@@ -37,38 +37,39 @@ body {
 .btn-blk:disabled { opacity: .2; cursor: not-allowed }
 input[type="text"] { border: 2px solid #000; padding: 7px 8px; font: 1.2rem inherit; width: 100%; outline: none; background: #fff }
 input[type="text"]:focus { box-shadow: 3px 3px 0 #000 }
-input::placeholder { color: #5878ca }
+input::placeholder { color: #999 }
 
 /* === LOGIN === */
 #login-screen { flex-direction: column; align-items: center; justify-content: center; animation: fadeIn .4s }
 .login-title { font-size: 2.2rem; font-weight: 900; letter-spacing: .12em; margin-bottom: .2rem }
-.login-sub { font-size: 1.2rem; color: #5878ca; margin-bottom: 2rem; letter-spacing: .05em }
+.login-sub { font-size: 1.2rem; color: #666; margin-bottom: 2rem; letter-spacing: .05em }
 .login-field { margin-bottom: 1rem; text-align: left }
 .login-field label { display: block; font-size: 1.25rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px }
 .login-error { color: #d00; font-size: 1.2rem; height: 2.8rem; margin-bottom: .2rem; font-weight: 700 }
-.login-hint { font-size: 1.2rem; color: #5878ca; margin-top: 1.5rem }
+.login-hint { font-size: 1.2rem; color: #666; margin-top: 1.5rem }
+.version-tag { font-size: 0.7rem; color: #ccc; margin-top: 1.2rem; letter-spacing: .05em }
 
 /* === SELECT === */
 #select-screen { flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1rem; animation: fadeIn .4s }
 .select-header { text-align: center; margin-bottom: 1rem }
 .select-header h2 { font-size: 1.4rem; font-weight: 800 }
-.select-header .player-name { font-size: 1.2rem; color: #5878ca; margin-top: .2rem }
-.select-prompt { font-size: 1.2rem; text-align: center; margin-bottom: 1.5rem; line-height: 1.1; color: #5878ca }
+.select-header .player-name { font-size: 1.2rem; color: #666; margin-top: .2rem }
+.select-prompt { font-size: 1.2rem; text-align: center; margin-bottom: 1.5rem; line-height: 1.1; color: #666 }
 .character-cards { display: flex; flex-direction: column; gap: .6rem; width: 100%; max-width: 380px }
 .char-card {
   border: 2px solid #000; padding: .8rem 1rem; cursor: pointer; background: #fff;
   display: flex; align-items: center; gap: .8rem; transition: all .08s;
 }
 .char-card:hover { background: #000; color: #fff }
-.char-card:hover .char-desc { color: #5878ca }
-.char-card:hover .char-era { color: #5878ca }
+.char-card:hover .char-desc { color: #999 }
+.char-card:hover .char-era { color: #999 }
 .char-card.completed { opacity: .3; cursor: default; border-style: dashed }
 .char-card.completed::after { content: ' ✓'; font-weight: 800 }
 .char-card.completed:hover { background: #fff; color: #000 }
 .char-icon { flex-shrink: 0 }
 .char-card h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: .15rem }
-.char-card .char-desc { font-size: 1.2rem; line-height: 1.0; color: #5878ca }
-.char-card .char-era { font-size: 1.2rem; color: #5878ca; margin-top: .2rem }
+.char-card .char-desc { font-size: 1.2rem; line-height: 1.0; color: #666 }
+.char-card .char-era { font-size: 1.2rem; color: #666; margin-top: .2rem }
 
 /* === GAME === */
 #game-screen { flex-direction: column; min-height: 100vh }
@@ -89,8 +90,8 @@ input::placeholder { color: #5878ca }
 .card-header { padding: .7rem .8rem; display: flex; align-items: center; gap: .6rem }
 .card-icon { flex-shrink: 0 }
 .card-title { font-size: 1.2rem; font-weight: 800 }
-.card-sub { font-size: 1.2rem; color: #5878ca; margin-top: .1rem }
-.card-status { margin-left: auto; font-size: 1.2rem; font-weight: 700; padding: 2px 6px; border: 1px solid #000 }
+.card-sub { font-size: 1.2rem; color: #666; margin-top: .1rem }
+.card-status { margin-left: auto; font-size: 1rem; font-weight: 700; padding: 2px 6px; border: 1px solid #000; white-space: nowrap }
 .card-status.solved { background: #000; color: #fff }
 
 /* Source detail */
@@ -103,29 +104,29 @@ input::placeholder { color: #5878ca }
 
 /* === PAPERS === */
 .letter-paper { border: 2px solid #000; padding: 1.2rem; line-height: 1.2; font-size: 1.2rem; font-family: Georgia, 'Noto Serif KR', serif }
-.letter-paper .letter-meta { font-family: -apple-system, sans-serif; font-size: 1.2rem; color: #5878ca; margin-bottom: .8rem; padding-bottom: .6rem; border-bottom: 1px dashed #000 }
+.letter-paper .letter-meta { font-family: -apple-system, sans-serif; font-size: 1.2rem; color: #666; margin-bottom: .8rem; padding-bottom: .6rem; border-bottom: 1px dashed #000 }
 .letter-paper .letter-sign { text-align: right; margin-top: 1.2rem; font-style: italic }
 .diary-paper { border: 2px solid #000; padding: 1.2rem; line-height: 1.35; font-size: 1.25rem; font-style: italic; background: repeating-linear-gradient(transparent, transparent 54px, #ddd 54px, #ddd 55px) }
-.diary-paper .diary-meta { font-style: normal; font-size: 1.2rem; color: #5878ca; margin-bottom: .8rem }
+.diary-paper .diary-meta { font-style: normal; font-size: 1.2rem; color: #666; margin-bottom: .8rem }
 .scholar-paper { border: 2px solid #000; border-left: 6px solid #000; padding: 1.2rem; line-height: 1.2; font-size: 1.2rem; font-family: Georgia, 'Noto Serif KR', serif }
 .newspaper-paper { border: 2px solid #000; padding: 1rem }
 .newspaper-paper .news-header { text-align: center; border-bottom: 3px double #000; padding-bottom: .5rem; margin-bottom: .6rem }
 .newspaper-paper .news-name { font-size: 1.7rem; font-weight: 900; letter-spacing: .5em }
-.newspaper-paper .news-date { font-size: 1.2rem; margin-top: .15rem; color: #5878ca }
+.newspaper-paper .news-date { font-size: 1.2rem; margin-top: .15rem; color: #666 }
 .newspaper-paper .news-title { font-size: 1.3rem; font-weight: 900; margin-bottom: .6rem; line-height: 1.0 }
 .newspaper-paper .news-body { font-size: 1.2rem; line-height: 1.2; text-align: justify }
 .photo-frame { border: 2px solid #000; padding: .6rem }
 .photo-placeholder {
   width: 100%; height: 140px; display: flex; align-items: center; justify-content: center; gap: .3rem;
-  font-size: 1.2rem; color: #5878ca;
+  font-size: 1.2rem; color: #666;
   background: repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 0 0 / 8px 8px;
   border: 1px solid #ddd;
 }
-.photo-frame .photo-caption { font-size: 1.2rem; color: #5878ca; margin-top: .5rem; line-height: 1.0; text-align: left }
-.photo-frame .photo-source { font-size: 1.2rem; color: #5878ca; margin-top: .2rem; text-align: left }
+.photo-frame .photo-caption { font-size: 1.2rem; color: #666; margin-top: .5rem; line-height: 1.0; text-align: left }
+.photo-frame .photo-source { font-size: 1.2rem; color: #666; margin-top: .2rem; text-align: left }
 .oral-player { border: 2px solid #000; padding: 1rem }
 .oral-player .cassette { text-align: center; margin-bottom: .6rem; display: flex; align-items: center; justify-content: center; animation: blink 2.5s infinite }
-.oral-player .oral-meta { font-size: 1.2rem; color: #5878ca; margin-bottom: .6rem; padding-bottom: .4rem; border-bottom: 1px solid #eee }
+.oral-player .oral-meta { font-size: 1.2rem; color: #666; margin-bottom: .6rem; padding-bottom: .4rem; border-bottom: 1px solid #eee }
 .oral-player .oral-text { font-size: 1.2rem; line-height: 1.2; font-style: italic }
 .oral-player .oral-text p { margin-bottom: .6rem }
 
@@ -133,7 +134,7 @@ input::placeholder { color: #5878ca }
 .blank-slot { display: inline-block; min-width: 60px; border-bottom: 2px solid #000; padding: 1px 3px; margin: 0 2px; cursor: pointer; font-weight: 800 }
 .blank-slot.empty { animation: blink 2s infinite; background: #f5f5f5 }
 .blank-slot.filled { background: #000; color: #fff; animation: none }
-.sound-note { font-size: 1.2rem; color: #5878ca; margin-top: .4rem; font-style: italic; display: flex; align-items: center; gap: .2rem }
+.sound-note { font-size: 1.2rem; color: #666; margin-top: .4rem; font-style: italic; display: flex; align-items: center; gap: .2rem }
 .sound-note svg { flex-shrink: 0 }
 
 /* === MODAL === */
@@ -142,7 +143,7 @@ input::placeholder { color: #5878ca }
 .answer-modal { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 2px solid #000; padding: 1.2rem; z-index: 300; animation: slideUp .2s; max-width: 780px; margin: 0 auto }
 .answer-modal.active { display: block }
 .answer-modal .modal-label { font-size: 1.2rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .3rem }
-.answer-modal .modal-hint { font-size: 1.2rem; color: #5878ca; margin-bottom: .8rem; line-height: 1.0 }
+.answer-modal .modal-hint { font-size: 1.2rem; color: #666; margin-bottom: .8rem; line-height: 1.0 }
 .answer-modal input { margin-bottom: .6rem }
 .answer-modal .modal-btns { display: flex; gap: .4rem }
 .answer-modal .modal-btns button { flex: 1 }
@@ -152,22 +153,22 @@ input::placeholder { color: #5878ca }
 
 /* Phase */
 .phase-banner { text-align: center; padding: 1.2rem .8rem; border: 2px solid #000 }
-.phase-banner .phase-num { font-size: 1.2rem; color: #5878ca; letter-spacing: .1em; margin-bottom: .2rem }
+.phase-banner .phase-num { font-size: 1.2rem; color: #666; letter-spacing: .1em; margin-bottom: .2rem }
 .phase-banner h2 { font-size: 1.4rem; font-weight: 900 }
-.phase-banner .phase-desc { font-size: 1.2rem; color: #5878ca; margin-top: .3rem; line-height: 1.0 }
+.phase-banner .phase-desc { font-size: 1.2rem; color: #666; margin-top: .3rem; line-height: 1.0 }
 
 /* Archive */
 .archive-selection { padding: .3rem 0 }
 .archive-prompt { border: 2px solid #000; padding: 1rem; text-align: center; margin-bottom: .8rem }
 .archive-prompt h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: .2rem }
-.archive-prompt p { font-size: 1.2rem; color: #5878ca }
+.archive-prompt p { font-size: 1.2rem; color: #666 }
 .archive-option { border: 2px solid #000; padding: .7rem .8rem; margin-bottom: -2px; cursor: pointer; display: flex; align-items: center; gap: .6rem; transition: all .08s }
 .archive-option:hover { box-shadow: 3px 3px 0 #000 }
 .archive-option.selected { background: #000; color: #fff }
-.archive-option.selected .opt-meaning { color: #5878ca }
+.archive-option.selected .opt-meaning { color: #999 }
 .archive-option .opt-icon { flex-shrink: 0 }
 .archive-option .opt-title { font-size: 1.2rem; font-weight: 700 }
-.archive-option .opt-meaning { font-size: 1.2rem; color: #5878ca; margin-top: .1rem }
+.archive-option .opt-meaning { font-size: 1.2rem; color: #666; margin-top: .1rem }
 
 /* === DELIVERY === */
 #delivery-screen { flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; animation: fadeIn .4s }
@@ -182,11 +183,25 @@ input::placeholder { color: #5878ca }
 #result-screen { flex-direction: column; align-items: center; justify-content: center; padding: 2rem; animation: fadeIn .4s }
 .result-box { max-width: 380px; width: 100% }
 .result-box h2 { font-size: 1.55rem; font-weight: 900; margin-bottom: .2rem }
-.result-box .result-sub { font-size: 1.2rem; color: #5878ca; margin-bottom: 1.2rem }
+.result-box .result-sub { font-size: 1.2rem; color: #666; margin-bottom: 1.2rem }
 .result-stat { border: 2px solid #000; padding: .6rem .8rem; margin-bottom: -2px; display: flex; justify-content: space-between }
 .result-stat .stat-label { font-size: 1.2rem }
 .result-stat .stat-value { font-weight: 900 }
 .result-summary { font-size: 1.2rem; line-height: 1.2; margin-top: 1.2rem; padding: .8rem; border: 2px solid #000; border-left: 6px solid #000 }
+
+/* Source Nav */
+.source-nav {
+  display: none; position: fixed; top: 0; bottom: 0; width: 44px;
+  z-index: 210; cursor: pointer; align-items: center; justify-content: center;
+  background: transparent; transition: background .15s;
+  -webkit-tap-highlight-color: transparent; user-select: none;
+}
+.source-nav.active { display: flex }
+.source-nav:hover { background: rgba(0,0,0,.04) }
+.source-nav-prev { left: 0 }
+.source-nav-next { right: 0 }
+.source-nav svg { opacity: 0; transition: opacity .15s }
+.source-nav:hover svg { opacity: .5 }
 
 /* Toast */
 .toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); background: #fff; border: 2px solid #000; padding: 1rem 1.2rem; z-index: 400; text-align: center; animation: fadeIn .15s; box-shadow: 6px 6px 0 #000; max-width: 260px }
@@ -222,6 +237,7 @@ input::placeholder { color: #5878ca }
       <p class="login-hint">우편사서함에 도착한 기록을 탐색합니다</p>
     </div>
   </div>
+  <p class="version-tag">v0.1.0</p>
 </div>
 
 <!-- SELECT -->
@@ -281,6 +297,14 @@ input::placeholder { color: #5878ca }
 </div>
 <div class="source-detail" id="source-detail">
   <div class="detail-inner" id="detail-inner"></div>
+</div>
+
+<!-- Source Navigation -->
+<div class="source-nav source-nav-prev" id="source-nav-prev" onclick="navigateSource(-1)">
+  <svg width="20" height="32" viewBox="0 0 5 8" shape-rendering="crispEdges" fill="#000"><rect x="3" y="0" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="2"/><rect x="1" y="5" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="3" y="7" width="1" height="1"/></svg>
+</div>
+<div class="source-nav source-nav-next" id="source-nav-next" onclick="navigateSource(1)">
+  <svg width="20" height="32" viewBox="0 0 5 8" shape-rendering="crispEdges" fill="#000"><rect x="1" y="0" width="1" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="3" y="2" width="1" height="1"/><rect x="4" y="3" width="1" height="2"/><rect x="3" y="5" width="1" height="1"/><rect x="2" y="6" width="1" height="1"/><rect x="1" y="7" width="1" height="1"/></svg>
 </div>
 
 <script>
@@ -467,7 +491,7 @@ const TEMPLATES = {
   },
   historian: {
     A: (b) => `<div class="scholar-paper">
-      <div class="letter-meta" style="font-family:-apple-system,sans-serif;font-size:1.3rem;color:#5878ca;margin-bottom:.8rem;padding-bottom:.6rem;border-bottom:1px dashed #000;"><strong>내가 죽기 전에</strong><br>2026년 3월 어느 날 · 역사학자 박종길 (90세)</div>
+      <div class="letter-meta" style="font-family:-apple-system,sans-serif;font-size:1.3rem;color:#666;margin-bottom:.8rem;padding-bottom:.6rem;border-bottom:1px dashed #000;"><strong>내가 죽기 전에</strong><br>2026년 3월 어느 날 · 역사학자 박종길 (90세)</div>
       <p>오늘 또 전망대에 올랐다. 망원경으로 보면 거기, 성벽의 윤곽이 풀 사이로 보인다. ${b.A}가 905년에 쌓은 철원성. 외성 둘레 12킬로미터. 천백 년 된 도성이 군사분계선에 걸터앉아 풀에 묻혀 있다.</p>
       <p style="margin-top:0.8rem;">서른 살에 일제강점기 사진 한 장으로 이 성을 만났다. 2005년에 육사 조사단과 외성 동벽을 직접 밟았다. 손이 떨렸다. 그런데 내성과 궁성은 군사분계선 너머에 있다.</p>
       <p style="margin-top:0.8rem;">2018년, 남북이 공동조사에 합의했을 때 발굴 계획서를 밤새 썼다. 하지만 이행되지 않았다. 70여 년간 사람의 발길이 닿지 않았으니 오히려 온전할 것이다. 분단이 유적을 지켰다.</p>
@@ -500,7 +524,7 @@ const TEMPLATES = {
 };
 
 // ===== GAME STATE =====
-let state = { playerName: '', currentChar: null, solvedBlanks: {}, selectedRecords: [], totalCranes: 0, completedStories: [] };
+let state = { playerName: '', currentChar: null, currentSourceId: null, solvedBlanks: {}, selectedRecords: [], totalCranes: 0, completedStories: [] };
 try {
   const saved = localStorage.getItem('dmz_diary_v2');
   if (saved) { const p = JSON.parse(saved); state.totalCranes = p.totalCranes || 0; state.completedStories = p.completedStories || []; }
@@ -598,6 +622,7 @@ function updateProgress() {
 // ===== SOURCE DETAIL =====
 function openSource(sourceId) {
   const data = GAME_DATA[state.currentChar];
+  state.currentSourceId = sourceId;
   const blanks = {};
   for (const key of Object.keys(data.blanks)) {
     blanks[key] = state.solvedBlanks[key]
@@ -610,13 +635,56 @@ function openSource(sourceId) {
     ${template(blanks)}`;
   document.getElementById('source-detail').classList.add('active');
   document.body.style.overflow = 'hidden';
+  showSourceNav(true);
 }
 
 function closeSource() {
   document.getElementById('source-detail').classList.remove('active');
   document.body.style.overflow = '';
+  state.currentSourceId = null;
+  showSourceNav(false);
   renderGamePhase1();
 }
+
+function showSourceNav(show) {
+  const method = show ? 'add' : 'remove';
+  document.getElementById('source-nav-prev').classList[method]('active');
+  document.getElementById('source-nav-next').classList[method]('active');
+}
+
+function navigateSource(direction) {
+  if (!state.currentChar || !state.currentSourceId) return;
+  // 답변모달이 열려 있으면 네비 무시
+  if (document.getElementById('answer-modal').classList.contains('active')) return;
+  const sources = GAME_DATA[state.currentChar].sources;
+  const currentIdx = sources.findIndex(s => s.id === state.currentSourceId);
+  if (currentIdx === -1) return;
+  let nextIdx = currentIdx + direction;
+  if (nextIdx < 0) nextIdx = sources.length - 1;
+  if (nextIdx >= sources.length) nextIdx = 0;
+  openSource(sources[nextIdx].id);
+}
+
+// 스와이프 제스처
+(function() {
+  let touchStartX = 0, touchStartY = 0, touchStartTime = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+  }, { passive: true });
+  document.addEventListener('touchend', function(e) {
+    if (!state.currentSourceId) return;
+    if (document.getElementById('answer-modal').classList.contains('active')) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    const dt = Date.now() - touchStartTime;
+    // 수평 스와이프: 최소 60px, 수직보다 크고, 500ms 이내
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && dt < 500) {
+      navigateSource(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+})();
 
 // ===== ANSWER MODAL =====
 let currentBlankId = null;
@@ -628,12 +696,14 @@ function openAnswerModal(blankId) {
   document.getElementById('modal-input').value = '';
   document.getElementById('modal-backdrop').classList.add('active');
   document.getElementById('answer-modal').classList.add('active');
+  showSourceNav(false);
   setTimeout(() => document.getElementById('modal-input').focus(), 100);
 }
 function closeAnswerModal() {
   document.getElementById('modal-backdrop').classList.remove('active');
   document.getElementById('answer-modal').classList.remove('active');
   currentBlankId = null;
+  if (state.currentSourceId) showSourceNav(true);
 }
 document.getElementById('modal-input').addEventListener('keydown', e => { if (e.key === 'Enter') submitAnswer(); });
 
