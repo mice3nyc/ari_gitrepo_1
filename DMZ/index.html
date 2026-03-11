@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>DMZ 다이어리</title>
 <style>
+/* TODO: Paperlogy 폰트 적용 검토
+ * - CDN: https://cdn.jsdelivr.net/gh/projectnoonnu/[email protected]/
+ *   @font-face { font-family: 'Paperlogy'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/[email protected]/Paperlogy-4Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+ *   (100~900 웨이트 지원, 파일명: Paperlogy-1Thin ~ Paperlogy-9Black)
+ * - Self-hosting: media/fonts/ 에 woff2 파일 추가 후 @font-face 선언
+ * - 적용 대상: 전체 body 또는 특정 요소
+ * - 라이선스: OFL (상업적 사용 가능, 개별 폰트 판매 금지)
+ * - GitHub: https://github.com/fonts-archive/Paperlogy
+ */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
   font-family: -apple-system, 'Helvetica Neue', 'Apple SD Gothic Neo', sans-serif;
@@ -35,6 +44,8 @@ body {
 .btn-blk { display: block; width: 100%; background: #000; color: #fff; border: 2px solid #000; padding: 8px; font: 800 1.2rem/1.2 inherit; cursor: pointer; text-align: center; margin-top: .8rem }
 .btn-blk:hover { background: #333 }
 .btn-blk:disabled { opacity: .2; cursor: not-allowed }
+.btn-login { display: block; width: 100%; background: #000; color: #fff; border: 2px solid #000; padding: 8px; font: 800 1.2rem/1.2 inherit; cursor: pointer; text-align: center }
+.btn-login:hover { background: #fff; color: #000 }
 input[type="text"] { border: 2px solid #000; padding: 7px 8px; font: 1.2rem inherit; width: 100%; outline: none; background: #fff }
 input[type="text"]:focus { box-shadow: 3px 3px 0 #000 }
 input::placeholder { color: #999 }
@@ -242,11 +253,11 @@ input::placeholder { color: #999 }
         <input type="text" id="input-code" placeholder="코드를 입력하세요" autocomplete="off">
       </div>
       <div class="login-error" id="login-error"></div>
-      <button class="btn" onclick="handleLogin()">입장</button>
+      <button class="btn-login" onclick="handleLogin()">입장</button>
       <p class="login-hint">우편사서함에 도착한 기록을 탐색합니다</p>
     </div>
   </div>
-  <p class="version-tag">v0.1.0</p>
+  <p class="version-tag">v0.2.0</p>
 </div>
 
 <!-- SELECT -->
