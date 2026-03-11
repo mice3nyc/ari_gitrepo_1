@@ -238,7 +238,7 @@ input::placeholder { color: #999 }
       </div>
       <div class="login-field">
         <label>코드</label>
-        <input type="text" id="input-code" placeholder="게임 코드" autocomplete="off">
+        <input type="text" id="input-code" placeholder="코드를 입력하세요" autocomplete="off">
       </div>
       <div class="login-error" id="login-error"></div>
       <button class="btn" onclick="handleLogin()">입장</button>
@@ -564,7 +564,7 @@ function handleLogin() {
   const code = document.getElementById('input-code').value.trim();
   const errEl = document.getElementById('login-error');
   if (!name) { errEl.textContent = '이름을 입력해주세요.'; return; }
-  if (code.toUpperCase() !== 'DMZ') { errEl.textContent = '게임 코드가 올바르지 않습니다.'; return; }
+  if (code !== '1953') { errEl.textContent = '게임 코드가 올바르지 않습니다.'; return; }
   state.playerName = name;
   showScreen('select-screen');
   document.getElementById('display-name').textContent = `아키비스트 ${name}`;
@@ -836,48 +836,127 @@ function resetGame() {
 }
 
 // ===== CATCHWORD (텍스트 하이라이트) =====
+// state.catchwords = [{ sourceId, wordIndex, text }, ...] — 위치 기반 저장
+
+// 본문 텍스트를 공백 기준으로 분할하여 단어 인덱스 맵 생성
+// getFilledBlankIndex와 동일한 글로벌 인덱스 체계 유지:
+// - 일반 텍스트 노드: 공백으로 분할한 각 단어가 1 인덱스
+// - .blank-slot.filled: 1 인덱스 (텍스트 노드는 건너뜀)
+// - .blank-slot.empty: 인덱스 부여 안 함
+function buildWordIndex(container) {
+  const walker = document.createTreeWalker(container, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, {
+    acceptNode: function(node) {
+      if (node.nodeType === Node.ELEMENT_NODE && node.classList && node.classList.contains('detail-close')) return NodeFilter.FILTER_REJECT;
+      if (node.nodeType === Node.ELEMENT_NODE && node.closest && node.closest('.detail-close')) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  const entries = []; // { textNode, localStart, localEnd, globalIndex }
+  let globalIndex = 0;
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains('blank-slot')) {
+      if (node.classList.contains('filled')) globalIndex++;
+      // blank-slot 내부 텍스트 노드는 walker가 순회하지만 아래 텍스트 처리에서 건너뜀
+      continue;
+    }
+    if (node.nodeType !== Node.TEXT_NODE) continue;
+    // blank-slot 내부 텍스트 노드 건너뛰기
+    if (node.parentElement && node.parentElement.closest('.blank-slot')) continue;
+    const text = node.nodeValue;
+    if (!text) continue;
+    // 공백으로 분할하여 각 단어에 글로벌 인덱스 부여
+    const parts = text.split(/(\s+)/);
+    let localPos = 0;
+    for (const part of parts) {
+      if (part && !/^\s+$/.test(part)) {
+        entries.push({ textNode: node, localStart: localPos, localEnd: localPos + part.length, globalIndex, text: part });
+        globalIndex++;
+      }
+      localPos += part.length;
+    }
+  }
+  return entries;
+}
+
+// filled blank-slot의 글로벌 인덱스를 계산
+function getFilledBlankIndex(container, blankEl) {
+  const walker = document.createTreeWalker(container, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, {
+    acceptNode: function(node) {
+      if (node.nodeType === Node.ELEMENT_NODE && node.classList && node.classList.contains('detail-close')) return NodeFilter.FILTER_REJECT;
+      if (node.nodeType === Node.ELEMENT_NODE && node.closest && node.closest('.detail-close')) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  let globalIndex = 0;
+  while (walker.nextNode()) {
+    const node = walker.currentNode;
+    if (node.nodeType === Node.TEXT_NODE) {
+      // blank-slot 내부 텍스트 노드 건너뛰기 (filled blank은 요소 단위로 카운트)
+      if (node.parentElement && node.parentElement.closest('.blank-slot')) continue;
+      const text = node.nodeValue;
+      if (!text) continue;
+      const parts = text.split(/(\s+)/);
+      for (const part of parts) {
+        if (part && !/^\s+$/.test(part)) globalIndex++;
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE && node.classList.contains('blank-slot')) {
+      if (node === blankEl) return globalIndex;
+      // filled blank = 1 단어 단위
+      if (node.classList.contains('filled')) globalIndex++;
+    }
+  }
+  return -1;
+}
+
 function applyCatchwords() {
   if (!state.catchwords.length) return;
   const container = document.getElementById('detail-inner');
   if (!container) return;
 
-  const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
-    acceptNode: function(node) {
-      // .blank-slot 내부 텍스트 제외
-      if (node.parentElement && node.parentElement.closest('.blank-slot')) return NodeFilter.FILTER_REJECT;
-      // .detail-close 버튼 내부 제외
-      if (node.parentElement && node.parentElement.closest('.detail-close')) return NodeFilter.FILTER_REJECT;
-      // 이미 하이라이트된 span 내부도 처리 대상 (재적용 시)
-      return NodeFilter.FILTER_ACCEPT;
+  // 현재 sourceId에 해당하는 캐치워드만 필터
+  const currentCW = state.catchwords.filter(cw => cw.sourceId === state.currentSourceId);
+  if (!currentCW.length) return;
+
+  // 글로벌 인덱스 기반으로 하이라이트 대상 수집
+  const targetIndices = new Map(); // globalIndex → text
+  for (const cw of currentCW) targetIndices.set(cw.wordIndex, cw.text);
+
+  // filled blank-slot 하이라이트 처리
+  const filledBlanks = container.querySelectorAll('.blank-slot.filled');
+  for (const fb of filledBlanks) {
+    const idx = getFilledBlankIndex(container, fb);
+    if (targetIndices.has(idx)) {
+      fb.classList.add('catchword-highlight');
     }
-  });
+  }
 
-  const textNodes = [];
-  while (walker.nextNode()) textNodes.push(walker.currentNode);
+  // 텍스트 노드 처리
+  const wordEntries = buildWordIndex(container);
+  // 텍스트 노드별로 그룹핑
+  const nodeGroups = new Map();
+  for (const entry of wordEntries) {
+    if (!targetIndices.has(entry.globalIndex)) continue;
+    if (!nodeGroups.has(entry.textNode)) nodeGroups.set(entry.textNode, []);
+    nodeGroups.get(entry.textNode).push(entry);
+  }
 
-  for (const textNode of textNodes) {
+  for (const [textNode, entries] of nodeGroups) {
     const text = textNode.nodeValue;
-    if (!text || !text.trim()) continue;
-
-    // 캐치워드 매칭을 위한 정규식 생성 (단어 경계 기반)
-    const escaped = state.catchwords.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-    const regex = new RegExp(`(${escaped.join('|')})`, 'g');
-    if (!regex.test(text)) continue;
-
-    // 매칭된 텍스트 노드를 분할하여 span으로 감싸기
     const frag = document.createDocumentFragment();
     let lastIndex = 0;
-    regex.lastIndex = 0;
-    let match;
-    while ((match = regex.exec(text)) !== null) {
-      if (match.index > lastIndex) {
-        frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+    // 정렬 (localStart 순서)
+    entries.sort((a, b) => a.localStart - b.localStart);
+    for (const entry of entries) {
+      if (entry.localStart > lastIndex) {
+        frag.appendChild(document.createTextNode(text.slice(lastIndex, entry.localStart)));
       }
       const span = document.createElement('span');
       span.className = 'catchword-highlight';
-      span.textContent = match[0];
+      span.dataset.wordIndex = entry.globalIndex;
+      span.textContent = text.slice(entry.localStart, entry.localEnd);
       frag.appendChild(span);
-      lastIndex = regex.lastIndex;
+      lastIndex = entry.localEnd;
     }
     if (lastIndex < text.length) {
       frag.appendChild(document.createTextNode(text.slice(lastIndex)));
@@ -887,7 +966,7 @@ function applyCatchwords() {
 }
 
 function getWordAtClick(e) {
-  // 클릭 위치에서 단어 추출
+  // 클릭 위치에서 단어 추출 (공백만 경계, 구두점은 단어에 포함)
   if (document.caretRangeFromPoint) {
     const range = document.caretRangeFromPoint(e.clientX, e.clientY);
     if (!range || !range.startContainer || range.startContainer.nodeType !== Node.TEXT_NODE) return null;
@@ -896,16 +975,41 @@ function getWordAtClick(e) {
     const text = textNode.nodeValue;
     if (!text) return null;
 
-    // 앞뒤 공백/구두점 경계까지 단어 추출
-    const wordBreak = /[\s.,;:!?"""''()（）\[\]{}·—–\-\/\\<>「」『』、。\n\r\t]/;
+    // 공백류만 경계로 사용
+    const wordBreak = /[\s\u3000\u00A0]/;
     let start = offset;
     let end = offset;
     while (start > 0 && !wordBreak.test(text[start - 1])) start--;
     while (end < text.length && !wordBreak.test(text[end])) end++;
-    const word = text.slice(start, end).trim();
+    const word = text.slice(start, end);
     return word || null;
   }
   return null;
+}
+
+// 클릭 위치의 글로벌 단어 인덱스 계산
+function getWordIndexAtClick(e) {
+  if (!document.caretRangeFromPoint) return -1;
+  const range = document.caretRangeFromPoint(e.clientX, e.clientY);
+  if (!range || !range.startContainer || range.startContainer.nodeType !== Node.TEXT_NODE) return -1;
+  const textNode = range.startContainer;
+  const offset = range.startOffset;
+  const text = textNode.nodeValue;
+  if (!text) return -1;
+
+  // 클릭한 단어의 로컬 범위 계산
+  const wordBreak = /[\s\u3000\u00A0]/;
+  let start = offset;
+  while (start > 0 && !wordBreak.test(text[start - 1])) start--;
+
+  const container = document.getElementById('detail-inner');
+  if (!container) return -1;
+
+  const entries = buildWordIndex(container);
+  for (const entry of entries) {
+    if (entry.textNode === textNode && entry.localStart === start) return entry.globalIndex;
+  }
+  return -1;
 }
 
 // 스와이프 후 click 방지 플래그
@@ -936,35 +1040,65 @@ document.getElementById('detail-inner').addEventListener('click', function(e) {
   // 답변모달이 열려 있으면 무시
   if (document.getElementById('answer-modal').classList.contains('active')) return;
 
-  // .blank-slot 클릭 무시
-  if (e.target.closest('.blank-slot')) return;
+  // .blank-slot.empty 클릭 → 기존 답변모달 동작 (캐치워드 대상 아님)
+  const blankSlot = e.target.closest('.blank-slot');
+  if (blankSlot && blankSlot.classList.contains('empty')) return;
 
   // .detail-close 버튼 클릭 무시
   if (e.target.closest('.detail-close')) return;
 
-  // .catchword-highlight 클릭 → 토글 해제
-  if (e.target.classList.contains('catchword-highlight')) {
-    const word = e.target.textContent;
-    state.catchwords = state.catchwords.filter(w => w !== word);
-    // 현재 소스 다시 렌더링
+  // .blank-slot.filled 클릭 → 통째로 캐치워드 처리
+  if (blankSlot && blankSlot.classList.contains('filled')) {
+    const container = document.getElementById('detail-inner');
+    const wordIndex = getFilledBlankIndex(container, blankSlot);
+    if (wordIndex === -1) return;
+    const text = blankSlot.textContent;
+
+    // 이미 있으면 토글 해제
+    const existingIdx = state.catchwords.findIndex(cw => cw.sourceId === state.currentSourceId && cw.wordIndex === wordIndex);
+    if (existingIdx !== -1) {
+      state.catchwords.splice(existingIdx, 1);
+    } else {
+      // FIFO: 전체 기준 3개 초과 시 가장 오래된 것 제거
+      if (state.catchwords.length >= 3) {
+        state.catchwords.shift();
+      }
+      state.catchwords.push({ sourceId: state.currentSourceId, wordIndex, text });
+    }
     if (state.currentSourceId) openSource(state.currentSourceId);
     return;
   }
 
-  // 일반 텍스트 클릭 → 단어 추출
+  // .catchword-highlight 클릭 → 토글 해제
+  if (e.target.classList.contains('catchword-highlight')) {
+    const wordIndex = parseInt(e.target.dataset.wordIndex, 10);
+    if (!isNaN(wordIndex)) {
+      state.catchwords = state.catchwords.filter(cw => !(cw.sourceId === state.currentSourceId && cw.wordIndex === wordIndex));
+    } else {
+      // filled blank의 catchword-highlight (dataset 없음) — blankSlot 경로에서 처리됨
+      const text = e.target.textContent;
+      state.catchwords = state.catchwords.filter(cw => !(cw.sourceId === state.currentSourceId && cw.text === text));
+    }
+    if (state.currentSourceId) openSource(state.currentSourceId);
+    return;
+  }
+
+  // 일반 텍스트 클릭 → 단어 추출 + 위치 인덱스 계산
   const word = getWordAtClick(e);
   if (!word || word.length < 1) return;
+  const wordIndex = getWordIndexAtClick(e);
+  if (wordIndex === -1) return;
 
   // 이미 있으면 토글 해제
-  const existingIdx = state.catchwords.indexOf(word);
+  const existingIdx = state.catchwords.findIndex(cw => cw.sourceId === state.currentSourceId && cw.wordIndex === wordIndex);
   if (existingIdx !== -1) {
     state.catchwords.splice(existingIdx, 1);
   } else {
-    // FIFO: 3개 초과 시 가장 오래된 것 제거
+    // FIFO: 전체 기준 3개 초과 시 가장 오래된 것 제거
     if (state.catchwords.length >= 3) {
       state.catchwords.shift();
     }
-    state.catchwords.push(word);
+    state.catchwords.push({ sourceId: state.currentSourceId, wordIndex, text: word });
   }
 
   // 현재 소스 다시 렌더링
