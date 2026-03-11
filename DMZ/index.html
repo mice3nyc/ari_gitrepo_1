@@ -1059,9 +1059,11 @@ document.getElementById('detail-inner').addEventListener('click', function(e) {
     if (existingIdx !== -1) {
       state.catchwords.splice(existingIdx, 1);
     } else {
-      // FIFO: 전체 기준 3개 초과 시 가장 오래된 것 제거
-      if (state.catchwords.length >= 3) {
-        state.catchwords.shift();
+      // FIFO: sourceId별 3개 초과 시 해당 sourceId의 가장 오래된 것 제거
+      const sourceCW = state.catchwords.filter(cw => cw.sourceId === state.currentSourceId);
+      if (sourceCW.length >= 3) {
+        const oldestIdx = state.catchwords.findIndex(cw => cw.sourceId === state.currentSourceId);
+        if (oldestIdx !== -1) state.catchwords.splice(oldestIdx, 1);
       }
       state.catchwords.push({ sourceId: state.currentSourceId, wordIndex, text });
     }
@@ -1094,9 +1096,11 @@ document.getElementById('detail-inner').addEventListener('click', function(e) {
   if (existingIdx !== -1) {
     state.catchwords.splice(existingIdx, 1);
   } else {
-    // FIFO: 전체 기준 3개 초과 시 가장 오래된 것 제거
-    if (state.catchwords.length >= 3) {
-      state.catchwords.shift();
+    // FIFO: sourceId별 3개 초과 시 해당 sourceId의 가장 오래된 것 제거
+    const sourceCW = state.catchwords.filter(cw => cw.sourceId === state.currentSourceId);
+    if (sourceCW.length >= 3) {
+      const oldestIdx = state.catchwords.findIndex(cw => cw.sourceId === state.currentSourceId);
+      if (oldestIdx !== -1) state.catchwords.splice(oldestIdx, 1);
     }
     state.catchwords.push({ sourceId: state.currentSourceId, wordIndex, text: word });
   }
