@@ -208,6 +208,14 @@ input::placeholder { color: #999 }
 .toast .toast-icon { font-size: 1.8rem; margin-bottom: .2rem; font-weight: 900 }
 .toast .toast-text { font-size: 1.2rem; line-height: 1.0 }
 
+/* Catchword highlight */
+.catchword-highlight {
+  background: #ccff00;
+  border-radius: 2px;
+  padding: 0 1px;
+  cursor: pointer;
+}
+
 @media (min-width: 600px) {
   .login-title { font-size: 3rem }
   .character-cards { flex-direction: row; max-width: 660px }
@@ -524,7 +532,7 @@ const TEMPLATES = {
 };
 
 // ===== GAME STATE =====
-let state = { playerName: '', currentChar: null, currentSourceId: null, solvedBlanks: {}, selectedRecords: [], totalCranes: 0, completedStories: [] };
+let state = { playerName: '', currentChar: null, currentSourceId: null, solvedBlanks: {}, selectedRecords: [], totalCranes: 0, completedStories: [], catchwords: [] };
 try {
   const saved = localStorage.getItem('dmz_diary_v2');
   if (saved) { const p = JSON.parse(saved); state.totalCranes = p.totalCranes || 0; state.completedStories = p.completedStories || []; }
@@ -586,6 +594,7 @@ function selectCharacter(charKey) {
   state.currentChar = charKey;
   state.solvedBlanks = {};
   state.selectedRecords = [];
+  state.catchwords = [];
   showScreen('game-screen');
   renderGamePhase1();
 }
@@ -636,6 +645,7 @@ function openSource(sourceId) {
   document.getElementById('source-detail').classList.add('active');
   document.body.style.overflow = 'hidden';
   showSourceNav(true);
+  applyCatchwords();
 }
 
 function closeSource() {
@@ -820,10 +830,146 @@ function showResult() {
 }
 
 function resetGame() {
-  state = { playerName: '', currentChar: null, solvedBlanks: {}, selectedRecords: [], totalCranes: 0, completedStories: [] };
+  state = { playerName: '', currentChar: null, solvedBlanks: {}, selectedRecords: [], totalCranes: 0, completedStories: [], catchwords: [] };
   try { localStorage.removeItem('dmz_diary_v2'); } catch(e) {}
   showScreen('login-screen');
 }
+
+// ===== CATCHWORD (텍스트 하이라이트) =====
+function applyCatchwords() {
+  if (!state.catchwords.length) return;
+  const container = document.getElementById('detail-inner');
+  if (!container) return;
+
+  const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+    acceptNode: function(node) {
+      // .blank-slot 내부 텍스트 제외
+      if (node.parentElement && node.parentElement.closest('.blank-slot')) return NodeFilter.FILTER_REJECT;
+      // .detail-close 버튼 내부 제외
+      if (node.parentElement && node.parentElement.closest('.detail-close')) return NodeFilter.FILTER_REJECT;
+      // 이미 하이라이트된 span 내부도 처리 대상 (재적용 시)
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+  for (const textNode of textNodes) {
+    const text = textNode.nodeValue;
+    if (!text || !text.trim()) continue;
+
+    // 캐치워드 매칭을 위한 정규식 생성 (단어 경계 기반)
+    const escaped = state.catchwords.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    const regex = new RegExp(`(${escaped.join('|')})`, 'g');
+    if (!regex.test(text)) continue;
+
+    // 매칭된 텍스트 노드를 분할하여 span으로 감싸기
+    const frag = document.createDocumentFragment();
+    let lastIndex = 0;
+    regex.lastIndex = 0;
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+      }
+      const span = document.createElement('span');
+      span.className = 'catchword-highlight';
+      span.textContent = match[0];
+      frag.appendChild(span);
+      lastIndex = regex.lastIndex;
+    }
+    if (lastIndex < text.length) {
+      frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+    }
+    textNode.parentNode.replaceChild(frag, textNode);
+  }
+}
+
+function getWordAtClick(e) {
+  // 클릭 위치에서 단어 추출
+  if (document.caretRangeFromPoint) {
+    const range = document.caretRangeFromPoint(e.clientX, e.clientY);
+    if (!range || !range.startContainer || range.startContainer.nodeType !== Node.TEXT_NODE) return null;
+    const textNode = range.startContainer;
+    const offset = range.startOffset;
+    const text = textNode.nodeValue;
+    if (!text) return null;
+
+    // 앞뒤 공백/구두점 경계까지 단어 추출
+    const wordBreak = /[\s.,;:!?"""''()（）\[\]{}·—–\-\/\\<>「」『』、。\n\r\t]/;
+    let start = offset;
+    let end = offset;
+    while (start > 0 && !wordBreak.test(text[start - 1])) start--;
+    while (end < text.length && !wordBreak.test(text[end])) end++;
+    const word = text.slice(start, end).trim();
+    return word || null;
+  }
+  return null;
+}
+
+// 스와이프 후 click 방지 플래그
+let swipedRecently = false;
+
+(function() {
+  let cwTouchStartX = 0, cwTouchStartY = 0;
+  document.addEventListener('touchstart', function(e) {
+    cwTouchStartX = e.touches[0].clientX;
+    cwTouchStartY = e.touches[0].clientY;
+    swipedRecently = false;
+  }, { passive: true });
+  document.addEventListener('touchend', function(e) {
+    const dx = Math.abs(e.changedTouches[0].clientX - cwTouchStartX);
+    const dy = Math.abs(e.changedTouches[0].clientY - cwTouchStartY);
+    if (dx > 30 || dy > 30) {
+      swipedRecently = true;
+      setTimeout(() => { swipedRecently = false; }, 300);
+    }
+  }, { passive: true });
+})();
+
+// #detail-inner 클릭 이벤트 (delegation)
+document.getElementById('detail-inner').addEventListener('click', function(e) {
+  // 스와이프 직후 click 무시
+  if (swipedRecently) return;
+
+  // 답변모달이 열려 있으면 무시
+  if (document.getElementById('answer-modal').classList.contains('active')) return;
+
+  // .blank-slot 클릭 무시
+  if (e.target.closest('.blank-slot')) return;
+
+  // .detail-close 버튼 클릭 무시
+  if (e.target.closest('.detail-close')) return;
+
+  // .catchword-highlight 클릭 → 토글 해제
+  if (e.target.classList.contains('catchword-highlight')) {
+    const word = e.target.textContent;
+    state.catchwords = state.catchwords.filter(w => w !== word);
+    // 현재 소스 다시 렌더링
+    if (state.currentSourceId) openSource(state.currentSourceId);
+    return;
+  }
+
+  // 일반 텍스트 클릭 → 단어 추출
+  const word = getWordAtClick(e);
+  if (!word || word.length < 1) return;
+
+  // 이미 있으면 토글 해제
+  const existingIdx = state.catchwords.indexOf(word);
+  if (existingIdx !== -1) {
+    state.catchwords.splice(existingIdx, 1);
+  } else {
+    // FIFO: 3개 초과 시 가장 오래된 것 제거
+    if (state.catchwords.length >= 3) {
+      state.catchwords.shift();
+    }
+    state.catchwords.push(word);
+  }
+
+  // 현재 소스 다시 렌더링
+  if (state.currentSourceId) openSource(state.currentSourceId);
+});
 </script>
 </body>
 </html>
