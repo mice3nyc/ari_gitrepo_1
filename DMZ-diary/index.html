@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>DMZ 다이어리</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, 'Helvetica Neue', 'Apple SD Gothic Neo', sans-serif;
+  background: #fff; color: #000; min-height: 100vh;
+}
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes blink { 0%,100% { opacity: .3 } 50% { opacity: 1 } }
+@keyframes fly { 0% { transform: translate(0,0); opacity: 1 } 100% { transform: translate(160px,-160px); opacity: 0 } }
+
+/* === WINDOW === */
+.win { border: 2px solid #000; max-width: 440px; width: 90%; background: #fff }
+.win-bar {
+  height: 20px; border-bottom: 2px solid #000;
+  background: repeating-linear-gradient(180deg, transparent 0px, transparent 2px, #000 2px, #000 3px);
+  display: flex; align-items: center; justify-content: center;
+}
+.win-bar span { background: #fff; padding: 0 8px; font-size: .65rem; font-weight: 800; letter-spacing: .05em }
+.win-body { padding: 1.5rem }
+
+/* === BUTTON / INPUT === */
+.btn { display: inline-block; background: #fff; border: 2px solid #000; padding: 7px 20px; font: 800 .8rem/1.2 inherit; cursor: pointer }
+.btn:hover { background: #000; color: #fff }
+.btn:disabled { opacity: .2; cursor: not-allowed }
+.btn:disabled:hover { background: #fff; color: #000 }
+.btn-blk { display: block; width: 100%; background: #000; color: #fff; border: 2px solid #000; padding: 8px; font: 800 .8rem/1.2 inherit; cursor: pointer; text-align: center; margin-top: .8rem }
+.btn-blk:hover { background: #333 }
+.btn-blk:disabled { opacity: .2; cursor: not-allowed }
+input[type="text"] { border: 2px solid #000; padding: 7px 8px; font: .85rem inherit; width: 100%; outline: none; background: #fff }
+input[type="text"]:focus { box-shadow: 3px 3px 0 #000 }
+input::placeholder { color: #bbb }
+
+/* === LOGIN === */
+#login-screen { flex-direction: column; align-items: center; justify-content: center; animation: fadeIn .4s }
+.login-title { font-size: 2.2rem; font-weight: 900; letter-spacing: .12em; margin-bottom: .2rem }
+.login-sub { font-size: .75rem; color: #888; margin-bottom: 2rem; letter-spacing: .05em }
+.login-field { margin-bottom: 1rem; text-align: left }
+.login-field label { display: block; font-size: .65rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px }
+.login-error { color: #d00; font-size: .75rem; height: 1.4rem; margin-bottom: .2rem; font-weight: 700 }
+.login-hint { font-size: .6rem; color: #aaa; margin-top: 1.5rem }
+
+/* === SELECT === */
+#select-screen { flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1rem; animation: fadeIn .4s }
+.select-header { text-align: center; margin-bottom: 1rem }
+.select-header h2 { font-size: 1rem; font-weight: 800 }
+.select-header .player-name { font-size: .75rem; color: #888; margin-top: .2rem }
+.select-prompt { font-size: .8rem; text-align: center; margin-bottom: 1.5rem; line-height: 1.6; color: #444 }
+.character-cards { display: flex; flex-direction: column; gap: .6rem; width: 100%; max-width: 380px }
+.char-card {
+  border: 2px solid #000; padding: .8rem 1rem; cursor: pointer; background: #fff;
+  display: flex; align-items: center; gap: .8rem; transition: all .08s;
+}
+.char-card:hover { background: #000; color: #fff }
+.char-card:hover .char-desc { color: #aaa }
+.char-card:hover .char-era { color: #777 }
+.char-card.completed { opacity: .3; cursor: default; border-style: dashed }
+.char-card.completed::after { content: ' ✓'; font-weight: 800 }
+.char-card.completed:hover { background: #fff; color: #000 }
+.char-icon { flex-shrink: 0 }
+.char-card h3 { font-size: .9rem; font-weight: 800; margin-bottom: .15rem }
+.char-card .char-desc { font-size: .7rem; line-height: 1.4; color: #555 }
+.char-card .char-era { font-size: .6rem; color: #999; margin-top: .2rem }
+
+/* === GAME === */
+#game-screen { flex-direction: column; min-height: 100vh }
+.game-header {
+  border-bottom: 2px solid #000; padding: 6px 12px;
+  display: flex; justify-content: space-between; align-items: center;
+  position: sticky; top: 0; background: #fff; z-index: 100;
+}
+.game-header .location { font-size: .65rem; font-weight: 700 }
+.game-header .progress { font-size: .7rem; font-weight: 800 }
+.game-content { flex: 1; padding: 1rem; display: flex; flex-direction: column; gap: .6rem; max-width: 480px; margin: 0 auto; width: 100% }
+.source-card { border: 2px solid #000; cursor: pointer; background: #fff; animation: slideUp .3s ease backwards; transition: all .08s }
+.source-card:nth-child(2) { animation-delay: .04s }
+.source-card:nth-child(3) { animation-delay: .08s }
+.source-card:nth-child(4) { animation-delay: .12s }
+.source-card:hover { box-shadow: 4px 4px 0 #000; transform: translate(-2px,-2px) }
+.source-letter,.source-newspaper,.source-photo,.source-oral {}
+.card-header { padding: .7rem .8rem; display: flex; align-items: center; gap: .6rem }
+.card-icon { flex-shrink: 0 }
+.card-title { font-size: .8rem; font-weight: 800 }
+.card-sub { font-size: .6rem; color: #777; margin-top: .1rem }
+.card-status { margin-left: auto; font-size: .6rem; font-weight: 700; padding: 2px 6px; border: 1px solid #000 }
+.card-status.solved { background: #000; color: #fff }
+
+/* Source detail */
+.source-detail { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 200; background: #fff; overflow-y: auto; animation: fadeIn .2s }
+.source-detail.active { display: block }
+.detail-inner { max-width: 460px; margin: 0 auto; padding: 1rem; min-height: 100vh }
+.detail-close { position: sticky; top: 0; text-align: right; padding: .3rem 0; z-index: 10; background: #fff }
+.detail-close button { background: #fff; border: 2px solid #000; padding: 3px 10px; cursor: pointer; font: 800 .75rem inherit }
+.detail-close button:hover { background: #000; color: #fff }
+
+/* === PAPERS === */
+.letter-paper { border: 2px solid #000; padding: 1.2rem; line-height: 1.8; font-size: .85rem; font-family: Georgia, 'Noto Serif KR', serif }
+.letter-paper .letter-meta { font-family: -apple-system, sans-serif; font-size: .65rem; color: #888; margin-bottom: .8rem; padding-bottom: .6rem; border-bottom: 1px dashed #000 }
+.letter-paper .letter-sign { text-align: right; margin-top: 1.2rem; font-style: italic }
+.diary-paper { border: 2px solid #000; padding: 1.2rem; line-height: 2; font-size: .9rem; font-style: italic; background: repeating-linear-gradient(transparent, transparent 27px, #ddd 27px, #ddd 28px) }
+.diary-paper .diary-meta { font-style: normal; font-size: .6rem; color: #888; margin-bottom: .8rem }
+.scholar-paper { border: 2px solid #000; border-left: 6px solid #000; padding: 1.2rem; line-height: 1.8; font-size: .85rem; font-family: Georgia, 'Noto Serif KR', serif }
+.newspaper-paper { border: 2px solid #000; padding: 1rem }
+.newspaper-paper .news-header { text-align: center; border-bottom: 3px double #000; padding-bottom: .5rem; margin-bottom: .6rem }
+.newspaper-paper .news-name { font-size: 1.2rem; font-weight: 900; letter-spacing: .5em }
+.newspaper-paper .news-date { font-size: .6rem; margin-top: .15rem; color: #888 }
+.newspaper-paper .news-title { font-size: .95rem; font-weight: 900; margin-bottom: .6rem; line-height: 1.4 }
+.newspaper-paper .news-body { font-size: .75rem; line-height: 1.8; text-align: justify }
+.photo-frame { border: 2px solid #000; padding: .6rem }
+.photo-placeholder {
+  width: 100%; height: 140px; display: flex; align-items: center; justify-content: center; gap: .3rem;
+  font-size: .7rem; color: #888;
+  background: repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 0 0 / 8px 8px;
+  border: 1px solid #ddd;
+}
+.photo-frame .photo-caption { font-size: .7rem; color: #333; margin-top: .5rem; line-height: 1.5; text-align: left }
+.photo-frame .photo-source { font-size: .55rem; color: #aaa; margin-top: .2rem; text-align: left }
+.oral-player { border: 2px solid #000; padding: 1rem }
+.oral-player .cassette { text-align: center; margin-bottom: .6rem; display: flex; align-items: center; justify-content: center; animation: blink 2.5s infinite }
+.oral-player .oral-meta { font-size: .6rem; color: #888; margin-bottom: .6rem; padding-bottom: .4rem; border-bottom: 1px solid #eee }
+.oral-player .oral-text { font-size: .8rem; line-height: 1.8; font-style: italic }
+.oral-player .oral-text p { margin-bottom: .6rem }
+
+/* Blanks */
+.blank-slot { display: inline-block; min-width: 60px; border-bottom: 2px solid #000; padding: 1px 3px; margin: 0 2px; cursor: pointer; font-weight: 800 }
+.blank-slot.empty { animation: blink 2s infinite; background: #f5f5f5 }
+.blank-slot.filled { background: #000; color: #fff; animation: none }
+.sound-note { font-size: .55rem; color: #bbb; margin-top: .4rem; font-style: italic; display: flex; align-items: center; gap: .2rem }
+.sound-note svg { flex-shrink: 0 }
+
+/* === MODAL === */
+.modal-backdrop { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.15); z-index: 250 }
+.modal-backdrop.active { display: block }
+.answer-modal { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 2px solid #000; padding: 1.2rem; z-index: 300; animation: slideUp .2s; max-width: 460px; margin: 0 auto }
+.answer-modal.active { display: block }
+.answer-modal .modal-label { font-size: .65rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .3rem }
+.answer-modal .modal-hint { font-size: .75rem; color: #555; margin-bottom: .8rem; line-height: 1.5 }
+.answer-modal input { margin-bottom: .6rem }
+.answer-modal .modal-btns { display: flex; gap: .4rem }
+.answer-modal .modal-btns button { flex: 1 }
+.btn-submit { background: #000; color: #fff; border: 2px solid #000; padding: 7px; font: 800 .8rem inherit; cursor: pointer }
+.btn-cancel { background: #fff; border: 2px solid #000; padding: 7px; font: .8rem inherit; cursor: pointer }
+.btn-cancel:hover { background: #eee }
+
+/* Phase */
+.phase-banner { text-align: center; padding: 1.2rem .8rem; border: 2px solid #000 }
+.phase-banner .phase-num { font-size: .6rem; color: #888; letter-spacing: .1em; margin-bottom: .2rem }
+.phase-banner h2 { font-size: 1rem; font-weight: 900 }
+.phase-banner .phase-desc { font-size: .7rem; color: #555; margin-top: .3rem; line-height: 1.5 }
+
+/* Archive */
+.archive-selection { padding: .3rem 0 }
+.archive-prompt { border: 2px solid #000; padding: 1rem; text-align: center; margin-bottom: .8rem }
+.archive-prompt h3 { font-size: .85rem; font-weight: 800; margin-bottom: .2rem }
+.archive-prompt p { font-size: .7rem; color: #555 }
+.archive-option { border: 2px solid #000; padding: .7rem .8rem; margin-bottom: -2px; cursor: pointer; display: flex; align-items: center; gap: .6rem; transition: all .08s }
+.archive-option:hover { box-shadow: 3px 3px 0 #000 }
+.archive-option.selected { background: #000; color: #fff }
+.archive-option.selected .opt-meaning { color: #aaa }
+.archive-option .opt-icon { flex-shrink: 0 }
+.archive-option .opt-title { font-size: .8rem; font-weight: 700 }
+.archive-option .opt-meaning { font-size: .6rem; color: #777; margin-top: .1rem }
+
+/* === DELIVERY === */
+#delivery-screen { flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; animation: fadeIn .4s }
+.crane-container { position: relative; width: 100px; height: 80px; margin-bottom: 1.2rem }
+.crane-bird { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%) }
+.crane-bird.flying { animation: fly 2s ease-in forwards }
+.delivery-text { font-size: .85rem; line-height: 1.8; max-width: 300px }
+.delivery-text .dest { font-weight: 900; border-bottom: 2px solid #000 }
+.crane-point { font-size: .75rem; margin-top: 1.2rem; font-weight: 700; animation: slideUp .5s ease 1s backwards }
+
+/* === RESULT === */
+#result-screen { flex-direction: column; align-items: center; justify-content: center; padding: 2rem; animation: fadeIn .4s }
+.result-box { max-width: 380px; width: 100% }
+.result-box h2 { font-size: 1.1rem; font-weight: 900; margin-bottom: .2rem }
+.result-box .result-sub { font-size: .7rem; color: #888; margin-bottom: 1.2rem }
+.result-stat { border: 2px solid #000; padding: .6rem .8rem; margin-bottom: -2px; display: flex; justify-content: space-between }
+.result-stat .stat-label { font-size: .75rem }
+.result-stat .stat-value { font-weight: 900 }
+.result-summary { font-size: .75rem; line-height: 1.8; margin-top: 1.2rem; padding: .8rem; border: 2px solid #000; border-left: 6px solid #000 }
+
+/* Toast */
+.toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); background: #fff; border: 2px solid #000; padding: 1rem 1.2rem; z-index: 400; text-align: center; animation: fadeIn .15s; box-shadow: 6px 6px 0 #000; max-width: 260px }
+.toast .toast-icon { font-size: 1.3rem; margin-bottom: .2rem; font-weight: 900 }
+.toast .toast-text { font-size: .8rem; line-height: 1.4 }
+
+@media (min-width: 600px) {
+  .login-title { font-size: 3rem }
+  .character-cards { flex-direction: row; max-width: 660px }
+  .char-card { flex: 1; flex-direction: column; text-align: center; gap: .3rem }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen" class="screen active">
+  <div class="win">
+    <div class="win-bar"><span>DMZ 다이어리</span></div>
+    <div class="win-body" style="text-align:center">
+      <h1 class="login-title">DMZ<br>다이어리</h1>
+      <p class="login-sub">아키비스트가 DMZ를 기록하는 방법</p>
+      <div class="login-field">
+        <label>이름</label>
+        <input type="text" id="input-name" placeholder="이름" autocomplete="off">
+      </div>
+      <div class="login-field">
+        <label>코드</label>
+        <input type="text" id="input-code" placeholder="게임 코드" autocomplete="off">
+      </div>
+      <div class="login-error" id="login-error"></div>
+      <button class="btn" onclick="handleLogin()">입장</button>
+      <p class="login-hint">우편사서함에 도착한 기록을 탐색합니다</p>
+    </div>
+  </div>
+</div>
+
+<!-- SELECT -->
+<div id="select-screen" class="screen">
+  <div class="select-header">
+    <h2>DMZ 우편사서함</h2>
+    <p class="player-name" id="display-name"></p>
+  </div>
+  <p class="select-prompt">기록을 선택하세요.<br>누구의 시선으로 DMZ를 바라보시겠습니까?</p>
+  <div class="character-cards" id="character-cards"></div>
+</div>
+
+<!-- GAME -->
+<div id="game-screen" class="screen">
+  <div class="game-header">
+    <span class="location" id="game-location"></span>
+    <span class="progress" id="game-progress"></span>
+  </div>
+  <div class="game-content" id="game-content"></div>
+</div>
+
+<!-- DELIVERY -->
+<div id="delivery-screen" class="screen">
+  <div class="crane-container">
+    <div class="crane-bird" id="crane-bird">
+      <svg width="48" height="36" viewBox="0 0 12 9" shape-rendering="crispEdges" fill="#000">
+        <rect x="5" y="0" width="2" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/>
+        <rect x="3" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/>
+        <rect x="2" y="3" width="1" height="1"/><rect x="5" y="3" width="2" height="1"/><rect x="9" y="3" width="1" height="1"/>
+        <rect x="1" y="4" width="1" height="1"/><rect x="5" y="4" width="2" height="1"/><rect x="10" y="4" width="1" height="1"/>
+        <rect x="5" y="5" width="2" height="1"/><rect x="5" y="6" width="2" height="1"/>
+        <rect x="4" y="7" width="2" height="1"/><rect x="6" y="7" width="2" height="1"/>
+        <rect x="4" y="8" width="1" height="1"/><rect x="7" y="8" width="1" height="1"/>
+      </svg>
+    </div>
+  </div>
+  <p class="delivery-text" id="delivery-text"></p>
+  <p class="crane-point" id="crane-point"></p>
+  <button class="btn" onclick="backToSelect()" style="margin-top:1.5rem">다른 기록 탐색하기</button>
+</div>
+
+<!-- RESULT -->
+<div id="result-screen" class="screen">
+  <div class="result-box" id="result-box"></div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="closeAnswerModal()"></div>
+<div class="answer-modal" id="answer-modal">
+  <div class="modal-label" id="modal-label"></div>
+  <div class="modal-hint" id="modal-hint"></div>
+  <input type="text" id="modal-input" placeholder="정답을 입력하세요" autocomplete="off">
+  <div class="modal-btns">
+    <button class="btn-cancel" onclick="closeAnswerModal()">취소</button>
+    <button class="btn-submit" onclick="submitAnswer()">확인</button>
+  </div>
+</div>
+<div class="source-detail" id="source-detail">
+  <div class="detail-inner" id="detail-inner"></div>
+</div>
+
+<script>
+// ===== PIXEL ART ICONS =====
+const I = {
+  soldier: '<svg width="24" height="24" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><rect x="3" y="0" width="2" height="1"/><rect x="2" y="1" width="4" height="1"/><rect x="0" y="2" width="8" height="2"/><rect x="1" y="4" width="6" height="1"/><rect x="2" y="5" width="4" height="1"/><rect x="1" y="6" width="2" height="1"/><rect x="5" y="6" width="2" height="1"/><rect x="0" y="7" width="2" height="1"/><rect x="6" y="7" width="2" height="1"/></svg>',
+  student: '<svg width="24" height="24" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><rect x="3" y="0" width="2" height="1"/><rect x="1" y="1" width="6" height="1"/><rect x="0" y="2" width="8" height="1"/><rect x="2" y="3" width="4" height="1"/><rect x="2" y="4" width="4" height="1"/><rect x="2" y="5" width="4" height="1"/><rect x="7" y="1" width="1" height="3"/></svg>',
+  historian: '<svg width="24" height="24" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><rect x="1" y="0" width="6" height="1"/><rect x="0" y="1" width="1" height="6"/><rect x="7" y="1" width="1" height="6"/><rect x="1" y="7" width="6" height="1"/><rect x="3" y="2" width="2" height="1"/><rect x="4" y="3" width="1" height="1"/><rect x="3" y="4" width="2" height="1"/><rect x="2" y="5" width="4" height="1"/></svg>',
+  envelope: '<svg width="18" height="18" viewBox="0 0 8 6" shape-rendering="crispEdges" fill="currentColor"><rect x="0" y="0" width="8" height="1"/><rect x="0" y="5" width="8" height="1"/><rect x="0" y="0" width="1" height="6"/><rect x="7" y="0" width="1" height="6"/><rect x="1" y="1" width="1" height="1"/><rect x="6" y="1" width="1" height="1"/><rect x="2" y="2" width="1" height="1"/><rect x="5" y="2" width="1" height="1"/><rect x="3" y="3" width="2" height="1"/></svg>',
+  newspaper: '<svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><rect x="0" y="0" width="8" height="1"/><rect x="0" y="7" width="8" height="1"/><rect x="0" y="0" width="1" height="8"/><rect x="7" y="0" width="1" height="8"/><rect x="2" y="2" width="4" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="2" y="5" width="4" height="1"/></svg>',
+  camera: '<svg width="18" height="18" viewBox="0 0 8 7" shape-rendering="crispEdges" fill="currentColor"><rect x="2" y="0" width="4" height="1"/><rect x="0" y="1" width="8" height="1"/><rect x="0" y="6" width="8" height="1"/><rect x="0" y="1" width="1" height="6"/><rect x="7" y="1" width="1" height="6"/><rect x="3" y="3" width="2" height="2"/></svg>',
+  mic: '<svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><rect x="3" y="0" width="2" height="4"/><rect x="1" y="3" width="1" height="2"/><rect x="6" y="3" width="1" height="2"/><rect x="2" y="5" width="4" height="1"/><rect x="3" y="6" width="2" height="1"/><rect x="2" y="7" width="4" height="1"/></svg>',
+  notebook: '<svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><rect x="1" y="0" width="6" height="1"/><rect x="1" y="7" width="6" height="1"/><rect x="1" y="0" width="1" height="8"/><rect x="7" y="0" width="1" height="8"/><rect x="3" y="0" width="1" height="8"/><rect x="4" y="3" width="2" height="1"/><rect x="4" y="5" width="2" height="1"/></svg>',
+  screen: '<svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><rect x="0" y="0" width="8" height="1"/><rect x="0" y="5" width="8" height="1"/><rect x="0" y="0" width="1" height="6"/><rect x="7" y="0" width="1" height="6"/><rect x="3" y="6" width="2" height="1"/><rect x="2" y="7" width="4" height="1"/></svg>',
+  book: '<svg width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor"><rect x="1" y="0" width="6" height="1"/><rect x="1" y="7" width="6" height="1"/><rect x="1" y="0" width="1" height="8"/><rect x="7" y="0" width="1" height="8"/><rect x="3" y="0" width="1" height="8"/></svg>',
+  pin: '<svg width="10" height="10" viewBox="0 0 6 8" shape-rendering="crispEdges" fill="currentColor"><rect x="2" y="0" width="2" height="1"/><rect x="1" y="1" width="4" height="3"/><rect x="2" y="4" width="2" height="1"/><rect x="2" y="5" width="2" height="1"/><rect x="2" y="6" width="2" height="1"/></svg>',
+  craneSm: '<svg width="16" height="12" viewBox="0 0 8 6" shape-rendering="crispEdges" fill="currentColor"><rect x="3" y="0" width="2" height="1"/><rect x="2" y="1" width="1" height="1"/><rect x="5" y="1" width="1" height="1"/><rect x="1" y="2" width="1" height="1"/><rect x="3" y="2" width="2" height="1"/><rect x="6" y="2" width="1" height="1"/><rect x="0" y="3" width="1" height="1"/><rect x="3" y="3" width="2" height="1"/><rect x="7" y="3" width="1" height="1"/><rect x="3" y="4" width="2" height="2"/></svg>',
+  cassette: '<svg width="28" height="20" viewBox="0 0 10 7" shape-rendering="crispEdges" fill="currentColor"><rect x="0" y="0" width="10" height="1"/><rect x="0" y="6" width="10" height="1"/><rect x="0" y="0" width="1" height="7"/><rect x="9" y="0" width="1" height="7"/><rect x="2" y="2" width="2" height="2"/><rect x="6" y="2" width="2" height="2"/><rect x="4" y="3" width="2" height="1"/><rect x="3" y="5" width="4" height="1"/></svg>',
+  sound: '<svg width="10" height="10" viewBox="0 0 6 6" shape-rendering="crispEdges" fill="currentColor" style="vertical-align:-1px;opacity:.4"><rect x="0" y="2" width="2" height="2"/><rect x="2" y="1" width="1" height="4"/><rect x="3" y="0" width="1" height="6"/><rect x="5" y="1" width="1" height="1"/><rect x="5" y="4" width="1" height="1"/></svg>',
+  photoSm: '<svg width="10" height="10" viewBox="0 0 6 5" shape-rendering="crispEdges" fill="currentColor" style="vertical-align:-1px"><rect x="2" y="0" width="2" height="1"/><rect x="0" y="1" width="6" height="1"/><rect x="0" y="4" width="6" height="1"/><rect x="0" y="1" width="1" height="4"/><rect x="5" y="1" width="1" height="4"/><rect x="2" y="2" width="2" height="2"/></svg>',
+};
+
+// ===== GAME DATA =====
+const GAME_DATA = {
+  soldier: {
+    title: 'DMZ의 탄생', icon: I.soldier, charName: '군인',
+    desc: '총소리가 멈춘 밤,<br>정전협정 그날의 기록',
+    location: '판문점, 중부전선, DMZ 일대',
+    era: '1953년 7월 27일 · 판문점',
+    destination: '판문점 (파주)',
+    soundNote: '포성이 줄어들다 침묵 → 벌레 소리, 바람 소리',
+    sources: [
+      { id: 'A', type: 'letter', icon: I.envelope, title: '군인의 편지', sub: 'DMZ 우편사서함에서 발견된 편지', styleClass: 'source-letter' },
+      { id: 'B', type: 'newspaper', icon: I.newspaper, title: '신문 보도', sub: '동아일보 1953년 7월 28일자', styleClass: 'source-newspaper' },
+      { id: 'C', type: 'photo', icon: I.camera, title: '사진 자료', sub: '정전협정 서명식 / 군사분계선 표지판', styleClass: 'source-photo' },
+      { id: 'D', type: 'oral', icon: I.mic, title: '구술 인터뷰', sub: '참전용사 김영수 (2010년 채록)', styleClass: 'source-oral' }
+    ],
+    blanks: {
+      A: { answer: '판문점', hint: '이 편지 속 장소는 다른 자료에서 확인할 수 있습니다. 자료 B(신문)를 읽어보세요.', source: 'B' },
+      B: { answer: '해리슨', hint: '이 인물은 사진 자료에서 확인할 수 있습니다. 자료 C(사진)의 캡션을 읽어보세요.', source: 'C' },
+      C: { answer: '남일', hint: '공산군 측 수석대표의 이름은 자료 B(신문)에서 확인할 수 있습니다.', source: 'B' },
+      D: { answer: '4', hint: '각 2킬로미터씩 후퇴하면 총 폭은? 자료 B(신문)를 참고하세요.', source: 'B', altAnswers: ['사', '4km', '4킬로미터'] }
+    },
+    choices: [
+      { icon: I.envelope, title: '군인의 편지', meaning: '개인의 감정과 체험을 기록으로 남긴다' },
+      { icon: I.newspaper, title: '신문 보도', meaning: '공식적 사실 기록을 남긴다' },
+      { icon: I.camera, title: '사진', meaning: '시각적 증거를 남긴다' },
+      { icon: I.mic, title: '구술 인터뷰', meaning: '살아있는 목소리를 기록으로 남긴다' }
+    ]
+  },
+  student: {
+    title: '대성동 초등학교', icon: I.student, charName: '초등학생',
+    desc: 'DMZ 안 유일한 학교,<br>졸업식 날의 기록',
+    location: '대성동 자유의 마을, 대성동초등학교',
+    era: '2026년 2월 · 대성동 자유의 마을',
+    destination: '대성동 자유의 마을 (파주)',
+    soundNote: '학교 종소리, 아이들 웃음, 간간이 군용차 엔진 소리',
+    sources: [
+      { id: 'A', type: 'diary', icon: I.notebook, title: '초등학생의 일기', sub: 'DMZ 우편사서함에서 발견된 일기장', styleClass: 'source-letter' },
+      { id: 'B', type: 'newspaper', icon: I.screen, title: '뉴스 보도', sub: '연합뉴스 2026년 2월 7일', styleClass: 'source-newspaper' },
+      { id: 'C', type: 'photo', icon: I.camera, title: '사진 자료', sub: '대성동초등학교 표지판 / 마을 전경', styleClass: 'source-photo' },
+      { id: 'D', type: 'oral', icon: I.mic, title: '구술 인터뷰', sub: '前 교사 이정호 (2025년 채록)', styleClass: 'source-oral' }
+    ],
+    blanks: {
+      A: { answer: '4', hint: '졸업생 수는 자료 B(뉴스)에서 확인할 수 있습니다.', source: 'B', altAnswers: ['네', '넷', '4명'] },
+      B: { answer: '유엔군사령부', hint: '영어 수업을 담당하는 곳은? 자료 D(구술)에 힌트가 있습니다.', source: 'D', altAnswers: ['UNC', '유엔군사령부(UNC)', '유엔군 사령부'] },
+      C: { answer: '영어특성화', hint: '유엔군이 영어를 가르친다는 내용에서 유추해보세요. 자료 A(일기)를 참고하세요.', source: 'A', altAnswers: ['영어 특성화'] },
+      D: { answer: '90', hint: '참석 인원은 자료 B(뉴스)에서 확인할 수 있습니다.', source: 'B', altAnswers: ['90명', '약 90', '약 90명'] }
+    },
+    choices: [
+      { icon: I.notebook, title: '초등학생의 일기', meaning: '아이의 시선으로 본 일상을 기록으로 남긴다' },
+      { icon: I.screen, title: '뉴스 보도', meaning: '공식 보도를 통한 사실 기록을 남긴다' },
+      { icon: I.camera, title: '사진', meaning: '시각적 장면을 기록으로 남긴다' },
+      { icon: I.mic, title: '교사의 구술', meaning: '어른의 시선으로 본 현장을 기록으로 남긴다' }
+    ]
+  },
+  historian: {
+    title: '철원성', icon: I.historian, charName: '역사학자',
+    desc: '천 년 된 도성이<br>군사분계선에 잠들다',
+    location: '철원 평화전망대, 철원성 (DMZ 내)',
+    era: '905년~현재 · 철원성',
+    destination: '철원 평화전망대',
+    soundNote: '바람 소리, 망원경 초점 맞추는 소리, 먼 곳의 새 울음',
+    sources: [
+      { id: 'A', type: 'scholar', icon: I.book, title: '역사학자의 일기', sub: 'DMZ 우편사서함에서 발견된 학술 노트', styleClass: 'source-letter' },
+      { id: 'B', type: 'newspaper', icon: I.newspaper, title: '신문 보도', sub: '강원일보 2026년 3월 15일', styleClass: 'source-newspaper' },
+      { id: 'C', type: 'photo', icon: I.camera, title: '사진 자료', sub: '철원 민통선 일대 전경', styleClass: 'source-photo' },
+      { id: 'D', type: 'oral', icon: I.mic, title: '구술 인터뷰', sub: '향토사학자 최동원 (2025년 채록)', styleClass: 'source-oral' }
+    ],
+    blanks: {
+      A: { answer: '궁예', hint: '905년에 이 성을 쌓은 인물은? 자료 D(구술)에서 확인하세요.', source: 'D' },
+      B: { answer: '군사분계선', hint: '도성을 관통하는 것은? 자료 A(일기)에 힌트가 있습니다.', source: 'A', altAnswers: ['MDL', '군사분계선(MDL)', '군사 분계선'] },
+      C: { answer: '7', hint: '성벽 밑변의 폭은? 자료 D(구술)에서 확인하세요.', source: 'D', altAnswers: ['7미터', '7m'] },
+      D: { answer: '평화전망대', hint: '망원경으로 성을 보는 장소는? 자료 A(일기)에서 확인하세요.', source: 'A', altAnswers: ['전망대', '철원 평화전망대'] }
+    },
+    choices: [
+      { icon: I.book, title: '학자의 일기', meaning: '한 사람의 평생에 걸친 꿈을 기록으로 남긴다' },
+      { icon: I.newspaper, title: '신문 보도', meaning: '학술적 사실과 정책 기록을 남긴다' },
+      { icon: I.camera, title: '사진', meaning: '유적의 현재 모습을 시각적 증거로 남긴다' },
+      { icon: I.mic, title: '향토사학자 구술', meaning: '현장의 살아있는 이야기를 기록으로 남긴다' }
+    ]
+  }
+};
+
+// ===== TEMPLATES =====
+const TEMPLATES = {
+  soldier: {
+    A: (b) => `<div class="letter-paper">
+      <div class="letter-meta"><strong>총소리가 멈춘 밤에</strong><br>1953년 7월 27일 · 보내는 이: 국군 병장 박진우 · 받는 이: 어머니</div>
+      <p>어머니, 총소리가 멈췄습니다.</p>
+      <p style="margin-top:0.8rem;">오늘 밤 열 시를 기해 모든 총성이 그쳤습니다. 아침에 ${b.A}이라는 곳에서 정전협정이 체결되었다고 합니다. 서명에 단 10분밖에 걸리지 않았다 합니다. 3년이 넘는 전쟁을 그렇게 매듭지었다니.</p>
+      <p style="margin-top:0.8rem;">이것은 평화가 아닙니다. '정전'이라 합니다. 총을 내려놓은 것이지 악수를 한 것이 아닙니다.</p>
+      <p style="margin-top:0.8rem;">내일부터 72시간 안에 우리는 2킬로미터를 물러납니다. 그 사이 빈 땅이 생기고, 군사분계선을 따라 1,292개의 표지판이 세워진다 합니다. 김 상병의 고향 마을도 그 안에 들어갑니다. 그는 오늘 밤 한마디도 하지 않았습니다.</p>
+      <p style="margin-top:0.8rem;">달이 밝습니다. 이 전쟁은 멈추었지만, 끝나지 않았습니다.</p>
+      <p class="letter-sign">아들 진우 올림</p>
+      <p class="sound-note">${I.sound} 포성이 줄어들며… 침묵. 벌레 소리, 바람 소리.</p>
+    </div>`,
+    B: (b) => `<div class="newspaper-paper">
+      <div class="news-header"><div class="news-name">동 아 일 보</div><div class="news-date">1953년 7월 28일 (화)</div></div>
+      <div class="news-title">정전협정 조인 — 판문점에서 쌍방 서명 완료</div>
+      <div class="news-body">
+        <p>유엔군 측 수석대표 ${b.B} 중장과 공산군 측 수석대표 남일 대장은 27일 오전 10시 정전협정에 조인하였다. 서명식은 약 10분간 진행되었으며 양측은 일체의 발언 없이 서명만을 교환하였다.</p>
+        <p style="margin-top:0.8rem;">협정에 따라 발효 후 72시간 이내에 쌍방 군사력은 군사분계선으로부터 각 2킬로미터씩 후퇴하여야 한다. 이로써 서해 강화도에서 동해 고성까지 약 248킬로미터에 걸친 비무장지대가 설치된다.</p>
+      </div></div>`,
+    C: (b) => `<div class="photo-frame" style="margin-bottom:1rem;">
+      <div class="photo-placeholder">${I.photoSm} 사진 1: 판문점 정전협정 서명식</div>
+      <div class="photo-caption">[사진 1] 1953년 7월 27일 오전 10시, 판문점. 유엔군 측 수석대표 해리슨 중장(왼쪽 테이블)이 정전협정문에 서명하고 있다. 맞은편에는 ${b.C} 대장이 앉아 있다.</div>
+      <div class="photo-source">출처: 미국 국립문서기록관리청(NARA)</div>
+    </div>
+    <div class="photo-frame">
+      <div class="photo-placeholder">${I.photoSm} 사진 2: MDL 표지판</div>
+      <div class="photo-caption">[사진 2] 판문점 DMZ 내 군사분계선 표지판. 서해 강화도에서 동해 고성까지 약 248킬로미터 구간에 총 1,292개가 설치되었다.</div>
+      <div class="photo-source">출처: 미국 공군(USAF)</div>
+    </div>`,
+    D: (b) => `<div class="oral-player">
+      <div class="cassette">${I.cassette}</div>
+      <div class="oral-meta">구술자: 김영수 (1933년생, 당시 이등병) · 채록: 2010년 6월<br>주제: 정전협정 당일 기억</div>
+      <div class="oral-text">
+        <p>"그날 밤 열 시에 총소리가 딱 멈추니까, 세상이 쥐 죽은 듯이 조용해졌어. 근데 아무도 안 웃었어. 울지도 않고. 그냥 멍했지."</p>
+        <p>"72시간 안에 물러나라 그래서, 3년 지킨 참호를 제 손으로 허물었어. 2킬로씩 물러나니까 가운데 ${b.D}킬로짜리 빈 땅이 생기는 거야. 거기가 비무장지대가 된 거지."</p>
+        <p>"우리 부대에 연천 사람이 하나 있었는데, 그 친구 고향이 딱 그 안에 들어갔어. 그 친구는 그날 밤새 북쪽만 보고 있었어."</p>
+      </div>
+      <p class="sound-note">${I.sound} 먼 곳의 침묵… 벌레 소리, 바람 소리</p>
+    </div>`
+  },
+  student: {
+    A: (b) => `<div class="diary-paper">
+      <div class="diary-meta">제목: 졸업합니다 · 2026년 2월 6일 · 6학년 한서윤</div>
+      <p>내일이면 졸업이다. 우리 학년 졸업생은 ${b.A}명이다.</p>
+      <p style="margin-top:0.8rem;">3학년 때 전학 왔다. 첫날 스쿨버스를 타고 통일대교를 건너는데 군인 아저씨가 올라타서 출입증을 확인했다. 검문소를 두 번 지났다.</p>
+      <p style="margin-top:0.8rem;">우리 반은 나 포함 다섯 명. 여기서 제일 신기한 건 판문점에 있는 유엔군 아저씨들이 와서 영어를 가르쳐 주는 거다. 마이클 선생님은 내 이름 발음을 졸업할 때까지 못 고쳤다.</p>
+      <p style="margin-top:0.8rem;">운동장에서 북쪽을 보면 기정동 마을이 보인다. 160미터짜리 깃대가 서 있다. 일 년에 두 번 대피 훈련을 한다. 사이렌이 울리면 전부 버스에 올라탄다.</p>
+      <p style="margin-top:0.8rem;">졸업합니다, 대성동초등학교.</p>
+      <p class="sound-note">${I.sound} 학교 종소리, 아이들 웃음소리</p>
+    </div>`,
+    B: (b) => `<div class="newspaper-paper">
+      <div class="news-header"><div class="news-name">연 합 뉴 스</div><div class="news-date">2026년 2월 7일</div></div>
+      <div class="news-title">DMZ 유일의 학교 대성동초등학교 제57회 졸업식</div>
+      <div class="news-body">
+        <p>비무장지대(DMZ) 내 유일한 교육기관인 대성동초등학교가 7일 졸업식을 거행했다. 졸업생은 4명. 1954년 개교 이래 누적 졸업생 234명을 배출했다.</p>
+        <p style="margin-top:0.8rem;">동 학교는 정전협정에 따라 DMZ 내 유일한 남측 민간인 거주지인 대성동 자유의 마을에 위치한다. ${b.B} 소속 장병이 영어 수업을 담당하며, 재학생 대다수는 문산·파주에서 스쿨버스로 통학한다.</p>
+        <p style="margin-top:0.8rem;">졸업식에는 통일부 관계자, 유엔군사령부 장교, 학부모 등 약 90여 명이 참석했다.</p>
+      </div></div>`,
+    C: (b) => `<div class="photo-frame" style="margin-bottom:1rem;">
+      <div class="photo-placeholder">${I.photoSm} 사진 1: 대성동초등학교 표지판</div>
+      <div class="photo-caption">[사진 1] 대성동초등학교 안내 표지판. 2007년 학생 수 감소로 폐교 위기에 처했으나, ${b.C}학교로 전환하여 존속하였다. 현재 6학급 재학생 약 27명, 교직원 약 21명.</div>
+      <div class="photo-source">출처: Edward N. Johnson, Wikimedia Commons</div>
+    </div>
+    <div class="photo-frame">
+      <div class="photo-placeholder">${I.photoSm} 사진 2: 대성동 마을 전경</div>
+      <div class="photo-caption">[사진 2] 공동경비구역(JSA) 인근에 위치한 대성동 자유의 마을과 높이 세워진 태극기. 북측 기정동 마을에서 약 800m 거리에 위치한다.</div>
+      <div class="photo-source">출처: Park Jong-u (2022), Wikimedia Commons</div>
+    </div>`,
+    D: (b) => `<div class="oral-player">
+      <div class="cassette">${I.cassette}</div>
+      <div class="oral-meta">구술자: 이정호 (대성동초등학교 前 교사) · 채록: 2025년 12월<br>주제: 대성동초등학교 교사 경험</div>
+      <div class="oral-text">
+        <p>"여기 처음 발령받았을 때, 검문소에서 출입증 검사받으면서 '내가 학교를 가는 건가 군부대를 가는 건가' 싶었어요. 근데 교실 문 열면 애들이 뛰어오거든요. 한 반에 다섯 명이니까 매일 이름 부르고. 숨을 데가 없어요."</p>
+        <p>"졸업식 때 참석자가 한 ${b.D}명은 돼요. 졸업생은 서넛인데. 통일부에서, 유엔군사령부에서, 시장님까지. 졸업생보다 하객이 스무 배 많은 졸업식이에요."</p>
+        <p>"북쪽 기정동에서 확성기 틀 때가 제일 힘들어요. 애들한테 '그냥 소리야' 하는데, 교실 창문이 그쪽을 향하고 있으니까. 그래도 애들은 금방 익숙해져요. 어른보다 빨라요."</p>
+      </div>
+      <p class="sound-note">${I.sound} 학교 종소리, 간간이 군용차 엔진 소리</p>
+    </div>`
+  },
+  historian: {
+    A: (b) => `<div class="scholar-paper">
+      <div class="letter-meta" style="font-family:-apple-system,sans-serif;font-size:.65rem;color:#888;margin-bottom:.8rem;padding-bottom:.6rem;border-bottom:1px dashed #000;"><strong>내가 죽기 전에</strong><br>2026년 3월 어느 날 · 역사학자 박종길 (90세)</div>
+      <p>오늘 또 전망대에 올랐다. 망원경으로 보면 거기, 성벽의 윤곽이 풀 사이로 보인다. ${b.A}가 905년에 쌓은 철원성. 외성 둘레 12킬로미터. 천백 년 된 도성이 군사분계선에 걸터앉아 풀에 묻혀 있다.</p>
+      <p style="margin-top:0.8rem;">서른 살에 일제강점기 사진 한 장으로 이 성을 만났다. 2005년에 육사 조사단과 외성 동벽을 직접 밟았다. 손이 떨렸다. 그런데 내성과 궁성은 군사분계선 너머에 있다.</p>
+      <p style="margin-top:0.8rem;">2018년, 남북이 공동조사에 합의했을 때 발굴 계획서를 밤새 썼다. 하지만 이행되지 않았다. 70여 년간 사람의 발길이 닿지 않았으니 오히려 온전할 것이다. 분단이 유적을 지켰다.</p>
+      <p style="margin-top:0.8rem;">내년에도 올 수 있을지 모르겠다. 그래도 계획서는 완성한다.</p>
+      <p class="sound-note">${I.sound} 바람 소리, 망원경 초점 맞추는 소리, 먼 곳의 새 울음</p>
+    </div>`,
+    B: (b) => `<div class="newspaper-paper">
+      <div class="news-header"><div class="news-name">강 원 일 보</div><div class="news-date">2026년 3월 15일</div></div>
+      <div class="news-title">태봉 철원성, 남북 공동발굴 '1순위' 유적으로 재조명</div>
+      <div class="news-body">
+        <p>철원성은 궁예가 905년 수도를 철원으로 옮기며 축조한 도성으로, 외성 둘레 약 12,306m, 내성 둘레 약 7,656m에 달한다. ${b.B}이 도성 중앙부를 관통하고 있어 완전한 조사에는 남북 공동 작업이 불가피하다.</p>
+        <p style="margin-top:0.8rem;">2005년 육군사관학교 조사단이 외성 동벽을 조사하였으며, 2020년 국가유산청이 유엔군사령부의 호위 하에 현장조사를 수행하였다. 학계에서는 장기간 접근이 차단됨으로써 유적이 역설적으로 양호한 보존 상태를 유지하고 있을 것으로 추정한다.</p>
+      </div></div>`,
+    C: (b) => `<div class="photo-frame">
+      <div class="photo-placeholder">${I.photoSm} 철원평야 / 민통선 전경</div>
+      <div class="photo-caption">철원 민통선 안에서 바라본 철원평야. 이 일대에 궁예가 세운 태봉의 도성 철원성이 위치해 있다. 외성 단면의 밑변 폭은 약 ${b.C}미터로, 천 년 넘게 토축으로 쌓아 올린 성벽이다. DMZ 내에 위치하여 민간 접근이 차단되어 있다.</div>
+      <div class="photo-source">출처: 대한민국 국방부, "2012년 전선에 서다" 시리즈</div>
+    </div>`,
+    D: (b) => `<div class="oral-player">
+      <div class="cassette">${I.cassette}</div>
+      <div class="oral-meta">구술자: 최동원 (철원 향토사학자) · 채록: 2025년 11월<br>주제: 철원성의 현재와 남북 공동조사 전망</div>
+      <div class="oral-text">
+        <p>"철원성이 뭐냐면, 궁예가 나라를 세우고 수도를 만든 곳이에요. 외성, 내성, 궁성 3겹 구조인데, 외성 남벽하고 동벽 일부만 우리 쪽이고, 내성이랑 궁성은 전부 북쪽이에요."</p>
+        <p>"2005년에 육사 조사단이 처음 들어갔어요. 성벽 밑변이 7미터나 되더래요. 그걸 천 년 넘게 흙으로 쌓아 올린 거예요. 2018년에 9.19 합의로 공동조사 하기로 했는데, 그 뒤로 소식이 없어요."</p>
+        <p>"어떤 교수님은 평생을 이 성에 바쳤는데 내성은 한 번도 못 밟으셨어요. 망원경으로만 보시는 거예요, ${b.D}에서."</p>
+      </div>
+      <p class="sound-note">${I.sound} 바람 소리, 먼 곳의 새 울음</p>
+    </div>`
+  }
+};
+
+// ===== GAME STATE =====
+let state = { playerName: '', currentChar: null, solvedBlanks: {}, selectedRecords: [], totalCranes: 0, completedStories: [] };
+try {
+  const saved = localStorage.getItem('dmz_diary_v2');
+  if (saved) { const p = JSON.parse(saved); state.totalCranes = p.totalCranes || 0; state.completedStories = p.completedStories || []; }
+} catch(e) {}
+
+function saveState() {
+  try { localStorage.setItem('dmz_diary_v2', JSON.stringify({ totalCranes: state.totalCranes, completedStories: state.completedStories, playerName: state.playerName })); } catch(e) {}
+}
+
+// ===== ANSWER =====
+function normalizeAnswer(str) { return str.trim().replace(/\s+/g, '').replace(/[()（）]/g, '').toLowerCase(); }
+function checkAnswer(input, blank) {
+  const norm = normalizeAnswer(input);
+  if (norm === normalizeAnswer(blank.answer)) return true;
+  if (blank.altAnswers) return blank.altAnswers.some(alt => norm === normalizeAnswer(alt));
+  return false;
+}
+
+// ===== SCREENS =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ===== LOGIN =====
+function handleLogin() {
+  const name = document.getElementById('input-name').value.trim();
+  const code = document.getElementById('input-code').value.trim();
+  const errEl = document.getElementById('login-error');
+  if (!name) { errEl.textContent = '이름을 입력해주세요.'; return; }
+  if (code.toUpperCase() !== 'DMZ') { errEl.textContent = '게임 코드가 올바르지 않습니다.'; return; }
+  state.playerName = name;
+  showScreen('select-screen');
+  document.getElementById('display-name').textContent = `아키비스트 ${name}`;
+  renderCharacterCards();
+}
+document.getElementById('input-code').addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+document.getElementById('input-name').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('input-code').focus(); });
+
+// ===== CHARACTER SELECT =====
+function renderCharacterCards() {
+  const container = document.getElementById('character-cards');
+  container.innerHTML = Object.entries(GAME_DATA).map(([key, data]) => {
+    const done = state.completedStories.includes(key);
+    return `<div class="char-card ${done ? 'completed' : ''}" onclick="${done ? '' : `selectCharacter('${key}')`}">
+      <div class="char-icon">${data.icon}</div>
+      <div>
+        <h3>${data.charName}</h3>
+        <p class="char-desc">${data.desc}</p>
+        <p class="char-era">${data.era}</p>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function selectCharacter(charKey) {
+  if (state.completedStories.includes(charKey)) return;
+  state.currentChar = charKey;
+  state.solvedBlanks = {};
+  state.selectedRecords = [];
+  showScreen('game-screen');
+  renderGamePhase1();
+}
+
+// ===== GAME PHASE 1 =====
+function renderGamePhase1() {
+  const data = GAME_DATA[state.currentChar];
+  document.getElementById('game-location').innerHTML = `${I.pin} ${data.location}`;
+  updateProgress();
+  const solvedCount = Object.keys(state.solvedBlanks).length;
+  document.getElementById('game-content').innerHTML = `
+    <div class="phase-banner">
+      <div class="phase-num">${data.era}</div>
+      <h2>${data.title}</h2>
+      <div class="phase-desc">4개의 자료를 탐색하고, 자료 간 교차 참조로 빈칸을 복원하세요.</div>
+      <div class="sound-note">${I.sound} ${data.soundNote}</div>
+    </div>
+    ${data.sources.map((src, i) => {
+      const solved = state.solvedBlanks[src.id];
+      return `<div class="source-card ${src.styleClass}" onclick="openSource('${src.id}')" style="animation-delay:${i*0.04}s">
+        <div class="card-header">
+          <span class="card-icon">${src.icon}</span>
+          <div><div class="card-title">${src.title}</div><div class="card-sub">${src.sub}</div></div>
+          <span class="card-status ${solved ? 'solved' : ''}">${solved ? '복원 완료' : '빈칸 1개'}</span>
+        </div></div>`;
+    }).join('')}
+    ${solvedCount === 4 ? `<button class="btn-blk" onclick="goToPhase3()">모든 빈칸 복원 완료 — 기록 선택으로</button>` : ''}`;
+}
+
+function updateProgress() {
+  document.getElementById('game-progress').textContent = `빈칸 복원 ${Object.keys(state.solvedBlanks).length}/4`;
+}
+
+// ===== SOURCE DETAIL =====
+function openSource(sourceId) {
+  const data = GAME_DATA[state.currentChar];
+  const blanks = {};
+  for (const key of Object.keys(data.blanks)) {
+    blanks[key] = state.solvedBlanks[key]
+      ? `<span class="blank-slot filled">${state.solvedBlanks[key]}</span>`
+      : `<span class="blank-slot empty" onclick="event.stopPropagation();openAnswerModal('${key}')">[${key}]</span>`;
+  }
+  const template = TEMPLATES[state.currentChar][sourceId];
+  document.getElementById('detail-inner').innerHTML = `
+    <div class="detail-close"><button onclick="closeSource()">닫기 ✕</button></div>
+    ${template(blanks)}`;
+  document.getElementById('source-detail').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSource() {
+  document.getElementById('source-detail').classList.remove('active');
+  document.body.style.overflow = '';
+  renderGamePhase1();
+}
+
+// ===== ANSWER MODAL =====
+let currentBlankId = null;
+function openAnswerModal(blankId) {
+  currentBlankId = blankId;
+  const blank = GAME_DATA[state.currentChar].blanks[blankId];
+  document.getElementById('modal-label').textContent = `빈칸 [${blankId}]`;
+  document.getElementById('modal-hint').textContent = blank.hint;
+  document.getElementById('modal-input').value = '';
+  document.getElementById('modal-backdrop').classList.add('active');
+  document.getElementById('answer-modal').classList.add('active');
+  setTimeout(() => document.getElementById('modal-input').focus(), 100);
+}
+function closeAnswerModal() {
+  document.getElementById('modal-backdrop').classList.remove('active');
+  document.getElementById('answer-modal').classList.remove('active');
+  currentBlankId = null;
+}
+document.getElementById('modal-input').addEventListener('keydown', e => { if (e.key === 'Enter') submitAnswer(); });
+
+function submitAnswer() {
+  if (!currentBlankId) return;
+  const blank = GAME_DATA[state.currentChar].blanks[currentBlankId];
+  const input = document.getElementById('modal-input').value.trim();
+  if (!input) return;
+  if (checkAnswer(input, blank)) {
+    const solvedId = currentBlankId;
+    state.solvedBlanks[solvedId] = blank.answer;
+    closeAnswerModal();
+    showToast('correct', '정답', `빈칸 [${solvedId}] 복원 완료`);
+    setTimeout(() => openSource(solvedId), 1200);
+  } else {
+    showToast('incorrect', '다시 확인', '다른 자료를 교차 참조해보세요.');
+  }
+}
+
+function showToast(type, title, text) {
+  const existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<div class="toast-icon">${type === 'correct' ? '✓' : '✗'}</div><div class="toast-text"><strong>${title}</strong><br>${text}</div>`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2000);
+}
+
+// ===== PHASE 3: ARCHIVE =====
+function goToPhase3() {
+  closeSource();
+  const data = GAME_DATA[state.currentChar];
+  state.selectedRecords = [];
+  document.getElementById('game-content').innerHTML = `
+    <div class="archive-selection">
+      <div class="archive-prompt">
+        <h3>당신은 아키비스트입니다.</h3>
+        <p>후대에 남길 자료 <strong>2개</strong>를 선택하십시오.</p>
+      </div>
+      ${data.choices.map((c, i) => `
+        <div class="archive-option" id="arch-opt-${i}" onclick="toggleArchiveChoice(${i})">
+          <span class="opt-icon">${c.icon}</span>
+          <div><div class="opt-title">${c.title}</div><div class="opt-meaning">${c.meaning}</div></div>
+        </div>`).join('')}
+      <button class="btn-blk" id="btn-confirm-archive" disabled onclick="confirmArchive()">기록 선택 완료 (0/2)</button>
+    </div>`;
+  document.getElementById('game-progress').textContent = '기록 선택';
+}
+
+function toggleArchiveChoice(idx) {
+  const el = document.getElementById(`arch-opt-${idx}`);
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+    state.selectedRecords = state.selectedRecords.filter(i => i !== idx);
+  } else {
+    if (state.selectedRecords.length >= 2) return;
+    el.classList.add('selected');
+    state.selectedRecords.push(idx);
+  }
+  const btn = document.getElementById('btn-confirm-archive');
+  btn.textContent = `기록 선택 완료 (${state.selectedRecords.length}/2)`;
+  btn.disabled = state.selectedRecords.length !== 2;
+}
+
+function confirmArchive() {
+  if (state.selectedRecords.length !== 2) return;
+  state.totalCranes++;
+  state.completedStories.push(state.currentChar);
+  saveState();
+  showDelivery();
+}
+
+// ===== DELIVERY =====
+function showDelivery() {
+  const data = GAME_DATA[state.currentChar];
+  showScreen('delivery-screen');
+  const selected = state.selectedRecords.map(i => data.choices[i].title).join(', ');
+  document.getElementById('delivery-text').innerHTML = `
+    <strong>${state.playerName}</strong> 아키비스트가 선택한 기록<br>
+    <em>${selected}</em><br><br>
+    두루미가 기록을 <span class="dest">${data.destination}</span>으로 배달합니다.`;
+  document.getElementById('crane-point').innerHTML = `${I.craneSm} 두루미 +1 (누적: ${state.totalCranes}마리)`;
+  const crane = document.getElementById('crane-bird');
+  crane.classList.remove('flying');
+  void crane.offsetWidth;
+  setTimeout(() => crane.classList.add('flying'), 500);
+}
+
+function backToSelect() {
+  if (state.completedStories.length >= 3) { showResult(); return; }
+  showScreen('select-screen');
+  document.getElementById('display-name').textContent = `아키비스트 ${state.playerName}`;
+  renderCharacterCards();
+}
+
+// ===== RESULT =====
+function showResult() {
+  showScreen('result-screen');
+  const charNames = state.completedStories.map(k => GAME_DATA[k].charName);
+  document.getElementById('result-box').innerHTML = `
+    <h2>기록이 완성되었습니다</h2>
+    <p class="result-sub">${state.playerName} 아키비스트의 DMZ 다이어리</p>
+    <div class="result-stat"><span class="stat-label">탐색한 기록</span><span class="stat-value">${state.completedStories.length}개</span></div>
+    <div class="result-stat"><span class="stat-label">복원한 빈칸</span><span class="stat-value">${state.completedStories.length * 4}개</span></div>
+    <div class="result-stat"><span class="stat-label">배달한 두루미</span><span class="stat-value">${state.totalCranes}마리</span></div>
+    <div class="result-stat"><span class="stat-label">만난 사람들</span><span class="stat-value">${charNames.join(', ')}</span></div>
+    <div class="result-summary">
+      <p>DMZ에는 군사분계선만 있는 것이 아닙니다.</p>
+      <p style="margin-top:0.5rem;">정전협정의 밤을 견딘 군인이 있고, 검문소를 지나 등교하는 아이가 있고, 망원경으로만 유적을 보는 학자가 있습니다.</p>
+      <p style="margin-top:0.5rem;">당신은 그들의 이야기를 교차 참조하고, 기록으로 남겼습니다.<br>아키비스트의 일은 — 잊히지 않게 하는 것입니다.</p>
+    </div>
+    <button class="btn" onclick="resetGame()" style="margin-top:1.5rem;display:block;width:100%;text-align:center">처음부터 다시 탐색하기</button>`;
+}
+
+function resetGame() {
+  state = { playerName: '', currentChar: null, solvedBlanks: {}, selectedRecords: [], totalCranes: 0, completedStories: [] };
+  try { localStorage.removeItem('dmz_diary_v2'); } catch(e) {}
+  showScreen('login-screen');
+}
+</script>
+</body>
+</html>
