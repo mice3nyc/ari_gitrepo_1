@@ -24,36 +24,36 @@ body {
   background: repeating-linear-gradient(180deg, transparent 0px, transparent 2px, #000 2px, #000 3px);
   display: flex; align-items: center; justify-content: center;
 }
-.win-bar span { background: #fff; padding: 0 8px; font-size: 1.3rem; font-weight: 800; letter-spacing: .05em }
+.win-bar span { background: #fff; padding: 0 8px; font-size: 0.9rem; font-weight: 800; letter-spacing: .05em }
 .win-body { padding: 1.5rem }
 
 /* === BUTTON / INPUT === */
-.btn { display: inline-block; background: #fff; border: 2px solid #000; padding: 7px 20px; font: 800 1.6rem/1.2 inherit; cursor: pointer }
+.btn { display: inline-block; background: #fff; border: 2px solid #000; padding: 7px 20px; font: 800 1.1rem/1.2 inherit; cursor: pointer }
 .btn:hover { background: #000; color: #fff }
 .btn:disabled { opacity: .2; cursor: not-allowed }
 .btn:disabled:hover { background: #fff; color: #000 }
-.btn-blk { display: block; width: 100%; background: #000; color: #fff; border: 2px solid #000; padding: 8px; font: 800 1.6rem/1.2 inherit; cursor: pointer; text-align: center; margin-top: .8rem }
+.btn-blk { display: block; width: 100%; background: #000; color: #fff; border: 2px solid #000; padding: 8px; font: 800 1.1rem/1.2 inherit; cursor: pointer; text-align: center; margin-top: .8rem }
 .btn-blk:hover { background: #333 }
 .btn-blk:disabled { opacity: .2; cursor: not-allowed }
-input[type="text"] { border: 2px solid #000; padding: 7px 8px; font: 1.7rem inherit; width: 100%; outline: none; background: #fff }
+input[type="text"] { border: 2px solid #000; padding: 7px 8px; font: 1.2rem inherit; width: 100%; outline: none; background: #fff }
 input[type="text"]:focus { box-shadow: 3px 3px 0 #000 }
 input::placeholder { color: #bbb }
 
 /* === LOGIN === */
 #login-screen { flex-direction: column; align-items: center; justify-content: center; animation: fadeIn .4s }
-.login-title { font-size: 4.4rem; font-weight: 900; letter-spacing: .12em; margin-bottom: .2rem }
-.login-sub { font-size: 1.5rem; color: #888; margin-bottom: 2rem; letter-spacing: .05em }
+.login-title { font-size: 2.2rem; font-weight: 900; letter-spacing: .12em; margin-bottom: .2rem }
+.login-sub { font-size: 1.05rem; color: #888; margin-bottom: 2rem; letter-spacing: .05em }
 .login-field { margin-bottom: 1rem; text-align: left }
-.login-field label { display: block; font-size: 1.3rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px }
-.login-error { color: #d00; font-size: 1.5rem; height: 2.8rem; margin-bottom: .2rem; font-weight: 700 }
+.login-field label { display: block; font-size: 1.25rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px }
+.login-error { color: #d00; font-size: 1.05rem; height: 2.8rem; margin-bottom: .2rem; font-weight: 700 }
 .login-hint { font-size: 1.2rem; color: #aaa; margin-top: 1.5rem }
 
 /* === SELECT === */
 #select-screen { flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1rem; animation: fadeIn .4s }
 .select-header { text-align: center; margin-bottom: 1rem }
-.select-header h2 { font-size: 2rem; font-weight: 800 }
-.select-header .player-name { font-size: 1.5rem; color: #888; margin-top: .2rem }
-.select-prompt { font-size: 1.6rem; text-align: center; margin-bottom: 1.5rem; line-height: 1.6; color: #444 }
+.select-header h2 { font-size: 1.4rem; font-weight: 800 }
+.select-header .player-name { font-size: 1.05rem; color: #888; margin-top: .2rem }
+.select-prompt { font-size: 1.1rem; text-align: center; margin-bottom: 1.5rem; line-height: 1.1; color: #444 }
 .character-cards { display: flex; flex-direction: column; gap: .6rem; width: 100%; max-width: 380px }
 .char-card {
   border: 2px solid #000; padding: .8rem 1rem; cursor: pointer; background: #fff;
@@ -66,9 +66,9 @@ input::placeholder { color: #bbb }
 .char-card.completed::after { content: ' ✓'; font-weight: 800 }
 .char-card.completed:hover { background: #fff; color: #000 }
 .char-icon { flex-shrink: 0 }
-.char-card h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: .15rem }
-.char-card .char-desc { font-size: 1.4rem; line-height: 1.4; color: #555 }
-.char-card .char-era { font-size: 1.2rem; color: #999; margin-top: .2rem }
+.char-card h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: .15rem }
+.char-card .char-desc { font-size: 1.0rem; line-height: 1.0; color: #555 }
+.char-card .char-era { font-size: 0.85rem; color: #999; margin-top: .2rem }
 
 /* === GAME === */
 #game-screen { flex-direction: column; min-height: 100vh }
@@ -77,8 +77,8 @@ input::placeholder { color: #bbb }
   display: flex; justify-content: space-between; align-items: center;
   position: sticky; top: 0; background: #fff; z-index: 100;
 }
-.game-header .location { font-size: 1.3rem; font-weight: 700 }
-.game-header .progress { font-size: 1.4rem; font-weight: 800 }
+.game-header .location { font-size: 0.9rem; font-weight: 700 }
+.game-header .progress { font-size: 1.0rem; font-weight: 800 }
 .game-content { flex: 1; padding: 1rem; display: flex; flex-direction: column; gap: .6rem; max-width: 780px; margin: 0 auto; width: 100% }
 .source-card { border: 2px solid #000; cursor: pointer; background: #fff; animation: slideUp .3s ease backwards; transition: all .08s }
 .source-card:nth-child(2) { animation-delay: .04s }
@@ -88,9 +88,9 @@ input::placeholder { color: #bbb }
 .source-letter,.source-newspaper,.source-photo,.source-oral {}
 .card-header { padding: .7rem .8rem; display: flex; align-items: center; gap: .6rem }
 .card-icon { flex-shrink: 0 }
-.card-title { font-size: 1.6rem; font-weight: 800 }
-.card-sub { font-size: 1.2rem; color: #777; margin-top: .1rem }
-.card-status { margin-left: auto; font-size: 1.2rem; font-weight: 700; padding: 2px 6px; border: 1px solid #000 }
+.card-title { font-size: 1.1rem; font-weight: 800 }
+.card-sub { font-size: 0.85rem; color: #777; margin-top: .1rem }
+.card-status { margin-left: auto; font-size: 0.85rem; font-weight: 700; padding: 2px 6px; border: 1px solid #000 }
 .card-status.solved { background: #000; color: #fff }
 
 /* Source detail */
@@ -98,42 +98,42 @@ input::placeholder { color: #bbb }
 .source-detail.active { display: block }
 .detail-inner { max-width: 780px; margin: 0 auto; padding: 1rem; min-height: 100vh }
 .detail-close { position: sticky; top: 0; text-align: right; padding: .3rem 0; z-index: 10; background: #fff }
-.detail-close button { background: #fff; border: 2px solid #000; padding: 3px 10px; cursor: pointer; font: 800 1.5rem inherit }
+.detail-close button { background: #fff; border: 2px solid #000; padding: 3px 10px; cursor: pointer; font: 800 1.05rem inherit }
 .detail-close button:hover { background: #000; color: #fff }
 
 /* === PAPERS === */
-.letter-paper { border: 2px solid #000; padding: 1.2rem; line-height: 1.8; font-size: 1.7rem; font-family: Georgia, 'Noto Serif KR', serif }
-.letter-paper .letter-meta { font-family: -apple-system, sans-serif; font-size: 1.3rem; color: #888; margin-bottom: .8rem; padding-bottom: .6rem; border-bottom: 1px dashed #000 }
+.letter-paper { border: 2px solid #000; padding: 1.2rem; line-height: 1.2; font-size: 1.2rem; font-family: Georgia, 'Noto Serif KR', serif }
+.letter-paper .letter-meta { font-family: -apple-system, sans-serif; font-size: 0.9rem; color: #888; margin-bottom: .8rem; padding-bottom: .6rem; border-bottom: 1px dashed #000 }
 .letter-paper .letter-sign { text-align: right; margin-top: 1.2rem; font-style: italic }
-.diary-paper { border: 2px solid #000; padding: 1.2rem; line-height: 2; font-size: 1.8rem; font-style: italic; background: repeating-linear-gradient(transparent, transparent 54px, #ddd 54px, #ddd 55px) }
-.diary-paper .diary-meta { font-style: normal; font-size: 1.2rem; color: #888; margin-bottom: .8rem }
-.scholar-paper { border: 2px solid #000; border-left: 6px solid #000; padding: 1.2rem; line-height: 1.8; font-size: 1.7rem; font-family: Georgia, 'Noto Serif KR', serif }
+.diary-paper { border: 2px solid #000; padding: 1.2rem; line-height: 1.35; font-size: 1.25rem; font-style: italic; background: repeating-linear-gradient(transparent, transparent 54px, #ddd 54px, #ddd 55px) }
+.diary-paper .diary-meta { font-style: normal; font-size: 0.85rem; color: #888; margin-bottom: .8rem }
+.scholar-paper { border: 2px solid #000; border-left: 6px solid #000; padding: 1.2rem; line-height: 1.2; font-size: 1.2rem; font-family: Georgia, 'Noto Serif KR', serif }
 .newspaper-paper { border: 2px solid #000; padding: 1rem }
 .newspaper-paper .news-header { text-align: center; border-bottom: 3px double #000; padding-bottom: .5rem; margin-bottom: .6rem }
-.newspaper-paper .news-name { font-size: 2.4rem; font-weight: 900; letter-spacing: .5em }
-.newspaper-paper .news-date { font-size: 1.2rem; margin-top: .15rem; color: #888 }
-.newspaper-paper .news-title { font-size: 1.9rem; font-weight: 900; margin-bottom: .6rem; line-height: 1.4 }
-.newspaper-paper .news-body { font-size: 1.5rem; line-height: 1.8; text-align: justify }
+.newspaper-paper .news-name { font-size: 1.7rem; font-weight: 900; letter-spacing: .5em }
+.newspaper-paper .news-date { font-size: 0.85rem; margin-top: .15rem; color: #888 }
+.newspaper-paper .news-title { font-size: 1.3rem; font-weight: 900; margin-bottom: .6rem; line-height: 1.0 }
+.newspaper-paper .news-body { font-size: 1.05rem; line-height: 1.2; text-align: justify }
 .photo-frame { border: 2px solid #000; padding: .6rem }
 .photo-placeholder {
   width: 100%; height: 140px; display: flex; align-items: center; justify-content: center; gap: .3rem;
-  font-size: 1.4rem; color: #888;
+  font-size: 1.0rem; color: #888;
   background: repeating-conic-gradient(#eee 0% 25%, #fff 0% 50%) 0 0 / 8px 8px;
   border: 1px solid #ddd;
 }
-.photo-frame .photo-caption { font-size: 1.4rem; color: #333; margin-top: .5rem; line-height: 1.5; text-align: left }
-.photo-frame .photo-source { font-size: 1.1rem; color: #aaa; margin-top: .2rem; text-align: left }
+.photo-frame .photo-caption { font-size: 1.0rem; color: #333; margin-top: .5rem; line-height: 1.0; text-align: left }
+.photo-frame .photo-source { font-size: 0.8rem; color: #aaa; margin-top: .2rem; text-align: left }
 .oral-player { border: 2px solid #000; padding: 1rem }
 .oral-player .cassette { text-align: center; margin-bottom: .6rem; display: flex; align-items: center; justify-content: center; animation: blink 2.5s infinite }
-.oral-player .oral-meta { font-size: 1.2rem; color: #888; margin-bottom: .6rem; padding-bottom: .4rem; border-bottom: 1px solid #eee }
-.oral-player .oral-text { font-size: 1.6rem; line-height: 1.8; font-style: italic }
+.oral-player .oral-meta { font-size: 0.85rem; color: #888; margin-bottom: .6rem; padding-bottom: .4rem; border-bottom: 1px solid #eee }
+.oral-player .oral-text { font-size: 1.1rem; line-height: 1.2; font-style: italic }
 .oral-player .oral-text p { margin-bottom: .6rem }
 
 /* Blanks */
 .blank-slot { display: inline-block; min-width: 60px; border-bottom: 2px solid #000; padding: 1px 3px; margin: 0 2px; cursor: pointer; font-weight: 800 }
 .blank-slot.empty { animation: blink 2s infinite; background: #f5f5f5 }
 .blank-slot.filled { background: #000; color: #fff; animation: none }
-.sound-note { font-size: 1.1rem; color: #bbb; margin-top: .4rem; font-style: italic; display: flex; align-items: center; gap: .2rem }
+.sound-note { font-size: 0.8rem; color: #bbb; margin-top: .4rem; font-style: italic; display: flex; align-items: center; gap: .2rem }
 .sound-note svg { flex-shrink: 0 }
 
 /* === MODAL === */
@@ -141,60 +141,60 @@ input::placeholder { color: #bbb }
 .modal-backdrop.active { display: block }
 .answer-modal { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 2px solid #000; padding: 1.2rem; z-index: 300; animation: slideUp .2s; max-width: 780px; margin: 0 auto }
 .answer-modal.active { display: block }
-.answer-modal .modal-label { font-size: 1.3rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .3rem }
-.answer-modal .modal-hint { font-size: 1.5rem; color: #555; margin-bottom: .8rem; line-height: 1.5 }
+.answer-modal .modal-label { font-size: 0.9rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .3rem }
+.answer-modal .modal-hint { font-size: 1.05rem; color: #555; margin-bottom: .8rem; line-height: 1.0 }
 .answer-modal input { margin-bottom: .6rem }
 .answer-modal .modal-btns { display: flex; gap: .4rem }
 .answer-modal .modal-btns button { flex: 1 }
-.btn-submit { background: #000; color: #fff; border: 2px solid #000; padding: 7px; font: 800 1.6rem inherit; cursor: pointer }
-.btn-cancel { background: #fff; border: 2px solid #000; padding: 7px; font: 1.6rem inherit; cursor: pointer }
+.btn-submit { background: #000; color: #fff; border: 2px solid #000; padding: 7px; font: 800 1.1rem/1.2 inherit; cursor: pointer }
+.btn-cancel { background: #fff; border: 2px solid #000; padding: 7px; font: 800 1.1rem/1.2 inherit; cursor: pointer }
 .btn-cancel:hover { background: #eee }
 
 /* Phase */
 .phase-banner { text-align: center; padding: 1.2rem .8rem; border: 2px solid #000 }
-.phase-banner .phase-num { font-size: 1.2rem; color: #888; letter-spacing: .1em; margin-bottom: .2rem }
-.phase-banner h2 { font-size: 2rem; font-weight: 900 }
-.phase-banner .phase-desc { font-size: 1.4rem; color: #555; margin-top: .3rem; line-height: 1.5 }
+.phase-banner .phase-num { font-size: 0.85rem; color: #888; letter-spacing: .1em; margin-bottom: .2rem }
+.phase-banner h2 { font-size: 1.4rem; font-weight: 900 }
+.phase-banner .phase-desc { font-size: 1.0rem; color: #555; margin-top: .3rem; line-height: 1.0 }
 
 /* Archive */
 .archive-selection { padding: .3rem 0 }
 .archive-prompt { border: 2px solid #000; padding: 1rem; text-align: center; margin-bottom: .8rem }
-.archive-prompt h3 { font-size: 1.7rem; font-weight: 800; margin-bottom: .2rem }
-.archive-prompt p { font-size: 1.4rem; color: #555 }
+.archive-prompt h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: .2rem }
+.archive-prompt p { font-size: 1.0rem; color: #555 }
 .archive-option { border: 2px solid #000; padding: .7rem .8rem; margin-bottom: -2px; cursor: pointer; display: flex; align-items: center; gap: .6rem; transition: all .08s }
 .archive-option:hover { box-shadow: 3px 3px 0 #000 }
 .archive-option.selected { background: #000; color: #fff }
 .archive-option.selected .opt-meaning { color: #aaa }
 .archive-option .opt-icon { flex-shrink: 0 }
-.archive-option .opt-title { font-size: 1.6rem; font-weight: 700 }
-.archive-option .opt-meaning { font-size: 1.2rem; color: #777; margin-top: .1rem }
+.archive-option .opt-title { font-size: 1.1rem; font-weight: 700 }
+.archive-option .opt-meaning { font-size: 0.85rem; color: #777; margin-top: .1rem }
 
 /* === DELIVERY === */
 #delivery-screen { flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; animation: fadeIn .4s }
 .crane-container { position: relative; width: 100px; height: 80px; margin-bottom: 1.2rem }
 .crane-bird { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%) }
 .crane-bird.flying { animation: fly 2s ease-in forwards }
-.delivery-text { font-size: 1.7rem; line-height: 1.8; max-width: 300px }
+.delivery-text { font-size: 1.2rem; line-height: 1.2; max-width: 300px }
 .delivery-text .dest { font-weight: 900; border-bottom: 2px solid #000 }
-.crane-point { font-size: 1.5rem; margin-top: 1.2rem; font-weight: 700; animation: slideUp .5s ease 1s backwards }
+.crane-point { font-size: 1.05rem; margin-top: 1.2rem; font-weight: 700; animation: slideUp .5s ease 1s backwards }
 
 /* === RESULT === */
 #result-screen { flex-direction: column; align-items: center; justify-content: center; padding: 2rem; animation: fadeIn .4s }
 .result-box { max-width: 380px; width: 100% }
-.result-box h2 { font-size: 2.2rem; font-weight: 900; margin-bottom: .2rem }
-.result-box .result-sub { font-size: 1.4rem; color: #888; margin-bottom: 1.2rem }
+.result-box h2 { font-size: 1.55rem; font-weight: 900; margin-bottom: .2rem }
+.result-box .result-sub { font-size: 1.0rem; color: #888; margin-bottom: 1.2rem }
 .result-stat { border: 2px solid #000; padding: .6rem .8rem; margin-bottom: -2px; display: flex; justify-content: space-between }
-.result-stat .stat-label { font-size: 1.5rem }
+.result-stat .stat-label { font-size: 1.05rem }
 .result-stat .stat-value { font-weight: 900 }
-.result-summary { font-size: 1.5rem; line-height: 1.8; margin-top: 1.2rem; padding: .8rem; border: 2px solid #000; border-left: 6px solid #000 }
+.result-summary { font-size: 1.05rem; line-height: 1.2; margin-top: 1.2rem; padding: .8rem; border: 2px solid #000; border-left: 6px solid #000 }
 
 /* Toast */
 .toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); background: #fff; border: 2px solid #000; padding: 1rem 1.2rem; z-index: 400; text-align: center; animation: fadeIn .15s; box-shadow: 6px 6px 0 #000; max-width: 260px }
-.toast .toast-icon { font-size: 2.6rem; margin-bottom: .2rem; font-weight: 900 }
-.toast .toast-text { font-size: 1.6rem; line-height: 1.4 }
+.toast .toast-icon { font-size: 1.8rem; margin-bottom: .2rem; font-weight: 900 }
+.toast .toast-text { font-size: 1.1rem; line-height: 1.0 }
 
 @media (min-width: 600px) {
-  .login-title { font-size: 6rem }
+  .login-title { font-size: 3rem }
   .character-cards { flex-direction: row; max-width: 660px }
   .char-card { flex: 1; flex-direction: column; text-align: center; gap: .3rem }
 }
