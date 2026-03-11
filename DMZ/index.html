@@ -116,6 +116,7 @@ input::placeholder { color: #999 }
 .newspaper-paper .news-title { font-size: 1.3rem; font-weight: 900; margin-bottom: .6rem; line-height: 1.0 }
 .newspaper-paper .news-body { font-size: 1.2rem; line-height: 1.2; text-align: justify }
 .photo-frame { border: 2px solid #000; padding: .6rem }
+.photo-frame img { width: 100%; display: block; }
 .photo-placeholder {
   width: 100%; height: 140px; display: flex; align-items: center; justify-content: center; gap: .3rem;
   font-size: 1.2rem; color: #666;
@@ -438,12 +439,12 @@ const TEMPLATES = {
         <p style="margin-top:0.8rem;">협정에 따라 발효 후 72시간 이내에 쌍방 군사력은 군사분계선으로부터 각 2킬로미터씩 후퇴하여야 한다. 이로써 서해 강화도에서 동해 고성까지 약 248킬로미터에 걸친 비무장지대가 설치된다.</p>
       </div></div>`,
     C: (b) => `<div class="photo-frame" style="margin-bottom:1rem;">
-      <div class="photo-placeholder">${I.photoSm} 사진 1: 판문점 정전협정 서명식</div>
+      <img src="media/char1_photo1.jpg" alt="사진 1: 판문점 정전협정 서명식">
       <div class="photo-caption">[사진 1] 1953년 7월 27일 오전 10시, 판문점. 유엔군 측 수석대표 해리슨 중장(왼쪽 테이블)이 정전협정문에 서명하고 있다. 맞은편에는 ${b.C} 대장이 앉아 있다.</div>
       <div class="photo-source">출처: 미국 국립문서기록관리청(NARA)</div>
     </div>
     <div class="photo-frame">
-      <div class="photo-placeholder">${I.photoSm} 사진 2: MDL 표지판</div>
+      <img src="media/char1_photo2.jpg" alt="사진 2: MDL 표지판">
       <div class="photo-caption">[사진 2] 판문점 DMZ 내 군사분계선 표지판. 서해 강화도에서 동해 고성까지 약 248킬로미터 구간에 총 1,292개가 설치되었다.</div>
       <div class="photo-source">출처: 미국 공군(USAF)</div>
     </div>`,
@@ -477,12 +478,12 @@ const TEMPLATES = {
         <p style="margin-top:0.8rem;">졸업식에는 통일부 관계자, 유엔군사령부 장교, 학부모 등 약 90여 명이 참석했다.</p>
       </div></div>`,
     C: (b) => `<div class="photo-frame" style="margin-bottom:1rem;">
-      <div class="photo-placeholder">${I.photoSm} 사진 1: 대성동초등학교 표지판</div>
+      <img src="media/char2_photo1.jpg" alt="사진 1: 대성동초등학교 표지판">
       <div class="photo-caption">[사진 1] 대성동초등학교 안내 표지판. 2007년 학생 수 감소로 폐교 위기에 처했으나, ${b.C}학교로 전환하여 존속하였다. 현재 6학급 재학생 약 27명, 교직원 약 21명.</div>
       <div class="photo-source">출처: Edward N. Johnson, Wikimedia Commons</div>
     </div>
     <div class="photo-frame">
-      <div class="photo-placeholder">${I.photoSm} 사진 2: 대성동 마을 전경</div>
+      <img src="media/char2_photo2.jpg" alt="사진 2: 대성동 마을 전경">
       <div class="photo-caption">[사진 2] 공동경비구역(JSA) 인근에 위치한 대성동 자유의 마을과 높이 세워진 태극기. 북측 기정동 마을에서 약 800m 거리에 위치한다.</div>
       <div class="photo-source">출처: Park Jong-u (2022), Wikimedia Commons</div>
     </div>`,
@@ -514,7 +515,7 @@ const TEMPLATES = {
         <p style="margin-top:0.8rem;">2005년 육군사관학교 조사단이 외성 동벽을 조사하였으며, 2020년 국가유산청이 유엔군사령부의 호위 하에 현장조사를 수행하였다. 학계에서는 장기간 접근이 차단됨으로써 유적이 역설적으로 양호한 보존 상태를 유지하고 있을 것으로 추정한다.</p>
       </div></div>`,
     C: (b) => `<div class="photo-frame">
-      <div class="photo-placeholder">${I.photoSm} 철원평야 / 민통선 전경</div>
+      <img src="media/char3_photo1.jpg" alt="철원평야 / 민통선 전경">
       <div class="photo-caption">철원 민통선 안에서 바라본 철원평야. 이 일대에 궁예가 세운 태봉의 도성 철원성이 위치해 있다. 외성 단면의 밑변 폭은 약 ${b.C}미터로, 천 년 넘게 토축으로 쌓아 올린 성벽이다. DMZ 내에 위치하여 민간 접근이 차단되어 있다.</div>
       <div class="photo-source">출처: 대한민국 국방부, "2012년 전선에 서다" 시리즈</div>
     </div>`,
