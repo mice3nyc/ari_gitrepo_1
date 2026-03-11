@@ -24,7 +24,10 @@ body {
 @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: translateY(0) } }
 @keyframes blink { 0%,100% { opacity: .3 } 50% { opacity: 1 } }
-@keyframes fly { 0% { transform: translate(0,0); opacity: 1 } 100% { transform: translate(160px,-160px); opacity: 0 } }
+@keyframes fly { 0% { transform: translate(0,0) scale(1); opacity: 1 } 60% { opacity: 1 } 100% { transform: translate(120px,-300px) scale(0.3); opacity: 0 } }
+@keyframes pixelFadeIn { 0% { opacity: 0 } 100% { opacity: 1 } }
+@keyframes typewriter { from { width: 0 } to { width: 100% } }
+@keyframes blinkCaret { 0%,100% { border-color: #fff } 50% { border-color: transparent } }
 
 /* === WINDOW === */
 .win { border: 2px solid #000; max-width: 720px; width: 95%; background: #fff }
@@ -182,14 +185,19 @@ input::placeholder { color: #999 }
 .archive-option .opt-title { font-size: 1.2rem; font-weight: 700 }
 .archive-option .opt-meaning { font-size: 1.2rem; color: #666; margin-top: .1rem }
 
-/* === DELIVERY === */
-#delivery-screen { flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; animation: fadeIn .4s }
-.crane-container { position: relative; width: 100px; height: 80px; margin-bottom: 1.2rem }
-.crane-bird { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%) }
-.crane-bird.flying { animation: fly 2s ease-in forwards }
-.delivery-text { font-size: 1.2rem; line-height: 1.2; max-width: 300px }
-.delivery-text .dest { font-weight: 900; border-bottom: 2px solid #000 }
-.crane-point { font-size: 1.2rem; margin-top: 1.2rem; font-weight: 700; animation: slideUp .5s ease 1s backwards }
+/* === DELIVERY (90s Mac pixel) === */
+#delivery-screen { flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; background: #000; animation: fadeIn .4s; cursor: pointer }
+#delivery-screen * { color: #fff }
+.pixel-crane-wrap { position: relative; width: 100%; display: flex; justify-content: center; margin-bottom: 2rem }
+.pixel-crane { position: relative; width: 60px; height: 75px; opacity: 0; animation: pixelFadeIn 1.2s ease 0.3s forwards }
+.pixel-crane-pixel { position: absolute; background: #fff }
+.pixel-crane.flying { animation: fly 2.5s ease-in forwards !important; opacity: 1 }
+.delivery-typed { font-family: 'Courier New', 'Menlo', monospace; font-size: 1.5rem; font-weight: 700; color: #fff; overflow: hidden; white-space: nowrap; border-right: 2px solid #fff; animation: typewriter 1.2s steps(12) 1.5s both, blinkCaret .7s step-end infinite; max-width: max-content; margin: 0 auto 1rem }
+.delivery-dest { font-family: 'Courier New', 'Menlo', monospace; font-size: 1.1rem; color: #999; margin-bottom: .5rem; opacity: 0; animation: pixelFadeIn .6s ease 2.8s forwards }
+.delivery-selected { font-family: 'Courier New', 'Menlo', monospace; font-size: 1rem; color: #666; margin-bottom: 1.5rem; opacity: 0; animation: pixelFadeIn .6s ease 3.2s forwards; line-height: 1.4 }
+.crane-count { font-family: 'Courier New', 'Menlo', monospace; font-size: 1rem; color: #fff; margin-top: 1rem; opacity: 0; animation: pixelFadeIn .6s ease 3.6s forwards; letter-spacing: .1em }
+#delivery-screen .btn { background: transparent; border-color: #fff; color: #fff; opacity: 0; animation: pixelFadeIn .6s ease 4s forwards }
+#delivery-screen .btn:hover { background: #fff; color: #000 }
 
 /* === RESULT === */
 #result-screen { flex-direction: column; align-items: center; justify-content: center; padding: 2rem; animation: fadeIn .4s }
@@ -280,23 +288,15 @@ input::placeholder { color: #999 }
 </div>
 
 <!-- DELIVERY -->
-<div id="delivery-screen" class="screen">
-  <div class="crane-container">
-    <div class="crane-bird" id="crane-bird">
-      <svg width="48" height="36" viewBox="0 0 12 9" shape-rendering="crispEdges" fill="#000">
-        <rect x="5" y="0" width="2" height="1"/><rect x="4" y="1" width="1" height="1"/><rect x="7" y="1" width="1" height="1"/>
-        <rect x="3" y="2" width="1" height="1"/><rect x="8" y="2" width="1" height="1"/>
-        <rect x="2" y="3" width="1" height="1"/><rect x="5" y="3" width="2" height="1"/><rect x="9" y="3" width="1" height="1"/>
-        <rect x="1" y="4" width="1" height="1"/><rect x="5" y="4" width="2" height="1"/><rect x="10" y="4" width="1" height="1"/>
-        <rect x="5" y="5" width="2" height="1"/><rect x="5" y="6" width="2" height="1"/>
-        <rect x="4" y="7" width="2" height="1"/><rect x="6" y="7" width="2" height="1"/>
-        <rect x="4" y="8" width="1" height="1"/><rect x="7" y="8" width="1" height="1"/>
-      </svg>
-    </div>
+<div id="delivery-screen" class="screen" onclick="deliveryClick()">
+  <div class="pixel-crane-wrap">
+    <div class="pixel-crane" id="pixel-crane"></div>
   </div>
-  <p class="delivery-text" id="delivery-text"></p>
-  <p class="crane-point" id="crane-point"></p>
-  <button class="btn" onclick="backToSelect()" style="margin-top:1.5rem">다른 기록 탐색하기</button>
+  <p class="delivery-typed" id="delivery-typed"></p>
+  <p class="delivery-dest" id="delivery-dest"></p>
+  <p class="delivery-selected" id="delivery-selected"></p>
+  <p class="crane-count" id="crane-count"></p>
+  <button class="btn" onclick="event.stopPropagation(); backToSelect()" style="margin-top:1.5rem">다른 기록 탐색하기</button>
 </div>
 
 <!-- RESULT -->
@@ -545,13 +545,17 @@ const TEMPLATES = {
 
 // ===== GAME STATE =====
 let state = { playerName: '', currentChar: null, currentSourceId: null, solvedBlanks: {}, selectedRecords: [], totalCranes: 0, completedStories: [], catchwords: [] };
-try {
-  const saved = localStorage.getItem('dmz_diary_v2');
-  if (saved) { const p = JSON.parse(saved); state.totalCranes = p.totalCranes || 0; state.completedStories = p.completedStories || []; }
-} catch(e) {}
+
+function loadStateForPlayer(name) {
+  try {
+    const saved = localStorage.getItem('dmz_diary_' + name);
+    if (saved) { const p = JSON.parse(saved); state.totalCranes = p.totalCranes || 0; state.completedStories = p.completedStories || []; }
+  } catch(e) {}
+}
 
 function saveState() {
-  try { localStorage.setItem('dmz_diary_v2', JSON.stringify({ totalCranes: state.totalCranes, completedStories: state.completedStories, playerName: state.playerName })); } catch(e) {}
+  if (!state.playerName) return;
+  try { localStorage.setItem('dmz_diary_' + state.playerName, JSON.stringify({ totalCranes: state.totalCranes, completedStories: state.completedStories, playerName: state.playerName })); } catch(e) {}
 }
 
 // ===== ANSWER =====
@@ -578,6 +582,7 @@ function handleLogin() {
   if (!name) { errEl.textContent = '이름을 입력해주세요.'; return; }
   if (code !== '1953') { errEl.textContent = '게임 코드가 올바르지 않습니다.'; return; }
   state.playerName = name;
+  loadStateForPlayer(name);
   showScreen('select-screen');
   document.getElementById('display-name').textContent = `아키비스트 ${name}`;
   renderCharacterCards();
@@ -643,6 +648,7 @@ function updateProgress() {
 // ===== SOURCE DETAIL =====
 function openSource(sourceId) {
   const data = GAME_DATA[state.currentChar];
+  const isNewSource = state.currentSourceId !== sourceId;
   state.currentSourceId = sourceId;
   const blanks = {};
   for (const key of Object.keys(data.blanks)) {
@@ -651,17 +657,21 @@ function openSource(sourceId) {
       : `<span class="blank-slot empty" onclick="event.stopPropagation();openAnswerModal('${key}')">[${key}]</span>`;
   }
   const template = TEMPLATES[state.currentChar][sourceId];
+  const detailEl = document.getElementById('source-detail');
   document.getElementById('detail-inner').innerHTML = `
     <div class="detail-close"><button onclick="closeSource()">닫기 ✕</button></div>
     ${template(blanks)}`;
-  document.getElementById('source-detail').classList.add('active');
+  detailEl.classList.add('active');
+  if (isNewSource) detailEl.scrollTop = 0;
   document.body.style.overflow = 'hidden';
   showSourceNav(true);
   applyCatchwords();
 }
 
 function closeSource() {
-  document.getElementById('source-detail').classList.remove('active');
+  const detailEl = document.getElementById('source-detail');
+  detailEl.classList.remove('active');
+  document.getElementById('detail-inner').innerHTML = '';
   document.body.style.overflow = '';
   state.currentSourceId = null;
   showSourceNav(false);
@@ -800,19 +810,66 @@ function confirmArchive() {
 }
 
 // ===== DELIVERY =====
+// Pixel crane: 12x15 grid, 5px per pixel = 60x75px
+const CRANE_PIXELS = [
+  [5,0],[6,0],
+  [4,1],[7,1],
+  [3,2],[8,2],
+  [2,3],[9,3],
+  [1,4],[10,4],
+  [0,5],[11,5],
+  [1,6],[10,6],
+  [2,7],[9,7],
+  [3,7],[8,7],
+  [4,7],[7,7],
+  [5,7],[6,7],
+  [5,8],[6,8],
+  [5,9],[6,9],
+  [5,10],[6,10],
+  [4,11],[5,11],[6,11],[7,11],
+  [3,12],[8,12],
+  [3,13],[8,13],
+  [2,14],[9,14],
+];
+
+function buildPixelCrane() {
+  const el = document.getElementById('pixel-crane');
+  el.innerHTML = '';
+  el.classList.remove('flying');
+  const px = 5;
+  CRANE_PIXELS.forEach(([x, y], i) => {
+    const d = document.createElement('div');
+    d.className = 'pixel-crane-pixel';
+    d.style.cssText = `left:${x*px}px;top:${y*px}px;width:${px}px;height:${px}px;opacity:0;animation:pixelFadeIn .08s ease ${0.3 + i*0.02}s forwards`;
+    el.appendChild(d);
+  });
+}
+
+let deliveryTimer = null;
+
 function showDelivery() {
   const data = GAME_DATA[state.currentChar];
   showScreen('delivery-screen');
-  const selected = state.selectedRecords.map(i => data.choices[i].title).join(', ');
-  document.getElementById('delivery-text').innerHTML = `
-    <strong>${state.playerName}</strong> 아키비스트가 선택한 기록<br>
-    <em>${selected}</em><br><br>
-    두루미가 기록을 <span class="dest">${data.destination}</span>으로 배달합니다.`;
-  document.getElementById('crane-point').innerHTML = `${I.craneSm} 두루미 +1 (누적: ${state.totalCranes}마리)`;
-  const crane = document.getElementById('crane-bird');
-  crane.classList.remove('flying');
-  void crane.offsetWidth;
-  setTimeout(() => crane.classList.add('flying'), 500);
+  buildPixelCrane();
+  const selected = state.selectedRecords.map(i => data.choices[i].title).join(' + ');
+  document.getElementById('delivery-typed').textContent = '기록이 전달되었습니다';
+  document.getElementById('delivery-typed').style.animation = 'none';
+  void document.getElementById('delivery-typed').offsetWidth;
+  document.getElementById('delivery-typed').style.animation = '';
+  document.getElementById('delivery-dest').innerHTML = `&gt; ${data.destination}`;
+  document.getElementById('delivery-selected').innerHTML = `${state.playerName} &mdash; ${selected}`;
+  document.getElementById('crane-count').textContent = `[ ${state.totalCranes} crane${state.totalCranes > 1 ? 's' : ''} ]`;
+  // Fly away after delay
+  const crane = document.getElementById('pixel-crane');
+  setTimeout(() => { crane.classList.add('flying'); }, 3000);
+  // Auto-advance
+  if (deliveryTimer) clearTimeout(deliveryTimer);
+  deliveryTimer = setTimeout(() => backToSelect(), 5500);
+}
+
+function deliveryClick() {
+  if (deliveryTimer) { clearTimeout(deliveryTimer); deliveryTimer = null; }
+  backToSelect();
 }
 
 function backToSelect() {
@@ -842,8 +899,9 @@ function showResult() {
 }
 
 function resetGame() {
+  const nameToRemove = state.playerName;
   state = { playerName: '', currentChar: null, solvedBlanks: {}, selectedRecords: [], totalCranes: 0, completedStories: [], catchwords: [] };
-  try { localStorage.removeItem('dmz_diary_v2'); } catch(e) {}
+  if (nameToRemove) { try { localStorage.removeItem('dmz_diary_' + nameToRemove); } catch(e) {} }
   showScreen('login-screen');
 }
 
