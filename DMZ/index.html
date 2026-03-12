@@ -24,10 +24,9 @@ body {
 @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: translateY(0) } }
 @keyframes blink { 0%,100% { opacity: .3 } 50% { opacity: 1 } }
-@keyframes fly { 0% { transform: translate(0,0) scale(1); opacity: 1 } 60% { opacity: 1 } 100% { transform: translate(120px,-300px) scale(0.3); opacity: 0 } }
 @keyframes pixelFadeIn { 0% { opacity: 0 } 100% { opacity: 1 } }
 @keyframes typewriter { from { width: 0 } to { width: 100% } }
-@keyframes blinkCaret { 0%,100% { border-color: #fff } 50% { border-color: transparent } }
+@keyframes blinkCaret { 0%,100% { border-color: #000 } 50% { border-color: transparent } }
 
 /* === WINDOW === */
 .win { border: 2px solid #000; max-width: 720px; width: 95%; background: #fff }
@@ -188,19 +187,48 @@ input::placeholder { color: #999 }
 .archive-option .opt-title { font-size: 1.2rem; font-weight: 700 }
 .archive-option .opt-meaning { font-size: 1.2rem; color: #666; margin-top: .1rem }
 
-/* === DELIVERY (90s Mac pixel) === */
-#delivery-screen { flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; background: #000; animation: fadeIn .4s; cursor: pointer }
-#delivery-screen * { color: #fff }
-.pixel-crane-wrap { position: relative; width: 100%; display: flex; justify-content: center; margin-bottom: 2rem }
-.pixel-crane { position: relative; width: 60px; height: 75px; opacity: 0; animation: pixelFadeIn 1.2s ease 0.3s forwards }
-.pixel-crane-pixel { position: absolute; background: #fff }
-.pixel-crane.flying { animation: fly 2.5s ease-in forwards !important; opacity: 1 }
-.delivery-typed { font-family: 'Courier New', 'Menlo', monospace; font-size: 1.5rem; font-weight: 700; color: #fff; overflow: hidden; white-space: nowrap; border-right: 2px solid #fff; animation: typewriter 1.2s steps(12) 1.5s both, blinkCaret .7s step-end infinite; max-width: max-content; margin: 0 auto 1rem }
-.delivery-dest { font-family: 'Courier New', 'Menlo', monospace; font-size: 1.1rem; color: #999; margin-bottom: .5rem; opacity: 0; animation: pixelFadeIn .6s ease 2.8s forwards }
-.delivery-selected { font-family: 'Courier New', 'Menlo', monospace; font-size: 1rem; color: #666; margin-bottom: 1.5rem; opacity: 0; animation: pixelFadeIn .6s ease 3.2s forwards; line-height: 1.4 }
-.crane-count { font-family: 'Courier New', 'Menlo', monospace; font-size: 1rem; color: #fff; margin-top: 1rem; opacity: 0; animation: pixelFadeIn .6s ease 3.6s forwards; letter-spacing: .1em }
-#delivery-screen .btn { background: transparent; border-color: #fff; color: #fff; opacity: 0; animation: pixelFadeIn .6s ease 4s forwards }
-#delivery-screen .btn:hover { background: #fff; color: #000 }
+/* === DELIVERY (envelope mail) === */
+#delivery-screen { flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; background: #fff; animation: fadeIn .4s; cursor: pointer }
+.envelope-scene { position: relative; width: 200px; height: 180px; margin: 0 auto 2rem; perspective: 400px }
+/* Envelope rectangle */
+.envelope-body { position: absolute; bottom: 0; left: 0; width: 200px; height: 130px; border: 2px solid #000; background: #fff; z-index: 2 }
+/* Inner V lines on envelope front */
+.envelope-body::before { content: ''; position: absolute; bottom: 0; left: -1px; width: 0; height: 0; border-left: 101px solid rgba(0,0,0,.08); border-top: 65px solid transparent }
+.envelope-body::after { content: ''; position: absolute; bottom: 0; right: -1px; width: 0; height: 0; border-right: 101px solid rgba(0,0,0,.08); border-top: 65px solid transparent }
+/* Open flap: triangle pointing UP from the top of envelope body */
+.envelope-flap { position: absolute; top: 0; left: 0; width: 200px; height: 50px; z-index: 5; transform-origin: bottom center; transform: rotateX(0deg) }
+.envelope-flap-inner { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 100px solid transparent; border-right: 100px solid transparent; border-bottom: 50px solid #fff }
+.envelope-flap-border { position: absolute; bottom: -1px; left: -2px; width: 0; height: 0; border-left: 102px solid transparent; border-right: 102px solid transparent; border-bottom: 52px solid #000; z-index: -1 }
+
+/* Card / postcard that slides into envelope */
+.envelope-card { position: absolute; left: 20px; width: 160px; height: 100px; border: 2px solid #000; background: #fff; z-index: 1; display: flex; align-items: center; justify-content: center; top: -60px; opacity: 0 }
+.envelope-card .card-icon-inner { transform: scale(2.5) }
+.envelope-card.animate-in { animation: cardSlideIn .8s ease forwards }
+@keyframes cardSlideIn { 0% { top: -60px; opacity: 0 } 20% { opacity: 1 } 100% { top: 55px; opacity: 1 } }
+
+/* Flap close animation */
+.envelope-flap.animate-close { animation: flapClose .6s ease forwards }
+@keyframes flapClose { 0% { transform: rotateX(0deg) } 100% { transform: rotateX(180deg) } }
+
+/* Stamp */
+.envelope-stamp { position: absolute; top: 60px; left: 50%; transform: translateX(-50%) scale(0); width: 70px; height: 70px; border: 3px solid #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .8rem; font-weight: 900; letter-spacing: .1em; z-index: 6; background: rgba(255,255,255,.9) }
+.envelope-stamp.animate-stamp { animation: stampBounce .4s cubic-bezier(.2,2,.5,1) forwards }
+@keyframes stampBounce { 0% { transform: translateX(-50%) scale(0) rotate(-15deg) } 60% { transform: translateX(-50%) scale(1.3) rotate(-15deg) } 100% { transform: translateX(-50%) scale(1) rotate(-15deg) } }
+
+/* Fly away */
+.envelope-scene.animate-fly { animation: envelopeFly .8s ease-in forwards }
+@keyframes envelopeFly { 0% { transform: scale(1) translateY(0); opacity: 1 } 100% { transform: scale(.5) translateY(-400px); opacity: 0 } }
+
+.delivery-typed { font-family: 'Courier New', 'Menlo', monospace; font-size: 1.5rem; font-weight: 700; color: #000; overflow: hidden; white-space: nowrap; border-right: 2px solid #000; max-width: max-content; margin: 0 auto 1rem; opacity: 0 }
+.delivery-typed.animate-type { animation: typewriter 1.2s steps(12) forwards, blinkCaret .7s step-end infinite; opacity: 1 }
+.delivery-dest { font-family: 'Courier New', 'Menlo', monospace; font-size: 1.1rem; color: #666; margin-bottom: .5rem; opacity: 0 }
+.delivery-dest.animate-show { animation: pixelFadeIn .6s ease forwards }
+.delivery-selected { font-family: 'Courier New', 'Menlo', monospace; font-size: 1rem; color: #999; margin-bottom: 1.5rem; opacity: 0; line-height: 1.4 }
+.delivery-selected.animate-show { animation: pixelFadeIn .6s ease forwards }
+.delivery-count { font-family: 'Courier New', 'Menlo', monospace; font-size: 1rem; color: #000; margin-top: 1rem; opacity: 0; letter-spacing: .1em }
+.delivery-count.animate-show { animation: pixelFadeIn .6s ease forwards }
+#delivery-screen .btn { opacity: 0 }
+#delivery-screen .btn.animate-show { animation: pixelFadeIn .6s ease forwards }
 
 /* === RESULT === */
 #result-screen { flex-direction: column; align-items: center; justify-content: center; padding: 2rem; animation: fadeIn .4s }
@@ -304,14 +332,20 @@ input::placeholder { color: #999 }
 
 <!-- DELIVERY -->
 <div id="delivery-screen" class="screen" onclick="deliveryClick()">
-  <div class="pixel-crane-wrap">
-    <div class="pixel-crane" id="pixel-crane"></div>
+  <div class="envelope-scene" id="envelope-scene">
+    <div class="envelope-flap" id="envelope-flap">
+      <div class="envelope-flap-border"></div>
+      <div class="envelope-flap-inner"></div>
+    </div>
+    <div class="envelope-card" id="envelope-card"></div>
+    <div class="envelope-body"></div>
+    <div class="envelope-stamp" id="envelope-stamp">통일부</div>
   </div>
   <p class="delivery-typed" id="delivery-typed"></p>
   <p class="delivery-dest" id="delivery-dest"></p>
   <p class="delivery-selected" id="delivery-selected"></p>
-  <p class="crane-count" id="crane-count"></p>
-  <button class="btn" onclick="event.stopPropagation(); backToSelect()" style="margin-top:1.5rem">다른 기록 탐색하기</button>
+  <p class="delivery-count" id="delivery-count"></p>
+  <button class="btn" id="delivery-btn" onclick="event.stopPropagation(); backToSelect()" style="margin-top:1.5rem">다른 기록 탐색하기</button>
 </div>
 
 <!-- RESULT -->
@@ -791,7 +825,7 @@ function showAllClearPopup() {
   popup.className = 'all-clear-popup';
   popup.innerHTML = `
     <div class="all-clear-inner">
-      <div class="all-clear-icon">${I.craneSm}</div>
+      <div class="all-clear-icon">${I.envelope}</div>
       <h3>모든 빈칸 복원 완료</h3>
       <p>${data.title} — 4개 자료의 기록이 복원되었습니다.</p>
       <p style="color:#666;font-size:1.1rem;margin-top:.6rem;">이제 아키비스트로서 후대에 남길 기록을 선택합니다.</p>
@@ -845,61 +879,69 @@ function confirmArchive() {
 }
 
 // ===== DELIVERY =====
-// Pixel crane: 12x15 grid, 5px per pixel = 60x75px
-const CRANE_PIXELS = [
-  [5,0],[6,0],
-  [4,1],[7,1],
-  [3,2],[8,2],
-  [2,3],[9,3],
-  [1,4],[10,4],
-  [0,5],[11,5],
-  [1,6],[10,6],
-  [2,7],[9,7],
-  [3,7],[8,7],
-  [4,7],[7,7],
-  [5,7],[6,7],
-  [5,8],[6,8],
-  [5,9],[6,9],
-  [5,10],[6,10],
-  [4,11],[5,11],[6,11],[7,11],
-  [3,12],[8,12],
-  [3,13],[8,13],
-  [2,14],[9,14],
-];
-
-function buildPixelCrane() {
-  const el = document.getElementById('pixel-crane');
-  el.innerHTML = '';
-  el.classList.remove('flying');
-  const px = 5;
-  CRANE_PIXELS.forEach(([x, y], i) => {
-    const d = document.createElement('div');
-    d.className = 'pixel-crane-pixel';
-    d.style.cssText = `left:${x*px}px;top:${y*px}px;width:${px}px;height:${px}px;opacity:0;animation:pixelFadeIn .08s ease ${0.3 + i*0.02}s forwards`;
-    el.appendChild(d);
-  });
-}
-
 let deliveryTimer = null;
+
+function getSourceIcon(type) {
+  const iconMap = { letter: I.envelope, diary: I.notebook, scholar: I.book, newspaper: I.newspaper, photo: I.camera, oral: I.mic };
+  return iconMap[type] || I.envelope;
+}
 
 function showDelivery() {
   const data = GAME_DATA[state.currentChar];
   showScreen('delivery-screen');
-  buildPixelCrane();
+
   const selected = state.selectedRecords.map(i => data.choices[i].title).join(' + ');
-  document.getElementById('delivery-typed').textContent = '기록이 전달되었습니다';
-  document.getElementById('delivery-typed').style.animation = 'none';
-  void document.getElementById('delivery-typed').offsetWidth;
-  document.getElementById('delivery-typed').style.animation = '';
-  document.getElementById('delivery-dest').innerHTML = `&gt; ${data.destination}`;
-  document.getElementById('delivery-selected').innerHTML = `${state.playerName} &mdash; ${selected}`;
-  document.getElementById('crane-count').textContent = `[ ${state.totalCranes} crane${state.totalCranes > 1 ? 's' : ''} ]`;
-  // Fly away after delay
-  const crane = document.getElementById('pixel-crane');
-  setTimeout(() => { crane.classList.add('flying'); }, 3000);
+  // Determine which icon to show on the card (use first selected source's type)
+  const firstChoice = data.choices[state.selectedRecords[0]];
+  const cardIconSvg = firstChoice.icon;
+
+  // Reset all animation classes
+  const scene = document.getElementById('envelope-scene');
+  const card = document.getElementById('envelope-card');
+  const flap = document.getElementById('envelope-flap');
+  const stamp = document.getElementById('envelope-stamp');
+  const typed = document.getElementById('delivery-typed');
+  const dest = document.getElementById('delivery-dest');
+  const sel = document.getElementById('delivery-selected');
+  const count = document.getElementById('delivery-count');
+  const btn = document.getElementById('delivery-btn');
+
+  scene.classList.remove('animate-fly');
+  card.classList.remove('animate-in');
+  flap.classList.remove('animate-close');
+  stamp.classList.remove('animate-stamp');
+  typed.classList.remove('animate-type');
+  dest.classList.remove('animate-show');
+  sel.classList.remove('animate-show');
+  count.classList.remove('animate-show');
+  btn.classList.remove('animate-show');
+
+  // Set content
+  card.innerHTML = `<div class="card-icon-inner">${cardIconSvg}</div>`;
+  typed.textContent = '기록이 전달되었습니다';
+  dest.innerHTML = `&gt; ${data.destination}`;
+  sel.innerHTML = `${state.playerName} &mdash; ${selected}`;
+  count.textContent = `[ ${state.totalCranes} record${state.totalCranes > 1 ? 's' : ''} ]`;
+
+  // Animation sequence
+  // 0.5s: card slides into envelope
+  setTimeout(() => card.classList.add('animate-in'), 500);
+  // 1.5s: flap closes
+  setTimeout(() => flap.classList.add('animate-close'), 1500);
+  // 2.2s: stamp bounces in
+  setTimeout(() => stamp.classList.add('animate-stamp'), 2200);
+  // 3.2s: envelope flies away
+  setTimeout(() => scene.classList.add('animate-fly'), 3200);
+  // 3.8s: text appears
+  setTimeout(() => typed.classList.add('animate-type'), 3800);
+  setTimeout(() => dest.classList.add('animate-show'), 4200);
+  setTimeout(() => sel.classList.add('animate-show'), 4600);
+  setTimeout(() => count.classList.add('animate-show'), 5000);
+  setTimeout(() => btn.classList.add('animate-show'), 5200);
+
   // Auto-advance
   if (deliveryTimer) clearTimeout(deliveryTimer);
-  deliveryTimer = setTimeout(() => backToSelect(), 5500);
+  deliveryTimer = setTimeout(() => backToSelect(), 7200);
 }
 
 function deliveryClick() {
@@ -923,7 +965,7 @@ function showResult() {
     <p class="result-sub">${state.playerName} 아키비스트의 DMZ 다이어리</p>
     <div class="result-stat"><span class="stat-label">탐색한 기록</span><span class="stat-value">${state.completedStories.length}개</span></div>
     <div class="result-stat"><span class="stat-label">복원한 빈칸</span><span class="stat-value">${state.completedStories.length * 4}개</span></div>
-    <div class="result-stat"><span class="stat-label">배달한 두루미</span><span class="stat-value">${state.totalCranes}마리</span></div>
+    <div class="result-stat"><span class="stat-label">전달한 기록</span><span class="stat-value">${state.totalCranes}건</span></div>
     <div class="result-stat"><span class="stat-label">만난 사람들</span><span class="stat-value">${charNames.join(', ')}</span></div>
     <div class="result-summary">
       <p>DMZ에는 군사분계선만 있는 것이 아닙니다.</p>
