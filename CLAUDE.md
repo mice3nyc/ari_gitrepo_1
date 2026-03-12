@@ -20,12 +20,15 @@ _dev/
 ├── CLAUDE.md          ← 이 파일
 ├── .github/workflows/ ← GitHub Actions
 └── DMZ/
-    ├── index.html     ← DMZ 다이어리 v3.1 (교육용 웹 게임)
-    ├── UI-MAP.md      ← UI 요소 네이밍 규칙
-    ├── DATA-SPEC.md   ← 데이터 스펙 (이미지 네이밍, CSV 포맷, 빈칸 규칙)
+    ├── index.html     ← DMZ 다이어리 v3.2 (교육용 웹 게임)
+    ├── docs/
+    │   ├── UI-MAP.md      ← UI 요소 네이밍 규칙
+    │   ├── DATA-SPEC.md   ← 데이터 스펙 (이미지 네이밍, CSV 포맷, 빈칸 규칙)
+    │   ├── HANDOFF.md     ← 아리공↔아리온 인수인계 노트
+    │   └── ARCHITECTURE.md← 게임 구조도 (mermaid)
     ├── dmz_blanks.csv ← 정답표 (12개 빈칸)
     ├── dmz_choices.csv← 아키비스트 선택지
-    └── media/         ← 이미지 (char{N}_photo{M}.jpg)
+    └── media/         ← 이미지 (char{N}_photo{M}.jpg) + 로고 (logo_*.png/jpg)
 ```
 
 ## DMZ 다이어리
@@ -49,7 +52,33 @@ _dev/
 - **디자인**: 흰 배경, 미니멀, 블랙&화이트 기본. 탁한 색 금지.
 - **한국어 우선**: UI 텍스트, 주석 모두 한국어
 
+## 변경 이력
+
+| 버전 | 날짜 | 내용 |
+|------|------|------|
+| v3.0 | 2026-03-10 | 초기 버전 (정예공 원본) |
+| v3.1 | 2026-03-12 | 정예공 수정본 3건 반영, DATA-SPEC/CSV 생성, 4/4 올클리어 팝업 |
+| v3.2 | 2026-03-12 | 게임코드 1953→DMZ (대소문자 무관+디엠지), 통일부+놀공 로고, delivery-screen 봉투 애니메이션 |
+
+## 현재 게임 상태 (v3.2)
+
+- **게임코드**: `DMZ` (대소문자 무관, `디엠지`도 허용)
+- **로그인 화면**: 타이틀 + 이름/코드 입력 + 하단 통일부·놀공 로고
+- **delivery-screen**: 서류봉투 우편 발송 시퀀스 (카드삽입→봉투닫힘→통일부 도장→날아감)
+- **캐릭터 4명**: 각각 4개 자료 + 4개 빈칸 = 총 16자료, 12빈칸 (일부 공유)
+- **GitHub Pages**: https://mice3nyc.github.io/ari_gitrepo_1/DMZ/
+
 ## 아리온에게
 
 너는 이 리포의 코드를 읽고 수정할 수 있어. 피터공이 모바일에서 작업을 지시하면 코드를 수정하고 커밋해줘.
 아리공(로컬)이 PM으로서 큰 방향을 잡고, 너(아리온)는 실행을 담당한다. 함께 잘 해보자!
+
+**자료 찾는 곳:**
+- 코드: `DMZ/index.html` (단일 파일)
+- UI 이름: `DMZ/docs/UI-MAP.md` — 화면/요소 이름 통일. 소통할 때 이 이름 사용
+- 데이터: `DMZ/docs/DATA-SPEC.md` — 이미지 네이밍, CSV 포맷, 빈칸 규칙
+- 인수인계: `DMZ/docs/HANDOFF.md` — 아리공↔아리온 소통 채널. push 전에 여기 기록
+- 구조도: `DMZ/docs/ARCHITECTURE.md` — mermaid 다이어그램
+- 정답표: `DMZ/dmz_blanks.csv` — source of truth. 코드와 항상 일치해야 함
+- 선택지: `DMZ/dmz_choices.csv`
+- 이미지/로고: `DMZ/media/`
