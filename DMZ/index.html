@@ -61,7 +61,10 @@ input::placeholder { color: #999 }
 .login-field label { display: block; font-size: 1.25rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 3px }
 .login-error { color: #d00; font-size: 1.2rem; height: 2.8rem; margin-bottom: .2rem; font-weight: 700 }
 .login-hint { font-size: 1.2rem; color: #666; margin-top: 1.5rem }
-.version-tag { font-size: 0.7rem; color: #ccc; margin-top: 1.2rem; letter-spacing: .05em }
+.version-tag { font-size: 0.7rem; color: #ccc; margin-top: .8rem; letter-spacing: .05em }
+.login-logos { display: flex; align-items: center; justify-content: center; gap: 2rem; margin-top: 2rem }
+.login-logos img { height: 48px; width: auto }
+.login-logos img[alt="놀공"] { height: 60px }
 
 /* === SELECT === */
 #select-screen { flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1rem; animation: fadeIn .4s }
@@ -272,6 +275,10 @@ input::placeholder { color: #999 }
       <button class="btn-login" onclick="handleLogin()">입장</button>
       <p class="login-hint">우편사서함에 도착한 기록을 탐색합니다</p>
     </div>
+  </div>
+  <div class="login-logos">
+    <img src="media/logo_unification.jpg" alt="통일부">
+    <img src="media/logo_nolgong.png" alt="놀공">
   </div>
   <p class="version-tag">v0.2.0</p>
 </div>
@@ -586,7 +593,8 @@ function handleLogin() {
   const code = document.getElementById('input-code').value.trim();
   const errEl = document.getElementById('login-error');
   if (!name) { errEl.textContent = '이름을 입력해주세요.'; return; }
-  if (code !== '1953') { errEl.textContent = '게임 코드가 올바르지 않습니다.'; return; }
+  const validCodes = ['dmz', '디엠지'];
+  if (!validCodes.includes(code.toLowerCase())) { errEl.textContent = '게임 코드가 올바르지 않습니다.'; return; }
   state.playerName = name;
   loadStateForPlayer(name);
   showScreen('select-screen');
