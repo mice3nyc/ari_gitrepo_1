@@ -228,6 +228,14 @@ input::placeholder { color: #999 }
 .toast .toast-icon { font-size: 1.8rem; margin-bottom: .2rem; font-weight: 900 }
 .toast .toast-text { font-size: 1.2rem; line-height: 1.0 }
 
+/* All Clear Popup */
+.all-clear-popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.5); z-index: 500; display: flex; align-items: center; justify-content: center; animation: fadeIn .2s }
+.all-clear-inner { background: #fff; border: 2px solid #000; padding: 2rem 1.5rem; text-align: center; max-width: 300px; box-shadow: 8px 8px 0 #000 }
+.all-clear-inner .all-clear-icon { margin-bottom: .5rem }
+.all-clear-inner h3 { font-size: 1.4rem; font-weight: 900; margin-bottom: .4rem }
+.all-clear-inner p { font-size: 1.2rem; line-height: 1.4 }
+.all-clear-inner .btn-blk { margin-top: 1.2rem; width: 100% }
+
 /* Catchword highlight */
 .catchword-highlight {
   background: #ccff00;
@@ -358,13 +366,13 @@ const GAME_DATA = {
     soundNote: '포성이 줄어들다 침묵 → 벌레 소리, 바람 소리',
     sources: [
       { id: 'A', type: 'letter', icon: I.envelope, title: '군인의 편지', sub: 'DMZ 우편사서함에서 발견된 편지', styleClass: 'source-letter' },
-      { id: 'B', type: 'newspaper', icon: I.newspaper, title: '신문 보도', sub: '동아일보 1953년 7월 28일자', styleClass: 'source-newspaper' },
+      { id: 'B', type: 'newspaper', icon: I.newspaper, title: '신문 보도', sub: '통일뉴스 1953년 7월 28일자', styleClass: 'source-newspaper' },
       { id: 'C', type: 'photo', icon: I.camera, title: '사진 자료', sub: '정전협정 서명식 / 군사분계선 표지판', styleClass: 'source-photo' },
       { id: 'D', type: 'oral', icon: I.mic, title: '구술 인터뷰', sub: '참전용사 김영수 (2010년 채록)', styleClass: 'source-oral' }
     ],
     blanks: {
       A: { answer: '판문점', hint: '이 편지 속 장소는 다른 자료에서 확인할 수 있습니다. 자료 B(신문)를 읽어보세요.', source: 'B' },
-      B: { answer: '해리슨', hint: '이 인물은 사진 자료에서 확인할 수 있습니다. 자료 C(사진)의 캡션을 읽어보세요.', source: 'C' },
+      B: { answer: '해리슨 2세', hint: '이 인물은 사진 자료에서 확인할 수 있습니다. 자료 C(사진)의 캡션을 읽어보세요.', source: 'C', altAnswers: ['해리슨', 'Harrison'] },
       C: { answer: '남일', hint: '공산군 측 수석대표의 이름은 자료 B(신문)에서 확인할 수 있습니다.', source: 'B' },
       D: { answer: '4', hint: '각 2킬로미터씩 후퇴하면 총 폭은? 자료 B(신문)를 참고하세요.', source: 'B', altAnswers: ['사', '4km', '4킬로미터'] }
     },
@@ -390,9 +398,9 @@ const GAME_DATA = {
     ],
     blanks: {
       A: { answer: '4', hint: '졸업생 수는 자료 B(뉴스)에서 확인할 수 있습니다.', source: 'B', altAnswers: ['네', '넷', '4명'] },
-      B: { answer: '유엔군사령부', hint: '영어 수업을 담당하는 곳은? 자료 D(구술)에 힌트가 있습니다.', source: 'D', altAnswers: ['UNC', '유엔군사령부(UNC)', '유엔군 사령부'] },
-      C: { answer: '영어특성화', hint: '유엔군이 영어를 가르친다는 내용에서 유추해보세요. 자료 A(일기)를 참고하세요.', source: 'A', altAnswers: ['영어 특성화'] },
-      D: { answer: '90', hint: '참석 인원은 자료 B(뉴스)에서 확인할 수 있습니다.', source: 'B', altAnswers: ['90명', '약 90', '약 90명'] }
+      B: { answer: '유엔군사령부', hint: '영어 수업을 담당하는 곳은? 자료 D(구술)에 힌트가 있습니다.', source: 'D', altAnswers: ['UNC', '유엔군사령부(UNC)', '유엔군 사령부', '유엔', 'UN'] },
+      C: { answer: '기정동', hint: '북쪽에 보이는 마을 이름은? 자료 A(일기)를 참고하세요.', source: 'A' },
+      D: { answer: '통일부', hint: '졸업식에 참석하는 기관은? 자료 B(뉴스)에서 확인하세요.', source: 'B' }
     },
     choices: [
       { icon: I.notebook, title: '초등학생의 일기', meaning: '아이의 시선으로 본 일상을 기록으로 남긴다' },
@@ -417,7 +425,7 @@ const GAME_DATA = {
     blanks: {
       A: { answer: '궁예', hint: '905년에 이 성을 쌓은 인물은? 자료 D(구술)에서 확인하세요.', source: 'D' },
       B: { answer: '군사분계선', hint: '도성을 관통하는 것은? 자료 A(일기)에 힌트가 있습니다.', source: 'A', altAnswers: ['MDL', '군사분계선(MDL)', '군사 분계선'] },
-      C: { answer: '7', hint: '성벽 밑변의 폭은? 자료 D(구술)에서 확인하세요.', source: 'D', altAnswers: ['7미터', '7m'] },
+      C: { answer: '12,306', hint: '외성 둘레는? 자료 B(신문)에서 확인하세요.', source: 'B', altAnswers: ['12306', '12,306m', '12306m'] },
       D: { answer: '평화전망대', hint: '망원경으로 성을 보는 장소는? 자료 A(일기)에서 확인하세요.', source: 'A', altAnswers: ['전망대', '철원 평화전망대'] }
     },
     choices: [
@@ -435,36 +443,36 @@ const TEMPLATES = {
     A: (b) => `<div class="letter-paper">
       <div class="letter-meta"><strong>총소리가 멈춘 밤에</strong><br>1953년 7월 27일 · 보내는 이: 국군 병장 박진우 · 받는 이: 어머니</div>
       <p>어머니, 총소리가 멈췄습니다.</p>
-      <p style="margin-top:0.8rem;">오늘 밤 열 시를 기해 모든 총성이 그쳤습니다. 아침에 ${b.A}이라는 곳에서 정전협정이 체결되었다고 합니다. 서명에 단 10분밖에 걸리지 않았다 합니다. 3년이 넘는 전쟁을 그렇게 매듭지었다니.</p>
+      <p style="margin-top:0.8rem;">오늘 밤 열 시를 기해 모든 총성이 그쳤습니다. 아침에 ${b.A}이라는 곳에서 정전협정이 체결되었다고 합니다. 서명에 단 10분밖에 걸리지 않았다 합니다. 3년이 넘는 전쟁을 그렇게 매듭짓다니.</p>
       <p style="margin-top:0.8rem;">이것은 평화가 아닙니다. '정전'이라 합니다. 총을 내려놓은 것이지 악수를 한 것이 아닙니다.</p>
-      <p style="margin-top:0.8rem;">내일부터 72시간 안에 우리는 2킬로미터를 물러납니다. 그 사이 빈 땅이 생기고, 군사분계선을 따라 1,292개의 표지판이 세워진다 합니다. 김 상병의 고향 마을도 그 안에 들어갑니다. 그는 오늘 밤 한마디도 하지 않았습니다.</p>
+      <p style="margin-top:0.8rem;">72시간 안에 우리는 2킬로미터를 물러납니다. 그 사이 빈 땅이 생기고, 군사분계선을 따라 1,292개의 표지판이 세워진다 합니다. 김 상병의 고향 마을도 그 안에 들어갑니다. 그는 오늘 밤 한마디도 하지 않았습니다.</p>
       <p style="margin-top:0.8rem;">달이 밝습니다. 이 전쟁은 멈추었지만, 끝나지 않았습니다.</p>
       <p class="letter-sign">아들 진우 올림</p>
       <p class="sound-note">${I.sound} 포성이 줄어들며… 침묵. 벌레 소리, 바람 소리.</p>
     </div>`,
     B: (b) => `<div class="newspaper-paper">
-      <div class="news-header"><div class="news-name">동 아 일 보</div><div class="news-date">1953년 7월 28일 (화)</div></div>
-      <div class="news-title">정전협정 조인 — 판문점에서 쌍방 서명 완료</div>
+      <div class="news-header"><div class="news-name">통 일 뉴 스</div><div class="news-date">1953년 7월 28일 (화)</div></div>
+      <div class="news-title">정전협정 체결 — 판문점에서 쌍방 서명 완료</div>
       <div class="news-body">
-        <p>유엔군 측 수석대표 ${b.B} 중장과 공산군 측 수석대표 남일 대장은 27일 오전 10시 정전협정에 조인하였다. 서명식은 약 10분간 진행되었으며 양측은 일체의 발언 없이 서명만을 교환하였다.</p>
-        <p style="margin-top:0.8rem;">협정에 따라 발효 후 72시간 이내에 쌍방 군사력은 군사분계선으로부터 각 2킬로미터씩 후퇴하여야 한다. 이로써 서해 강화도에서 동해 고성까지 약 248킬로미터에 걸친 비무장지대가 설치된다.</p>
+        <p>유엔군대표단 측 수석대표 미육군대장 ${b.B}와 조선인민군 및 중국인민지원군대표단 수석대표 조선인민군대장 남일이 대표로 참석해 27일 오전 10시에 정전협정에 서명했다. 양측은 일체의 발언 없이 서명만을 교환하였다.</p>
+        <p style="margin-top:0.8rem;">협정에 따라 발효 후 72시간 이내에 쌍방 군사력은 군사분계선으로부터 각 2킬로미터씩 후퇴하여야 한다. 이로써 서해 강화도에서 강원 고성까지 약 248킬로미터에 걸친 비무장지대가 설치된다.</p>
       </div></div>`,
     C: (b) => `<div class="photo-frame" style="margin-bottom:1rem;">
       <img src="media/char1_photo1.jpg" alt="사진 1: 판문점 정전협정 서명식">
-      <div class="photo-caption">[사진 1] 1953년 7월 27일 오전 10시, 판문점. 유엔군 측 수석대표 해리슨 중장(왼쪽 테이블)이 정전협정문에 서명하고 있다. 맞은편에는 ${b.C} 대장이 앉아 있다.</div>
-      <div class="photo-source">출처: 미국 국립문서기록관리청(NARA)</div>
+      <div class="photo-caption">[사진 1] 1953년 7월 27일 오전 10시, 판문점. 유엔군대표단 수석대표 미육군대장 해리슨 2세(왼쪽 테이블)가 정전협정문에 서명하고 있다. 반대쪽에는 조선인민군 및 중국인민지원군대표단 수석대표 ${b.C} 대장이 앉아 있다.</div>
+      <div class="photo-source">출처: 미국 국립문서기록관리청(NARA), Record Group 111, SC-423678</div>
     </div>
     <div class="photo-frame">
       <img src="media/char1_photo2.jpg" alt="사진 2: MDL 표지판">
       <div class="photo-caption">[사진 2] 판문점 DMZ 내 군사분계선 표지판. 서해 강화도에서 동해 고성까지 약 248킬로미터 구간에 총 1,292개가 설치되었다.</div>
-      <div class="photo-source">출처: 미국 공군(USAF)</div>
+      <div class="photo-source">출처: 미국 공군(USAF), TECH. SGT. Scott Stewart 촬영 (1993)</div>
     </div>`,
     D: (b) => `<div class="oral-player">
       <div class="cassette">${I.cassette}</div>
       <div class="oral-meta">구술자: 김영수 (1933년생, 당시 이등병) · 채록: 2010년 6월<br>주제: 정전협정 당일 기억</div>
       <div class="oral-text">
         <p>"그날 밤 열 시에 총소리가 딱 멈추니까, 세상이 쥐 죽은 듯이 조용해졌어. 근데 아무도 안 웃었어. 울지도 않고. 그냥 멍했지."</p>
-        <p>"72시간 안에 물러나라 그래서, 3년 지킨 참호를 제 손으로 허물었어. 2킬로씩 물러나니까 가운데 ${b.D}킬로짜리 빈 땅이 생기는 거야. 거기가 비무장지대가 된 거지."</p>
+        <p>"72시간 안에 물러나라 그래서, 3년 지킨 참호를 제 손으로 허물었어. 2킬로씩 물러나니까 폭이 ${b.D} 킬로짜리 빈 땅이 생기는 거야. 거기가 비무장지대가 된 거지."</p>
         <p>"우리 부대에 연천 사람이 하나 있었는데, 그 친구 고향이 딱 그 안에 들어갔어. 그 친구는 그날 밤새 북쪽만 보고 있었어."</p>
       </div>
       <p class="sound-note">${I.sound} 먼 곳의 침묵… 벌레 소리, 바람 소리</p>
@@ -473,38 +481,35 @@ const TEMPLATES = {
   student: {
     A: (b) => `<div class="diary-paper">
       <div class="diary-meta">제목: 졸업합니다 · 2026년 2월 6일 · 6학년 한서윤</div>
-      <p>내일이면 졸업이다. 우리 학년 졸업생은 ${b.A}명이다.</p>
-      <p style="margin-top:0.8rem;">3학년 때 전학 왔다. 첫날 스쿨버스를 타고 통일대교를 건너는데 군인 아저씨가 올라타서 출입증을 확인했다. 검문소를 두 번 지났다.</p>
-      <p style="margin-top:0.8rem;">우리 반은 나 포함 다섯 명. 여기서 제일 신기한 건 판문점에 있는 유엔군 아저씨들이 와서 영어를 가르쳐 주는 거다. 마이클 선생님은 내 이름 발음을 졸업할 때까지 못 고쳤다.</p>
-      <p style="margin-top:0.8rem;">운동장에서 북쪽을 보면 기정동 마을이 보인다. 160미터짜리 깃대가 서 있다. 일 년에 두 번 대피 훈련을 한다. 사이렌이 울리면 전부 버스에 올라탄다.</p>
-      <p style="margin-top:0.8rem;">졸업합니다, 대성동초등학교.</p>
+      <p>내일이면 졸업이다. 나와 함께 졸업하는 친구들은 ${b.A}명이다.</p>
+      <p style="margin-top:0.8rem;">나는 3학년 때 전학 왔다. 첫날 스쿨버스를 타고 통일대교를 건너는데 군인 아저씨가 올라타서 출입증을 확인했던 기억이 생생하다.</p>
+      <p style="margin-top:0.8rem;">여기서 제일 신기했던 건 판문점에 있는 유엔군 아저씨들이 와서 영어를 가르쳐 주는 거였다. 그리고 운동장에서 북쪽을 보면 기정동 마을이 보이는 것도 신기했다. 160미터짜리 깃대를 보는 것도 내일이면 마지막이다.</p>
       <p class="sound-note">${I.sound} 학교 종소리, 아이들 웃음소리</p>
     </div>`,
     B: (b) => `<div class="newspaper-paper">
       <div class="news-header"><div class="news-name">연 합 뉴 스</div><div class="news-date">2026년 2월 7일</div></div>
       <div class="news-title">DMZ 유일의 학교 대성동초등학교 제57회 졸업식</div>
       <div class="news-body">
-        <p>비무장지대(DMZ) 내 유일한 교육기관인 대성동초등학교가 7일 졸업식을 거행했다. 졸업생은 4명. 1954년 개교 이래 누적 졸업생 234명을 배출했다.</p>
-        <p style="margin-top:0.8rem;">동 학교는 정전협정에 따라 DMZ 내 유일한 남측 민간인 거주지인 대성동 자유의 마을에 위치한다. ${b.B} 소속 장병이 영어 수업을 담당하며, 재학생 대다수는 문산·파주에서 스쿨버스로 통학한다.</p>
-        <p style="margin-top:0.8rem;">졸업식에는 통일부 관계자, 유엔군사령부 장교, 학부모 등 약 90여 명이 참석했다.</p>
+        <p>비무장지대(DMZ) 내 유일한 교육기관인 대성동초등학교가 7일 졸업식을 거행했다. 올해 졸업생은 총 4명. 1954년 개교 이래 누적 졸업생 230명을 배출했다.</p>
+        <p style="margin-top:0.8rem;">대성동초등학교는 DMZ 내 유일한 교육기관이다. ${b.B} 소속 장병이 영어 수업을 담당하며, 재학생 대다수는 문산·파주에서 스쿨버스로 통학한다.</p>
+        <p style="margin-top:0.8rem;">졸업식에는 통일부 관계자, 유엔군사령부 장교, 학부모 등 90여 명이 참석했다.</p>
       </div></div>`,
     C: (b) => `<div class="photo-frame" style="margin-bottom:1rem;">
       <img src="media/char2_photo1.jpg" alt="사진 1: 대성동초등학교 표지판">
-      <div class="photo-caption">[사진 1] 대성동초등학교 안내 표지판. 2007년 학생 수 감소로 폐교 위기에 처했으나, ${b.C}학교로 전환하여 존속하였다. 현재 6학급 재학생 약 27명, 교직원 약 21명.</div>
+      <div class="photo-caption">[사진 1] 대성동초등학교 안내 표지판. 2007년 학생 수 감소로 폐교 위기에 처했으나, 영어특성화 학교로 전환하는 등 여러 노력 끝에 존속 중이다.</div>
       <div class="photo-source">출처: Edward N. Johnson, Wikimedia Commons</div>
     </div>
     <div class="photo-frame">
       <img src="media/char2_photo2.jpg" alt="사진 2: 대성동 마을 전경">
-      <div class="photo-caption">[사진 2] 공동경비구역(JSA) 인근에 위치한 대성동 자유의 마을과 높이 세워진 태극기. 북측 기정동 마을에서 약 800m 거리에 위치한다.</div>
+      <div class="photo-caption">[사진 2] 대성동 자유의 마을과 높이 솟은 태극기. 북측 ${b.C} 마을이 약 800m 거리에 있다.</div>
       <div class="photo-source">출처: Park Jong-u (2022), Wikimedia Commons</div>
     </div>`,
     D: (b) => `<div class="oral-player">
       <div class="cassette">${I.cassette}</div>
       <div class="oral-meta">구술자: 이정호 (대성동초등학교 前 교사) · 채록: 2025년 12월<br>주제: 대성동초등학교 교사 경험</div>
       <div class="oral-text">
-        <p>"여기 처음 발령받았을 때, 검문소에서 출입증 검사받으면서 '내가 학교를 가는 건가 군부대를 가는 건가' 싶었어요. 근데 교실 문 열면 애들이 뛰어오거든요. 한 반에 다섯 명이니까 매일 이름 부르고. 숨을 데가 없어요."</p>
-        <p>"졸업식 때 참석자가 한 ${b.D}명은 돼요. 졸업생은 서넛인데. 통일부에서, 유엔군사령부에서, 시장님까지. 졸업생보다 하객이 스무 배 많은 졸업식이에요."</p>
-        <p>"북쪽 기정동에서 확성기 틀 때가 제일 힘들어요. 애들한테 '그냥 소리야' 하는데, 교실 창문이 그쪽을 향하고 있으니까. 그래도 애들은 금방 익숙해져요. 어른보다 빨라요."</p>
+        <p>"여기 처음 발령받았을 때, 검문소에서 출입증 검사받으면서 '내가 학교를 가는 건가 군부대를 가는 건가' 싶었어요. 근데 교실 문 열면 애들이 뛰어오거든요."</p>
+        <p>"졸업식 참석자가 아주 화려해요. 졸업생은 서넛인데. ${b.D}에서도 나오고, 유엔군사령부에서도 나오고, 시장님까지. 졸업생보다 손님이 더 많은 졸업식이에요."</p>
       </div>
       <p class="sound-note">${I.sound} 학교 종소리, 간간이 군용차 엔진 소리</p>
     </div>`
@@ -512,10 +517,9 @@ const TEMPLATES = {
   historian: {
     A: (b) => `<div class="scholar-paper">
       <div class="letter-meta" style="font-family:-apple-system,sans-serif;font-size:1.3rem;color:#666;margin-bottom:.8rem;padding-bottom:.6rem;border-bottom:1px dashed #000;"><strong>내가 죽기 전에</strong><br>2026년 3월 어느 날 · 역사학자 박종길 (90세)</div>
-      <p>오늘 또 전망대에 올랐다. 망원경으로 보면 거기, 성벽의 윤곽이 풀 사이로 보인다. ${b.A}가 905년에 쌓은 철원성. 외성 둘레 12킬로미터. 천백 년 된 도성이 군사분계선에 걸터앉아 풀에 묻혀 있다.</p>
-      <p style="margin-top:0.8rem;">서른 살에 일제강점기 사진 한 장으로 이 성을 만났다. 2005년에 육사 조사단과 외성 동벽을 직접 밟았다. 손이 떨렸다. 그런데 내성과 궁성은 군사분계선 너머에 있다.</p>
-      <p style="margin-top:0.8rem;">2018년, 남북이 공동조사에 합의했을 때 발굴 계획서를 밤새 썼다. 하지만 이행되지 않았다. 70여 년간 사람의 발길이 닿지 않았으니 오히려 온전할 것이다. 분단이 유적을 지켰다.</p>
-      <p style="margin-top:0.8rem;">내년에도 올 수 있을지 모르겠다. 그래도 계획서는 완성한다.</p>
+      <p>오늘도 평화전망대에 올라서 ${b.A}가 905년에 수도로 삼았던 철원성의 위치를 어림잡아 본다.</p>
+      <p style="margin-top:0.8rem;">얄궂게도 군사분계선에 걸쳐 있는 철원성은 지금은 풀숲이 되었지만 외성 둘레만도 12km가 넘고 면적은 서울의 중구와 유사할 만큼 엄청난 위용을 자랑했었다.</p>
+      <p style="margin-top:0.8rem;">2018년 판문점 선언 이후, DMZ 내 태봉국 철원성을 남북이 공동 조사하자고 합의했을 때, 떨리는 마음으로 발굴 계획서를 밤새 작성했었다. 이 계획서를 실천에 옮길 날을 기다리고 있다. 그리고 그날 나도 함께할 수 있기를…</p>
       <p class="sound-note">${I.sound} 바람 소리, 망원경 초점 맞추는 소리, 먼 곳의 새 울음</p>
     </div>`,
     B: (b) => `<div class="newspaper-paper">
@@ -523,11 +527,12 @@ const TEMPLATES = {
       <div class="news-title">태봉 철원성, 남북 공동발굴 '1순위' 유적으로 재조명</div>
       <div class="news-body">
         <p>철원성은 궁예가 905년 수도를 철원으로 옮기며 축조한 도성으로, 외성 둘레 약 12,306m, 내성 둘레 약 7,656m에 달한다. ${b.B}이 도성 중앙부를 관통하고 있어 완전한 조사에는 남북 공동 작업이 불가피하다.</p>
-        <p style="margin-top:0.8rem;">2005년 육군사관학교 조사단이 외성 동벽을 조사하였으며, 2020년 국가유산청이 유엔군사령부의 호위 하에 현장조사를 수행하였다. 학계에서는 장기간 접근이 차단됨으로써 유적이 역설적으로 양호한 보존 상태를 유지하고 있을 것으로 추정한다.</p>
+        <p style="margin-top:0.8rem;">학계에서는 장기간 사람의 손길이 닿지 않아 역설적으로 양호한 보존 상태를 유지하고 있을 것으로 추정하고 있다. 그러나 공동 작업을 위해서 풀어야 하는 숙제는 한둘이 아니다.</p>
+        <p style="margin-top:0.8rem;">유엔사 군사정전위원회의 허락을 얻어야만 출입할 수 있는 금단의 땅인 데다 지뢰 제거라는 큰 난관도 존재한다.</p>
       </div></div>`,
     C: (b) => `<div class="photo-frame">
       <img src="media/char3_photo1.jpg" alt="철원평야 / 민통선 전경">
-      <div class="photo-caption">철원 민통선 안에서 바라본 철원평야. 이 일대에 궁예가 세운 태봉의 도성 철원성이 위치해 있다. 외성 단면의 밑변 폭은 약 ${b.C}미터로, 천 년 넘게 토축으로 쌓아 올린 성벽이다. DMZ 내에 위치하여 민간 접근이 차단되어 있다.</div>
+      <div class="photo-caption">이 일대에 궁예가 세운 태봉의 도성 철원성이 위치해 있다. 외성 둘레는 약 ${b.C}m로 추정된다.</div>
       <div class="photo-source">출처: 대한민국 국방부, "2012년 전선에 서다" 시리즈</div>
     </div>`,
     D: (b) => `<div class="oral-player">
@@ -535,8 +540,9 @@ const TEMPLATES = {
       <div class="oral-meta">구술자: 최동원 (철원 향토사학자) · 채록: 2025년 11월<br>주제: 철원성의 현재와 남북 공동조사 전망</div>
       <div class="oral-text">
         <p>"철원성이 뭐냐면, 궁예가 나라를 세우고 수도를 만든 곳이에요. 외성, 내성, 궁성 3겹 구조인데, 외성 남벽하고 동벽 일부만 우리 쪽이고, 내성이랑 궁성은 전부 북쪽이에요."</p>
-        <p>"2005년에 육사 조사단이 처음 들어갔어요. 성벽 밑변이 7미터나 되더래요. 그걸 천 년 넘게 흙으로 쌓아 올린 거예요. 2018년에 9.19 합의로 공동조사 하기로 했는데, 그 뒤로 소식이 없어요."</p>
-        <p>"어떤 교수님은 평생을 이 성에 바쳤는데 내성은 한 번도 못 밟으셨어요. 망원경으로만 보시는 거예요, ${b.D}에서."</p>
+        <p>"2000년에 육사 조사단이 처음 들어갔어요. 2018년에 남북이 합의해서 공동 조사하기로 했는데, 그 뒤로 소식이 없어요."</p>
+        <p>"어떤 교수님은 평생을 이 성에 바쳤는데 한 번도 철원성 땅을 못 밟으셨어요. 망원경으로만 보시는 거예요, ${b.D}에서."</p>
+        <p>"참 신기하죠? 군사분계선이 철원성을 거의 정확하게 반으로 가르고 있다고 합니다."</p>
       </div>
       <p class="sound-note">${I.sound} 바람 소리, 먼 곳의 새 울음</p>
     </div>`
@@ -748,8 +754,13 @@ function submitAnswer() {
     const solvedId = currentBlankId;
     state.solvedBlanks[solvedId] = blank.answer;
     closeAnswerModal();
-    showToast('correct', '정답', `빈칸 [${solvedId}] 복원 완료`);
-    setTimeout(() => openSource(solvedId), 1200);
+    if (Object.keys(state.solvedBlanks).length === 4) {
+      showToast('correct', '정답', `빈칸 [${solvedId}] 복원 완료`);
+      setTimeout(() => showAllClearPopup(), 1500);
+    } else {
+      showToast('correct', '정답', `빈칸 [${solvedId}] 복원 완료`);
+      setTimeout(() => openSource(solvedId), 1200);
+    }
   } else {
     showToast('incorrect', '다시 확인', '다른 자료를 교차 참조해보세요.');
   }
@@ -763,6 +774,22 @@ function showToast(type, title, text) {
   toast.innerHTML = `<div class="toast-icon">${type === 'correct' ? '✓' : '✗'}</div><div class="toast-text"><strong>${title}</strong><br>${text}</div>`;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 2000);
+}
+
+function showAllClearPopup() {
+  closeSource();
+  const data = GAME_DATA[state.currentChar];
+  const popup = document.createElement('div');
+  popup.className = 'all-clear-popup';
+  popup.innerHTML = `
+    <div class="all-clear-inner">
+      <div class="all-clear-icon">${I.craneSm}</div>
+      <h3>모든 빈칸 복원 완료</h3>
+      <p>${data.title} — 4개 자료의 기록이 복원되었습니다.</p>
+      <p style="color:#666;font-size:1.1rem;margin-top:.6rem;">이제 아키비스트로서 후대에 남길 기록을 선택합니다.</p>
+      <button class="btn-blk" onclick="this.closest('.all-clear-popup').remove();goToPhase3();">기록 선택으로</button>
+    </div>`;
+  document.body.appendChild(popup);
 }
 
 // ===== PHASE 3: ARCHIVE =====

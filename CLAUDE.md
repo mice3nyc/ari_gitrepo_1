@@ -20,12 +20,27 @@ _dev/
 ├── CLAUDE.md          ← 이 파일
 ├── .github/workflows/ ← GitHub Actions
 └── DMZ/
-    └── index.html     ← DMZ 다이어리 v3 (교육용 웹 게임)
+    ├── index.html     ← DMZ 다이어리 v3.1 (교육용 웹 게임)
+    ├── UI-MAP.md      ← UI 요소 네이밍 규칙
+    ├── DATA-SPEC.md   ← 데이터 스펙 (이미지 네이밍, CSV 포맷, 빈칸 규칙)
+    ├── dmz_blanks.csv ← 정답표 (12개 빈칸)
+    ├── dmz_choices.csv← 아키비스트 선택지
+    └── media/         ← 이미지 (char{N}_photo{M}.jpg)
 ```
 
 ## DMZ 다이어리
 
 아키비스트가 DMZ를 기록하는 교차참조 빈칸 복원 게임. 단일 HTML, 바닐라 JS, 프레임워크 없음.
+
+### 개발 문서 (반드시 읽고 따를 것)
+- **UI-MAP.md** — 화면/UI 요소 공식 이름. 소통 시 이 이름을 사용한다.
+- **DATA-SPEC.md** — 이미지 네이밍(`char{N}_photo{M}.jpg`), CSV 포맷, 빈칸 규칙, 업데이트 절차. 콘텐츠 수정 시 반드시 참조.
+- **dmz_blanks.csv** — 정답 데이터의 원본(source of truth). 코드 수정 시 CSV와 일치해야 한다.
+
+### 콘텐츠 업데이트 절차
+1. 정예공(콘텐츠 작가)이 docx로 수정본 전달
+2. 아리공/아리온이 CSV 업데이트 + 코드 반영
+3. dmz_blanks.csv와 index.html 정답이 항상 일치해야 함
 
 ## 코드 컨벤션
 
