@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>내 그림은 어디서부터인가</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --color-text: #1a1a1a;
+    --color-text-light: #555;
+    --color-border: #ddd;
+    --color-bg: #fff;
+    --color-accent: #0066ff;
+    --color-accent-light: rgba(0, 102, 255, 0.08);
+    --color-accent-fill: rgba(0, 102, 255, 0.12);
+    --radius: 12px;
+    --max-width: 600px;
+    --transition: 0.4s ease;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.7;
+    font-size: 17px;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px 60px;
+  }
+
+  #app {
+    width: 100%;
+    max-width: var(--max-width);
+    position: relative;
+  }
+
+  /* ── Screen containers ── */
+  .screen {
+    display: none;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .screen.active {
+    display: block;
+  }
+  .screen.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Step indicator ── */
+  .step-indicator {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 36px;
+  }
+  .step-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-border);
+    transition: background 0.3s;
+  }
+  .step-dot.filled {
+    background: var(--color-accent);
+  }
+  .step-dot.current {
+    background: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-light);
+  }
+
+  /* ── Situation text ── */
+  .situation {
+    border-left: 3px solid var(--color-border);
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    background: #fafafa;
+    border-radius: 0 var(--radius) var(--radius) 0;
+  }
+  .situation p {
+    margin-bottom: 12px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .situation p.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .situation p:last-child { margin-bottom: 0; }
+  .situation strong { color: var(--color-text); }
+
+  /* ── Intro specific ── */
+  .intro-text {
+    text-align: center;
+    padding: 60px 0 40px;
+  }
+  .intro-text p {
+    margin-bottom: 16px;
+    font-size: 18px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .intro-text p.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .intro-text strong {
+    font-size: 19px;
+  }
+
+  /* ── Episode title ── */
+  .episode-title {
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .episode-main-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 48px;
+    color: var(--color-text);
+  }
+
+  /* ── Choices ── */
+  .choices {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .choice-card {
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--color-bg);
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 72px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .choice-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 2px 12px rgba(0, 102, 255, 0.08);
+  }
+  .choice-card:active {
+    transform: scale(0.98);
+  }
+  .choice-card.selected {
+    border-color: var(--color-accent);
+    background: var(--color-accent-light);
+  }
+  .choice-card .choice-label {
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--color-text);
+  }
+  .choice-card .choice-desc {
+    font-size: 14px;
+    color: var(--color-text-light);
+  }
+  .choices.disabled .choice-card {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  .choices.disabled .choice-card.selected {
+    opacity: 1;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    display: block;
+    margin: 36px auto 0;
+    padding: 16px 48px;
+    font-size: 17px;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+  .btn:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+  }
+  .btn:active {
+    transform: translateY(0);
+  }
+  .btn.hidden {
+    display: none;
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--color-text-light);
+    border: 1.5px solid var(--color-border);
+    margin-top: 16px;
+  }
+  .btn-secondary:hover {
+    border-color: var(--color-text-light);
+    color: var(--color-text);
+  }
+
+  /* ── Profile screen ── */
+  .profile-type-name {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .profile-type-quote {
+    text-align: center;
+    font-size: 14px;
+    color: var(--color-text-light);
+    margin-bottom: 32px;
+  }
+  .radar-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 32px;
+  }
+  .radar-container svg {
+    width: 100%;
+    max-width: 320px;
+  }
+  .profile-desc {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--color-text);
+    margin-bottom: 40px;
+    padding: 20px 24px;
+    border-left: 3px solid var(--color-accent);
+    background: var(--color-accent-light);
+    border-radius: 0 var(--radius) var(--radius) 0;
+  }
+  .profile-desc strong { color: var(--color-text); }
+
+  .closing-message {
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--color-text-light);
+    margin-bottom: 40px;
+    padding: 0 12px;
+  }
+  .closing-message strong {
+    color: var(--color-text);
+  }
+
+  /* ── Stat bars (text fallback under chart) ── */
+  .stat-bars {
+    margin-bottom: 32px;
+  }
+  .stat-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  .stat-bar-label {
+    width: 80px;
+    text-align: right;
+    color: var(--color-text-light);
+    flex-shrink: 0;
+  }
+  .stat-bar-track {
+    flex: 1;
+    height: 8px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .stat-bar-fill {
+    height: 100%;
+    background: var(--color-accent);
+    border-radius: 4px;
+    transition: width 1s ease;
+    width: 0;
+  }
+  .stat-bar-value {
+    width: 24px;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--color-text);
+  }
+
+  /* ── Reflection ── */
+  .reflection-text {
+    text-align: center;
+    padding: 40px 0;
+  }
+  .reflection-text p {
+    margin-bottom: 16px;
+    font-size: 18px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .reflection-text p.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 480px) {
+    body { padding: 24px 16px 48px; font-size: 16px; }
+    .intro-text p { font-size: 16px; }
+    .situation { padding: 16px 18px; }
+    .choice-card { padding: 16px 18px; }
+    .profile-type-name { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ═══ INTRO ═══ -->
+  <div class="screen active" id="screen-intro">
+    <div class="episode-title">Episode 1</div>
+    <div class="episode-main-title">내 그림은 어디서부터인가</div>
+    <div class="intro-text" id="intro-lines"></div>
+    <button class="btn hidden" id="btn-start" onclick="goToStep1()">시작하기</button>
+  </div>
+
+  <!-- ═══ STEP 1 ═══ -->
+  <div class="screen" id="screen-step1">
+    <div class="step-indicator" id="indicator-1"></div>
+    <div class="situation" id="step1-situation"></div>
+    <div class="choices" id="step1-choices"></div>
+  </div>
+
+  <!-- ═══ STEP 2 ═══ -->
+  <div class="screen" id="screen-step2">
+    <div class="step-indicator" id="indicator-2"></div>
+    <div class="situation" id="step2-situation"></div>
+    <div class="choices" id="step2-choices"></div>
+  </div>
+
+  <!-- ═══ STEP 3 ═══ -->
+  <div class="screen" id="screen-step3">
+    <div class="step-indicator" id="indicator-3"></div>
+    <div class="situation" id="step3-situation"></div>
+    <div class="choices" id="step3-choices"></div>
+    <button class="btn hidden" id="btn-step3-next" onclick="goToStep4()">다음</button>
+  </div>
+
+  <!-- ═══ STEP 4: Reflection ═══ -->
+  <div class="screen" id="screen-step4">
+    <div class="step-indicator" id="indicator-4"></div>
+    <div class="reflection-text" id="step4-text"></div>
+    <button class="btn hidden" id="btn-step4-next" onclick="goToStep5()">내 프로필 보기</button>
+  </div>
+
+  <!-- ═══ STEP 5: Profile ═══ -->
+  <div class="screen" id="screen-step5">
+    <div class="step-indicator" id="indicator-5"></div>
+    <div class="profile-type-name" id="profile-name"></div>
+    <div class="profile-type-quote" id="profile-path"></div>
+    <div class="radar-container" id="radar-container"></div>
+    <div class="stat-bars" id="stat-bars"></div>
+    <div class="profile-desc" id="profile-desc"></div>
+    <div class="closing-message" id="closing-message"></div>
+    <button class="btn" onclick="restart()">다시 해보기</button>
+    <button class="btn btn-secondary" onclick="showAllProfiles()">다른 프로필 보기</button>
+  </div>
+
+</div>
+
+<script>
+// ════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════
+
+const INTRO_LINES = [
+  { text: "2026년 어느 목요일.", bold: false },
+  { text: "미술 시간 종이 울렸다.", bold: false },
+  { text: "", bold: false },
+  { text: "선생님이 말했다.", bold: false },
+  { text: '"다음 주까지 \'나의 하루\'를 주제로 포스터 한 장을 만들어 오세요."', bold: true },
+  { text: "", bold: false },
+  { text: '옆자리 지민이가 웃으면서 말한다.', bold: false },
+  { text: '"이거 AI로 하면 10분이면 되는데."', bold: false },
+  { text: "", bold: false },
+  { text: "교실 여기저기서 웃음이 나온다. 몇 명은 이미 폰을 꺼내고 있다.", bold: false },
+  { text: "선생님은 들었는지 못 들었는지, 아무 말 없이 교실을 나갔다.", bold: false },
+  { text: "", bold: false },
+  { text: "너는 어떻게 하겠는가?", bold: true }
+];
+
+const STEP1 = {
+  situation: [
+    { text: "집에 와서 책상 앞에 앉았다.", bold: false },
+    { text: "빈 종이 한 장이 있고, 노트북이 있다.", bold: false },
+    { text: "지민이가 보내온 카톡이 와 있다.", bold: false },
+    { text: "", bold: false },
+    { text: '"야 나 벌써 했어 ㅋㅋ AI로 5분 컷"', bold: false },
+    { text: "사진이 딸려 있다. 꽤 멋지다.", bold: false },
+    { text: "", bold: false },
+    { text: "종이를 집을 것인가, 노트북을 켤 것인가.", bold: true }
+  ],
+  choices: [
+    {
+      id: "A", label: "종이를 집는다.",
+      desc: '"일단 내 손으로 시작해보자."',
+      stats: { thinking: 2, creativity: 2, tech: 0, adaptability: 0, confidence: 1, curiosity: 0 }
+    },
+    {
+      id: "B", label: '노트북을 켠다. AI에게 "나의 하루 포스터"를 시킨다.',
+      desc: '"빨리 끝내고 게임하자."',
+      stats: { thinking: 0, creativity: -1, tech: 2, adaptability: 2, confidence: 1, curiosity: 0 }
+    },
+    {
+      id: "C", label: '노트북을 켠다. AI에게 "어떻게 그리면 좋을까?"라고 물어본다.',
+      desc: '"아이디어를 좀 얻고 시작하자."',
+      stats: { thinking: 1, creativity: 1, tech: 1, adaptability: 1, confidence: 0, curiosity: 1 }
+    },
+    {
+      id: "D", label: '지민이에게 카톡을 보낸다. "어떤 AI 썼어?"',
+      desc: '"일단 뭘로 하는 건지 알아보자."',
+      stats: { thinking: 0, creativity: 0, tech: 1, adaptability: 1, confidence: -1, curiosity: 1 }
+    }
+  ]
+};
+
+const STEP2 = {
+  A: {
+    situation: [
+      { text: "30분이 지났다.", bold: false },
+      { text: "종이 위에 그린 건 막대 사람 두 개와 지워진 자국들.", bold: false },
+      { text: "지민이 포스터가 머릿속에서 떠나지 않는다.", bold: false },
+      { text: '"저거보다 잘 그릴 수 있을 것 같지 않은데..."', bold: true },
+      { text: "", bold: false },
+      { text: "어떻게 하겠는가?", bold: true }
+    ],
+    choices: [
+      { id: "A-1", label: "계속 그린다.", desc: '"못생겨도 내 그림이다."', stats: { thinking: 2, creativity: 2, tech: 0, adaptability: 0, confidence: 2, curiosity: 0 } },
+      { id: "A-2", label: 'AI에게 구도만 물어본다.', desc: '"사람을 어떤 포즈로 그리면 좋아?"', stats: { thinking: 1, creativity: 1, tech: 1, adaptability: 1, confidence: 0, curiosity: 1 } },
+      { id: "A-3", label: "그만 둔다.", desc: '"내일 학교에서 다시 생각해보자."', stats: { thinking: 0, creativity: 0, tech: 0, adaptability: -1, confidence: -1, curiosity: 1 } }
+    ]
+  },
+  B: {
+    situation: [
+      { text: "AI가 5분 만에 포스터를 만들어줬다.", bold: false },
+      { text: "예쁘다. 그런데 보면 볼수록 이상하다.", bold: true },
+      { text: '"나의 하루"인데, 이 그림 속 하루는 내 하루가 아니다.', bold: false },
+      { text: "AI가 그린 건 교복 입은 애가 카페에서 공부하는 모습이다.", bold: false },
+      { text: "나는 방과 후에 형이랑 피시방에 가는데.", bold: true },
+      { text: "", bold: false },
+      { text: "어떻게 하겠는가?", bold: true }
+    ],
+    choices: [
+      { id: "B-1", label: "그냥 낸다.", desc: '"어차피 포스터니까."', stats: { thinking: -1, creativity: -1, tech: 1, adaptability: 1, confidence: 1, curiosity: -1 } },
+      { id: "B-2", label: 'AI에게 "피시방 장면으로 바꿔줘"라고 다시 시킨다.', desc: '"내 하루로 바꾸자."', stats: { thinking: 0, creativity: 1, tech: 2, adaptability: 1, confidence: 0, curiosity: 1 } },
+      { id: "B-3", label: "AI 그림은 참고만 하고, 내 하루를 직접 그려본다.", desc: '"내가 그려야 내 하루지."', stats: { thinking: 2, creativity: 2, tech: 0, adaptability: 1, confidence: 1, curiosity: 1 } }
+    ]
+  },
+  C: {
+    situation: [
+      { text: "AI가 아이디어를 줬다.", bold: false },
+      { text: '"시간대별로 나눠서 아침-점심-저녁을 세 칸으로 그려보세요."', bold: false },
+      { text: "괜찮은 아이디어다.", bold: false },
+      { text: "그런데 이 아이디어는 AI 것인가 내 것인가?", bold: true },
+      { text: "구도는 AI에게서 왔고, 그림은 내가 그릴 거다.", bold: false },
+      { text: "", bold: false },
+      { text: "어떻게 하겠는가?", bold: true }
+    ],
+    choices: [
+      { id: "C-1", label: "이 구도 그대로 간다.", desc: '"아이디어를 참고하는 건 나쁜 게 아니니까."', stats: { thinking: 1, creativity: 0, tech: 1, adaptability: 1, confidence: 1, curiosity: 0 } },
+      { id: "C-2", label: "AI 구도 말고 내 방식으로 해본다.", desc: '"아침만 크게 그리고 싶다."', stats: { thinking: 2, creativity: 2, tech: 0, adaptability: 1, confidence: 2, curiosity: 0 } },
+      { id: "C-3", label: "AI에게 다른 구도도 3개 더 물어본다.", desc: '"그중에 고르자."', stats: { thinking: 0, creativity: 0, tech: 2, adaptability: 1, confidence: -1, curiosity: 2 } }
+    ]
+  },
+  D: {
+    situation: [
+      { text: "지민이가 알려준 AI로 들어갔다.", bold: false },
+      { text: '"나의 하루 포스터"를 입력하니 여러 가지가 나온다.', bold: false },
+      { text: "다 비슷비슷하다.", bold: true },
+      { text: '예쁜데, 다 "누군가의 하루" 같지 "내 하루" 같지는 않다.', bold: false },
+      { text: "여기서 멈추면 아무것도 없고, 하나를 고르면 일단 숙제는 해결된다.", bold: true },
+      { text: "", bold: false },
+      { text: "어떻게 하겠는가?", bold: true }
+    ],
+    choices: [
+      { id: "D-1", label: "하나를 고른다.", desc: '"지민이도 이렇게 한 거잖아."', stats: { thinking: -1, creativity: -1, tech: 2, adaptability: 1, confidence: 1, curiosity: -1 } },
+      { id: "D-2", label: "AI 그림을 보면서, 내가 직접 비슷하게 그려본다.", desc: '"참고해서 내 손으로."', stats: { thinking: 1, creativity: 2, tech: 1, adaptability: 1, confidence: 1, curiosity: 0 } },
+      { id: "D-3", label: "노트북을 닫는다.", desc: '"AI 결과가 마음에 안 든다. 내일 빈 종이에 해보자."', stats: { thinking: 1, creativity: 1, tech: -1, adaptability: 0, confidence: 0, curiosity: 2 } }
+    ]
+  }
+};
+
+const STEP3 = {
+  // Paths with choices
+  "B-1": {
+    situation: [
+      { text: "미술 시간. 포스터를 칠판에 붙였다.", bold: false },
+      { text: "선생님이 한 명씩 돌아다니며 본다.", bold: false },
+      { text: "", bold: false },
+      { text: "선생님이 네 포스터 앞에서 멈춘다.", bold: false },
+      { text: '"잘 그렸네. 그런데 이거 네가 진짜 하는 거야? 방과 후에 카페에서 공부해?"', bold: true },
+      { text: "", bold: false },
+      { text: "옆에서 누가 킥킥 웃는다. 나도 좀 웃긴다. 근데 좀 찔린다.", bold: false },
+      { text: "", bold: false },
+      { text: "어떻게 하겠는가?", bold: true }
+    ],
+    choices: [
+      { id: "B-1-a", label: '"아, 아니요. AI가 이렇게 그려서요."', desc: "솔직하게 말한다.", stats: { thinking: 1, creativity: 0, tech: 0, adaptability: 0, confidence: 2, curiosity: 0 } },
+      { id: "B-1-b", label: '"네, 가끔요."', desc: "적당히 넘긴다.", stats: { thinking: 0, creativity: 0, tech: 0, adaptability: 1, confidence: 0, curiosity: 0 } },
+      { id: "B-1-c", label: "아무 말도 안 한다.", desc: "", stats: { thinking: -1, creativity: 0, tech: 0, adaptability: 0, confidence: -1, curiosity: 0 } }
+    ]
+  },
+  "C-1": {
+    situation: [
+      { text: "미술 시간. 포스터를 칠판에 붙였다.", bold: false },
+      { text: "세 칸으로 나눈 구도. 아침에 알람 못 끄는 나, 점심에 급식 줄 서는 나, 저녁에 이불 속에서 폰 보는 나.", bold: false },
+      { text: "그림체는 좀 삐뚤지만, 내 하루가 맞다.", bold: true },
+      { text: "", bold: false },
+      { text: '선생님이 본다. "이 구도 어디서 생각했어?"', bold: false },
+      { text: "", bold: false },
+      { text: "어떻게 하겠는가?", bold: true }
+    ],
+    choices: [
+      { id: "C-1-a", label: '"AI가 추천해줬어요."', desc: "솔직하게 말한다.", stats: { thinking: 1, creativity: 0, tech: 0, adaptability: 0, confidence: 2, curiosity: 0 } },
+      { id: "C-1-b", label: '"그냥 생각했어요."', desc: "", stats: { thinking: -1, creativity: 0, tech: 0, adaptability: 0, confidence: 1, curiosity: -1 } },
+      { id: "C-1-c", label: '"AI한테 구도 아이디어 받고, 그림은 제가 그렸어요."', desc: "", stats: { thinking: 2, creativity: 1, tech: 1, adaptability: 1, confidence: 1, curiosity: 1 } }
+    ]
+  },
+  // Paths with scene only (no choices)
+  "A-1": {
+    situation: [
+      { text: "미술 시간. 포스터를 칠판에 붙였다.", bold: false },
+      { text: "내 포스터는 솔직히 좀 못생겼다. 막대 사람이 피시방에서 형이랑 앉아 있다.", bold: false },
+      { text: "선생님이 본다.", bold: false },
+      { text: "", bold: false },
+      { text: '"이거 뭐야, 피시방?" 선생님이 웃는다. "네 하루가 이거구나."', bold: true },
+      { text: "", bold: false },
+      { text: "지민이가 내 그림을 보며 말한다.", bold: false },
+      { text: '"야 이거 진짜 네 하루잖아 ㅋㅋ 나 그거 AI가 그린 건데 카페 그려줬어."', bold: false },
+      { text: "", bold: false },
+      { text: "이상하다. 못생긴 내 그림을 보면서 웃기는데, 기분이 나쁘지 않다.", bold: true }
+    ],
+    choices: null
+  },
+  "A-2": {
+    situation: [
+      { text: "미술 시간. 포스터를 칠판에 붙였다.", bold: false },
+      { text: "AI가 알려준 포즈로 그렸더니 사람이 좀 더 그럴듯하다.", bold: false },
+      { text: "지민이가 본다.", bold: false },
+      { text: '"오 너 그림 좀 나아졌는데?"', bold: false },
+      { text: "", bold: false },
+      { text: "포즈는 AI에게 배웠지만, 그 안에 내 하루를 채운 건 나다.", bold: true },
+      { text: "그걸로 충분한지는 아직 모르겠다.", bold: false }
+    ],
+    choices: null
+  },
+  "A-3": {
+    situation: [
+      { text: "다음 날 아침.", bold: false },
+      { text: "빈 종이를 가방에 넣고 학교에 갔다.", bold: false },
+      { text: "미술 시간, 선생님이 제출하라고 한다.", bold: false },
+      { text: "", bold: false },
+      { text: '"아직 못 했어요."', bold: false },
+      { text: "", bold: false },
+      { text: "선생님이 고개를 끄덕인다. 뭐라고 안 한다.", bold: false },
+      { text: "지민이가 속삭인다. \"AI로 하면 되는데 왜...\"", bold: false },
+      { text: "", bold: false },
+      { text: "그런데 이상하게, 빈 종이가 마음에 걸리지 않는다.", bold: false },
+      { text: "뭔가 시작해야 할 것 같은 느낌이 있다.", bold: true }
+    ],
+    choices: null
+  },
+  "B-2": {
+    situation: [
+      { text: "미술 시간. 포스터를 칠판에 붙였다.", bold: false },
+      { text: "AI가 그린 피시방 장면이다. 꽤 정확하다.", bold: false },
+      { text: '선생님이 본다. "피시방? 재미있네."', bold: false },
+      { text: "", bold: false },
+      { text: "지민이가 말한다. \"야 너도 AI지? 나도 AI인데 ㅋㅋ\"", bold: false },
+      { text: "", bold: false },
+      { text: "내 하루는 맞는데, 내 그림은 아니다.", bold: true },
+      { text: "그 차이가 중요한 건지 아직 모르겠다.", bold: false }
+    ],
+    choices: null
+  },
+  "B-3": {
+    situation: [
+      { text: "미술 시간. 포스터를 칠판에 붙였다.", bold: false },
+      { text: "AI 그림을 참고해서 직접 그렸다. 비율이 좀 이상하지만.", bold: false },
+      { text: "", bold: false },
+      { text: "선생님이 본다. \"이거 직접 그렸어?\"", bold: false },
+      { text: '"네, AI 그림 보면서요."', bold: false },
+      { text: '"참고한 거구나. 근데 네 느낌이 나네."', bold: true },
+      { text: "", bold: false },
+      { text: "참고는 했지만, 손은 내 손이었다. 그게 뭔가 다르다.", bold: true }
+    ],
+    choices: null
+  },
+  "C-2": {
+    situation: [
+      { text: "미술 시간. 포스터를 칠판에 붙였다.", bold: false },
+      { text: "아침 장면만 크게 그렸다. 알람 시계가 7:15를 가리키고 있고, 이불에서 손만 나와 있다.", bold: false },
+      { text: "", bold: false },
+      { text: '선생님이 웃는다. "이거 너지?"', bold: false },
+      { text: '"네."', bold: false },
+      { text: "", bold: false },
+      { text: "AI의 세 칸 구도를 버리고 내 방식으로 갔다. 그게 더 나답다.", bold: true }
+    ],
+    choices: null
+  },
+  "C-3": {
+    situation: [
+      { text: "미술 시간. 포스터를 칠판에 붙였다.", bold: false },
+      { text: "AI가 준 4번째 구도로 그렸다. 원형으로 하루를 돌리는 구성.", bold: false },
+      { text: "독특하긴 한데, 왜 이걸 골랐는지 스스로도 잘 모르겠다.", bold: false },
+      { text: "", bold: false },
+      { text: "선생님이 묻는다. \"왜 원형으로 했어?\"", bold: false },
+      { text: "", bold: false },
+      { text: "\"...예뻐서요.\"", bold: false },
+      { text: "", bold: false },
+      { text: "이유를 모른 채 고른 선택. 그래도 손으로 그린 건 나다.", bold: true }
+    ],
+    choices: null
+  },
+  "D-1": {
+    situation: [
+      { text: "미술 시간. 포스터를 칠판에 붙였다.", bold: false },
+      { text: "지민이랑 비슷한 스타일이다. 당연하다, 같은 AI로 했으니까.", bold: false },
+      { text: "", bold: false },
+      { text: "선생님이 둘을 번갈아 본다.", bold: false },
+      { text: '"둘이 같이 한 거야?"', bold: true },
+      { text: "", bold: false },
+      { text: "지민이가 웃으면서 대답한다. \"아니요, 같은 AI예요.\"", bold: false },
+      { text: "교실이 잠깐 조용해진다.", bold: false }
+    ],
+    choices: null
+  },
+  "D-2": {
+    situation: [
+      { text: "미술 시간. 포스터를 칠판에 붙였다.", bold: false },
+      { text: "AI 그림을 보면서 따라 그렸다. 비슷하면서 좀 다르다.", bold: false },
+      { text: "", bold: false },
+      { text: "선생님이 본다. \"이거 어디서 본 것 같은데, 네가 그린 거야?\"", bold: false },
+      { text: '"AI 그림 보면서 제가 그렸어요."', bold: false },
+      { text: "", bold: false },
+      { text: "따라 그리면서 배운 것도 있다. 하지만 내 그림이라고 하기엔 좀 애매하다.", bold: true }
+    ],
+    choices: null
+  },
+  "D-3": {
+    situation: [
+      { text: "다음 날 아침.", bold: false },
+      { text: "빈 종이 앞에 다시 앉았다.", bold: false },
+      { text: "AI 결과물이 마음에 안 들었던 이유를 생각해본다.", bold: false },
+      { text: "", bold: false },
+      { text: "\"내 하루\"가 아니어서 그랬던 건가.", bold: false },
+      { text: "아니면 내가 안 한 게 찝찝해서 그런 건가.", bold: false },
+      { text: "", bold: false },
+      { text: "모르겠다. 하지만 노트북을 닫은 건 본능적이었다.", bold: true },
+      { text: "그 본능에 뭔가 있는 것 같다.", bold: false }
+    ],
+    choices: null
+  }
+};
+
+const STEP4_LINES = [
+  { text: "미술 시간이 끝났다.", bold: false },
+  { text: '집에 가는 길에 혼자 생각한다.', bold: true },
+  { text: "", bold: false },
+  { text: "포스터는 제출했다.", bold: false },
+  { text: "그런데 하나가 걸린다.", bold: false },
+  { text: "", bold: false },
+  { text: '"내 포스터"라는 말.', bold: true },
+  { text: "그게 뭘 뜻하는 건지 모르겠다.", bold: true },
+  { text: "", bold: false },
+  { text: "AI가 그린 건 내 포스터가 아닌가?", bold: false },
+  { text: "AI 아이디어로 내가 그린 건?", bold: false },
+  { text: "내가 처음부터 끝까지 그린 건?", bold: false },
+  { text: "", bold: false },
+  { text: '"내 것"은 어디서부터인가?', bold: true }
+];
+
+const PROFILES = {
+  "손으로 시작하는 사람": {
+    desc: '너는 일단 직접 해보는 사람이다. 막히면 답답하지만, 결과물에 내가 들어 있다는 감각이 중요하다. AI가 편리한 건 알지만, <strong>"이건 내가 했다"가 너한테는 의미가 있다.</strong>'
+  },
+  "도구를 쓰되 자기 것으로 만드는 사람": {
+    desc: '너는 참고는 하되 결국 자기 방식으로 가는 사람이다. AI의 아이디어를 보고 "아, 이런 것도 있구나" 하지만, <strong>자기 감각을 더 신뢰한다.</strong> 도구와 자기 사이의 균형을 잘 잡는 편이다.'
+  },
+  "빠르게 끝내고 싶은 사람": {
+    desc: '너는 효율이 중요한 사람이다. 결과물을 빨리 만들 수 있으면 그게 좋다. 그런데 <strong>"이건 나야?"라는 질문 앞에서 좀 멈칫한다.</strong> 속도와 의미 사이에서 네가 어디쯤 서 있는지, 이 게임이 보여줬을 수도 있다.'
+  },
+  "아직 찾는 중인 사람": {
+    desc: '너는 정해진 답이 없으면 멈추는 편이다. 그게 나쁜 건 아니다. <strong>AI 결과가 마음에 안 들어서 노트북을 닫은 건, 네 안에 기준이 있다는 뜻이다.</strong> 그 기준이 뭔지 아직 모를 뿐이다. 찾아가는 중이다.'
+  }
+};
+
+const CLOSING_TEXT = `이 프로필에 정답은 없다.<br>
+사고력이 높다고 좋은 것도 아니고,<br>
+기술친숙도가 낮다고 나쁜 것도 아니다.<br><br>
+중요한 건 하나다.<br>
+<strong>네가 선택한 것이 무엇인지, 너는 알고 있는가.</strong><br><br>
+AI 시대에 뭘 쓰든, 뭘 만들든,<br>
+<strong>"이건 내가 한 거야"라고 말할 수 있는 순간은 네가 만든다.</strong>`;
+
+const STAT_LABELS = {
+  thinking: "사고력",
+  creativity: "창의력",
+  tech: "기술친숙도",
+  adaptability: "적응력",
+  confidence: "자신감",
+  curiosity: "호기심"
+};
+
+const STAT_KEYS = ["thinking", "creativity", "tech", "adaptability", "confidence", "curiosity"];
+
+
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+
+let stats = { thinking: 0, creativity: 0, tech: 0, adaptability: 0, confidence: 0, curiosity: 0 };
+let choiceHistory = [];
+let currentScreen = "intro";
+
+
+// ════════════════════════════════════════
+// UTILITIES
+// ════════════════════════════════════════
+
+function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+function addStats(delta) {
+  for (const key of STAT_KEYS) {
+    if (delta[key]) {
+      stats[key] = clamp(stats[key] + delta[key], 0, 10);
+    }
+  }
+}
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach(s => {
+    s.classList.remove("active", "visible");
+  });
+  const el = document.getElementById("screen-" + id);
+  el.classList.add("active");
+  // trigger reflow
+  void el.offsetHeight;
+  requestAnimationFrame(() => el.classList.add("visible"));
+  currentScreen = id;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderLines(container, lines, startDelay) {
+  container.innerHTML = "";
+  const delay = startDelay || 0;
+  lines.forEach((line, i) => {
+    const p = document.createElement("p");
+    if (line.text === "") {
+      p.innerHTML = "&nbsp;";
+    } else if (line.bold) {
+      p.innerHTML = "<strong>" + line.text + "</strong>";
+    } else {
+      p.textContent = line.text;
+    }
+    container.appendChild(p);
+    setTimeout(() => p.classList.add("show"), delay + i * 300);
+  });
+  return delay + lines.length * 300;
+}
+
+function renderIndicator(containerId, currentStep) {
+  const c = document.getElementById(containerId);
+  c.innerHTML = "";
+  for (let i = 1; i <= 5; i++) {
+    const dot = document.createElement("div");
+    dot.className = "step-dot";
+    if (i < currentStep) dot.classList.add("filled");
+    if (i === currentStep) dot.classList.add("current");
+    c.appendChild(dot);
+  }
+}
+
+function renderChoices(containerId, choices, onSelect) {
+  const c = document.getElementById(containerId);
+  c.innerHTML = "";
+  c.classList.remove("disabled");
+  choices.forEach(choice => {
+    const card = document.createElement("button");
+    card.className = "choice-card";
+    card.innerHTML = `<div class="choice-label">${choice.label}</div>` +
+      (choice.desc ? `<div class="choice-desc">${choice.desc}</div>` : "");
+    card.addEventListener("click", () => {
+      if (c.classList.contains("disabled")) return;
+      c.classList.add("disabled");
+      card.classList.add("selected");
+      addStats(choice.stats);
+      choiceHistory.push(choice.id);
+      setTimeout(() => onSelect(choice.id), 800);
+    });
+    c.appendChild(card);
+  });
+}
+
+function renderSituation(containerId, lines) {
+  const c = document.getElementById(containerId);
+  return renderLines(c, lines, 100);
+}
+
+
+// ════════════════════════════════════════
+// SCREEN TRANSITIONS
+// ════════════════════════════════════════
+
+// INTRO
+(function initIntro() {
+  const container = document.getElementById("intro-lines");
+  const totalTime = renderLines(container, INTRO_LINES, 400);
+  setTimeout(() => {
+    document.getElementById("btn-start").classList.remove("hidden");
+  }, totalTime + 200);
+})();
+
+function goToStep1() {
+  showScreen("step1");
+  renderIndicator("indicator-1", 1);
+  const totalTime = renderSituation("step1-situation", STEP1.situation);
+  setTimeout(() => {
+    renderChoices("step1-choices", STEP1.choices, (id) => {
+      goToStep2(id);
+    });
+  }, totalTime);
+}
+
+function goToStep2(step1Choice) {
+  showScreen("step2");
+  renderIndicator("indicator-2", 2);
+  const data = STEP2[step1Choice];
+  const totalTime = renderSituation("step2-situation", data.situation);
+  setTimeout(() => {
+    renderChoices("step2-choices", data.choices, (id) => {
+      goToStep3(id);
+    });
+  }, totalTime);
+}
+
+function goToStep3(step2Choice) {
+  showScreen("step3");
+  renderIndicator("indicator-3", 3);
+  const data = STEP3[step2Choice];
+  const totalTime = renderSituation("step3-situation", data.situation);
+
+  if (data.choices) {
+    // Has choices
+    document.getElementById("btn-step3-next").classList.add("hidden");
+    setTimeout(() => {
+      renderChoices("step3-choices", data.choices, () => {
+        goToStep4();
+      });
+    }, totalTime);
+  } else {
+    // Scene only
+    document.getElementById("step3-choices").innerHTML = "";
+    setTimeout(() => {
+      document.getElementById("btn-step3-next").classList.remove("hidden");
+    }, totalTime + 200);
+  }
+}
+
+function goToStep4() {
+  showScreen("step4");
+  renderIndicator("indicator-4", 4);
+  const container = document.getElementById("step4-text");
+  const totalTime = renderLines(container, STEP4_LINES, 300);
+  setTimeout(() => {
+    document.getElementById("btn-step4-next").classList.remove("hidden");
+  }, totalTime + 400);
+}
+
+function goToStep5() {
+  showScreen("step5");
+  renderIndicator("indicator-5", 5);
+  const profile = determineProfile(stats);
+  const pathStr = choiceHistory.join(" → ");
+
+  document.getElementById("profile-name").textContent = profile;
+  document.getElementById("profile-path").textContent = "나의 경로: " + pathStr;
+  document.getElementById("profile-desc").innerHTML = PROFILES[profile].desc;
+  document.getElementById("closing-message").innerHTML = CLOSING_TEXT;
+
+  renderRadarChart(stats);
+  renderStatBars(stats);
+}
+
+function restart() {
+  stats = { thinking: 0, creativity: 0, tech: 0, adaptability: 0, confidence: 0, curiosity: 0 };
+  choiceHistory = [];
+  document.getElementById("btn-step4-next").classList.add("hidden");
+  showScreen("intro");
+  const container = document.getElementById("intro-lines");
+  const totalTime = renderLines(container, INTRO_LINES, 200);
+  setTimeout(() => {
+    document.getElementById("btn-start").classList.remove("hidden");
+  }, totalTime + 200);
+}
+
+function showAllProfiles() {
+  alert(
+    "[ 프로필 유형 4가지 ]\n\n" +
+    "1. 손으로 시작하는 사람\n" +
+    "   → 직접 해보는 것이 중요한 사람\n\n" +
+    "2. 도구를 쓰되 자기 것으로 만드는 사람\n" +
+    "   → 도구와 자기 사이 균형을 잡는 사람\n\n" +
+    "3. 빠르게 끝내고 싶은 사람\n" +
+    "   → 효율을 중시하는 사람\n\n" +
+    "4. 아직 찾는 중인 사람\n" +
+    "   → 자기 기준을 찾아가는 중인 사람\n\n" +
+    "다시 플레이해서 다른 경로를 경험해보세요!"
+  );
+}
+
+
+// ════════════════════════════════════════
+// PROFILE DETERMINATION
+// ════════════════════════════════════════
+
+function determineProfile(s) {
+  const { thinking, creativity, tech, adaptability, confidence, curiosity } = s;
+
+  // Pattern-based matching
+  if (thinking + creativity >= 12 && tech <= 4) {
+    return "손으로 시작하는 사람";
+  }
+  if (tech + adaptability >= 12 && creativity <= 4) {
+    return "빠르게 끝내고 싶은 사람";
+  }
+  if (curiosity >= Math.max(thinking, creativity, tech, adaptability, confidence) && confidence <= 4) {
+    return "아직 찾는 중인 사람";
+  }
+  if (creativity >= 6 && tech >= 4 && confidence >= 5) {
+    return "도구를 쓰되 자기 것으로 만드는 사람";
+  }
+
+  // Fallback: dominant axis
+  const vals = [thinking, creativity, tech, adaptability, confidence, curiosity];
+  const maxVal = Math.max(...vals);
+  if (thinking === maxVal || creativity === maxVal) {
+    if (tech >= 4) return "도구를 쓰되 자기 것으로 만드는 사람";
+    return "손으로 시작하는 사람";
+  }
+  if (curiosity === maxVal) return "아직 찾는 중인 사람";
+  if (tech === maxVal || adaptability === maxVal) return "빠르게 끝내고 싶은 사람";
+  return "도구를 쓰되 자기 것으로 만드는 사람";
+}
+
+
+// ════════════════════════════════════════
+// RADAR CHART (SVG)
+// ════════════════════════════════════════
+
+function renderRadarChart(stats) {
+  const container = document.getElementById("radar-container");
+  const size = 300;
+  const cx = size / 2;
+  const cy = size / 2;
+  const maxR = 110;
+  const labelR = maxR + 28;
+
+  const labels = ["사고력", "창의력", "기술친숙도", "적응력", "자신감", "호기심"];
+  const values = STAT_KEYS.map(k => stats[k]);
+
+  function polar(angle, r) {
+    const rad = (angle - 90) * Math.PI / 180;
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  }
+
+  function hexPoints(r) {
+    return Array.from({ length: 6 }, (_, i) => {
+      const p = polar(i * 60, r);
+      return `${p.x},${p.y}`;
+    }).join(" ");
+  }
+
+  let svg = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">`;
+
+  // Grid hexagons
+  for (let level = 2; level <= 10; level += 2) {
+    const r = (level / 10) * maxR;
+    svg += `<polygon points="${hexPoints(r)}" fill="none" stroke="#e8e8e8" stroke-width="1"/>`;
+  }
+
+  // Axis lines
+  for (let i = 0; i < 6; i++) {
+    const p = polar(i * 60, maxR);
+    svg += `<line x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}" stroke="#e0e0e0" stroke-width="1"/>`;
+  }
+
+  // Data polygon
+  const dataPoints = values.map((v, i) => {
+    const r = (v / 10) * maxR;
+    return polar(i * 60, r);
+  });
+  const dataPath = dataPoints.map(p => `${p.x},${p.y}`).join(" ");
+  svg += `<polygon points="${dataPath}" fill="rgba(0, 102, 255, 0.12)" stroke="#0066ff" stroke-width="2"/>`;
+
+  // Data dots
+  dataPoints.forEach(p => {
+    svg += `<circle cx="${p.x}" cy="${p.y}" r="4" fill="#0066ff"/>`;
+  });
+
+  // Labels
+  labels.forEach((label, i) => {
+    const p = polar(i * 60, labelR);
+    let anchor = "middle";
+    let dx = 0;
+    if (i === 1 || i === 2) { anchor = "start"; dx = 4; }
+    if (i === 4 || i === 5) { anchor = "end"; dx = -4; }
+    svg += `<text x="${p.x + dx}" y="${p.y + 5}" text-anchor="${anchor}" font-size="12" fill="#666" font-family="-apple-system, sans-serif">${label}</text>`;
+  });
+
+  // Value labels on points
+  values.forEach((v, i) => {
+    const p = polar(i * 60, (v / 10) * maxR + 14);
+    svg += `<text x="${p.x}" y="${p.y + 4}" text-anchor="middle" font-size="11" fill="#0066ff" font-weight="600" font-family="-apple-system, sans-serif">${v}</text>`;
+  });
+
+  svg += `</svg>`;
+  container.innerHTML = svg;
+
+  // Animate: start from center, expand
+  const polygon = container.querySelector("polygon:last-of-type");
+  const circles = container.querySelectorAll("circle");
+  const centerPoints = Array.from({ length: 6 }, () => `${cx},${cy}`).join(" ");
+
+  polygon.setAttribute("points", centerPoints);
+  circles.forEach(c => { c.setAttribute("cx", cx); c.setAttribute("cy", cy); });
+
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      polygon.style.transition = "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)";
+      polygon.setAttribute("points", dataPath);
+      circles.forEach((c, i) => {
+        c.style.transition = `all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 0.05}s`;
+        c.setAttribute("cx", dataPoints[i].x);
+        c.setAttribute("cy", dataPoints[i].y);
+      });
+    }, 300);
+  });
+}
+
+
+// ════════════════════════════════════════
+// STAT BARS
+// ════════════════════════════════════════
+
+function renderStatBars(stats) {
+  const container = document.getElementById("stat-bars");
+  container.innerHTML = "";
+  STAT_KEYS.forEach((key, i) => {
+    const val = stats[key];
+    const row = document.createElement("div");
+    row.className = "stat-bar-row";
+    row.innerHTML = `
+      <span class="stat-bar-label">${STAT_LABELS[key]}</span>
+      <div class="stat-bar-track"><div class="stat-bar-fill" id="bar-${key}"></div></div>
+      <span class="stat-bar-value">${val}</span>
+    `;
+    container.appendChild(row);
+    setTimeout(() => {
+      document.getElementById("bar-" + key).style.width = (val * 10) + "%";
+    }, 500 + i * 100);
+  });
+}
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+document.addEventListener("DOMContentLoaded", () => {
+  showScreen("intro");
+});
+
+</script>
+</body>
+</html>
