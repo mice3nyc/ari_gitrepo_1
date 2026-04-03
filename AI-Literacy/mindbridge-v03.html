@@ -10,37 +10,55 @@
   .container { max-width: 480px; width: 100%; padding: 24px 20px; min-height: 100vh; display: flex; flex-direction: column; }
 
   /* ===== SVG 아이콘 ===== */
-  .icon-svg { display: inline-block; vertical-align: middle; margin-right: 4px; width: 20px; height: 20px; }
+  .icon-svg { display: inline-block; vertical-align: middle; margin-right: 4px; }
 
-  /* ===== 스탯 바 ===== */
-  .stats-bar { display: flex; gap: 12px; margin-bottom: 20px; padding: 14px 16px; border: 2px solid #111; border-radius: 6px; background: #fff; box-shadow: 0 2px 0 #111; transition: all 0.3s; }
-  .stat { flex: 1; }
-  .stat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-  .stat-label { font-size: 13px; color: #111; font-weight: 500; letter-spacing: 0.5px; display: flex; align-items: center; }
-  .stat-num { font-size: 14px; font-weight: 700; transition: all 0.4s; }
-  .stat-num.pos { color: #111; }
+  /* ===== 스탯 바 (v0.3.3 재설계) ===== */
+  .stats-bar { display: flex; gap: 8px; margin-bottom: 20px; padding: 12px 8px; border: 2px solid #111; border-radius: 6px; background: #fff; box-shadow: 0 2px 0 #111; transition: all 0.3s; }
+  .stat { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 8px 4px; border-radius: 4px; position: relative; transition: background-color 0.3s; }
+
+  /* 1행: 아이콘 + 숫자 */
+  .stat-top { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 4px; position: relative; }
+  .stat-num { font-size: 24px; font-weight: 700; transition: all 0.4s; line-height: 1; }
+  .stat-num.pos { color: #1a8c1a; }
   .stat-num.neg { color: #c44; }
   .stat-num.zero { color: #bbb; }
-  .stat-gauge { height: 10px; background: #e8e8e8; border-radius: 2px; overflow: visible; position: relative; border: 1px solid #ccc; }
-  .stat-gauge-center { position: absolute; left: 50%; top: -1px; width: 2px; height: 12px; background: #999; border-radius: 1px; z-index: 2; }
-  .stat-gauge-fill { height: 100%; border-radius: 1px; position: absolute; top: 0; transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
-  .stat-gauge-fill.pos { background: #111; left: 50%; }
+
+  /* 숫자 pulse 애니메이션 */
+  @keyframes numPulse { 0% { transform: scale(1); } 30% { transform: scale(1.5); } 100% { transform: scale(1); } }
+  .stat-num.pulsing { animation: numPulse 0.5s ease; }
+
+  /* 2행: 이름 */
+  .stat-name { font-size: 12px; color: #888; text-align: center; margin-bottom: 6px; }
+
+  /* 3행: 게이지 바 */
+  .stat-gauge { height: 12px; width: 100%; background: #e8e8e8; border-radius: 3px; overflow: visible; position: relative; border: 1px solid #ccc; }
+  .stat-gauge-center { position: absolute; left: 50%; top: -1px; width: 2px; height: 14px; background: #999; border-radius: 1px; z-index: 2; }
+  .stat-gauge-fill { height: 100%; border-radius: 2px; position: absolute; top: 0; transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .stat-gauge-fill.pos { background: #1a8c1a; left: 50%; }
   .stat-gauge-fill.neg { background: #c44; right: 50%; }
-  .stat-change-indicator { font-size: 11px; font-weight: 700; position: absolute; top: -18px; transition: all 0.3s; opacity: 0; white-space: nowrap; }
-  .stat-change-indicator.show { opacity: 1; animation: changePopup 1.5s ease forwards; }
-  .stat-change-indicator.up { color: #111; }
+
+  /* 변동 원인 텍스트 (숫자 위에서 떠오름) */
+  .stat-change-indicator { font-size: 14px; font-weight: 700; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); transition: all 0.3s; opacity: 0; white-space: nowrap; pointer-events: none; }
+  .stat-change-indicator.show { opacity: 1; animation: changeFloat 1.8s ease forwards; }
+  .stat-change-indicator.up { color: #1a8c1a; }
   .stat-change-indicator.down { color: #c44; }
-  @keyframes changePopup { 0% { opacity: 0; transform: translateY(4px); } 15% { opacity: 1; transform: translateY(0); } 75% { opacity: 1; } 100% { opacity: 0; transform: translateY(-8px); } }
+  @keyframes changeFloat { 0% { opacity: 0; transform: translateX(-50%) translateY(8px); } 15% { opacity: 1; transform: translateX(-50%) translateY(0); } 70% { opacity: 1; } 100% { opacity: 0; transform: translateX(-50%) translateY(-14px); } }
+
+  /* 블록 배경 플래시 */
+  @keyframes flashGreen { 0% { background-color: rgba(26,140,26,0.15); } 100% { background-color: transparent; } }
+  @keyframes flashRed { 0% { background-color: rgba(204,68,68,0.15); } 100% { background-color: transparent; } }
+  .stat.flash-up { animation: flashGreen 0.8s ease; }
+  .stat.flash-down { animation: flashRed 0.8s ease; }
 
   /* 스탯 흔들림 */
   @keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-3px); } 40% { transform: translateX(3px); } 60% { transform: translateX(-2px); } 80% { transform: translateX(2px); } }
   .stat.shaking { animation: shake 0.4s ease; }
 
   /* 호버 프리뷰 */
-  .stat.preview-up .stat-gauge { background: rgba(17,17,17,0.15); }
-  .stat.preview-up .stat-label { color: #111; font-weight: 700; }
+  .stat.preview-up .stat-gauge { background: rgba(26,140,26,0.15); }
+  .stat.preview-up .stat-name { color: #1a8c1a; font-weight: 700; }
   .stat.preview-down .stat-gauge { background: rgba(204,68,68,0.15); }
-  .stat.preview-down .stat-label { color: #c44; }
+  .stat.preview-down .stat-name { color: #c44; }
 
   /* Act + 라운드 인디케이터 */
   .act-indicator { text-align: center; font-size: 13px; color: #111; margin-bottom: 6px; font-weight: 700; letter-spacing: 2px; font-family: 'SF Mono', 'Monaco', 'Menlo', monospace; }
@@ -52,8 +70,11 @@
   /* 화면 */
   .screen { flex: 1; display: flex; flex-direction: column; }
 
+  /* 픽셀 삽화 */
+  .pixel-icon { display: flex; justify-content: center; margin-bottom: 16px; }
+
   /* 타이틀 카드 */
-  .title-card { text-align: center; padding-top: 80px; animation: cardIn 0.5s ease; }
+  .title-card { text-align: center; padding-top: 60px; animation: cardIn 0.5s ease; }
   .title-card h1 { font-size: 20px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
   .title-card p { font-size: 13px; color: #888; margin-bottom: 40px; }
   .title-card .start-btn { background: #111; color: #fff; border: 2px solid #111; border-radius: 4px; padding: 14px 40px; font-size: 14px; font-family: 'SF Mono', 'Monaco', 'Menlo', monospace; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 0 #000; }
@@ -61,7 +82,7 @@
   .title-card .start-btn:active { box-shadow: none; transform: translateY(2px); }
 
   /* Act 전환 카드 */
-  .act-card { text-align: center; padding-top: 80px; animation: cardIn 0.5s ease; }
+  .act-card { text-align: center; padding-top: 60px; animation: cardIn 0.5s ease; }
   .act-card .act-label { font-size: 12px; color: #999; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; font-weight: 700; }
   .act-card h2 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
   .act-card p { font-size: 14px; color: #555; margin-bottom: 36px; line-height: 1.8; }
@@ -79,40 +100,17 @@
   .scene-card .result-bad { border-left: 3px solid #c44; padding-left: 12px; margin: 12px 0; }
   .scene-card .result-neutral { border-left: 3px solid #999; padding-left: 12px; margin: 12px 0; }
 
-  /* ===== 스와이프 카드 (2지선다 — Reigns 스타일) ===== */
-  .swipe-area { position: relative; display: flex; justify-content: center; align-items: center; margin-top: auto; padding-bottom: 20px; min-height: 220px; perspective: 800px; }
-  .swipe-card { position: relative; width: 90%; max-width: 360px; background: #fff; border: 2px solid #111; border-radius: 12px; padding: 20px; cursor: grab; user-select: none; touch-action: none; transition: box-shadow 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-height: 180px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-  .swipe-card:active { cursor: grabbing; }
-
-  /* 카드 위 좌/우 선택지 텍스트 (Reigns 스타일) */
-  .swipe-choice-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; pointer-events: none; padding: 16px; }
-  .swipe-choice-left, .swipe-choice-right { flex: 1; display: flex; align-items: center; font-size: 13px; line-height: 1.5; font-weight: 600; opacity: 0; transition: opacity 0.15s; font-family: 'SF Mono', 'Monaco', 'Menlo', monospace; }
-  .swipe-choice-left { justify-content: flex-start; color: #c44; padding-right: 20px; text-align: left; }
-  .swipe-choice-right { justify-content: flex-end; color: #111; padding-left: 20px; text-align: right; }
-
-  .swipe-card .card-drag-hint { font-size: 12px; color: #bbb; text-align: center; letter-spacing: 1px; margin-top: 8px; }
-  .swipe-card .card-icon { font-size: 28px; color: #ccc; margin-bottom: 8px; }
-
-  /* 스탯 프리뷰 (스와이프 중) */
-  .swipe-preview { position: absolute; bottom: -28px; font-size: 11px; color: #999; letter-spacing: 0.3px; opacity: 0; transition: opacity 0.15s; pointer-events: none; font-weight: 600; }
-  .swipe-preview.left { left: 0; }
-  .swipe-preview.right { right: 0; text-align: right; }
-
-  /* ===== 카드 스택 (3지선다 — 겹쳐 쌓인 카드) ===== */
-  .stack-area { margin-top: auto; padding-bottom: 20px; }
-  .stack-cards-wrapper { display: flex; flex-direction: column; gap: 10px; }
-  .stack-card { background: #fff; border: 2px solid #111; border-radius: 6px; padding: 18px 16px; cursor: pointer; user-select: none; transition: all 0.2s; box-shadow: 0 2px 0 #111; }
-  .stack-card:hover { transform: translateX(4px); box-shadow: 0 2px 0 #111, 0 4px 8px rgba(0,0,0,0.1); }
-  .stack-card:active { background: #111; color: #fff; box-shadow: none; transform: translateY(2px); }
-  .stack-card:active .stack-text { color: #fff; }
-  .stack-card .stack-text { font-size: 14px; line-height: 1.6; color: #111; transition: color 0.15s; }
+  /* ===== 선택 카드 (통합 — 세로 리스트) ===== */
+  .choice-area { margin-top: auto; padding-bottom: 20px; }
+  .choice-cards-wrapper { display: flex; flex-direction: column; gap: 10px; }
+  .choice-card { background: #fff; border: 2px solid #111; border-radius: 6px; padding: 18px 16px; cursor: pointer; user-select: none; transition: all 0.2s; box-shadow: 0 2px 0 #111; }
+  .choice-card:hover { transform: translateX(4px); box-shadow: 0 2px 0 #111, 0 4px 8px rgba(0,0,0,0.1); }
+  .choice-card:active { background: #111; color: #fff; box-shadow: none; transform: translateY(2px); }
+  .choice-card:active .choice-text { color: #fff; }
+  .choice-card .choice-text { font-size: 14px; line-height: 1.6; color: #111; transition: color 0.15s; }
 
   /* 카드 날아가는 애니메이션 */
-  @keyframes flyLeft { to { transform: translateX(-120%) rotate(-20deg); opacity: 0; } }
-  @keyframes flyRight { to { transform: translateX(120%) rotate(20deg); opacity: 0; } }
   @keyframes flyUp { to { transform: translateY(-100%) scale(0.9); opacity: 0; } }
-  .fly-left { animation: flyLeft 0.35s ease forwards; }
-  .fly-right { animation: flyRight 0.35s ease forwards; }
   .fly-up { animation: flyUp 0.3s ease forwards; }
   @keyframes fadeOut { to { opacity: 0; transform: scale(0.95); } }
   .fade-out { animation: fadeOut 0.25s ease forwards; }
@@ -132,7 +130,7 @@
   .profile-bar-label .label-with-icon { display: flex; align-items: center; gap: 4px; }
   .profile-bar-track { height: 20px; background: #f0f0f0; border-radius: 4px; overflow: hidden; position: relative; border: 2px solid #111; }
   .profile-bar-fill { height: 100%; border-radius: 0; transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1); position: absolute; }
-  .profile-bar-fill.positive { background: #111; left: 50%; }
+  .profile-bar-fill.positive { background: #1a8c1a; left: 50%; }
   .profile-bar-fill.negative { background: #c44; right: 50%; left: auto; }
   .profile-bar-center { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: #999; z-index: 1; }
   .profile-comment { font-size: 14px; line-height: 1.8; text-align: left; margin-bottom: 20px; padding: 14px; background: #fff; border-radius: 6px; border: 2px solid #111; box-shadow: 0 2px 0 rgba(0,0,0,0.15); }
@@ -148,39 +146,42 @@
 </head>
 <body>
 <div class="container">
-  <!-- 스탯 바 -->
+  <!-- 스탯 바 (v0.3.3 재설계: 세로 블록) -->
   <div class="stats-bar hidden" id="statsBar">
     <div class="stat" id="statCenterWrap">
-      <div class="stat-header">
-        <span class="stat-label"><svg class="icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="21"/><path d="M4 15c0-4.4 3.6-8 8-8s8 3.6 8 8"/><line x1="8" y1="21" x2="16" y2="21"/></svg>중심잡기</span>
+      <div class="stat-top">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.5" shape-rendering="crispEdges"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="21"/><path d="M4 15c0-4.4 3.6-8 8-8s8 3.6 8 8"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
         <span class="stat-num zero" id="statCenterNum">0</span>
+        <div class="stat-change-indicator" id="statCenterDelta"></div>
       </div>
+      <div class="stat-name">중심잡기</div>
       <div class="stat-gauge">
         <div class="stat-gauge-center"></div>
         <div class="stat-gauge-fill" id="statCenterFill"></div>
-        <div class="stat-change-indicator" id="statCenterDelta"></div>
       </div>
     </div>
     <div class="stat" id="statFusionWrap">
-      <div class="stat-header">
-        <span class="stat-label"><svg class="icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1-1"/></svg>융합하기</span>
+      <div class="stat-top">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.5" shape-rendering="crispEdges"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1-1"/></svg>
         <span class="stat-num zero" id="statFusionNum">0</span>
+        <div class="stat-change-indicator" id="statFusionDelta"></div>
       </div>
+      <div class="stat-name">융합하기</div>
       <div class="stat-gauge">
         <div class="stat-gauge-center"></div>
         <div class="stat-gauge-fill" id="statFusionFill"></div>
-        <div class="stat-change-indicator" id="statFusionDelta"></div>
       </div>
     </div>
     <div class="stat" id="statReflectWrap">
-      <div class="stat-header">
-        <span class="stat-label"><svg class="icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>성찰하기</span>
+      <div class="stat-top">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.5" shape-rendering="crispEdges"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         <span class="stat-num zero" id="statReflectNum">0</span>
+        <div class="stat-change-indicator" id="statReflectDelta"></div>
       </div>
+      <div class="stat-name">성찰하기</div>
       <div class="stat-gauge">
         <div class="stat-gauge-center"></div>
         <div class="stat-gauge-fill" id="statReflectFill"></div>
-        <div class="stat-change-indicator" id="statReflectDelta"></div>
       </div>
     </div>
   </div>
@@ -190,14 +191,67 @@
   <!-- 메인 화면 -->
   <div class="screen" id="screen"></div>
 </div>
-<div class="version">v0.3.2 — no stat preview</div>
+<div class="version">v0.3.3 — Mac SE edition</div>
 
 <script>
-// ===== SVG 아이콘 인라인 =====
+// ===== Mac SE 픽셀아트 SVG 아이콘 (1bit, Susan Kare 스타일) =====
+const PIXEL_ICONS = {
+  // 타이틀: Mac SE 실루엣 (64x64)
+  title: `<svg width="64" height="64" viewBox="0 0 32 32" fill="none" shape-rendering="crispEdges">
+    <rect x="4" y="2" width="24" height="20" rx="1" stroke="#111" stroke-width="1" fill="none"/>
+    <rect x="6" y="4" width="20" height="14" stroke="#111" stroke-width="1" fill="none"/>
+    <line x1="14" y1="22" x2="14" y2="26" stroke="#111" stroke-width="1"/>
+    <line x1="18" y1="22" x2="18" y2="26" stroke="#111" stroke-width="1"/>
+    <rect x="10" y="26" width="12" height="2" stroke="#111" stroke-width="1" fill="none"/>
+    <rect x="14" y="8" width="4" height="1" fill="#111"/>
+    <rect x="13" y="10" width="1" height="3" fill="#111"/>
+    <rect x="18" y="10" width="1" height="3" fill="#111"/>
+    <rect x="14" y="14" width="4" height="1" fill="#111"/>
+  </svg>`,
+  // Act 1: 연필+종이 (48x48)
+  pencil: `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" shape-rendering="crispEdges">
+    <rect x="5" y="3" width="14" height="18" rx="1" stroke="#111" stroke-width="1" fill="none"/>
+    <line x1="8" y1="7" x2="16" y2="7" stroke="#111" stroke-width="1"/>
+    <line x1="8" y1="10" x2="16" y2="10" stroke="#111" stroke-width="1"/>
+    <line x1="8" y1="13" x2="13" y2="13" stroke="#111" stroke-width="1"/>
+    <line x1="17" y1="12" x2="21" y2="4" stroke="#111" stroke-width="1.5"/>
+    <polygon points="17,12 16,15 19,14" fill="#111"/>
+  </svg>`,
+  // Act 2: 펼쳐진 책 (48x48)
+  book: `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" shape-rendering="crispEdges">
+    <path d="M2 4 L12 6 L22 4 L22 18 L12 20 L2 18 Z" stroke="#111" stroke-width="1" fill="none"/>
+    <line x1="12" y1="6" x2="12" y2="20" stroke="#111" stroke-width="1"/>
+    <line x1="5" y1="8" x2="10" y2="9" stroke="#111" stroke-width="0.8"/>
+    <line x1="5" y1="10" x2="10" y2="11" stroke="#111" stroke-width="0.8"/>
+    <line x1="5" y1="12" x2="10" y2="13" stroke="#111" stroke-width="0.8"/>
+    <line x1="14" y1="9" x2="19" y2="8" stroke="#111" stroke-width="0.8"/>
+    <line x1="14" y1="11" x2="19" y2="10" stroke="#111" stroke-width="0.8"/>
+    <line x1="14" y1="13" x2="19" y2="12" stroke="#111" stroke-width="0.8"/>
+  </svg>`,
+  // Act 3: 붓+팔레트 (48x48)
+  palette: `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" shape-rendering="crispEdges">
+    <ellipse cx="11" cy="14" rx="9" ry="7" stroke="#111" stroke-width="1" fill="none"/>
+    <circle cx="7" cy="12" r="1.5" fill="#111"/>
+    <circle cx="10" cy="10" r="1.5" fill="#111"/>
+    <circle cx="14" cy="10" r="1.5" fill="#111"/>
+    <circle cx="16" cy="13" r="1.5" fill="#111"/>
+    <ellipse cx="8" cy="16" rx="2" ry="1.2" stroke="#111" stroke-width="0.8" fill="none"/>
+    <line x1="18" y1="3" x2="20" y2="11" stroke="#111" stroke-width="1.5"/>
+    <polygon points="20,11 18.5,13 21.5,12" fill="#111"/>
+  </svg>`,
+  // 최종 프로필: 사람+별 (48x48)
+  profile: `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" shape-rendering="crispEdges">
+    <circle cx="10" cy="7" r="3" stroke="#111" stroke-width="1" fill="none"/>
+    <path d="M4 20 C4 15 7 13 10 13 C13 13 16 15 16 20" stroke="#111" stroke-width="1" fill="none"/>
+    <polygon points="20,4 21,7.5 24,7.5 21.8,9.5 22.5,13 20,11 17.5,13 18.2,9.5 16,7.5 19,7.5" fill="#111"/>
+  </svg>`
+};
+
+// ===== SVG 아이콘 인라인 (40px for stat bar) =====
 const ICONS = {
-  center: '<svg class="icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="21"/><path d="M4 15c0-4.4 3.6-8 8-8s8 3.6 8 8"/><line x1="8" y1="21" x2="16" y2="21"/></svg>',
-  fusion: '<svg class="icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1-1"/></svg>',
-  reflect: '<svg class="icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+  center: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="21"/><path d="M4 15c0-4.4 3.6-8 8-8s8 3.6 8 8"/><line x1="8" y1="21" x2="16" y2="21"/></svg>',
+  fusion: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1-1"/></svg>',
+  reflect: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
 };
 
 // ===== 시나리오 데이터 (v0.2 구조 유지 + reasons 추가) =====
@@ -360,6 +414,8 @@ function init() {
   actInd.classList.add('hidden');
   stats = { c: 0, f: 0, r: 0 };
   curActIndex = 0;
+  curScenario = null;
+  curNode = null;
   showTitleCard();
 }
 
@@ -367,6 +423,7 @@ function init() {
 function showTitleCard() {
   screen.innerHTML = `
     <div class="title-card">
+      <div class="pixel-icon">${PIXEL_ICONS.title}</div>
       <h1>AI 리터러시 — 위임 판단력</h1>
       <p>세 가지 상황에서 너의 선택을 따라간다</p>
       <button class="start-btn" onclick="startFirstAct()">시작하기</button>
@@ -381,6 +438,7 @@ function startFirstAct() {
 
 function startAct(key) {
   curScenario = scenarios[key];
+  if (!curScenario) return;
   round = 0;
   totalRounds = curScenario.rounds;
   statsBar.classList.remove('hidden');
@@ -396,8 +454,17 @@ function startAct(key) {
 function showActTransition() {
   const key = actOrder[curActIndex];
   const sc = scenarios[key];
+  if (!sc) return;
+
+  // 각 Act에 맞는 픽셀 아이콘 선택
+  let icon = '';
+  if (curActIndex === 0) icon = PIXEL_ICONS.pencil;
+  else if (curActIndex === 1) icon = PIXEL_ICONS.book;
+  else if (curActIndex === 2) icon = PIXEL_ICONS.palette;
+
   screen.innerHTML = `
     <div class="act-card">
+      <div class="pixel-icon">${icon}</div>
       <div class="act-label">Act ${curActIndex + 1} / ${actOrder.length}</div>
       <h2>${sc.actLabel}</h2>
       <p>${sc.actDesc.replace(/\n/g, '<br>')}</p>
@@ -407,6 +474,7 @@ function showActTransition() {
 
 // ===== 노드 표시 =====
 function showNode(id) {
+  if (!curScenario) return;
   curNode = curScenario.nodes[id];
   if (!curNode) return;
 
@@ -417,7 +485,9 @@ function showNode(id) {
     const isLastAct = curActIndex >= actOrder.length - 1;
     if (isLastAct) {
       // 최종 프로필 (3 Act 합산)
-      h += `<div class="profile"><h2>나의 프로필</h2><div class="profile-bars">
+      h += `<div class="profile">
+        <div class="pixel-icon">${PIXEL_ICONS.profile}</div>
+        <h2>나의 프로필</h2><div class="profile-bars">
         ${profBar('center', '중심잡기', stats.c)}${profBar('fusion', '융합하기', stats.f)}${profBar('reflect', '성찰하기', stats.r)}
       </div><div class="profile-comment">${profComment()}</div>
       <button class="restart-btn" onclick="init()">처음부터 다시</button></div>`;
@@ -428,27 +498,15 @@ function showNode(id) {
       screen.innerHTML = h;
     }
   } else if (curNode.choices.length === 1 && curNode.choices[0].isNext) {
-    // 결과 텍스트 + "다음" 버튼 (스와이프 불필요)
+    // 결과 텍스트 + "다음" 버튼
     h += `<div class="next-area"><button class="next-btn" onclick="choose(0)">다음</button></div>`;
     screen.innerHTML = h;
-  } else if (curNode.choices.length === 2 && !curNode.choices[0].isNext) {
-    // ===== 2지선다: Reigns 스타일 스와이프 카드 =====
-    h += buildSwipeCard(curNode.choices);
+  } else if (curNode.choices.length >= 2) {
+    // ===== 모든 선택지: 통일된 세로 카드 리스트 =====
+    h += buildChoiceCards(curNode.choices);
     screen.innerHTML = h;
-    initSwipe();
-  } else if (curNode.choices.length === 3 && !curNode.choices[0].isNext) {
-    // ===== 3지선다: 카드 스택 =====
-    h += buildStackCards(curNode.choices);
-    screen.innerHTML = h;
-    initStack();
+    initChoiceCards();
   } else {
-    // fallback
-    h += '<div class="stack-area"><div class="stack-cards-wrapper">';
-    curNode.choices.forEach((ch, i) => {
-      const preview = previewText(ch.stats);
-      h += `<button class="stack-card" style="position:relative;" onclick="choose(${i})"><div class="stack-text">${ch.text}</div>${preview ? `<div class="stack-preview">${preview}</div>` : ''}</button>`;
-    });
-    h += '</div></div>';
     screen.innerHTML = h;
   }
   window.scrollTo(0, 0);
@@ -462,115 +520,23 @@ function advanceAct() {
   }
 }
 
-// ===== 2지선다 Reigns 스타일 스와이프 카드 빌드 =====
-function buildSwipeCard(choices) {
-  return `
-    <div class="swipe-area" id="swipeArea">
-      <div class="swipe-card" id="swipeCard">
-        <div class="swipe-choice-overlay">
-          <div class="swipe-choice-left" id="swipeChoiceL">${choices[0].text}</div>
-          <div class="swipe-choice-right" id="swipeChoiceR">${choices[1].text}</div>
-        </div>
-        <div class="card-icon">&#x2194;</div>
-        <div class="card-drag-hint">밀어서 선택</div>
-      </div>
-    </div>`;
-}
-
-function truncate(s, max) {
-  return s.length > max ? s.slice(0, max) + '...' : s;
-}
-
-// ===== 스와이프 로직 (Reigns 스타일: 카드 기울어짐 + 텍스트 오버레이) =====
-function initSwipe() {
-  const card = document.getElementById('swipeCard');
-  const choiceL = document.getElementById('swipeChoiceL');
-  const choiceR = document.getElementById('swipeChoiceR');
-  if (!card) return;
-
-  let startX = 0, currentX = 0, isDragging = false;
-  const threshold = 80;
-
-  function onStart(x) {
-    isDragging = true;
-    startX = x;
-    currentX = 0;
-    card.style.transition = 'none';
-  }
-
-  function onMove(x) {
-    if (!isDragging) return;
-    currentX = x - startX;
-    const rotation = Math.max(-15, Math.min(15, currentX * 0.12));
-    const opacity = Math.min(Math.abs(currentX) / threshold, 1);
-
-    requestAnimationFrame(() => {
-      card.style.transform = `translateX(${currentX}px) rotate(${rotation}deg)`;
-
-      // Reigns 스타일: 드래그 방향에 따라 선택지 텍스트 불투명도
-      if (currentX < -20) {
-        choiceL.style.opacity = opacity;
-        choiceR.style.opacity = 0;
-      } else if (currentX > 20) {
-        choiceR.style.opacity = opacity;
-        choiceL.style.opacity = 0;
-      } else {
-        choiceL.style.opacity = 0;
-        choiceR.style.opacity = 0;
-      }
-    });
-  }
-
-  function onEnd() {
-    if (!isDragging) return;
-    isDragging = false;
-
-    if (currentX < -threshold) {
-      card.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-      card.style.transform = `translateX(-120%) rotate(-20deg)`;
-      card.style.opacity = '0';
-      setTimeout(() => choose(0), 300);
-    } else if (currentX > threshold) {
-      card.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-      card.style.transform = `translateX(120%) rotate(20deg)`;
-      card.style.opacity = '0';
-      setTimeout(() => choose(1), 300);
-    } else {
-      card.style.transition = 'transform 0.3s ease';
-      card.style.transform = 'translateX(0) rotate(0deg)';
-      choiceL.style.opacity = 0;
-      choiceR.style.opacity = 0;
-    }
-  }
-
-  // 터치 이벤트
-  card.addEventListener('touchstart', e => { onStart(e.touches[0].clientX); }, { passive: true });
-  card.addEventListener('touchmove', e => { onMove(e.touches[0].clientX); }, { passive: true });
-  card.addEventListener('touchend', onEnd);
-
-  // 마우스 이벤트
-  card.addEventListener('mousedown', e => { onStart(e.clientX); e.preventDefault(); });
-  document.addEventListener('mousemove', e => { if (isDragging) onMove(e.clientX); });
-  document.addEventListener('mouseup', onEnd);
-}
-
-// ===== 3지선다 카드 스택 빌드 (겹쳐 쌓인 카드) =====
-function buildStackCards(choices) {
-  let h = '<div class="stack-area"><div class="stack-cards-wrapper" id="stackArea">';
+// ===== 통합 선택 카드 빌드 (세로 카드 리스트) =====
+function buildChoiceCards(choices) {
+  let h = '<div class="choice-area"><div class="choice-cards-wrapper" id="choiceArea">';
   choices.forEach((ch, i) => {
-    h += `<div class="stack-card" data-index="${i}">
-      <div class="stack-text">${ch.text}</div>
+    h += `<div class="choice-card" data-index="${i}">
+      <div class="choice-text">${ch.text}</div>
     </div>`;
   });
   h += '</div></div>';
   return h;
 }
 
-// ===== 카드 스택 탭 처리 =====
-function initStack() {
-  const area = document.getElementById('stackArea');
+// ===== 선택 카드 탭 처리 =====
+function initChoiceCards() {
+  const area = document.getElementById('choiceArea');
   if (!area) return;
-  const cards = area.querySelectorAll('.stack-card');
+  const cards = area.querySelectorAll('.choice-card');
   cards.forEach(card => {
     card.addEventListener('click', () => {
       const idx = parseInt(card.dataset.index);
@@ -586,7 +552,7 @@ function initStack() {
 // ===== 스탯 프리뷰 텍스트 =====
 function previewText(s) {
   const names = ['중심', '융합', '성찰'];
-  return s.map((v, i) => v > 0 ? `${names[i]}↑` : v < 0 ? `${names[i]}↓` : '').filter(Boolean).join(' ');
+  return s.map((v, i) => v > 0 ? `${names[i]}+` : v < 0 ? `${names[i]}-` : '').filter(Boolean).join(' ');
 }
 
 // ===== 스탯 프리뷰 하이라이트 =====
@@ -608,6 +574,7 @@ function clearPreview() {
 
 // ===== 선택 처리 =====
 function choose(i) {
+  if (!curNode || !curNode.choices[i]) return;
   const ch = curNode.choices[i];
   clearPreview();
   const reasons = ch.reasons || ['', '', ''];
@@ -623,7 +590,7 @@ function applyStats(dc, df, dr, reasons) {
   renderStats(dc, df, dr, reasons);
 }
 
-// ===== 스탯 렌더링 (+ reasons 텍스트) =====
+// ===== 스탯 렌더링 (v0.3.3: pulse + flash + float reason) =====
 function renderStats(dc, df, dr, reasons) {
   const deltas = { c: dc, f: df, r: dr };
   const reasonArr = reasons || ['', '', ''];
@@ -647,14 +614,28 @@ function renderStats(dc, df, dr, reasons) {
     else { fillEl.style.right = '50%'; fillEl.style.left = 'auto'; fillEl.style.width = pct + '%'; }
 
     if (d !== 0) {
-      // 숫자 + reason 텍스트
+      // 숫자 pulse
+      numEl.classList.remove('pulsing');
+      void numEl.offsetWidth; // reflow
+      numEl.classList.add('pulsing');
+
+      // reason 텍스트 떠오름
       const sign = d > 0 ? '+' : '';
       const reasonText = reason ? ` ${reason}` : '';
       deltaEl.textContent = `${sign}${d}${reasonText}`;
       deltaEl.className = 'stat-change-indicator show ' + (d > 0 ? 'up' : 'down');
-      deltaEl.style.left = v >= 0 ? `calc(50% + ${pct}% + 4px)` : `calc(50% - ${pct}% - 20px)`;
+
+      // 블록 배경 flash
+      wrapEl.classList.remove('flash-up', 'flash-down', 'shaking');
+      void wrapEl.offsetWidth; // reflow
+      wrapEl.classList.add(d > 0 ? 'flash-up' : 'flash-down');
       wrapEl.classList.add('shaking');
-      setTimeout(() => { deltaEl.className = 'stat-change-indicator'; wrapEl.classList.remove('shaking'); }, 1500);
+
+      setTimeout(() => {
+        deltaEl.className = 'stat-change-indicator';
+        wrapEl.classList.remove('shaking', 'flash-up', 'flash-down');
+        numEl.classList.remove('pulsing');
+      }, 1800);
     }
   });
 }
