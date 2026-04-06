@@ -298,17 +298,32 @@
             touch-action: none;
         }
 
-        .swipe-card {
+        /* Card deck stack — 3 cards layered */
+        .swipe-stack-card {
+            position: absolute;
             width: 68%;
             max-width: 270px;
-            position: relative;
             will-change: transform;
             user-select: none;
+            pointer-events: none;
         }
-        .swipe-card.anim {
-            transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.3s;
+        .swipe-stack-card.front {
+            z-index: 3;
+            pointer-events: auto;
         }
-        .swipe-card img {
+        .swipe-stack-card.middle {
+            z-index: 2;
+            transform: scale(0.93) translateY(12px);
+            opacity: 0.5;
+            transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s;
+        }
+        .swipe-stack-card.back {
+            z-index: 1;
+            transform: scale(0.86) translateY(24px);
+            opacity: 0.25;
+            transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s;
+        }
+        .swipe-stack-card img {
             width: 100%;
             height: auto;
             display: block;
@@ -344,7 +359,7 @@
             display: none;
             pointer-events: none;
         }
-        .swipe-card.is-on .swipe-badge { display: block; }
+        .swipe-stack-card.is-on .swipe-badge { display: block; }
 
         .swipe-hint {
             position: absolute;
@@ -355,6 +370,7 @@
             color: var(--text-muted);
             pointer-events: none;
             transition: opacity 0.6s;
+            z-index: 5;
         }
 
         .card-dots {
@@ -659,14 +675,7 @@
         </div>
         <div class="sel-tray" id="sel-tray"></div>
         <div class="swipe-area" id="swipe-area">
-            <div class="swipe-card anim" id="swipe-card">
-                <img id="swipe-img" src="" alt="">
-                <span class="swipe-badge">✓ 선택됨</span>
-                <div class="swipe-name">
-                    <div class="swipe-kr" id="swipe-kr"></div>
-                    <div class="swipe-en" id="swipe-en"></div>
-                </div>
-            </div>
+            <!-- Card stack is built by JS (3 cards: front, middle, back) -->
             <div class="swipe-hint" id="swipe-hint">↑ 위로 올려서 선택</div>
         </div>
         <div class="card-dots" id="card-dots"></div>
@@ -794,6 +803,62 @@ function enterGame() {
 let cardIdx = 0;
 const sw = { startX: 0, startY: 0, dx: 0, dy: 0, dir: null, on: false };
 
+/* --- Card Stack State --- */
+const STACK_SIZE = 3; // number of visible stacked cards
+let stackCards = [];   // array of { el, idx } — [0]=front, [1]=middle, [2]=back
+let animating = false; // block input during fly-out transitions
+
+function createCardEl() {
+    const card = document.createElement('div');
+    card.className = 'swipe-stack-card';
+    card.innerHTML = `
+        <img src="" alt="">
+        <span class="swipe-badge">✓ 선택됨</span>
+        <div class="swipe-name">
+            <div class="swipe-kr"></div>
+            <div class="swipe-en"></div>
+        </div>`;
+    return card;
+}
+
+function setCardContent(el, idx) {
+    idx = ((idx % VALUES.length) + VALUES.length) % VALUES.length;
+    const v = VALUES[idx];
+    el.querySelector('img').src = 'valuecards/beingfaust_' + v.id + '.png';
+    el.querySelector('.swipe-kr').textContent = v.kr;
+    el.querySelector('.swipe-en').textContent = v.en;
+    el.style.setProperty('--c', v.color);
+    el.classList.toggle('is-on', state.selected.has(v.id));
+    return idx;
+}
+
+function applyStackPositions() {
+    stackCards.forEach((sc, i) => {
+        const isOn = sc.el.classList.contains('is-on');
+        sc.el.className = 'swipe-stack-card';
+        if (isOn) sc.el.classList.add('is-on');
+        sc.el.style.transform = '';
+        sc.el.style.opacity = '';
+        sc.el.style.transition = '';
+        if (i === 0) {
+            sc.el.classList.add('front');
+        } else if (i === 1) {
+            sc.el.classList.add('middle');
+        } else {
+            sc.el.classList.add('back');
+        }
+    });
+}
+
+function updateDots() {
+    const idx = stackCards.length > 0 ? stackCards[0].idx : cardIdx;
+    $('card-dots').querySelectorAll('.c-dot').forEach((d, i) => {
+        d.className = 'c-dot';
+        if (i === idx) d.classList.add('now');
+        else if (state.selected.has(VALUES[i].id)) d.classList.add('picked');
+    });
+}
+
 function initSwipe() {
     // 점 인디케이터 생성
     const dots = $('card-dots');
@@ -804,36 +869,113 @@ function initSwipe() {
     });
     // 초기 트레이 (빈 슬롯 6개)
     renderTray();
-    // 초기 카드 표시
-    showCard(0);
+
+    // Build initial 3-card stack
+    const area = $('swipe-area');
+    for (let i = 0; i < STACK_SIZE; i++) {
+        const el = createCardEl();
+        const realIdx = setCardContent(el, i);
+        area.insertBefore(el, $('swipe-hint'));
+        stackCards.push({ el, idx: realIdx });
+    }
+    cardIdx = 0;
+    applyStackPositions();
+    updateDots();
 
     // 터치 이벤트
-    const area = $('swipe-area');
     area.addEventListener('touchstart', swStart, { passive: true });
     area.addEventListener('touchmove', swMove, { passive: false });
     area.addEventListener('touchend', swEnd);
+
+    // 마우스 이벤트 (데스크톱 테스트용)
+    area.addEventListener('mousedown', e => {
+        swStart({ touches: [{ clientX: e.clientX, clientY: e.clientY }] });
+        const onMove = ev => swMove({ touches: [{ clientX: ev.clientX, clientY: ev.clientY }], preventDefault: () => ev.preventDefault() });
+        const onUp = () => { swEnd(); document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); };
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+    });
 }
 
+/* showCard: external API preserved for deselectCard badge refresh */
 function showCard(idx) {
     idx = ((idx % VALUES.length) + VALUES.length) % VALUES.length;
     cardIdx = idx;
-    const v = VALUES[idx];
-    const card = $('swipe-card');
 
-    $('swipe-img').src = 'valuecards/beingfaust_' + v.id + '.png';
-    $('swipe-kr').textContent = v.kr;
-    $('swipe-en').textContent = v.en;
-    card.style.setProperty('--c', v.color);
-    card.classList.toggle('is-on', state.selected.has(v.id));
-    card.style.transform = '';
-    card.style.opacity = '1';
+    // Rebuild stack from this index
+    for (let i = 0; i < STACK_SIZE; i++) {
+        const realIdx = ((idx + i) % VALUES.length + VALUES.length) % VALUES.length;
+        stackCards[i].idx = setCardContent(stackCards[i].el, realIdx);
+    }
+    applyStackPositions();
+    updateDots();
+}
 
-    // 점 업데이트
-    $('card-dots').querySelectorAll('.c-dot').forEach((d, i) => {
-        d.className = 'c-dot';
-        if (i === idx) d.classList.add('now');
-        else if (state.selected.has(VALUES[i].id)) d.classList.add('picked');
-    });
+/* flyCard: animate the front card out, promote others, add new card at back */
+function flyCard(direction, onComplete) {
+    if (animating) return;
+    animating = true;
+
+    const front = stackCards[0];
+    const el = front.el;
+
+    // Determine fly-out transform
+    let flyTransform, flyOpacity;
+    if (direction === 'left') {
+        flyTransform = 'translateX(-140%) rotate(-18deg)';
+        flyOpacity = '0';
+    } else if (direction === 'right') {
+        flyTransform = 'translateX(140%) rotate(18deg)';
+        flyOpacity = '0';
+    } else if (direction === 'up') {
+        flyTransform = 'translateY(-120vh) rotate(6deg)';
+        flyOpacity = '0';
+    }
+
+    // Animate front card out
+    el.style.transition = 'transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.3s';
+    el.style.transform = flyTransform;
+    el.style.opacity = flyOpacity;
+
+    // Promote middle → front, back → middle (with transition)
+    if (stackCards[1]) {
+        stackCards[1].el.classList.remove('middle');
+        stackCards[1].el.classList.add('front');
+    }
+    if (stackCards[2]) {
+        stackCards[2].el.classList.remove('back');
+        stackCards[2].el.classList.add('middle');
+    }
+
+    setTimeout(() => {
+        // Remove front from stack, recycle it as back card
+        stackCards.shift();
+
+        // Calculate new back card index
+        const lastIdx = stackCards.length > 0 ? stackCards[stackCards.length - 1].idx : cardIdx;
+        const newIdx = ((lastIdx + 1) % VALUES.length + VALUES.length) % VALUES.length;
+
+        // Reset the flown-out element and reuse it
+        el.style.transition = 'none';
+        el.style.transform = '';
+        el.style.opacity = '';
+        el.className = 'swipe-stack-card back';
+        setCardContent(el, newIdx);
+
+        // Force reflow before re-enabling transition
+        void el.offsetHeight;
+        el.style.transition = '';
+
+        stackCards.push({ el, idx: newIdx });
+
+        // Update front card index
+        cardIdx = stackCards[0].idx;
+        applyStackPositions();
+        updateDots();
+
+        animating = false;
+        if (onComplete) onComplete();
+    }, 380);
 }
 
 function refreshCount() {
@@ -877,14 +1019,18 @@ function deselectCard(id) {
 
 /* ---------- SWIPE TOUCH ---------- */
 function swStart(e) {
+    if (animating) return;
     sw.startX = e.touches[0].clientX;
     sw.startY = e.touches[0].clientY;
     sw.dx = 0; sw.dy = 0; sw.dir = null; sw.on = true;
-    $('swipe-card').classList.remove('anim');
+    // Remove transitions on front card for direct drag
+    if (stackCards[0]) {
+        stackCards[0].el.style.transition = 'none';
+    }
 }
 
 function swMove(e) {
-    if (!sw.on) return;
+    if (!sw.on || animating) return;
     const x = e.touches[0].clientX;
     const y = e.touches[0].clientY;
     sw.dx = x - sw.startX;
@@ -897,63 +1043,88 @@ function swMove(e) {
     }
     e.preventDefault();
 
-    const card = $('swipe-card');
+    const card = stackCards[0].el;
     if (sw.dir === 'h') {
         const rot = sw.dx * 0.04;
         card.style.transform = 'translateX(' + sw.dx + 'px) rotate(' + rot + 'deg)';
+        // Progressively reveal middle card as front card moves away
+        const prog = Math.min(Math.abs(sw.dx) / 200, 1);
+        if (stackCards[1]) {
+            stackCards[1].el.style.transition = 'none';
+            stackCards[1].el.style.transform = 'scale(' + (0.93 + prog * 0.07) + ') translateY(' + (12 - prog * 12) + 'px)';
+            stackCards[1].el.style.opacity = String(0.5 + prog * 0.5);
+        }
     } else if (sw.dy < 0) {
         // 위로만
         const prog = Math.min(Math.abs(sw.dy) / 300, 1);
         card.style.transform = 'translateY(' + sw.dy + 'px) scale(' + (1 - prog * 0.08) + ')';
         card.style.opacity = String(1 - prog * 0.4);
+        // Progressively reveal middle card
+        if (stackCards[1]) {
+            stackCards[1].el.style.transition = 'none';
+            stackCards[1].el.style.transform = 'scale(' + (0.93 + prog * 0.07) + ') translateY(' + (12 - prog * 12) + 'px)';
+            stackCards[1].el.style.opacity = String(0.5 + prog * 0.5);
+        }
     }
 }
 
 function swEnd() {
-    if (!sw.on) return;
+    if (!sw.on || animating) return;
     sw.on = false;
-    const card = $('swipe-card');
-    card.classList.add('anim');
 
     if (sw.dir === 'h') {
-        if (sw.dx < -50) {
-            showCard(cardIdx + 1);
-        } else if (sw.dx > 50) {
-            showCard(cardIdx - 1);
+        if (sw.dx < -60) {
+            // Swipe left → skip (fly out left)
+            flyCard('left');
+        } else if (sw.dx > 60) {
+            // Swipe right → skip (fly out right)
+            flyCard('right');
         } else {
-            card.style.transform = '';
+            // Snap back
+            resetFrontCard();
         }
     } else if (sw.dir === 'v' && sw.dy < -80) {
         // 위로 스와이프 → 선택
         const v = VALUES[cardIdx];
         if (!state.selected.has(v.id) && state.selected.size < 6) {
-            // 날리기 애니메이션
-            card.style.transition = 'transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.3s';
-            card.style.transform = 'translateY(-120vh) rotate(6deg)';
-            card.style.opacity = '0';
-
-            setTimeout(() => {
+            flyCard('up', () => {
                 state.selected.add(v.id);
                 renderTray();
                 refreshCount();
                 // 힌트 숨기기
                 $('swipe-hint').style.opacity = '0';
-                // 다음 미선택 카드로 이동
+                // Jump to next unselected card
                 let next = cardIdx;
-                for (let i = 1; i <= VALUES.length; i++) {
-                    const ni = (cardIdx + i) % VALUES.length;
-                    if (!state.selected.has(VALUES[ni].id)) { next = ni; break; }
+                let found = false;
+                for (let i = 0; i < VALUES.length; i++) {
+                    if (!state.selected.has(VALUES[(cardIdx + i) % VALUES.length].id)) {
+                        next = (cardIdx + i) % VALUES.length;
+                        found = true;
+                        break;
+                    }
                 }
                 showCard(next);
-            }, 350);
+            });
             return;
         } else {
-            card.style.transform = '';
-            card.style.opacity = '1';
+            resetFrontCard();
         }
     } else {
-        card.style.transform = '';
-        card.style.opacity = '1';
+        resetFrontCard();
+    }
+}
+
+function resetFrontCard() {
+    if (!stackCards[0]) return;
+    const card = stackCards[0].el;
+    card.style.transition = 'transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s';
+    card.style.transform = '';
+    card.style.opacity = '';
+    // Reset middle card too
+    if (stackCards[1]) {
+        stackCards[1].el.style.transition = 'transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s';
+        stackCards[1].el.style.transform = 'scale(0.93) translateY(12px)';
+        stackCards[1].el.style.opacity = '0.5';
     }
 }
 
@@ -1166,7 +1337,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('btn-next').addEventListener('click', showConfirm);
 
     // Confirm
-    $('btn-reselect').addEventListener('click', () => go('selection'));
+    $('btn-reselect').addEventListener('click', () => { showCard(cardIdx); go('selection'); });
     $('btn-to-pri').addEventListener('click', showPriority);
 
     // Priority

@@ -4,7 +4,7 @@
 > 에이전트가 이 문서를 기반으로 작업한다. 스펙 외의 수정은 금지.
 
 **최종 업데이트**: 2026-04-06 (세션175)
-**현재 버전**: v0.3 (스와이프 UX + Google Sheets 연동 준비 완료)
+**현재 버전**: v0.4 (카드 덱 스택 UX)
 **배포**: GitHub Pages — `https://mice3nyc.github.io/ari_gitrepo_1/beingfaust_values/`
 
 ---
@@ -31,7 +31,7 @@ beingfaust_values/
 
 | 파일 | 용도 | 배포 | 상태 |
 |------|------|------|------|
-| `index.html` | 플레이어 메인 앱 (모바일) | ✅ GitHub Pages | ✅ 정상 동작 (API 연결 제외) |
+| `index.html` | 플��이어 메인 앱 (모바일) | ✅ GitHub Pages | ✅ v0.4 카드 덱 스택 |
 | `index-grid.html` | 그리드 버전 백업 | ✅ 접속 가능 | ✅ 정상 동작 (API 연결 제외) |
 | `dashboard.html` | 진행자 대시보드 (PC) | ✅ 접속 가능 | ⏳ API URL 필요 |
 
@@ -98,7 +98,7 @@ const VALUES = [
 
 ### Screen 2: Selection — 스와이프 버전 (`#selection` in index.html)
 
-**기능**: 12개 카드를 1장씩 넘기며, 위로 올려서 선택 (최대 6개)
+**기능**: 12개 카드를 카드 덱 스택 방식으로 넘기며, 위로 올려서 선택 (최대 6개)
 
 | 요소 | ID/Class | 동작 |
 |------|----------|------|
@@ -106,24 +106,28 @@ const VALUES = [
 | 카운터 | `#sel-count` | 선택 수 표시. `.bump` 클래스로 pulse 애니메이션 |
 | 트레이 | `#sel-tray` | 상단에 선택된 카드 미니어처 (28x42px). 클릭하면 해제 |
 | 카드 영역 | `#swipe-area` | 터치 제스처 영역. `touch-action: none` |
-| 카드 | `#swipe-card` | 단일 DOM. `showCard(idx)`로 내용 교체 |
-| 카드 이미지 | `#swipe-img` | `valuecards/beingfaust_{id}.png` |
-| 한국어 이름 | `#swipe-kr` | 카드 아래 표시 |
-| 영어 이름 | `#swipe-en` | 카드 아래 소문자 표시 |
+| 카드 스택 | `.swipe-stack-card` | 3개 DOM 스택 (front/middle/back). JS가 동적 생성 |
 | 선택됨 뱃지 | `.swipe-badge` | 이미 선택된 카드에 "✓ 선택됨" 표시 |
-| 힌트 | `#swipe-hint` | "↑ 위로 올려서 선택". 첫 선택 후 사라짐 |
+| 힌트 | `#swipe-hint` | "↑ 위로 올려서 선택". 첫 선택 후 사라짐 (z-index: 5) |
 | 점 인디케이터 | `#card-dots` | 12개 점. 현재=흰색, 선택됨=빨강 |
 | 다음 버튼 | `#btn-next` | 6개 선택 시 활성화 → `showConfirm()` |
 
-**스와이프 로직** (핵심 — 건드리지 말 것):
-- **좌우 스와이프**: `|dx| > 50` → 이전/다음 카드 (wrap-around)
+**카드 덱 스택 구조** (v0.4):
+- 3장의 카드가 겹쳐 보임: front(100% scale, z-3), middle(93% scale, 50% opacity, z-2), back(86% scale, 25% opacity, z-1)
+- **좌우 스와이프**: `|dx| > 60` → 앞 카드가 회전하며 날아감, 뒤 카드가 transition으로 승격, 새 카드가 뒤에 추가
 - **위로 스와이프**: `dy < -80` → 선택. fly-up 애니메이션 후 다음 미선택 카드로 이동
 - 방향 판정: 첫 8px 이동으로 수평/수직 결정 (`sw.dir`)
+- 드래그 중 뒤 카드가 점진적으로 올라옴 (progressive reveal)
 - 6개 다 차면 더 이상 위로 스와이프 안 됨
+- 마우스 이벤트도 지원 (데스크톱 테스트용)
 
 **JS 함수 (index.html 전용)**:
-- `initSwipe()` — 점/트레이 초기화, 터치 이벤트 등록
-- `showCard(idx)` — idx번 카드 표시 (wrap-around)
+- `initSwipe()` — 3개 카드 DOM 생성, 점/트레이 초기화, 터치+마우스 이벤트 등록
+- `showCard(idx)` — 스택 전체를 idx 기준으로 리빌드 (뱃지 갱신용)
+- `flyCard(direction, onComplete)` — 앞 카드 날리기 + 스택 승격 + 새 카드 추가
+- `applyStackPositions()` — 스택 3장의 CSS 클래스/스타일 갱신
+- `updateDots()` — 점 인디케이터 갱신
+- `resetFrontCard()` — 드래그 취소 시 snap-back
 - `refreshCount()` — 카운터 업데이트, 버튼 활성화
 - `renderTray()` — 트레이 갱신 (선택 카드 + 빈 슬롯)
 - `deselectCard(id)` — 트레이 클릭 시 선택 해제
@@ -251,8 +255,8 @@ const VALUES = [
 |------|------|------|
 | `VALUES` 배열 | 전체 | 원작 데이터. 색상 포함 |
 | 카드 이미지 경로 | 전체 | `valuecards/beingfaust_{id}.png` 고정 |
-| 스와이프 터치 로직 | index.html L893~L972 | `swStart/swMove/swEnd`. 모바일 제스처 튜닝 완료 |
-| 트레이 로직 | index.html L864~L890 | `renderTray/deselectCard` |
+| 카드 덱 스택 | index.html | `flyCard/swStart/swMove/swEnd/applyStackPositions`. v0.4 완료 |
+| 트레이 로직 | index.html | `renderTray/deselectCard` |
 | 그리드 선택 로직 | index-grid.html L747~L794 | `buildGrid/toggle/refreshSelection` |
 | 드래그&드롭 | 양쪽 `initDrag()` | 터치 드래그 순위 조정. 동작 확인 완료 |
 | 화면 전환 | 양쪽 `go()` | CSS transition 기반 |
@@ -310,7 +314,20 @@ const VALUES = [
 
 ---
 
-### TASK 3: (미확정) 추가 기능
+### TASK 3: Screen 2 스와이프 UX 개선 — 카드 덱 스택 ✅ 완료
+
+**구현 완료** (v0.4, 2026-04-06):
+- 단일 `#swipe-card` DOM → 3개 `.swipe-stack-card` DOM 스택으로 변경
+- 좌우 스와이프 시 앞 카드가 회전하며 날아가고 뒤 카드가 부드럽게 승격
+- 위로 스와이프 선택(fly-up) 유지, 뒤 카드 자동 승격
+- 드래그 중 progressive reveal (뒤 카드가 점진적으로 올라옴)
+- 12개 카드 무한 순환 (날아간 카드는 덱 뒤로 재활용)
+- 마우스 이벤트 지원 (데스크톱 테스트)
+- `renderTray()`, `deselectCard()`, `refreshCount()` 미수정
+
+---
+
+### TASK 4: (미확정) 추가 기능
 
 아래는 피터공이 결정해야 할 사항:
 
@@ -368,3 +385,4 @@ const VALUES = [
 | v0.2 | 2026-04-06 | Google Sheets 연동 구조 (dashboard.html + apps-script-guide.md) |
 | v0.3 | 2026-04-06 | 스와이프 UX (index.html). 좌우 넘기기 + 위로 날려 선택, 트레이, 점 인디케이터 |
 | — | 2026-04-06 | GitHub Pages 배포 완료 (3회 커밋+푸시) |
+| v0.4 | 2026-04-06 | 카드 덱 스택 UX — 3장 스택, fly-out, progressive reveal, 마우스 지원 |
