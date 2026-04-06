@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Being Faust Values — 진행자 대시보드</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0D0D0D;
+            --bg-card: #181818;
+            --bg-elevated: #222222;
+            --text: #F0EDE8;
+            --text-secondary: rgba(240,237,232,0.6);
+            --text-muted: rgba(240,237,232,0.28);
+            --accent: #C04040;
+            --font-display: 'Bodoni Moda', 'Didot', serif;
+            --font-body: 'Noto Sans KR', -apple-system, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-body);
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        /* ===== HEADER ===== */
+        .dash-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .dash-logo {
+            font-family: var(--font-display);
+            font-size: 20px;
+            letter-spacing: 0.3em;
+            text-indent: 0.3em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        .dash-title {
+            font-family: var(--font-display);
+            font-size: 32px;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+        }
+        .dash-room {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        .dash-room code {
+            color: var(--accent);
+            font-size: 16px;
+            letter-spacing: 0.1em;
+        }
+
+        /* ===== SETUP ===== */
+        .setup {
+            max-width: 400px;
+            margin: 0 auto 40px;
+            text-align: center;
+        }
+        .setup-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .setup input {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 15px;
+            outline: none;
+        }
+        .setup input:focus { border-color: rgba(255,255,255,0.25); }
+        .setup input::placeholder { color: var(--text-muted); }
+        .setup button {
+            padding: 12px 24px;
+            background: var(--accent);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-family: var(--font-body);
+            font-size: 15px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .setup button:hover { background: #A33333; }
+        .setup-note {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* ===== STATS BAR ===== */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 48px;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-num {
+            font-family: var(--font-display);
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            letter-spacing: 0.05em;
+        }
+
+        /* ===== MAIN GRID ===== */
+        .dash-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .panel {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 24px;
+        }
+        .panel-title {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        /* ===== BAR CHART ===== */
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .bar-label {
+            min-width: 70px;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: right;
+        }
+        .bar-track {
+            flex: 1;
+            height: 28px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            min-width: 2px;
+        }
+        .bar-count {
+            min-width: 28px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* ===== RANK TIERS ===== */
+        .tier {
+            margin-bottom: 20px;
+        }
+        .tier:last-child { margin-bottom: 0; }
+        .tier-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .tier-items {
+            display: flex;
+            gap: 8px;
+        }
+        .tier-card {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: var(--bg-elevated);
+            border-radius: 8px;
+            border-left: 3px solid var(--c);
+        }
+        .tier-kr {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .tier-score {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* ===== PARTICIPANT LIST ===== */
+        .participant-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .participant {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 13px;
+        }
+        .participant:last-child { border-bottom: none; }
+        .p-name { font-weight: 500; flex: 1; }
+        .p-values {
+            display: flex;
+            gap: 3px;
+        }
+        .p-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+        }
+
+        /* ===== REFRESH ===== */
+        .refresh-bar {
+            text-align: center;
+            margin-top: 32px;
+        }
+        .refresh-btn {
+            padding: 10px 32px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .refresh-btn:hover { background: rgba(255,255,255,0.1); }
+        .refresh-time {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .no-data {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            padding: 40px 0;
+        }
+
+        /* ===== NOT CONFIGURED ===== */
+        .config-warning {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 40px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .config-warning h3 {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 12px;
+        }
+        .config-warning p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        .config-warning code {
+            background: rgba(255,255,255,0.08);
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dash-header">
+    <div class="dash-logo">MEPHISTØ &amp; co.</div>
+    <div class="dash-title">가치 선택 결과</div>
+    <div class="dash-room" id="room-display"></div>
+</div>
+
+<!-- API URL 미설정 시 -->
+<div class="config-warning" id="config-warning" style="display:none">
+    <h3>API 연결 필요</h3>
+    <p>
+        Google Apps Script 배포 후<br>
+        이 파일의 <code>API_URL</code> 변수에 URL을 입력하세요.<br><br>
+        가이드: <code>apps-script-guide.md</code> 참조
+    </p>
+</div>
+
+<!-- 방 코드 입력 -->
+<div class="setup" id="setup">
+    <div class="setup-row">
+        <input type="text" id="inp-room" placeholder="방 코드 입력" maxlength="6">
+        <button onclick="loadData()">조회</button>
+    </div>
+    <div class="setup-note">방 코드를 입력하고 조회를 누르세요</div>
+</div>
+
+<!-- 대시보드 본체 (초기 숨김) -->
+<div id="dashboard" style="display:none">
+
+    <div class="stats-bar">
+        <div class="stat">
+            <div class="stat-num" id="stat-total">0</div>
+            <div class="stat-label">제출 완료</div>
+        </div>
+    </div>
+
+    <div class="dash-grid">
+        <!-- 왼쪽: 선택 빈도 -->
+        <div class="panel">
+            <div class="panel-title">가치별 선택 빈도</div>
+            <div id="chart-bars"></div>
+        </div>
+
+        <!-- 오른쪽: 가중 랭킹 -->
+        <div class="panel">
+            <div class="panel-title">가중 랭킹 (1위=6점 ~ 6위=1점)</div>
+            <div id="chart-tiers"></div>
+        </div>
+
+        <!-- 왼쪽: 1순위 분포 -->
+        <div class="panel">
+            <div class="panel-title">1순위로 가장 많이 선택된 가치</div>
+            <div id="chart-first"></div>
+        </div>
+
+        <!-- 오른쪽: 참가자 목록 -->
+        <div class="panel">
+            <div class="panel-title">참가자 목록</div>
+            <div class="participant-list" id="participant-list"></div>
+        </div>
+    </div>
+
+    <div class="refresh-bar">
+        <button class="refresh-btn" onclick="loadData()">새로고침</button>
+        <div class="refresh-time" id="refresh-time"></div>
+    </div>
+</div>
+
+<script>
+/* ===== CONFIG ===== */
+// Google Apps Script 배포 URL을 여기에 붙여넣기
+const API_URL = '';
+
+/* ===== VALUE DATA ===== */
+const VALUES = [
+    { id: 'love',      en: 'LOVE',      kr: '사랑',     color: '#E63946' },
+    { id: 'beauty',    en: 'BEAUTY',    kr: '아름다움', color: '#9B59B6' },
+    { id: 'faith',     en: 'FAITH',     kr: '믿음',     color: '#A8C256' },
+    { id: 'fame',      en: 'FAME',      kr: '명예',     color: '#7A7A7A' },
+    { id: 'family',    en: 'FAMILY',    kr: '가족',     color: '#E67E22' },
+    { id: 'freedom',   en: 'FREEDOM',   kr: '자유',     color: '#2980B9' },
+    { id: 'knowledge', en: 'KNOWLEDGE', kr: '지식',     color: '#27AE60' },
+    { id: 'pleasure',  en: 'PLEASURE',  kr: '쾌락',     color: '#E84393' },
+    { id: 'power',     en: 'POWER',     kr: '권력',     color: '#C5A55A' },
+    { id: 'progress',  en: 'PROGRESS',  kr: '발전',     color: '#00BCD4' },
+    { id: 'wealth',    en: 'WEALTH',    kr: '돈',       color: '#F1C40F' },
+    { id: 'youth',     en: 'YOUTH',     kr: '젊음',     color: '#85C1E9' }
+];
+
+// 한국어 이름 → 가치 객체 매핑
+const KR_MAP = {};
+VALUES.forEach(v => {
+    KR_MAP[v.kr] = v;
+    // "사랑(LOVE)" 형식도 매핑
+    KR_MAP[v.kr + '(' + v.en + ')'] = v;
+});
+
+function findValue(str) {
+    if (!str) return null;
+    str = str.trim();
+    if (KR_MAP[str]) return KR_MAP[str];
+    // 부분 매칭
+    for (const v of VALUES) {
+        if (str.includes(v.kr) || str.toLowerCase().includes(v.en.toLowerCase())) return v;
+    }
+    return null;
+}
+
+/* ===== DATA LOADING ===== */
+let currentRoom = '';
+
+async function loadData() {
+    const roomInput = document.getElementById('inp-room');
+    currentRoom = roomInput.value.trim().toUpperCase();
+
+    if (!API_URL) {
+        document.getElementById('config-warning').style.display = 'block';
+        document.getElementById('dashboard').style.display = 'none';
+        return;
+    }
+
+    try {
+        const url = currentRoom
+            ? API_URL + '?room=' + encodeURIComponent(currentRoom)
+            : API_URL;
+
+        const res = await fetch(url);
+        const json = await res.json();
+
+        if (json.status === 'ok') {
+            render(json.data || []);
+        } else {
+            console.error('API error:', json.message);
+        }
+    } catch (err) {
+        console.error('Fetch error:', err);
+    }
+}
+
+/* ===== RENDERING ===== */
+function render(rows) {
+    document.getElementById('setup').style.display = 'none';
+    document.getElementById('config-warning').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+
+    // 방 표시
+    document.getElementById('room-display').innerHTML =
+        currentRoom ? '방 코드: <code>' + currentRoom + '</code>' : '전체 데이터';
+
+    // 참가자 수
+    document.getElementById('stat-total').textContent = rows.length;
+
+    if (rows.length === 0) {
+        document.getElementById('chart-bars').innerHTML = '<div class="no-data">아직 데이터가 없습니다</div>';
+        document.getElementById('chart-tiers').innerHTML = '';
+        document.getElementById('chart-first').innerHTML = '';
+        document.getElementById('participant-list').innerHTML = '';
+        updateRefreshTime();
+        return;
+    }
+
+    // === 집계 ===
+    const selectCount = {};   // 가치별 선택 횟수
+    const weightedScore = {}; // 가중 점수 (1위=6, 2위=5...)
+    const firstCount = {};    // 1순위 횟수
+    VALUES.forEach(v => {
+        selectCount[v.id] = 0;
+        weightedScore[v.id] = 0;
+        firstCount[v.id] = 0;
+    });
+
+    const parsedRows = rows.map(row => {
+        const vals = row.values.map(findValue).filter(Boolean);
+        vals.forEach((v, i) => {
+            selectCount[v.id]++;
+            weightedScore[v.id] += (6 - i); // 1위=6점, 6위=1점
+            if (i === 0) firstCount[v.id]++;
+        });
+        return { name: row.name, values: vals };
+    });
+
+    const maxSelect = Math.max(...Object.values(selectCount), 1);
+    const maxWeighted = Math.max(...Object.values(weightedScore), 1);
+
+    // === 1. 선택 빈도 바 차트 ===
+    const sorted = VALUES.slice().sort((a, b) => selectCount[b.id] - selectCount[a.id]);
+    document.getElementById('chart-bars').innerHTML = sorted.map(v => {
+        const count = selectCount[v.id];
+        const pct = (count / maxSelect * 100).toFixed(1);
+        return `<div class="bar-row">
+            <div class="bar-label" style="color:${v.color}">${v.kr}</div>
+            <div class="bar-track">
+                <div class="bar-fill" style="width:${pct}%;background:${v.color}"></div>
+            </div>
+            <div class="bar-count">${count}</div>
+        </div>`;
+    }).join('');
+
+    // === 2. 가중 랭킹 Tiers ===
+    const ranked = VALUES.slice().sort((a, b) => weightedScore[b.id] - weightedScore[a.id]);
+    const tiers = [
+        { label: 'TOP 3', items: ranked.slice(0, 3) },
+        { label: 'MIDDLE', items: ranked.slice(3, 6) },
+        { label: 'LOWER MIDDLE', items: ranked.slice(6, 9) },
+        { label: 'BOTTOM', items: ranked.slice(9, 12) }
+    ];
+    document.getElementById('chart-tiers').innerHTML = tiers.map(tier => {
+        const cards = tier.items
+            .filter(v => weightedScore[v.id] > 0)
+            .map(v => `<div class="tier-card" style="--c:${v.color}">
+                <span class="tier-kr">${v.kr}</span>
+                <span class="tier-score">${weightedScore[v.id]}pt</span>
+            </div>`).join('');
+        if (!cards) return '';
+        return `<div class="tier">
+            <div class="tier-label">${tier.label}</div>
+            <div class="tier-items">${cards}</div>
+        </div>`;
+    }).join('');
+
+    // === 3. 1순위 분포 ===
+    const firstSorted = VALUES.slice()
+        .filter(v => firstCount[v.id] > 0)
+        .sort((a, b) => firstCount[b.id] - firstCount[a.id]);
+    const maxFirst = Math.max(...Object.values(firstCount), 1);
+    document.getElementById('chart-first').innerHTML = firstSorted.length
+        ? firstSorted.map(v => {
+            const count = firstCount[v.id];
+            const pct = (count / maxFirst * 100).toFixed(1);
+            return `<div class="bar-row">
+                <div class="bar-label" style="color:${v.color}">${v.kr}</div>
+                <div class="bar-track">
+                    <div class="bar-fill" style="width:${pct}%;background:${v.color}"></div>
+                </div>
+                <div class="bar-count">${count}</div>
+            </div>`;
+        }).join('')
+        : '<div class="no-data">데이터 없음</div>';
+
+    // === 4. 참가자 목록 ===
+    document.getElementById('participant-list').innerHTML = parsedRows.map(row => {
+        const dots = row.values.map(v =>
+            `<span class="p-dot" style="background:${v.color}" title="${v.kr}"></span>`
+        ).join('');
+        return `<div class="participant">
+            <span class="p-name">${row.name}</span>
+            <span class="p-values">${dots}</span>
+        </div>`;
+    }).join('');
+
+    updateRefreshTime();
+}
+
+function updateRefreshTime() {
+    const now = new Date();
+    const t = now.getHours().toString().padStart(2,'0') + ':' +
+              now.getMinutes().toString().padStart(2,'0') + ':' +
+              now.getSeconds().toString().padStart(2,'0');
+    document.getElementById('refresh-time').textContent = '마지막 업데이트: ' + t;
+}
+
+/* ===== INIT ===== */
+document.addEventListener('DOMContentLoaded', () => {
+    if (!API_URL) {
+        document.getElementById('config-warning').style.display = 'block';
+    }
+    document.getElementById('inp-room').addEventListener('keydown', e => {
+        if (e.key === 'Enter') loadData();
+    });
+});
+</script>
+</body>
+</html>

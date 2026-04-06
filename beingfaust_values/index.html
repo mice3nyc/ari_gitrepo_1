@@ -932,27 +932,40 @@ function initDrag() {
 /* ==========================================================
    SCREEN 5: DONE (SUBMIT)
    ========================================================== */
-function submit() {
-    // priority 최종 동기화
+// ===== Google Sheets 연동 =====
+// Apps Script 배포 URL을 여기에 붙여넣기
+const API_URL = '';
+
+async function submit() {
     syncPriority();
 
-    // Phase 2에서 Google Sheets 전송 로직 추가 예정
     const payload = {
         name: state.name,
         room: state.room,
-        values: state.priority.map((id, i) => ({
-            rank: i + 1,
-            id,
-            kr: V_MAP[id].kr,
-            en: V_MAP[id].en
-        })),
-        ts: new Date().toISOString()
+        values: state.priority.map(id => V_MAP[id].kr + '(' + V_MAP[id].en + ')')
     };
-    console.log('[BF Values] 제출 데이터:', JSON.stringify(payload, null, 2));
 
-    // 완료 화면
+    // 완료 화면 먼저 표시 (응답 기다리지 않음)
     renderDone();
     go('done');
+
+    // 서버 전송 (백그라운드)
+    if (API_URL) {
+        try {
+            await fetch(API_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            console.log('[BF] 전송 완료');
+        } catch (err) {
+            console.warn('[BF] 전송 실패:', err);
+        }
+    } else {
+        console.log('[BF] API_URL 미설정 — 로컬 모드');
+        console.log('[BF] 페이로드:', JSON.stringify(payload, null, 2));
+    }
 }
 
 function renderDone() {
