@@ -239,9 +239,9 @@
             flex-shrink: 0;
         }
         .sel-instruction {
-            font-size: 13px;
-            font-weight: 300;
-            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
             letter-spacing: 0.01em;
             margin-bottom: 4px;
         }
@@ -260,14 +260,14 @@
         .sel-sep { color: var(--text-muted); margin: 0 1px; font-weight: 300; }
         .sel-total { color: var(--text-muted); font-weight: 300; }
 
-        /* ===== SWIPE CAROUSEL ===== */
+        /* ===== SWIPE STACK ===== */
         .sel-tray {
             display: flex;
             justify-content: center;
-            gap: 5px;
+            gap: 10px;
             padding: 2px 16px 0;
-            min-height: 44px;
-            align-items: center;
+            min-height: 62px;
+            align-items: flex-start;
             flex-shrink: 0;
         }
         .tray-slot {
@@ -276,6 +276,13 @@
             border: 1.5px dashed rgba(255,255,255,0.08);
             flex-shrink: 0;
         }
+        .tray-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            animation: trayPop 0.3s cubic-bezier(0.34,1.56,0.64,1);
+        }
         .tray-item {
             width: 28px; height: 42px;
             border-radius: 3px;
@@ -283,11 +290,15 @@
             border: 1.5px solid var(--c);
             flex-shrink: 0;
             cursor: pointer;
-            animation: trayPop 0.3s cubic-bezier(0.34,1.56,0.64,1);
             transition: transform 0.15s;
         }
         .tray-item:active { transform: scale(0.85); }
         .tray-item img { width: 100%; height: 100%; object-fit: cover; }
+        .tray-label {
+            font-size: 10px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
 
         .swipe-area {
             flex: 1;
@@ -299,31 +310,32 @@
             touch-action: none;
         }
 
-        /* Horizontal carousel — 3 cards side by side */
-        .carousel-track {
-            display: flex;
-            align-items: center;
+        /* Card deck stack — 3 cards layered */
+        .swipe-stack-card {
             position: absolute;
+            width: 68%;
+            max-width: 270px;
             will-change: transform;
-            transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
-            visibility: hidden;
-        }
-        .carousel-track.ready {
-            visibility: visible;
-        }
-        .carousel-track.no-transition {
-            transition: none;
-        }
-        .carousel-card {
-            position: relative;
-            flex-shrink: 0;
             user-select: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            pointer-events: none;
         }
-        .carousel-card img {
+        .swipe-stack-card.front {
+            z-index: 3;
+            pointer-events: auto;
+        }
+        .swipe-stack-card.middle {
+            z-index: 2;
+            transform: scale(0.93) translateY(12px);
+            opacity: 0;
+            transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s;
+        }
+        .swipe-stack-card.back {
+            z-index: 1;
+            transform: scale(0.86) translateY(24px);
+            opacity: 0;
+            transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s;
+        }
+        .swipe-stack-card img {
             width: 100%;
             height: auto;
             display: block;
@@ -332,19 +344,7 @@
             pointer-events: none;
         }
 
-        .swipe-name {
-            text-align: center;
-            margin-top: 12px;
-            pointer-events: none;
-        }
-        .swipe-kr { font-size: 17px; font-weight: 500; }
-        .swipe-en {
-            font-size: 13px;
-            color: var(--text-muted);
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            margin-top: 1px;
-        }
+        .swipe-name { display: none; }
 
         .swipe-badge {
             position: absolute;
@@ -359,7 +359,7 @@
             display: none;
             pointer-events: none;
         }
-        .carousel-card.is-on .swipe-badge { display: block; }
+        .swipe-stack-card.is-on .swipe-badge { display: block; }
 
         .swipe-hint {
             position: absolute;
@@ -367,7 +367,7 @@
             left: 0; right: 0;
             text-align: center;
             font-size: 13px;
-            color: var(--text-muted);
+            color: var(--text);
             pointer-events: none;
             transition: opacity 0.6s;
             z-index: 5;
@@ -688,7 +688,7 @@
     <!-- ====== SCREEN 2: CARD SELECTION (SWIPE) ====== -->
     <section id="selection" class="screen">
         <div class="sel-header">
-            <div class="sel-instruction">좌우로 넘기고 · 위로 올려서 선택</div>
+            <div class="sel-instruction">당신이 욕망하는 가치를 선택하세요</div>
             <div class="sel-counter">
                 <span class="sel-count" id="sel-count">0</span><span class="sel-sep"> / </span><span class="sel-total">6</span>
             </div>
@@ -696,7 +696,7 @@
         <div class="sel-tray" id="sel-tray"></div>
         <div class="swipe-area" id="swipe-area">
             <!-- Carousel track built by JS -->
-            <div class="swipe-hint" id="swipe-hint">← 좌우 스와이프 · ↑ 위로 올려서 선택 →</div>
+            <div class="swipe-hint" id="swipe-hint">좌우로 넘기고 · 위로 올려서 선택</div>
         </div>
         <div class="card-dots" id="card-dots"></div>
         <div class="screen-footer">
@@ -792,17 +792,6 @@ function go(screenId) {
     // 스크롤 위치 초기화
     const scrollable = target.querySelector('.cfm-grid, .pri-list');
     if (scrollable) scrollable.scrollTop = 0;
-    // 캐러셀 화면 진입 시 재측정 (display:none→active 후 크기 계산)
-    if (screenId === 'selection' && carouselTrack) {
-        carouselTrack.classList.add('no-transition');
-        requestAnimationFrame(() => {
-            measureCarousel();
-            positionTrack();
-            carouselTrack.classList.add('ready');
-            void carouselTrack.offsetHeight;
-            carouselTrack.classList.remove('no-transition');
-        });
-    }
 }
 
 /* ==========================================================
@@ -825,24 +814,19 @@ function enterGame() {
 }
 
 /* ==========================================================
-   SCREEN 2: CARD SELECTION (HORIZONTAL CAROUSEL)
+   SCREEN 2: CARD SELECTION (SWIPE STACK)
    ========================================================== */
 let cardIdx = 0;
 let animating = false;
 
-/* --- Carousel State --- */
-let carouselTrack = null;
-let allCards = [];       // 14 cards: [clone11] [0..11] [clone0]
-let cardWidth = 0;
-let areaWidth = 0;
-const GAP = 14;
-let displayIdx = 1;     // index in allCards (1~12 = real, 0 & 13 = clones)
-
-const sw = { startX: 0, startY: 0, dx: 0, dy: 0, on: false, startTime: 0, wasDragged: false };
+/* --- Card Stack State --- */
+const STACK_SIZE = 3;
+let stackCards = [];   // array of { el, idx } — [0]=front, [1]=middle, [2]=back
+const sw = { startX: 0, startY: 0, dx: 0, dy: 0, dir: null, on: false };
 
 function createCardEl() {
     const card = document.createElement('div');
-    card.className = 'carousel-card';
+    card.className = 'swipe-stack-card';
     card.innerHTML = `
         <img src="" alt="">
         <span class="swipe-badge">✓ 선택됨</span>
@@ -864,78 +848,62 @@ function setCardContent(el, idx) {
     return idx;
 }
 
-function measureCarousel() {
-    areaWidth = $('swipe-area').clientWidth;
-    cardWidth = Math.min(areaWidth * 0.68, 270);
-    allCards.forEach(sc => { sc.el.style.width = cardWidth + 'px'; });
-    carouselTrack.style.gap = GAP + 'px';
-}
-
-function positionTrack(extraOffset) {
-    extraOffset = extraOffset || 0;
-    const offset = -(displayIdx * (cardWidth + GAP)) + (areaWidth - cardWidth) / 2 + extraOffset;
-    carouselTrack.style.transform = 'translateX(' + offset + 'px)';
+function applyStackPositions() {
+    stackCards.forEach((sc, i) => {
+        const isOn = sc.el.classList.contains('is-on');
+        sc.el.className = 'swipe-stack-card';
+        if (isOn) sc.el.classList.add('is-on');
+        sc.el.style.transform = '';
+        sc.el.style.opacity = '';
+        sc.el.style.transition = '';
+        if (i === 0) {
+            sc.el.classList.add('front');
+        } else if (i === 1) {
+            sc.el.classList.add('middle');
+        } else {
+            sc.el.classList.add('back');
+        }
+    });
 }
 
 function updateDots() {
+    const idx = stackCards.length > 0 ? stackCards[0].idx : cardIdx;
     $('card-dots').querySelectorAll('.c-dot').forEach((d, i) => {
         d.className = 'c-dot';
-        if (i === cardIdx) d.classList.add('now');
+        if (i === idx) d.classList.add('now');
         else if (state.selected.has(VALUES[i].id)) d.classList.add('picked');
     });
 }
 
-function refreshBadges() {
-    allCards.forEach(sc => {
-        sc.el.classList.toggle('is-on', state.selected.has(VALUES[sc.realIdx].id));
-    });
-}
-
 function initSwipe() {
+    // 점 인디케이터 생성
     const dots = $('card-dots');
     VALUES.forEach(() => {
         const d = document.createElement('span');
         d.className = 'c-dot';
         dots.appendChild(d);
     });
+    // 초기 트레이 (빈 슬롯 6개)
     renderTray();
 
-    // Build track: [clone of 11] + [0..11] + [clone of 0] = 14 cards
+    // Build initial 3-card stack
     const area = $('swipe-area');
-    carouselTrack = document.createElement('div');
-    carouselTrack.className = 'carousel-track no-transition';
-    area.insertBefore(carouselTrack, $('swipe-hint'));
-
-    // Clone of last
-    let el = createCardEl();
-    setCardContent(el, VALUES.length - 1);
-    carouselTrack.appendChild(el);
-    allCards.push({ el, realIdx: VALUES.length - 1 });
-
-    // Real 12 cards
-    for (let i = 0; i < VALUES.length; i++) {
-        el = createCardEl();
-        setCardContent(el, i);
-        carouselTrack.appendChild(el);
-        allCards.push({ el, realIdx: i });
+    for (let i = 0; i < STACK_SIZE; i++) {
+        const el = createCardEl();
+        const realIdx = setCardContent(el, i);
+        area.insertBefore(el, $('swipe-hint'));
+        stackCards.push({ el, idx: realIdx });
     }
-
-    // Clone of first
-    el = createCardEl();
-    setCardContent(el, 0);
-    carouselTrack.appendChild(el);
-    allCards.push({ el, realIdx: 0 });
-
     cardIdx = 0;
-    displayIdx = 1;
+    applyStackPositions();
     updateDots();
 
-    // Touch
+    // 터치 이벤트
     area.addEventListener('touchstart', swStart, { passive: true });
     area.addEventListener('touchmove', swMove, { passive: false });
     area.addEventListener('touchend', swEnd);
 
-    // Mouse (desktop)
+    // 마우스 이벤트 (데스크톱 테스트용)
     area.addEventListener('mousedown', e => {
         swStart({ touches: [{ clientX: e.clientX, clientY: e.clientY }] });
         const onMove = ev => swMove({ touches: [{ clientX: ev.clientX, clientY: ev.clientY }], preventDefault: () => ev.preventDefault() });
@@ -943,82 +911,98 @@ function initSwipe() {
         document.addEventListener('mousemove', onMove);
         document.addEventListener('mouseup', onUp);
     });
-
-    // Tap to select center card
-    carouselTrack.addEventListener('click', e => {
-        if (animating || sw.wasDragged) return;
-        const card = e.target.closest('.carousel-card');
-        if (!card) return;
-        if (allCards.indexOf(allCards.find(c => c.el === card)) !== displayIdx) return;
-        handleCardTap();
-    });
-
-    // Resize
-    window.addEventListener('resize', () => {
-        carouselTrack.classList.add('no-transition');
-        measureCarousel(); positionTrack();
-        void carouselTrack.offsetHeight;
-        carouselTrack.classList.remove('no-transition');
-    });
 }
 
-function handleCardTap() {
-    const v = VALUES[cardIdx];
-    if (state.selected.has(v.id)) {
-        deselectCard(v.id);
-    } else if (state.selected.size < 6) {
-        state.selected.add(v.id);
-        renderTray();
-        refreshCount();
-        refreshBadges();
-        $('swipe-hint').style.opacity = '0';
+/* nextUnselected: find next card index that isn't selected */
+function nextUnselected(fromIdx) {
+    for (let i = 0; i < VALUES.length; i++) {
+        const idx = (fromIdx + i) % VALUES.length;
+        if (!state.selected.has(VALUES[idx].id)) return idx;
     }
+    return fromIdx;
 }
 
+/* showCard: rebuild stack from a given index, skipping selected */
 function showCard(idx) {
     idx = ((idx % VALUES.length) + VALUES.length) % VALUES.length;
-    cardIdx = idx;
-    displayIdx = idx + 1;
-    carouselTrack.classList.add('no-transition');
-    refreshBadges();
-    measureCarousel();
-    positionTrack();
-    void carouselTrack.offsetHeight;
-    carouselTrack.classList.remove('no-transition');
+    let current = nextUnselected(idx);
+    cardIdx = current;
+    for (let i = 0; i < STACK_SIZE; i++) {
+        stackCards[i].idx = setCardContent(stackCards[i].el, current);
+        current = nextUnselected((current + 1) % VALUES.length);
+    }
+    applyStackPositions();
     updateDots();
 }
 
-function slideToCard(newDisplayIdx) {
+/* flyCard: animate the front card out, promote others, add new card at back */
+function flyCard(direction, onComplete) {
     if (animating) return;
     animating = true;
 
-    displayIdx = newDisplayIdx;
-    carouselTrack.classList.remove('no-transition');
-    positionTrack();
+    const front = stackCards[0];
+    const el = front.el;
 
-    const onDone = () => {
-        carouselTrack.removeEventListener('transitionend', onDone);
+    let flyTransform;
+    if (direction === 'left') {
+        flyTransform = 'translateX(-140%) rotate(-18deg)';
+    } else if (direction === 'right') {
+        flyTransform = 'translateX(140%) rotate(18deg)';
+    } else if (direction === 'up') {
+        flyTransform = 'translateY(-120vh) rotate(6deg)';
+    }
 
-        // Wrap: if we landed on a clone, jump to the real card
-        if (displayIdx <= 0) {
-            displayIdx = VALUES.length;
-            cardIdx = VALUES.length - 1;
-        } else if (displayIdx >= allCards.length - 1) {
-            displayIdx = 1;
-            cardIdx = 0;
-        } else {
-            cardIdx = displayIdx - 1;
-        }
+    // Animate front card out
+    el.style.transition = 'transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.3s';
+    el.style.transform = flyTransform;
+    el.style.opacity = '0';
 
-        carouselTrack.classList.add('no-transition');
-        positionTrack();
-        void carouselTrack.offsetHeight;
-        carouselTrack.classList.remove('no-transition');
+    // Promote middle → front, back → middle
+    if (stackCards[1]) {
+        stackCards[1].el.classList.remove('middle');
+        stackCards[1].el.classList.add('front');
+    }
+    if (stackCards[2]) {
+        stackCards[2].el.classList.remove('back');
+        stackCards[2].el.classList.add('middle');
+    }
+
+    setTimeout(() => {
+        stackCards.shift();
+
+        const lastIdx = stackCards.length > 0 ? stackCards[stackCards.length - 1].idx : cardIdx;
+        const newIdx = nextUnselected((lastIdx + 1) % VALUES.length);
+
+        el.style.transition = 'none';
+        el.style.transform = '';
+        el.style.opacity = '';
+        el.className = 'swipe-stack-card back';
+        setCardContent(el, newIdx);
+        void el.offsetHeight;
+        el.style.transition = '';
+
+        stackCards.push({ el, idx: newIdx });
+
+        cardIdx = stackCards[0].idx;
+        applyStackPositions();
         updateDots();
+
         animating = false;
-    };
-    carouselTrack.addEventListener('transitionend', onDone, { once: true });
-    setTimeout(() => { if (animating) onDone(); }, 500);
+        if (onComplete) onComplete();
+    }, 380);
+}
+
+function resetFrontCard() {
+    if (!stackCards[0]) return;
+    const card = stackCards[0].el;
+    card.style.transition = 'transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s';
+    card.style.transform = '';
+    card.style.opacity = '';
+    if (stackCards[1]) {
+        stackCards[1].el.style.transition = 'transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s';
+        stackCards[1].el.style.transform = 'scale(0.93) translateY(12px)';
+        stackCards[1].el.style.opacity = '0.5';
+    }
 }
 
 function refreshCount() {
@@ -1035,17 +1019,23 @@ function refreshCount() {
 function renderTray() {
     const tray = $('sel-tray');
     tray.innerHTML = '';
-    // 선택된 카드 먼저
     state.selected.forEach(id => {
         const v = V_MAP[id];
+        const wrap = document.createElement('div');
+        wrap.className = 'tray-wrap';
         const el = document.createElement('div');
         el.className = 'tray-item';
         el.style.setProperty('--c', v.color);
         el.innerHTML = '<img src="valuecards/beingfaust_' + v.id + '.png" alt="' + v.kr + '">';
         el.addEventListener('click', () => deselectCard(id));
-        tray.appendChild(el);
+        const label = document.createElement('div');
+        label.className = 'tray-label';
+        label.style.color = v.color;
+        label.textContent = v.kr;
+        wrap.appendChild(el);
+        wrap.appendChild(label);
+        tray.appendChild(wrap);
     });
-    // 남은 빈 슬롯
     for (let i = state.selected.size; i < 6; i++) {
         const sl = document.createElement('div');
         sl.className = 'tray-slot';
@@ -1057,32 +1047,52 @@ function deselectCard(id) {
     state.selected.delete(id);
     renderTray();
     refreshCount();
-    showCard(cardIdx); // 현재 카드 뱃지 갱신
+    showCard(cardIdx);
 }
 
-/* ---------- SWIPE / DRAG ---------- */
+/* ---------- SWIPE TOUCH ---------- */
 function swStart(e) {
     if (animating) return;
     sw.startX = e.touches[0].clientX;
-    sw.startY = e.touches[0].clientY || 0;
-    sw.dx = 0;
-    sw.dy = 0;
-    sw.on = true;
-    sw.wasDragged = false;
-    sw.startTime = Date.now();
-    carouselTrack.classList.add('no-transition');
+    sw.startY = e.touches[0].clientY;
+    sw.dx = 0; sw.dy = 0; sw.dir = null; sw.on = true;
+    if (stackCards[0]) {
+        stackCards[0].el.style.transition = 'none';
+    }
 }
 
 function swMove(e) {
     if (!sw.on || animating) return;
-    sw.dx = e.touches[0].clientX - sw.startX;
-    sw.dy = (e.touches[0].clientY || 0) - sw.startY;
+    const x = e.touches[0].clientX;
+    const y = e.touches[0].clientY;
+    sw.dx = x - sw.startX;
+    sw.dy = y - sw.startY;
 
-    if (Math.abs(sw.dx) > 5 || Math.abs(sw.dy) > 5) {
-        sw.wasDragged = true;
-        if (Math.abs(sw.dx) > Math.abs(sw.dy)) {
-            e.preventDefault();
-            positionTrack(sw.dx);
+    if (!sw.dir) {
+        if (Math.abs(sw.dx) > 8 || Math.abs(sw.dy) > 8) {
+            sw.dir = Math.abs(sw.dx) > Math.abs(sw.dy) ? 'h' : 'v';
+        } else return;
+    }
+    e.preventDefault();
+
+    const card = stackCards[0].el;
+    if (sw.dir === 'h') {
+        const rot = sw.dx * 0.04;
+        card.style.transform = 'translateX(' + sw.dx + 'px) rotate(' + rot + 'deg)';
+        const prog = Math.min(Math.abs(sw.dx) / 200, 1);
+        if (stackCards[1]) {
+            stackCards[1].el.style.transition = 'none';
+            stackCards[1].el.style.transform = 'scale(' + (0.93 + prog * 0.07) + ') translateY(' + (12 - prog * 12) + 'px)';
+            stackCards[1].el.style.opacity = String(0.5 + prog * 0.5);
+        }
+    } else if (sw.dy < 0) {
+        const prog = Math.min(Math.abs(sw.dy) / 300, 1);
+        card.style.transform = 'translateY(' + sw.dy + 'px) scale(' + (1 - prog * 0.08) + ')';
+        card.style.opacity = String(1 - prog * 0.4);
+        if (stackCards[1]) {
+            stackCards[1].el.style.transition = 'none';
+            stackCards[1].el.style.transform = 'scale(' + (0.93 + prog * 0.07) + ') translateY(' + (12 - prog * 12) + 'px)';
+            stackCards[1].el.style.opacity = String(0.5 + prog * 0.5);
         }
     }
 }
@@ -1090,32 +1100,38 @@ function swMove(e) {
 function swEnd() {
     if (!sw.on || animating) return;
     sw.on = false;
-    carouselTrack.classList.remove('no-transition');
 
-    // 위로 스와이프 → 선택
-    if (sw.dy < -60 && Math.abs(sw.dy) > Math.abs(sw.dx) * 1.5) {
-        positionTrack();
+    if (sw.dir === 'h') {
+        if (sw.dx < -60) {
+            flyCard('left');
+        } else if (sw.dx > 60) {
+            flyCard('right');
+        } else {
+            resetFrontCard();
+        }
+    } else if (sw.dir === 'v' && sw.dy < -80) {
         const v = VALUES[cardIdx];
         if (!state.selected.has(v.id) && state.selected.size < 6) {
-            state.selected.add(v.id);
-            renderTray();
-            refreshCount();
-            refreshBadges();
-            $('swipe-hint').style.opacity = '0';
+            flyCard('up', () => {
+                state.selected.add(v.id);
+                renderTray();
+                refreshCount();
+                $('swipe-hint').style.opacity = '0';
+                let next = cardIdx;
+                for (let i = 0; i < VALUES.length; i++) {
+                    if (!state.selected.has(VALUES[(cardIdx + i) % VALUES.length].id)) {
+                        next = (cardIdx + i) % VALUES.length;
+                        break;
+                    }
+                }
+                showCard(next);
+            });
+            return;
+        } else {
+            resetFrontCard();
         }
-        return;
-    }
-
-    const elapsed = Date.now() - sw.startTime;
-    const velocity = Math.abs(sw.dx) / elapsed;
-    const threshold = cardWidth * 0.25;
-
-    if (sw.dx < -threshold || (sw.dx < -20 && velocity > 0.3)) {
-        slideToCard(displayIdx + 1);
-    } else if (sw.dx > threshold || (sw.dx > 20 && velocity > 0.3)) {
-        slideToCard(displayIdx - 1);
     } else {
-        positionTrack();
+        resetFrontCard();
     }
 }
 
@@ -1299,7 +1315,7 @@ function renderDone() {
             <span class="done-nm" style="color:${v.color}">${v.kr}</span>
             <span class="done-en">${v.en}</span>
             <span class="done-dot" style="background:${v.color}"></span>
-            <span class="done-count" data-value-id="${v.id}">—</span>`;
+            <span class="done-count" data-rank="${i}" data-value-id="${v.id}">—</span>`;
         list.appendChild(li);
     });
     refreshDoneCounts();
@@ -1313,20 +1329,27 @@ async function refreshDoneCounts() {
         const json = await res.json();
         if (json.status !== 'ok') return;
 
-        const counts = {};
-        VALUES.forEach(v => counts[v.id] = 0);
+        // 순위별 카운트: rankCounts[rank][valueId] = 몇 명이 해당 순위에 해당 가치를 뒀는가
+        const rankCounts = {};
+        for (let r = 0; r < 6; r++) rankCounts[r] = {};
+
         (json.data || []).forEach(row => {
-            (row.values || []).forEach(str => {
+            (row.values || []).forEach((str, rank) => {
+                if (rank >= 6 || !str) return;
                 const found = VALUES.find(v =>
-                    str && (str.includes(v.kr) || str.toLowerCase().includes(v.en.toLowerCase()))
+                    str.includes(v.kr) || str.toLowerCase().includes(v.en.toLowerCase())
                 );
-                if (found) counts[found.id]++;
+                if (found) {
+                    rankCounts[rank][found.id] = (rankCounts[rank][found.id] || 0) + 1;
+                }
             });
         });
 
         document.querySelectorAll('.done-count').forEach(el => {
+            const rank = parseInt(el.dataset.rank);
             const vid = el.dataset.valueId;
-            if (vid && counts[vid] !== undefined) el.textContent = counts[vid] + '명';
+            const n = (rankCounts[rank] && rankCounts[rank][vid]) || 0;
+            el.textContent = n + '명';
         });
     } catch (e) {
         console.warn('[BF] 카운트 조회 실패:', e);
