@@ -832,12 +832,12 @@ let animating = false;
 
 /* --- Carousel State --- */
 let carouselTrack = null;
-let carouselCards = []; // array of { el, idx } — always 3: [prev, current, next]
-let cardWidth = 0;      // computed card width
-let areaWidth = 0;      // swipe-area width
-const GAP = 14;         // gap between cards in px
+let allCards = [];       // 14 cards: [clone11] [0..11] [clone0]
+let cardWidth = 0;
+let areaWidth = 0;
+const GAP = 14;
+let displayIdx = 1;     // index in allCards (1~12 = real, 0 & 13 = clones)
 
-// Drag state
 const sw = { startX: 0, startY: 0, dx: 0, dy: 0, on: false, startTime: 0, wasDragged: false };
 
 function createCardEl() {
@@ -864,28 +864,16 @@ function setCardContent(el, idx) {
     return idx;
 }
 
-function wrapIdx(i) {
-    return ((i % VALUES.length) + VALUES.length) % VALUES.length;
-}
-
-/* Compute sizes and set card widths */
 function measureCarousel() {
     areaWidth = $('swipe-area').clientWidth;
     cardWidth = Math.min(areaWidth * 0.68, 270);
-    carouselCards.forEach(sc => {
-        sc.el.style.width = cardWidth + 'px';
-    });
+    allCards.forEach(sc => { sc.el.style.width = cardWidth + 'px'; });
     carouselTrack.style.gap = GAP + 'px';
 }
 
-/* Position the track so the center card (index 1 in the 3-card array) is centered */
 function positionTrack(extraOffset) {
     extraOffset = extraOffset || 0;
-    // Track has 3 cards: [prev, current, next]
-    // Total track width = 3 * cardWidth + 2 * GAP
-    // Center card starts at cardWidth + GAP from track left
-    // We want center of center card at center of area
-    const offset = -(cardWidth + GAP) + (areaWidth - cardWidth) / 2 + extraOffset;
+    const offset = -(displayIdx * (cardWidth + GAP)) + (areaWidth - cardWidth) / 2 + extraOffset;
     carouselTrack.style.transform = 'translateX(' + offset + 'px)';
 }
 
@@ -897,117 +885,139 @@ function updateDots() {
     });
 }
 
-function rebuildCarouselCards() {
-    const prevIdx = wrapIdx(cardIdx - 1);
-    const nextIdx = wrapIdx(cardIdx + 1);
-    carouselCards[0].idx = setCardContent(carouselCards[0].el, prevIdx);
-    carouselCards[1].idx = setCardContent(carouselCards[1].el, cardIdx);
-    carouselCards[2].idx = setCardContent(carouselCards[2].el, nextIdx);
+function refreshBadges() {
+    allCards.forEach(sc => {
+        sc.el.classList.toggle('is-on', state.selected.has(VALUES[sc.realIdx].id));
+    });
 }
 
 function initSwipe() {
-    // 점 인디케이터 생성
     const dots = $('card-dots');
     VALUES.forEach(() => {
         const d = document.createElement('span');
         d.className = 'c-dot';
         dots.appendChild(d);
     });
-    // 초기 트레이 (빈 슬롯 6개)
     renderTray();
 
-    // Build carousel track with 3 cards
+    // Build track: [clone of 11] + [0..11] + [clone of 0] = 14 cards
     const area = $('swipe-area');
     carouselTrack = document.createElement('div');
-    carouselTrack.className = 'carousel-track';
+    carouselTrack.className = 'carousel-track no-transition';
     area.insertBefore(carouselTrack, $('swipe-hint'));
 
-    for (let i = -1; i <= 1; i++) {
-        const el = createCardEl();
-        const realIdx = setCardContent(el, wrapIdx(cardIdx + i));
+    // Clone of last
+    let el = createCardEl();
+    setCardContent(el, VALUES.length - 1);
+    carouselTrack.appendChild(el);
+    allCards.push({ el, realIdx: VALUES.length - 1 });
+
+    // Real 12 cards
+    for (let i = 0; i < VALUES.length; i++) {
+        el = createCardEl();
+        setCardContent(el, i);
         carouselTrack.appendChild(el);
-        carouselCards.push({ el, idx: realIdx });
+        allCards.push({ el, realIdx: i });
     }
 
-    measureCarousel();
-    positionTrack();
+    // Clone of first
+    el = createCardEl();
+    setCardContent(el, 0);
+    carouselTrack.appendChild(el);
+    allCards.push({ el, realIdx: 0 });
+
+    cardIdx = 0;
+    displayIdx = 1;
     updateDots();
 
-    // Recalculate on resize
-    window.addEventListener('resize', () => { measureCarousel(); positionTrack(); });
-
-    // Touch events
+    // Touch
     area.addEventListener('touchstart', swStart, { passive: true });
     area.addEventListener('touchmove', swMove, { passive: false });
     area.addEventListener('touchend', swEnd);
 
-    // Mouse events (desktop)
+    // Mouse (desktop)
     area.addEventListener('mousedown', e => {
         swStart({ touches: [{ clientX: e.clientX, clientY: e.clientY }] });
         const onMove = ev => swMove({ touches: [{ clientX: ev.clientX, clientY: ev.clientY }], preventDefault: () => ev.preventDefault() });
-        const onUp = ev => { swEnd(ev); document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); };
+        const onUp = () => { swEnd(); document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); };
         document.addEventListener('mousemove', onMove);
         document.addEventListener('mouseup', onUp);
     });
 
-    // Tap to select on center card
-    carouselCards[1].el.addEventListener('click', handleCardTap);
+    // Tap to select center card
+    carouselTrack.addEventListener('click', e => {
+        if (animating || sw.wasDragged) return;
+        const card = e.target.closest('.carousel-card');
+        if (!card) return;
+        if (allCards.indexOf(allCards.find(c => c.el === card)) !== displayIdx) return;
+        handleCardTap();
+    });
+
+    // Resize
+    window.addEventListener('resize', () => {
+        carouselTrack.classList.add('no-transition');
+        measureCarousel(); positionTrack();
+        void carouselTrack.offsetHeight;
+        carouselTrack.classList.remove('no-transition');
+    });
 }
 
 function handleCardTap() {
-    if (animating || sw.wasDragged) return;
     const v = VALUES[cardIdx];
     if (state.selected.has(v.id)) {
-        // 이미 선택됨 → 해제
         deselectCard(v.id);
     } else if (state.selected.size < 6) {
-        // 선택
         state.selected.add(v.id);
         renderTray();
         refreshCount();
-        rebuildCarouselCards(); // 배지 갱신
+        refreshBadges();
         $('swipe-hint').style.opacity = '0';
     }
 }
 
-/* showCard: external API preserved for deselectCard badge refresh */
 function showCard(idx) {
-    idx = wrapIdx(idx);
+    idx = ((idx % VALUES.length) + VALUES.length) % VALUES.length;
     cardIdx = idx;
-    rebuildCarouselCards();
+    displayIdx = idx + 1;
+    carouselTrack.classList.add('no-transition');
+    refreshBadges();
     measureCarousel();
     positionTrack();
+    void carouselTrack.offsetHeight;
+    carouselTrack.classList.remove('no-transition');
     updateDots();
 }
 
-/* slideToCard: animate to adjacent card */
-function slideToCard(newIdx, direction) {
+function slideToCard(newDisplayIdx) {
     if (animating) return;
     animating = true;
-    newIdx = wrapIdx(newIdx);
 
-    // Enable transition
+    displayIdx = newDisplayIdx;
     carouselTrack.classList.remove('no-transition');
+    positionTrack();
 
-    // Slide the track
-    const slideAmount = direction === 'left' ? -(cardWidth + GAP) : (cardWidth + GAP);
-    positionTrack(slideAmount);
-
-    // After transition ends, snap to new position without animation
     const onDone = () => {
         carouselTrack.removeEventListener('transitionend', onDone);
-        cardIdx = newIdx;
+
+        // Wrap: if we landed on a clone, jump to the real card
+        if (displayIdx <= 0) {
+            displayIdx = VALUES.length;
+            cardIdx = VALUES.length - 1;
+        } else if (displayIdx >= allCards.length - 1) {
+            displayIdx = 1;
+            cardIdx = 0;
+        } else {
+            cardIdx = displayIdx - 1;
+        }
+
         carouselTrack.classList.add('no-transition');
-        rebuildCarouselCards();
         positionTrack();
-        void carouselTrack.offsetHeight; // force reflow
+        void carouselTrack.offsetHeight;
         carouselTrack.classList.remove('no-transition');
         updateDots();
         animating = false;
     };
     carouselTrack.addEventListener('transitionend', onDone, { once: true });
-
-    // Safety timeout in case transitionend doesn't fire
     setTimeout(() => { if (animating) onDone(); }, 500);
 }
 
@@ -1065,14 +1075,11 @@ function swStart(e) {
 
 function swMove(e) {
     if (!sw.on || animating) return;
-    const x = e.touches[0].clientX;
-    const y = e.touches[0].clientY || 0;
-    sw.dx = x - sw.startX;
-    sw.dy = y - sw.startY;
+    sw.dx = e.touches[0].clientX - sw.startX;
+    sw.dy = (e.touches[0].clientY || 0) - sw.startY;
 
     if (Math.abs(sw.dx) > 5 || Math.abs(sw.dy) > 5) {
         sw.wasDragged = true;
-        // 수평 드래그가 우세하면 캐러셀 이동
         if (Math.abs(sw.dx) > Math.abs(sw.dy)) {
             e.preventDefault();
             positionTrack(sw.dx);
@@ -1085,32 +1092,29 @@ function swEnd() {
     sw.on = false;
     carouselTrack.classList.remove('no-transition');
 
-    // 위로 스와이프 → 카드 선택 (dy < -60 이상 올림)
+    // 위로 스와이프 → 선택
     if (sw.dy < -60 && Math.abs(sw.dy) > Math.abs(sw.dx) * 1.5) {
-        positionTrack(); // 수평 위치 복원
+        positionTrack();
         const v = VALUES[cardIdx];
         if (!state.selected.has(v.id) && state.selected.size < 6) {
             state.selected.add(v.id);
             renderTray();
             refreshCount();
-            rebuildCarouselCards();
+            refreshBadges();
             $('swipe-hint').style.opacity = '0';
         }
         return;
     }
 
     const elapsed = Date.now() - sw.startTime;
-    const velocity = Math.abs(sw.dx) / elapsed; // px/ms
+    const velocity = Math.abs(sw.dx) / elapsed;
     const threshold = cardWidth * 0.25;
 
     if (sw.dx < -threshold || (sw.dx < -20 && velocity > 0.3)) {
-        // Swipe left → next card
-        slideToCard(cardIdx + 1, 'left');
+        slideToCard(displayIdx + 1);
     } else if (sw.dx > threshold || (sw.dx > 20 && velocity > 0.3)) {
-        // Swipe right → previous card
-        slideToCard(cardIdx - 1, 'right');
+        slideToCard(displayIdx - 1);
     } else {
-        // Snap back
         positionTrack();
     }
 }
