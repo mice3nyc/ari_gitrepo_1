@@ -141,23 +141,20 @@
         }
 
         .welcome-brand { margin-bottom: 36px; }
-        .mephisto-logo {
-            font-family: var(--font-logo);
-            font-size: 24px;
-            font-weight: 400;
-            letter-spacing: 0.35em;
-            text-indent: 0.35em;
-            margin-bottom: 6px;
+        .welcome-logo-img {
+            height: 48px;
+            margin-bottom: 12px;
             opacity: 0;
             animation: fadeUp 0.8s 0.2s ease forwards;
         }
-        .mephisto-sub {
-            font-family: var(--font-quote);
-            font-size: 13px;
-            font-weight: 300;
-            letter-spacing: 0.15em;
-            color: var(--text-muted);
-            font-style: italic;
+        .mephisto-logo {
+            font-family: var(--font-logo);
+            font-size: 20px;
+            font-weight: 400;
+            letter-spacing: 0.35em;
+            text-indent: 0.35em;
+            color: var(--accent);
+            margin-bottom: 6px;
             opacity: 0;
             animation: fadeUp 0.8s 0.5s ease forwards;
         }
@@ -173,9 +170,8 @@
 
         .welcome-question {
             font-family: var(--font-quote);
-            font-size: 19px;
+            font-size: 15px;
             font-weight: 300;
-            font-style: italic;
             color: var(--text-secondary);
             line-height: 1.8;
             margin-bottom: 44px;
@@ -665,13 +661,13 @@
     <!-- ====== SCREEN 1: WELCOME ====== -->
     <section id="welcome" class="screen active">
         <div class="welcome-brand">
-            <div class="mephisto-logo">MEPHISTØ &amp; co.</div>
-            <div class="mephisto-sub">— since 1808 —</div>
+            <img src="imgs/bf_logo_white.png" class="welcome-logo-img" alt="Being Faust">
+            <div class="mephisto-logo">Mephisto &amp; Co.</div>
         </div>
         <div class="welcome-line"></div>
         <p class="welcome-question">
-            당신이 욕망하는 모든 가치를<br>
-            얻을 수 있다면?
+            당신이 욕망하는 가치는 무엇인가요?<br>
+            당신은 어떤 댓가를 치를 준비가 되었나요?
         </p>
         <div class="welcome-form" id="welcome-form">
             <input type="text" class="input-field" id="inp-name"
@@ -680,9 +676,7 @@
                    placeholder="방 코드" value="ECW" autocomplete="off" enterkeyhint="go">
             <button class="btn btn-primary" id="btn-enter">입장하기</button>
         </div>
-        <div class="bf-badge">
-            <img src="imgs/bf_logo_white.png" alt="Being Faust — Enter Mephisto">
-        </div>
+        <div class="bf-badge"></div>
     </section>
 
     <!-- ====== SCREEN 2: CARD SELECTION (SWIPE) ====== -->
