@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Being Faust Values — 진행자 대시보드</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy.css" rel="stylesheet">
     <style>
         :root {
             --bg: #0D0D0D;
@@ -16,8 +14,8 @@
             --text-secondary: rgba(240,237,232,0.6);
             --text-muted: rgba(240,237,232,0.28);
             --accent: #C04040;
-            --font-display: 'Bodoni Moda', 'Didot', serif;
-            --font-body: 'Noto Sans KR', -apple-system, sans-serif;
+            --font-display: 'Paperlogy', -apple-system, 'Helvetica Neue', sans-serif;
+            --font-body: 'Paperlogy', -apple-system, 'Helvetica Neue', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -154,9 +152,9 @@
             margin-bottom: 8px;
         }
         .bar-label {
-            min-width: 70px;
-            font-size: 13px;
-            font-weight: 500;
+            min-width: 100px;
+            font-size: 20px;
+            font-weight: 700;
             text-align: right;
         }
         .bar-track {
@@ -181,62 +179,54 @@
             font-weight: 500;
         }
 
-        /* ===== RANK TIERS ===== */
-        .tier {
+        /* ===== RANK SECTIONS (3단) ===== */
+        .rank-section {
             margin-bottom: 20px;
         }
-        .tier:last-child { margin-bottom: 0; }
-        .tier-label {
-            font-size: 11px;
+        .rank-section:last-child { margin-bottom: 0; }
+        .rank-section-title {
+            font-size: 13px;
+            font-weight: 700;
             color: var(--text-muted);
             letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
-        .tier-items {
-            display: flex;
-            gap: 8px;
-        }
-        .tier-card {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 14px;
-            background: var(--bg-elevated);
-            border-radius: 8px;
-            border-left: 3px solid var(--c);
-        }
-        .tier-kr {
-            font-size: 14px;
-            font-weight: 500;
-        }
-        .tier-score {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
-
-        /* ===== PARTICIPANT LIST ===== */
-        .participant-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        .participant {
+        .rank-item {
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            font-size: 13px;
         }
-        .participant:last-child { border-bottom: none; }
-        .p-name { font-weight: 500; flex: 1; }
-        .p-values {
-            display: flex;
-            gap: 3px;
+        .rank-medal {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-muted);
+            min-width: 20px;
+            text-align: center;
         }
-        .p-dot {
-            width: 8px; height: 8px;
+        .rank-color-dot {
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .rank-value-name {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .rank-value-en {
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+        }
+        .rank-count {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            white-space: nowrap;
         }
 
         /* ===== REFRESH ===== */
@@ -319,7 +309,7 @@
 <!-- 방 코드 입력 -->
 <div class="setup" id="setup">
     <div class="setup-row">
-        <input type="text" id="inp-room" placeholder="방 코드 입력" maxlength="6">
+        <input type="text" id="inp-room" placeholder="방 코드 입력">
         <button onclick="loadData()">조회</button>
     </div>
     <div class="setup-note">방 코드를 입력하고 조회를 누르세요</div>
@@ -342,22 +332,10 @@
             <div id="chart-bars"></div>
         </div>
 
-        <!-- 오른쪽: 가중 랭킹 -->
+        <!-- 오른쪽: 1~3순위 Top 가치 -->
         <div class="panel">
-            <div class="panel-title">가중 랭킹 (1위=6점 ~ 6위=1점)</div>
-            <div id="chart-tiers"></div>
-        </div>
-
-        <!-- 왼쪽: 1순위 분포 -->
-        <div class="panel">
-            <div class="panel-title">1순위로 가장 많이 선택된 가치</div>
-            <div id="chart-first"></div>
-        </div>
-
-        <!-- 오른쪽: 참가자 목록 -->
-        <div class="panel">
-            <div class="panel-title">참가자 목록</div>
-            <div class="participant-list" id="participant-list"></div>
+            <div class="panel-title">순위별 Top 가치</div>
+            <div id="chart-top-ranks"></div>
         </div>
     </div>
 
@@ -453,35 +431,34 @@ function render(rows) {
 
     if (rows.length === 0) {
         document.getElementById('chart-bars').innerHTML = '<div class="no-data">아직 데이터가 없습니다</div>';
-        document.getElementById('chart-tiers').innerHTML = '';
-        document.getElementById('chart-first').innerHTML = '';
-        document.getElementById('participant-list').innerHTML = '';
+        document.getElementById('chart-top-ranks').innerHTML = '';
         updateRefreshTime();
         return;
     }
 
     // === 집계 ===
     const selectCount = {};   // 가치별 선택 횟수
-    const weightedScore = {}; // 가중 점수 (1위=6, 2위=5...)
     const firstCount = {};    // 1순위 횟수
+    const secondCount = {};   // 2순위 횟수
+    const thirdCount = {};    // 3순위 횟수
     VALUES.forEach(v => {
         selectCount[v.id] = 0;
-        weightedScore[v.id] = 0;
         firstCount[v.id] = 0;
+        secondCount[v.id] = 0;
+        thirdCount[v.id] = 0;
     });
 
-    const parsedRows = rows.map(row => {
+    rows.forEach(row => {
         const vals = row.values.map(findValue).filter(Boolean);
         vals.forEach((v, i) => {
             selectCount[v.id]++;
-            weightedScore[v.id] += (6 - i); // 1위=6점, 6위=1점
             if (i === 0) firstCount[v.id]++;
+            if (i === 1) secondCount[v.id]++;
+            if (i === 2) thirdCount[v.id]++;
         });
-        return { name: row.name, values: vals };
     });
 
     const maxSelect = Math.max(...Object.values(selectCount), 1);
-    const maxWeighted = Math.max(...Object.values(weightedScore), 1);
 
     // === 1. 선택 빈도 바 차트 ===
     const sorted = VALUES.slice().sort((a, b) => selectCount[b.id] - selectCount[a.id]);
@@ -497,57 +474,40 @@ function render(rows) {
         </div>`;
     }).join('');
 
-    // === 2. 가중 랭킹 Tiers ===
-    const ranked = VALUES.slice().sort((a, b) => weightedScore[b.id] - weightedScore[a.id]);
-    const tiers = [
-        { label: 'TOP 3', items: ranked.slice(0, 3) },
-        { label: 'MIDDLE', items: ranked.slice(3, 6) },
-        { label: 'LOWER MIDDLE', items: ranked.slice(6, 9) },
-        { label: 'BOTTOM', items: ranked.slice(9, 12) }
+    // === 2. 순위별 Top 3 가치 (3단) ===
+    function getTop3(countObj) {
+        return VALUES.slice()
+            .filter(v => countObj[v.id] > 0)
+            .sort((a, b) => countObj[b.id] - countObj[a.id])
+            .slice(0, 3)
+            .map(v => ({ value: v, count: countObj[v.id] }));
+    }
+
+    const rankSections = [
+        { label: '1순위 TOP 3', items: getTop3(firstCount) },
+        { label: '2순위 TOP 3', items: getTop3(secondCount) },
+        { label: '3순위 TOP 3', items: getTop3(thirdCount) }
     ];
-    document.getElementById('chart-tiers').innerHTML = tiers.map(tier => {
-        const cards = tier.items
-            .filter(v => weightedScore[v.id] > 0)
-            .map(v => `<div class="tier-card" style="--c:${v.color}">
-                <span class="tier-kr">${v.kr}</span>
-                <span class="tier-score">${weightedScore[v.id]}pt</span>
-            </div>`).join('');
-        if (!cards) return '';
-        return `<div class="tier">
-            <div class="tier-label">${tier.label}</div>
-            <div class="tier-items">${cards}</div>
-        </div>`;
-    }).join('');
 
-    // === 3. 1순위 분포 ===
-    const firstSorted = VALUES.slice()
-        .filter(v => firstCount[v.id] > 0)
-        .sort((a, b) => firstCount[b.id] - firstCount[a.id]);
-    const maxFirst = Math.max(...Object.values(firstCount), 1);
-    document.getElementById('chart-first').innerHTML = firstSorted.length
-        ? firstSorted.map(v => {
-            const count = firstCount[v.id];
-            const pct = (count / maxFirst * 100).toFixed(1);
-            return `<div class="bar-row">
-                <div class="bar-label" style="color:${v.color}">${v.kr}</div>
-                <div class="bar-track">
-                    <div class="bar-fill" style="width:${pct}%;background:${v.color}"></div>
-                </div>
-                <div class="bar-count">${count}</div>
+    document.getElementById('chart-top-ranks').innerHTML = rankSections
+        .map(section => {
+            const rows = section.items.map((item, i) => {
+                const v = item.value;
+                return `<div class="rank-item">
+                    <div class="rank-medal">${i + 1}</div>
+                    <div class="rank-color-dot" style="background:${v.color}"></div>
+                    <div style="flex:1">
+                        <span class="rank-value-name" style="color:${v.color}">${v.kr}</span>
+                        <span class="rank-value-en">${v.en}</span>
+                    </div>
+                    <div class="rank-count">${item.count}명</div>
+                </div>`;
+            }).join('');
+            return `<div class="rank-section">
+                <div class="rank-section-title">${section.label}</div>
+                ${rows || '<div class="no-data">데이터 없음</div>'}
             </div>`;
-        }).join('')
-        : '<div class="no-data">데이터 없음</div>';
-
-    // === 4. 참가자 목록 ===
-    document.getElementById('participant-list').innerHTML = parsedRows.map(row => {
-        const dots = row.values.map(v =>
-            `<span class="p-dot" style="background:${v.color}" title="${v.kr}"></span>`
-        ).join('');
-        return `<div class="participant">
-            <span class="p-name">${row.name}</span>
-            <span class="p-values">${dots}</span>
-        </div>`;
-    }).join('');
+        }).join('');
 
     updateRefreshTime();
 }

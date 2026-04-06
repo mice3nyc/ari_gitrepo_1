@@ -101,6 +101,9 @@ function doGet(e) {
 5. 권한 승인 (구글 계정 권한 허용)
 6. **웹 앱 URL 복사** — `https://script.google.com/macros/s/...../exec` 형태
 
+배포ID: AKfycbwIMyfFbHv6cAlY8LF1-JraX1Zw9iOT5g12jfegE3iJOUd0lp0KfsQX-o6259ouAoHOdA
+웹앱: https://script.google.com/macros/s/AKfycbwIMyfFbHv6cAlY8LF1-JraX1Zw9iOT5g12jfegE3iJOUd0lp0KfsQX-o6259ouAoHOdA/exec 
+
 ---
 
 ## 4단계: 아리공에게 URL 전달

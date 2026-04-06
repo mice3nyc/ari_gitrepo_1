@@ -8,7 +8,7 @@
     <title>MEPHISTØ & co.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy.css" rel="stylesheet">
     <style>
         /* ===== VARIABLES ===== */
@@ -22,8 +22,9 @@
             --text-muted: rgba(240,237,232,0.55);
             --accent: #C04040;
             --accent-hover: #A33333;
-            --font-display: 'Bodoni Moda', 'Didot', 'Georgia', serif;
-            --font-quote: 'Cormorant Garamond', 'Georgia', serif;
+            --font-display: 'Paperlogy', -apple-system, 'Helvetica Neue', sans-serif;
+            --font-quote: 'Paperlogy', -apple-system, 'Helvetica Neue', sans-serif;
+            --font-logo: 'Bodoni Moda', 'Didot', 'Georgia', serif;
             --font-body: 'Paperlogy', -apple-system, 'Helvetica Neue', sans-serif;
             --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
@@ -141,7 +142,7 @@
 
         .welcome-brand { margin-bottom: 36px; }
         .mephisto-logo {
-            font-family: var(--font-display);
+            font-family: var(--font-logo);
             font-size: 24px;
             font-weight: 400;
             letter-spacing: 0.35em;
@@ -298,32 +299,31 @@
             touch-action: none;
         }
 
-        /* Card deck stack — 3 cards layered */
-        .swipe-stack-card {
+        /* Horizontal carousel — 3 cards side by side */
+        .carousel-track {
+            display: flex;
+            align-items: center;
             position: absolute;
-            width: 68%;
-            max-width: 270px;
             will-change: transform;
+            transition: transform 0.35s cubic-bezier(0.22,1,0.36,1);
+            visibility: hidden;
+        }
+        .carousel-track.ready {
+            visibility: visible;
+        }
+        .carousel-track.no-transition {
+            transition: none;
+        }
+        .carousel-card {
+            position: relative;
+            flex-shrink: 0;
             user-select: none;
-            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
-        .swipe-stack-card.front {
-            z-index: 3;
-            pointer-events: auto;
-        }
-        .swipe-stack-card.middle {
-            z-index: 2;
-            transform: scale(0.93) translateY(12px);
-            opacity: 0.5;
-            transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s;
-        }
-        .swipe-stack-card.back {
-            z-index: 1;
-            transform: scale(0.86) translateY(24px);
-            opacity: 0.25;
-            transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s;
-        }
-        .swipe-stack-card img {
+        .carousel-card img {
             width: 100%;
             height: auto;
             display: block;
@@ -359,7 +359,7 @@
             display: none;
             pointer-events: none;
         }
-        .swipe-stack-card.is-on .swipe-badge { display: block; }
+        .carousel-card.is-on .swipe-badge { display: block; }
 
         .swipe-hint {
             position: absolute;
@@ -570,6 +570,7 @@
             margin-bottom: 28px;
             opacity: 0;
             animation: fadeUp 0.6s 0.35s ease forwards;
+            white-space: nowrap;
         }
 
         .done-list {
@@ -596,9 +597,9 @@
             min-width: 20px;
             text-align: right;
         }
-        .done-nm { flex: 1; font-size: 14px; font-weight: 500; }
+        .done-nm { flex: 1; font-size: 18px; font-weight: 500; }
         .done-en {
-            font-size: 13px;
+            font-size: 15px;
             color: var(--text-muted);
             letter-spacing: 0.06em;
             text-transform: uppercase;
@@ -608,6 +609,27 @@
             border-radius: 50%;
             flex-shrink: 0;
         }
+        .done-count {
+            font-size: 13px;
+            color: var(--text-muted);
+            min-width: 24px;
+            text-align: right;
+        }
+        .done-refresh {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 8px 24px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-family: var(--font-body);
+            font-size: 13px;
+            cursor: pointer;
+            opacity: 0;
+            animation: fadeUp 0.6s 0.85s ease forwards;
+        }
+        .done-refresh:active { background: rgba(255,255,255,0.12); }
 
         .done-note {
             font-size: 13px;
@@ -634,9 +656,7 @@
             from { transform: scale(0) translateY(10px); opacity: 0; }
             to { transform: scale(1) translateY(0); opacity: 1; }
         }
-        @keyframes flyUp {
-            to { transform: translateY(-120vh) rotate(8deg); opacity: 0; }
-        }
+        /* flyUp removed — carousel uses translateX slides */
     </style>
 </head>
 <body>
@@ -657,7 +677,7 @@
             <input type="text" class="input-field" id="inp-name"
                    placeholder="이름" autocomplete="off" enterkeyhint="next">
             <input type="text" class="input-field" id="inp-room"
-                   placeholder="방 코드" value="Emerging Creative Workshop" autocomplete="off" enterkeyhint="go" style="font-size:12px">
+                   placeholder="방 코드" value="ECW" autocomplete="off" enterkeyhint="go">
             <button class="btn btn-primary" id="btn-enter">입장하기</button>
         </div>
         <div class="bf-badge">
@@ -668,15 +688,15 @@
     <!-- ====== SCREEN 2: CARD SELECTION (SWIPE) ====== -->
     <section id="selection" class="screen">
         <div class="sel-header">
-            <div class="sel-instruction">위로 올려서 선택 · 좌우로 넘기기</div>
+            <div class="sel-instruction">좌우로 넘기고 · 위로 올려서 선택</div>
             <div class="sel-counter">
                 <span class="sel-count" id="sel-count">0</span><span class="sel-sep"> / </span><span class="sel-total">6</span>
             </div>
         </div>
         <div class="sel-tray" id="sel-tray"></div>
         <div class="swipe-area" id="swipe-area">
-            <!-- Card stack is built by JS (3 cards: front, middle, back) -->
-            <div class="swipe-hint" id="swipe-hint">↑ 위로 올려서 선택</div>
+            <!-- Carousel track built by JS -->
+            <div class="swipe-hint" id="swipe-hint">← 좌우 스와이프 · ↑ 위로 올려서 선택 →</div>
         </div>
         <div class="card-dots" id="card-dots"></div>
         <div class="screen-footer">
@@ -717,13 +737,9 @@
     <!-- ====== SCREEN 5: DONE ====== -->
     <section id="done" class="screen">
         <div class="done-m">M</div>
-        <div class="done-title">
-            당신의 가치가<br>기록되었습니다
-        </div>
+        <div class="done-title">당신의 가치가 기록되었습니다</div>
         <ul class="done-list" id="done-list"></ul>
-        <p class="done-note">
-            결과는 진행자 화면에서<br>확인할 수 있습니다
-        </p>
+        <button class="done-refresh" onclick="refreshDoneCounts()">새로고침</button>
     </section>
 
 </div>
@@ -776,6 +792,17 @@ function go(screenId) {
     // 스크롤 위치 초기화
     const scrollable = target.querySelector('.cfm-grid, .pri-list');
     if (scrollable) scrollable.scrollTop = 0;
+    // 캐러셀 화면 진입 시 재측정 (display:none→active 후 크기 계산)
+    if (screenId === 'selection' && carouselTrack) {
+        carouselTrack.classList.add('no-transition');
+        requestAnimationFrame(() => {
+            measureCarousel();
+            positionTrack();
+            carouselTrack.classList.add('ready');
+            void carouselTrack.offsetHeight;
+            carouselTrack.classList.remove('no-transition');
+        });
+    }
 }
 
 /* ==========================================================
@@ -793,24 +820,29 @@ function enterGame() {
     if (!ok) return;
 
     state.name = name;
-    state.room = room;
+    state.room = room.toUpperCase();
     go('selection');
 }
 
 /* ==========================================================
-   SCREEN 2: CARD SELECTION (SWIPE)
+   SCREEN 2: CARD SELECTION (HORIZONTAL CAROUSEL)
    ========================================================== */
 let cardIdx = 0;
-const sw = { startX: 0, startY: 0, dx: 0, dy: 0, dir: null, on: false };
+let animating = false;
 
-/* --- Card Stack State --- */
-const STACK_SIZE = 3; // number of visible stacked cards
-let stackCards = [];   // array of { el, idx } — [0]=front, [1]=middle, [2]=back
-let animating = false; // block input during fly-out transitions
+/* --- Carousel State --- */
+let carouselTrack = null;
+let carouselCards = []; // array of { el, idx } — always 3: [prev, current, next]
+let cardWidth = 0;      // computed card width
+let areaWidth = 0;      // swipe-area width
+const GAP = 14;         // gap between cards in px
+
+// Drag state
+const sw = { startX: 0, startY: 0, dx: 0, dy: 0, on: false, startTime: 0, wasDragged: false };
 
 function createCardEl() {
     const card = document.createElement('div');
-    card.className = 'swipe-stack-card';
+    card.className = 'carousel-card';
     card.innerHTML = `
         <img src="" alt="">
         <span class="swipe-badge">✓ 선택됨</span>
@@ -832,37 +864,51 @@ function setCardContent(el, idx) {
     return idx;
 }
 
-function applyStackPositions() {
-    stackCards.forEach((sc, i) => {
-        const isOn = sc.el.classList.contains('is-on');
-        sc.el.className = 'swipe-stack-card';
-        if (isOn) sc.el.classList.add('is-on');
-        sc.el.style.transform = '';
-        sc.el.style.opacity = '';
-        sc.el.style.transition = '';
-        if (i === 0) {
-            sc.el.classList.add('front');
-        } else if (i === 1) {
-            sc.el.classList.add('middle');
-        } else {
-            sc.el.classList.add('back');
-        }
+function wrapIdx(i) {
+    return ((i % VALUES.length) + VALUES.length) % VALUES.length;
+}
+
+/* Compute sizes and set card widths */
+function measureCarousel() {
+    areaWidth = $('swipe-area').clientWidth;
+    cardWidth = Math.min(areaWidth * 0.68, 270);
+    carouselCards.forEach(sc => {
+        sc.el.style.width = cardWidth + 'px';
     });
+    carouselTrack.style.gap = GAP + 'px';
+}
+
+/* Position the track so the center card (index 1 in the 3-card array) is centered */
+function positionTrack(extraOffset) {
+    extraOffset = extraOffset || 0;
+    // Track has 3 cards: [prev, current, next]
+    // Total track width = 3 * cardWidth + 2 * GAP
+    // Center card starts at cardWidth + GAP from track left
+    // We want center of center card at center of area
+    const offset = -(cardWidth + GAP) + (areaWidth - cardWidth) / 2 + extraOffset;
+    carouselTrack.style.transform = 'translateX(' + offset + 'px)';
 }
 
 function updateDots() {
-    const idx = stackCards.length > 0 ? stackCards[0].idx : cardIdx;
     $('card-dots').querySelectorAll('.c-dot').forEach((d, i) => {
         d.className = 'c-dot';
-        if (i === idx) d.classList.add('now');
+        if (i === cardIdx) d.classList.add('now');
         else if (state.selected.has(VALUES[i].id)) d.classList.add('picked');
     });
+}
+
+function rebuildCarouselCards() {
+    const prevIdx = wrapIdx(cardIdx - 1);
+    const nextIdx = wrapIdx(cardIdx + 1);
+    carouselCards[0].idx = setCardContent(carouselCards[0].el, prevIdx);
+    carouselCards[1].idx = setCardContent(carouselCards[1].el, cardIdx);
+    carouselCards[2].idx = setCardContent(carouselCards[2].el, nextIdx);
 }
 
 function initSwipe() {
     // 점 인디케이터 생성
     const dots = $('card-dots');
-    VALUES.forEach((_, i) => {
+    VALUES.forEach(() => {
         const d = document.createElement('span');
         d.className = 'c-dot';
         dots.appendChild(d);
@@ -870,112 +916,99 @@ function initSwipe() {
     // 초기 트레이 (빈 슬롯 6개)
     renderTray();
 
-    // Build initial 3-card stack
+    // Build carousel track with 3 cards
     const area = $('swipe-area');
-    for (let i = 0; i < STACK_SIZE; i++) {
+    carouselTrack = document.createElement('div');
+    carouselTrack.className = 'carousel-track';
+    area.insertBefore(carouselTrack, $('swipe-hint'));
+
+    for (let i = -1; i <= 1; i++) {
         const el = createCardEl();
-        const realIdx = setCardContent(el, i);
-        area.insertBefore(el, $('swipe-hint'));
-        stackCards.push({ el, idx: realIdx });
+        const realIdx = setCardContent(el, wrapIdx(cardIdx + i));
+        carouselTrack.appendChild(el);
+        carouselCards.push({ el, idx: realIdx });
     }
-    cardIdx = 0;
-    applyStackPositions();
+
+    measureCarousel();
+    positionTrack();
     updateDots();
 
-    // 터치 이벤트
+    // Recalculate on resize
+    window.addEventListener('resize', () => { measureCarousel(); positionTrack(); });
+
+    // Touch events
     area.addEventListener('touchstart', swStart, { passive: true });
     area.addEventListener('touchmove', swMove, { passive: false });
     area.addEventListener('touchend', swEnd);
 
-    // 마우스 이벤트 (데스크톱 테스트용)
+    // Mouse events (desktop)
     area.addEventListener('mousedown', e => {
         swStart({ touches: [{ clientX: e.clientX, clientY: e.clientY }] });
         const onMove = ev => swMove({ touches: [{ clientX: ev.clientX, clientY: ev.clientY }], preventDefault: () => ev.preventDefault() });
-        const onUp = () => { swEnd(); document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); };
+        const onUp = ev => { swEnd(ev); document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); };
         document.addEventListener('mousemove', onMove);
         document.addEventListener('mouseup', onUp);
     });
+
+    // Tap to select on center card
+    carouselCards[1].el.addEventListener('click', handleCardTap);
+}
+
+function handleCardTap() {
+    if (animating || sw.wasDragged) return;
+    const v = VALUES[cardIdx];
+    if (state.selected.has(v.id)) {
+        // 이미 선택됨 → 해제
+        deselectCard(v.id);
+    } else if (state.selected.size < 6) {
+        // 선택
+        state.selected.add(v.id);
+        renderTray();
+        refreshCount();
+        rebuildCarouselCards(); // 배지 갱신
+        $('swipe-hint').style.opacity = '0';
+    }
 }
 
 /* showCard: external API preserved for deselectCard badge refresh */
 function showCard(idx) {
-    idx = ((idx % VALUES.length) + VALUES.length) % VALUES.length;
+    idx = wrapIdx(idx);
     cardIdx = idx;
-
-    // Rebuild stack from this index
-    for (let i = 0; i < STACK_SIZE; i++) {
-        const realIdx = ((idx + i) % VALUES.length + VALUES.length) % VALUES.length;
-        stackCards[i].idx = setCardContent(stackCards[i].el, realIdx);
-    }
-    applyStackPositions();
+    rebuildCarouselCards();
+    measureCarousel();
+    positionTrack();
     updateDots();
 }
 
-/* flyCard: animate the front card out, promote others, add new card at back */
-function flyCard(direction, onComplete) {
+/* slideToCard: animate to adjacent card */
+function slideToCard(newIdx, direction) {
     if (animating) return;
     animating = true;
+    newIdx = wrapIdx(newIdx);
 
-    const front = stackCards[0];
-    const el = front.el;
+    // Enable transition
+    carouselTrack.classList.remove('no-transition');
 
-    // Determine fly-out transform
-    let flyTransform, flyOpacity;
-    if (direction === 'left') {
-        flyTransform = 'translateX(-140%) rotate(-18deg)';
-        flyOpacity = '0';
-    } else if (direction === 'right') {
-        flyTransform = 'translateX(140%) rotate(18deg)';
-        flyOpacity = '0';
-    } else if (direction === 'up') {
-        flyTransform = 'translateY(-120vh) rotate(6deg)';
-        flyOpacity = '0';
-    }
+    // Slide the track
+    const slideAmount = direction === 'left' ? -(cardWidth + GAP) : (cardWidth + GAP);
+    positionTrack(slideAmount);
 
-    // Animate front card out
-    el.style.transition = 'transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.3s';
-    el.style.transform = flyTransform;
-    el.style.opacity = flyOpacity;
-
-    // Promote middle → front, back → middle (with transition)
-    if (stackCards[1]) {
-        stackCards[1].el.classList.remove('middle');
-        stackCards[1].el.classList.add('front');
-    }
-    if (stackCards[2]) {
-        stackCards[2].el.classList.remove('back');
-        stackCards[2].el.classList.add('middle');
-    }
-
-    setTimeout(() => {
-        // Remove front from stack, recycle it as back card
-        stackCards.shift();
-
-        // Calculate new back card index
-        const lastIdx = stackCards.length > 0 ? stackCards[stackCards.length - 1].idx : cardIdx;
-        const newIdx = ((lastIdx + 1) % VALUES.length + VALUES.length) % VALUES.length;
-
-        // Reset the flown-out element and reuse it
-        el.style.transition = 'none';
-        el.style.transform = '';
-        el.style.opacity = '';
-        el.className = 'swipe-stack-card back';
-        setCardContent(el, newIdx);
-
-        // Force reflow before re-enabling transition
-        void el.offsetHeight;
-        el.style.transition = '';
-
-        stackCards.push({ el, idx: newIdx });
-
-        // Update front card index
-        cardIdx = stackCards[0].idx;
-        applyStackPositions();
+    // After transition ends, snap to new position without animation
+    const onDone = () => {
+        carouselTrack.removeEventListener('transitionend', onDone);
+        cardIdx = newIdx;
+        carouselTrack.classList.add('no-transition');
+        rebuildCarouselCards();
+        positionTrack();
+        void carouselTrack.offsetHeight; // force reflow
+        carouselTrack.classList.remove('no-transition');
         updateDots();
-
         animating = false;
-        if (onComplete) onComplete();
-    }, 380);
+    };
+    carouselTrack.addEventListener('transitionend', onDone, { once: true });
+
+    // Safety timeout in case transitionend doesn't fire
+    setTimeout(() => { if (animating) onDone(); }, 500);
 }
 
 function refreshCount() {
@@ -1017,53 +1050,32 @@ function deselectCard(id) {
     showCard(cardIdx); // 현재 카드 뱃지 갱신
 }
 
-/* ---------- SWIPE TOUCH ---------- */
+/* ---------- SWIPE / DRAG ---------- */
 function swStart(e) {
     if (animating) return;
     sw.startX = e.touches[0].clientX;
-    sw.startY = e.touches[0].clientY;
-    sw.dx = 0; sw.dy = 0; sw.dir = null; sw.on = true;
-    // Remove transitions on front card for direct drag
-    if (stackCards[0]) {
-        stackCards[0].el.style.transition = 'none';
-    }
+    sw.startY = e.touches[0].clientY || 0;
+    sw.dx = 0;
+    sw.dy = 0;
+    sw.on = true;
+    sw.wasDragged = false;
+    sw.startTime = Date.now();
+    carouselTrack.classList.add('no-transition');
 }
 
 function swMove(e) {
     if (!sw.on || animating) return;
     const x = e.touches[0].clientX;
-    const y = e.touches[0].clientY;
+    const y = e.touches[0].clientY || 0;
     sw.dx = x - sw.startX;
     sw.dy = y - sw.startY;
 
-    if (!sw.dir) {
-        if (Math.abs(sw.dx) > 8 || Math.abs(sw.dy) > 8) {
-            sw.dir = Math.abs(sw.dx) > Math.abs(sw.dy) ? 'h' : 'v';
-        } else return;
-    }
-    e.preventDefault();
-
-    const card = stackCards[0].el;
-    if (sw.dir === 'h') {
-        const rot = sw.dx * 0.04;
-        card.style.transform = 'translateX(' + sw.dx + 'px) rotate(' + rot + 'deg)';
-        // Progressively reveal middle card as front card moves away
-        const prog = Math.min(Math.abs(sw.dx) / 200, 1);
-        if (stackCards[1]) {
-            stackCards[1].el.style.transition = 'none';
-            stackCards[1].el.style.transform = 'scale(' + (0.93 + prog * 0.07) + ') translateY(' + (12 - prog * 12) + 'px)';
-            stackCards[1].el.style.opacity = String(0.5 + prog * 0.5);
-        }
-    } else if (sw.dy < 0) {
-        // 위로만
-        const prog = Math.min(Math.abs(sw.dy) / 300, 1);
-        card.style.transform = 'translateY(' + sw.dy + 'px) scale(' + (1 - prog * 0.08) + ')';
-        card.style.opacity = String(1 - prog * 0.4);
-        // Progressively reveal middle card
-        if (stackCards[1]) {
-            stackCards[1].el.style.transition = 'none';
-            stackCards[1].el.style.transform = 'scale(' + (0.93 + prog * 0.07) + ') translateY(' + (12 - prog * 12) + 'px)';
-            stackCards[1].el.style.opacity = String(0.5 + prog * 0.5);
+    if (Math.abs(sw.dx) > 5 || Math.abs(sw.dy) > 5) {
+        sw.wasDragged = true;
+        // 수평 드래그가 우세하면 캐러셀 이동
+        if (Math.abs(sw.dx) > Math.abs(sw.dy)) {
+            e.preventDefault();
+            positionTrack(sw.dx);
         }
     }
 }
@@ -1071,60 +1083,35 @@ function swMove(e) {
 function swEnd() {
     if (!sw.on || animating) return;
     sw.on = false;
+    carouselTrack.classList.remove('no-transition');
 
-    if (sw.dir === 'h') {
-        if (sw.dx < -60) {
-            // Swipe left → skip (fly out left)
-            flyCard('left');
-        } else if (sw.dx > 60) {
-            // Swipe right → skip (fly out right)
-            flyCard('right');
-        } else {
-            // Snap back
-            resetFrontCard();
-        }
-    } else if (sw.dir === 'v' && sw.dy < -80) {
-        // 위로 스와이프 → 선택
+    // 위로 스와이프 → 카드 선택 (dy < -60 이상 올림)
+    if (sw.dy < -60 && Math.abs(sw.dy) > Math.abs(sw.dx) * 1.5) {
+        positionTrack(); // 수평 위치 복원
         const v = VALUES[cardIdx];
         if (!state.selected.has(v.id) && state.selected.size < 6) {
-            flyCard('up', () => {
-                state.selected.add(v.id);
-                renderTray();
-                refreshCount();
-                // 힌트 숨기기
-                $('swipe-hint').style.opacity = '0';
-                // Jump to next unselected card
-                let next = cardIdx;
-                let found = false;
-                for (let i = 0; i < VALUES.length; i++) {
-                    if (!state.selected.has(VALUES[(cardIdx + i) % VALUES.length].id)) {
-                        next = (cardIdx + i) % VALUES.length;
-                        found = true;
-                        break;
-                    }
-                }
-                showCard(next);
-            });
-            return;
-        } else {
-            resetFrontCard();
+            state.selected.add(v.id);
+            renderTray();
+            refreshCount();
+            rebuildCarouselCards();
+            $('swipe-hint').style.opacity = '0';
         }
-    } else {
-        resetFrontCard();
+        return;
     }
-}
 
-function resetFrontCard() {
-    if (!stackCards[0]) return;
-    const card = stackCards[0].el;
-    card.style.transition = 'transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s';
-    card.style.transform = '';
-    card.style.opacity = '';
-    // Reset middle card too
-    if (stackCards[1]) {
-        stackCards[1].el.style.transition = 'transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.35s';
-        stackCards[1].el.style.transform = 'scale(0.93) translateY(12px)';
-        stackCards[1].el.style.opacity = '0.5';
+    const elapsed = Date.now() - sw.startTime;
+    const velocity = Math.abs(sw.dx) / elapsed; // px/ms
+    const threshold = cardWidth * 0.25;
+
+    if (sw.dx < -threshold || (sw.dx < -20 && velocity > 0.3)) {
+        // Swipe left → next card
+        slideToCard(cardIdx + 1, 'left');
+    } else if (sw.dx > threshold || (sw.dx > 20 && velocity > 0.3)) {
+        // Swipe right → previous card
+        slideToCard(cardIdx - 1, 'right');
+    } else {
+        // Snap back
+        positionTrack();
     }
 }
 
@@ -1305,11 +1292,41 @@ function renderDone() {
         const li = document.createElement('li');
         li.innerHTML = `
             <span class="done-rk">${i + 1}</span>
-            <span class="done-nm">${v.kr}</span>
+            <span class="done-nm" style="color:${v.color}">${v.kr}</span>
             <span class="done-en">${v.en}</span>
-            <span class="done-dot" style="background:${v.color}"></span>`;
+            <span class="done-dot" style="background:${v.color}"></span>
+            <span class="done-count" data-value-id="${v.id}">—</span>`;
         list.appendChild(li);
     });
+    refreshDoneCounts();
+}
+
+async function refreshDoneCounts() {
+    if (!API_URL || !state.room) return;
+    try {
+        const url = API_URL + '?room=' + encodeURIComponent(state.room);
+        const res = await fetch(url);
+        const json = await res.json();
+        if (json.status !== 'ok') return;
+
+        const counts = {};
+        VALUES.forEach(v => counts[v.id] = 0);
+        (json.data || []).forEach(row => {
+            (row.values || []).forEach(str => {
+                const found = VALUES.find(v =>
+                    str && (str.includes(v.kr) || str.toLowerCase().includes(v.en.toLowerCase()))
+                );
+                if (found) counts[found.id]++;
+            });
+        });
+
+        document.querySelectorAll('.done-count').forEach(el => {
+            const vid = el.dataset.valueId;
+            if (vid && counts[vid] !== undefined) el.textContent = counts[vid] + '명';
+        });
+    } catch (e) {
+        console.warn('[BF] 카운트 조회 실패:', e);
+    }
 }
 
 /* ==========================================================
