@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 리터러시 — 위임 판단력 (TAB1)</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Paperlogy', -apple-system, sans-serif;
+    background: #f5f5f5;
+    color: #111;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .container {
+    max-width: 1200px;
+    width: 100%;
+    padding: 24px 32px;
+    padding-top: 0;
+  }
+
+  /* ===== 스탯 바 (sticky) ===== */
+  .stats-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 14px 16px;
+    border: 2px solid #111;
+    border-radius: 0 0 8px 8px;
+    background: #fff;
+    box-shadow: 0 2px 0 #111;
+    transition: all 0.3s;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .stat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 4px;
+    border-radius: 4px;
+    position: relative;
+    transition: background-color 0.3s;
+  }
+  .stat-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 4px;
+    position: relative;
+  }
+  .stat-num {
+    font-size: 24px;
+    font-weight: 700;
+    transition: all 0.4s;
+    line-height: 1;
+  }
+  .stat-num.pos { color: #1a8c1a; }
+  .stat-num.neg { color: #c44; }
+  .stat-num.zero { color: #bbb; }
+  @keyframes numPulse { 0% { transform: scale(1); } 30% { transform: scale(1.5); } 100% { transform: scale(1); } }
+  .stat-num.pulsing { animation: numPulse 0.5s ease; }
+  .stat-name { font-size: 12px; color: #888; text-align: center; margin-bottom: 6px; }
+  .stat-gauge {
+    height: 12px;
+    width: 100%;
+    background: #e8e8e8;
+    border-radius: 3px;
+    overflow: visible;
+    position: relative;
+    border: 1px solid #ccc;
+  }
+  .stat-gauge-center {
+    position: absolute;
+    left: 50%;
+    top: -1px;
+    width: 2px;
+    height: 14px;
+    background: #999;
+    border-radius: 1px;
+    z-index: 2;
+  }
+  .stat-gauge-fill {
+    height: 100%;
+    border-radius: 2px;
+    position: absolute;
+    top: 0;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .stat-gauge-fill.pos { background: #1a8c1a; left: 50%; }
+  .stat-gauge-fill.neg { background: #c44; right: 50%; }
+  .stat-change-indicator {
+    font-size: 13px;
+    font-weight: 700;
+    position: absolute;
+    top: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: all 0.3s;
+    opacity: 0;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .stat-change-indicator.show { opacity: 1; animation: changeFloat 1.8s ease forwards; }
+  .stat-change-indicator.up { color: #1a8c1a; }
+  .stat-change-indicator.down { color: #c44; }
+  @keyframes changeFloat {
+    0% { opacity: 0; transform: translateX(-50%) translateY(8px); }
+    15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    70% { opacity: 1; }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-14px); }
+  }
+  @keyframes flashGreen { 0% { background-color: rgba(26,140,26,0.15); } 100% { background-color: transparent; } }
+  @keyframes flashRed { 0% { background-color: rgba(204,68,68,0.15); } 100% { background-color: transparent; } }
+  .stat.flash-up { animation: flashGreen 0.8s ease; }
+  .stat.flash-down { animation: flashRed 0.8s ease; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-3px); }
+    40% { transform: translateX(3px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+  }
+  .stat.shaking { animation: shake 0.4s ease; }
+
+  /* ===== 4컷 패널 영역 ===== */
+  .panels-container {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    position: relative;
+    min-height: 480px;
+  }
+
+  /* ===== Act 섹션 (누적) ===== */
+  .act-section {
+    margin-bottom: 0;
+  }
+  .act-section .panels-container {
+    min-height: 480px;
+  }
+
+  /* ===== 타이틀 카드 (인라인) ===== */
+  .title-card-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 480px;
+  }
+
+  /* ===== 바인더 구분선 (Macintosh SE notebook) ===== */
+  .binder-divider {
+    height: 80px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: #f8f8f8;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,0.03) 3px,
+      rgba(0,0,0,0.03) 4px
+    );
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+    margin: 12px 0 24px 0;
+  }
+  .binder-holes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 16px;
+    flex-shrink: 0;
+  }
+  .binder-hole {
+    width: 14px;
+    height: 14px;
+  }
+  .binder-text {
+    flex: 1;
+    padding-left: 8px;
+  }
+  .binder-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #111;
+    line-height: 1.4;
+  }
+  .binder-subtitle {
+    font-size: 12px;
+    font-style: italic;
+    color: #888;
+    margin-top: 2px;
+    line-height: 1.5;
+  }
+
+  .panel {
+    flex: 0 0 calc(25% - 12px);
+    aspect-ratio: 3 / 4;
+    border-radius: 8px;
+    border: 1px dashed #ccc;
+    background: #fafafa;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.4s ease-out;
+    position: relative;
+  }
+  .panel.empty {
+    border: 1px dashed #ccc;
+    background: #fafafa;
+  }
+  .panel.active {
+    border: 2px solid #111;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .panel.done {
+    border: 2px solid #111;
+    background: #fff;
+  }
+  /* 엔딩 틴트 */
+  .panel.tint-good { background: #f0faf0; }
+  .panel.tint-bad { background: #faf0f0; }
+  .panel.tint-neutral { background: #fff; }
+
+  /* 패널 슬라이드인 */
+  .panel.slide-in {
+    animation: panelSlideIn 0.4s ease-out;
+  }
+  @keyframes panelSlideIn {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* 패널 내부 */
+  .panel-image {
+    height: 42%;
+    border-bottom: 1px dashed #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f8f8;
+    color: #ccc;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+  }
+  .panel.active .panel-image,
+  .panel.done .panel-image {
+    border-bottom: 1px solid #eee;
+  }
+  .panel-image .cut-label {
+    font-size: 48px;
+    font-weight: 200;
+    color: #e0e0e0;
+    line-height: 1;
+  }
+  .panel-image .pixel-icon-wrap {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    opacity: 0.15;
+  }
+
+  .panel-body {
+    flex: 1;
+    padding: 12px 14px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .panel-body p { margin-bottom: 6px; }
+  .panel-body .highlight { font-weight: 700; }
+  .panel-body .thought { color: #888; font-style: italic; font-size: 12px; margin-top: 4px; }
+  .panel-body .result-good { border-left: 3px solid #111; padding-left: 10px; margin: 8px 0; }
+  .panel-body .result-bad { border-left: 3px solid #c44; padding-left: 10px; margin: 8px 0; }
+  .panel-body .result-neutral { border-left: 3px solid #999; padding-left: 10px; margin: 8px 0; }
+  .panel-body .choice-tag {
+    margin-top: auto;
+    font-size: 12px;
+    color: #fff;
+    background: #111;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  /* ===== 선택지 영역 (패널 오른쪽 세로 카드) ===== */
+  .choices-column {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+    transition: left 0.3s ease;
+  }
+  .choice-card {
+    width: 100%;
+    background: #fff;
+    border: 2px solid #111;
+    border-radius: 8px;
+    padding: 16px 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s;
+    box-shadow: 0 2px 0 #111;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .choice-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .choice-card:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 0 #111, 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .choice-card:active {
+    background: #111;
+    color: #fff;
+    box-shadow: none;
+    transform: translateY(2px);
+  }
+  .choice-card:active .choice-text { color: #fff; }
+  .choice-card .choice-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #111;
+    transition: color 0.15s;
+  }
+  .choice-card.selected {
+    background: #111;
+    color: #fff;
+    box-shadow: 0 2px 0 #111;
+  }
+  .choice-card.selected .choice-text { color: #fff; }
+  @keyframes choiceFadeOut {
+    to { opacity: 0; transform: translateX(20px) scale(0.95); }
+  }
+  .choice-card.fade-out {
+    animation: choiceFadeOut 0.3s ease forwards;
+    pointer-events: none;
+  }
+
+  /* ===== 타이틀/Act 전환 카드 ===== */
+  .overlay-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    background: #f5f5f5;
+    animation: overlayIn 0.5s ease;
+    min-height: 480px;
+  }
+  @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes overlayOut { from { opacity: 1; } to { opacity: 0; } }
+  .overlay-card.fade-out { animation: overlayOut 0.4s ease forwards; }
+  .card-inner {
+    text-align: center;
+    max-width: 400px;
+    padding: 40px;
+  }
+  .card-inner .pixel-icon { margin-bottom: 20px; }
+  .card-inner .act-label {
+    font-size: 12px;
+    color: #999;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .card-inner h1, .card-inner h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.5px;
+  }
+  .card-inner p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 32px;
+    line-height: 1.8;
+  }
+  .card-inner .start-btn {
+    background: #111;
+    color: #fff;
+    border: 2px solid #111;
+    border-radius: 4px;
+    padding: 14px 40px;
+    font-size: 14px;
+    font-family: 'Paperlogy', -apple-system, sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 0 #000;
+  }
+  .card-inner .start-btn:hover { background: #444; border-color: #444; }
+  .card-inner .start-btn:active { box-shadow: none; transform: translateY(2px); }
+
+  /* ===== "다음" 버튼 (패널 아래 또는 선택지 자리) ===== */
+  .next-btn-wrap {
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 20px;
+  }
+  .next-btn {
+    background: #111;
+    color: #fff;
+    border: 2px solid #111;
+    border-radius: 4px;
+    padding: 12px 32px;
+    font-size: 14px;
+    font-family: 'Paperlogy', -apple-system, sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 0 #000;
+    white-space: nowrap;
+  }
+  .next-btn:hover { background: #444; border-color: #444; }
+  .next-btn:active { box-shadow: none; transform: translateY(2px); }
+
+  /* ===== Act 완료 요약 (오버레이 안) ===== */
+  .summary-stat { display: inline-flex; align-items: center; gap: 4px; }
+  .summary-stat.pos { color: #1a8c1a; font-weight: 600; }
+  .summary-stat.neg { color: #c44; font-weight: 600; }
+  .summary-stat.zero { color: #999; }
+
+  /* ===== 최종 프로필 ===== */
+  .profile-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+    background: #f5f5f5;
+    animation: overlayIn 0.5s ease;
+    min-height: 480px;
+    padding: 40px 0;
+  }
+  .profile-inner {
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+    padding: 32px;
+  }
+  .profile-inner .pixel-icon { margin-bottom: 20px; }
+  .profile-inner h2 {
+    font-size: 18px;
+    margin-bottom: 24px;
+  }
+  .profile-bars { margin-bottom: 24px; }
+  .profile-bar { margin-bottom: 14px; text-align: left; }
+  .profile-bar-label {
+    font-size: 13px;
+    color: #111;
+    margin-bottom: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+  }
+  .profile-bar-label .label-with-icon { display: flex; align-items: center; gap: 4px; }
+  .profile-bar-track {
+    height: 20px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid #111;
+  }
+  .profile-bar-fill {
+    height: 100%;
+    border-radius: 0;
+    transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: absolute;
+  }
+  .profile-bar-fill.positive { background: #1a8c1a; left: 50%; }
+  .profile-bar-fill.negative { background: #c44; right: 50%; left: auto; }
+  .profile-bar-center {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #999;
+    z-index: 1;
+  }
+  .profile-comment {
+    font-size: 14px;
+    line-height: 1.8;
+    text-align: left;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: #fff;
+    border-radius: 6px;
+    border: 2px solid #111;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.15);
+  }
+  .restart-btn {
+    background: #111;
+    color: #fff;
+    border: 2px solid #111;
+    border-radius: 4px;
+    padding: 12px 28px;
+    font-size: 14px;
+    font-family: 'Paperlogy', -apple-system, sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 0 #000;
+  }
+  .restart-btn:hover { background: #444; border-color: #444; }
+  .restart-btn:active { box-shadow: none; transform: translateY(2px); }
+
+  .hidden { display: none; }
+  .version {
+    position: fixed;
+    bottom: 8px;
+    right: 12px;
+    font-size: 10px;
+    color: #bbb;
+    font-family: 'Paperlogy', -apple-system, sans-serif;
+  }
+</style>
+</head>
+<body>
+<div class="container" id="mainContainer">
+  <!-- 스탯 바 (sticky) -->
+  <div class="stats-bar hidden" id="statsBar">
+    <div class="stat" id="statCenterWrap">
+      <div class="stat-top">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.5" shape-rendering="crispEdges"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="21"/><path d="M4 15c0-4.4 3.6-8 8-8s8 3.6 8 8"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+        <span class="stat-num zero" id="statCenterNum">0</span>
+        <div class="stat-change-indicator" id="statCenterDelta"></div>
+      </div>
+      <div class="stat-name">중심잡기</div>
+      <div class="stat-gauge">
+        <div class="stat-gauge-center"></div>
+        <div class="stat-gauge-fill" id="statCenterFill"></div>
+      </div>
+    </div>
+    <div class="stat" id="statFusionWrap">
+      <div class="stat-top">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.5" shape-rendering="crispEdges"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1-1"/></svg>
+        <span class="stat-num zero" id="statFusionNum">0</span>
+        <div class="stat-change-indicator" id="statFusionDelta"></div>
+      </div>
+      <div class="stat-name">융합하기</div>
+      <div class="stat-gauge">
+        <div class="stat-gauge-center"></div>
+        <div class="stat-gauge-fill" id="statFusionFill"></div>
+      </div>
+    </div>
+    <div class="stat" id="statReflectWrap">
+      <div class="stat-top">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.5" shape-rendering="crispEdges"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span class="stat-num zero" id="statReflectNum">0</span>
+        <div class="stat-change-indicator" id="statReflectDelta"></div>
+      </div>
+      <div class="stat-name">성찰하기</div>
+      <div class="stat-gauge">
+        <div class="stat-gauge-center"></div>
+        <div class="stat-gauge-fill" id="statReflectFill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Act 섹션들이 여기에 누적됨 -->
+  <div id="contentArea">
+    <!-- 타이틀 카드, Act 섹션, 바인더 구분선, 최종 프로필이 JS로 append됨 -->
+  </div>
+</div>
+<div class="version">TAB1 v1.1</div>
+
+<script>
+// ===== Mac SE 픽셀아트 SVG 아이콘 =====
+const PIXEL_ICONS = {
+  title: `<svg width="64" height="64" viewBox="0 0 32 32" fill="none" shape-rendering="crispEdges">
+    <rect x="4" y="2" width="24" height="20" rx="1" stroke="#111" stroke-width="1" fill="none"/>
+    <rect x="6" y="4" width="20" height="14" stroke="#111" stroke-width="1" fill="none"/>
+    <line x1="14" y1="22" x2="14" y2="26" stroke="#111" stroke-width="1"/>
+    <line x1="18" y1="22" x2="18" y2="26" stroke="#111" stroke-width="1"/>
+    <rect x="10" y="26" width="12" height="2" stroke="#111" stroke-width="1" fill="none"/>
+    <rect x="14" y="8" width="4" height="1" fill="#111"/>
+    <rect x="13" y="10" width="1" height="3" fill="#111"/>
+    <rect x="18" y="10" width="1" height="3" fill="#111"/>
+    <rect x="14" y="14" width="4" height="1" fill="#111"/>
+  </svg>`,
+  pencil: `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" shape-rendering="crispEdges">
+    <rect x="5" y="3" width="14" height="18" rx="1" stroke="#111" stroke-width="1" fill="none"/>
+    <line x1="8" y1="7" x2="16" y2="7" stroke="#111" stroke-width="1"/>
+    <line x1="8" y1="10" x2="16" y2="10" stroke="#111" stroke-width="1"/>
+    <line x1="8" y1="13" x2="13" y2="13" stroke="#111" stroke-width="1"/>
+    <line x1="17" y1="12" x2="21" y2="4" stroke="#111" stroke-width="1.5"/>
+    <polygon points="17,12 16,15 19,14" fill="#111"/>
+  </svg>`,
+  book: `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" shape-rendering="crispEdges">
+    <path d="M2 4 L12 6 L22 4 L22 18 L12 20 L2 18 Z" stroke="#111" stroke-width="1" fill="none"/>
+    <line x1="12" y1="6" x2="12" y2="20" stroke="#111" stroke-width="1"/>
+    <line x1="5" y1="8" x2="10" y2="9" stroke="#111" stroke-width="0.8"/>
+    <line x1="5" y1="10" x2="10" y2="11" stroke="#111" stroke-width="0.8"/>
+    <line x1="5" y1="12" x2="10" y2="13" stroke="#111" stroke-width="0.8"/>
+    <line x1="14" y1="9" x2="19" y2="8" stroke="#111" stroke-width="0.8"/>
+    <line x1="14" y1="11" x2="19" y2="10" stroke="#111" stroke-width="0.8"/>
+    <line x1="14" y1="13" x2="19" y2="12" stroke="#111" stroke-width="0.8"/>
+  </svg>`,
+  palette: `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" shape-rendering="crispEdges">
+    <ellipse cx="11" cy="14" rx="9" ry="7" stroke="#111" stroke-width="1" fill="none"/>
+    <circle cx="7" cy="12" r="1.5" fill="#111"/>
+    <circle cx="10" cy="10" r="1.5" fill="#111"/>
+    <circle cx="14" cy="10" r="1.5" fill="#111"/>
+    <circle cx="16" cy="13" r="1.5" fill="#111"/>
+    <ellipse cx="8" cy="16" rx="2" ry="1.2" stroke="#111" stroke-width="0.8" fill="none"/>
+    <line x1="18" y1="3" x2="20" y2="11" stroke="#111" stroke-width="1.5"/>
+    <polygon points="20,11 18.5,13 21.5,12" fill="#111"/>
+  </svg>`,
+  profile: `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" shape-rendering="crispEdges">
+    <circle cx="10" cy="7" r="3" stroke="#111" stroke-width="1" fill="none"/>
+    <path d="M4 20 C4 15 7 13 10 13 C13 13 16 15 16 20" stroke="#111" stroke-width="1" fill="none"/>
+    <polygon points="20,4 21,7.5 24,7.5 21.8,9.5 22.5,13 20,11 17.5,13 18.2,9.5 16,7.5 19,7.5" fill="#111"/>
+  </svg>`
+};
+
+const ICONS = {
+  center: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="21"/><path d="M4 15c0-4.4 3.6-8 8-8s8 3.6 8 8"/><line x1="8" y1="21" x2="16" y2="21"/></svg>',
+  fusion: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1-1"/></svg>',
+  reflect: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+};
+
+// ===== 시나리오 데이터 (v03 그대로) =====
+const scenarios = {
+  homework: {
+    title: "숙제 + ChatGPT",
+    desc: "내일까지 숙제. 시작도 못했다.",
+    actLabel: "Act 1 — 숙제",
+    actDesc: "사회 숙제가 내일까지다.\nChatGPT가 눈에 들어온다.",
+    rounds: 4,
+    nodes: {
+      start: {
+        text: `<p>사회 숙제가 <span class="highlight">내일까지</span>다.</p><p>"기후변화가 우리 생활에 미치는 영향" A4 1장.</p><p>시작도 못했다.</p>`,
+        choices: [
+          { text: 'ChatGPT에 "기후변화가 우리 생활에 미치는 영향 써줘"라고 친다', next: 'hw_ai_full', stats: [-1, 0, -1], reasons: ["통째 위임", "", "확인 없이"] },
+          { text: '일단 내가 아는 거부터 끄적인다', next: 'hw_self', stats: [1, -1, 0], reasons: ["직접 시작", "도구 안 씀", ""] },
+          { text: 'ChatGPT에 "기후변화 관련 키워드 좀 알려줘"라고 친다', next: 'hw_ai_keyword', stats: [0, 1, 0], reasons: ["", "도구 활용", ""] }
+        ]
+      },
+      hw_ai_full: {
+        text: `<p>깔끔한 글이 나왔다. 서론-본론-결론.</p><p>"해수면 상승률 연 3.2mm", "식량 생산 23% 감소 전망" 같은 수치도 들어 있다.</p><p class="thought">꽤 괜찮은데?</p>`,
+        choices: [
+          { text: '그대로 제출한다', next: 'hw_present_blind', stats: [-2, 0, -2], reasons: ["판단 없이", "", "확인 안 함"] },
+          { text: '한번 읽어보고 이상한 데 없는지 확인한다', next: 'hw_present_check', stats: [0, 1, 1], reasons: ["", "검증 활용", "내용 확인"] },
+          { text: '내 말로 고쳐서 쓴다 (시간 더 걸림)', next: 'hw_present_rewrite', stats: [1, 1, 1], reasons: ["내 말로", "도구+나", "재해석"] }
+        ]
+      },
+      hw_self: {
+        text: `<p>30분 썼는데 반 장도 안 됐다.</p><p>아는 게 별로 없다. 짜증난다.</p><p class="thought">다른 애들은 다 했을 텐데...</p>`,
+        choices: [
+          { text: '"에이 몰라" 하고 ChatGPT를 켠다', next: 'hw_ai_full', stats: [-1, 0, -1], reasons: ["포기 전환", "", "확인 없이"] },
+          { text: '부족해도 이대로 낸다', next: 'hw_present_honest', stats: [1, -1, 1], reasons: ["솔직 제출", "도구 안 씀", "자기 인정"] },
+          { text: '모르는 부분만 ChatGPT에 물어본다', next: 'hw_present_rewrite', stats: [0, 2, 1], reasons: ["", "부분 활용", "보완 판단"] }
+        ]
+      },
+      hw_ai_keyword: {
+        text: `<p>ChatGPT가 키워드 10개를 알려줬다.</p><p>"해수면 상승, 극단적 기상현상, 식량 안보, 생태계 변화..."</p><p class="thought">방향이 잡힌다.</p>`,
+        choices: [
+          { text: '키워드를 바탕으로 직접 쓴다', next: 'hw_present_rewrite', stats: [1, 1, 1], reasons: ["직접 작성", "방향 활용", "자기 정리"] },
+          { text: '"이 키워드로 글 써줘"라고 다시 시킨다', next: 'hw_ai_full', stats: [-1, 0, -1], reasons: ["통째 위임", "", "확인 없이"] }
+        ]
+      },
+      hw_present_blind: {
+        text: `<p>수업 시간. 선생님이 발표시킨다.</p><p class="highlight">"여기 '해수면 상승 연 3.2mm'라고 썼는데, 이 수치 출처가 뭐야?"</p><p>...</p><p class="thought">모른다. AI가 쓴 거니까.</p>`,
+        choices: [
+          { text: '"인터넷에서 봤어요" (얼버무린다)', next: 'hw_end_fake', stats: [-1, 0, -2], reasons: ["거짓 대응", "", "성찰 회피"] },
+          { text: '"솔직히 AI가 쓴 거라 모르겠어요"', next: 'hw_end_honest_late', stats: [1, 0, 2], reasons: ["솔직 인정", "", "뒤늦은 성찰"] }
+        ]
+      },
+      hw_present_check: { text: `<p>수업 시간. 선생님이 발표시킨다.</p><p>"해수면 상승 3.2mm" — 어제 확인해봤더니 실제 수치였다. 설명도 된다.</p><p class="thought">확인하길 잘했다.</p>`, choices: [{ text: '다음', next: 'hw_end_check', stats: [0, 0, 1], reasons: ["", "", "확인 보람"], isNext: true }] },
+      hw_present_rewrite: { text: `<p>수업 시간. 선생님이 발표시킨다.</p><p>수치는 확인해서 맞고, 자기 말로 바꿔놔서 설명도 된다.</p><p>시간은 좀 걸렸지만.</p><p class="thought">발표하니까 꽤 괜찮은데?</p>`, choices: [{ text: '다음', next: 'hw_end_rewrite', stats: [0, 0, 1], reasons: ["", "", "자신감"], isNext: true }] },
+      hw_present_honest: { text: `<p>수업 시간. 선생님이 발표시킨다.</p><p>짧고 부족하다. 하지만 "우리 동네 여름에 물난리 난 거"를 썼더니</p><p class="highlight">선생님: "좋은 관점이다. 개인 경험에서 시작한 게 좋다."</p>`, choices: [{ text: '다음', next: 'hw_end_honest', stats: [1, 0, 1], reasons: ["경험 인정", "", "관점 확인"], isNext: true }] },
+      hw_end_fake: { text: `<p>집에 와서 생각한다.</p><div class="result-bad"><p>선생님이 더 물어봤으면 어쩔 뻔했지.</p><p>5분 만에 끝낸 건 편했는데, 발표 때 식은땀이 났다.</p><p class="highlight">내가 쓴 게 아니니까 내가 설명할 수가 없었다.</p></div>`, choices: [], isEnd: true },
+      hw_end_honest_late: { text: `<p>집에 와서 생각한다.</p><div class="result-neutral"><p>솔직히 말한 건 좀 부끄러웠다.</p><p>근데 선생님이 "알겠어, 다음엔 출처를 같이 확인해봐"라고 했다.</p><p class="highlight">늦었지만 솔직한 게 나았다.</p></div>`, choices: [], isEnd: true },
+      hw_end_check: { text: `<p>집에 와서 생각한다.</p><div class="result-neutral"><p>AI가 써준 글을 확인하고 고치는 데 시간이 좀 걸렸다.</p><p>직접 쓴 건 아니지만, 적어도 내용은 알고 있었다.</p><p class="highlight">도구로 쓴 거지, 도구에 쓰인 건 아니다.</p></div>`, choices: [], isEnd: true },
+      hw_end_rewrite: { text: `<p>집에 와서 생각한다.</p><div class="result-good"><p>AI한테 방향을 잡고, 내가 직접 정리했다.</p><p>시간은 걸렸지만 발표할 때 자신 있었다.</p><p class="highlight">AI는 출발점이었고, 도착은 내가 했다.</p></div>`, choices: [], isEnd: true },
+      hw_end_honest: { text: `<p>집에 와서 생각한다.</p><div class="result-good"><p>반 장짜리 서툰 글이었는데, "개인 경험에서 시작한 게 좋다"고 했다.</p><p>양은 부족했지만 진짜 내 생각이 들어 있었다.</p><p class="highlight">부족해도 내 것이면 말할 수 있다.</p></div>`, choices: [], isEnd: true }
+    }
+  },
+  book: {
+    title: '독후감 — "모르겠다"가 사라진다',
+    desc: "어린 왕자를 읽었는데, 솔직히 잘 모르겠다.",
+    actLabel: "Act 2 — 독후감",
+    actDesc: "어린 왕자를 읽었다.\n솔직히 잘 모르겠다.",
+    rounds: 4,
+    nodes: {
+      start: { text: `<p>어린 왕자를 읽었다. 독후감을 써야 한다.</p><p>솔직한 감상:</p><p class="highlight">"여우가 '길들인다'는 말을 하는데... 뭔 말인지 잘 모르겠다."</p>`, choices: [
+        { text: 'ChatGPT에 "어린 왕자 독후감 써줘"', next: 'bk_ai_full', stats: [-1, 0, -1], reasons: ["통째 위임", "", "감상 없이"] },
+        { text: '"잘 모르겠다"부터 시작해서 직접 쓴다', next: 'bk_self', stats: [1, -1, 2], reasons: ["솔직 시작", "도구 안 씀", "혼란 직면"] },
+        { text: 'ChatGPT에 "길들인다는 게 무슨 뜻이야?" 물어본다', next: 'bk_ai_ask', stats: [0, 1, 0], reasons: ["", "질문 활용", ""] }
+      ]},
+      bk_ai_full: { text: `<p>AI가 써줬다.</p><p><em>"이 작품은 진정한 관계의 의미를 깨닫게 해준다. 여우가 말하는 '길들인다'는 것은 서로에게 시간을 들이는 것이며..."</em></p><p>깔끔하다.</p><p class="thought">근데 나는 "깨달은" 적이 없다. 아직 모르겠는데.</p>`, choices: [
+        { text: '깔끔하니까 그대로 낸다', next: 'bk_class_ai', stats: [-2, 0, -2], reasons: ["판단 없이", "", "감상 포기"] },
+        { text: '"깨달았다"를 "아직 잘 모르겠다"로 바꾼다', next: 'bk_class_honest', stats: [2, 0, 2], reasons: ["솔직 수정", "", "감상 회복"] },
+        { text: 'AI 글이랑 내 느낌을 비교하면서 다시 쓴다', next: 'bk_class_compare', stats: [1, 1, 2], reasons: ["비교 판단", "참고 활용", "차이 인식"] }
+      ]},
+      bk_self: { text: `<p>"여우가 길들인다는 말을 했는데 솔직히 잘 모르겠다.</p><p>친구 사이에서도 그런 건가?</p><p>우리 강아지를 키울 때 느낀 거랑 비슷한 건가?"</p><p class="thought">서툴다. 문장도 별로다. 근데 쓰다 보니 뭔가 떠오른다.</p>`, choices: [
+        { text: '이대로 낸다 (서툴지만 솔직하게)', next: 'bk_class_honest', stats: [1, -1, 2], reasons: ["솔직 제출", "도구 안 씀", "자기 감상"] },
+        { text: '좀 더 다듬는다', next: 'bk_class_honest', stats: [1, 0, 1], reasons: ["다듬기", "", "정리 노력"] },
+        { text: '"역시 AI한테 시킬걸" 후회하면서 AI를 켠다', next: 'bk_ai_full', stats: [-1, 0, -1], reasons: ["포기 전환", "", "감상 포기"] }
+      ]},
+      bk_ai_ask: { text: `<p>ChatGPT가 설명한다:</p><p><em>"길들인다는 건 시간과 노력을 들여 관계를 맺는 것입니다."</em></p><p class="thought">이해는 되는데... 뭔가 내가 느낀 거랑 다르다.</p>`, choices: [
+        { text: '"아, 그렇구나" 하고 이 설명으로 독후감을 쓴다', next: 'bk_class_ai', stats: [0, 1, -1], reasons: ["", "설명 차용", "내 감상 없이"] },
+        { text: '"근데 나는 아직 잘 모르겠는데..." 내 혼란을 그대로 쓴다', next: 'bk_class_compare', stats: [1, 0, 2], reasons: ["솔직 유지", "", "혼란 직면"] }
+      ]},
+      bk_class_ai: { text: `<p>수업 시간. 선생님:</p><p class="highlight">"독후감에서 가장 솔직했던 문장을 한 줄만 읽어봐."</p><p>"진정한 관계의 의미를 깨닫게 해주는 작품이다."</p><p class="thought">반 애들 반응 없음. 뻔한 말이니까.</p>`, choices: [{ text: '다음', next: 'bk_end_ai', stats: [0, 0, -1], reasons: ["", "", "공감 없음"], isNext: true }] },
+      bk_class_honest: { text: `<p>수업 시간. 선생님:</p><p class="highlight">"독후감에서 가장 솔직했던 문장을 한 줄만 읽어봐."</p><p>"여우가 길들인다는 말을 했는데, 우리 강아지 키울 때 느낀 거랑 비슷한 건지 아직 모르겠다."</p><p>옆자리가 <span class="highlight">"아 나도 그 부분 이상했어."</span></p><p class="thought">대화가 시작됐다.</p>`, choices: [{ text: '다음', next: 'bk_end_honest', stats: [1, 0, 1], reasons: ["공감 획득", "", "대화 열림"], isNext: true }] },
+      bk_class_compare: { text: `<p>수업 시간. 선생님:</p><p class="highlight">"독후감에서 가장 솔직했던 문장을 한 줄만 읽어봐."</p><p>"AI는 '시간을 들여 관계를 맺는 것'이라고 했는데, 나는 아직 그게 뭔 느낌인지 모르겠다."</p><p>선생님: <span class="highlight">"그 차이를 느낀 것 자체가 좋은 감상이야."</span></p>`, choices: [{ text: '다음', next: 'bk_end_compare', stats: [1, 1, 2], reasons: ["차이 인식", "비교 활용", "깊은 성찰"], isNext: true }] },
+      bk_end_ai: { text: `<p>그날 밤, 다시 어린 왕자를 펼친다.</p><p><em>"넌 나에게 아직 수만 명의 다른 소년과 다를 바 없어."</em></p><div class="result-bad"><p>AI가 "깨닫게 해준다"라고 정리해버린 그 혼란.</p><p>사실 그 혼란이 읽는 이유였는데.</p><p class="highlight">모르겠다는 감상이 사라졌다.</p></div>`, choices: [], isEnd: true },
+      bk_end_honest: { text: `<p>그날 밤, 다시 어린 왕자를 펼친다.</p><p><em>"넌 나에게 아직 수만 명의 다른 소년과 다를 바 없어."</em></p><div class="result-good"><p>아직도 잘 모르겠다. 근데 오늘 수업에서 옆자리도 모르겠다고 했다.</p><p>모르겠다는 게 나만 그런 게 아니었다.</p><p class="highlight">"모르겠다"가 대화를 열었다.</p></div>`, choices: [], isEnd: true },
+      bk_end_compare: { text: `<p>그날 밤, 다시 어린 왕자를 펼친다.</p><p><em>"넌 나에게 아직 수만 명의 다른 소년과 다를 바 없어."</em></p><div class="result-good"><p>AI는 "시간을 들여 관계를 맺는 것"이라고 했다. 맞는 말인 것 같다.</p><p>근데 내가 강아지한테 느끼는 건 "시간을 들인" 게 아니라 그냥... 매일 거기 있는 거?</p><p class="highlight">AI의 정리와 내 혼란 — 그 차이 자체가 감상이었다.</p></div>`, choices: [], isEnd: true }
+    }
+  },
+  art: {
+    title: "미술 시간 — AI 그림",
+    desc: "그림을 못 그린다. AI가 있다.",
+    actLabel: "Act 3 — 미술",
+    actDesc: '미술 시간.\n"가장 행복했던 순간"을 그려야 한다.',
+    rounds: 4,
+    nodes: {
+      start: { text: `<p>미술 시간.</p><p><span class="highlight">"가장 행복했던 순간"</span>을 그려오라는 과제.</p><p>나는 그림을 못 그린다.</p><p class="thought">가족 여행에서 바다 본 순간을 그리고 싶은데...</p>`, choices: [
+        { text: 'AI 이미지 생성기에 "행복한 가족 바다 여행" 입력', next: 'art_ai', stats: [-1, 0, -1], reasons: ["통째 위임", "", "기억 없이"] },
+        { text: '서툴지만 직접 그린다', next: 'art_self', stats: [2, -1, 0], reasons: ["직접 표현", "도구 안 씀", ""] },
+        { text: 'AI로 참고 이미지를 만들고 보면서 따라 그린다', next: 'art_ref', stats: [0, 1, 0], reasons: ["", "참고 활용", ""] }
+      ]},
+      art_ai: { text: `<p>AI가 예쁜 그림을 만들었다.</p><p>푸른 바다, 맑은 하늘, 가족이 웃고 있다.</p><p class="thought">근데 우리 가족 여행은 흐린 날이었고, 바다가 회색이었다. 오히려 그게 좋았는데.</p>`, choices: [
+        { text: '예쁘니까 그냥 이걸로 낸다', next: 'art_present_ai', stats: [-2, 0, -1], reasons: ["판단 없이", "", "기억 포기"] },
+        { text: '"아니, 이건 내 기억이 아닌데" — 프롬프트를 바꿔본다', next: 'art_present_prompt', stats: [0, 1, 1], reasons: ["", "프롬프트 수정", "기억 반영"] },
+        { text: 'AI 그림을 버리고 직접 그린다', next: 'art_self', stats: [2, -1, 1], reasons: ["직접 선택", "도구 포기", "기억 우선"] }
+      ]},
+      art_self: { text: `<p>30분 그렸다.</p><p>바다가 이상하고 사람이 막대기 같다.</p><p class="thought">근데 옆에 엄마가 들고 있는 우산은 진짜 그날 있던 노란 우산이다.</p>`, choices: [
+        { text: '부끄럽지만 이대로 낸다', next: 'art_present_self', stats: [1, -1, 1], reasons: ["솔직 제출", "도구 안 씀", "자기 인정"] },
+        { text: '너무 못 그렸다. AI한테 깔끔하게 만들어달라고 한다', next: 'art_present_ai', stats: [-1, 0, -1], reasons: ["포기 전환", "", "기억 포기"] }
+      ]},
+      art_ref: { text: `<p>AI가 만든 참고 이미지를 보면서 따라 그린다.</p><p>구도는 AI 거, 색감도 참고했다. 근데 가운데에 노란 우산을 하나 그려 넣었다.</p><p class="thought">이건 AI한테 없던 거다. 그날 진짜 있었던 우산.</p>`, choices: [
+        { text: '이대로 낸다', next: 'art_present_mix', stats: [1, 1, 1], reasons: ["내 것 추가", "참고+나", "기억 반영"] },
+        { text: '더 AI처럼 깔끔하게 고친다 (우산 지우고)', next: 'art_present_ai', stats: [-1, 0, -1], reasons: ["기억 삭제", "", "기억 포기"] }
+      ]},
+      art_present_ai: { text: `<p>선생님이 작품을 보여주면서 묻는다:</p><p class="highlight">"이 그림에서 네가 제일 좋아하는 부분이 뭐야?"</p><p>"... 음... 바다요?"</p><p class="thought">대답이 안 나온다. 내가 고른 게 하나도 없으니까.</p>`, choices: [{ text: '다음', next: 'art_after_ai', stats: [0, 0, -1], reasons: ["", "", "설명 불가"], isNext: true }] },
+      art_present_self: { text: `<p>선생님이 작품을 보여주면서 묻는다:</p><p class="highlight">"이 그림에서 네가 제일 좋아하는 부분이 뭐야?"</p><p>"여기 노란 우산이요. 그날 진짜 있었거든요."</p><p>선생님: <span class="highlight">"이게 너의 기억이구나."</span></p><p>반 애들이 "어떤 날이었어?" 묻는다.</p>`, choices: [{ text: '다음', next: 'art_after_self', stats: [1, 0, 1], reasons: ["기억 공유", "", "대화 열림"], isNext: true }] },
+      art_present_prompt: { text: `<p>선생님이 작품을 보여주면서 묻는다:</p><p class="highlight">"이 그림에서 네가 제일 좋아하는 부분이 뭐야?"</p><p>"회색 바다요. 흐린 날이었는데 그게 좋았어요."</p><p>선생님: <span class="highlight">"보통 행복한 순간을 밝게 그리는데, 회색을 고른 이유가 있구나."</span></p>`, choices: [{ text: '다음', next: 'art_after_prompt', stats: [0, 1, 1], reasons: ["", "도구 조율", "의도 설명"], isNext: true }] },
+      art_present_mix: { text: `<p>선생님이 작품을 보여주면서 묻는다:</p><p class="highlight">"이 그림에서 네가 제일 좋아하는 부분이 뭐야?"</p><p>"이 노란 우산이요. 나머지는 참고했는데, 이건 제가 직접 넣었어요."</p><p>선생님: <span class="highlight">"그 우산이 이 그림을 네 그림으로 만들어주는구나."</span></p>`, choices: [{ text: '다음', next: 'art_after_mix', stats: [1, 1, 1], reasons: ["내 것 표현", "협업 인정", "차이 인식"], isNext: true }] },
+      art_after_ai: { text: `<p>미술실을 나온다. 친구가 묻는다: "너 그거 AI로 했어?"</p>`, choices: [
+        { text: '"응" (솔직)', next: 'art_end_honest', stats: [0, 0, 1], reasons: ["", "", "솔직 인정"] },
+        { text: '"아니" (거짓말)', next: 'art_end_lie', stats: [-1, 0, -2], reasons: ["거짓 대응", "", "성찰 회피"] },
+        { text: '"...반반?" (애매하게)', next: 'art_end_vague', stats: [0, 0, 0], reasons: ["", "", ""] }
+      ]},
+      art_after_self: { text: `<p>미술실을 나온다. 친구가 묻는다: "너 그림 되게 솔직하다."</p><div class="result-good"><p>서툴었다. 막대기 사람이었다.</p><p>근데 노란 우산은 내 기억이었고, 그게 대화를 열었다.</p><p class="highlight">잘 그린 그림이 좋은 그림은 아니었다.</p></div>`, choices: [], isEnd: true },
+      art_after_prompt: { text: `<p>미술실을 나온다.</p><div class="result-neutral"><p>AI가 만든 건 맞다. 하지만 "회색 바다"를 고른 건 나였다.</p><p>AI는 푸른 바다를 줬고, 내가 그걸 거부하고 회색을 요청했다.</p><p class="highlight">도구가 제안하고, 내가 선택했다.</p></div>`, choices: [], isEnd: true },
+      art_after_mix: { text: `<p>미술실을 나온다.</p><div class="result-good"><p>AI가 구도를 잡아줬다. 색감도 참고했다.</p><p>근데 노란 우산 하나가 "내 그림"으로 만들어줬다.</p><p class="highlight">AI의 도움 위에 내 기억 하나. 그게 차이였다.</p></div>`, choices: [], isEnd: true },
+      art_end_honest: { text: `<div class="result-neutral"><p>친구: "역시. 근데 좋아하는 부분 말 못한 거 좀 웃겼어."</p><p class="highlight">AI가 그려준 그림에서 내가 좋아하는 부분은 없었다. 내가 고른 게 없으니까.</p></div>`, choices: [], isEnd: true },
+      art_end_lie: { text: `<div class="result-bad"><p>친구: "그래? 되게 잘 그렸더라."</p><p class="thought">속이 불편하다.</p><p class="highlight">"잘 그렸다"는 칭찬인데, 받을수록 찝찝하다.</p></div>`, choices: [], isEnd: true },
+      art_end_vague: { text: `<div class="result-neutral"><p>친구: "뭐야 반반이 뭐야 ㅋㅋ"</p><p class="thought">웃긴데... 솔직히 나도 모르겠다. 어디까지가 내 그림인지.</p><p class="highlight">그 경계가 애매한 게 바로 이 시대의 질문이다.</p></div>`, choices: [], isEnd: true }
+    }
+  }
+};
+
+// ===== Act 순서 및 상태 =====
+const actOrder = ['homework', 'book', 'art'];
+let curActIndex = 0;
+let curScenario = null;
+let curNodeId = null;
+let curNode = null;
+let stats = { c: 0, f: 0, r: 0 };
+let round = 0;
+
+// 현재 Act 시작 시 스탯 스냅샷 (Act 요약용)
+let actStartStats = { c: 0, f: 0, r: 0 };
+
+// 패널별 상태 추적
+let panels = [null, null, null, null]; // { text, choiceText, nodeId }
+let activePanelIndex = 0;
+
+// 현재 활성 panels-container (Act별로 새로 생성됨)
+let curPanelsContainer = null;
+
+// ===== DOM =====
+const contentArea = document.getElementById('contentArea');
+const statsBar = document.getElementById('statsBar');
+const statEls = {
+  c: { wrap: 'statCenterWrap', num: 'statCenterNum', fill: 'statCenterFill', delta: 'statCenterDelta' },
+  f: { wrap: 'statFusionWrap', num: 'statFusionNum', fill: 'statFusionFill', delta: 'statFusionDelta' },
+  r: { wrap: 'statReflectWrap', num: 'statReflectNum', fill: 'statReflectFill', delta: 'statReflectDelta' }
+};
+
+// ===== 바인더 구분선 SVG =====
+const BINDER_HOLE_SVG = `<svg class="binder-hole" width="14" height="14" viewBox="0 0 14 14" shape-rendering="crispEdges">
+  <circle cx="7" cy="7" r="6" fill="none" stroke="#111" stroke-width="2"/>
+  <circle cx="7" cy="7" r="4" fill="#fff"/>
+</svg>`;
+
+// ===== 초기화 =====
+function init() {
+  statsBar.classList.add('hidden');
+  stats = { c: 0, f: 0, r: 0 };
+  curActIndex = 0;
+  curScenario = null;
+  curNodeId = null;
+  curNode = null;
+  curPanelsContainer = null;
+  // 스탯 디스플레이 초기화
+  renderStats(0, 0, 0);
+  contentArea.innerHTML = '';
+  showTitleCard();
+}
+
+// ===== 타이틀 카드 =====
+function showTitleCard() {
+  contentArea.innerHTML = `
+    <div class="overlay-card" id="overlayCard">
+      <div class="card-inner">
+        <div class="pixel-icon">${PIXEL_ICONS.title}</div>
+        <h1>AI 리터러시 — 위임 판단력</h1>
+        <p>세 가지 상황에서 너의 선택을 따라간다</p>
+        <button class="start-btn" onclick="startFirstAct()">시작하기</button>
+      </div>
+    </div>`;
+}
+
+// ===== Act 시작 =====
+function startFirstAct() {
+  curActIndex = 0;
+  // 타이틀 카드 fade out → 첫 Act 시작
+  const overlay = document.getElementById('overlayCard');
+  if (overlay) {
+    overlay.classList.add('fade-out');
+    setTimeout(() => {
+      overlay.remove();
+      startAct(actOrder[0]);
+    }, 400);
+  } else {
+    startAct(actOrder[0]);
+  }
+}
+
+function startAct(key) {
+  curScenario = scenarios[key];
+  if (!curScenario) return;
+  round = 0;
+  panels = [null, null, null, null];
+  activePanelIndex = 0;
+  actStartStats = { c: stats.c, f: stats.f, r: stats.r };
+
+  statsBar.classList.remove('hidden');
+  renderStats(0, 0, 0);
+
+  // Act 섹션 생성
+  const section = document.createElement('div');
+  section.className = 'act-section';
+  section.id = `act-section-${curActIndex}`;
+
+  const panelsDiv = document.createElement('div');
+  panelsDiv.className = 'panels-container';
+  panelsDiv.id = `panels-${curActIndex}`;
+  section.appendChild(panelsDiv);
+
+  contentArea.appendChild(section);
+  curPanelsContainer = panelsDiv;
+
+  renderPanels();
+  showNode('start', 0);
+
+  // 자동 스크롤
+  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== 바인더 구분선 삽입 =====
+function insertBinderDivider(actIdx) {
+  const key = actOrder[actIdx];
+  const sc = scenarios[key];
+  if (!sc) return;
+
+  const divider = document.createElement('div');
+  divider.className = 'binder-divider';
+  divider.innerHTML = `
+    <div class="binder-holes">
+      ${BINDER_HOLE_SVG}
+      ${BINDER_HOLE_SVG}
+      ${BINDER_HOLE_SVG}
+    </div>
+    <div class="binder-text">
+      <div class="binder-title">${sc.actLabel}</div>
+      <div class="binder-subtitle">"${sc.desc}"</div>
+    </div>`;
+
+  contentArea.appendChild(divider);
+}
+
+// ===== 패널 렌더링 =====
+function renderPanels() {
+  curPanelsContainer.innerHTML = '';
+  const cutLabels = ['1', '2', '3', '4'];
+  const cutNames = ['상황', '전개', '대면', '엔딩'];
+
+  for (let i = 0; i < 4; i++) {
+    const panel = document.createElement('div');
+    panel.className = 'panel empty';
+    panel.id = `panel-${curActIndex}-${i}`;
+    panel.innerHTML = `
+      <div class="panel-image">
+        <span class="cut-label">${cutLabels[i]}</span>
+      </div>
+      <div class="panel-body">
+        <div style="color:#ccc; font-size:12px; text-align:center; margin-top:auto; margin-bottom:auto;">${cutNames[i]}</div>
+      </div>`;
+    curPanelsContainer.appendChild(panel);
+  }
+}
+
+// ===== 패널 ID 헬퍼 =====
+function panelId(idx) {
+  return `panel-${curActIndex}-${idx}`;
+}
+
+// ===== 노드 표시 =====
+function showNode(nodeId, panelIdx) {
+  if (!curScenario) return;
+  curNodeId = nodeId;
+  curNode = curScenario.nodes[nodeId];
+  if (!curNode) return;
+  activePanelIndex = panelIdx;
+
+  // 패널 내용 채우기
+  fillPanel(panelIdx, curNode.text, curNode);
+
+  // 선택지 / 엔딩 / 다음 버튼 처리
+  removeChoicesAndButtons();
+
+  if (curNode.isEnd) {
+    // 엔딩 패널 — 결과 톤에 따라 틴트
+    const panelEl = document.getElementById(panelId(panelIdx));
+    if (curNode.text.includes('result-good')) panelEl.classList.add('tint-good');
+    else if (curNode.text.includes('result-bad')) panelEl.classList.add('tint-bad');
+    else panelEl.classList.add('tint-neutral');
+
+    // 4컷 완성 조망 후 요약/다음
+    setTimeout(() => showActEnd(), 800);
+  } else if (curNode.choices.length === 1 && curNode.choices[0].isNext) {
+    // "다음" 버튼
+    showNextButton(panelIdx, 0);
+  } else if (curNode.choices.length >= 2) {
+    // 선택지 카드
+    setTimeout(() => showChoices(panelIdx, curNode.choices), 200);
+  }
+}
+
+// ===== 패널 채우기 =====
+function fillPanel(idx, html, node) {
+  const panelEl = document.getElementById(panelId(idx));
+  if (!panelEl) return;
+
+  panelEl.className = 'panel active slide-in';
+  // 이전 패널들을 done으로
+  for (let i = 0; i < idx; i++) {
+    const prev = document.getElementById(panelId(i));
+    if (prev && panels[i]) {
+      prev.classList.remove('active');
+      prev.classList.add('done');
+    }
+  }
+
+  // 이미지 영역 유지, 텍스트 영역 업데이트
+  const cutLabels = ['1', '2', '3', '4'];
+  let pixelIcon = '';
+  if (curActIndex === 0) pixelIcon = PIXEL_ICONS.pencil;
+  else if (curActIndex === 1) pixelIcon = PIXEL_ICONS.book;
+  else if (curActIndex === 2) pixelIcon = PIXEL_ICONS.palette;
+
+  panelEl.innerHTML = `
+    <div class="panel-image">
+      <span class="cut-label">${cutLabels[idx]}</span>
+      <div class="pixel-icon-wrap">${pixelIcon}</div>
+    </div>
+    <div class="panel-body">${html}</div>`;
+
+  panels[idx] = { text: html, nodeId: curNodeId };
+}
+
+// ===== 선택지 표시 =====
+function showChoices(panelIdx, choices) {
+  removeChoicesAndButtons();
+
+  const col = document.createElement('div');
+  col.className = 'choices-column';
+  col.id = 'choicesColumn';
+
+  // 패널 위치 계산: 활성 패널 오른쪽에 배치
+  const panelEl = document.getElementById(panelId(panelIdx));
+
+  // 선택지 폭: 패널 1개 폭과 동일
+  const panelWidth = panelEl.offsetWidth;
+  const gap = 16;
+  const choiceLeft = panelEl.offsetLeft + panelWidth + gap;
+
+  col.style.left = choiceLeft + 'px';
+  col.style.top = '24px';
+  col.style.width = panelWidth + 'px';
+
+  choices.forEach((ch, i) => {
+    const card = document.createElement('div');
+    card.className = 'choice-card';
+    card.dataset.index = i;
+    card.innerHTML = `<div class="choice-text">${ch.text}</div>`;
+    card.addEventListener('click', () => onChoiceClick(i, card, col));
+    col.appendChild(card);
+
+    // 시차 페이드인
+    setTimeout(() => card.classList.add('visible'), 100 + i * 100);
+  });
+
+  curPanelsContainer.appendChild(col);
+}
+
+// ===== "다음" 버튼 =====
+function showNextButton(panelIdx, choiceIdx) {
+  removeChoicesAndButtons();
+
+  const wrap = document.createElement('div');
+  wrap.className = 'next-btn-wrap';
+  wrap.id = 'nextBtnWrap';
+
+  const panelEl = document.getElementById(panelId(panelIdx));
+  const panelWidth = panelEl.offsetWidth;
+  const gap = 16;
+  wrap.style.left = (panelEl.offsetLeft + panelWidth + gap) + 'px';
+  wrap.style.top = '24px';
+
+  const btn = document.createElement('button');
+  btn.className = 'next-btn';
+  btn.textContent = '다음';
+  btn.addEventListener('click', () => {
+    onChoose(choiceIdx);
+  });
+  wrap.appendChild(btn);
+  curPanelsContainer.appendChild(wrap);
+}
+
+// ===== 선택 클릭 =====
+let choosing = false;
+function onChoiceClick(idx, cardEl, colEl) {
+  if (choosing) return;
+  choosing = true;
+
+  // 선택 카드 강조
+  cardEl.classList.add('selected');
+
+  // 나머지 페이드아웃
+  const allCards = colEl.querySelectorAll('.choice-card');
+  allCards.forEach((c, i) => {
+    if (i !== idx) c.classList.add('fade-out');
+  });
+
+  // 잠시 후 처리
+  setTimeout(() => {
+    onChoose(idx);
+    choosing = false;
+  }, 400);
+}
+
+// ===== 선택 처리 =====
+function onChoose(choiceIdx) {
+  if (!curNode || !curNode.choices[choiceIdx]) return;
+  const ch = curNode.choices[choiceIdx];
+
+  // 현재 패널에 선택 태그 추가
+  if (!ch.isNext) {
+    const panelBody = document.querySelector(`#${panelId(activePanelIndex)} .panel-body`);
+    if (panelBody) {
+      const tag = document.createElement('div');
+      tag.className = 'choice-tag';
+      tag.textContent = '> ' + ch.text;
+      panelBody.appendChild(tag);
+    }
+    panels[activePanelIndex].choiceText = ch.text;
+  }
+
+  // 스탯 적용
+  const reasons = ch.reasons || ['', '', ''];
+  applyStats(ch.stats[0], ch.stats[1], ch.stats[2], reasons);
+
+  // 선택지 제거
+  removeChoicesAndButtons();
+
+  // 라운드 진행
+  if (!ch.isNext) round++;
+
+  // 다음 패널 인덱스 결정
+  let nextPanelIdx = activePanelIndex + 1;
+  if (nextPanelIdx > 3) nextPanelIdx = 3; // 최대 4컷
+
+  // 현재 패널 done 처리
+  const curPanelEl = document.getElementById(panelId(activePanelIndex));
+  if (curPanelEl) {
+    curPanelEl.classList.remove('active');
+    curPanelEl.classList.add('done');
+  }
+
+  // 다음 노드 표시
+  setTimeout(() => showNode(ch.next, nextPanelIdx), 200);
+}
+
+// ===== 선택지/버튼 제거 =====
+function removeChoicesAndButtons() {
+  const col = document.getElementById('choicesColumn');
+  if (col) col.remove();
+  const btn = document.getElementById('nextBtnWrap');
+  if (btn) btn.remove();
+}
+
+// ===== Act 종료 =====
+function showActEnd() {
+  const isLastAct = curActIndex >= actOrder.length - 1;
+
+  if (isLastAct) {
+    // 최종 프로필
+    setTimeout(() => showFinalProfile(), 500);
+  } else {
+    // 바인더 구분선 + 다음 Act 자동 시작
+    setTimeout(() => advanceAct(), 800);
+  }
+}
+
+function advanceAct() {
+  curActIndex++;
+  if (curActIndex < actOrder.length) {
+    // 바인더 구분선 삽입
+    insertBinderDivider(curActIndex);
+    // 새 Act 시작
+    startAct(actOrder[curActIndex]);
+  }
+}
+
+// ===== 최종 프로필 =====
+function showFinalProfile() {
+  const profileSection = document.createElement('div');
+  profileSection.className = 'act-section';
+  profileSection.innerHTML = `
+    <div class="profile-overlay">
+      <div class="profile-inner">
+        <div class="pixel-icon">${PIXEL_ICONS.profile}</div>
+        <h2>나의 프로필</h2>
+        <div class="profile-bars">
+          ${profBar('center', '중심잡기', stats.c)}
+          ${profBar('fusion', '융합하기', stats.f)}
+          ${profBar('reflect', '성찰하기', stats.r)}
+        </div>
+        <div class="profile-comment">${profComment()}</div>
+        <button class="restart-btn" onclick="init()">처음부터 다시</button>
+      </div>
+    </div>`;
+  contentArea.appendChild(profileSection);
+
+  // 자동 스크롤
+  profileSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // 프로필 바 애니메이션 (0 -> 실제값)
+  setTimeout(() => {
+    document.querySelectorAll('.profile-bar-fill').forEach(el => {
+      el.style.width = el.dataset.targetWidth;
+    });
+  }, 100);
+}
+
+function profBar(iconKey, label, v) {
+  const maxV = 12, pct = Math.min(Math.abs(v) / maxV * 50, 50);
+  const cls = v >= 0 ? 'positive' : 'negative';
+  const disp = (v > 0 ? '+' : '') + v;
+  return `<div class="profile-bar"><div class="profile-bar-label"><span class="label-with-icon">${ICONS[iconKey]}${label}</span><span>${disp}</span></div>
+    <div class="profile-bar-track"><div class="profile-bar-center"></div>
+    <div class="profile-bar-fill ${cls}" style="width:0%" data-target-width="${pct}%"></div></div></div>`;
+}
+
+function profComment() {
+  const t = stats.c + stats.f + stats.r;
+  if (t >= 18) return "세 가지 상황 모두에서, 너는 AI를 도구로 쓰되 판단은 네가 했다. 시간이 걸려도 네 것으로 만들었다.";
+  if (t >= 10) return "AI의 도움을 받으면서도 자기 기준을 유지하려고 했다. 때로 흔들렸지만, 균형을 찾아가는 중이다.";
+  if (t >= 2) return "편한 쪽을 고르기도 하고, 직접 하기도 했다. 일관되진 않지만 — 그 고민 자체가 시작이다.";
+  if (t >= -6) return "편한 쪽을 많이 골랐다. 틀린 건 아니다. 다만 — 발표 때, 설명할 수 있었어?";
+  return "대부분 AI에게 맡겼다. 빠르고 편했을 거다. 근데 세 번의 상황에서, 네가 직접 고른 건 뭐였어?";
+}
+
+// ===== 스탯 적용 =====
+function applyStats(dc, df, dr, reasons) {
+  stats.c += dc; stats.f += df; stats.r += dr;
+  renderStats(dc, df, dr, reasons);
+}
+
+// ===== 스탯 렌더링 =====
+function renderStats(dc, df, dr, reasons) {
+  const deltas = { c: dc, f: df, r: dr };
+  const reasonArr = reasons || ['', '', ''];
+  const keys = ['c', 'f', 'r'];
+
+  keys.forEach((k, idx) => {
+    const el = statEls[k], v = stats[k], d = deltas[k];
+    const reason = reasonArr[idx] || '';
+    const numEl = document.getElementById(el.num);
+    const fillEl = document.getElementById(el.fill);
+    const deltaEl = document.getElementById(el.delta);
+    const wrapEl = document.getElementById(el.wrap);
+
+    numEl.textContent = (v > 0 ? '+' : '') + v;
+    numEl.className = 'stat-num ' + (v > 0 ? 'pos' : v < 0 ? 'neg' : 'zero');
+
+    const maxV = 12, pct = Math.min(Math.abs(v) / maxV * 50, 50);
+    fillEl.className = 'stat-gauge-fill ' + (v >= 0 ? 'pos' : 'neg');
+    if (v >= 0) { fillEl.style.left = '50%'; fillEl.style.right = 'auto'; fillEl.style.width = pct + '%'; }
+    else { fillEl.style.right = '50%'; fillEl.style.left = 'auto'; fillEl.style.width = pct + '%'; }
+
+    if (d !== 0) {
+      numEl.classList.remove('pulsing');
+      void numEl.offsetWidth;
+      numEl.classList.add('pulsing');
+
+      const sign = d > 0 ? '+' : '';
+      const reasonText = reason ? ` ${reason}` : '';
+      deltaEl.textContent = `${sign}${d}${reasonText}`;
+      deltaEl.className = 'stat-change-indicator show ' + (d > 0 ? 'up' : 'down');
+
+      wrapEl.classList.remove('flash-up', 'flash-down', 'shaking');
+      void wrapEl.offsetWidth;
+      wrapEl.classList.add(d > 0 ? 'flash-up' : 'flash-down');
+      wrapEl.classList.add('shaking');
+
+      setTimeout(() => {
+        deltaEl.className = 'stat-change-indicator';
+        wrapEl.classList.remove('shaking', 'flash-up', 'flash-down');
+        numEl.classList.remove('pulsing');
+      }, 1800);
+    }
+  });
+}
+
+// ===== DOMContentLoaded =====
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
