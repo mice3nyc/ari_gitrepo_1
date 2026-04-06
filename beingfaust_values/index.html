@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>MEPHISTØ & co.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== VARIABLES ===== */
+        :root {
+            --bg-deep: #0D0D0D;
+            --bg: #141414;
+            --bg-card: #1C1C1C;
+            --bg-elevated: #222222;
+            --text: #F0EDE8;
+            --text-secondary: rgba(240,237,232,0.6);
+            --text-muted: rgba(240,237,232,0.28);
+            --accent: #C04040;
+            --accent-hover: #A33333;
+            --font-display: 'Bodoni Moda', 'Didot', 'Georgia', serif;
+            --font-quote: 'Cormorant Garamond', 'Georgia', serif;
+            --font-body: 'Noto Sans KR', -apple-system, 'Helvetica Neue', sans-serif;
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        /* ===== RESET ===== */
+        *, *::before, *::after {
+            margin: 0; padding: 0; box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        html {
+            height: 100%;
+            overflow: hidden;
+            overscroll-behavior: contain;
+        }
+        body {
+            height: 100%;
+            overflow: hidden;
+            background: var(--bg-deep);
+            color: var(--text);
+            font-family: var(--font-body);
+            font-weight: 400;
+            font-size: 15px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== APP ===== */
+        #app {
+            position: relative;
+            width: 100%;
+            max-width: 430px;
+            height: 100dvh;
+            height: 100vh;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        @supports (height: 100dvh) {
+            #app { height: 100dvh; }
+        }
+
+        /* ===== SCREEN BASE ===== */
+        .screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
+            transform: translateY(10px);
+            overflow: hidden;
+        }
+        .screen.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* ===== SHARED: BUTTONS ===== */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px 24px;
+            border: none;
+            border-radius: 6px;
+            font-family: var(--font-body);
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s, opacity 0.3s;
+            letter-spacing: 0.02em;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn:disabled { opacity: 0.25; cursor: default; transform: none; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:active:not(:disabled) { background: var(--accent-hover); }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .btn-ghost:active:not(:disabled) { background: rgba(255,255,255,0.05); }
+
+        .screen-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 20px calc(16px + var(--safe-bottom));
+            background: linear-gradient(transparent, var(--bg-deep) 35%);
+            z-index: 10;
+            pointer-events: none;
+        }
+        .screen-footer > * { pointer-events: auto; }
+        .footer-row {
+            display: flex;
+            gap: 10px;
+        }
+        .footer-row .btn { flex: 1; }
+
+        /* ========================================
+           SCREEN 1: WELCOME
+           ======================================== */
+        #welcome {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 32px;
+            background:
+                radial-gradient(ellipse at 20% 10%, rgba(140,45,45,0.12) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 90%, rgba(35,35,90,0.08) 0%, transparent 55%),
+                var(--bg-deep);
+            overflow-y: auto;
+        }
+
+        .welcome-brand { margin-bottom: 36px; }
+        .mephisto-logo {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 400;
+            letter-spacing: 0.35em;
+            text-indent: 0.35em;
+            margin-bottom: 6px;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.2s ease forwards;
+        }
+        .mephisto-sub {
+            font-family: var(--font-quote);
+            font-size: 13px;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            font-style: italic;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.5s ease forwards;
+        }
+
+        .welcome-line {
+            width: 36px;
+            height: 1px;
+            background: var(--text-muted);
+            margin: 0 auto 28px;
+            opacity: 0;
+            animation: fadeUp 0.7s 0.7s ease forwards;
+        }
+
+        .welcome-question {
+            font-family: var(--font-quote);
+            font-size: 19px;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 44px;
+            max-width: 280px;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.9s ease forwards;
+        }
+
+        .welcome-form {
+            width: 100%;
+            max-width: 260px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeUp 0.8s 1.1s ease forwards;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 13px 16px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s, background 0.3s;
+        }
+        .input-field:focus {
+            border-color: rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.06);
+        }
+        .input-field::placeholder { color: var(--text-muted); }
+        .input-field.shake {
+            animation: shake 0.4s ease;
+            border-color: var(--accent);
+        }
+
+        .welcome-form .btn { margin-top: 4px; }
+
+        .bf-badge {
+            margin-top: 40px;
+            opacity: 0;
+            animation: fadeUp 0.6s 1.4s ease forwards;
+        }
+        .bf-badge img {
+            height: 14px;
+            opacity: 0.18;
+        }
+
+        /* ========================================
+           SCREEN 2: CARD SELECTION
+           ======================================== */
+        #selection { background: var(--bg-deep); }
+
+        .sel-header {
+            padding: 18px 20px 12px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .sel-instruction {
+            font-size: 13px;
+            font-weight: 300;
+            color: var(--text-secondary);
+            letter-spacing: 0.01em;
+            margin-bottom: 4px;
+        }
+        .sel-counter {
+            font-family: var(--font-display);
+            font-size: 34px;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+        }
+        .sel-count {
+            color: var(--accent);
+            display: inline-block;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .sel-count.bump { transform: scale(1.35); }
+        .sel-sep { color: var(--text-muted); margin: 0 1px; font-weight: 300; }
+        .sel-total { color: var(--text-muted); font-weight: 300; }
+
+        .card-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 7px;
+            padding: 4px 10px 110px;
+            overflow-y: auto;
+            align-content: start;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .card-cell {
+            position: relative;
+            border-radius: 7px;
+            overflow: hidden;
+            cursor: pointer;
+            background: var(--bg-card);
+            transition:
+                transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.3s ease,
+                box-shadow 0.3s ease;
+            will-change: transform;
+        }
+        .card-cell img {
+            width: 100%;
+            height: auto;
+            display: block;
+            pointer-events: none;
+        }
+        /* 선택 테두리 */
+        .card-cell::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 7px;
+            border: 2.5px solid var(--c);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .card-cell.on::after { opacity: 1; }
+        .card-cell.on {
+            transform: scale(0.92);
+            box-shadow: 0 0 20px -4px var(--c);
+        }
+        .card-cell.off {
+            opacity: 0.28;
+            transform: scale(0.94);
+            filter: grayscale(0.6);
+        }
+
+        /* 체크마크 */
+        .card-chk {
+            position: absolute;
+            top: 5px; right: 5px;
+            width: 20px; height: 20px;
+            background: var(--c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0);
+            transition: opacity 0.2s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            z-index: 3;
+        }
+        .card-cell.on .card-chk {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .card-chk svg { width: 11px; height: 11px; }
+
+        /* ========================================
+           SCREEN 3: CONFIRM
+           ======================================== */
+        #confirm {
+            background: var(--bg-deep);
+            overflow-y: auto;
+        }
+
+        .cfm-header {
+            padding: 28px 24px 4px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .cfm-name {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            margin-bottom: 3px;
+        }
+        .cfm-sub {
+            font-size: 13px;
+            font-weight: 300;
+            color: var(--text-secondary);
+        }
+
+        .cfm-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            padding: 16px 20px 110px;
+            flex: 1;
+            align-content: start;
+        }
+        .cfm-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+        }
+        .cfm-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ========================================
+           SCREEN 4: PRIORITY RANKING
+           ======================================== */
+        #priority {
+            background: var(--bg-deep);
+        }
+
+        .pri-header {
+            padding: 28px 24px 14px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .pri-title {
+            font-family: var(--font-display);
+            font-size: 19px;
+            font-weight: 400;
+            letter-spacing: 0.03em;
+            margin-bottom: 3px;
+        }
+        .pri-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .pri-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 16px 110px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .pri-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            background: var(--bg-elevated);
+            border-radius: 10px;
+            border-left: 3px solid var(--c);
+            transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+            user-select: none;
+        }
+        .pri-item.dragging {
+            background: #2A2A2A;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            z-index: 100;
+            transform: scale(1.03);
+        }
+
+        .pri-rank {
+            font-family: var(--font-display);
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--c);
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .pri-handle {
+            color: var(--text-muted);
+            font-size: 16px;
+            padding: 6px 2px;
+            line-height: 1;
+            cursor: grab;
+            touch-action: none;
+        }
+
+        .pri-thumb {
+            width: 34px;
+            height: 50px;
+            border-radius: 4px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .pri-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pri-info { flex: 1; min-width: 0; }
+        .pri-kr { font-size: 14px; font-weight: 500; }
+        .pri-en {
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .pri-arrows {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .arr-btn {
+            width: 26px; height: 22px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 4px;
+            color: var(--text-muted);
+            font-size: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s;
+        }
+        .arr-btn:active { background: rgba(255,255,255,0.12); }
+        .arr-btn:disabled { opacity: 0.15; }
+
+        /* ========================================
+           SCREEN 5: DONE
+           ======================================== */
+        #done {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 28px;
+            background:
+                radial-gradient(ellipse at 50% 25%, rgba(140,45,45,0.08) 0%, transparent 60%),
+                var(--bg-deep);
+            overflow-y: auto;
+        }
+
+        .done-m {
+            width: 44px; height: 44px;
+            border: 1.5px solid var(--text-muted);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 400;
+            margin: 0 auto 22px;
+            opacity: 0;
+            animation: fadeUp 0.6s 0.15s ease forwards;
+        }
+
+        .done-title {
+            font-family: var(--font-quote);
+            font-size: 21px;
+            font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: fadeUp 0.6s 0.35s ease forwards;
+        }
+
+        .done-list {
+            list-style: none;
+            width: 100%;
+            max-width: 250px;
+            margin: 0 auto 28px;
+            text-align: left;
+            opacity: 0;
+            animation: fadeUp 0.6s 0.55s ease forwards;
+        }
+        .done-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .done-list li:last-child { border-bottom: none; }
+        .done-rk {
+            font-family: var(--font-display);
+            font-size: 15px;
+            color: var(--text-muted);
+            min-width: 20px;
+            text-align: right;
+        }
+        .done-nm { flex: 1; font-size: 14px; font-weight: 500; }
+        .done-en {
+            font-size: 10px;
+            color: var(--text-muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        .done-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .done-note {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 300;
+            line-height: 1.7;
+            opacity: 0;
+            animation: fadeUp 0.6s 0.75s ease forwards;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(5px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(3px); }
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+
+    <!-- ====== SCREEN 1: WELCOME ====== -->
+    <section id="welcome" class="screen active">
+        <div class="welcome-brand">
+            <div class="mephisto-logo">MEPHISTØ &amp; co.</div>
+            <div class="mephisto-sub">— since 1808 —</div>
+        </div>
+        <div class="welcome-line"></div>
+        <p class="welcome-question">
+            당신이 욕망하는 모든 가치를<br>
+            얻을 수 있다면?
+        </p>
+        <div class="welcome-form" id="welcome-form">
+            <input type="text" class="input-field" id="inp-name"
+                   placeholder="이름" autocomplete="off" enterkeyhint="next">
+            <input type="text" class="input-field" id="inp-room"
+                   placeholder="방 코드" maxlength="6" autocomplete="off" enterkeyhint="go">
+            <button class="btn btn-primary" id="btn-enter">입장하기</button>
+        </div>
+        <div class="bf-badge">
+            <img src="imgs/bf_logo_white.png" alt="Being Faust — Enter Mephisto">
+        </div>
+    </section>
+
+    <!-- ====== SCREEN 2: CARD SELECTION ====== -->
+    <section id="selection" class="screen">
+        <div class="sel-header">
+            <div class="sel-instruction">당신이 욕망하는 가치를 선택하세요</div>
+            <div class="sel-counter">
+                <span class="sel-count" id="sel-count">0</span><span class="sel-sep"> / </span><span class="sel-total">6</span>
+            </div>
+        </div>
+        <div class="card-grid" id="card-grid"></div>
+        <div class="screen-footer">
+            <button class="btn btn-primary" id="btn-next" disabled>다음</button>
+        </div>
+    </section>
+
+    <!-- ====== SCREEN 3: CONFIRM ====== -->
+    <section id="confirm" class="screen">
+        <div class="cfm-header">
+            <div class="cfm-name" id="cfm-name"></div>
+            <div class="cfm-sub">당신이 선택한 가치입니다</div>
+        </div>
+        <div class="cfm-grid" id="cfm-grid"></div>
+        <div class="screen-footer">
+            <div class="footer-row">
+                <button class="btn btn-ghost" id="btn-reselect">다시 선택</button>
+                <button class="btn btn-primary" id="btn-to-pri">순위 정하기</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== SCREEN 4: PRIORITY ====== -->
+    <section id="priority" class="screen">
+        <div class="pri-header">
+            <div class="pri-title">순위를 정해주세요</div>
+            <div class="pri-hint">가장 중요한 가치가 위로 · 드래그 또는 화살표</div>
+        </div>
+        <div class="pri-list" id="pri-list"></div>
+        <div class="screen-footer">
+            <div class="footer-row">
+                <button class="btn btn-ghost" id="btn-back-cfm">이전</button>
+                <button class="btn btn-primary" id="btn-submit">제출하기</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== SCREEN 5: DONE ====== -->
+    <section id="done" class="screen">
+        <div class="done-m">M</div>
+        <div class="done-title">
+            당신의 가치가<br>기록되었습니다
+        </div>
+        <ul class="done-list" id="done-list"></ul>
+        <p class="done-note">
+            결과는 진행자 화면에서<br>확인할 수 있습니다
+        </p>
+    </section>
+
+</div>
+
+<script>
+/* ==========================================================
+   VALUE DATA
+   ========================================================== */
+const VALUES = [
+    { id: 'love',      en: 'LOVE',      kr: '사랑',     de: 'LIEBE',       color: '#E63946' },
+    { id: 'beauty',    en: 'BEAUTY',    kr: '아름다움', de: 'SCHÖNHEIT',   color: '#9B59B6' },
+    { id: 'faith',     en: 'FAITH',     kr: '믿음',     de: 'GLAUBE',      color: '#A8C256' },
+    { id: 'fame',      en: 'FAME',      kr: '명예',     de: 'RUHM',        color: '#7A7A7A' },
+    { id: 'family',    en: 'FAMILY',    kr: '가족',     de: 'FAMILIE',     color: '#E67E22' },
+    { id: 'freedom',   en: 'FREEDOM',   kr: '자유',     de: 'FREIHEIT',    color: '#2980B9' },
+    { id: 'knowledge', en: 'KNOWLEDGE', kr: '지식',     de: 'WISSEN',      color: '#27AE60' },
+    { id: 'pleasure',  en: 'PLEASURE',  kr: '쾌락',     de: 'WOLLUST',     color: '#E84393' },
+    { id: 'power',     en: 'POWER',     kr: '권력',     de: 'MACHT',       color: '#C5A55A' },
+    { id: 'progress',  en: 'PROGRESS',  kr: '발전',     de: 'FORTSCHRITT', color: '#00BCD4' },
+    { id: 'wealth',    en: 'WEALTH',    kr: '돈',       de: 'REICHTUM',    color: '#F1C40F' },
+    { id: 'youth',     en: 'YOUTH',     kr: '젊음',     de: 'JUGEND',      color: '#85C1E9' }
+];
+
+const V_MAP = Object.fromEntries(VALUES.map(v => [v.id, v]));
+
+/* ==========================================================
+   STATE
+   ========================================================== */
+const state = {
+    name: '',
+    room: '',
+    selected: new Set(),   // value IDs, max 6
+    priority: []           // ordered value IDs after ranking
+};
+
+/* ==========================================================
+   DOM REFS
+   ========================================================== */
+const $ = id => document.getElementById(id);
+
+/* ==========================================================
+   SCREEN NAVIGATION
+   ========================================================== */
+function go(screenId) {
+    document.querySelectorAll('.screen').forEach(s => {
+        s.classList.remove('active');
+    });
+    const target = $(screenId);
+    target.classList.add('active');
+    // 스크롤 위치 초기화
+    const scrollable = target.querySelector('.card-grid, .cfm-grid, .pri-list');
+    if (scrollable) scrollable.scrollTop = 0;
+}
+
+/* ==========================================================
+   SCREEN 1: WELCOME
+   ========================================================== */
+function enterGame() {
+    const nameEl = $('inp-name');
+    const roomEl = $('inp-room');
+    const name = nameEl.value.trim();
+    const room = roomEl.value.trim();
+
+    let ok = true;
+    if (!name) { nameEl.classList.add('shake'); ok = false; }
+    if (!room) { roomEl.classList.add('shake'); ok = false; }
+    if (!ok) return;
+
+    state.name = name;
+    state.room = room;
+    go('selection');
+}
+
+/* ==========================================================
+   SCREEN 2: CARD SELECTION
+   ========================================================== */
+function buildGrid() {
+    const grid = $('card-grid');
+    VALUES.forEach(v => {
+        const el = document.createElement('div');
+        el.className = 'card-cell';
+        el.dataset.id = v.id;
+        el.style.setProperty('--c', v.color);
+        el.innerHTML = `
+            <img src="valuecards/beingfaust_${v.id}.png" alt="${v.kr}" loading="lazy">
+            <span class="card-chk">
+                <svg viewBox="0 0 12 12" fill="none">
+                    <path d="M2 6L5 9L10 3" stroke="#fff" stroke-width="2"
+                          stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>`;
+        el.addEventListener('click', () => toggle(v.id));
+        grid.appendChild(el);
+    });
+}
+
+function toggle(id) {
+    if (state.selected.has(id)) {
+        state.selected.delete(id);
+    } else if (state.selected.size < 6) {
+        state.selected.add(id);
+    } else {
+        return;
+    }
+    refreshSelection();
+}
+
+function refreshSelection() {
+    const n = state.selected.size;
+    const countEl = $('sel-count');
+    countEl.textContent = n;
+    countEl.classList.add('bump');
+    setTimeout(() => countEl.classList.remove('bump'), 220);
+
+    document.querySelectorAll('.card-cell').forEach(el => {
+        const on = state.selected.has(el.dataset.id);
+        el.classList.toggle('on', on);
+        el.classList.toggle('off', n >= 6 && !on);
+    });
+
+    const btn = $('btn-next');
+    btn.disabled = n !== 6;
+    btn.textContent = n === 6 ? '다음 →' : '다음';
+}
+
+/* ==========================================================
+   SCREEN 3: CONFIRM
+   ========================================================== */
+function showConfirm() {
+    $('cfm-name').textContent = state.name + '님,';
+    const grid = $('cfm-grid');
+    grid.innerHTML = '';
+    state.selected.forEach(id => {
+        const v = V_MAP[id];
+        const card = document.createElement('div');
+        card.className = 'cfm-card';
+        card.innerHTML = `<img src="valuecards/beingfaust_${v.id}.png" alt="${v.kr}">`;
+        grid.appendChild(card);
+    });
+    go('confirm');
+}
+
+/* ==========================================================
+   SCREEN 4: PRIORITY RANKING
+   ========================================================== */
+function showPriority() {
+    state.priority = [...state.selected];
+    renderPriList();
+    go('priority');
+}
+
+function renderPriList() {
+    const list = $('pri-list');
+    list.innerHTML = '';
+    state.priority.forEach((id, i) => {
+        const v = V_MAP[id];
+        const el = document.createElement('div');
+        el.className = 'pri-item';
+        el.dataset.id = id;
+        el.style.setProperty('--c', v.color);
+        el.innerHTML = `
+            <span class="pri-rank">${i + 1}</span>
+            <span class="pri-handle">☰</span>
+            <div class="pri-thumb">
+                <img src="valuecards/beingfaust_${v.id}.png" alt="${v.kr}">
+            </div>
+            <div class="pri-info">
+                <div class="pri-kr">${v.kr}</div>
+                <div class="pri-en">${v.en}</div>
+            </div>
+            <div class="pri-arrows">
+                <button class="arr-btn arr-up" ${i === 0 ? 'disabled' : ''}>▲</button>
+                <button class="arr-btn arr-dn" ${i === state.priority.length - 1 ? 'disabled' : ''}>▼</button>
+            </div>`;
+        // 화살표 이벤트
+        el.querySelector('.arr-up').addEventListener('click', () => moveItem(id, -1));
+        el.querySelector('.arr-dn').addEventListener('click', () => moveItem(id, 1));
+        list.appendChild(el);
+    });
+    initDrag();
+}
+
+function moveItem(id, dir) {
+    const i = state.priority.indexOf(id);
+    const j = i + dir;
+    if (j < 0 || j >= state.priority.length) return;
+    [state.priority[i], state.priority[j]] = [state.priority[j], state.priority[i]];
+    renderPriList();
+}
+
+function syncPriority() {
+    const items = $('pri-list').querySelectorAll('.pri-item');
+    state.priority = [...items].map(el => el.dataset.id);
+    items.forEach((el, i) => {
+        el.querySelector('.pri-rank').textContent = i + 1;
+        const up = el.querySelector('.arr-up');
+        const dn = el.querySelector('.arr-dn');
+        up.disabled = i === 0;
+        dn.disabled = i === items.length - 1;
+    });
+}
+
+/* ---------- DRAG & DROP ---------- */
+function initDrag() {
+    const list = $('pri-list');
+    let dragged = null;
+    let startY = 0;
+
+    list.addEventListener('touchstart', e => {
+        if (!e.target.closest('.pri-handle')) return;
+        dragged = e.target.closest('.pri-item');
+        startY = e.touches[0].clientY;
+        dragged.classList.add('dragging');
+    }, { passive: true });
+
+    list.addEventListener('touchmove', e => {
+        if (!dragged) return;
+        e.preventDefault();
+
+        const y = e.touches[0].clientY;
+        const dy = y - startY;
+        dragged.style.transform = `translateY(${dy}px) scale(1.03)`;
+
+        const items = [...list.querySelectorAll('.pri-item:not(.dragging)')];
+        const dRect = dragged.getBoundingClientRect();
+        const dMid = dRect.top + dRect.height / 2;
+
+        for (const sib of items) {
+            const sRect = sib.getBoundingClientRect();
+            const sMid = sRect.top + sRect.height / 2;
+
+            // 위로 드래그: 대상을 지남
+            if (dy < 0 && dMid < sMid &&
+                (dragged.compareDocumentPosition(sib) & Node.DOCUMENT_POSITION_PRECEDING)) {
+                list.insertBefore(dragged, sib);
+                startY = y;
+                dragged.style.transform = 'scale(1.03)';
+                syncPriority();
+                break;
+            }
+            // 아래로 드래그: 대상을 지남
+            if (dy > 0 && dMid > sMid &&
+                (dragged.compareDocumentPosition(sib) & Node.DOCUMENT_POSITION_FOLLOWING)) {
+                sib.after(dragged);
+                startY = y;
+                dragged.style.transform = 'scale(1.03)';
+                syncPriority();
+                break;
+            }
+        }
+    }, { passive: false });
+
+    list.addEventListener('touchend', () => {
+        if (!dragged) return;
+        dragged.classList.remove('dragging');
+        dragged.style.transform = '';
+        syncPriority();
+        dragged = null;
+    });
+}
+
+/* ==========================================================
+   SCREEN 5: DONE (SUBMIT)
+   ========================================================== */
+function submit() {
+    // priority 최종 동기화
+    syncPriority();
+
+    // Phase 2에서 Google Sheets 전송 로직 추가 예정
+    const payload = {
+        name: state.name,
+        room: state.room,
+        values: state.priority.map((id, i) => ({
+            rank: i + 1,
+            id,
+            kr: V_MAP[id].kr,
+            en: V_MAP[id].en
+        })),
+        ts: new Date().toISOString()
+    };
+    console.log('[BF Values] 제출 데이터:', JSON.stringify(payload, null, 2));
+
+    // 완료 화면
+    renderDone();
+    go('done');
+}
+
+function renderDone() {
+    const list = $('done-list');
+    list.innerHTML = '';
+    state.priority.forEach((id, i) => {
+        const v = V_MAP[id];
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span class="done-rk">${i + 1}</span>
+            <span class="done-nm">${v.kr}</span>
+            <span class="done-en">${v.en}</span>
+            <span class="done-dot" style="background:${v.color}"></span>`;
+        list.appendChild(li);
+    });
+}
+
+/* ==========================================================
+   EVENT BINDINGS
+   ========================================================== */
+document.addEventListener('DOMContentLoaded', () => {
+    buildGrid();
+
+    // Welcome
+    $('btn-enter').addEventListener('click', enterGame);
+    $('inp-name').addEventListener('input', e => e.target.classList.remove('shake'));
+    $('inp-room').addEventListener('input', e => e.target.classList.remove('shake'));
+    $('inp-name').addEventListener('keydown', e => {
+        if (e.key === 'Enter') $('inp-room').focus();
+    });
+    $('inp-room').addEventListener('keydown', e => {
+        if (e.key === 'Enter') enterGame();
+    });
+    // 셰이크 애니메이션 끝나면 클래스 제거
+    document.querySelectorAll('.input-field').forEach(el => {
+        el.addEventListener('animationend', () => el.classList.remove('shake'));
+    });
+
+    // Selection → Confirm
+    $('btn-next').addEventListener('click', showConfirm);
+
+    // Confirm
+    $('btn-reselect').addEventListener('click', () => go('selection'));
+    $('btn-to-pri').addEventListener('click', showPriority);
+
+    // Priority
+    $('btn-back-cfm').addEventListener('click', () => go('confirm'));
+    $('btn-submit').addEventListener('click', submit);
+});
+</script>
+</body>
+</html>
