@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 리터러시 — 위임 판단력</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Pretendard', -apple-system, sans-serif; background: #fff; color: #111; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+  .container { max-width: 480px; width: 100%; padding: 24px 20px; min-height: 100vh; display: flex; flex-direction: column; }
+
+  /* ===== 스탯 바 — Reigns 스타일 게이지 ===== */
+  .stats-bar { display: flex; gap: 6px; margin-bottom: 20px; padding: 10px 12px; border: 1px solid #e8e8e8; border-radius: 10px; background: #fafafa; transition: all 0.3s; }
+  .stat { flex: 1; }
+  .stat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .stat-label { font-size: 10px; color: #999; font-weight: 500; letter-spacing: 0.5px; }
+  .stat-num { font-size: 11px; font-weight: 700; transition: all 0.4s; }
+  .stat-num.pos { color: #1a8c1a; }
+  .stat-num.neg { color: #c44; }
+  .stat-num.zero { color: #bbb; }
+  .stat-gauge { height: 6px; background: #e8e8e8; border-radius: 3px; overflow: visible; position: relative; }
+  .stat-gauge-center { position: absolute; left: 50%; top: -1px; width: 2px; height: 8px; background: #ccc; border-radius: 1px; z-index: 2; }
+  .stat-gauge-fill { height: 100%; border-radius: 3px; position: absolute; top: 0; transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .stat-gauge-fill.pos { background: #111; left: 50%; }
+  .stat-gauge-fill.neg { background: #c44; right: 50%; }
+  .stat-change-indicator { font-size: 10px; font-weight: 700; position: absolute; top: -16px; transition: all 0.3s; opacity: 0; }
+  .stat-change-indicator.show { opacity: 1; animation: changePopup 1.2s ease forwards; }
+  .stat-change-indicator.up { color: #1a8c1a; }
+  .stat-change-indicator.down { color: #c44; }
+  @keyframes changePopup { 0% { opacity: 0; transform: translateY(4px); } 20% { opacity: 1; transform: translateY(0); } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-8px); } }
+
+  /* 스탯 흔들림 */
+  @keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-3px); } 40% { transform: translateX(3px); } 60% { transform: translateX(-2px); } 80% { transform: translateX(2px); } }
+  .stat.shaking { animation: shake 0.4s ease; }
+
+  /* 호버 프리뷰 — 영향받는 스탯 하이라이트 */
+  .stat.preview-up .stat-gauge { background: rgba(26,140,26,0.15); }
+  .stat.preview-up .stat-label { color: #1a8c1a; }
+  .stat.preview-down .stat-gauge { background: rgba(204,68,68,0.15); }
+  .stat.preview-down .stat-label { color: #c44; }
+
+  /* 라운드 */
+  .round-indicator { display: flex; gap: 6px; margin-bottom: 16px; justify-content: center; }
+  .round-dot { width: 8px; height: 8px; border-radius: 50%; background: #e0e0e0; transition: all 0.3s; }
+  .round-dot.active { background: #111; transform: scale(1.3); }
+  .round-dot.done { background: #888; }
+
+  /* 화면 */
+  .screen { flex: 1; display: flex; flex-direction: column; }
+
+  /* 씬 텍스트 — 카드 느낌 */
+  .scene-card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); animation: cardIn 0.4s ease; }
+  @keyframes cardIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .scene-card p { font-size: 15px; line-height: 1.7; margin-bottom: 10px; }
+  .scene-card .highlight { font-weight: 600; }
+  .scene-card .thought { color: #888; font-style: italic; font-size: 13px; margin-top: 6px; }
+  .scene-card .result-good { border-left: 3px solid #1a8c1a; padding-left: 12px; margin: 12px 0; }
+  .scene-card .result-bad { border-left: 3px solid #c44; padding-left: 12px; margin: 12px 0; }
+  .scene-card .result-neutral { border-left: 3px solid #999; padding-left: 12px; margin: 12px 0; }
+
+  /* 선택지 — 카드 버튼 */
+  .choices { display: flex; flex-direction: column; gap: 8px; margin-top: auto; padding-bottom: 20px; }
+  .choice-btn { background: #fff; border: 1.5px solid #e0e0e0; border-radius: 10px; padding: 14px 16px; text-align: left; font-size: 14px; line-height: 1.5; cursor: pointer; transition: all 0.2s; position: relative; }
+  .choice-btn:hover { border-color: #111; background: #f8f8f8; transform: translateX(4px); }
+  .choice-btn:active { background: #f0f0f0; transform: scale(0.98); }
+  .choice-btn .choice-preview { display: none; font-size: 10px; margin-top: 6px; color: #999; letter-spacing: 0.3px; }
+  .choice-btn:hover .choice-preview { display: block; }
+
+  /* 시나리오 선택 */
+  .scenario-select { text-align: center; padding-top: 48px; }
+  .scenario-select h2 { font-size: 18px; margin-bottom: 6px; font-weight: 700; }
+  .scenario-select p { font-size: 12px; color: #999; margin-bottom: 28px; }
+  .scenario-btn { display: block; width: 100%; background: #fff; border: 1.5px solid #e0e0e0; border-radius: 12px; padding: 18px 16px; margin-bottom: 10px; text-align: left; cursor: pointer; transition: all 0.2s; }
+  .scenario-btn:hover { border-color: #111; transform: translateX(4px); }
+  .scenario-btn .s-title { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+  .scenario-btn .s-desc { font-size: 12px; color: #999; }
+
+  /* 최종 프로필 */
+  .profile { text-align: center; padding-top: 32px; animation: cardIn 0.5s ease; }
+  .profile h2 { font-size: 17px; margin-bottom: 20px; }
+  .profile-bars { margin-bottom: 24px; }
+  .profile-bar { margin-bottom: 14px; text-align: left; }
+  .profile-bar-label { font-size: 12px; color: #888; margin-bottom: 3px; display: flex; justify-content: space-between; }
+  .profile-bar-track { height: 20px; background: #f0f0f0; border-radius: 10px; overflow: hidden; position: relative; }
+  .profile-bar-fill { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1); position: absolute; }
+  .profile-bar-fill.positive { background: #111; left: 50%; }
+  .profile-bar-fill.negative { background: #c44; right: 50%; left: auto; }
+  .profile-bar-center { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: #ccc; z-index: 1; }
+  .profile-comment { font-size: 14px; line-height: 1.7; text-align: left; margin-bottom: 20px; padding: 14px; background: #f8f8f8; border-radius: 10px; border-left: 3px solid #111; }
+  .restart-btn { background: #111; color: #fff; border: none; border-radius: 8px; padding: 12px 28px; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+  .restart-btn:hover { background: #333; transform: scale(1.02); }
+
+  .next-btn { background: #111; color: #fff; border: none; border-radius: 8px; padding: 12px; font-size: 13px; cursor: pointer; width: 100%; transition: all 0.2s; }
+  .next-btn:hover { background: #333; }
+
+  .hidden { display: none; }
+
+  /* 버전 표시 */
+  .version { position: fixed; bottom: 8px; right: 12px; font-size: 9px; color: #ccc; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="stats-bar hidden" id="statsBar">
+    <div class="stat" id="statCenterWrap">
+      <div class="stat-header">
+        <span class="stat-label">중심잡기</span>
+        <span class="stat-num zero" id="statCenterNum">0</span>
+      </div>
+      <div class="stat-gauge">
+        <div class="stat-gauge-center"></div>
+        <div class="stat-gauge-fill" id="statCenterFill"></div>
+        <div class="stat-change-indicator" id="statCenterDelta"></div>
+      </div>
+    </div>
+    <div class="stat" id="statFusionWrap">
+      <div class="stat-header">
+        <span class="stat-label">융합하기</span>
+        <span class="stat-num zero" id="statFusionNum">0</span>
+      </div>
+      <div class="stat-gauge">
+        <div class="stat-gauge-center"></div>
+        <div class="stat-gauge-fill" id="statFusionFill"></div>
+        <div class="stat-change-indicator" id="statFusionDelta"></div>
+      </div>
+    </div>
+    <div class="stat" id="statReflectWrap">
+      <div class="stat-header">
+        <span class="stat-label">성찰하기</span>
+        <span class="stat-num zero" id="statReflectNum">0</span>
+      </div>
+      <div class="stat-gauge">
+        <div class="stat-gauge-center"></div>
+        <div class="stat-gauge-fill" id="statReflectFill"></div>
+        <div class="stat-change-indicator" id="statReflectDelta"></div>
+      </div>
+    </div>
+  </div>
+  <div class="round-indicator hidden" id="roundIndicator"></div>
+  <div class="screen" id="screen"></div>
+</div>
+<div class="version">v0.2 — Reigns style</div>
+
+<script>
+const scenarios = {
+  homework: {
+    title: "숙제 + ChatGPT",
+    desc: "내일까지 숙제. 시작도 못했다.",
+    rounds: 4,
+    nodes: {
+      start: {
+        text: `<p>사회 숙제가 <span class="highlight">내일까지</span>다.</p><p>"기후변화가 우리 생활에 미치는 영향" A4 1장.</p><p>시작도 못했다.</p>`,
+        choices: [
+          { text: 'ChatGPT에 "기후변화가 우리 생활에 미치는 영향 써줘"라고 친다', next: 'hw_ai_full', stats: [-1, 0, -1] },
+          { text: '일단 내가 아는 거부터 끄적인다', next: 'hw_self', stats: [1, -1, 0] },
+          { text: 'ChatGPT에 "기후변화 관련 키워드 좀 알려줘"라고 친다', next: 'hw_ai_keyword', stats: [0, 1, 0] }
+        ]
+      },
+      hw_ai_full: {
+        text: `<p>깔끔한 글이 나왔다. 서론-본론-결론.</p><p>"해수면 상승률 연 3.2mm", "식량 생산 23% 감소 전망" 같은 수치도 들어 있다.</p><p class="thought">꽤 괜찮은데?</p>`,
+        choices: [
+          { text: '그대로 제출한다', next: 'hw_present_blind', stats: [-2, 0, -2] },
+          { text: '한번 읽어보고 이상한 데 없는지 확인한다', next: 'hw_present_check', stats: [0, 1, 1] },
+          { text: '내 말로 고쳐서 쓴다 (시간 더 걸림)', next: 'hw_present_rewrite', stats: [1, 1, 1] }
+        ]
+      },
+      hw_self: {
+        text: `<p>30분 썼는데 반 장도 안 됐다.</p><p>아는 게 별로 없다. 짜증난다.</p><p class="thought">다른 애들은 다 했을 텐데...</p>`,
+        choices: [
+          { text: '"에이 몰라" 하고 ChatGPT를 켠다', next: 'hw_ai_full', stats: [-1, 0, -1] },
+          { text: '부족해도 이대로 낸다', next: 'hw_present_honest', stats: [1, -1, 1] },
+          { text: '모르는 부분만 ChatGPT에 물어본다', next: 'hw_present_rewrite', stats: [0, 2, 1] }
+        ]
+      },
+      hw_ai_keyword: {
+        text: `<p>ChatGPT가 키워드 10개를 알려줬다.</p><p>"해수면 상승, 극단적 기상현상, 식량 안보, 생태계 변화..."</p><p class="thought">방향이 잡힌다.</p>`,
+        choices: [
+          { text: '키워드를 바탕으로 직접 쓴다', next: 'hw_present_rewrite', stats: [1, 1, 1] },
+          { text: '"이 키워드로 글 써줘"라고 다시 시킨다', next: 'hw_ai_full', stats: [-1, 0, -1] }
+        ]
+      },
+      hw_present_blind: {
+        text: `<p>수업 시간. 선생님이 발표시킨다.</p><p class="highlight">"여기 '해수면 상승 연 3.2mm'라고 썼는데, 이 수치 출처가 뭐야?"</p><p>...</p><p class="thought">모른다. AI가 쓴 거니까.</p>`,
+        choices: [
+          { text: '"인터넷에서 봤어요" (얼버무린다)', next: 'hw_end_fake', stats: [-1, 0, -2] },
+          { text: '"솔직히 AI가 쓴 거라 모르겠어요"', next: 'hw_end_honest_late', stats: [1, 0, 2] }
+        ]
+      },
+      hw_present_check: { text: `<p>수업 시간. 선생님이 발표시킨다.</p><p>"해수면 상승 3.2mm" — 어제 확인해봤더니 실제 수치였다. 설명도 된다.</p><p class="thought">확인하길 잘했다.</p>`, choices: [{ text: '다음', next: 'hw_end_check', stats: [0, 0, 1], isNext: true }] },
+      hw_present_rewrite: { text: `<p>수업 시간. 선생님이 발표시킨다.</p><p>수치는 확인해서 맞고, 자기 말로 바꿔놔서 설명도 된다.</p><p>시간은 좀 걸렸지만.</p><p class="thought">발표하니까 꽤 괜찮은데?</p>`, choices: [{ text: '다음', next: 'hw_end_rewrite', stats: [0, 0, 1], isNext: true }] },
+      hw_present_honest: { text: `<p>수업 시간. 선생님이 발표시킨다.</p><p>짧고 부족하다. 하지만 "우리 동네 여름에 물난리 난 거"를 썼더니</p><p class="highlight">선생님: "좋은 관점이다. 개인 경험에서 시작한 게 좋다."</p>`, choices: [{ text: '다음', next: 'hw_end_honest', stats: [1, 0, 1], isNext: true }] },
+      hw_end_fake: { text: `<p>집에 와서 생각한다.</p><div class="result-bad"><p>선생님이 더 물어봤으면 어쩔 뻔했지.</p><p>5분 만에 끝낸 건 편했는데, 발표 때 식은땀이 났다.</p><p class="highlight">내가 쓴 게 아니니까 내가 설명할 수가 없었다.</p></div>`, choices: [], isEnd: true },
+      hw_end_honest_late: { text: `<p>집에 와서 생각한다.</p><div class="result-neutral"><p>솔직히 말한 건 좀 부끄러웠다.</p><p>근데 선생님이 "알겠어, 다음엔 출처를 같이 확인해봐"라고 했다.</p><p class="highlight">늦었지만 솔직한 게 나았다.</p></div>`, choices: [], isEnd: true },
+      hw_end_check: { text: `<p>집에 와서 생각한다.</p><div class="result-neutral"><p>AI가 써준 글을 확인하고 고치는 데 시간이 좀 걸렸다.</p><p>직접 쓴 건 아니지만, 적어도 내용은 알고 있었다.</p><p class="highlight">도구로 쓴 거지, 도구에 쓰인 건 아니다.</p></div>`, choices: [], isEnd: true },
+      hw_end_rewrite: { text: `<p>집에 와서 생각한다.</p><div class="result-good"><p>AI한테 방향을 잡고, 내가 직접 정리했다.</p><p>시간은 걸렸지만 발표할 때 자신 있었다.</p><p class="highlight">AI는 출발점이었고, 도착은 내가 했다.</p></div>`, choices: [], isEnd: true },
+      hw_end_honest: { text: `<p>집에 와서 생각한다.</p><div class="result-good"><p>반 장짜리 서툰 글이었는데, "개인 경험에서 시작한 게 좋다"고 했다.</p><p>양은 부족했지만 진짜 내 생각이 들어 있었다.</p><p class="highlight">부족해도 내 것이면 말할 수 있다.</p></div>`, choices: [], isEnd: true }
+    }
+  },
+  book: {
+    title: "독후감 — \"모르겠다\"가 사라진다",
+    desc: "어린 왕자를 읽었는데, 솔직히 잘 모르겠다.",
+    rounds: 4,
+    nodes: {
+      start: { text: `<p>어린 왕자를 읽었다. 독후감을 써야 한다.</p><p>솔직한 감상:</p><p class="highlight">"여우가 '길들인다'는 말을 하는데... 뭔 말인지 잘 모르겠다."</p>`, choices: [
+        { text: 'ChatGPT에 "어린 왕자 독후감 써줘"', next: 'bk_ai_full', stats: [-1, 0, -1] },
+        { text: '"잘 모르겠다"부터 시작해서 직접 쓴다', next: 'bk_self', stats: [1, -1, 2] },
+        { text: 'ChatGPT에 "길들인다는 게 무슨 뜻이야?" 물어본다', next: 'bk_ai_ask', stats: [0, 1, 0] }
+      ]},
+      bk_ai_full: { text: `<p>AI가 써줬다.</p><p><em>"이 작품은 진정한 관계의 의미를 깨닫게 해준다. 여우가 말하는 '길들인다'는 것은 서로에게 시간을 들이는 것이며..."</em></p><p>깔끔하다.</p><p class="thought">근데 나는 "깨달은" 적이 없다. 아직 모르겠는데.</p>`, choices: [
+        { text: '깔끔하니까 그대로 낸다', next: 'bk_class_ai', stats: [-2, 0, -2] },
+        { text: '"깨달았다"를 "아직 잘 모르겠다"로 바꾼다', next: 'bk_class_honest', stats: [2, 0, 2] },
+        { text: 'AI 글이랑 내 느낌을 비교하면서 다시 쓴다', next: 'bk_class_compare', stats: [1, 1, 2] }
+      ]},
+      bk_self: { text: `<p>"여우가 길들인다는 말을 했는데 솔직히 잘 모르겠다.</p><p>친구 사이에서도 그런 건가?</p><p>우리 강아지를 키울 때 느낀 거랑 비슷한 건가?"</p><p class="thought">서툴다. 문장도 별로다. 근데 쓰다 보니 뭔가 떠오른다.</p>`, choices: [
+        { text: '이대로 낸다 (서툴지만 솔직하게)', next: 'bk_class_honest', stats: [1, -1, 2] },
+        { text: '좀 더 다듬는다', next: 'bk_class_honest', stats: [1, 0, 1] },
+        { text: '"역시 AI한테 시킬걸" 후회하면서 AI를 켠다', next: 'bk_ai_full', stats: [-1, 0, -1] }
+      ]},
+      bk_ai_ask: { text: `<p>ChatGPT가 설명한다:</p><p><em>"길들인다는 건 시간과 노력을 들여 관계를 맺는 것입니다."</em></p><p class="thought">이해는 되는데... 뭔가 내가 느낀 거랑 다르다.</p>`, choices: [
+        { text: '"아, 그렇구나" 하고 이 설명으로 독후감을 쓴다', next: 'bk_class_ai', stats: [0, 1, -1] },
+        { text: '"근데 나는 아직 잘 모르겠는데..." 내 혼란을 그대로 쓴다', next: 'bk_class_compare', stats: [1, 0, 2] }
+      ]},
+      bk_class_ai: { text: `<p>수업 시간. 선생님:</p><p class="highlight">"독후감에서 가장 솔직했던 문장을 한 줄만 읽어봐."</p><p>"진정한 관계의 의미를 깨닫게 해주는 작품이다."</p><p class="thought">반 애들 반응 없음. 뻔한 말이니까.</p>`, choices: [{ text: '다음', next: 'bk_end_ai', stats: [0, 0, -1], isNext: true }] },
+      bk_class_honest: { text: `<p>수업 시간. 선생님:</p><p class="highlight">"독후감에서 가장 솔직했던 문장을 한 줄만 읽어봐."</p><p>"여우가 길들인다는 말을 했는데, 우리 강아지 키울 때 느낀 거랑 비슷한 건지 아직 모르겠다."</p><p>옆자리가 <span class="highlight">"아 나도 그 부분 이상했어."</span></p><p class="thought">대화가 시작됐다.</p>`, choices: [{ text: '다음', next: 'bk_end_honest', stats: [1, 0, 1], isNext: true }] },
+      bk_class_compare: { text: `<p>수업 시간. 선생님:</p><p class="highlight">"독후감에서 가장 솔직했던 문장을 한 줄만 읽어봐."</p><p>"AI는 '시간을 들여 관계를 맺는 것'이라고 했는데, 나는 아직 그게 뭔 느낌인지 모르겠다."</p><p>선생님: <span class="highlight">"그 차이를 느낀 것 자체가 좋은 감상이야."</span></p>`, choices: [{ text: '다음', next: 'bk_end_compare', stats: [1, 1, 2], isNext: true }] },
+      bk_end_ai: { text: `<p>그날 밤, 다시 어린 왕자를 펼친다.</p><p><em>"넌 나에게 아직 수만 명의 다른 소년과 다를 바 없어."</em></p><div class="result-bad"><p>AI가 "깨닫게 해준다"라고 정리해버린 그 혼란.</p><p>사실 그 혼란이 읽는 이유였는데.</p><p class="highlight">모르겠다는 감상이 사라졌다.</p></div>`, choices: [], isEnd: true },
+      bk_end_honest: { text: `<p>그날 밤, 다시 어린 왕자를 펼친다.</p><p><em>"넌 나에게 아직 수만 명의 다른 소년과 다를 바 없어."</em></p><div class="result-good"><p>아직도 잘 모르겠다. 근데 오늘 수업에서 옆자리도 모르겠다고 했다.</p><p>모르겠다는 게 나만 그런 게 아니었다.</p><p class="highlight">"모르겠다"가 대화를 열었다.</p></div>`, choices: [], isEnd: true },
+      bk_end_compare: { text: `<p>그날 밤, 다시 어린 왕자를 펼친다.</p><p><em>"넌 나에게 아직 수만 명의 다른 소년과 다를 바 없어."</em></p><div class="result-good"><p>AI는 "시간을 들여 관계를 맺는 것"이라고 했다. 맞는 말인 것 같다.</p><p>근데 내가 강아지한테 느끼는 건 "시간을 들인" 게 아니라 그냥... 매일 거기 있는 거?</p><p class="highlight">AI의 정리와 내 혼란 — 그 차이 자체가 감상이었다.</p></div>`, choices: [], isEnd: true }
+    }
+  },
+  art: {
+    title: "미술 시간 — AI 그림",
+    desc: "그림을 못 그린다. AI가 있다.",
+    rounds: 4,
+    nodes: {
+      start: { text: `<p>미술 시간.</p><p><span class="highlight">"가장 행복했던 순간"</span>을 그려오라는 과제.</p><p>나는 그림을 못 그린다.</p><p class="thought">가족 여행에서 바다 본 순간을 그리고 싶은데...</p>`, choices: [
+        { text: 'AI 이미지 생성기에 "행복한 가족 바다 여행" 입력', next: 'art_ai', stats: [-1, 0, -1] },
+        { text: '서툴지만 직접 그린다', next: 'art_self', stats: [2, -1, 0] },
+        { text: 'AI로 참고 이미지를 만들고 보면서 따라 그린다', next: 'art_ref', stats: [0, 1, 0] }
+      ]},
+      art_ai: { text: `<p>AI가 예쁜 그림을 만들었다.</p><p>푸른 바다, 맑은 하늘, 가족이 웃고 있다.</p><p class="thought">근데 우리 가족 여행은 흐린 날이었고, 바다가 회색이었다. 오히려 그게 좋았는데.</p>`, choices: [
+        { text: '예쁘니까 그냥 이걸로 낸다', next: 'art_present_ai', stats: [-2, 0, -1] },
+        { text: '"아니, 이건 내 기억이 아닌데" — 프롬프트를 바꿔본다', next: 'art_present_prompt', stats: [0, 1, 1] },
+        { text: 'AI 그림을 버리고 직접 그린다', next: 'art_self', stats: [2, -1, 1] }
+      ]},
+      art_self: { text: `<p>30분 그렸다.</p><p>바다가 이상하고 사람이 막대기 같다.</p><p class="thought">근데 옆에 엄마가 들고 있는 우산은 진짜 그날 있던 노란 우산이다.</p>`, choices: [
+        { text: '부끄럽지만 이대로 낸다', next: 'art_present_self', stats: [1, -1, 1] },
+        { text: '너무 못 그렸다. AI한테 깔끔하게 만들어달라고 한다', next: 'art_present_ai', stats: [-1, 0, -1] }
+      ]},
+      art_ref: { text: `<p>AI가 만든 참고 이미지를 보면서 따라 그린다.</p><p>구도는 AI 거, 색감도 참고했다. 근데 가운데에 노란 우산을 하나 그려 넣었다.</p><p class="thought">이건 AI한테 없던 거다. 그날 진짜 있었던 우산.</p>`, choices: [
+        { text: '이대로 낸다', next: 'art_present_mix', stats: [1, 1, 1] },
+        { text: '더 AI처럼 깔끔하게 고친다 (우산 지우고)', next: 'art_present_ai', stats: [-1, 0, -1] }
+      ]},
+      art_present_ai: { text: `<p>선생님이 작품을 보여주면서 묻는다:</p><p class="highlight">"이 그림에서 네가 제일 좋아하는 부분이 뭐야?"</p><p>"... 음... 바다요?"</p><p class="thought">대답이 안 나온다. 내가 고른 게 하나도 없으니까.</p>`, choices: [{ text: '다음', next: 'art_after_ai', stats: [0, 0, -1], isNext: true }] },
+      art_present_self: { text: `<p>선생님이 작품을 보여주면서 묻는다:</p><p class="highlight">"이 그림에서 네가 제일 좋아하는 부분이 뭐야?"</p><p>"여기 노란 우산이요. 그날 진짜 있었거든요."</p><p>선생님: <span class="highlight">"이게 너의 기억이구나."</span></p><p>반 애들이 "어떤 날이었어?" 묻는다.</p>`, choices: [{ text: '다음', next: 'art_after_self', stats: [1, 0, 1], isNext: true }] },
+      art_present_prompt: { text: `<p>선생님이 작품을 보여주면서 묻는다:</p><p class="highlight">"이 그림에서 네가 제일 좋아하는 부분이 뭐야?"</p><p>"회색 바다요. 흐린 날이었는데 그게 좋았어요."</p><p>선생님: <span class="highlight">"보통 행복한 순간을 밝게 그리는데, 회색을 고른 이유가 있구나."</span></p>`, choices: [{ text: '다음', next: 'art_after_prompt', stats: [0, 1, 1], isNext: true }] },
+      art_present_mix: { text: `<p>선생님이 작품을 보여주면서 묻는다:</p><p class="highlight">"이 그림에서 네가 제일 좋아하는 부분이 뭐야?"</p><p>"이 노란 우산이요. 나머지는 참고했는데, 이건 제가 직접 넣었어요."</p><p>선생님: <span class="highlight">"그 우산이 이 그림을 네 그림으로 만들어주는구나."</span></p>`, choices: [{ text: '다음', next: 'art_after_mix', stats: [1, 1, 1], isNext: true }] },
+      art_after_ai: { text: `<p>미술실을 나온다. 친구가 묻는다: "너 그거 AI로 했어?"</p>`, choices: [
+        { text: '"응" (솔직)', next: 'art_end_honest', stats: [0, 0, 1] },
+        { text: '"아니" (거짓말)', next: 'art_end_lie', stats: [-1, 0, -2] },
+        { text: '"...반반?" (애매하게)', next: 'art_end_vague', stats: [0, 0, 0] }
+      ]},
+      art_after_self: { text: `<p>미술실을 나온다. 친구가 묻는다: "너 그림 되게 솔직하다."</p><div class="result-good"><p>서툴었다. 막대기 사람이었다.</p><p>근데 노란 우산은 내 기억이었고, 그게 대화를 열었다.</p><p class="highlight">잘 그린 그림이 좋은 그림은 아니었다.</p></div>`, choices: [], isEnd: true },
+      art_after_prompt: { text: `<p>미술실을 나온다.</p><div class="result-neutral"><p>AI가 만든 건 맞다. 하지만 "회색 바다"를 고른 건 나였다.</p><p>AI는 푸른 바다를 줬고, 내가 그걸 거부하고 회색을 요청했다.</p><p class="highlight">도구가 제안하고, 내가 선택했다.</p></div>`, choices: [], isEnd: true },
+      art_after_mix: { text: `<p>미술실을 나온다.</p><div class="result-good"><p>AI가 구도를 잡아줬다. 색감도 참고했다.</p><p>근데 노란 우산 하나가 "내 그림"으로 만들어줬다.</p><p class="highlight">AI의 도움 위에 내 기억 하나. 그게 차이였다.</p></div>`, choices: [], isEnd: true },
+      art_end_honest: { text: `<div class="result-neutral"><p>친구: "역시. 근데 좋아하는 부분 말 못한 거 좀 웃겼어."</p><p class="highlight">AI가 그려준 그림에서 내가 좋아하는 부분은 없었다. 내가 고른 게 없으니까.</p></div>`, choices: [], isEnd: true },
+      art_end_lie: { text: `<div class="result-bad"><p>친구: "그래? 되게 잘 그렸더라."</p><p class="thought">속이 불편하다.</p><p class="highlight">"잘 그렸다"는 칭찬인데, 받을수록 찝찝하다.</p></div>`, choices: [], isEnd: true },
+      art_end_vague: { text: `<div class="result-neutral"><p>친구: "뭐야 반반이 뭐야 ㅋㅋ"</p><p class="thought">웃긴데... 솔직히 나도 모르겠다. 어디까지가 내 그림인지.</p><p class="highlight">그 경계가 애매한 게 바로 이 시대의 질문이다.</p></div>`, choices: [], isEnd: true }
+    }
+  }
+};
+
+// ===== State =====
+let curScenario = null, curNode = null, stats = {c:0,f:0,r:0}, round = 0, totalRounds = 4;
+const screen = document.getElementById('screen');
+const statsBar = document.getElementById('statsBar');
+const roundInd = document.getElementById('roundIndicator');
+const statEls = {
+  c: { wrap: 'statCenterWrap', num: 'statCenterNum', fill: 'statCenterFill', delta: 'statCenterDelta' },
+  f: { wrap: 'statFusionWrap', num: 'statFusionNum', fill: 'statFusionFill', delta: 'statFusionDelta' },
+  r: { wrap: 'statReflectWrap', num: 'statReflectNum', fill: 'statReflectFill', delta: 'statReflectDelta' }
+};
+
+function init() { statsBar.classList.add('hidden'); roundInd.classList.add('hidden'); showSelect(); }
+
+function showSelect() {
+  let h = `<div class="scenario-select"><h2>AI 리터러시 — 위임 판단력</h2><p>시나리오를 선택하세요</p>`;
+  for (const [k,s] of Object.entries(scenarios))
+    h += `<button class="scenario-btn" onclick="startGame('${k}')"><div class="s-title">${s.title}</div><div class="s-desc">${s.desc}</div></button>`;
+  screen.innerHTML = h + '</div>';
+}
+
+function startGame(k) {
+  curScenario = scenarios[k]; stats = {c:0,f:0,r:0}; round = 0; totalRounds = curScenario.rounds;
+  statsBar.classList.remove('hidden'); roundInd.classList.remove('hidden');
+  renderStats(0,0,0); renderRounds(); showNode('start');
+}
+
+function showNode(id) {
+  curNode = curScenario.nodes[id]; if (!curNode) return;
+  let h = `<div class="scene-card">${curNode.text}</div>`;
+  if (curNode.isEnd) {
+    h += `<div class="profile"><h2>나의 프로필</h2><div class="profile-bars">
+      ${profBar('중심잡기',stats.c)}${profBar('융합하기',stats.f)}${profBar('성찰하기',stats.r)}
+    </div><div class="profile-comment">${profComment()}</div>
+    <button class="restart-btn" onclick="init()">다른 시나리오 해보기</button></div>`;
+  } else {
+    h += '<div class="choices">';
+    curNode.choices.forEach((ch,i) => {
+      const cls = ch.isNext ? 'next-btn' : 'choice-btn';
+      const preview = !ch.isNext ? previewText(ch.stats) : '';
+      h += `<button class="${cls}" onmouseenter="previewStats([${ch.stats}])" onmouseleave="clearPreview()" onclick="choose(${i})">${ch.text}${preview ? `<div class="choice-preview">${preview}</div>` : ''}</button>`;
+    });
+    h += '</div>';
+  }
+  screen.innerHTML = h; window.scrollTo(0,0);
+}
+
+function previewText(s) {
+  const names = ['중심','융합','성찰'];
+  return s.map((v,i) => v > 0 ? `${names[i]}↑` : v < 0 ? `${names[i]}↓` : '').filter(Boolean).join(' ');
+}
+
+function previewStats(s) {
+  const keys = ['c','f','r'];
+  keys.forEach((k,i) => {
+    const wrap = document.getElementById(statEls[k].wrap);
+    wrap.classList.remove('preview-up','preview-down');
+    if (s[i] > 0) wrap.classList.add('preview-up');
+    else if (s[i] < 0) wrap.classList.add('preview-down');
+  });
+}
+
+function clearPreview() {
+  ['c','f','r'].forEach(k => {
+    document.getElementById(statEls[k].wrap).classList.remove('preview-up','preview-down');
+  });
+}
+
+function choose(i) {
+  const ch = curNode.choices[i];
+  clearPreview();
+  applyStats(ch.stats[0], ch.stats[1], ch.stats[2]);
+  if (!ch.isNext) round++;
+  renderRounds();
+  setTimeout(() => showNode(ch.next), 350);
+}
+
+function applyStats(dc, df, dr) {
+  stats.c += dc; stats.f += df; stats.r += dr;
+  renderStats(dc, df, dr);
+}
+
+function renderStats(dc, df, dr) {
+  const deltas = {c: dc, f: df, r: dr};
+  ['c','f','r'].forEach(k => {
+    const el = statEls[k], v = stats[k], d = deltas[k];
+    const numEl = document.getElementById(el.num);
+    const fillEl = document.getElementById(el.fill);
+    const deltaEl = document.getElementById(el.delta);
+    const wrapEl = document.getElementById(el.wrap);
+
+    numEl.textContent = (v > 0 ? '+' : '') + v;
+    numEl.className = 'stat-num ' + (v > 0 ? 'pos' : v < 0 ? 'neg' : 'zero');
+
+    const maxV = 8, pct = Math.min(Math.abs(v) / maxV * 50, 50);
+    fillEl.className = 'stat-gauge-fill ' + (v >= 0 ? 'pos' : 'neg');
+    if (v >= 0) { fillEl.style.left = '50%'; fillEl.style.right = 'auto'; fillEl.style.width = pct + '%'; }
+    else { fillEl.style.right = '50%'; fillEl.style.left = 'auto'; fillEl.style.width = pct + '%'; }
+
+    if (d !== 0) {
+      deltaEl.textContent = d > 0 ? '+' + d : d;
+      deltaEl.className = 'stat-change-indicator show ' + (d > 0 ? 'up' : 'down');
+      deltaEl.style.left = v >= 0 ? `calc(50% + ${pct}% + 4px)` : `calc(50% - ${pct}% - 20px)`;
+      wrapEl.classList.add('shaking');
+      setTimeout(() => { deltaEl.className = 'stat-change-indicator'; wrapEl.classList.remove('shaking'); }, 1200);
+    }
+  });
+}
+
+function renderRounds() {
+  let h = '';
+  for (let i = 0; i < totalRounds; i++) h += `<div class="round-dot ${i < round ? 'done' : i === round ? 'active' : ''}"></div>`;
+  roundInd.innerHTML = h;
+}
+
+function profBar(label, v) {
+  const maxV = 8, pct = Math.min(Math.abs(v)/maxV*50, 50);
+  const cls = v >= 0 ? 'positive' : 'negative';
+  const disp = (v > 0 ? '+' : '') + v;
+  return `<div class="profile-bar"><div class="profile-bar-label"><span>${label}</span><span>${disp}</span></div>
+    <div class="profile-bar-track"><div class="profile-bar-center"></div>
+    <div class="profile-bar-fill ${cls}" style="width:${pct}%"></div></div></div>`;
+}
+
+function profComment() {
+  const t = stats.c + stats.f + stats.r;
+  if (t >= 8) return "AI를 도구로 쓰되, 판단은 네가 했다. 시간은 걸렸지만 네 것이 됐다.";
+  if (t >= 4) return "AI의 도움을 받으면서도 자기 기준을 유지하려고 했다. 균형을 찾는 중이다.";
+  if (t >= 0) return "편한 쪽을 골랐다. 틀린 건 아니다. 다만 — 그게 진짜 네 선택이었는지 한번 생각해봐.";
+  return "AI가 대부분을 했다. 빠르고 편했을 거다. 근데 발표 때, 설명할 수 있었어?";
+}
+
+init();
+</script>
+</body>
+</html>

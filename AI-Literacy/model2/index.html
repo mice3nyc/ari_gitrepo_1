@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal Agent v0.4</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #FFFFFF;
+  --fg: #111111;
+  --border: #111111;
+  --g1: #F5F5F5;
+  --g2: #CCCCCC;
+  --g3: #999999;
+  --g4: #666666;
+  --blue: #2563EB;
+  --yellow: #CA8A04;
+  --red: #DC2626;
+  --purple: #7C3AED;
+  --green: #16A34A;
+  --mono: 'SF Mono', 'Menlo', 'Monaco', 'Courier New', monospace;
+  --sans: -apple-system, 'Noto Sans KR', 'Segoe UI', sans-serif;
+  --radius: 4px;
+}
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.5;
+}
+
+/* ===== CONTAINER ===== */
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.hdr {
+  border: 2px solid var(--border);
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--mono);
+}
+.hdr-title { font-size: 13px; font-weight: bold; letter-spacing: 2px; }
+.hdr-info { font-size: 11px; color: var(--g3); letter-spacing: 1px; }
+
+/* ===== PHASES ===== */
+.phase { display: none; }
+.phase.on { display: block; }
+
+/* ===== PROGRESS ===== */
+.progress-bar {
+  display: none;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+.progress-bar.on { display: flex; }
+.progress-step {
+  flex: 1;
+  height: 3px;
+  background: var(--g2);
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+.progress-step.done { background: var(--fg); }
+.progress-step.current { background: var(--g3); }
+
+/* ===== INTRO ===== */
+.intro-box {
+  border: 2px solid var(--border);
+  padding: 32px 24px;
+  text-align: center;
+}
+.intro-box h2 {
+  font-family: var(--mono);
+  font-size: 20px;
+  letter-spacing: 3px;
+  margin-bottom: 4px;
+}
+.intro-role { font-size: 13px; color: var(--g3); margin-bottom: 24px; }
+.intro-mission {
+  border: 2px solid var(--border);
+  background: var(--g1);
+  padding: 20px;
+  max-width: 480px;
+  margin: 0 auto 24px auto;
+  text-align: left;
+}
+.intro-mission .im-label {
+  font-family: var(--mono);
+  font-size: 10px; color: var(--g3);
+  letter-spacing: 2px; margin-bottom: 8px;
+}
+.intro-mission .im-title {
+  font-size: 16px; font-weight: bold;
+  margin-bottom: 10px; line-height: 1.4;
+}
+.intro-mission .im-desc { font-size: 13px; color: var(--g4); line-height: 1.6; }
+.intro-signals {
+  display: flex; justify-content: center;
+  gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
+}
+.intro-sig {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 1px;
+}
+
+/* ===== COMMON ===== */
+.dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  display: inline-block; flex-shrink: 0;
+}
+.dot-sm { width: 8px; height: 8px; }
+.btn {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 1px;
+  padding: 10px 20px; border: 2px solid var(--border);
+  background: var(--bg); cursor: pointer; border-radius: var(--radius);
+  transition: all 0.15s;
+}
+.btn:hover { background: var(--fg); color: var(--bg); }
+.btn-primary { background: var(--fg); color: var(--bg); }
+.btn-primary:hover { background: var(--bg); color: var(--fg); }
+.btn:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+.center { text-align: center; }
+.mt { margin-top: 16px; }
+
+/* ===== MAIN GAME LAYOUT ===== */
+.game-layout { display: flex; gap: 16px; }
+.board-col { width: 220px; flex-shrink: 0; }
+.browser-col { flex: 1; min-width: 0; }
+
+@media (max-width: 700px) {
+  .game-layout { flex-direction: column; }
+  .board-col { width: 100%; }
+  .board-compact { display: flex !important; gap: 6px; }
+  .board-compact .slot {
+    flex: 1; min-height: auto; padding: 8px 6px;
+  }
+  .board-compact .slot .slot-question { display: none; }
+  .board-compact .slot .slot-filled-text { font-size: 9px; line-height: 1.2; }
+  .board-compact .slot .slot-label { font-size: 8px; margin-bottom: 2px; }
+  .board-compact .dot { width: 6px; height: 6px; }
+}
+
+/* ===== BOARD SLOTS ===== */
+.board-full { display: flex; flex-direction: column; gap: 8px; }
+.slot {
+  border: 2px dashed var(--g2);
+  border-radius: var(--radius);
+  padding: 12px; min-height: 64px;
+  transition: all 0.25s; position: relative;
+}
+.slot.filled { border-style: solid; }
+.slot-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 1px;
+  display: flex; align-items: center; gap: 5px; margin-bottom: 4px;
+}
+.slot-question { font-size: 12px; color: var(--g3); line-height: 1.4; }
+.slot-filled-text { font-size: 12px; font-weight: bold; line-height: 1.3; }
+.slot-check {
+  position: absolute; top: 8px; right: 10px;
+  font-family: var(--mono); font-size: 11px; font-weight: bold;
+}
+
+@keyframes slotFlash {
+  0% { background: transparent; }
+  40% { background: #F0F0F0; }
+  100% { background: transparent; }
+}
+.slot.flash { animation: slotFlash 0.5s ease; }
+
+/* ===== CARD BROWSER ===== */
+.browser {
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.browser-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 14px; border-bottom: 1px solid var(--g2);
+  font-family: var(--mono); font-size: 11px; letter-spacing: 1px; color: var(--g3);
+}
+.nav-arrow {
+  cursor: pointer; font-size: 16px; color: var(--fg);
+  padding: 4px 10px; border: 1px solid var(--g2); border-radius: var(--radius);
+  user-select: none; transition: all 0.15s;
+}
+.nav-arrow:hover { background: var(--fg); color: var(--bg); }
+.nav-arrow.disabled { opacity: 0.2; pointer-events: none; }
+.card-body { padding: 16px; min-height: 180px; }
+.card-badge {
+  display: inline-block; font-family: var(--mono);
+  font-size: 9px; letter-spacing: 1px;
+  padding: 2px 8px; border: 1px solid var(--g2);
+  border-radius: 2px; margin-bottom: 10px; color: var(--g3);
+}
+.card-title {
+  font-size: 16px; font-weight: bold;
+  margin-bottom: 12px; line-height: 1.4;
+}
+.card-text { font-size: 14px; line-height: 1.7; color: var(--g4); margin-bottom: 12px; }
+.card-text b { color: var(--fg); }
+.card-source {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--g2); letter-spacing: 0.5px;
+}
+.reg-bar {
+  display: flex; gap: 6px; padding: 12px 16px;
+  border-top: 1px solid var(--g2); background: var(--g1);
+  flex-wrap: wrap; align-items: center;
+}
+.reg-bar-label {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 1px; color: var(--g3); width: 100%; margin-bottom: 4px;
+}
+.reg-btn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 12px; border: 2px solid var(--border);
+  border-radius: var(--radius); font-family: var(--mono);
+  font-size: 10px; letter-spacing: 0.5px; cursor: pointer;
+  background: var(--bg); transition: all 0.15s;
+}
+.reg-btn:hover { background: var(--fg); color: var(--bg); }
+.reg-btn.disabled {
+  opacity: 0.25; pointer-events: none; border-style: dashed;
+}
+.card-feedback {
+  padding: 12px 16px; font-size: 13px; line-height: 1.5;
+  display: none; border-top: 1px solid var(--g2);
+}
+.card-feedback.show { display: block; }
+.card-feedback.success { border-left: 3px solid var(--green); }
+.card-feedback.warn { border-left: 3px solid var(--red); }
+.card-feedback.hint { border-left: 3px solid var(--yellow); }
+.fb-label {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 1px; margin-bottom: 4px;
+}
+
+@keyframes slideLeft {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.card-body.slide-left { animation: slideLeft 0.2s ease; }
+.card-body.slide-right { animation: slideRight 0.2s ease; }
+
+/* ===== CHOICE PANEL (Personal / Future) ===== */
+.choice-panel {
+  border: 2px solid var(--border);
+  border-radius: var(--radius); padding: 20px;
+}
+.choice-panel h3 {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 1px; margin-bottom: 4px;
+}
+.cp-question {
+  font-size: 15px; font-weight: bold;
+  margin-bottom: 16px; line-height: 1.4;
+}
+.cp-context {
+  border: 1px solid var(--g2); border-radius: var(--radius);
+  padding: 12px; margin-bottom: 12px;
+  font-size: 13px; color: var(--g4); line-height: 1.6;
+}
+.cp-context b { color: var(--fg); }
+.cp-source {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--g2); margin-top: 6px;
+}
+.choice-options { display: flex; flex-direction: column; gap: 8px; }
+.choice-opt {
+  border: 2px solid var(--border); border-radius: var(--radius);
+  padding: 12px 16px; cursor: pointer;
+  font-size: 13px; line-height: 1.5; transition: all 0.15s;
+}
+.choice-opt:hover { background: var(--g1); }
+.choice-opt.selected { background: var(--fg); color: var(--bg); }
+
+/* ===== FUTURE PIECES ===== */
+.future-pieces { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.future-piece {
+  border: 2px solid var(--border); border-radius: var(--radius);
+  padding: 12px 16px; cursor: pointer;
+  font-size: 13px; line-height: 1.5; transition: all 0.15s;
+  position: relative;
+}
+.future-piece:hover { background: var(--g1); }
+.future-piece.selected { border-color: var(--purple); background: #F5F0FF; }
+.fp-num {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--g3); position: absolute; top: 6px; right: 10px;
+}
+.future-combo {
+  border: 2px solid var(--purple); border-radius: var(--radius);
+  padding: 16px; font-size: 14px; font-weight: bold;
+  line-height: 1.5; text-align: center; display: none;
+}
+.future-combo.show { display: block; }
+
+/* ===== ASSEMBLE ===== */
+.asm-section {
+  border: 2px solid var(--border); border-radius: var(--radius);
+  padding: 16px; margin-bottom: 12px;
+}
+.asm-section h4 {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 1px; margin-bottom: 10px;
+}
+.asm-sig {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 8px 0; border-bottom: 1px solid var(--g1); font-size: 13px;
+}
+.asm-sig:last-child { border-bottom: none; }
+.sig-label {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.5px; flex-shrink: 0; padding-top: 2px;
+}
+.main-sig-opts { display: flex; flex-direction: column; gap: 8px; }
+.main-sig-opt {
+  border: 2px solid var(--border); border-radius: var(--radius);
+  padding: 10px 14px; cursor: pointer; font-size: 13px;
+  display: flex; align-items: center; gap: 8px; transition: all 0.15s;
+}
+.main-sig-opt:hover { background: var(--g1); }
+.main-sig-opt.selected { background: var(--fg); color: var(--bg); }
+.headline-opts { display: flex; flex-direction: column; gap: 8px; }
+.headline-opt {
+  border: 2px solid var(--border); border-radius: var(--radius);
+  padding: 12px 16px; cursor: pointer;
+  font-size: 14px; font-weight: bold; transition: all 0.15s;
+}
+.headline-opt:hover { background: var(--g1); }
+.headline-opt.selected { background: var(--fg); color: var(--bg); }
+
+/* ===== BRIEFING ===== */
+.briefing-card {
+  border: 3px solid var(--border); border-radius: var(--radius);
+  padding: 24px; margin-bottom: 16px;
+}
+.b-label {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 2px; color: var(--g3); margin-bottom: 6px;
+}
+.b-headline {
+  font-size: 18px; font-weight: bold;
+  margin-bottom: 20px; line-height: 1.3;
+}
+.b-signals { display: flex; flex-direction: column; gap: 10px; }
+.b-sig {
+  border: 1px solid var(--g2); border-radius: var(--radius);
+  padding: 12px; font-size: 13px; line-height: 1.4;
+}
+.b-sig.main { border: 2px solid var(--border); background: var(--g1); }
+.bs-label {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 1px; margin-bottom: 4px;
+}
+
+/* ===== MIRROR ===== */
+.mirror-card {
+  border: 3px solid var(--border); border-radius: var(--radius);
+  padding: 28px; text-align: center; margin-bottom: 16px;
+}
+.m-label {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 2px; color: var(--g3); margin-bottom: 12px;
+}
+.m-dot-big {
+  width: 24px; height: 24px; border-radius: 50%;
+  margin: 0 auto 12px;
+}
+.m-type { font-size: 22px; font-weight: bold; margin-bottom: 8px; }
+.m-desc {
+  font-size: 14px; color: var(--g4); line-height: 1.6;
+  max-width: 480px; margin: 0 auto;
+}
+.noise-reveal {
+  border: 1px solid var(--g2); border-radius: var(--radius);
+  padding: 16px; margin-bottom: 16px;
+}
+.noise-reveal h4 {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 1px; color: var(--g3); margin-bottom: 8px;
+}
+.noise-item {
+  font-size: 12px; color: var(--g4); margin-bottom: 6px;
+  line-height: 1.4; padding-left: 16px; text-indent: -16px;
+}
+
+/* ===== TOAST ===== */
+.toast-el {
+  position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%);
+  background: var(--fg); color: var(--bg);
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.5px;
+  padding: 10px 20px; border-radius: var(--radius);
+  transition: bottom 0.3s ease; z-index: 100; white-space: nowrap;
+}
+.toast-el.show { bottom: 24px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <div class="hdr-title">SIGNAL AGENT</div>
+    <div class="hdr-info" id="hdrInfo">STANDBY</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar" id="progressBar">
+    <div class="progress-step" id="prog-0"></div>
+    <div class="progress-step" id="prog-1"></div>
+    <div class="progress-step" id="prog-2"></div>
+    <div class="progress-step" id="prog-3"></div>
+    <div class="progress-step" id="prog-4"></div>
+  </div>
+
+  <!-- ===== INTRO ===== -->
+  <div class="phase on" id="p-intro">
+    <div class="intro-box">
+      <h2>SIGNAL AGENT</h2>
+      <div class="intro-role">AI 시대의 신호를 읽는 사람</div>
+      <div class="intro-mission">
+        <div class="im-label">TODAY'S MISSION</div>
+        <div class="im-title">AI가 그린 그림이 미술 대회에서 대상을 탔다</div>
+        <div class="im-desc">쏟아지는 정보 속에서 신호를 찾고, 노이즈를 걸러내고, 당신만의 브리핑을 만드세요.</div>
+      </div>
+      <div class="intro-signals">
+        <div class="intro-sig"><span class="dot" style="background:var(--blue)"></span>기술</div>
+        <div class="intro-sig"><span class="dot" style="background:var(--yellow)"></span>사회</div>
+        <div class="intro-sig"><span class="dot" style="background:var(--red)"></span>개인</div>
+        <div class="intro-sig"><span class="dot" style="background:var(--purple)"></span>미래</div>
+      </div>
+      <button class="btn btn-primary" id="startBtn">미션 시작</button>
+    </div>
+  </div>
+
+  <!-- ===== MAIN GAME ===== -->
+  <div class="phase" id="p-game">
+    <div class="game-layout">
+      <div class="board-col">
+        <div id="board"></div>
+      </div>
+      <div class="browser-col">
+        <div class="browser" id="browser">
+          <div class="browser-nav">
+            <span class="nav-arrow" id="navLeft">&#8592;</span>
+            <span id="cardCounter">1 / 12</span>
+            <span class="nav-arrow" id="navRight">&#8594;</span>
+          </div>
+          <div class="card-body" id="cardBody"></div>
+          <div class="card-feedback" id="cardFeedback"></div>
+          <div class="reg-bar" id="regBar"></div>
+        </div>
+        <div class="center mt" id="nextPhaseWrap" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PERSONAL ===== -->
+  <div class="phase" id="p-personal">
+    <div class="choice-panel" id="personalPanel"></div>
+    <div class="center mt" id="personalNextWrap" style="display:none;">
+      <button class="btn btn-primary" id="toFutureBtn">다음: 미래 신호 &#8594;</button>
+    </div>
+  </div>
+
+  <!-- ===== FUTURE ===== -->
+  <div class="phase" id="p-future">
+    <div class="choice-panel" id="futurePanel"></div>
+    <div class="center mt" id="futureNextWrap" style="display:none;">
+      <button class="btn btn-primary" id="toAssembleBtn">브리핑 조립 &#8594;</button>
+    </div>
+  </div>
+
+  <!-- ===== ASSEMBLE ===== -->
+  <div class="phase" id="p-assemble">
+    <div class="asm-section">
+      <h4>수집한 신호 요약</h4>
+      <div id="asmSummary"></div>
+    </div>
+    <div class="asm-section">
+      <h4>이 이슈에서 가장 중요한 신호는?</h4>
+      <div class="main-sig-opts" id="mainSigOpts"></div>
+    </div>
+    <div class="asm-section">
+      <h4>내 브리핑의 헤드라인</h4>
+      <div class="headline-opts" id="headlineOpts"></div>
+    </div>
+    <div class="center mt" id="asmNextWrap" style="display:none;">
+      <button class="btn btn-primary" id="toBriefingBtn">브리핑 생성 &#8594;</button>
+    </div>
+  </div>
+
+  <!-- ===== BRIEFING ===== -->
+  <div class="phase" id="p-briefing">
+    <div class="briefing-card" id="briefingCard"></div>
+    <div class="center mt">
+      <button class="btn btn-primary" id="toMirrorBtn">결과 보기 &#8594;</button>
+    </div>
+  </div>
+
+  <!-- ===== MIRROR ===== -->
+  <div class="phase" id="p-mirror">
+    <div class="mirror-card" id="mirrorCard"></div>
+    <div id="noiseReveal"></div>
+    <div class="center mt">
+      <button class="btn" id="restartBtn">다시 하기</button>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast-el" id="toastEl"></div>
+
+</div>
+
+<script>
+/* ============================================================
+   DATA
+   ============================================================ */
+
+var CARDS = [
+  {
+    id: 1, type: 'article', badge: 'ARTICLE',
+    title: '3초면 완성 \u2014 AI 이미지 생성의 현재',
+    body: '최신 이미지 생성 AI는 텍스트 한 줄만 입력하면 <b>3초 안에 고해상도 이미지</b>를 만든다. 1년 전만 해도 손가락 개수를 틀렸는데, 지금은 사진과 구별이 거의 안 된다.',
+    source: 'Tech Crunch, 2026.02',
+    assignableTo: ['tech', 'social'],
+    isNoise: false, noiseReason: '',
+    snippet: 'AI 이미지 생성: 3초, 사진과 구별 불가'
+  },
+  {
+    id: 2, type: 'article', badge: 'ARTICLE',
+    title: '콜로라도 미술대회 1등, AI 작품이었다',
+    body: '콜로라도 주 미술대회에서 1등을 한 작품이 <b>AI 도구(Midjourney)로 만들어진 것</b>으로 드러났다. 출품자는 "80시간 프롬프트를 다듬었다, 이것도 창작이다"라고 주장했다.',
+    source: 'NYT, 2023.09',
+    assignableTo: ['tech', 'social'],
+    isNoise: false, noiseReason: '',
+    snippet: '콜로라도 미술대회 1등 = AI 작품'
+  },
+  {
+    id: 3, type: 'interview', badge: 'INTERVIEW',
+    title: '"AI가 그려주면 좋지 않아?" \u2014 고2 지민이',
+    body: '"미술 시간에 AI로 5분 만에 포스터를 완성했다. 예쁜데. 근데 <b>친구들이 반칙 아니냐고 했다</b>. 그게 반칙인지 모르겠다. 근데 손으로 그린 애들보다 결과물은 확실히 나았다."',
+    source: '학생 인터뷰, 2026.03',
+    assignableTo: ['social', 'personal'],
+    isNoise: false, noiseReason: '',
+    snippet: '학생 인터뷰: AI 그림 = 반칙?'
+  },
+  {
+    id: 4, type: 'data', badge: 'DATA',
+    title: '미술 교사 78% AI 사용 반대, 학생 62% 허용 찬성',
+    body: '전국 미술 교사 500명 설문에서 <b>교사 78%가 수행평가 AI 사용에 반대</b>했다. 반면 학생 1200명 설문에서는 <b>62%가 "도구로 허용해야 한다"</b>고 답했다.',
+    source: '교육신문, 2026.03',
+    assignableTo: ['social', 'personal'],
+    isNoise: false, noiseReason: '',
+    snippet: '교사 78% 반대 vs 학생 62% 찬성'
+  },
+  {
+    id: 5, type: 'article', badge: 'ARTICLE',
+    title: 'EU, AI 이미지에 표시 의무화',
+    body: 'EU는 2026년부터 AI로 생성된 이미지에 <b>반드시 표시를 붙이도록 법제화</b>했다. 사람이 만든 것과 AI가 만든 것을 구별할 권리가 법적으로 보장된 셈이다.',
+    source: 'BBC, 2026.01',
+    assignableTo: ['social'],
+    isNoise: false, noiseReason: '',
+    snippet: 'EU: AI 이미지 표시 의무화 법제화'
+  },
+  {
+    id: 6, type: 'article', badge: 'ARTICLE',
+    title: '"핸드메이드"의 귀환 \u2014 사람 그림에 프리미엄',
+    body: '빈티지 필름 카메라가 다시 유행하듯, <b>사람이 직접 그린 그림에 프리미엄이 붙기 시작</b>했다. 일부 갤러리는 "핸드메이드" 라벨을 붙이고 있다.',
+    source: '디자인 매거진, 2025.12',
+    assignableTo: ['social', 'future'],
+    isNoise: false, noiseReason: '',
+    snippet: '사람 그림에 "핸드메이드" 프리미엄'
+  },
+  {
+    id: 7, type: 'interview', badge: 'INTERVIEW',
+    title: '"프롬프트를 잘 쓰는 게 실력이 될 거예요"',
+    body: '"어떤 프롬프트를 쓰고 어떻게 편집하느냐가 실력이 되는 시대. <b>도구를 다루는 감각이 새로운 역량</b>이라고 생각해요."',
+    source: '디자이너 인터뷰, 2026.02',
+    assignableTo: ['tech', 'future'],
+    isNoise: false, noiseReason: '',
+    snippet: '프롬프트 감각 = 새로운 실력'
+  },
+  {
+    id: 8, type: 'sns', badge: 'SNS',
+    title: '"AI 때문에 일러스트레이터 40% 폐업"',
+    body: 'SNS에서 많이 공유된 게시글. <b>"AI 때문에 일러스트레이터 40%가 폐업했다"</b>고 주장한다. 구체적인 출처나 조사 기관은 언급되지 않았다.',
+    source: '출처 불명',
+    assignableTo: [],
+    isNoise: true,
+    noiseReason: '원본 데이터나 조사 기관이 없습니다. "40%"라는 수치의 근거를 확인할 수 없어요.',
+    snippet: ''
+  },
+  {
+    id: 9, type: 'sns', badge: 'SNS',
+    title: '"미국 학생 90%가 AI로 숙제한다"',
+    body: 'SNS에서 돌고 있는 글. <b>"미국 학생의 90%가 이미 AI로 숙제를 하고 있다"</b>고 한다. 하지만 이 수치의 원본 조사를 찾을 수 없다.',
+    source: '출처 미확인',
+    assignableTo: [],
+    isNoise: true,
+    noiseReason: '원본 조사를 찾을 수 없습니다. "90%"라는 수치가 어디서 나왔는지 불분명해요.',
+    snippet: ''
+  },
+  {
+    id: 10, type: 'data', badge: 'DATA',
+    title: 'AI 학습 데이터 50억 장, 대부분 무단 수집',
+    body: 'AI 이미지 모델은 인터넷에서 수집한 약 <b>50억 장의 이미지로 학습</b>했다. 이 중 상당수는 원작자 동의 없이 수집된 것으로 알려졌다.',
+    source: '네이처 논문, 2025.11',
+    assignableTo: ['tech', 'social'],
+    isNoise: false, noiseReason: '',
+    snippet: 'AI 학습 데이터 50억 장, 무단 수집 문제'
+  },
+  {
+    id: 11, type: 'interview', badge: 'INTERVIEW',
+    title: '"못생겨도 내 그림인데..." \u2014 고1 은서',
+    body: '"친구들이 AI로 만든 그림을 자랑하는데, 나는 손으로 그리는 게 좋다. <b>못생겨도 내가 그린 거니까</b>. 근데 점점 자신이 없어진다."',
+    source: '학생 인터뷰, 2026.03',
+    assignableTo: ['personal'],
+    isNoise: false, noiseReason: '',
+    snippet: '학생: 못생겨도 내 그림'
+  },
+  {
+    id: 12, type: 'article', badge: 'ARTICLE',
+    title: '미술 공모전 3곳 중 2곳, AI 출품 규정 신설',
+    body: '콜로라도 대회 이후 미국 주요 미술 공모전 <b>3곳 중 2곳이 AI 작품 출품 규정을 신설</b>했다. 대부분 "AI 사용 여부를 명시"하도록 하는 규정이다.',
+    source: 'ArtNet, 2025.08',
+    assignableTo: ['social', 'future'],
+    isNoise: false, noiseReason: '',
+    snippet: '공모전 2/3이 AI 출품 규정 신설'
+  }
+];
+
+var PERSONAL_CHOICES = [
+  { id: 'p1', text: '수행평가 기준이 달라질 것 같다 \u2014 AI를 쓸 수 있게 되면, "잘 그리는 것"의 의미가 바뀌니까' },
+  { id: 'p2', text: 'AI 덕분에 내가 표현할 수 있는 게 늘어날 수도 있다 \u2014 그림을 못 그려도 내 상상을 보여줄 수 있으니까' },
+  { id: 'p3', text: '솔직히 별로 상관없다 \u2014 미술에 크게 관심이 없으니까' }
+];
+
+var PERSONAL_CONTEXT = [
+  {
+    text: '미술 시간에 친구가 AI로 5분 만에 포스터를 완성했다. 나는 아직 스케치도 못 끝냈다. <b>손으로 직접 그리는 게 의미가 있는 걸까?</b>',
+    source: '학생 일기'
+  },
+  {
+    text: '수행평가 기준이 "작품의 완성도"인데, AI를 쓰면 완성도는 확실히 올라간다. <b>근데 그게 내 실력인가?</b>',
+    source: '교실 관찰'
+  }
+];
+
+var FUTURE_PIECES = [
+  { id: 'f1', text: 'AI 아트가 주류가 된다 \u2014 갤러리와 공모전이 정식으로 받아들인다' },
+  { id: 'f2', text: '사람이 직접 그린 그림이 프리미엄이 된다 \u2014 핸드메이드 라벨' },
+  { id: 'f3', text: 'AI와 사람의 협업이 새 장르가 된다 \u2014 프롬프트 감각이 실력' }
+];
+
+var FUTURE_COMBOS = {
+  'f1+f2': 'AI 아트와 사람 아트가 공존하되, 구분된다',
+  'f1+f3': 'AI가 주류가 되고, 프롬프트 감각이 새로운 실력이 된다',
+  'f2+f3': '사람 그림이 프리미엄이 되고, AI 협업이 새 장르가 된다'
+};
+
+var FUTURE_CONTEXT = [
+  {
+    text: '갤러리들이 "AI 아트" 전용 섹션을 열기 시작했다. <b>AI 작품만을 위한 공모전</b>도 만들어졌다.',
+    source: 'ArtReview, 2026.01'
+  },
+  {
+    text: '빈티지 필름 카메라가 다시 유행하듯, <b>사람이 직접 그린 그림에 프리미엄</b>이 붙기 시작했다.',
+    source: '디자인 매거진, 2025.12'
+  }
+];
+
+var SLOT_DEFS = [
+  { id: 'tech',     label: 'TECH 기술',      color: 'var(--blue)',   question: '이 사건에서 AI 기술은 구체적으로 무엇을 했나?', type: 'card' },
+  { id: 'social',   label: 'SOCIAL 사회',     color: 'var(--yellow)', question: '세상은 이 변화에 어떻게 반응하고 있나?',        type: 'card' },
+  { id: 'personal', label: 'PERSONAL 개인',   color: 'var(--red)',    question: '이 이슈가 나에게 의미하는 건?',              type: 'choice' },
+  { id: 'future',   label: 'FUTURE 미래',     color: 'var(--purple)', question: '이게 계속되면, 5년 후에는?',                type: 'choice' }
+];
+
+var HEADLINES = [
+  '기술은 빠르게 바뀌고 있다 \u2014 적응이 핵심이다',
+  '사회는 아직 준비가 안 됐다 \u2014 규칙이 먼저다',
+  '결국 이건 내 문제다 \u2014 나는 어떻게 할 것인가',
+  '미래는 열려 있다 \u2014 방향은 우리가 정한다'
+];
+
+var PROFILES = {
+  tech:     { name: '기술 중심형',   desc: '변화의 속도를 먼저 본다. 새로운 기술이 무엇을 가능하게 하는지에 주목하는 사람.', color: 'var(--blue)' },
+  social:   { name: '사회 관찰형',   desc: '사람들의 반응을 먼저 본다. 기술보다 그것이 만드는 사회적 파장에 주목하는 사람.', color: 'var(--yellow)' },
+  personal: { name: '개인 체감형',   desc: '나에게 닿는 것을 먼저 본다. 거대한 변화 속에서 내 일상이 어떻게 달라지는지에 주목하는 사람.', color: 'var(--red)' },
+  future:   { name: '미래 설계형',   desc: '앞으로 어디로 가는지를 먼저 본다. 지금의 신호에서 내일의 방향을 읽으려는 사람.', color: 'var(--purple)' }
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+
+var currentCardIdx = 0;
+var filledSlots = {};
+var personalChoice = null;
+var futureChoices = [];
+var mainSignal = null;
+var chosenHeadline = null;
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+
+function show(id) {
+  var phases = document.querySelectorAll('.phase');
+  for (var i = 0; i < phases.length; i++) {
+    phases[i].classList.remove('on');
+  }
+  document.getElementById(id).classList.add('on');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toastEl');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2000);
+}
+
+function updateProgress(step) {
+  var bar = document.getElementById('progressBar');
+  bar.classList.add('on');
+  for (var i = 0; i < 5; i++) {
+    var el = document.getElementById('prog-' + i);
+    if (i < step) { el.className = 'progress-step done'; }
+    else if (i === step) { el.className = 'progress-step current'; }
+    else { el.className = 'progress-step'; }
+  }
+}
+
+function cardSlotsCount() {
+  var c = 0;
+  if (filledSlots.tech) c++;
+  if (filledSlots.social) c++;
+  return c;
+}
+
+function findSlotDef(id) {
+  for (var i = 0; i < SLOT_DEFS.length; i++) {
+    if (SLOT_DEFS[i].id === id) return SLOT_DEFS[i];
+  }
+  return null;
+}
+
+/* ============================================================
+   INTRO -> GAME
+   ============================================================ */
+
+function startGame() {
+  show('p-game');
+  updateProgress(0);
+  document.getElementById('hdrInfo').textContent = '0/2 신호 수집';
+  renderBoard();
+  renderCard();
+  renderRegBar();
+}
+
+/* ============================================================
+   BOARD
+   ============================================================ */
+
+function renderBoard() {
+  var container = document.getElementById('board');
+  var isMobile = window.innerWidth <= 700;
+
+  container.className = isMobile ? 'board-compact' : 'board-full';
+  container.innerHTML = '';
+
+  for (var i = 0; i < SLOT_DEFS.length; i++) {
+    var slot = SLOT_DEFS[i];
+    var isFilled = !!filledSlots[slot.id];
+    var el = document.createElement('div');
+    el.className = 'slot' + (isFilled ? ' filled' : '');
+
+    if (isFilled) {
+      el.style.borderColor = '';
+      el.style.cssText = 'border-style:solid;';
+    }
+
+    var inner = '<div class="slot-label">' +
+      '<span class="dot" style="background:' + slot.color + '"></span>' +
+      slot.label + '</div>';
+
+    if (isFilled) {
+      inner += '<div class="slot-filled-text">' + filledSlots[slot.id].snippet + '</div>';
+      inner += '<div class="slot-check" style="color:' + slot.color + '">\u2713</div>';
+    } else {
+      inner += '<div class="slot-question">' + slot.question + '</div>';
+    }
+
+    el.innerHTML = inner;
+    container.appendChild(el);
+  }
+
+  var wrap = document.getElementById('nextPhaseWrap');
+  if (cardSlotsCount() >= 2) {
+    wrap.style.display = 'block';
+    wrap.innerHTML = '<button class="btn btn-primary" id="toPersonalBtn">다음: 개인 신호 \u2192</button>';
+    document.getElementById('toPersonalBtn').addEventListener('click', goPersonal);
+    document.getElementById('hdrInfo').textContent = '2/2 신호 수집 완료';
+  } else {
+    wrap.style.display = 'none';
+    document.getElementById('hdrInfo').textContent = cardSlotsCount() + '/2 신호 수집';
+  }
+}
+
+/* ============================================================
+   CARD BROWSER
+   ============================================================ */
+
+function renderCard() {
+  var card = CARDS[currentCardIdx];
+  var body = document.getElementById('cardBody');
+
+  body.innerHTML =
+    '<div class="card-badge">' + card.badge + '</div>' +
+    '<div class="card-title">' + card.title + '</div>' +
+    '<div class="card-text">' + card.body + '</div>' +
+    '<div class="card-source">' + card.source + '</div>';
+
+  document.getElementById('cardCounter').textContent = (currentCardIdx + 1) + ' / ' + CARDS.length;
+
+  var navL = document.getElementById('navLeft');
+  var navR = document.getElementById('navRight');
+  navL.className = 'nav-arrow' + (currentCardIdx === 0 ? ' disabled' : '');
+  navR.className = 'nav-arrow' + (currentCardIdx === CARDS.length - 1 ? ' disabled' : '');
+
+  var fb = document.getElementById('cardFeedback');
+  fb.className = 'card-feedback';
+  fb.innerHTML = '';
+
+  renderRegBar();
+}
+
+function nextCard() {
+  if (currentCardIdx < CARDS.length - 1) {
+    currentCardIdx++;
+    var body = document.getElementById('cardBody');
+    body.className = 'card-body slide-left';
+    renderCard();
+    setTimeout(function() { body.className = 'card-body'; }, 250);
+  }
+}
+
+function prevCard() {
+  if (currentCardIdx > 0) {
+    currentCardIdx--;
+    var body = document.getElementById('cardBody');
+    body.className = 'card-body slide-right';
+    renderCard();
+    setTimeout(function() { body.className = 'card-body'; }, 250);
+  }
+}
+
+/* ============================================================
+   REGISTRATION BAR
+   ============================================================ */
+
+function renderRegBar() {
+  var bar = document.getElementById('regBar');
+  var card = CARDS[currentCardIdx];
+
+  var html = '<div class="reg-bar-label">이 카드를 등록할 신호:</div>';
+
+  for (var i = 0; i < 2; i++) {
+    var slot = SLOT_DEFS[i]; // tech, social only
+    var isFilled = !!filledSlots[slot.id];
+    html += '<div class="reg-btn' + (isFilled ? ' disabled' : '') + '" data-slot="' + slot.id + '">' +
+      '<span class="dot dot-sm" style="background:' + slot.color + '"></span>' +
+      slot.label + (isFilled ? ' \u2713' : '') + '</div>';
+  }
+
+  bar.innerHTML = html;
+
+  // Attach click events
+  var btns = bar.querySelectorAll('.reg-btn:not(.disabled)');
+  for (var j = 0; j < btns.length; j++) {
+    btns[j].addEventListener('click', (function(slotId) {
+      return function() { registerCard(slotId); };
+    })(btns[j].getAttribute('data-slot')));
+  }
+}
+
+function registerCard(slotId) {
+  var card = CARDS[currentCardIdx];
+
+  // Noise check
+  if (card.isNoise) {
+    showCardFeedback('warn', '\u26A0 출처 불분명', card.noiseReason);
+    return;
+  }
+
+  // Check assignability
+  var canAssign = false;
+  for (var i = 0; i < card.assignableTo.length; i++) {
+    if (card.assignableTo[i] === slotId) { canAssign = true; break; }
+  }
+
+  if (!canAssign) {
+    showCardFeedback('hint', '한번 더 생각해보세요', '이 카드는 다른 신호에 더 가까울 수 있어요. 카드의 핵심 정보를 다시 읽어보세요.');
+    return;
+  }
+
+  // Register
+  filledSlots[slotId] = {
+    cardId: card.id,
+    snippet: card.snippet
+  };
+
+  var slotDef = findSlotDef(slotId);
+  showCardFeedback('success', '\u2713 SIGNAL COLLECTED', slotDef.label + ' 신호 수집 완료');
+  showToast(slotDef.label + ' 신호 수집 완료');
+
+  renderBoard();
+  renderRegBar();
+
+  // Flash animation
+  var slots = document.querySelectorAll('.slot');
+  for (var k = 0; k < SLOT_DEFS.length; k++) {
+    if (SLOT_DEFS[k].id === slotId && slots[k]) {
+      slots[k].classList.add('flash');
+    }
+  }
+}
+
+function showCardFeedback(type, label, msg) {
+  var fb = document.getElementById('cardFeedback');
+  fb.className = 'card-feedback show ' + type;
+  fb.innerHTML = '<div class="fb-label">' + label + '</div>' + msg;
+}
+
+/* ============================================================
+   SWIPE + KEYBOARD
+   ============================================================ */
+
+(function() {
+  var startX = 0;
+  var target = null;
+
+  document.addEventListener('touchstart', function(e) {
+    var browser = document.getElementById('browser');
+    if (browser && browser.contains(e.target)) {
+      startX = e.touches[0].clientX;
+      target = browser;
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    if (!target) return;
+    var endX = e.changedTouches[0].clientX;
+    var diff = endX - startX;
+    if (Math.abs(diff) > 50) {
+      if (diff < 0) nextCard();
+      else prevCard();
+    }
+    target = null;
+  }, { passive: true });
+})();
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowLeft') prevCard();
+  if (e.key === 'ArrowRight') nextCard();
+});
+
+/* ============================================================
+   PERSONAL SIGNAL
+   ============================================================ */
+
+function goPersonal() {
+  show('p-personal');
+  updateProgress(1);
+  document.getElementById('hdrInfo').textContent = 'PERSONAL 개인 신호';
+  renderPersonal();
+}
+
+function renderPersonal() {
+  var panel = document.getElementById('personalPanel');
+  var html = '<h3 style="color:var(--red)">PERSONAL 개인 신호</h3>';
+  html += '<div class="cp-question">이 이슈가 나에게 의미하는 건?</div>';
+
+  for (var i = 0; i < PERSONAL_CONTEXT.length; i++) {
+    var ctx = PERSONAL_CONTEXT[i];
+    html += '<div class="cp-context">' + ctx.text + '<div class="cp-source">' + ctx.source + '</div></div>';
+  }
+
+  html += '<div style="font-size:12px;color:var(--g3);margin-bottom:8px;font-family:var(--mono);letter-spacing:0.5px;">정답은 없습니다. 가장 와닿는 것을 고르세요.</div>';
+  html += '<div class="choice-options">';
+  for (var j = 0; j < PERSONAL_CHOICES.length; j++) {
+    var c = PERSONAL_CHOICES[j];
+    var sel = personalChoice === c.id ? ' selected' : '';
+    html += '<div class="choice-opt' + sel + '" data-pid="' + c.id + '">' + c.text + '</div>';
+  }
+  html += '</div>';
+
+  panel.innerHTML = html;
+
+  // Attach events
+  var opts = panel.querySelectorAll('.choice-opt');
+  for (var k = 0; k < opts.length; k++) {
+    opts[k].addEventListener('click', (function(pid) {
+      return function() { pickPersonal(pid); };
+    })(opts[k].getAttribute('data-pid')));
+  }
+
+  document.getElementById('personalNextWrap').style.display = personalChoice ? 'block' : 'none';
+}
+
+function pickPersonal(id) {
+  personalChoice = id;
+  var choice = null;
+  for (var i = 0; i < PERSONAL_CHOICES.length; i++) {
+    if (PERSONAL_CHOICES[i].id === id) { choice = PERSONAL_CHOICES[i]; break; }
+  }
+
+  var text = choice.text;
+  filledSlots.personal = {
+    cardId: null,
+    snippet: text.length > 35 ? text.substring(0, 35) + '\u2026' : text
+  };
+
+  showToast('PERSONAL 개인 신호 수집 완료');
+  renderPersonal();
+}
+
+/* ============================================================
+   FUTURE SIGNAL
+   ============================================================ */
+
+function goFuture() {
+  show('p-future');
+  updateProgress(2);
+  document.getElementById('hdrInfo').textContent = 'FUTURE 미래 신호';
+  renderFuture();
+}
+
+function renderFuture() {
+  var panel = document.getElementById('futurePanel');
+  var html = '<h3 style="color:var(--purple)">FUTURE 미래 신호</h3>';
+  html += '<div class="cp-question">이게 계속되면, 5년 후에는?</div>';
+
+  for (var i = 0; i < FUTURE_CONTEXT.length; i++) {
+    var ctx = FUTURE_CONTEXT[i];
+    html += '<div class="cp-context">' + ctx.text + '<div class="cp-source">' + ctx.source + '</div></div>';
+  }
+
+  html += '<div style="font-size:12px;color:var(--g3);margin-bottom:8px;font-family:var(--mono);letter-spacing:0.5px;">시나리오 조각 2개를 골라 연결하세요</div>';
+  html += '<div class="future-pieces">';
+  for (var j = 0; j < FUTURE_PIECES.length; j++) {
+    var p = FUTURE_PIECES[j];
+    var isSelected = false;
+    for (var s = 0; s < futureChoices.length; s++) {
+      if (futureChoices[s] === p.id) { isSelected = true; break; }
+    }
+    html += '<div class="future-piece' + (isSelected ? ' selected' : '') + '" data-fid="' + p.id + '">' +
+      p.text + '<span class="fp-num">' + (j + 1) + '</span></div>';
+  }
+  html += '</div>';
+
+  if (futureChoices.length === 2) {
+    var sorted = futureChoices.slice().sort();
+    var key = sorted[0] + '+' + sorted[1];
+    var combo = FUTURE_COMBOS[key] || (futureChoices[0] + ' + ' + futureChoices[1]);
+    html += '<div class="future-combo show" style="border-color:var(--purple);">\u2192 ' + combo + '</div>';
+  }
+
+  panel.innerHTML = html;
+
+  // Attach events
+  var pieces = panel.querySelectorAll('.future-piece');
+  for (var k = 0; k < pieces.length; k++) {
+    pieces[k].addEventListener('click', (function(fid) {
+      return function() { pickFuture(fid); };
+    })(pieces[k].getAttribute('data-fid')));
+  }
+
+  document.getElementById('futureNextWrap').style.display = futureChoices.length === 2 ? 'block' : 'none';
+}
+
+function pickFuture(id) {
+  var idx = -1;
+  for (var i = 0; i < futureChoices.length; i++) {
+    if (futureChoices[i] === id) { idx = i; break; }
+  }
+
+  if (idx !== -1) {
+    futureChoices.splice(idx, 1);
+  } else if (futureChoices.length < 2) {
+    futureChoices.push(id);
+  } else {
+    futureChoices.shift();
+    futureChoices.push(id);
+  }
+
+  if (futureChoices.length === 2) {
+    var sorted = futureChoices.slice().sort();
+    var key = sorted[0] + '+' + sorted[1];
+    var combo = FUTURE_COMBOS[key] || '';
+    filledSlots.future = {
+      cardId: null,
+      snippet: combo.length > 35 ? combo.substring(0, 35) + '\u2026' : combo
+    };
+    showToast('FUTURE 미래 신호 수집 완료');
+  } else {
+    delete filledSlots.future;
+  }
+
+  renderFuture();
+}
+
+/* ============================================================
+   ASSEMBLE
+   ============================================================ */
+
+function goAssemble() {
+  show('p-assemble');
+  updateProgress(3);
+  document.getElementById('hdrInfo').textContent = 'ASSEMBLE';
+  renderAssemble();
+}
+
+function renderAssemble() {
+  // Summary
+  var summary = document.getElementById('asmSummary');
+  var html = '';
+  for (var i = 0; i < SLOT_DEFS.length; i++) {
+    var slot = SLOT_DEFS[i];
+    var data = filledSlots[slot.id];
+    html += '<div class="asm-sig">' +
+      '<span class="dot dot-sm" style="background:' + slot.color + ';margin-top:3px;"></span>' +
+      '<div><span class="sig-label" style="color:' + slot.color + '">' + slot.label + '</span><br>' +
+      (data ? data.snippet : '\u2014') + '</div></div>';
+  }
+  summary.innerHTML = html;
+
+  // Main signal
+  var msOpts = document.getElementById('mainSigOpts');
+  msOpts.innerHTML = '';
+  for (var j = 0; j < SLOT_DEFS.length; j++) {
+    var s = SLOT_DEFS[j];
+    var el = document.createElement('div');
+    el.className = 'main-sig-opt' + (mainSignal === s.id ? ' selected' : '');
+    el.innerHTML = '<span class="dot dot-sm" style="background:' + s.color + '"></span>' + s.label;
+    el.setAttribute('data-sid', s.id);
+    msOpts.appendChild(el);
+  }
+  var msItems = msOpts.querySelectorAll('.main-sig-opt');
+  for (var m = 0; m < msItems.length; m++) {
+    msItems[m].addEventListener('click', (function(sid) {
+      return function() {
+        mainSignal = sid;
+        renderAssemble();
+        checkAssembleReady();
+      };
+    })(msItems[m].getAttribute('data-sid')));
+  }
+
+  // Headlines
+  var hlOpts = document.getElementById('headlineOpts');
+  hlOpts.innerHTML = '';
+  for (var k = 0; k < HEADLINES.length; k++) {
+    var hel = document.createElement('div');
+    hel.className = 'headline-opt' + (chosenHeadline === k ? ' selected' : '');
+    hel.textContent = HEADLINES[k];
+    hel.setAttribute('data-hidx', k);
+    hlOpts.appendChild(hel);
+  }
+  var hlItems = hlOpts.querySelectorAll('.headline-opt');
+  for (var h = 0; h < hlItems.length; h++) {
+    hlItems[h].addEventListener('click', (function(idx) {
+      return function() {
+        chosenHeadline = idx;
+        renderAssemble();
+        checkAssembleReady();
+      };
+    })(parseInt(hlItems[h].getAttribute('data-hidx'))));
+  }
+
+  checkAssembleReady();
+}
+
+function checkAssembleReady() {
+  var ready = mainSignal !== null && chosenHeadline !== null;
+  document.getElementById('asmNextWrap').style.display = ready ? 'block' : 'none';
+}
+
+/* ============================================================
+   BRIEFING
+   ============================================================ */
+
+function goBriefing() {
+  show('p-briefing');
+  updateProgress(4);
+  document.getElementById('hdrInfo').textContent = 'BRIEFING';
+
+  var card = document.getElementById('briefingCard');
+  var html = '<div class="b-label">SIGNAL BRIEFING</div>';
+  html += '<div class="b-headline">' + HEADLINES[chosenHeadline] + '</div>';
+  html += '<div class="b-signals">';
+
+  for (var i = 0; i < SLOT_DEFS.length; i++) {
+    var slot = SLOT_DEFS[i];
+    var isMain = slot.id === mainSignal;
+    var data = filledSlots[slot.id];
+    html += '<div class="b-sig' + (isMain ? ' main' : '') + '">' +
+      '<div class="bs-label" style="color:' + slot.color + '">' +
+      (isMain ? '\u2605 ' : '') + slot.label + '</div>' +
+      '<div>' + (data ? data.snippet : '\u2014') + '</div></div>';
+  }
+
+  html += '</div>';
+  card.innerHTML = html;
+}
+
+/* ============================================================
+   MIRROR
+   ============================================================ */
+
+function goMirror() {
+  show('p-mirror');
+  document.getElementById('progressBar').classList.remove('on');
+  document.getElementById('hdrInfo').textContent = 'YOUR PROFILE';
+
+  var p = PROFILES[mainSignal];
+  var mirror = document.getElementById('mirrorCard');
+  mirror.innerHTML =
+    '<div class="m-label">YOUR SIGNAL PROFILE</div>' +
+    '<div class="m-dot-big" style="background:' + p.color + '"></div>' +
+    '<div class="m-type">' + p.name + '</div>' +
+    '<div class="m-desc">' + p.desc + '</div>';
+
+  // Reveal noise
+  var reveal = document.getElementById('noiseReveal');
+  var noiseHtml = '<div class="noise-reveal"><h4>이런 노이즈도 있었습니다</h4>';
+  var hasNoise = false;
+  for (var i = 0; i < CARDS.length; i++) {
+    if (CARDS[i].isNoise) {
+      hasNoise = true;
+      noiseHtml += '<div class="noise-item">\u26A0 <b>' + CARDS[i].title + '</b> \u2014 ' + CARDS[i].noiseReason + '</div>';
+    }
+  }
+  noiseHtml += '</div>';
+  reveal.innerHTML = hasNoise ? noiseHtml : '';
+}
+
+/* ============================================================
+   EVENT LISTENERS (no inline onclick)
+   ============================================================ */
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('startBtn').addEventListener('click', startGame);
+  document.getElementById('navLeft').addEventListener('click', prevCard);
+  document.getElementById('navRight').addEventListener('click', nextCard);
+  document.getElementById('toFutureBtn').addEventListener('click', goFuture);
+  document.getElementById('toAssembleBtn').addEventListener('click', goAssemble);
+  document.getElementById('toBriefingBtn').addEventListener('click', goBriefing);
+  document.getElementById('toMirrorBtn').addEventListener('click', goMirror);
+  document.getElementById('restartBtn').addEventListener('click', function() {
+    location.reload();
+  });
+});
+</script>
+</body>
+</html>

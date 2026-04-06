@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 리터러시 콘텐츠 — 어디까지 왔는가</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: rgb(30, 144, 255);
+    --text: #1a1a1a;
+    --text-light: #666;
+    --bg: #fff;
+    --slide-max: 960px;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: "Apple SD Gothic Neo", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  /* ── Slide Container ── */
+  .deck {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(40px);
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s 0.4s;
+  }
+
+  .slide.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity 0.4s ease, transform 0.4s ease, visibility 0s 0s;
+  }
+
+  .slide.exit-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    visibility: hidden;
+  }
+
+  /* ── Typography ── */
+  .slide-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  h2 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    margin-bottom: 10px;
+  }
+
+  h3 {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    font-size: 20px;
+    color: var(--text-light);
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  p, li {
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  .big-text {
+    font-size: 26px;
+    line-height: 1.6;
+    font-weight: 500;
+    max-width: 720px;
+  }
+
+  .accent { color: var(--accent); }
+  .bold { font-weight: 700; }
+  .dim { color: var(--text-light); }
+
+  /* ── Lists ── */
+  ul {
+    list-style: none;
+    margin: 16px 0;
+  }
+
+  ul li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 10px;
+  }
+
+  ul li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* ── Highlight Box ── */
+  .highlight-box {
+    background: #f7f9fc;
+    border-left: 4px solid var(--accent);
+    padding: 20px 24px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .highlight-box p {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  /* ── Data Card ── */
+  .data-card {
+    display: inline-block;
+    background: var(--text);
+    color: #fff;
+    padding: 20px 28px;
+    border-radius: 12px;
+    margin: 16px 0;
+  }
+
+  .data-card .number {
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .data-card .label {
+    font-size: 15px;
+    color: #aaa;
+    margin-top: 6px;
+  }
+
+  /* ── Table ── */
+  .source-table {
+    width: 100%;
+    max-width: 820px;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+  }
+
+  .source-table th {
+    text-align: left;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-bottom: 2px solid var(--text);
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-light);
+  }
+
+  .source-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  .source-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .source-table .src-name {
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--accent);
+  }
+
+  /* ── Scenario Cards ── */
+  .scenario {
+    background: #fafafa;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 12px 0;
+    position: relative;
+  }
+
+  .scenario-id {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  .scenario p {
+    font-size: 17px;
+    line-height: 1.65;
+    font-style: italic;
+    color: #333;
+  }
+
+  /* ── Two Column ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin: 16px 0;
+    align-items: start;
+  }
+
+  /* ── Material Tags ── */
+  .material-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .material-tag {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1.5px solid #ddd;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    background: #fff;
+  }
+
+  .material-tag.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(30, 144, 255, 0.05);
+  }
+
+  /* ── Next Steps ── */
+  .step-list {
+    counter-reset: steps;
+    margin: 20px 0;
+  }
+
+  .step-list li {
+    padding-left: 40px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .step-list li::before {
+    counter-increment: steps;
+    content: counter(steps);
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Final Slide ── */
+  .final-quote {
+    border-top: 3px solid var(--text);
+    padding-top: 28px;
+    margin-top: 20px;
+    max-width: 700px;
+  }
+
+  .final-quote p {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .final-quote p:last-child {
+    color: var(--accent);
+  }
+
+  /* ── Stat Row ── */
+  .stat-row {
+    display: flex;
+    gap: 24px;
+    margin: 16px 0;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-item .num {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--accent);
+  }
+
+  .stat-item .desc {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-top: 4px;
+  }
+
+  /* ── Slide counter ── */
+  .slide-counter {
+    position: fixed;
+    bottom: 24px;
+    right: 32px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #bbb;
+    z-index: 100;
+    user-select: none;
+  }
+
+  /* ── Progress bar ── */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--accent);
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* ── Nav dots ── */
+  .nav-dots {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 100;
+  }
+
+  .nav-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ddd;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+    border: none;
+    padding: 0;
+  }
+
+  .nav-dot.active {
+    background: var(--accent);
+    transform: scale(1.3);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .slide {
+      padding: 40px 28px;
+    }
+    h1 { font-size: 30px; }
+    h2 { font-size: 24px; }
+    h3 { font-size: 18px; }
+    .subtitle { font-size: 17px; }
+    .big-text { font-size: 20px; }
+    p, li { font-size: 16px; }
+    .two-col { grid-template-columns: 1fr; gap: 20px; }
+    .data-card .number { font-size: 36px; }
+    .source-table { font-size: 14px; }
+    .source-table td, .source-table th { padding: 8px 10px; }
+    .scenario { padding: 16px 18px; }
+    .highlight-box p { font-size: 17px; }
+    .stat-row { flex-direction: column; gap: 16px; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 32px 20px; }
+    h1 { font-size: 26px; }
+    h2 { font-size: 21px; }
+  }
+
+  /* ── Print ── */
+  @media print {
+    html, body { overflow: visible; height: auto; }
+    .deck { position: static; }
+    .slide {
+      position: static;
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+      page-break-after: always;
+      min-height: 100vh;
+      border-bottom: none;
+    }
+    .slide:last-child { page-break-after: auto; }
+    .slide-counter, .progress-bar, .nav-dots { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="deck" id="deck">
+
+  <!-- ────────── Slide 1: Title ────────── -->
+  <div class="slide active" data-slide="1">
+    <div class="slide-label">2026. 4. 1.</div>
+    <h1>AI 리터러시 콘텐츠<br><span class="accent">어디까지 왔는가</span></h1>
+    <p class="subtitle" style="margin-top: 16px;">
+      놀공 &times; 경기도교육청 하이러닝
+    </p>
+    <p class="dim" style="margin-top: 40px; font-size: 15px;">
+      놀공 &middot; 내부 논의자료
+    </p>
+  </div>
+
+  <!-- ────────── Slide 2: 한 문장 정의 ────────── -->
+  <div class="slide" data-slide="2">
+    <div class="slide-label">What We Make</div>
+    <h2>뭘 만드는가</h2>
+    <div class="highlight-box" style="margin-top: 24px;">
+      <p>"AI 시대의 상황을<br><span class="accent">경험으로 읽는</span> 콘텐츠"</p>
+    </div>
+    <ul style="margin-top: 24px;">
+      <li><span class="bold">대상</span> &mdash; 초중등학생</li>
+      <li><span class="bold">플랫폼</span> &mdash; 하이러닝 (경기도교육청)</li>
+      <li><span class="bold">형식</span> &mdash; 시나리오 기반 선택형 콘텐츠</li>
+    </ul>
+  </div>
+
+  <!-- ────────── Slide 3: Why — Credible Sources ────────── -->
+  <div class="slide" data-slide="3">
+    <div class="slide-label">Why &mdash; Credible Sources</div>
+    <h2>권위 있는 소스들이 뭐라 하는가</h2>
+    <div class="two-col" style="margin-top: 20px;">
+      <div>
+        <ul>
+          <li><span class="bold">OECD</span> &mdash; AI와 교육의 미래 프레임워크</li>
+          <li><span class="bold">UNESCO</span> &mdash; AI 역량 프레임워크</li>
+          <li><span class="bold">김현철 교수</span> (부스트코스) &mdash; AI 리터러시 정의</li>
+          <li><span class="bold">국가교육비전처</span> &mdash; 정책 방향</li>
+          <li><span class="bold">임문영</span> &mdash; 현장 비평</li>
+        </ul>
+        <p style="margin-top: 16px; font-size: 16px; color: var(--text-light);">
+          공통 키워드: "인간 중심", "비판적 사고",<br>"질문의 힘", "도구 교육만으로는 안 된다"
+        </p>
+      </div>
+      <div>
+        <div class="data-card">
+          <div class="label">false mastery 효과</div>
+          <div style="margin-top: 12px;">
+            <span class="number">+48%</span>
+            <span class="label" style="margin-left: 4px;">연습 점수</span>
+          </div>
+          <div style="margin-top: 8px;">
+            <span class="number" style="color: #ff6b6b;">-17%</span>
+            <span class="label" style="margin-left: 4px;">실제 시험 점수</span>
+          </div>
+          <div class="label" style="margin-top: 12px; font-size: 13px;">
+            AI 도움으로 잘하는 것 같지만<br>실력은 떨어진다
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ────────── Slide 4: 빈자리 ────────── -->
+  <div class="slide" data-slide="4">
+    <div class="slide-label">The Gap</div>
+    <h2>아무도 안 한 것</h2>
+    <p class="subtitle">OECD도 UNESCO도 답 못 한 빈자리가<br><span class="accent bold">정확히 우리 자리다</span></p>
+    <div class="two-col" style="margin-top: 24px;">
+      <div>
+        <h3>"WHY"는 정리됐다</h3>
+        <p class="dim">왜 AI 리터러시가 필요한지는<br>이미 충분히 말해졌다.</p>
+      </div>
+      <div>
+        <h3 class="accent">"HOW"가 비어있다</h3>
+        <ul>
+          <li>어떻게 가르칠 것인가?</li>
+          <li><span class="bold">정체성</span> &mdash; AI 시대에 나는 누구인가</li>
+          <li><span class="bold">위임의 경계</span> &mdash; 어디까지 맡길 것인가</li>
+          <li><span class="bold">감정 메타인지</span> &mdash; 내 감정을 인식하고 있는가</li>
+          <li><span class="bold">놀이(Play)</span> &mdash; 경험을 통한 학습</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top: 20px;">
+      <p>"질문이 중요하다"고 모두 말한다.<br>그런데 <span class="accent">그 질문이 어디서 나오는지</span>에 대한 답은 없다.</p>
+    </div>
+  </div>
+
+  <!-- ────────── Slide 5: 놀공의 접근 ────────── -->
+  <div class="slide" data-slide="5">
+    <div class="slide-label">Our Approach</div>
+    <h2>Credible 소스 위에 올라선다</h2>
+    <div class="highlight-box" style="margin-top: 16px;">
+      <p>김현철 교수가 <span class="bold">Why</span>를 정의했다면,<br>놀공은 <span class="accent bold">How</span>를 설계한다.</p>
+    </div>
+    <table class="source-table" style="margin-top: 24px;">
+      <thead>
+        <tr>
+          <th>소스</th>
+          <th>해준 것</th>
+          <th>놀공이 얹는 것</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="src-name">김현철 교수</td>
+          <td>AI 리터러시 정의, 역량 분류</td>
+          <td>역량을 <b>체험 가능한 선택지</b>로 전환</td>
+        </tr>
+        <tr>
+          <td class="src-name">OECD / UNESCO</td>
+          <td>글로벌 프레임워크, 정책 근거</td>
+          <td>프레임워크를 <b>시나리오 경험</b>으로 구현</td>
+        </tr>
+        <tr>
+          <td class="src-name">false mastery 연구</td>
+          <td>AI 의존의 위험성 데이터</td>
+          <td>위험을 <b>직접 느끼게</b> 하는 메카닉</td>
+        </tr>
+        <tr>
+          <td class="src-name">GRM 방법론</td>
+          <td>도메인 진입 설계 (놀공 자체)</td>
+          <td><b>"가르치지 않고 부딪히게 한다"</b></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ────────── Slide 6: 핵심 메카닉 ────────── -->
+  <div class="slide" data-slide="6">
+    <div class="slide-label">Core Mechanic</div>
+    <h2>게임 캐릭터 업그레이드</h2>
+    <div class="two-col" style="margin-top: 20px;">
+      <div>
+        <p class="big-text" style="font-size: 20px;">
+          <span class="bold">12가지 인간중심 사고</span>를<br>게임의 스탯처럼 설계한다.
+        </p>
+        <ul style="margin-top: 16px;">
+          <li>매 선택마다 <span class="accent bold">역량 경험치</span> 누적</li>
+          <li>MBTI = 고정 유형 분류<br><span class="accent bold">게임 캐릭터 = 전략적 성장</span></li>
+          <li>"AI에게 맡기기" 선택 시<br>&rarr; <span class="bold">경험치가 쌓이지 않는다</span></li>
+        </ul>
+      </div>
+      <div>
+        <div style="background: #f7f9fc; border-radius: 12px; padding: 24px; text-align: center;">
+          <p style="font-size: 14px; color: var(--text-light); margin-bottom: 16px; letter-spacing: 0.06em;">위임의 경계 = 핵심 체험</p>
+          <div style="display: flex; justify-content: center; gap: 16px; align-items: center; flex-wrap: wrap;">
+            <div style="padding: 12px 20px; border: 2px solid var(--accent); border-radius: 8px;">
+              <p style="font-size: 15px; font-weight: 700;">직접 한다</p>
+              <p style="font-size: 13px; color: var(--text-light); margin-top: 4px;">경험치 ++</p>
+            </div>
+            <div style="font-size: 24px; color: #ccc;">vs</div>
+            <div style="padding: 12px 20px; border: 2px solid #ddd; border-radius: 8px;">
+              <p style="font-size: 15px; font-weight: 700;">AI에게 맡긴다</p>
+              <p style="font-size: 13px; color: var(--text-light); margin-top: 4px;">경험치 &mdash;</p>
+            </div>
+          </div>
+          <p style="font-size: 14px; margin-top: 16px; color: var(--text-light);">
+            "편하지만 성장은 멈춘다"를<br><b>선택의 결과</b>로 체험
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ────────── Slide 7: 시나리오 예시 ────────── -->
+  <div class="slide" data-slide="7">
+    <div class="slide-label">Scenarios</div>
+    <h2>시나리오 예시</h2>
+    <p class="dim" style="margin-bottom: 16px;">라이키 톤 &mdash; 학생이 공감하는 일상의 순간</p>
+
+    <div class="scenario">
+      <div class="scenario-id">A1 &mdash; 숙제의 유혹</div>
+      <p>"숙제가 내일까지인데 아직 시작도 못했다. 일단 ChatGPT를 켠다."</p>
+    </div>
+
+    <div class="scenario">
+      <div class="scenario-id">B3 &mdash; 깔끔한 거짓말</div>
+      <p>"독후감을 AI에게 시켰다. 문장이 깔끔하다. 근데 내가 책 읽으면서 느꼈던 건 '잘 모르겠다'였는데, AI 글에는 그런 게 없다."</p>
+    </div>
+
+    <div class="scenario">
+      <div class="scenario-id">C6 &mdash; 완벽한 타인</div>
+      <p>"자기소개서를 AI가 써줬다. 완벽하다. 면접에서 '이 글을 쓴 당신은 어떤 사람이에요?'라고 물으면 뭐라고 할지 모르겠다."</p>
+    </div>
+  </div>
+
+  <!-- ────────── Slide 8: 텍스트 재료 ────────── -->
+  <div class="slide" data-slide="8">
+    <div class="slide-label">Materials</div>
+    <h2>관련 텍스트 재료</h2>
+    <p class="subtitle">시나리오 + 텍스트 = 학생이 읽고, 선택하고, 경험하는 재료</p>
+
+    <div style="margin-top: 20px;">
+      <h3>DMZ / 월페커즈 스타일의 교차참조 재료</h3>
+      <div class="material-tags" style="margin-top: 16px;">
+        <span class="material-tag active">기사 발췌</span>
+        <span class="material-tag active">인터뷰 인용</span>
+        <span class="material-tag active">데이터 카드</span>
+        <span class="material-tag">SNS 댓글</span>
+        <span class="material-tag">학생 일기</span>
+        <span class="material-tag">전문가 칼럼</span>
+        <span class="material-tag">설문 결과</span>
+        <span class="material-tag">뉴스 헤드라인</span>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top: 24px;">
+      <p>학생은 <span class="accent">시나리오 속 상황</span>에서<br>이 재료들을 참조하며 <span class="bold">자기 판단</span>을 내린다.</p>
+    </div>
+    <p style="margin-top: 16px; font-size: 16px; color: var(--text-light);">
+      &rarr; 정답이 아니라 <b>판단의 근거</b>를 경험하는 구조
+    </p>
+  </div>
+
+  <!-- ────────── Slide 9: 다음 단계 ────────── -->
+  <div class="slide" data-slide="9">
+    <div class="slide-label">Next Steps</div>
+    <h2>다음 단계 &mdash; 정예공과 함께</h2>
+
+    <ul class="step-list" style="margin-top: 28px;">
+      <li>
+        <span class="bold">에피소드 선정</span><br>
+        <span class="dim">시나리오 12개 중 첫 에피소드 3개를 고른다</span>
+      </li>
+      <li>
+        <span class="bold">텍스트 재료 구체화</span><br>
+        <span class="dim">각 에피소드에 붙일 기사, 인터뷰, 데이터를 수집한다</span>
+      </li>
+      <li>
+        <span class="bold">Playable Prototype 설계</span><br>
+        <span class="dim">학생이 실제로 플레이할 수 있는 첫 번째 프로토타입</span>
+      </li>
+    </ul>
+
+    <div style="margin-top: 32px; padding: 20px 24px; background: #f7f9fc; border-radius: 12px;">
+      <p style="font-size: 16px; color: var(--text-light);">
+        <span class="bold" style="color: var(--text);">우리가 가진 것:</span>
+        WHY의 근거 + HOW의 설계 + 메카닉 + 시나리오 초안
+      </p>
+      <p style="font-size: 16px; color: var(--text-light); margin-top: 8px;">
+        <span class="bold" style="color: var(--accent);">다음에 필요한 것:</span>
+        콘텐츠 팀의 눈으로 시나리오를 검증하고 살을 붙이는 작업
+      </p>
+    </div>
+  </div>
+
+  <!-- ────────── Slide 10: 마지막 ────────── -->
+  <div class="slide" data-slide="10">
+    <div class="slide-label">AI Literacy</div>
+    <div class="final-quote">
+      <p>김현철 교수가 <span style="border-bottom: 3px solid var(--text);">Why</span>를 정의했다면,</p>
+      <p>놀공은 <span style="border-bottom: 3px solid var(--accent);">How</span>를 설계한다.</p>
+    </div>
+    <div style="margin-top: 48px; max-width: 600px;">
+      <p style="font-size: 22px; line-height: 1.6; color: var(--accent); font-weight: 600;">
+        위임의 경계를 판단하는 것 &mdash;<br>
+        이것이 AI 리터러시다.
+      </p>
+    </div>
+    <p class="dim" style="margin-top: 48px; font-size: 14px;">
+      놀공 &middot; 2026
+    </p>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="slide-counter" id="slideCounter">1 / 10</div>
+<div class="nav-dots" id="navDots"></div>
+
+<script>
+(function () {
+  const deck = document.getElementById('deck');
+  const slides = Array.from(deck.querySelectorAll('.slide'));
+  const counter = document.getElementById('slideCounter');
+  const progressBar = document.getElementById('progressBar');
+  const navDotsContainer = document.getElementById('navDots');
+  const total = slides.length;
+  let current = 0;
+  let transitioning = false;
+
+  // Build nav dots
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+    dot.addEventListener('click', () => goTo(i));
+    navDotsContainer.appendChild(dot);
+  });
+
+  const dots = Array.from(navDotsContainer.querySelectorAll('.nav-dot'));
+
+  function updateUI() {
+    counter.textContent = (current + 1) + ' / ' + total;
+    progressBar.style.width = ((current + 1) / total * 100) + '%';
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+
+  function goTo(index) {
+    if (index === current || index < 0 || index >= total || transitioning) return;
+    transitioning = true;
+
+    const prev = slides[current];
+    const next = slides[index];
+    const goingForward = index > current;
+
+    // Remove all transition classes
+    slides.forEach(s => {
+      s.classList.remove('active', 'exit-left');
+      s.style.transform = '';
+    });
+
+    if (goingForward) {
+      prev.classList.add('exit-left');
+      next.style.transform = 'translateX(40px)';
+    } else {
+      prev.style.transform = 'translateX(40px)';
+      next.style.transform = 'translateX(-40px)';
+    }
+
+    // Force reflow
+    void next.offsetWidth;
+
+    next.classList.add('active');
+    next.style.transform = '';
+
+    current = index;
+    updateUI();
+
+    setTimeout(() => { transitioning = false; }, 420);
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+    if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    if (e.key === 'End') { e.preventDefault(); goTo(total - 1); }
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  deck.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  deck.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      dx < 0 ? next() : prev();
+    }
+  }, { passive: true });
+
+  // Click sides (desktop)
+  deck.addEventListener('click', (e) => {
+    if (e.target.closest('button, a, .nav-dots')) return;
+    const x = e.clientX / window.innerWidth;
+    if (x > 0.7) next();
+    else if (x < 0.3) prev();
+  });
+
+  updateUI();
+})();
+</script>
+
+</body>
+</html>

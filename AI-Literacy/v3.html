@@ -1,0 +1,3169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>AI 리터러시 v3 — 나는 어떤 선택을 하는 사람일까?</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --color-bg: #ffffff;
+  --color-text: #000000;
+  --color-text-light: #555;
+  --color-bubble-mine: #000000;
+  --color-bubble-mine-text: #ffffff;
+  --color-bubble-other: #ffffff;
+  --color-bubble-other-text: #000000;
+  --color-narration: #555;
+  --color-card-bg: #ffffff;
+  --color-card-border: #000000;
+  --color-card-earned: #000000;
+  --color-accent: #000000;
+
+  --chart-grid: #ccc;
+  --chart-fill: rgba(0, 0, 0, 0.08);
+  --chart-stroke: #000000;
+  --chart-point: #000000;
+
+  --color-core: #000000;
+  --color-expansion: #000000;
+  --color-meta: #000000;
+
+  --radius-sm: 4px;
+  --radius-md: 4px;
+  --radius-lg: 4px;
+  --radius-full: 4px;
+
+  --font-family: "Chicago", "Geneva", "Monaco", "Courier New", monospace, "Noto Sans KR", sans-serif;
+  --font-size-sm: 13px;
+  --font-size-base: 15px;
+  --font-size-lg: 18px;
+  --font-size-xl: 24px;
+  --font-size-xxl: 32px;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-family);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  background: #fff;
+  color: var(--color-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Main Layout (PC: 2-column) ── */
+.app-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  height: 100dvh;
+  width: 100%;
+  max-width: 800px;
+  padding: 16px;
+}
+
+/* ── Macintosh Window Frame ── */
+.phone-frame {
+  width: 375px;
+  height: 720px;
+  max-height: 95dvh;
+  border: 2px solid #000;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.phone-statusbar {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--color-text);
+  background: #fff;
+  border-bottom: 2px solid #000;
+  flex-shrink: 0;
+  position: relative;
+}
+/* Macintosh title bar dots */
+.mac-titlebar {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  background: #fff;
+  border-bottom: 2px solid #000;
+  flex-shrink: 0;
+  position: relative;
+}
+.mac-titlebar-dots {
+  display: flex;
+  gap: 5px;
+}
+.mac-titlebar-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid #000;
+  background: #fff;
+}
+.mac-titlebar-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-family);
+  color: #000;
+}
+
+.phone-home-indicator {
+  height: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-top: 2px solid #000;
+}
+.phone-home-indicator::after {
+  display: none;
+}
+
+.phone-content {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Mobile Mini Bar (inside phone, top) ── */
+.mobile-mini-bar {
+  display: none;
+  padding: 6px 16px;
+  background: var(--color-bg);
+  border-bottom: 1px solid #000;
+  flex-shrink: 0;
+  gap: 6px;
+}
+.mini-bar-row {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+.mini-bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mini-bar-label {
+  font-size: 10px;
+  color: var(--color-text-light);
+  display: flex;
+  justify-content: space-between;
+}
+.mini-bar-track {
+  height: 4px;
+  background: #ddd;
+  border-radius: 0;
+  overflow: hidden;
+  border: 1px solid #000;
+}
+.mini-bar-fill {
+  height: 100%;
+  border-radius: 0;
+  transition: width 0.6s ease-out;
+  width: 0%;
+}
+.mini-bar-fill.core { background: #000; }
+.mini-bar-fill.expansion { background: #000; }
+.mini-bar-fill.meta { background: #000; }
+
+/* ── Side Panel (PC only, Macintosh window) ── */
+.side-panel {
+  width: 240px;
+  height: 720px;
+  max-height: 95dvh;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex-shrink: 0;
+  border: 2px solid #000;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.side-panel-section {
+  padding: 20px 16px;
+}
+.side-panel-section:first-child {
+  border-bottom: 1px solid #000;
+}
+
+.side-panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 16px;
+}
+
+/* 3-Pillar Bars */
+.pillar-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.pillar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.pillar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.pillar-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+.pillar-value {
+  font-size: 12px;
+  color: var(--color-text-light);
+  min-width: 28px;
+  text-align: right;
+}
+.pillar-sub {
+  font-size: 11px;
+  color: var(--color-text-light);
+  margin-bottom: 2px;
+}
+.pillar-track {
+  height: 8px;
+  background: #ddd;
+  border-radius: 0;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #000;
+}
+.pillar-fill {
+  height: 100%;
+  border-radius: 0;
+  transition: width 0.6s ease-out;
+  width: 0%;
+  position: relative;
+}
+.pillar-fill.core { background: #000; }
+.pillar-fill.expansion { background: #000; }
+.pillar-fill.meta { background: #000; }
+
+/* Flash animation */
+.pillar-flash-up {
+  animation: flashGreen 0.8s ease;
+}
+.pillar-flash-down {
+  animation: flashRed 0.8s ease;
+}
+@keyframes flashGreen {
+  0%, 100% { box-shadow: none; }
+  30% { box-shadow: inset 0 0 0 2px rgba(16, 185, 129, 0.6); background-color: rgba(16, 185, 129, 0.15); }
+}
+@keyframes flashRed {
+  0%, 100% { box-shadow: none; }
+  30% { box-shadow: inset 0 0 0 2px rgba(239, 68, 68, 0.6); background-color: rgba(239, 68, 68, 0.15); }
+}
+
+/* Card List in Side Panel */
+.side-cards-section {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 16px;
+}
+.side-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.side-card-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 0;
+  animation: cardSlideIn 0.3s ease-out;
+}
+@keyframes cardSlideIn {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.side-card-item .card-icon { font-size: 20px; flex-shrink: 0; }
+.side-card-item .card-label {
+  font-size: 12px;
+  color: var(--color-text);
+  line-height: 1.3;
+}
+.side-card-empty {
+  font-size: 13px;
+  color: #D1D5DB;
+  text-align: center;
+  padding: 24px 0;
+}
+
+/* Side Panel Episode Info */
+.side-episode-info {
+  padding: 12px 16px;
+  border-top: 1px solid #000;
+  text-align: center;
+  font-size: 12px;
+  color: var(--color-text-light);
+  flex-shrink: 0;
+}
+
+/* ── Screens ── */
+.screen {
+  display: none;
+  position: absolute;
+  inset: 0;
+  flex-direction: column;
+  overflow: hidden;
+}
+.screen.active {
+  display: flex;
+}
+
+.screen-enter { animation: screenFadeIn 0.4s ease forwards; }
+.screen-exit { animation: screenFadeOut 0.3s ease forwards; }
+
+@keyframes screenFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes screenFadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-8px); }
+}
+
+/* ── Title Screen ── */
+#screen-title {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 24px;
+  gap: 16px;
+}
+.title-emoji { font-size: 56px; margin-bottom: 8px; }
+.title-main {
+  font-size: var(--font-size-xxl);
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.3;
+}
+.title-sub {
+  font-size: var(--font-size-base);
+  color: var(--color-text-light);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+.btn-primary {
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 4px;
+  padding: 14px 40px;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: all 0.15s ease;
+  min-height: 48px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.btn-primary:hover { background: #000; color: #fff; transform: none; }
+.btn-primary:active { transform: scale(0.97); }
+
+.title-fade-in { animation: fadeIn 0.8s ease forwards; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Character Select Screen ── */
+#screen-character {
+  padding: 24px 16px;
+  gap: 16px;
+  overflow-y: auto;
+}
+.char-header {
+  text-align: center;
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}
+.char-sub {
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+  margin-bottom: 8px;
+}
+.character-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  flex: 1;
+}
+.character-card {
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 4px;
+  padding: 20px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.character-card:hover {
+  background: #000;
+  color: #fff;
+  transform: none;
+}
+.character-card:hover .char-tagline,
+.character-card:hover .char-tag {
+  color: #ccc;
+}
+.character-card:active { transform: scale(0.97); }
+.character-card .char-avatar { font-size: 36px; }
+.character-card .char-name {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+}
+.character-card .char-tagline {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+  line-height: 1.4;
+}
+.character-card .char-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 4px;
+}
+.char-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--color-text-light);
+  border: 1px solid #000;
+}
+
+/* ── Messenger Screen ── */
+#screen-messenger {
+  flex-direction: column;
+}
+.messenger-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #000;
+  flex-shrink: 0;
+  background: var(--color-bg);
+}
+.messenger-header .header-back {
+  font-size: 20px;
+  color: var(--color-text-light);
+  cursor: default;
+}
+.messenger-header .header-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background: #fff;
+  border: 1px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.messenger-header .header-name {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+}
+.messenger-header .header-cards-btn {
+  margin-left: auto;
+  background: #fff;
+  border: 1.5px solid #000;
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #000;
+  font-family: var(--font-family);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  min-height: 30px;
+}
+.messenger-header .header-cards-btn:hover { background: #000; color: #fff; }
+
+/* Chat Area */
+.chat-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  scroll-behavior: smooth;
+}
+
+.message-row {
+  display: flex;
+  gap: 8px;
+  max-width: 80%;
+  align-items: flex-end;
+}
+.message-row.left { align-self: flex-start; }
+.message-row.right { align-self: flex-end; flex-direction: row-reverse; }
+.message-row.center { align-self: center; max-width: 90%; }
+
+.message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background: #fff;
+  border: 1px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.message-content { display: flex; flex-direction: column; }
+
+.bubble {
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  word-break: keep-all;
+}
+.bubble.left {
+  background: #fff;
+  color: #000;
+  border: 1px solid #000;
+  border-bottom-left-radius: 0;
+}
+.bubble.right {
+  background: #000;
+  color: #fff;
+  border-bottom-right-radius: 0;
+}
+.bubble.center {
+  background: none;
+  color: var(--color-narration);
+  font-size: var(--font-size-sm);
+  text-align: center;
+  font-style: italic;
+  padding: 8px 0;
+}
+
+.sender-name {
+  font-size: 12px;
+  color: var(--color-text-light);
+  margin-bottom: 4px;
+}
+
+.message-time {
+  font-size: 11px;
+  color: var(--color-text-light);
+  margin-top: 2px;
+}
+.message-row.right .message-time { text-align: right; }
+
+.read-receipt {
+  font-size: 11px;
+  color: var(--color-text-light);
+  text-align: right;
+}
+
+.bubble-enter {
+  animation: bubbleIn 0.3s ease-out forwards;
+}
+@keyframes bubbleIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typing Indicator */
+.typing-row {
+  display: flex;
+  gap: 8px;
+  align-self: flex-start;
+  align-items: flex-end;
+  max-width: 80%;
+}
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 4px;
+  border-bottom-left-radius: 4px;
+  width: fit-content;
+}
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  background: #000;
+  border-radius: 50%;
+  animation: typingBounce 1.2s infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-4px); }
+}
+
+/* Choices */
+.choices-container {
+  padding: 12px 16px;
+  background: var(--color-bg);
+  border-top: 1px solid #000;
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.choice-btn {
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 4px;
+  padding: 14px 16px;
+  font-size: var(--font-size-base);
+  color: #000;
+  cursor: pointer;
+  text-align: left;
+  min-height: 48px;
+  transition: all 0.15s ease;
+  font-family: var(--font-family);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.choice-btn:hover {
+  background: #000;
+  color: #fff;
+}
+.choice-btn:active { transform: scale(0.98); }
+.choice-btn.selected {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+/* Next Button */
+.next-btn-container {
+  padding: 12px 16px;
+  background: var(--color-bg);
+  border-top: 1px solid #000;
+  display: none;
+  flex-shrink: 0;
+}
+.next-btn {
+  width: 100%;
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 4px;
+  padding: 14px;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-family);
+  min-height: 48px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: all 0.15s ease;
+}
+.next-btn:hover { background: #000; color: #fff; }
+.next-btn:active { transform: scale(0.98); }
+
+/* ── Transition Screen ── */
+.transition-screen {
+  position: absolute;
+  inset: 0;
+  background: var(--color-bg);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 50;
+}
+.transition-screen.active {
+  display: flex;
+  animation: fadeInOut 2.5s ease forwards;
+}
+@keyframes fadeInOut {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+.transition-icon { font-size: 40px; }
+.transition-episode {
+  font-size: var(--font-size-sm);
+  color: #000;
+  font-weight: 600;
+}
+.transition-label {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-light);
+}
+.transition-steps {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+.transition-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ddd;
+  border: 1px solid #000;
+}
+.transition-dot.active { background: #000; }
+
+/* ── Card Collection Screen ── */
+#screen-cards {
+  padding: 20px 16px;
+  overflow-y: auto;
+  gap: 16px;
+}
+.cards-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cards-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}
+.cards-back-btn {
+  background: #fff;
+  border: 1.5px solid #000;
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  color: #000;
+  font-family: var(--font-family);
+  min-height: 36px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: all 0.15s ease;
+}
+.cards-back-btn:hover { background: #000; color: #fff; }
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.earned-card {
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 4px;
+  padding: 16px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.earned-card .card-icon { font-size: 28px; }
+.earned-card .card-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  line-height: 1.4;
+}
+.earned-card .card-step {
+  font-size: 11px;
+  color: var(--color-text-light);
+}
+.empty-card {
+  background: #fff;
+  border: 1.5px dashed #000;
+  border-radius: 4px;
+  padding: 16px;
+  text-align: center;
+  color: #aaa;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+}
+
+/* ── Card Popup ── */
+.card-popup-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.15);
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-popup {
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 4px;
+  padding: 24px 32px;
+  text-align: center;
+  z-index: 100;
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.card-popup .popup-badge {
+  font-size: 12px;
+  color: #000;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.card-popup .popup-icon { font-size: 40px; margin-bottom: 8px; }
+.card-popup .popup-label {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+.popup-stat-changes {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.popup-stat-change {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+.popup-stat-change.up {
+  color: #059669;
+  background: rgba(16, 185, 129, 0.1);
+}
+.popup-stat-change.down {
+  color: #DC2626;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* ── Profile Result Screen ── */
+#screen-profile {
+  padding: 24px 16px;
+  overflow-y: auto;
+  gap: 16px;
+  align-items: center;
+}
+.profile-card {
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 4px;
+  padding: 32px 24px;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+}
+.profile-avatar { font-size: 48px; margin-bottom: 8px; }
+.profile-char-name {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+  margin-bottom: 4px;
+}
+.profile-type {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+.profile-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+.profile-chart {
+  margin: 0 auto 24px;
+  max-width: 280px;
+}
+.profile-chart svg { width: 100%; height: auto; }
+
+.stat-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.stat-label {
+  font-size: 12px;
+  color: var(--color-text-light);
+  width: 70px;
+  flex-shrink: 0;
+}
+.stat-bar-bg {
+  flex: 1;
+  height: 6px;
+  background: #ddd;
+  border-radius: 0;
+  overflow: hidden;
+  border: 1px solid #000;
+}
+.stat-bar-fill {
+  height: 100%;
+  background: #000;
+  border-radius: 0;
+  transition: width 0.8s ease-out;
+  width: 0;
+}
+.stat-value {
+  font-size: 12px;
+  color: var(--color-text);
+  width: 24px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.profile-cards-section {
+  margin-bottom: 24px;
+}
+.profile-cards-title {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-light);
+  margin-bottom: 12px;
+}
+.profile-cards {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.profile-card-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 4px;
+  padding: 4px 12px;
+  font-size: 13px;
+}
+
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 360px;
+}
+.btn-secondary {
+  background: #fff;
+  color: #000;
+  border: 1.5px solid #000;
+  border-radius: 4px;
+  padding: 12px 24px;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-family);
+  min-height: 48px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: all 0.15s ease;
+}
+.btn-secondary:hover { background: #000; color: #fff; }
+.btn-secondary:active { transform: scale(0.97); }
+
+/* ── Mobile Cards Overlay ── */
+.mobile-cards-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 80;
+  display: none;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.mobile-cards-overlay.active { display: flex; }
+.mobile-cards-sheet {
+  background: var(--color-bg);
+  border-radius: 4px 4px 0 0;
+  border: 2px solid #000;
+  border-bottom: none;
+  padding: 20px 16px 32px;
+  max-height: 60%;
+  overflow-y: auto;
+  animation: slideUpSheet 0.3s ease-out;
+}
+@keyframes slideUpSheet {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.mobile-cards-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.mobile-cards-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--color-text-light);
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 767px) {
+  body { background: var(--color-bg); }
+  .app-container {
+    padding: 0;
+    gap: 0;
+  }
+  .phone-frame {
+    width: 100%;
+    max-height: none;
+    height: 100dvh;
+    border: none;
+    border-radius: 0;
+  }
+  .mac-titlebar,
+  .phone-home-indicator { display: none; }
+  .side-panel { display: none !important; }
+  .mobile-mini-bar { display: flex; }
+  .messenger-header .header-cards-btn { display: inline-flex; }
+
+  .character-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .choice-btn {
+    min-height: 52px;
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-mini-bar { display: none !important; }
+  .messenger-header .header-cards-btn { display: none; }
+}
+
+button {
+  min-height: 44px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Scrollbar styling */
+.chat-area::-webkit-scrollbar,
+.side-cards-section::-webkit-scrollbar { width: 4px; }
+.chat-area::-webkit-scrollbar-track,
+.side-cards-section::-webkit-scrollbar-track { background: transparent; }
+.chat-area::-webkit-scrollbar-thumb,
+.side-cards-section::-webkit-scrollbar-thumb { background: #000; border-radius: 0; }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- Macintosh Window -->
+  <div class="phone-frame">
+    <div class="mac-titlebar">
+      <div class="mac-titlebar-dots">
+        <div class="mac-titlebar-dot"></div>
+        <div class="mac-titlebar-dot"></div>
+        <div class="mac-titlebar-dot"></div>
+      </div>
+      <span class="mac-titlebar-title">AI 리터러시</span>
+    </div>
+
+    <div class="phone-content">
+      <!-- Mobile Mini Bar (3-pillar) -->
+      <div class="mobile-mini-bar" id="mobile-mini-bar">
+        <div class="mini-bar-row">
+          <div class="mini-bar-item">
+            <div class="mini-bar-label"><span>Core</span><span class="mini-val" id="mini-core-val">0</span></div>
+            <div class="mini-bar-track"><div class="mini-bar-fill core" id="mini-core-fill"></div></div>
+          </div>
+          <div class="mini-bar-item">
+            <div class="mini-bar-label"><span>Exp</span><span class="mini-val" id="mini-exp-val">0</span></div>
+            <div class="mini-bar-track"><div class="mini-bar-fill expansion" id="mini-exp-fill"></div></div>
+          </div>
+          <div class="mini-bar-item">
+            <div class="mini-bar-label"><span>Meta</span><span class="mini-val" id="mini-meta-val">0</span></div>
+            <div class="mini-bar-track"><div class="mini-bar-fill meta" id="mini-meta-fill"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Title Screen -->
+      <div class="screen" id="screen-title">
+        <div class="title-emoji title-fade-in">\u{1F3A8}</div>
+        <div class="title-main title-fade-in">AI 시대,<br>나는 어떤 선택을<br>하는 사람일까?</div>
+        <div class="title-sub title-fade-in">에피소드 4개 · 약 15~18번의 선택이 바꾸는 나의 프로필</div>
+        <button class="btn-primary title-fade-in" onclick="showScreen('character')">시작하기</button>
+      </div>
+
+      <!-- Character Select Screen -->
+      <div class="screen" id="screen-character">
+        <div class="char-header">캐릭터를 골라봐</div>
+        <div class="char-sub">누구로 플레이할까?</div>
+        <div class="character-grid" id="character-grid"></div>
+      </div>
+
+      <!-- Messenger Screen -->
+      <div class="screen" id="screen-messenger">
+        <div class="messenger-header">
+          <span class="header-back">&#8249;</span>
+          <div class="header-avatar" id="messenger-avatar"></div>
+          <span class="header-name" id="messenger-name"></span>
+          <button class="header-cards-btn" onclick="openMobileCards()">내 카드</button>
+        </div>
+        <div class="chat-area" id="chat-area"></div>
+        <div class="choices-container" id="choices-container"></div>
+        <div class="next-btn-container" id="next-btn-container">
+          <button class="next-btn" id="next-btn">다음</button>
+        </div>
+      </div>
+
+      <!-- Card Collection Screen (mobile fallback) -->
+      <div class="screen" id="screen-cards">
+        <div class="cards-header">
+          <span class="cards-title">내가 모은 카드</span>
+          <button class="cards-back-btn" onclick="showScreen('messenger')">돌아가기</button>
+        </div>
+        <div class="card-grid" id="card-grid"></div>
+      </div>
+
+      <!-- Profile Result Screen -->
+      <div class="screen" id="screen-profile">
+        <div class="profile-card" id="profile-card-content"></div>
+        <div class="profile-actions">
+          <button class="btn-primary" onclick="game.restart(true)">다시 해보기</button>
+          <button class="btn-secondary" onclick="game.restart(false)">다른 캐릭터로 해보기</button>
+        </div>
+      </div>
+
+      <!-- Transition Overlay -->
+      <div class="transition-screen" id="transition-screen">
+        <div class="transition-episode" id="transition-episode"></div>
+        <div class="transition-icon" id="transition-icon"></div>
+        <div class="transition-label" id="transition-label"></div>
+        <div class="transition-steps" id="transition-steps"></div>
+      </div>
+
+      <!-- Mobile Cards Overlay -->
+      <div class="mobile-cards-overlay" id="mobile-cards-overlay" onclick="closeMobileCards(event)">
+        <div class="mobile-cards-sheet">
+          <div class="mobile-cards-header">
+            <span style="font-weight:700; font-size:18px;">내 카드</span>
+            <button class="mobile-cards-close" onclick="closeMobileCards()">&times;</button>
+          </div>
+          <div id="mobile-card-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phone-home-indicator"></div><!-- bottom border line -->
+  </div>
+
+  <!-- Side Panel (PC only, Macintosh window) -->
+  <div class="side-panel" id="side-panel">
+    <div class="mac-titlebar">
+      <div class="mac-titlebar-dots">
+        <div class="mac-titlebar-dot"></div>
+        <div class="mac-titlebar-dot"></div>
+        <div class="mac-titlebar-dot"></div>
+      </div>
+      <span class="mac-titlebar-title">Status</span>
+    </div>
+    <div class="side-panel-section">
+      <div class="side-panel-title">역량 3기둥</div>
+      <div class="pillar-bars">
+        <div class="pillar-item">
+          <div class="pillar-header">
+            <span class="pillar-name" style="color:#000">Core</span>
+            <span class="pillar-value" id="pillar-core-val">0</span>
+          </div>
+          <div class="pillar-sub">지키는 힘 (사고력 + 창의력)</div>
+          <div class="pillar-track" id="pillar-core-track">
+            <div class="pillar-fill core" id="pillar-core-fill"></div>
+          </div>
+        </div>
+        <div class="pillar-item">
+          <div class="pillar-header">
+            <span class="pillar-name" style="color:#000">Expansion</span>
+            <span class="pillar-value" id="pillar-exp-val">0</span>
+          </div>
+          <div class="pillar-sub">넓히는 힘 (기술친숙도 + 적응력)</div>
+          <div class="pillar-track" id="pillar-exp-track">
+            <div class="pillar-fill expansion" id="pillar-exp-fill"></div>
+          </div>
+        </div>
+        <div class="pillar-item">
+          <div class="pillar-header">
+            <span class="pillar-name" style="color:#000">Meta</span>
+            <span class="pillar-value" id="pillar-meta-val">0</span>
+          </div>
+          <div class="pillar-sub">나를 읽는 힘 (자신감 + 호기심)</div>
+          <div class="pillar-track" id="pillar-meta-track">
+            <div class="pillar-fill meta" id="pillar-meta-fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-cards-section">
+      <div class="side-panel-title">모은 카드</div>
+      <div class="side-card-list" id="side-card-list">
+        <div class="side-card-empty">아직 카드가 없어요</div>
+      </div>
+    </div>
+
+    <div class="side-episode-info" id="side-episode-info">
+      에피소드 — / —
+    </div>
+  </div>
+</div>
+
+<script>
+// =======================================
+// DATA
+// =======================================
+
+const CHARACTERS = {
+  suyeon: {
+    id: "suyeon",
+    name: "서연",
+    avatar: "\u{1F469}\u200D\u{1F4BB}",
+    tagline: "새 앱은 나오면 바로 깔아야지",
+    tags: ["기술친화", "효율"],
+    color: "#4A90D9"
+  },
+  hajun: {
+    id: "hajun",
+    name: "하준",
+    avatar: "\u{1F3A8}",
+    tagline: "쉬는 시간 낙서가 제일 좋아",
+    tags: ["그림", "자존감"],
+    color: "#E8913A"
+  },
+  minji: {
+    id: "minji",
+    name: "민지",
+    avatar: "\u{1F60E}",
+    tagline: "숙제는 빨리 끝내는 게 장땡",
+    tags: ["솔직", "편의"],
+    color: "#50B87A"
+  },
+  doyun: {
+    id: "doyun",
+    name: "도윤",
+    avatar: "\u{1F914}",
+    tagline: "뭘 해야 할지 잘 모르겠어...",
+    tags: ["신중", "불안"],
+    color: "#9B7DC8"
+  }
+};
+
+const SPEAKERS = {
+  jimin: { name: "지민", avatar: "\u{1F604}", side: "left" },
+  yuna: { name: "유나", avatar: "\u{1F60A}", side: "left" },
+  siwoo: { name: "시우", avatar: "\u{1F610}", side: "left" },
+  subin: { name: "수빈", avatar: "\u{1F97A}", side: "left" },
+  teacher: { name: "선생님", avatar: "\u{1F468}\u200D\u{1F3EB}", side: "left" },
+  ai: { name: "AI 도우미", avatar: "\u{1F916}", side: "left" },
+  chatbot: { name: "AI 챗봇", avatar: "\u{1F916}", side: "left" },
+  classmate: { name: "같은 반 친구", avatar: "\u{1F64B}", side: "left" },
+  narration: { name: null, avatar: null, side: "center" },
+  system: { name: null, avatar: null, side: "center" },
+  player: { name: "나", avatar: null, side: "right" }
+};
+
+const SCENE_INFO = {
+  home: { icon: "\u{1F3E0}", label: "집, 책상 앞" },
+  desk: { icon: "\u{1F4DD}", label: "30분 뒤, 책상 앞" },
+  classroom: { icon: "\u{1F4DA}", label: "다음 날, 미술 시간" },
+  korean_class: { icon: "\u{1F4D6}", label: "국어 시간, 조별 활동" },
+  afterschool: { icon: "\u{1F3EB}", label: "방과 후, 빈 교실" },
+  presentation: { icon: "\u{1F3A4}", label: "발표 당일" },
+  home_night_study: { icon: "\u{1F4D6}", label: "시험 2일 전, 밤" },
+  exam_day: { icon: "\u{270D}\uFE0F", label: "시험 당일, 쉬는 시간" },
+  exam_result: { icon: "\u{1F4CA}", label: "일주일 뒤, 시험 결과" },
+  home_night: { icon: "\u{1F319}", label: "밤, 방 안" },
+  next_day: { icon: "\u{2600}\uFE0F", label: "다음 날, 등굣길" },
+  lunchtime: { icon: "\u{1F371}", label: "점심시간, 급식실" },
+  final_reflect: { icon: "\u{2728}", label: "나의 프로필" }
+};
+
+const EPISODE_TITLES = {
+  1: "에피소드 1: 내 그림은 어디서부터인가",
+  2: "에피소드 2: 발표는 누가 하는 건가",
+  3: "에피소드 3: 시험은 누가 공부하는 건가",
+  4: "에피소드 4: 친구 고민은 AI가 더 잘 들어줄까"
+};
+
+// ── SUYEON full scenario (Episode 1-4) ──
+const SCENARIO = {
+  suyeon: {
+    // ===========================
+    // EPISODE 1: 내 그림은 어디서부터인가
+    // ===========================
+    // --- Scene 1-1: 집, 지민이 카톡 ---
+    "ep1_s1": {
+      episode: 1,
+      scene: "home",
+      messages: [
+        { from: "jimin", text: "야 나 벌써 했어 ㅋㅋ AI로 5분 컷", delay: 800 },
+        { from: "jimin", text: "[사진: AI가 만든 포스터]", delay: 1200 },
+        { from: "jimin", text: "이거 봐 대박이지?? \u{1F606}", delay: 600 },
+        { from: "system", text: "지민이의 포스터는 꽤 멋지다. 근데... 나도 해봤는데.", delay: 1000 }
+      ],
+      choices: [
+        {
+          id: "s1-A",
+          text: "ㅋㅋ 나도 했어 근데 좀 아쉬운데",
+          card: { icon: "\u{1F50D}", label: "만족 못 해서 더 파본다" },
+          stats: { thinking: 2, creativity: 1, tech: 1, adaptability: 0, confidence: 1, curiosity: 1 }
+        },
+        {
+          id: "s1-B",
+          text: "오 어떤 거 썼어? 나도 해볼래",
+          card: { icon: "\u26A1", label: "효율적으로 빨리 끝낸다" },
+          stats: { thinking: 0, creativity: -1, tech: 2, adaptability: 2, confidence: 1, curiosity: 0 }
+        },
+        {
+          id: "s1-C",
+          text: "근데 이거 내 그림은 아니잖아",
+          card: { icon: "\u{1F928}", label: "뭔가 찝찝하다" },
+          stats: { thinking: 2, creativity: 2, tech: 0, adaptability: 0, confidence: 0, curiosity: 1 }
+        }
+      ]
+    },
+
+    // --- Scene 1-2: 작업 중 막힘 (분기) ---
+    "ep1_s2": {
+      "s1-A": {
+        episode: 1,
+        scene: "desk",
+        messages: [
+          { from: "narration", text: "AI가 만들어준 건 예쁜데, 내 느낌이 아니다.", delay: 800 },
+          { from: "narration", text: "프롬프트를 바꿔볼까, 아니면...", delay: 600 }
+        ],
+        choices: [
+          {
+            id: "s2-A1",
+            text: "프롬프트를 10번 더 바꿔본다",
+            card: { icon: "\u{1F527}", label: "도구를 내 방식대로" },
+            stats: { thinking: 1, creativity: 1, tech: 2, adaptability: 1, confidence: 1, curiosity: 0 }
+          },
+          {
+            id: "s2-A2",
+            text: "AI 결과 참고하면서 직접 그려본다",
+            card: { icon: "\u270D\uFE0F", label: "AI 보고 내가 그린다" },
+            stats: { thinking: 2, creativity: 2, tech: 0, adaptability: 1, confidence: 1, curiosity: 1 }
+          },
+          {
+            id: "s2-A3",
+            text: "에이 그냥 아쉬워도 이거 내자",
+            card: { icon: "\u{1F937}", label: "적당히 타협한다" },
+            stats: { thinking: 0, creativity: 0, tech: 1, adaptability: 2, confidence: 0, curiosity: 0 }
+          }
+        ]
+      },
+      "s1-B": {
+        episode: 1,
+        scene: "desk",
+        messages: [
+          { from: "jimin", text: "나 DALL-E 썼어 ㅋㅋ 걍 '나의 하루 포스터' 치면 됨", delay: 800 },
+          { from: "narration", text: "5분 만에 포스터가 나왔다. 예쁘다.", delay: 600 },
+          { from: "narration", text: "근데 이 그림 속 하루는... 내 하루가 아닌데?", delay: 800 }
+        ],
+        choices: [
+          {
+            id: "s2-B1",
+            text: "프롬프트 수정해서 내 하루로 바꾼다",
+            card: { icon: "\u{1F504}", label: "내 것으로 커스텀한다" },
+            stats: { thinking: 1, creativity: 1, tech: 2, adaptability: 1, confidence: 1, curiosity: 0 }
+          },
+          {
+            id: "s2-B2",
+            text: "그냥 이거 내자. 어차피 숙제니까",
+            card: { icon: "\u{1F4A8}", label: "빨리 끝내는 게 중요하다" },
+            stats: { thinking: 0, creativity: -1, tech: 2, adaptability: 2, confidence: 1, curiosity: -1 }
+          }
+        ]
+      },
+      "s1-C": {
+        episode: 1,
+        scene: "desk",
+        messages: [
+          { from: "jimin", text: "뭔 소리야 ㅋㅋ 프롬프트 쓴 게 내가 한 거지", delay: 800 },
+          { from: "narration", text: "지민이 말도 틀린 건 아닌 것 같은데...", delay: 600 },
+          { from: "narration", text: "빈 종이가 놓여 있다. 노트북도 켜져 있다.", delay: 800 }
+        ],
+        choices: [
+          {
+            id: "s2-C1",
+            text: "그래도 난 직접 그려볼래. 종이를 집는다",
+            card: { icon: "\u{1F3A8}", label: "못생겨도 내 그림이다" },
+            stats: { thinking: 2, creativity: 2, tech: 0, adaptability: 0, confidence: 1, curiosity: 0 }
+          },
+          {
+            id: "s2-C2",
+            text: "AI한테 구도만 물어보고 내가 그린다",
+            card: { icon: "\u{1F91D}", label: "AI랑 같이 만든다" },
+            stats: { thinking: 1, creativity: 1, tech: 1, adaptability: 1, confidence: 1, curiosity: 1 }
+          },
+          {
+            id: "s2-C3",
+            text: "지민이 말이 맞을지도? AI로 하자",
+            card: { icon: "\u{1F4AD}", label: "생각을 바꿨다" },
+            stats: { thinking: 0, creativity: 0, tech: 2, adaptability: 2, confidence: 0, curiosity: 0 }
+          }
+        ]
+      }
+    },
+
+    // --- Scene 1-3: 미술 시간 제출 + 반응 ---
+    "ep1_s3": {
+      "s2-A1": {
+        episode: 1, scene: "classroom",
+        messages: [
+          { from: "narration", text: "미술 시간. 포스터를 칠판에 붙였다.", delay: 600 },
+          { from: "narration", text: "프롬프트를 수십 번 고쳐서 만든 포스터. 예쁘다. 근데 뭔가 이상하다.", delay: 800 },
+          { from: "teacher", text: "서연아, 이거 잘 만들었네. AI 쓴 거지?", delay: 800 },
+          { from: "narration", text: "선생님이 바로 알아챘다.", delay: 600 }
+        ],
+        choices: [
+          {
+            id: "s3-A1a",
+            text: "네, AI로 했는데 프롬프트 엄청 고쳤어요",
+            card: { icon: "\u{1F4AC}", label: "솔직하게 말했다" },
+            stats: { thinking: 1, creativity: 0, tech: 0, adaptability: 0, confidence: 2, curiosity: 0 }
+          },
+          {
+            id: "s3-A1b",
+            text: "...네. (할 말이 없다)",
+            card: { icon: "\u{1F910}", label: "말문이 막혔다" },
+            stats: { thinking: 1, creativity: 0, tech: 0, adaptability: 0, confidence: -1, curiosity: 1 }
+          }
+        ]
+      },
+      "s2-A2": {
+        episode: 1, scene: "classroom",
+        messages: [
+          { from: "narration", text: "미술 시간. 포스터를 칠판에 붙였다.", delay: 600 },
+          { from: "narration", text: "AI 결과물을 참고해서 그린 그림. 좀 삐뚤지만, 내 느낌이 들어 있다.", delay: 800 },
+          { from: "teacher", text: "서연아, 이 구도 재밌다. 어떻게 생각한 거야?", delay: 800 },
+          { from: "jimin", text: "오 이거 직접 그린 거야? 느낌 있는데", delay: 600 }
+        ],
+        noChoice: true,
+        endMessages: [
+          { from: "narration", text: "지민이가 진심으로 놀란 것 같다.", delay: 600 },
+          { from: "narration", text: "AI 보고 따라 그린 건데... 기분이 나쁘지 않다.", delay: 800 }
+        ]
+      },
+      "s2-A3": {
+        episode: 1, scene: "classroom",
+        messages: [
+          { from: "narration", text: "미술 시간. 포스터를 칠판에 붙였다.", delay: 600 },
+          { from: "narration", text: "아쉬운 대로 낸 AI 포스터. 남들이랑 비슷하게 생겼다.", delay: 800 },
+          { from: "teacher", text: "음, 잘 만들었네.", delay: 600 },
+          { from: "narration", text: "선생님이 별다른 말 없이 지나갔다. 나도 별다른 감정이 없다.", delay: 800 },
+          { from: "narration", text: "...진짜 없나?", delay: 600 }
+        ],
+        noChoice: true
+      },
+      "s2-B1": {
+        episode: 1, scene: "classroom",
+        messages: [
+          { from: "narration", text: "미술 시간. 포스터를 칠판에 붙였다.", delay: 600 },
+          { from: "narration", text: "프롬프트를 고쳐서 내 하루를 반영한 AI 포스터.", delay: 800 },
+          { from: "teacher", text: "오, 피시방? 재미있는 주제네.", delay: 600 },
+          { from: "jimin", text: "야 이거도 AI지? ㅋㅋ", delay: 600 }
+        ],
+        choices: [
+          {
+            id: "s3-B1a",
+            text: "응 ㅋㅋ 근데 내용은 다 내 거야",
+            card: { icon: "\u270C\uFE0F", label: "당당하게 말했다" },
+            stats: { thinking: 0, creativity: 0, tech: 1, adaptability: 1, confidence: 2, curiosity: 0 }
+          },
+          {
+            id: "s3-B1b",
+            text: "어... 반반? AI가 그리고 내가 수정했어",
+            card: { icon: "\u2696\uFE0F", label: "애매하게 설명했다" },
+            stats: { thinking: 1, creativity: 0, tech: 0, adaptability: 1, confidence: 0, curiosity: 1 }
+          }
+        ]
+      },
+      "s2-B2": {
+        episode: 1, scene: "classroom",
+        messages: [
+          { from: "narration", text: "미술 시간. 포스터를 칠판에 붙였다.", delay: 600 },
+          { from: "narration", text: "AI가 그린 카페 공부 포스터. 예쁘긴 한데.", delay: 800 },
+          { from: "teacher", text: "서연아, 방과 후에 카페에서 공부하는 거야?", delay: 800 },
+          { from: "narration", text: "...아뇨. 근데 할 말이 없다.", delay: 600 },
+          { from: "jimin", text: "ㅋㅋㅋ", delay: 400 }
+        ],
+        noChoice: true,
+        endMessages: [
+          { from: "narration", text: "좀 찔린다. 빨리 끝내고 싶었을 뿐인데.", delay: 800 }
+        ]
+      },
+      "s2-C1": {
+        episode: 1, scene: "classroom",
+        messages: [
+          { from: "narration", text: "미술 시간. 포스터를 칠판에 붙였다.", delay: 600 },
+          { from: "narration", text: "직접 그린 그림. 솔직히 좀 못생겼다. 근데 내 하루가 맞다.", delay: 800 },
+          { from: "teacher", text: "이거 직접 그린 거야? 느낌이 살아있네.", delay: 800 },
+          { from: "jimin", text: "야 ㅋㅋ 이거 진짜 네 하루잖아. 나는 AI가 카페 그려줬는데", delay: 800 }
+        ],
+        noChoice: true,
+        endMessages: [
+          { from: "narration", text: "못생긴 내 그림을 보면서 웃기는데, 기분이 나쁘지 않다.", delay: 800 }
+        ]
+      },
+      "s2-C2": {
+        episode: 1, scene: "classroom",
+        messages: [
+          { from: "narration", text: "미술 시간. 포스터를 칠판에 붙였다.", delay: 600 },
+          { from: "narration", text: "AI한테 구도 아이디어 받고, 그림은 내가 그렸다.", delay: 800 },
+          { from: "teacher", text: "이 구도 어디서 생각했어?", delay: 800 }
+        ],
+        choices: [
+          {
+            id: "s3-C2a",
+            text: "AI한테 구도 받고, 그림은 제가 그렸어요",
+            card: { icon: "\u{1F4AC}", label: "솔직하게 말했다" },
+            stats: { thinking: 1, creativity: 1, tech: 0, adaptability: 0, confidence: 2, curiosity: 0 }
+          },
+          {
+            id: "s3-C2b",
+            text: "그냥 생각했어요",
+            card: { icon: "\u{1F636}", label: "슬쩍 넘겼다" },
+            stats: { thinking: 0, creativity: 0, tech: 0, adaptability: 1, confidence: 0, curiosity: 0 }
+          }
+        ]
+      },
+      "s2-C3": {
+        episode: 1, scene: "classroom",
+        messages: [
+          { from: "narration", text: "미술 시간. 포스터를 칠판에 붙였다.", delay: 600 },
+          { from: "narration", text: "결국 AI로 만든 포스터. 지민이 거랑 비슷하게 생겼다.", delay: 800 },
+          { from: "teacher", text: "서연아, 지민이랑 스타일이 비슷하네?", delay: 800 },
+          { from: "jimin", text: "ㅋㅋ 같은 AI 쓴 거 아냐?", delay: 600 }
+        ],
+        noChoice: true,
+        endMessages: [
+          { from: "narration", text: "처음에는 찝찝했는데, 결국 같은 결과가 나왔다.", delay: 800 },
+          { from: "narration", text: "...이게 내가 원한 건가?", delay: 600 }
+        ]
+      }
+    },
+
+    // ===========================
+    // EPISODE 2: 발표는 누가 하는 건가
+    // ===========================
+    // --- Scene 2-1: 국어 시간, 조 구성 ---
+    "ep2_s1": {
+      episode: 2,
+      scene: "korean_class",
+      messages: [
+        { from: "narration", text: "일주일 뒤, 국어 시간.", delay: 600 },
+        { from: "teacher", text: "다음 주에 조별 발표가 있어요. 주제는 자유. 4명이 한 조.", delay: 800 },
+        { from: "narration", text: "서연이 조: 서연, 유나, 시우, 지민.", delay: 600 },
+        { from: "yuna", text: "야 우리 AI로 PPT 만들자 ㅋㅋ 시간 없잖아", delay: 800 },
+        { from: "siwoo", text: "에... 그냥 직접 하면 안 돼? AI로 하면 다 비슷비슷하잖아", delay: 800 },
+        { from: "jimin", text: "나 저번에 AI로 포스터 했는데 선생님이 바로 알아챘어 ㅋㅋ", delay: 800 },
+        { from: "system", text: "조원들 의견이 갈린다. 나는 어떻게 할까?", delay: 1000 }
+      ],
+      choices: [
+        {
+          id: "s4-A",
+          text: "AI로 초안 만들고 우리가 수정하면 되지 않아?",
+          card: { icon: "\u{1F91D}", label: "중간 지점을 찾았다" },
+          stats: { thinking: 2, creativity: 1, tech: 1, adaptability: 2, confidence: 1, curiosity: 0 }
+        },
+        {
+          id: "s4-B",
+          text: "유나 말대로 AI로 빨리 하자. 나 학원 가야 해",
+          card: { icon: "\u{23F1}\uFE0F", label: "시간이 없다" },
+          stats: { thinking: 0, creativity: -1, tech: 2, adaptability: 2, confidence: 1, curiosity: -1 }
+        },
+        {
+          id: "s4-C",
+          text: "시우 말도 맞아. 우리가 직접 하자",
+          card: { icon: "\u270B", label: "직접 하자고 했다" },
+          stats: { thinking: 1, creativity: 2, tech: 0, adaptability: 0, confidence: 2, curiosity: 1 }
+        }
+      ]
+    },
+
+    // --- Scene 2-2: 방과 후, 조별 작업 ---
+    "ep2_s2": {
+      "s4-A": {
+        episode: 2, scene: "afterschool",
+        messages: [
+          { from: "yuna", text: "오 그거 좋다! AI한테 구조 잡게 하고 우리가 내용 넣으면 되잖아", delay: 800 },
+          { from: "siwoo", text: "음... 그러면 발표 대본은 직접 쓰자. 읽기만 하는 건 싫어", delay: 800 },
+          { from: "narration", text: "AI가 PPT 초안을 만들었다. 꽤 깔끔하다.", delay: 600 },
+          { from: "narration", text: "근데 내용이 너무 일반적이다. '소통의 중요성' 같은 뻔한 말들.", delay: 800 },
+          { from: "jimin", text: "야 이거 다른 조도 비슷할 듯 ㅋㅋ", delay: 600 }
+        ],
+        choices: [
+          {
+            id: "s5-A1",
+            text: "우리 경험 넣자. 급식 얘기를 주제로 바꾸면?",
+            card: { icon: "\u{1F4A1}", label: "우리만의 이야기를 넣었다" },
+            stats: { thinking: 2, creativity: 2, tech: 0, adaptability: 1, confidence: 1, curiosity: 1 }
+          },
+          {
+            id: "s5-A2",
+            text: "AI한테 좀 더 구체적으로 시키면 되지 않아?",
+            card: { icon: "\u{1F504}", label: "프롬프트를 더 다듬었다" },
+            stats: { thinking: 1, creativity: 0, tech: 2, adaptability: 1, confidence: 1, curiosity: 0 }
+          }
+        ]
+      },
+      "s4-B": {
+        episode: 2, scene: "afterschool",
+        messages: [
+          { from: "yuna", text: "ㅋㅋ 역시 서연이! 내가 프롬프트 칠게 기다려", delay: 800 },
+          { from: "siwoo", text: "...", delay: 400 },
+          { from: "narration", text: "유나가 5분 만에 PPT를 만들었다. 예쁘다.", delay: 600 },
+          { from: "narration", text: "시우가 조용히 대본을 쓰고 있다. 혼자서.", delay: 800 },
+          { from: "jimin", text: "야 대본도 AI한테 시킬까?", delay: 600 },
+          { from: "siwoo", text: "됐어. 내가 쓸게.", delay: 600 }
+        ],
+        choices: [
+          {
+            id: "s5-B1",
+            text: "시우야 같이 하자, 내가 도와줄게",
+            card: { icon: "\u{1F64B}", label: "시우 편에 섰다" },
+            stats: { thinking: 1, creativity: 1, tech: 0, adaptability: 1, confidence: 1, curiosity: 1 }
+          },
+          {
+            id: "s5-B2",
+            text: "시우가 알아서 하겠지... 나는 PPT 정리할게",
+            card: { icon: "\u{1F636}", label: "넘어갔다" },
+            stats: { thinking: 0, creativity: 0, tech: 1, adaptability: 2, confidence: 0, curiosity: 0 }
+          }
+        ]
+      },
+      "s4-C": {
+        episode: 2, scene: "afterschool",
+        messages: [
+          { from: "siwoo", text: "오 서연이 ㅋㅋ 의외다? 좋아", delay: 800 },
+          { from: "yuna", text: "에이~ 시간 오래 걸리는데... 그럼 주제라도 빨리 정하자", delay: 800 },
+          { from: "narration", text: "직접 하기로 했다. 근데 막상 빈 슬라이드 앞에 앉으니...", delay: 800 },
+          { from: "jimin", text: "야 주제 뭐로 해? 나 아이디어 없는데", delay: 600 },
+          { from: "narration", text: "4명이 아이디어를 하나도 못 내고 10분이 지났다.", delay: 800 }
+        ],
+        choices: [
+          {
+            id: "s5-C1",
+            text: "아이디어만 AI한테 물어보자. 거기서 고르면 되잖아",
+            card: { icon: "\u{1F9ED}", label: "방향만 AI에게 물었다" },
+            stats: { thinking: 1, creativity: 1, tech: 1, adaptability: 2, confidence: 1, curiosity: 1 }
+          },
+          {
+            id: "s5-C2",
+            text: "우리 점심시간에 맨날 하는 게임 얘기하자 그거 재밌잖아",
+            card: { icon: "\u{1F525}", label: "우리 이야기에서 찾았다" },
+            stats: { thinking: 2, creativity: 2, tech: 0, adaptability: 0, confidence: 2, curiosity: 0 }
+          }
+        ]
+      }
+    },
+
+    // --- Scene 2-3: 발표 당일 ---
+    "ep2_s3": {
+      "s5-A1": {
+        episode: 2, scene: "presentation",
+        messages: [
+          { from: "narration", text: "발표 당일. 서연이 조가 나갔다.", delay: 600 },
+          { from: "narration", text: "주제: '급식실에서 벌어지는 소통'. AI가 잡은 구조에, 우리 이야기가 들어갔다.", delay: 800 },
+          { from: "teacher", text: "재미있다! 이 주제는 어떻게 나온 거야?", delay: 800 }
+        ],
+        choices: [
+          {
+            id: "s6-Aa",
+            text: "AI가 초안 잡아주고, 내용은 저희가 넣었어요",
+            card: { icon: "\u{1F4AC}", label: "투명하게 말했다" },
+            stats: { thinking: 1, creativity: 0, tech: 0, adaptability: 0, confidence: 2, curiosity: 0 }
+          },
+          {
+            id: "s6-Ab",
+            text: "같이 이야기하다가 나왔어요 ㅎㅎ",
+            card: { icon: "\u{1F60F}", label: "적당히 넘겼다" },
+            stats: { thinking: 0, creativity: 0, tech: 0, adaptability: 1, confidence: 0, curiosity: 0 }
+          }
+        ]
+      },
+      "s5-A2": {
+        episode: 2, scene: "presentation",
+        messages: [
+          { from: "narration", text: "발표 당일. 서연이 조가 나갔다.", delay: 600 },
+          { from: "narration", text: "AI가 만든 깔끔한 PPT. 내용도 괜찮다. 근데 읽으면서 느낀다.", delay: 800 },
+          { from: "narration", text: "이거... 우리 발표인데 왜 남의 발표 같지?", delay: 800 },
+          { from: "teacher", text: "잘 정리했네. 그런데 이 통계 출처가 어디야?", delay: 800 },
+          { from: "narration", text: "...모른다. AI가 넣은 숫자니까.", delay: 600 }
+        ],
+        noChoice: true,
+        endMessages: [
+          { from: "narration", text: "시우가 조용히 한마디 했다.", delay: 600 },
+          { from: "siwoo", text: "다음엔 직접 찾아보자... 이번엔 좀 창피했어", delay: 800 }
+        ]
+      },
+      "s5-B1": {
+        episode: 2, scene: "presentation",
+        messages: [
+          { from: "narration", text: "발표 당일. 서연이 조가 나갔다.", delay: 600 },
+          { from: "narration", text: "PPT는 AI가, 대본은 시우와 서연이 같이 썼다.", delay: 800 },
+          { from: "narration", text: "대본 읽으면서 느낀다. 슬라이드랑 말이 좀 따로 논다.", delay: 800 },
+          { from: "teacher", text: "PPT는 깔끔한데, 발표 내용이랑 좀 다른 느낌이야?", delay: 800 }
+        ],
+        choices: [
+          {
+            id: "s6-Ba",
+            text: "PPT는 AI로 만들고 대본은 저희가 썼어요. 좀 안 맞죠?",
+            card: { icon: "\u{1F605}", label: "솔직하게 인정했다" },
+            stats: { thinking: 1, creativity: 0, tech: 0, adaptability: 0, confidence: 2, curiosity: 1 }
+          },
+          {
+            id: "s6-Bb",
+            text: "아... 시간이 좀 부족해서요",
+            card: { icon: "\u{1F62C}", label: "변명을 했다" },
+            stats: { thinking: 0, creativity: 0, tech: 0, adaptability: 1, confidence: -1, curiosity: 0 }
+          }
+        ]
+      },
+      "s5-B2": {
+        episode: 2, scene: "presentation",
+        messages: [
+          { from: "narration", text: "발표 당일. 서연이 조가 나갔다.", delay: 600 },
+          { from: "narration", text: "PPT는 화려하다. 시우가 쓴 대본은 짧다.", delay: 800 },
+          { from: "narration", text: "유나가 신나서 PPT를 넘기는데, 시우는 말이 없다.", delay: 800 },
+          { from: "teacher", text: "이 자료 어떻게 만들었어?", delay: 800 },
+          { from: "yuna", text: "AI로 했어요! 되게 쉽더라고요 ㅋㅋ", delay: 600 },
+          { from: "teacher", text: "음... 그래서 너희가 직접 한 부분은 어디야?", delay: 800 }
+        ],
+        noChoice: true,
+        endMessages: [
+          { from: "narration", text: "조용해졌다. 시우가 작은 소리로 '대본은 제가 썼어요' 했다.", delay: 800 },
+          { from: "narration", text: "나는? ...나는 뭘 했지?", delay: 800 }
+        ]
+      },
+      "s5-C1": {
+        episode: 2, scene: "presentation",
+        messages: [
+          { from: "narration", text: "발표 당일. 서연이 조가 나갔다.", delay: 600 },
+          { from: "narration", text: "AI가 추천한 주제 중 '교복' 얘기를 골라서, 내용은 직접 채웠다.", delay: 800 },
+          { from: "teacher", text: "교복 자율화? 요즘 이야기네. 잘 골랐다", delay: 800 },
+          { from: "jimin", text: "야 발표 잘했어 ㅋㅋ 교복 얘기 공감돼", delay: 600 }
+        ],
+        noChoice: true,
+        endMessages: [
+          { from: "narration", text: "AI가 방향만 잡아줬을 뿐인데, 결과는 우리 것이 됐다.", delay: 800 },
+          { from: "narration", text: "시우도 만족스러운 표정이다.", delay: 600 }
+        ]
+      },
+      "s5-C2": {
+        episode: 2, scene: "presentation",
+        messages: [
+          { from: "narration", text: "발표 당일. 서연이 조가 나갔다.", delay: 600 },
+          { from: "narration", text: "주제: '점심시간 보드게임의 숨은 규칙들'. PPT는 투박하지만 내용은 진짜다.", delay: 800 },
+          { from: "teacher", text: "와 이거 재밌다 ㅋㅋ 직접 경험한 거지?", delay: 800 },
+          { from: "siwoo", text: "서연이가 주제 냈어요!", delay: 600 },
+          { from: "jimin", text: "야 나도 넣어줘 저번에 내가 진 거 ㅋㅋ", delay: 600 }
+        ],
+        noChoice: true,
+        endMessages: [
+          { from: "narration", text: "서연이가 웃었다. 이건 확실히 우리 발표다.", delay: 600 },
+          { from: "narration", text: "PPT가 안 예뻐도, 이 발표는 우리 거라는 게 느껴진다.", delay: 800 }
+        ]
+      }
+    },
+
+    // ===========================
+    // EPISODE 3: 시험은 누가 공부하는 건가
+    // ===========================
+    // --- Scene 3-1: 시험 2일 전, 지민이 카톡 ---
+    "ep3_s1": {
+      episode: 3,
+      scene: "home_night_study",
+      messages: [
+        { from: "narration", text: "시험 2일 전, 밤.", delay: 600 },
+        { from: "narration", text: "교과서를 펴고 있는데 카톡이 왔다.", delay: 800 },
+        { from: "jimin", text: "야 ㅋㅋ 나 AI한테 사회 요약본 만들어달라고 했는데 진짜 대박", delay: 800 },
+        { from: "jimin", text: "[파일: AI_사회_요약_완벽정리.pdf]", delay: 1000 },
+        { from: "jimin", text: "이거 보면 됨 ㅋㅋ 교과서 안 봐도 될 듯??", delay: 600 },
+        { from: "system", text: "지민이가 보내준 요약본. 깔끔하다. 근데...", delay: 1000 }
+      ],
+      choices: [
+        {
+          id: "s7-A",
+          text: "ㅋㅋ 고마워 나도 이거 보고 외울게",
+          card: { icon: "\u{1F4CB}", label: "AI 요약본으로 공부한다" },
+          stats: { thinking: 0, creativity: 0, tech: 2, adaptability: 2, confidence: 1, curiosity: -1 }
+        },
+        {
+          id: "s7-B",
+          text: "오 근데 나는 AI한테 직접 물어보면서 할래",
+          card: { icon: "\u{1F4AC}", label: "AI와 대화하며 공부한다" },
+          stats: { thinking: 1, creativity: 0, tech: 2, adaptability: 1, confidence: 1, curiosity: 1 }
+        },
+        {
+          id: "s7-C",
+          text: "ㅋㅋ 나는 그냥 교과서로 할게 이게 편해",
+          card: { icon: "\u{1F4D6}", label: "교과서로 직접 정리한다" },
+          stats: { thinking: 2, creativity: 1, tech: 0, adaptability: 0, confidence: 1, curiosity: 0 }
+        }
+      ]
+    },
+
+    // --- Scene 3-2: 시험 당일 쉬는 시간 ---
+    "ep3_s2": {
+      "s7-A": {
+        episode: 3, scene: "exam_day",
+        messages: [
+          { from: "narration", text: "시험 당일, 1교시 전 쉬는 시간.", delay: 600 },
+          { from: "classmate", text: "야 AI 요약 봤어? 핵심만 딱딱 있더라", delay: 800 },
+          { from: "jimin", text: "ㅋㅋ 걔 덕분에 2시간 만에 끝냈어", delay: 600 },
+          { from: "narration", text: "다들 같은 요약본을 봤나 보다. 나도 어젯밤에 그거 달달 외웠다.", delay: 800 },
+          { from: "narration", text: "근데 솔직히 '무역의 흐름'이 뭔지는 잘 모르겠다. 키워드만 기억나.", delay: 800 },
+          { from: "system", text: "시험지가 나왔다. 서술형 문제가 보인다.", delay: 800 }
+        ],
+        choices: [
+          {
+            id: "s8-A1",
+            text: "키워드 조합해서 어떻게든 써본다",
+            card: { icon: "\u{1F4DD}", label: "외운 걸 짜맞춘다" },
+            stats: { thinking: 0, creativity: 1, tech: 0, adaptability: 2, confidence: 0, curiosity: 0 }
+          },
+          {
+            id: "s8-A2",
+            text: "...모르겠다. 빈칸으로 두자",
+            card: { icon: "\u{1F62E}\u200D\u{1F4A8}", label: "머릿속이 하얗다" },
+            stats: { thinking: 0, creativity: 0, tech: 0, adaptability: 0, confidence: -1, curiosity: 1 }
+          }
+        ]
+      },
+      "s7-B": {
+        episode: 3, scene: "exam_day",
+        messages: [
+          { from: "narration", text: "시험 당일, 1교시 전 쉬는 시간.", delay: 600 },
+          { from: "jimin", text: "야 너 어젯밤에 뭐 했어? 요약본 안 봤어?", delay: 800 },
+          { from: "narration", text: "나는 AI한테 '무역의 흐름이 뭐야?' 이런 식으로 물어보면서 공부했다.", delay: 800 },
+          { from: "narration", text: "요약본보다 시간은 더 걸렸는데, 대화하면서 궁금한 거 하나하나 풀었다.", delay: 800 },
+          { from: "classmate", text: "야 근데 AI가 가끔 이상한 말 하지 않아?", delay: 600 },
+          { from: "system", text: "시험지가 나왔다. 서술형 문제가 보인다.", delay: 800 }
+        ],
+        choices: [
+          {
+            id: "s8-B1",
+            text: "어젯밤에 AI한테 질문한 게 떠오른다. 써본다",
+            card: { icon: "\u{1F4A1}", label: "대화가 기억을 만들었다" },
+            stats: { thinking: 2, creativity: 0, tech: 1, adaptability: 0, confidence: 2, curiosity: 1 }
+          },
+          {
+            id: "s8-B2",
+            text: "AI가 설명해준 건 기억나는데... 맞는지 확신이 없다",
+            card: { icon: "\u{1F914}", label: "기억은 나는데 확신이 없다" },
+            stats: { thinking: 1, creativity: 0, tech: 0, adaptability: 1, confidence: 0, curiosity: 1 }
+          }
+        ]
+      },
+      "s7-C": {
+        episode: 3, scene: "exam_day",
+        messages: [
+          { from: "narration", text: "시험 당일, 1교시 전 쉬는 시간.", delay: 600 },
+          { from: "jimin", text: "야 너 진짜 교과서로 했어? ㅋㅋ 시간 넘 오래 걸리지 않아?", delay: 800 },
+          { from: "narration", text: "솔직히 오래 걸렸다. 지민이 요약본 보고 싶기도 했다.", delay: 800 },
+          { from: "narration", text: "근데 내가 직접 밑줄 치면서 정리한 노트가 있다. 글씨가 좀 더럽지만.", delay: 800 },
+          { from: "system", text: "시험지가 나왔다. 서술형 문제가 보인다.", delay: 800 }
+        ],
+        noChoice: true,
+        endMessages: [
+          { from: "narration", text: "교과서에서 밑줄 친 부분이 떠오른다. '무역의 흐름'... 그 그래프 옆에 내가 쓴 메모.", delay: 800 },
+          { from: "narration", text: "느리지만, 내 손으로 정리한 게 지금 쓸모가 있다.", delay: 800 }
+        ]
+      }
+    },
+
+    // --- Scene 3-3: 시험 결과 ---
+    "ep3_s3": {
+      episode: 3,
+      scene: "exam_result",
+      _isCommon: true,
+      messages: [
+        { from: "narration", text: "일주일 뒤. 시험 결과가 나왔다.", delay: 600 },
+        { from: "jimin", text: "야 나 78점 ㅋㅋ 그래도 요약본 안 봤으면 더 낮았을 듯", delay: 800 },
+        { from: "narration", text: "내 점수도 나왔다. 비슷한 범위.", delay: 600 },
+        { from: "narration", text: "점수는 크게 다르지 않다.", delay: 800 },
+        { from: "narration", text: "근데 느낌이 다르다.", delay: 600 },
+        { from: "system", text: "AI 요약을 외운 사람, AI와 대화하며 공부한 사람, 교과서로 직접 정리한 사람.", delay: 1000 },
+        { from: "system", text: "점수는 비슷해도, 머릿속에 남은 건 다르다.", delay: 1000 },
+        { from: "narration", text: "다음 시험에서는 어떻게 할까? 아직은 모르겠다.", delay: 800 }
+      ],
+      noChoice: true
+    },
+
+    // ===========================
+    // EPISODE 4: 친구 고민은 AI가 더 잘 들어줄까
+    // ===========================
+    // --- Scene 4-1: 밤, 친구 카톡 + AI 챗봇 ---
+    "ep4_s1": {
+      episode: 4,
+      scene: "home_night",
+      messages: [
+        { from: "narration", text: "밤 11시. 자려고 누웠는데.", delay: 600 },
+        { from: "subin", text: "서연아", delay: 800 },
+        { from: "subin", text: "나 요즘 좀 힘들어", delay: 600 },
+        { from: "subin", text: "별거 아닌데 그냥... 모든 게 귀찮고", delay: 800 },
+        { from: "narration", text: "동시에 AI 챗봇 앱 알림이 떴다.", delay: 600 },
+        { from: "chatbot", text: "\u{1F44B} 오늘 하루 어땠어? 이야기해줘!", delay: 800 },
+        { from: "system", text: "수빈이 톡이 와 있다. AI 챗봇도 말 걸고 있다. 나는 졸리다.", delay: 1000 }
+      ],
+      choices: [
+        {
+          id: "s9-A",
+          text: "수빈이한테 먼저 답장한다",
+          card: { icon: "\u{1F49C}", label: "친구한테 먼저 갔다" },
+          stats: { thinking: 1, creativity: 0, tech: 0, adaptability: 0, confidence: 1, curiosity: 0 }
+        },
+        {
+          id: "s9-B",
+          text: "AI 챗봇 먼저 열어본다. 수빈이한텐 나중에",
+          card: { icon: "\u{1F916}", label: "AI가 더 편하다" },
+          stats: { thinking: 0, creativity: 0, tech: 2, adaptability: 1, confidence: 0, curiosity: 1 }
+        },
+        {
+          id: "s9-C",
+          text: "둘 다 무시하고 잔다. 내일 답장하지 뭐",
+          card: { icon: "\u{1F634}", label: "일단 잔다" },
+          stats: { thinking: 0, creativity: 0, tech: 0, adaptability: 1, confidence: 0, curiosity: 0 }
+        }
+      ]
+    },
+
+    // --- Scene 4-2: 다음 날, 상황 변화 ---
+    "ep4_s2": {
+      "s9-A": {
+        episode: 4, scene: "next_day",
+        messages: [
+          { from: "narration", text: "다음 날 아침, 등굣길.", delay: 600 },
+          { from: "narration", text: "어젯밤에 수빈이랑 한 시간 넘게 카톡했다.", delay: 800 },
+          { from: "narration", text: "별 대단한 얘기는 안 했다. 그냥 '응 힘들지' '나도 그래' 이런 말들.", delay: 800 },
+          { from: "narration", text: "근데 수빈이가 마지막에 보낸 톡.", delay: 600 },
+          { from: "subin", text: "고마워 서연아 ㅠㅠ 진짜 좀 나아졌어", delay: 800 },
+          { from: "narration", text: "AI 챗봇은 읽지도 않았다. 알림만 쌓여 있다.", delay: 800 },
+          { from: "system", text: "교실에서 수빈이를 만났다.", delay: 800 }
+        ],
+        choices: [
+          {
+            id: "s10-A1",
+            text: "수빈이한테 다가가서 \"어제 좀 괜찮아?\" 물어본다",
+            card: { icon: "\u{1F917}", label: "직접 확인했다" },
+            stats: { thinking: 1, creativity: 0, tech: 0, adaptability: 0, confidence: 2, curiosity: 0 }
+          },
+          {
+            id: "s10-A2",
+            text: "눈 마주치면 웃어준다. 굳이 말은 안 한다",
+            card: { icon: "\u{1F60A}", label: "조용히 옆에 있어줬다" },
+            stats: { thinking: 1, creativity: 0, tech: 0, adaptability: 1, confidence: 1, curiosity: 0 }
+          }
+        ]
+      },
+      "s9-B": {
+        episode: 4, scene: "next_day",
+        messages: [
+          { from: "narration", text: "다음 날 아침, 등굣길.", delay: 600 },
+          { from: "narration", text: "어젯밤에 AI 챗봇이랑 30분 얘기했다.", delay: 800 },
+          { from: "chatbot", text: "그런 기분이 드는 건 자연스러운 거야! 너는 충분히 잘하고 있어 \u{1F60A}", delay: 800 },
+          { from: "narration", text: "위로가 됐다. 근데... 수빈이한테 답장을 안 했다.", delay: 800 },
+          { from: "narration", text: "아침에 확인하니까 수빈이 톡 마지막이.", delay: 600 },
+          { from: "subin", text: "ㅋ 괜찮아 자고 있었나봐", delay: 600 },
+          { from: "narration", text: "'괜찮아' 라고 했지만, 괜찮은 건지는 모르겠다.", delay: 800 },
+          { from: "system", text: "교실에서 수빈이를 만났다.", delay: 800 }
+        ],
+        choices: [
+          {
+            id: "s10-B1",
+            text: "수빈아 미안 어제 ㅠ 지금 얘기해도 돼?",
+            card: { icon: "\u{1F625}", label: "뒤늦게라도 다가갔다" },
+            stats: { thinking: 1, creativity: 0, tech: 0, adaptability: 1, confidence: 1, curiosity: 1 }
+          },
+          {
+            id: "s10-B2",
+            text: "... (뭐라고 하기 어렵다. 그냥 지나간다)",
+            card: { icon: "\u{1F636}", label: "넘어갔다" },
+            stats: { thinking: 0, creativity: 0, tech: 0, adaptability: 1, confidence: -1, curiosity: 0 }
+          }
+        ]
+      },
+      "s9-C": {
+        episode: 4, scene: "next_day",
+        messages: [
+          { from: "narration", text: "다음 날 아침, 등굣길.", delay: 600 },
+          { from: "narration", text: "어젯밤에 그냥 잤다. 알림도 안 봤다.", delay: 800 },
+          { from: "narration", text: "아침에 폰 켜니까 수빈이 톡이 3개 더 와 있다.", delay: 600 },
+          { from: "subin", text: "아 미안 갑자기 이런 말 해서", delay: 600 },
+          { from: "subin", text: "그냥 잊어줘 ㅋ", delay: 400 },
+          { from: "subin", text: "ㅋ", delay: 300 },
+          { from: "narration", text: "'ㅋ'가 좀 씁쓸해 보인다.", delay: 800 },
+          { from: "system", text: "교실에서 수빈이를 만났다.", delay: 800 }
+        ],
+        choices: [
+          {
+            id: "s10-C1",
+            text: "수빈아 어제 미안!! 뭐 무슨 일이야?",
+            card: { icon: "\u{1F97A}", label: "늦었지만 말을 걸었다" },
+            stats: { thinking: 1, creativity: 0, tech: 0, adaptability: 0, confidence: 1, curiosity: 1 }
+          },
+          {
+            id: "s10-C2",
+            text: "수빈이가 괜찮다고 했으니까... 괜찮겠지",
+            card: { icon: "\u{1F610}", label: "그냥 넘어갔다" },
+            stats: { thinking: 0, creativity: 0, tech: 0, adaptability: 1, confidence: -1, curiosity: 0 }
+          }
+        ]
+      }
+    },
+
+    // --- Scene 4-3: 점심시간, 수빈이와 마주침 ---
+    "ep4_s3": {
+      "s10-A1": {
+        episode: 4, scene: "lunchtime",
+        messages: [
+          { from: "narration", text: "점심시간. 수빈이가 웃으면서 다가왔다.", delay: 600 },
+          { from: "subin", text: "서연아 ㅋㅋ 어제 진짜 고마웠어", delay: 800 },
+          { from: "subin", text: "나 사실 AI 챗봇으로 상담 해봤거든? 근데 좀 이상한 느낌이야", delay: 800 },
+          { from: "subin", text: "걔는 맨날 '괜찮아 잘할 거야' 하는데, 그게 진짜인지 모르겠어", delay: 800 },
+          { from: "subin", text: "서연이는 그냥 '나도 그래' 했는데 그게 더 위로됐어 ㅋㅋ", delay: 600 }
+        ],
+        noChoice: true,
+        endMessages: [
+          { from: "narration", text: "AI는 완벽한 말을 해줬다. 근데 수빈이한테 필요한 건 완벽한 말이 아니었다.", delay: 1000 },
+          { from: "narration", text: "'나도 그래'가 '괜찮아 잘할 거야'보다 가까웠다.", delay: 800 }
+        ]
+      },
+      "s10-A2": {
+        episode: 4, scene: "lunchtime",
+        messages: [
+          { from: "narration", text: "점심시간. 수빈이 옆에 앉았다.", delay: 600 },
+          { from: "narration", text: "말은 안 했다. 그냥 같이 밥을 먹었다.", delay: 800 },
+          { from: "subin", text: "서연아 고마워 ㅋ 어제도 오늘도", delay: 800 },
+          { from: "narration", text: "뭘 한 건지 모르겠는데, 수빈이는 고마워했다.", delay: 600 }
+        ],
+        noChoice: true,
+        endMessages: [
+          { from: "narration", text: "가끔은 말보다 옆에 있는 게 전부인 것 같다.", delay: 800 },
+          { from: "narration", text: "AI는 그걸 할 수 없다.", delay: 600 }
+        ]
+      },
+      "s10-B1": {
+        episode: 4, scene: "lunchtime",
+        messages: [
+          { from: "narration", text: "점심시간. 수빈이한테 다가갔다.", delay: 600 },
+          { from: "subin", text: "아 ㅋㅋ 진짜 괜찮아. 어제 좀 우울했어 그냥", delay: 800 },
+          { from: "narration", text: "괜찮다고 했지만, 좀 더 물어봤다.", delay: 600 },
+          { from: "subin", text: "사실 나도 AI 챗봇으로 얘기해봤는데... 뭐라 해야 되지", delay: 800 },
+          { from: "subin", text: "걔는 다 들어주는데 진짜 '듣는' 느낌은 아닌 거 있지?", delay: 800 }
+        ],
+        noChoice: true,
+        endMessages: [
+          { from: "narration", text: "어젯밤에 AI 챗봇이랑 먼저 얘기한 게 좀 미안해졌다.", delay: 800 },
+          { from: "narration", text: "AI가 '들어주는' 것과 친구가 '들어주는' 건 다른 거구나.", delay: 800 }
+        ]
+      },
+      "s10-B2": {
+        episode: 4, scene: "lunchtime",
+        messages: [
+          { from: "narration", text: "점심시간. 수빈이가 다른 친구들이랑 웃고 있다.", delay: 600 },
+          { from: "narration", text: "...괜찮나? 괜찮은 것 같기도 하고.", delay: 800 },
+          { from: "narration", text: "어젯밤에 AI 챗봇이 '너는 좋은 친구야'라고 했다.", delay: 600 },
+          { from: "narration", text: "진짜 좋은 친구면 답장은 했어야 되는 거 아닌가.", delay: 800 }
+        ],
+        noChoice: true,
+        endMessages: [
+          { from: "narration", text: "AI는 내가 좋은 사람이라고 해줬다. 근데 그걸 확인해줄 수 없다.", delay: 800 },
+          { from: "narration", text: "확인은 내가 하는 거다. 행동으로.", delay: 800 }
+        ]
+      },
+      "s10-C1": {
+        episode: 4, scene: "lunchtime",
+        messages: [
+          { from: "narration", text: "점심시간. 수빈이한테 다가갔다.", delay: 600 },
+          { from: "subin", text: "아 ㅋㅋ 괜찮아 진짜. 어제 좀 그랬어", delay: 800 },
+          { from: "narration", text: "수빈이가 살짝 웃었다. 진짜 괜찮은 건지는 모르겠다.", delay: 800 },
+          { from: "subin", text: "근데 서연아, 너는 힘들 때 누구한테 얘기해?", delay: 800 }
+        ],
+        choices: [
+          {
+            id: "s11-C1a",
+            text: "음... 나도 잘 모르겠어. 그냥 혼자 삭이는 것 같아",
+            card: { icon: "\u{1F4AD}", label: "나도 생각해본 적 없다" },
+            stats: { thinking: 2, creativity: 0, tech: 0, adaptability: 0, confidence: 0, curiosity: 2 }
+          },
+          {
+            id: "s11-C1b",
+            text: "AI 챗봇? ㅋㅋ 장난이고... 그냥 음악 듣는 것 같아",
+            card: { icon: "\u{1F3B5}", label: "나만의 방법이 있다" },
+            stats: { thinking: 1, creativity: 1, tech: 0, adaptability: 1, confidence: 1, curiosity: 0 }
+          }
+        ]
+      },
+      "s10-C2": {
+        episode: 4, scene: "lunchtime",
+        messages: [
+          { from: "narration", text: "점심시간. 수빈이 앞을 지나갔다.", delay: 600 },
+          { from: "narration", text: "수빈이가 혼자 밥을 먹고 있다.", delay: 800 },
+          { from: "narration", text: "...괜찮다고 했잖아.", delay: 600 },
+          { from: "narration", text: "폰을 꺼내서 AI 챗봇을 열었다.", delay: 600 },
+          { from: "chatbot", text: "안녕! 오늘은 기분이 어때? \u{1F60A}", delay: 800 },
+          { from: "narration", text: "AI는 항상 물어봐준다. 근데 수빈이한텐 아무도 안 물어본 것 같다.", delay: 1000 }
+        ],
+        noChoice: true,
+        endMessages: [
+          { from: "narration", text: "AI가 물어봐주는 건 프로그램이다. 내가 물어보는 건 선택이다.", delay: 800 },
+          { from: "narration", text: "그 차이가 이렇게 큰 건지 몰랐다.", delay: 800 }
+        ]
+      }
+    },
+
+    // ===========================
+    // EPISODE 5: 돌아보기 + 프로필
+    // ===========================
+    "ep5_reflect": {
+      episode: 5,
+      scene: "final_reflect",
+      messages: [
+        { from: "narration", text: "미술도, 발표도, 시험도, 친구의 고민도.", delay: 800 },
+        { from: "narration", text: "네 번의 장면을 지나왔다.", delay: 600 },
+        { from: "system", text: "혼자 할 때와, 같이 할 때.", delay: 800 },
+        { from: "system", text: "AI가 옆에 있을 때, 내 선택은 달라지는 걸까?", delay: 1000 },
+        { from: "narration", text: "달라지든 아니든,", delay: 600 },
+        { from: "narration", text: "선택한 건 나다.", delay: 800 },
+        { from: "system", text: "그게 나의 AI 리터러시다.", delay: 1000 }
+      ],
+      noChoice: true
+    }
+  },
+
+  // ── HAJUN (ep1_s1 only) ──
+  hajun: {
+    "ep1_s1": {
+      episode: 1,
+      scene: "home",
+      messages: [
+        { from: "jimin", text: "야 나 벌써 했어 ㅋㅋ AI로 5분 컷", delay: 800 },
+        { from: "jimin", text: "[사진: AI가 만든 포스터]", delay: 1200 },
+        { from: "jimin", text: "이거 봐 ㅋㅋ 대박이지??", delay: 600 },
+        { from: "system", text: "...대단하네. 근데 기분이 묘하다. 저걸 AI가 30초 만에 그렸다고?", delay: 1000 }
+      ],
+      choices: [
+        {
+          id: "hajun-1A",
+          text: "솔직히 좀 부럽다... 나도 저렇게 그리고 싶은데",
+          card: { icon: "\u{1F614}", label: "복잡한 마음이 든다" },
+          stats: { thinking: 2, creativity: 1, tech: 0, adaptability: 0, confidence: -1, curiosity: 1 }
+        },
+        {
+          id: "hajun-1B",
+          text: "에이 저거 감성이 없잖아. 내가 직접 그릴래",
+          card: { icon: "\u{1F525}", label: "내 그림에 자존심이 있다" },
+          stats: { thinking: 1, creativity: 2, tech: 0, adaptability: 0, confidence: 2, curiosity: 0 }
+        },
+        {
+          id: "hajun-1C",
+          text: "오... 어떤 AI야? 나도 한번 써볼까",
+          card: { icon: "\u{1F9D0}", label: "궁금해서 써본다" },
+          stats: { thinking: 0, creativity: 0, tech: 2, adaptability: 1, confidence: 0, curiosity: 2 }
+        }
+      ]
+    }
+  },
+
+  // ── MINJI (ep1_s1 only) ──
+  minji: {
+    "ep1_s1": {
+      episode: 1,
+      scene: "home",
+      messages: [
+        { from: "jimin", text: "야 나 벌써 했어 ㅋㅋ AI로 5분 컷", delay: 800 },
+        { from: "jimin", text: "[사진: AI가 만든 포스터]", delay: 1200 },
+        { from: "jimin", text: "이거 걍 내면 되는 거 아냐? ㅋㅋ", delay: 600 },
+        { from: "system", text: "오 대박. 나도 빨리 끝내고 싶다.", delay: 800 }
+      ],
+      choices: [
+        {
+          id: "minji-1A",
+          text: "오 대박!! 나도 그거 해줘 링크 보내줘",
+          card: { icon: "\u{1F680}", label: "빨리 끝내고 싶다" },
+          stats: { thinking: 0, creativity: -1, tech: 2, adaptability: 2, confidence: 1, curiosity: 0 }
+        },
+        {
+          id: "minji-1B",
+          text: "ㅋㅋ 근데 걸리면 어떡해",
+          card: { icon: "\u{1F605}", label: "편하고 싶지만 불안하다" },
+          stats: { thinking: 1, creativity: 0, tech: 1, adaptability: 1, confidence: 0, curiosity: 1 }
+        },
+        {
+          id: "minji-1C",
+          text: "에이 귀찮아... 내일 학교에서 하지 뭐",
+          card: { icon: "\u{1F634}", label: "일단 미루자" },
+          stats: { thinking: 0, creativity: 0, tech: 0, adaptability: 1, confidence: 0, curiosity: 0 }
+        }
+      ]
+    }
+  },
+
+  // ── DOYUN (ep1_s1 only) ──
+  doyun: {
+    "ep1_s1": {
+      episode: 1,
+      scene: "home",
+      messages: [
+        { from: "jimin", text: "야 나 벌써 했어 ㅋㅋ AI로 5분 컷", delay: 800 },
+        { from: "jimin", text: "[사진: AI가 만든 포스터]", delay: 1200 },
+        { from: "jimin", text: "너도 해봐 진짜 쉬움!!", delay: 600 },
+        { from: "system", text: "...읽기만 했다. 뭐라고 답장하지.", delay: 1000 },
+        { from: "narration", text: "AI를 쓰자니 뭔가 양심에 걸리고, 직접 하자니 못할 것 같고.", delay: 800 }
+      ],
+      choices: [
+        {
+          id: "doyun-1A",
+          text: "ㅎㅎ 대단하다 (일단 이렇게만 답장한다)",
+          card: { icon: "\u{1F60C}", label: "답장은 했지만 결정은 안 했다" },
+          stats: { thinking: 1, creativity: 0, tech: 0, adaptability: 1, confidence: -1, curiosity: 1 }
+        },
+        {
+          id: "doyun-1B",
+          text: "나는 어떤 걸로 해야 할지 모르겠어...",
+          card: { icon: "\u{1F625}", label: "솔직하게 말했다" },
+          stats: { thinking: 1, creativity: 0, tech: 0, adaptability: 0, confidence: 0, curiosity: 2 }
+        },
+        {
+          id: "doyun-1C",
+          text: "읽씹한다. 일단 자고 내일 생각하자.",
+          card: { icon: "\u{1F636}", label: "선택을 미뤘다" },
+          stats: { thinking: 0, creativity: 0, tech: 0, adaptability: 0, confidence: -1, curiosity: 1 }
+        }
+      ]
+    }
+  }
+};
+
+const PROFILES = {
+  handmaker: {
+    name: "직접 해보는 사람",
+    desc: "결과가 완벽하지 않아도, 과정에 내가 들어가는 게 중요한 사람.",
+    condition: (s) => (s.thinking + s.creativity) >= 7 && s.tech <= 5
+  },
+  toolmaker: {
+    name: "도구와 함께 만드는 사람",
+    desc: "AI를 쓰되, 내 것으로 만드는 방법을 찾는 사람.",
+    condition: (s) => s.creativity >= 3 && s.tech >= 3 && s.confidence >= 3
+  },
+  speedrunner: {
+    name: "빠르게 끝내는 사람",
+    desc: "효율을 중요하게 생각하고, 도구를 적극적으로 활용하는 사람.",
+    condition: (s) => (s.tech + s.adaptability) >= 7 && s.creativity <= 4
+  },
+  connector: {
+    name: "사람을 연결하는 사람",
+    desc: "기술보다 관계가 먼저인 사람. AI가 대신할 수 없는 것을 아는 사람.",
+    condition: (s) => s.confidence >= 4 && s.thinking >= 4 && s.tech <= 4
+  },
+  teamplayer: {
+    name: "같이 만드는 사람",
+    desc: "혼자보다 함께일 때 빛나고, AI와 사람 사이에서 균형을 찾는 사람.",
+    condition: (s) => s.adaptability >= 4 && s.confidence >= 3 && s.thinking >= 3
+  },
+  explorer: {
+    name: "아직 찾는 사람",
+    desc: "정해진 답 없이 여러 가능성을 탐색하고 있는 사람.",
+    condition: (s) => s.curiosity >= Math.max(s.thinking, s.creativity, s.tech, s.adaptability, s.confidence)
+  }
+};
+
+function determineProfile(stats) {
+  for (const key of ['handmaker', 'toolmaker', 'connector', 'teamplayer', 'speedrunner', 'explorer']) {
+    if (PROFILES[key].condition(stats)) return PROFILES[key];
+  }
+  const entries = Object.entries(stats);
+  entries.sort((a, b) => b[1] - a[1]);
+  const topKey = entries[0][0];
+  if (topKey === 'thinking' || topKey === 'creativity') return PROFILES.handmaker;
+  if (topKey === 'tech' || topKey === 'adaptability') return PROFILES.speedrunner;
+  if (topKey === 'curiosity') return PROFILES.explorer;
+  if (topKey === 'confidence') return PROFILES.connector;
+  return PROFILES.toolmaker;
+}
+
+
+// =======================================
+// STEP ORDER & FLOW
+// =======================================
+
+// The step order for suyeon's full journey
+const SUYEON_STEPS = [
+  "ep1_s1", "ep1_s2", "ep1_s3",
+  "ep2_s1", "ep2_s2", "ep2_s3",
+  "ep3_s1", "ep3_s2", "ep3_s3",
+  "ep4_s1", "ep4_s2", "ep4_s3",
+  "ep5_reflect"
+];
+
+
+// =======================================
+// 3-PILLAR SYSTEM
+// =======================================
+
+function calcPillars(stats) {
+  const core = Math.round(((stats.thinking || 0) + (stats.creativity || 0)) / 2 * 10) / 10;
+  const expansion = Math.round(((stats.tech || 0) + (stats.adaptability || 0)) / 2 * 10) / 10;
+  const meta = Math.round(((stats.confidence || 0) + (stats.curiosity || 0)) / 2 * 10) / 10;
+  return { core, expansion, meta };
+}
+
+function updatePillarUI(stats, prevPillars) {
+  const pillars = calcPillars(stats);
+  const maxVal = 10;
+
+  const coreEl = document.getElementById('pillar-core-fill');
+  const expEl = document.getElementById('pillar-exp-fill');
+  const metaEl = document.getElementById('pillar-meta-fill');
+
+  if (coreEl) coreEl.style.width = `${(pillars.core / maxVal) * 100}%`;
+  if (expEl) expEl.style.width = `${(pillars.expansion / maxVal) * 100}%`;
+  if (metaEl) metaEl.style.width = `${(pillars.meta / maxVal) * 100}%`;
+
+  document.getElementById('pillar-core-val').textContent = pillars.core.toFixed(1);
+  document.getElementById('pillar-exp-val').textContent = pillars.expansion.toFixed(1);
+  document.getElementById('pillar-meta-val').textContent = pillars.meta.toFixed(1);
+
+  const miniCore = document.getElementById('mini-core-fill');
+  const miniExp = document.getElementById('mini-exp-fill');
+  const miniMeta = document.getElementById('mini-meta-fill');
+  if (miniCore) miniCore.style.width = `${(pillars.core / maxVal) * 100}%`;
+  if (miniExp) miniExp.style.width = `${(pillars.expansion / maxVal) * 100}%`;
+  if (miniMeta) miniMeta.style.width = `${(pillars.meta / maxVal) * 100}%`;
+
+  document.getElementById('mini-core-val').textContent = pillars.core.toFixed(1);
+  document.getElementById('mini-exp-val').textContent = pillars.expansion.toFixed(1);
+  document.getElementById('mini-meta-val').textContent = pillars.meta.toFixed(1);
+
+  if (prevPillars) {
+    flashPillar('pillar-core-track', pillars.core, prevPillars.core);
+    flashPillar('pillar-exp-track', pillars.expansion, prevPillars.expansion);
+    flashPillar('pillar-meta-track', pillars.meta, prevPillars.meta);
+  }
+
+  return pillars;
+}
+
+function flashPillar(trackId, newVal, oldVal) {
+  const track = document.getElementById(trackId);
+  if (!track) return;
+  track.classList.remove('pillar-flash-up', 'pillar-flash-down');
+  if (newVal > oldVal) {
+    void track.offsetHeight;
+    track.classList.add('pillar-flash-up');
+    setTimeout(() => track.classList.remove('pillar-flash-up'), 800);
+  } else if (newVal < oldVal) {
+    void track.offsetHeight;
+    track.classList.add('pillar-flash-down');
+    setTimeout(() => track.classList.remove('pillar-flash-down'), 800);
+  }
+}
+
+function getPillarChanges(stats, prevStats) {
+  const oldP = calcPillars(prevStats);
+  const newP = calcPillars(stats);
+  const changes = [];
+  if (newP.core !== oldP.core) changes.push({ name: 'Core', diff: newP.core - oldP.core });
+  if (newP.expansion !== oldP.expansion) changes.push({ name: 'Exp', diff: newP.expansion - oldP.expansion });
+  if (newP.meta !== oldP.meta) changes.push({ name: 'Meta', diff: newP.meta - oldP.meta });
+  return changes;
+}
+
+
+// =======================================
+// MESSENGER ENGINE
+// =======================================
+
+class MessengerEngine {
+  constructor(chatArea, choicesContainer) {
+    this.chatArea = chatArea;
+    this.choicesContainer = choicesContainer;
+    this.isPlaying = false;
+    this.gameTime = { hour: 16, minute: 30 };
+    this.lastSender = null;
+  }
+
+  async playMessages(messages) {
+    this.isPlaying = true;
+    for (const msg of messages) {
+      if (msg.from !== 'player') {
+        if (msg.from !== 'system' && msg.from !== 'narration') {
+          this.showTyping(msg.from);
+          await this.wait(msg.delay || 800);
+          this.hideTyping();
+        } else {
+          await this.wait(msg.delay || 600);
+        }
+      }
+      this.addBubble(msg);
+      this.scrollToBottom();
+      this.advanceTime();
+    }
+    this.isPlaying = false;
+  }
+
+  addBubble(msg) {
+    const speaker = SPEAKERS[msg.from];
+    if (!speaker) return;
+
+    const row = document.createElement('div');
+    row.className = `message-row ${speaker.side}`;
+
+    if (speaker.side === 'left') {
+      const showName = this.lastSender !== msg.from;
+      row.innerHTML = `
+        <div class="message-avatar">${speaker.avatar || ''}</div>
+        <div class="message-content">
+          ${showName ? `<div class="sender-name">${speaker.name}</div>` : ''}
+          <div class="bubble left bubble-enter">${msg.text}</div>
+          <div class="message-time">${this.getTime()}</div>
+        </div>
+      `;
+    } else if (speaker.side === 'right') {
+      row.innerHTML = `
+        <div class="message-content">
+          <div class="bubble right bubble-enter">${msg.text}</div>
+          <div class="read-receipt">읽음</div>
+        </div>
+      `;
+    } else {
+      row.innerHTML = `<div class="bubble center bubble-enter">${msg.text}</div>`;
+    }
+
+    this.chatArea.appendChild(row);
+    this.lastSender = msg.from;
+  }
+
+  showChoices(choices, onSelect) {
+    this.choicesContainer.innerHTML = '';
+    this.choicesContainer.style.display = 'flex';
+
+    for (const choice of choices) {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.textContent = choice.text;
+      btn.addEventListener('click', () => {
+        this.choicesContainer.querySelectorAll('.choice-btn').forEach(b => {
+          b.disabled = true;
+          b.style.pointerEvents = 'none';
+        });
+        btn.classList.add('selected');
+        setTimeout(() => {
+          this.choicesContainer.style.display = 'none';
+          this.addBubble({ from: 'player', text: choice.text });
+          this.scrollToBottom();
+          onSelect(choice);
+        }, 400);
+      });
+      this.choicesContainer.appendChild(btn);
+    }
+  }
+
+  showTyping(from) {
+    const speaker = SPEAKERS[from];
+    if (!speaker) return;
+    this.hideTyping();
+    const row = document.createElement('div');
+    row.className = 'typing-row';
+    row.id = 'typing-indicator';
+    row.innerHTML = `
+      <div class="message-avatar">${speaker.avatar || ''}</div>
+      <div class="typing-indicator">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+    `;
+    this.chatArea.appendChild(row);
+    this.scrollToBottom();
+  }
+
+  hideTyping() {
+    const el = document.getElementById('typing-indicator');
+    if (el) el.remove();
+  }
+
+  scrollToBottom() {
+    requestAnimationFrame(() => {
+      this.chatArea.scrollTop = this.chatArea.scrollHeight;
+    });
+  }
+
+  getTime() {
+    const h = this.gameTime.hour;
+    const m = this.gameTime.minute;
+    const period = h >= 12 ? '오후' : '오전';
+    const displayH = h > 12 ? h - 12 : h;
+    return `${period} ${displayH}:${m.toString().padStart(2, '0')}`;
+  }
+
+  advanceTime() {
+    this.gameTime.minute += Math.floor(Math.random() * 2) + 1;
+    if (this.gameTime.minute >= 60) {
+      this.gameTime.minute -= 60;
+      this.gameTime.hour += 1;
+    }
+  }
+
+  clearChat() {
+    this.chatArea.innerHTML = '';
+    this.choicesContainer.style.display = 'none';
+    this.choicesContainer.innerHTML = '';
+    this.lastSender = null;
+  }
+
+  wait(ms) {
+    return new Promise(r => setTimeout(r, ms));
+  }
+}
+
+
+// =======================================
+// RADAR CHART (SVG)
+// =======================================
+
+function renderRadarChart(stats, container) {
+  const size = 280;
+  const cx = size / 2;
+  const cy = size / 2;
+  const maxR = size / 2 - 40;
+  const axes = ['thinking', 'creativity', 'tech', 'adaptability', 'confidence', 'curiosity'];
+  const labels = ['사고력', '창의력', '기술친숙도', '적응력', '자신감', '호기심'];
+  const maxVal = 10;
+  const angleStep = 360 / 6;
+
+  function polar(angle, r) {
+    const rad = (angle - 90) * Math.PI / 180;
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  }
+
+  let svg = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">`;
+
+  for (let level = 1; level <= 5; level++) {
+    const r = maxR * (level / 5);
+    const points = [];
+    for (let i = 0; i < 6; i++) {
+      const p = polar(i * angleStep, r);
+      points.push(`${p.x},${p.y}`);
+    }
+    svg += `<polygon points="${points.join(' ')}" fill="none" stroke="#ccc" stroke-width="1"/>`;
+  }
+
+  for (let i = 0; i < 6; i++) {
+    const p = polar(i * angleStep, maxR);
+    svg += `<line x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}" stroke="#ccc" stroke-width="1"/>`;
+  }
+
+  const dataPoints = [];
+  for (let i = 0; i < 6; i++) {
+    const val = Math.max(0, Math.min(maxVal, stats[axes[i]] || 0));
+    const r = maxR * (val / maxVal);
+    const p = polar(i * angleStep, r);
+    dataPoints.push(p);
+  }
+  const pointsStr = dataPoints.map(p => `${p.x},${p.y}`).join(' ');
+  svg += `<polygon points="${pointsStr}" fill="rgba(0, 0, 0, 0.08)" stroke="#000" stroke-width="2"/>`;
+
+  for (const p of dataPoints) {
+    svg += `<circle cx="${p.x}" cy="${p.y}" r="4" fill="#000"/>`;
+  }
+
+  for (let i = 0; i < 6; i++) {
+    const p = polar(i * angleStep, maxR + 22);
+    svg += `<text x="${p.x}" y="${p.y}" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#000" font-family="'Chicago', 'Geneva', 'Monaco', 'Courier New', monospace, 'Noto Sans KR', sans-serif">${labels[i]}</text>`;
+  }
+
+  svg += '</svg>';
+  container.innerHTML = svg;
+}
+
+
+// =======================================
+// GAME CONTROLLER
+// =======================================
+
+class GameController {
+  constructor() {
+    this.state = {
+      character: null,
+      currentStep: null,
+      currentBranch: null,
+      cards: [],
+      stats: { thinking: 0, creativity: 0, tech: 0, adaptability: 0, confidence: 0, curiosity: 0 },
+      choiceHistory: [],
+      currentEpisode: 1
+    };
+    this.messenger = null;
+    this.prevPillars = null;
+    this.totalEpisodes = 4;
+  }
+
+  init() {
+    const chatArea = document.getElementById('chat-area');
+    const choicesContainer = document.getElementById('choices-container');
+    this.messenger = new MessengerEngine(chatArea, choicesContainer);
+    this.renderCharacterGrid();
+    this.updateEpisodeInfo();
+  }
+
+  getStepOrder() {
+    if (this.state.character === 'suyeon') {
+      return SUYEON_STEPS;
+    }
+    // Other characters only have ep1_s1
+    return ["ep1_s1"];
+  }
+
+  renderCharacterGrid() {
+    const grid = document.getElementById('character-grid');
+    grid.innerHTML = '';
+    for (const [id, char] of Object.entries(CHARACTERS)) {
+      const card = document.createElement('div');
+      card.className = 'character-card';
+      card.style.borderColor = '#000';
+      card.innerHTML = `
+        <div class="char-avatar">${char.avatar}</div>
+        <div class="char-name">${char.name}</div>
+        <div class="char-tagline">${char.tagline}</div>
+        <div class="char-tags">
+          ${char.tags.map(t => `<span class="char-tag">#${t}</span>`).join('')}
+        </div>
+      `;
+      card.addEventListener('click', () => this.selectCharacter(id));
+      grid.appendChild(card);
+    }
+  }
+
+  selectCharacter(charId) {
+    this.state.character = charId;
+    const char = CHARACTERS[charId];
+
+    document.getElementById('messenger-avatar').textContent = char.avatar;
+    document.getElementById('messenger-name').textContent = '\uC9C0\uBBFC';
+
+    this.messenger.gameTime = { hour: 16, minute: 30 };
+    this.messenger.clearChat();
+    this.prevPillars = calcPillars(this.state.stats);
+    updatePillarUI(this.state.stats, null);
+    this.updateSideCards();
+    this.updateEpisodeInfo();
+    showScreen('messenger');
+    this.startStep(this.getStepOrder()[0]);
+  }
+
+  getSceneConfig(scene) {
+    const configs = {
+      home: { time: { hour: 16, minute: 30 }, headerName: '\uC9C0\uBBFC' },
+      desk: { time: { hour: 17, minute: 5 }, headerName: '\uC9C0\uBBFC' },
+      classroom: { time: { hour: 10, minute: 30 }, headerName: '\uBBF8\uC220 \uC2DC\uAC04' },
+      korean_class: { time: { hour: 14, minute: 0 }, headerName: '\uAD6D\uC5B4 \uC2DC\uAC04' },
+      afterschool: { time: { hour: 15, minute: 30 }, headerName: '\uBC29\uACFC \uD6C4' },
+      presentation: { time: { hour: 10, minute: 0 }, headerName: '\uBC1C\uD45C \uC2DC\uAC04' },
+      home_night_study: { time: { hour: 22, minute: 0 }, headerName: '\uC9C0\uBBFC' },
+      exam_day: { time: { hour: 8, minute: 30 }, headerName: '\uC2DC\uD5D8 \uB2F9\uC77C' },
+      exam_result: { time: { hour: 14, minute: 0 }, headerName: '\uC2DC\uD5D8 \uACB0\uACFC' },
+      home_night: { time: { hour: 23, minute: 0 }, headerName: '\uC218\uBE48' },
+      next_day: { time: { hour: 8, minute: 10 }, headerName: '\uB4F1\uAD47\uAE38' },
+      lunchtime: { time: { hour: 12, minute: 30 }, headerName: '\uC810\uC2EC\uC2DC\uAC04' },
+      final_reflect: { time: { hour: 15, minute: 30 }, headerName: '\uB3CC\uC544\uBCF4\uAE30' }
+    };
+    return configs[scene] || { time: { hour: 12, minute: 0 }, headerName: scene };
+  }
+
+  async startStep(stepKey) {
+    this.state.currentStep = stepKey;
+
+    if (stepKey === 'profile') {
+      this.showProfile();
+      return;
+    }
+
+    const charScenario = SCENARIO[this.state.character];
+    if (!charScenario) { this.showProfile(); return; }
+
+    let stepData;
+
+    const rawStep = charScenario[stepKey];
+    if (!rawStep) { this.showProfile(); return; }
+
+    if (rawStep.scene || rawStep._isCommon) {
+      // Direct step data (not branched)
+      stepData = rawStep;
+    } else {
+      // Branched step - look up by last choice
+      stepData = rawStep[this.state.currentBranch];
+      if (!stepData) { this.showProfile(); return; }
+    }
+
+    // Update episode tracking
+    if (stepData.episode) {
+      this.state.currentEpisode = stepData.episode;
+      this.updateEpisodeInfo();
+    }
+
+    // Scene transition
+    if (stepData.scene) {
+      const sceneInfo = SCENE_INFO[stepData.scene];
+      if (sceneInfo) {
+        const epTitle = EPISODE_TITLES[stepData.episode || this.state.currentEpisode] || '';
+        await this.showTransition(sceneInfo.icon, sceneInfo.label, stepKey, epTitle);
+      }
+
+      const config = this.getSceneConfig(stepData.scene);
+      this.messenger.gameTime = { ...config.time };
+      document.getElementById('messenger-name').textContent = config.headerName;
+    }
+
+    this.messenger.clearChat();
+    await this.messenger.playMessages(stepData.messages);
+
+    if (stepData.choices && !stepData.noChoice) {
+      this.messenger.showChoices(stepData.choices, (choice) => this.onChoice(choice));
+    } else if (stepData.endMessages) {
+      await this.messenger.playMessages(stepData.endMessages);
+      this.showNextButton();
+    } else if (stepData.noChoice) {
+      this.showNextButton();
+    } else {
+      this.showNextButton();
+    }
+  }
+
+  onChoice(choice) {
+    const prevStats = { ...this.state.stats };
+    this.prevPillars = calcPillars(prevStats);
+
+    this.addStats(choice.stats);
+
+    const pillarChanges = getPillarChanges(this.state.stats, prevStats);
+
+    updatePillarUI(this.state.stats, this.prevPillars);
+    this.prevPillars = calcPillars(this.state.stats);
+
+    if (choice.card) {
+      const card = { ...choice.card, step: this.state.currentStep, episode: this.state.currentEpisode };
+      this.state.cards.push(card);
+      this.showCardPopup(card, pillarChanges);
+      this.updateSideCards();
+    }
+
+    this.state.choiceHistory.push(choice.id);
+    this.state.currentBranch = choice.id;
+
+    const nextStep = this.getNextStep();
+    setTimeout(() => {
+      this.startStep(nextStep);
+    }, 2200);
+  }
+
+  addStats(delta) {
+    for (const key in delta) {
+      if (this.state.stats.hasOwnProperty(key)) {
+        this.state.stats[key] = Math.max(0, Math.min(10,
+          (this.state.stats[key] || 0) + delta[key]
+        ));
+      }
+    }
+  }
+
+  getNextStep() {
+    const order = this.getStepOrder();
+    const idx = order.indexOf(this.state.currentStep);
+
+    if (idx < order.length - 1) {
+      const nextStep = order[idx + 1];
+      const charScenario = SCENARIO[this.state.character];
+
+      if (!charScenario[nextStep]) return 'profile';
+
+      const rawStep = charScenario[nextStep];
+      // If it's a common step or direct step, always proceed
+      if (rawStep.scene || rawStep._isCommon) return nextStep;
+
+      // It's a branched step - check if our branch exists
+      if (rawStep[this.state.currentBranch]) return nextStep;
+
+      // Branch not found, skip to next valid step
+      for (let i = idx + 2; i < order.length; i++) {
+        const tryStep = order[i];
+        if (!charScenario[tryStep]) continue;
+        const tryRaw = charScenario[tryStep];
+        if (tryRaw.scene || tryRaw._isCommon || tryRaw[this.state.currentBranch]) return tryStep;
+      }
+      return 'profile';
+    }
+    return 'profile';
+  }
+
+  showNextButton() {
+    const container = document.getElementById('next-btn-container');
+    const btn = document.getElementById('next-btn');
+    container.style.display = 'block';
+
+    const nextStep = this.getNextStep();
+    btn.textContent = nextStep === 'profile' ? '\uACB0\uACFC \uBCF4\uAE30' : '\uB2E4\uC74C';
+
+    btn.onclick = () => {
+      container.style.display = 'none';
+      this.startStep(nextStep);
+    };
+  }
+
+  showCardPopup(card, pillarChanges) {
+    const existing = document.querySelector('.card-popup-overlay');
+    if (existing) existing.remove();
+
+    let changesHtml = '';
+    if (pillarChanges && pillarChanges.length > 0) {
+      changesHtml = '<div class="popup-stat-changes">';
+      for (const c of pillarChanges) {
+        const isUp = c.diff > 0;
+        const arrow = isUp ? '\u{1F53A}' : '\u{1F53B}';
+        const sign = isUp ? '+' : '';
+        changesHtml += `<span class="popup-stat-change ${isUp ? 'up' : 'down'}">${sign}${c.diff.toFixed(1)} ${c.name} ${arrow}</span>`;
+      }
+      changesHtml += '</div>';
+    }
+
+    const overlay = document.createElement('div');
+    overlay.className = 'card-popup-overlay';
+    overlay.innerHTML = `
+      <div class="card-popup">
+        <div class="popup-badge">\uCE74\uB4DC \uD68D\uB4DD!</div>
+        <div class="popup-icon">${card.icon}</div>
+        <div class="popup-label">${card.label}</div>
+        ${changesHtml}
+      </div>
+    `;
+    document.querySelector('.phone-content').appendChild(overlay);
+
+    setTimeout(() => {
+      overlay.style.transition = 'opacity 0.3s ease';
+      overlay.style.opacity = '0';
+      setTimeout(() => overlay.remove(), 300);
+    }, 2000);
+  }
+
+  showTransition(icon, label, stepKey, episodeTitle) {
+    return new Promise(resolve => {
+      const screen = document.getElementById('transition-screen');
+      document.getElementById('transition-icon').textContent = icon;
+      document.getElementById('transition-label').textContent = label;
+      document.getElementById('transition-episode').textContent = episodeTitle || '';
+
+      const stepsContainer = document.getElementById('transition-steps');
+      const allSteps = this.getStepOrder();
+      const currentIdx = allSteps.indexOf(stepKey);
+      stepsContainer.innerHTML = allSteps.map((s, i) =>
+        `<div class="transition-dot ${i <= currentIdx ? 'active' : ''}"></div>`
+      ).join('');
+
+      screen.classList.add('active');
+      screen.style.animation = 'none';
+      void screen.offsetHeight;
+      screen.style.animation = 'fadeInOut 2.5s ease forwards';
+
+      setTimeout(() => {
+        screen.classList.remove('active');
+        resolve();
+      }, 2500);
+    });
+  }
+
+  updateSideCards() {
+    const list = document.getElementById('side-card-list');
+    if (!list) return;
+
+    if (this.state.cards.length === 0) {
+      list.innerHTML = '<div class="side-card-empty">\uC544\uC9C1 \uCE74\uB4DC\uAC00 \uC5C6\uC5B4\uC694</div>';
+      return;
+    }
+
+    list.innerHTML = '';
+    for (const card of this.state.cards) {
+      const item = document.createElement('div');
+      item.className = 'side-card-item';
+      item.innerHTML = `
+        <span class="card-icon">${card.icon}</span>
+        <span class="card-label">${card.label}</span>
+      `;
+      list.appendChild(item);
+    }
+  }
+
+  updateEpisodeInfo() {
+    const info = document.getElementById('side-episode-info');
+    if (info) {
+      const stepOrder = this.getStepOrder();
+      const currentIdx = this.state.currentStep ? stepOrder.indexOf(this.state.currentStep) + 1 : 0;
+      info.textContent = `\uC5D0\uD53C\uC18C\uB4DC ${this.state.currentEpisode} / ${this.totalEpisodes}  \xB7  STEP ${currentIdx} / ${stepOrder.length}`;
+    }
+  }
+
+  showProfile() {
+    const char = CHARACTERS[this.state.character];
+    const profile = determineProfile(this.state.stats);
+
+    const container = document.getElementById('profile-card-content');
+    const statLabels = {
+      thinking: '\uC0AC\uACE0\uB825',
+      creativity: '\uCC3D\uC758\uB825',
+      tech: '\uAE30\uC220\uCE5C\uC219\uB3C4',
+      adaptability: '\uC801\uC751\uB825',
+      confidence: '\uC790\uC2E0\uAC10',
+      curiosity: '\uD638\uAE30\uC2EC'
+    };
+
+    const pillars = calcPillars(this.state.stats);
+
+    container.innerHTML = `
+      <div class="profile-avatar">${char.avatar}</div>
+      <div class="profile-char-name">${char.name}(\uC73C)\uB85C \uD50C\uB808\uC774</div>
+      <div class="profile-type">${profile.name}</div>
+      <div class="profile-desc">${profile.desc}</div>
+      <div class="profile-chart" id="radar-chart"></div>
+      <div class="stat-bars" id="stat-bars"></div>
+      <div class="profile-cards-section">
+        <div class="profile-cards-title">\uB0B4\uAC00 \uBAA8\uC740 \uCE74\uB4DC</div>
+        <div class="profile-cards" id="profile-badges"></div>
+      </div>
+    `;
+
+    const chartContainer = document.getElementById('radar-chart');
+    renderRadarChart(this.state.stats, chartContainer);
+
+    const barsContainer = document.getElementById('stat-bars');
+    for (const [key, label] of Object.entries(statLabels)) {
+      const val = this.state.stats[key] || 0;
+      const row = document.createElement('div');
+      row.className = 'stat-row';
+      row.innerHTML = `
+        <div class="stat-label">${label}</div>
+        <div class="stat-bar-bg"><div class="stat-bar-fill" style="width: 0%"></div></div>
+        <div class="stat-value">${val}</div>
+      `;
+      barsContainer.appendChild(row);
+    }
+
+    const badgesContainer = document.getElementById('profile-badges');
+    for (const card of this.state.cards) {
+      const badge = document.createElement('div');
+      badge.className = 'profile-card-badge';
+      badge.innerHTML = `<span>${card.icon}</span> ${card.label}`;
+      badgesContainer.appendChild(badge);
+    }
+
+    showScreen('profile');
+
+    const info = document.getElementById('side-episode-info');
+    if (info) info.textContent = '\uC644\uB8CC!';
+
+    setTimeout(() => {
+      const fills = barsContainer.querySelectorAll('.stat-bar-fill');
+      const keys = Object.keys(statLabels);
+      fills.forEach((fill, i) => {
+        const val = this.state.stats[keys[i]] || 0;
+        fill.style.width = `${(val / 10) * 100}%`;
+      });
+    }, 100);
+  }
+
+  renderCardCollection() {
+    const grid = document.getElementById('card-grid');
+    grid.innerHTML = '';
+
+    for (const card of this.state.cards) {
+      const el = document.createElement('div');
+      el.className = 'earned-card';
+      el.innerHTML = `
+        <div class="card-icon">${card.icon}</div>
+        <div class="card-label">${card.label}</div>
+        <div class="card-step">EP${card.episode || 1}</div>
+      `;
+      grid.appendChild(el);
+    }
+
+    const maxCards = 18;
+    for (let i = this.state.cards.length; i < maxCards; i++) {
+      const el = document.createElement('div');
+      el.className = 'empty-card';
+      el.textContent = '?';
+      grid.appendChild(el);
+    }
+  }
+
+  restart(sameCharacter = true) {
+    const charId = sameCharacter ? this.state.character : null;
+    this.state = {
+      character: charId,
+      currentStep: null,
+      currentBranch: null,
+      cards: [],
+      stats: { thinking: 0, creativity: 0, tech: 0, adaptability: 0, confidence: 0, curiosity: 0 },
+      choiceHistory: [],
+      currentEpisode: 1
+    };
+    this.prevPillars = null;
+
+    document.getElementById('next-btn-container').style.display = 'none';
+    document.getElementById('choices-container').style.display = 'none';
+
+    updatePillarUI(this.state.stats, null);
+    this.updateSideCards();
+    this.updateEpisodeInfo();
+
+    if (charId) {
+      this.selectCharacter(charId);
+    } else {
+      showScreen('character');
+    }
+  }
+}
+
+
+// =======================================
+// SCREEN MANAGEMENT
+// =======================================
+
+let currentScreen = null;
+
+function showScreen(screenId) {
+  document.querySelectorAll('.screen.active').forEach(s => {
+    s.classList.remove('active');
+    s.classList.remove('screen-enter');
+  });
+
+  const screen = document.getElementById(`screen-${screenId}`);
+  if (screen) {
+    screen.classList.add('active', 'screen-enter');
+    currentScreen = screenId;
+  }
+
+  if (screenId === 'cards') {
+    game.renderCardCollection();
+  }
+
+  const miniBar = document.getElementById('mobile-mini-bar');
+  if (miniBar) {
+    miniBar.style.display = (screenId === 'messenger') ? '' : 'none';
+  }
+}
+
+function openMobileCards() {
+  const overlay = document.getElementById('mobile-cards-overlay');
+  const list = document.getElementById('mobile-card-list');
+
+  list.innerHTML = '';
+  if (game.state.cards.length === 0) {
+    list.innerHTML = '<div class="side-card-empty">\uC544\uC9C1 \uCE74\uB4DC\uAC00 \uC5C6\uC5B4\uC694</div>';
+  } else {
+    for (const card of game.state.cards) {
+      const item = document.createElement('div');
+      item.className = 'side-card-item';
+      item.innerHTML = `
+        <span class="card-icon">${card.icon}</span>
+        <span class="card-label">${card.label}</span>
+      `;
+      list.appendChild(item);
+    }
+  }
+
+  overlay.classList.add('active');
+}
+
+function closeMobileCards(event) {
+  if (event && event.target !== document.getElementById('mobile-cards-overlay')) return;
+  document.getElementById('mobile-cards-overlay').classList.remove('active');
+}
+
+
+// =======================================
+// INIT
+// =======================================
+
+let game;
+
+document.addEventListener("DOMContentLoaded", () => {
+  game = new GameController();
+  game.init();
+  showScreen('title');
+});
+</script>
+</body>
+</html>
