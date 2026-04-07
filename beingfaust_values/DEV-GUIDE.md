@@ -3,8 +3,8 @@
 > **이 문서는 코드 수정 전 반드시 읽는다.**
 > 에이전트가 이 문서를 기반으로 작업한다. 스펙 외의 수정은 금지.
 
-**최종 업데이트**: 2026-04-06 (세션175)
-**현재 버전**: v0.4 (카드 덱 스택 UX)
+**최종 업데이트**: 2026-04-07
+**현재 버전**: v0.5 (Priority 드래그 UX v2)
 **배포**: GitHub Pages — `https://mice3nyc.github.io/ari_gitrepo_1/beingfaust_values/`
 
 ---
@@ -258,7 +258,7 @@ const VALUES = [
 | 카드 덱 스택 | index.html | `flyCard/swStart/swMove/swEnd/applyStackPositions`. v0.4 완료 |
 | 트레이 로직 | index.html | `renderTray/deselectCard` |
 | 그리드 선택 로직 | index-grid.html L747~L794 | `buildGrid/toggle/refreshSelection` |
-| 드래그&드롭 | 양쪽 `initDrag()` | 터치 드래그 순위 조정. 동작 확인 완료 |
+| 드래그&드롭 | 양쪽 `initDrag()` | v2 동작 검증 완료 — TASK 5 (2026-04-07). 슬롯 양보 패턴, 떨림 제거 |
 | 화면 전환 | 양쪽 `go()` | CSS transition 기반 |
 | Welcome 폼 | 양쪽 `enterGame()` | shake 유효성 검증 포함 |
 | 디자인 시스템 | 전체 CSS 변수 `:root` | 다크 테마, 폰트, 색상 |
@@ -340,6 +340,120 @@ const VALUES = [
 
 ---
 
+### TASK 5: Screen 4 Priority 드래그 UX 재작업 ⏳ 진행 중 (2026-04-07)
+
+**문제 보고** (피터공, 2026-04-07):
+1. **떨림(flicker)**: 드래그 중인 블럭이 부르르 떨림
+2. **즉시 swap의 어색함**: 손가락이 형제 중간점을 넘으면 즉시 DOM swap → 모든 블럭이 들썩, dragged도 새 인덱스로 점프 — "다음 칸이 확 열리면서 거기 놔야 할 것처럼 다들 움직이는" 느낌
+
+**원인 분석** (현재 코드 진단, index.html L1204~1260 / index-grid.html L855~):
+- `.pri-item`의 `transition: transform 0.15s` (L482)이 드래그 중인 아이템에도 적용 → 손가락↔블럭 lag → 떨림
+- touchmove 핸들러가 매 swap마다 `startY = y` 리셋 + dragged의 `transform`을 `scale(1.03)`으로 (translateY 제거) → swap 순간 dragged 위치 점프
+- DOM `insertBefore`/`after`로 즉시 재배열 → 형제들이 즉시 새 위치로 jump (placeholder 미리보기 없음)
+
+**목표 동작** (Sortable.js / FLIP 같은 일반 패턴):
+- 드래그 중인 블럭은 손가락만 매끄럽게 따라간다 (떨림 없음)
+- 손가락 위치에 가장 가까운 슬롯의 양옆 형제가 `translateY`로 부드럽게 자리 양보 → placeholder 형성
+- drop 시점에 dragged가 그 자리로 부드럽게 안착 → 그제야 DOM 재정렬
+- 화살표 버튼은 영향 없음 (별도 경로)
+
+---
+
+**구현 단계** (양쪽 파일 동시 적용: index.html + index-grid.html — 두 파일 동일 코드)
+
+#### Step 1: CSS 보강
+
+`.pri-item`:
+- `transition: transform 0.22s cubic-bezier(0.2, 0, 0, 1)` (안착 / 슬롯 양보용 부드러운 곡선)
+- `will-change: transform` (드래그 시 GPU 가속 힌트)
+
+`.pri-item.dragging`:
+- `transition: none !important` (드래그 중 lag 제거 — **떨림 해결의 핵심**)
+- 그림자 / scale(1.03) / z-index 100 유지
+
+#### Step 2: 드래그 시작 (touchstart / mousedown)
+
+```
+- dragged = e.target.closest('.pri-item')  (단, .arr-btn 클릭은 제외)
+- siblings = [...list.querySelectorAll('.pri-item')]
+- origIndex = siblings.indexOf(dragged)
+- origRect = dragged.getBoundingClientRect()
+- itemHeight = origRect.height + gap (현재 .pri-list의 gap=5px)
+- pointerOffsetY = pointerY - origRect.top  (블럭의 어느 위치를 잡았는지)
+- startPointerY = pointerY
+- targetIndex = origIndex (초기값)
+- dragged.classList.add('dragging')
+```
+
+#### Step 3: 드래그 이동 (touchmove / mousemove)
+
+```
+- dy = pointerY - startPointerY
+- dragged.style.transform = `translateY(${dy}px) scale(1.03)`
+  → 손가락만 따라감. swap 없음. 떨림 없음.
+
+- newTargetIndex 계산:
+  draggedCenterY = origRect.top + origRect.height / 2 + dy
+  newTargetIndex = clamp(round((draggedCenterY - listFirstItemTopY) / itemHeight), 0, siblings.length - 1)
+
+- targetIndex가 바뀌었으면 형제들 transform 갱신:
+  for (let i = 0; i < siblings.length; i++):
+    if (i === origIndex) continue  // dragged 본인은 skip
+    let shift = 0
+    if (origIndex < newTargetIndex && i > origIndex && i <= newTargetIndex):
+      shift = -itemHeight  // 위로 밀려 올라감
+    else if (origIndex > newTargetIndex && i >= newTargetIndex && i < origIndex):
+      shift = itemHeight   // 아래로 밀려 내려감
+    siblings[i].style.transform = `translateY(${shift}px)`
+  → 형제들의 transition은 Step 1의 0.22s가 적용 → 부드럽게 자리 양보
+
+- targetIndex = newTargetIndex
+```
+
+#### Step 4: 드래그 종료 (touchend / mouseup)
+
+```
+- dragged.classList.remove('dragging')  // 트랜지션 다시 활성화
+- 형제들 transform 모두 빈 문자열로 리셋
+- state.priority 배열 재정렬:
+  const moved = state.priority.splice(origIndex, 1)[0]
+  state.priority.splice(targetIndex, 0, moved)
+- renderPriList() 호출 → DOM 재생성, rank/화살표 갱신, transform 자동으로 0
+- dragged = null
+```
+
+> **주의**: Step 4에서 dragged의 transform을 안착 애니메이션으로 부드럽게 처리하고 싶다면, 먼저 transform을 최종 위치로 transition 후 `transitionend`에서 renderPriList()를 호출하는 방식도 가능. 1차 구현은 즉시 renderPriList()로 단순화 (transform이 풀리면서 렌더링 직전에 잠깐 깜빡일 수 있으나, dragging 클래스만 잘 제거되면 큰 문제 없음).
+
+#### Step 5: 검증 체크리스트 (구현 후 반드시 통과)
+
+- [ ] 드래그 중 떨림/플리커 없음
+- [ ] 1↔6 위치 변경 (긴 거리) 매끄러움
+- [ ] 인접 swap (1↔2) 매끄러움
+- [ ] 빠른 드래그 / 천천히 드래그 모두 OK
+- [ ] 형제 블럭이 적절한 시점에 살짝 벌어졌다가, drop 시 그 자리에 정확히 안착
+- [ ] 화살표 버튼(▲▼) 동작 영향 없음 (별도 경로)
+- [ ] 마우스 이벤트도 동작 (데스크톱 테스트)
+- [ ] 5개 화면 전체 플로우 통과 (Welcome → Selection → Confirm → Priority → Done)
+- [ ] index.html과 index-grid.html 양쪽 동일하게 동작
+
+#### 범위 외 (이번 작업에서 손대지 않음)
+
+- Screen 1/2/3/5 (Welcome, Selection, Confirm, Done)
+- VALUES 배열, 카드 이미지
+- 화살표 버튼(`.arr-up`/`.arr-dn`)의 `moveItem()` 동작
+- API_URL, submit() 로직
+- dashboard.html
+
+#### 작업 완료 기준
+
+- 양쪽 파일(index.html + index-grid.html)에 동일하게 적용
+- Step 5 체크리스트 모두 통과
+- devlog.md에 구현 내역 append
+- DEV-GUIDE 변경 이력에 v0.5 추가
+- DO NOT TOUCH 표에서 `initDrag` 항목 복원 (v2 동작 검증 완료 표시)
+
+---
+
 ## 7. 수정 전 체크리스트
 
 에이전트가 코드를 수정하기 전에 반드시 확인:
@@ -386,3 +500,4 @@ const VALUES = [
 | v0.3 | 2026-04-06 | 스와이프 UX (index.html). 좌우 넘기기 + 위로 날려 선택, 트레이, 점 인디케이터 |
 | — | 2026-04-06 | GitHub Pages 배포 완료 (3회 커밋+푸시) |
 | v0.4 | 2026-04-06 | 카드 덱 스택 UX — 3장 스택, fly-out, progressive reveal, 마우스 지원 |
+| v0.5 | 2026-04-07 | Screen 4 Priority 드래그 UX v2 (떨림 제거 + 슬롯 양보 패턴) |

@@ -479,16 +479,20 @@
             gap: 10px;
             padding: 12px 14px;
             border-radius: 10px;
-            transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+            /* 슬롯 양보(형제) + 안착(drop) 공통: 부드러운 transform */
+            transition: transform 0.22s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s, background 0.2s;
+            will-change: transform;
             user-select: none;
             cursor: grab;
             touch-action: none;
         }
         .pri-item.dragging {
+            /* 드래그 중에는 transition 제거 — 떨림/lag 해결의 핵심 */
+            transition: none !important;
             background: #2A2A2A;
             box-shadow: 0 8px 32px rgba(0,0,0,0.6);
             z-index: 100;
-            transform: scale(1.03);
+            cursor: grabbing;
         }
 
         .pri-rank {
@@ -1200,63 +1204,120 @@ function syncPriority() {
     });
 }
 
-/* ---------- DRAG & DROP ---------- */
+/* ---------- DRAG & DROP (v2: 슬롯 양보 패턴) ----------
+   - 드래그 중인 블럭은 손가락만 따라감 (transform: translateY)
+   - 형제들은 translateY로 자리 양보 → placeholder UX
+   - DOM 재배열은 drop 시점에만 (state.priority + renderPriList)
+   - 화살표 버튼(moveItem)은 별도 경로, 영향 없음
+   - 리스너는 한 번만 바인딩 (renderPriList가 매번 initDrag를 호출해도 중복 방지)
+*/
 function initDrag() {
     const list = $('pri-list');
+    if (list.dataset.dragBound === '1') return; // 이미 바인딩됨
+    list.dataset.dragBound = '1';
+
     let dragged = null;
-    let startY = 0;
+    let siblings = [];        // 드래그 시점의 아이템 스냅샷 (DOM 순서)
+    let origIndex = -1;
+    let targetIndex = -1;
+    let itemHeight = 0;       // 아이템 높이 + gap
+    let startPointerY = 0;
+    let listGap = 5;          // .pri-list gap과 동일
 
-    list.addEventListener('touchstart', e => {
+    // 포인터 Y 좌표 추출 (touch / mouse 공통)
+    const getY = (e) => (e.touches && e.touches[0]) ? e.touches[0].clientY : e.clientY;
+
+    const onStart = (e) => {
+        // 화살표 버튼 클릭은 드래그 아님
         if (e.target.closest('.arr-btn')) return;
-        dragged = e.target.closest('.pri-item');
-        startY = e.touches[0].clientY;
+        const item = e.target.closest('.pri-item');
+        if (!item) return;
+
+        dragged = item;
+        siblings = [...list.querySelectorAll('.pri-item')];
+        origIndex = siblings.indexOf(dragged);
+        targetIndex = origIndex;
+
+        const rect = dragged.getBoundingClientRect();
+        itemHeight = rect.height + listGap;
+        startPointerY = getY(e);
+
+        // 드래그 상태 — transition 제거되어 lag 없이 손가락 따라감
         dragged.classList.add('dragging');
-    }, { passive: true });
+    };
 
-    list.addEventListener('touchmove', e => {
+    const onMove = (e) => {
         if (!dragged) return;
-        e.preventDefault();
+        // 스크롤 방지 (touch)
+        if (e.cancelable) e.preventDefault();
 
-        const y = e.touches[0].clientY;
-        const dy = y - startY;
+        const pointerY = getY(e);
+        const dy = pointerY - startPointerY;
+
+        // 1) 드래그 중인 블럭: 손가락만 따라감 (swap 없음 → 떨림 없음)
         dragged.style.transform = `translateY(${dy}px) scale(1.03)`;
 
-        const items = [...list.querySelectorAll('.pri-item:not(.dragging)')];
-        const dRect = dragged.getBoundingClientRect();
-        const dMid = dRect.top + dRect.height / 2;
+        // 2) 새 targetIndex 계산: origIndex로부터 몇 칸 이동했는가
+        const shift = Math.round(dy / itemHeight);
+        let newTargetIndex = origIndex + shift;
+        if (newTargetIndex < 0) newTargetIndex = 0;
+        if (newTargetIndex > siblings.length - 1) newTargetIndex = siblings.length - 1;
 
-        for (const sib of items) {
-            const sRect = sib.getBoundingClientRect();
-            const sMid = sRect.top + sRect.height / 2;
-
-            // 위로 드래그: 대상을 지남
-            if (dy < 0 && dMid < sMid &&
-                (dragged.compareDocumentPosition(sib) & Node.DOCUMENT_POSITION_PRECEDING)) {
-                list.insertBefore(dragged, sib);
-                startY = y;
-                dragged.style.transform = 'scale(1.03)';
-                syncPriority();
-                break;
+        // 3) targetIndex가 바뀐 경우에만 형제 transform 갱신
+        if (newTargetIndex !== targetIndex) {
+            for (let i = 0; i < siblings.length; i++) {
+                if (i === origIndex) continue; // dragged 본인 skip
+                let offset = 0;
+                if (origIndex < newTargetIndex && i > origIndex && i <= newTargetIndex) {
+                    // 위쪽으로 밀려 올라감 (dragged가 아래로 감)
+                    offset = -itemHeight;
+                } else if (origIndex > newTargetIndex && i >= newTargetIndex && i < origIndex) {
+                    // 아래쪽으로 밀려 내려감 (dragged가 위로 감)
+                    offset = itemHeight;
+                }
+                siblings[i].style.transform = offset ? `translateY(${offset}px)` : '';
             }
-            // 아래로 드래그: 대상을 지남
-            if (dy > 0 && dMid > sMid &&
-                (dragged.compareDocumentPosition(sib) & Node.DOCUMENT_POSITION_FOLLOWING)) {
-                sib.after(dragged);
-                startY = y;
-                dragged.style.transform = 'scale(1.03)';
-                syncPriority();
-                break;
-            }
+            targetIndex = newTargetIndex;
         }
-    }, { passive: false });
+    };
 
-    list.addEventListener('touchend', () => {
+    const onEnd = () => {
         if (!dragged) return;
+
+        // 형제 transform 리셋 (drop 전)
+        siblings.forEach((sib, i) => {
+            if (i !== origIndex) sib.style.transform = '';
+        });
+
+        // dragging 클래스 제거 → transition 다시 활성화
         dragged.classList.remove('dragging');
         dragged.style.transform = '';
-        syncPriority();
+
+        // state.priority 재정렬
+        if (origIndex !== targetIndex && origIndex >= 0 && targetIndex >= 0) {
+            const moved = state.priority.splice(origIndex, 1)[0];
+            state.priority.splice(targetIndex, 0, moved);
+        }
+
+        // DOM 재생성: rank/화살표 상태 자동 갱신
         dragged = null;
-    });
+        siblings = [];
+        origIndex = -1;
+        targetIndex = -1;
+        renderPriList();
+    };
+
+    // 터치 이벤트 — 리스트 스코프
+    list.addEventListener('touchstart', onStart, { passive: true });
+    list.addEventListener('touchmove', onMove, { passive: false });
+    list.addEventListener('touchend', onEnd);
+    list.addEventListener('touchcancel', onEnd);
+
+    // 마우스 이벤트 — 데스크톱 테스트용
+    // mousedown은 list에, mousemove/mouseup은 document에 등록 (list 밖으로 나가도 추적)
+    list.addEventListener('mousedown', onStart);
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onEnd);
 }
 
 /* ==========================================================
