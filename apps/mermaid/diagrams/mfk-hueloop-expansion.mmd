@@ -1,0 +1,78 @@
+flowchart TD
+    classDef hub fill:#000,color:#fff,stroke:#000
+    classDef done fill:#f5f5f5,stroke:#000,stroke-width:2px
+    classDef pending fill:#fff,stroke:#999,stroke-dasharray: 5 5
+    classDef peter fill:#fff,stroke:#000,stroke-width:3px
+
+    START["MfK 회고 + 씨앗 노트<br/>피터공 코멘트 22건"]:::peter
+
+    START --> HUB["백남준 답사 이후<br/>— 프로젝트 허브<br/>(5개 축)"]:::hub
+    START --> INLINE["즉답 인라인<br/>회고 4건 + 씨앗 6건"]:::done
+
+    subgraph 1R ["1라운드 — 본체 4개"]
+        direction TB
+        B1["축1 Good Morning Mr. Paik<br/>비동기 시대의 인사<br/>v2 4,000자"]:::done
+        B2["축5 Tine 질문 항목<br/>빈 자리 지도"]:::done
+        B3["축4 펀딩 전략 v2<br/>Eigenmittel 갭 진단"]:::done
+        B4["MfK 건축 고고학<br/>6년 경첩 발견"]:::done
+    end
+
+    HUB --> 1R
+
+    subgraph 2R ["2라운드 — L59 반성 후 복구"]
+        direction TB
+        P2A["축3 NJP Mindset<br/>다섯 원칙"]:::done
+        P2B["Recreation vs Copy<br/>질문 7개 + 제3의 길"]:::done
+        P2C["UX→PX 글감"]:::pending
+    end
+
+    HUB --> 2R
+
+    subgraph BD ["백도 fan-out 3개"]
+        direction TB
+        BA["Pre Bell Man<br/>브랜딩 영향력"]:::done
+        BB["Pre Bell Man<br/>제안서·작가 기록"]:::done
+        BC["4/23 심포지엄<br/>사전 브리핑"]:::done
+    end
+
+    HUB --> BD
+
+    subgraph P6 ["Phase 6 — Ethic 2차 휴룹"]
+        direction TB
+        P6A["피터공 코멘트 12건 응답"]:::done
+        P6B["여섯 번째 원칙 환대<br/>후보, 검증 대기"]:::done
+        P6C["NJP Mindset 용어 승인"]:::done
+        P6D["소화 노트 분리<br/>427줄→220줄+279줄"]:::done
+    end
+
+    P2A --> P6
+
+    subgraph P7 ["Phase 7 — 조식 직백아리"]
+        direction TB
+        P7A["조식 대화 회고"]:::done
+        P7B["씨앗·탐구 가능성<br/>해석의 여지 발견"]:::done
+        P7C["대화 로그 인덱스<br/>인프라 신설"]:::done
+    end
+
+    START -.->|"4/11 녹취"| P7
+
+    subgraph REMAIN ["미완료"]
+        direction TB
+        R1["MfK 건축 재점검"]:::pending
+        R2["TM_백남준 갱신"]:::pending
+        R3["번역 5+1 원칙<br/>4/18~19"]:::pending
+    end
+
+    P6 --> REMAIN
+    1R --> REMAIN
+
+    subgraph DISCOVER ["TOP 3 발견"]
+        direction LR
+        D1["Eigenmittel 4만€ 갭<br/>= 파트너 공백"]
+        D2["외교부 문화 브랜치<br/>= 벽 우회"]
+        D3["6년 경첩<br/>건물이 이름보다 먼저"]
+    end
+
+    B3 -.-> D1
+    B3 -.-> D2
+    B4 -.-> D3
