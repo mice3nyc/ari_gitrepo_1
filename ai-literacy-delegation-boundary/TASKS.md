@@ -1,10 +1,16 @@
 # TASKS
 
-**최종 업데이트**: 2026-04-25
+**최종 업데이트**: 2026-04-27
 
 ## 현재 목표
 
-6개 시나리오를 끝까지 플레이할 수 있는 단일 index.html 프로토타입 구현 → **v0.2 완성. 플레이테스트 대기.**
+6개 시나리오를 끝까지 플레이할 수 있는 단일 index.html 프로토타입 구현 → **v0.2 완성. GitHub Pages 배포(외부 접속 가능). 플레이테스트 대기.**
+
+## 배포
+
+- **URL**: https://mice3nyc.github.io/ari_gitrepo_1/ai-literacy-delegation-boundary/
+- **Repo**: github.com/mice3nyc/ari_gitrepo_1 (main 브랜치, `/ai-literacy-delegation-boundary/` 폴더)
+- **이미지**: WebP로 압축 (8.1MB → 491KB, 94% 감소). PNG 원본은 로컬에만 보존(.gitignore)
 
 ## 완료
 
@@ -22,6 +28,8 @@
 - [x] 결과 수치 팡팡 pop 애니메이션
 - [x] IMAGE-PROMPTS.md 작성 (6시나리오 프롬프트)
 - [x] images/ 폴더 생성
+- [x] S01 이미지 3장 WebP 압축 (PNG 8MB → WebP 491KB)
+- [x] GitHub Pages 배포 (4/27)
 
 ## 완료 조건 체크
 
