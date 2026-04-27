@@ -105,16 +105,15 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .chosen-label { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#888; margin-bottom:8px; }
 .chosen-title { font-size:15px; font-weight:700; margin-bottom:6px; }
 .chosen-way { font-size:13px; color:#444; line-height:1.6; margin-bottom:8px; }
-.choice-card { background:#111; color:#fff; border:2px solid #111; padding:14px 16px; cursor:pointer; user-select:none; transition:all 0.2s; box-shadow:0 2px 0 #111; opacity:0; transform:translateY(12px); }
+.choice-card { display:flex; background:#fff; color:#111; border:2px solid #111; padding:0; cursor:pointer; user-select:none; transition:all 0.2s; box-shadow:0 2px 0 #111; opacity:0; transform:translateY(12px); overflow:hidden; }
 .choice-card.visible { opacity:1; transform:translateY(0); }
-.choice-card:hover:not(.locked) { transform:translateX(4px); box-shadow:0 2px 0 #111,0 4px 10px rgba(0,0,0,0.15); }
-.choice-card:active:not(.locked) { background:#fff; color:#111; box-shadow:none; transform:translateY(2px); }
-.choice-card:active:not(.locked) .choice-num { color:#666; }
-.choice-card:active:not(.locked) .choice-desc { color:#666; }
-.choice-card.locked { opacity:0.45; cursor:not-allowed; background:#444; border-color:#444; }
-.choice-num { font-size:10px; font-weight:600; letter-spacing:0.12em; color:#888; margin-bottom:6px; }
+.choice-card:hover:not(.locked) { transform:translateX(4px); box-shadow:0 2px 0 #111,0 4px 10px rgba(0,0,0,0.08); }
+.choice-card:active:not(.locked) { box-shadow:none; transform:translateY(2px); }
+.choice-card.locked { opacity:0.45; cursor:not-allowed; }
+.choice-num { background:#111; color:#fff; width:30px; padding:14px 0; text-align:center; font-size:14px; font-weight:700; line-height:1.6; flex-shrink:0; }
+.choice-body { flex:1; padding:14px 16px; min-width:0; }
 .choice-text { font-size:13px; font-weight:600; line-height:1.5; margin-bottom:3px; }
-.choice-desc { font-size:11px; color:#bbb; line-height:1.5; margin-bottom:5px; }
+.choice-desc { font-size:11px; color:#666; line-height:1.5; margin-bottom:5px; }
 .choice-hints { display:flex; gap:4px; flex-wrap:wrap; }
 .hint-tag { font-size:10px; padding:2px 5px; font-weight:600; }
 .hint-tag.positive { background:#e8f5e9; color:#2e7d32; border:1px solid #a5d6a7; }
@@ -370,7 +369,7 @@ function advanceToChoices(idx){
     var card=document.createElement('div');
     card.className='choice-card '+c.skill+(avail?'':' locked');
     if(avail)card.onclick=function(){onChoice(c.id);};
-    card.innerHTML='<div class="choice-num">선택 '+(i+1)+'</div><div class="choice-text">'+c.title+'</div><div class="choice-desc">'+c.desc+'</div><div class="choice-hints">'+c.hint.split(' / ').map(function(t){return'<span class="hint-tag '+hintClass(t)+'">'+t+'</span>';}).join('')+'</div>'+(lr?'<div class="choice-lock">&#128274; '+lr+'</div>':'');
+    card.innerHTML='<div class="choice-num">선<br>택<br>'+(i+1)+'</div><div class="choice-body"><div class="choice-text">'+c.title+'</div><div class="choice-desc">'+c.desc+'</div><div class="choice-hints">'+c.hint.split(' / ').map(function(t){return'<span class="hint-tag '+hintClass(t)+'">'+t+'</span>';}).join('')+'</div>'+(lr?'<div class="choice-lock">&#128274; '+lr+'</div>':'')+'</div>';
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+200);
   });
