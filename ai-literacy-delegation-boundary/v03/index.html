@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 리터러시: 위임의 경계 v0.3</title>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; background: #f5f5f5; color: #111; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+.container { max-width: 1100px; width: 100%; padding: 0 24px 80px; }
+
+/* ===== Stats Bar ===== */
+.stats-bar { display:none; gap:12px; padding:10px 16px; border:2px solid #111; border-top:none; background:#fff; box-shadow:0 2px 0 #111; position:sticky; top:0; z-index:100; max-width:1100px; width:calc(100% - 48px); align-items:center; flex-wrap:wrap; }
+.stats-bar.visible { display:flex; }
+.stat { flex:1; min-width:140px; display:flex; flex-direction:column; padding:4px 8px; position:relative; transition:background-color 0.3s; }
+.stat-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:3px; }
+.stat-name { font-size:12px; color:#555; font-weight:600; }
+.stat-num { font-size:18px; font-weight:700; line-height:1; transition:all 0.3s; }
+.stat-gauge { height:10px; width:100%; background:#eee; border:1px solid #ccc; overflow:hidden; }
+.stat-gauge-fill { height:100%; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1), background-color 0.6s ease; background:#111; }
+.stat-change-indicator { font-size:13px; font-weight:700; position:absolute; top:50%; right:-4px; transform:translateY(-50%); opacity:0; white-space:nowrap; pointer-events:none; }
+.stat-change-indicator.show { opacity:1; animation:changeFloat 1.8s ease forwards; }
+.stat-change-indicator.up { color:#1a8c1a; }
+.stat-change-indicator.down { color:#c44; }
+@keyframes changeFloat { 0%{opacity:0;transform:translateY(-50%) translateX(0)} 15%{opacity:1;transform:translateY(-50%) translateX(8px)} 70%{opacity:1} 100%{opacity:0;transform:translateY(-50%) translateX(16px)} }
+@keyframes numPulse { 0%{transform:scale(1)} 30%{transform:scale(1.4)} 100%{transform:scale(1)} }
+.stat-num.pulsing { animation:numPulse 0.5s ease; }
+@keyframes flashGreen { 0%{background-color:rgba(26,140,26,0.12)} 100%{background-color:transparent} }
+@keyframes flashRed { 0%{background-color:rgba(204,68,68,0.12)} 100%{background-color:transparent} }
+.stat.flash-up { animation:flashGreen 0.8s ease; }
+.stat.flash-down { animation:flashRed 0.8s ease; }
+.stats-divider { width:1px; height:36px; background:#ddd; flex-shrink:0; }
+.stat-progress { font-size:12px; color:#999; font-weight:600; white-space:nowrap; }
+.score-stat { font-size:13px; font-weight:700; padding:4px 10px; border:1.5px solid #111; background:#111; color:#fff; }
+
+/* ===== Overlay (Start) ===== */
+.overlay-card { display:flex; align-items:center; justify-content:center; min-height:480px; animation:overlayIn 0.5s ease; }
+@keyframes overlayIn { from{opacity:0} to{opacity:1} }
+.card-inner { text-align:center; max-width:480px; padding:40px 24px; }
+.card-inner h1 { font-size:22px; font-weight:700; margin-bottom:6px; }
+.card-inner .subtitle { font-size:15px; color:#666; margin-bottom:8px; }
+.card-inner .vtag { font-size:12px; color:#888; margin-bottom:18px; letter-spacing:1px; }
+.card-inner p { font-size:14px; color:#555; margin-bottom:28px; line-height:1.8; }
+.start-btn { background:#111; color:#fff; border:2px solid #111; padding:14px 40px; font-size:14px; font-family:'Paperlogy',sans-serif; cursor:pointer; transition:all 0.2s; box-shadow:0 2px 0 #000; display:inline-block; margin:4px; }
+.start-btn:hover { background:#444; border-color:#444; }
+.start-btn:active { box-shadow:none; transform:translateY(2px); }
+.start-btn.secondary { background:#fff; color:#111; }
+.start-btn.secondary:hover { background:#eee; }
+
+/* ===== Binder ===== */
+.binder-divider { height:60px; width:100%; display:flex; align-items:center; background:#f8f8f8; background-image:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.03) 3px,rgba(0,0,0,0.03) 4px); border-top:1px solid #ccc; border-bottom:1px solid #ccc; margin:16px 0 20px; padding:0 20px; }
+.binder-title { font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; }
+.binder-subtitle { font-size:11px; color:#888; margin-top:2px; }
+
+/* ===== 6-Cut Panel Grid ===== */
+.scenario-row { position:relative; margin-bottom:32px; }
+.panels-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.panels-row2 { margin-top:12px; }
+
+/* ===== Panel ===== */
+.panel { border:1px dashed #ccc; background:#fafafa; display:flex; flex-direction:column; overflow:hidden; transition:all 0.3s ease-out; min-height:380px; }
+.panel.active, .panel.done { border:2px solid #111; background:#fff; box-shadow:0 2px 4px rgba(0,0,0,0.06); }
+.panel.slide-in { animation:panelSlideIn 0.4s ease-out; }
+@keyframes panelSlideIn { from{opacity:0;transform:translateX(30px)} to{opacity:1;transform:translateX(0)} }
+.panel-image { width:100%; aspect-ratio:1/1; border-bottom:1px solid #eee; display:flex; align-items:center; justify-content:center; background:#f0f0f0; overflow:hidden; flex-shrink:0; position:relative; }
+.panel.active .panel-image img, .panel.done .panel-image img { width:100%; height:100%; object-fit:cover; }
+.cut-label { font-size:48px; font-weight:200; color:#ddd; }
+.cut-num { position:absolute; top:6px; left:8px; font-size:10px; font-weight:700; color:#999; background:rgba(255,255,255,0.85); padding:2px 6px; letter-spacing:1px; }
+.panel-place { font-size:10px; color:#999; position:absolute; bottom:4px; right:8px; background:rgba(255,255,255,0.8); padding:1px 6px; }
+.panel-body { flex:1; padding:12px 14px; overflow-y:auto; font-size:13px; line-height:1.7; }
+.panel-body p { margin-bottom:6px; }
+.panel-body .highlight { font-weight:700; }
+.panel-body .core-q { font-weight:600; font-size:14px; margin:6px 0; padding:6px 0; border-top:1px solid #eee; }
+.advance-wrap { text-align:center; margin-top:10px; }
+.advance-btn { background:#111; color:#fff; border:2px solid #111; padding:8px 24px; font-size:12px; font-family:'Paperlogy',sans-serif; cursor:pointer; box-shadow:0 2px 0 #000; transition:all 0.2s; }
+.advance-btn:hover { background:#444; }
+.advance-btn:active { box-shadow:none; transform:translateY(2px); }
+
+/* ===== Choice Cards ===== */
+.choices-area { padding:8px; display:flex; flex-direction:column; gap:8px; height:100%; }
+.choices-q { font-size:14px; font-weight:700; padding:6px 0 8px; color:#111; }
+.chosen-summary { padding:14px; border:2px solid #111; background:#fff; animation:panelSlideIn 0.4s ease; }
+.chosen-label { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#888; margin-bottom:6px; }
+.chosen-title { font-size:14px; font-weight:700; margin-bottom:4px; }
+.chosen-way { font-size:12px; color:#444; line-height:1.6; }
+.choice-card { display:flex; background:#fff; color:#111; border:2px solid #111; padding:0; cursor:pointer; user-select:none; transition:all 0.2s; box-shadow:0 2px 0 #111; opacity:0; transform:translateY(12px); overflow:hidden; }
+.choice-card.visible { opacity:1; transform:translateY(0); }
+.choice-card:hover { transform:translateX(4px); box-shadow:0 2px 0 #111,0 4px 10px rgba(0,0,0,0.08); }
+.choice-card:active { box-shadow:none; transform:translateY(2px); }
+.choice-num { background:#111; color:#fff; width:30px; padding:14px 0; text-align:center; font-size:14px; font-weight:700; line-height:1.6; flex-shrink:0; }
+.choice-body { flex:1; padding:12px 14px; min-width:0; }
+.choice-text { font-size:13px; font-weight:600; line-height:1.5; margin-bottom:3px; }
+.choice-desc { font-size:11px; color:#666; line-height:1.5; }
+.delegation-tag { display:inline-block; font-size:10px; font-weight:700; padding:1px 5px; margin-top:4px; background:#f0f0f0; border:1px solid #ccc; color:#555; letter-spacing:0.5px; }
+@keyframes choiceFadeOut { to{opacity:0;transform:translateX(16px) scale(0.96)} }
+.choice-card.fade-out { animation:choiceFadeOut 0.3s ease forwards; pointer-events:none; }
+
+/* ===== Result Block ===== */
+.result-text { border:2px solid #111; padding:12px; background:#fafafa; font-size:13px; line-height:1.7; margin-bottom:8px; }
+.result-meta { font-size:11px; color:#888; margin-bottom:8px; }
+
+/* ===== Final Block ===== */
+.final-score { text-align:center; padding:8px 0; }
+.final-grade { font-size:48px; font-weight:700; line-height:1; }
+.final-grade.S, .final-grade.A { color:#1a8c1a; }
+.final-grade.B { color:#111; }
+.final-grade.C { color:#e65100; }
+.final-grade.D { color:#c44; }
+.final-num { font-size:18px; font-weight:700; margin-top:2px; }
+.final-item { border:2px solid #111; padding:10px 12px; margin:8px 0; text-align:center; background:#fff; }
+.final-item-label { font-size:10px; color:#888; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+.final-item-name { font-size:14px; font-weight:700; }
+.final-item.empty { background:#f5f5f5; color:#888; border-color:#ccc; }
+.awareness { font-size:13px; line-height:1.7; padding:10px; border-left:3px solid #111; background:#fafafa; margin-top:8px; }
+
+/* ===== Next Button ===== */
+.next-btn-wrap { text-align:center; margin-top:20px; opacity:0; transition:opacity 0.4s; pointer-events:none; }
+.next-btn-wrap.visible { opacity:1; pointer-events:auto; }
+.next-btn { background:#111; color:#fff; border:2px solid #111; padding:10px 28px; font-size:13px; font-family:'Paperlogy',sans-serif; cursor:pointer; transition:all 0.2s; box-shadow:0 2px 0 #000; }
+.next-btn:hover { background:#444; }
+.next-btn:active { box-shadow:none; transform:translateY(2px); }
+
+/* ===== Report ===== */
+.report-overlay { min-height:480px; padding:40px 0; animation:overlayIn 0.5s ease; }
+.report-inner { max-width:540px; width:100%; margin:0 auto; text-align:center; }
+.report-inner h2 { font-size:20px; margin-bottom:24px; }
+.report-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:20px; }
+.report-stat-box { background:#fff; border:2px solid #111; padding:14px; box-shadow:0 2px 0 rgba(0,0,0,0.1); }
+.report-stat-num { font-size:28px; font-weight:700; }
+.report-stat-label { font-size:11px; color:#888; margin-top:2px; }
+.report-comment { font-size:14px; line-height:1.8; text-align:left; margin-bottom:20px; padding:16px; background:#fff; border:2px solid #111; box-shadow:0 2px 0 rgba(0,0,0,0.1); }
+
+/* ===== Debug ===== */
+.debug-toggle { position:fixed; bottom:10px; right:10px; background:#333; color:#fff; border:none; padding:5px 10px; font-size:10px; cursor:pointer; z-index:300; font-family:monospace; }
+.debug-panel { display:none; position:fixed; bottom:36px; right:10px; background:#1a1a1a; color:#ddd; padding:14px; font-size:11px; font-family:monospace; z-index:300; max-width:380px; max-height:60vh; overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
+.debug-panel.active { display:block; }
+.debug-section { margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid #333; }
+.debug-label { color:#888; font-size:9px; text-transform:uppercase; margin-bottom:3px; }
+.debug-buttons { display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; }
+.debug-btn { background:#333; color:#ddd; border:1px solid #555; padding:3px 7px; font-size:10px; cursor:pointer; font-family:monospace; }
+.debug-btn:hover { background:#444; }
+.version { position:fixed; bottom:6px; left:12px; font-size:10px; color:#ccc; }
+
+@media (max-width:800px) {
+  .panels-grid { grid-template-columns:1fr; }
+  .stats-bar { gap:8px; }
+  .stat { min-width:100px; }
+}
+</style>
+</head>
+<body>
+<div class="stats-bar" id="stats-bar">
+  <div class="stat" id="stat-delegation"><div class="stat-change-indicator" id="delta-delegation"></div><div class="stat-header"><span class="stat-name">위임 선택력</span><span class="stat-num" id="num-delegation">0</span></div><div class="stat-gauge"><div class="stat-gauge-fill" id="gauge-delegation" style="width:50%"></div></div></div>
+  <div class="stat" id="stat-knowledge"><div class="stat-change-indicator" id="delta-knowledge"></div><div class="stat-header"><span class="stat-name">지식</span><span class="stat-num" id="num-knowledge">0</span></div><div class="stat-gauge"><div class="stat-gauge-fill" id="gauge-knowledge" style="width:50%"></div></div></div>
+  <div class="stats-divider"></div>
+  <div class="score-stat" id="score-stat">점수 0</div>
+  <div class="stats-divider"></div>
+  <div class="stat-progress" id="stat-progress">컷 1/6</div>
+</div>
+<div class="container" id="main-container"></div>
+<button class="debug-toggle" onclick="toggleDebug()">DEBUG</button>
+<div class="debug-panel" id="debug-panel"></div>
+<div class="version">v0.3 — 어린왕자 prototype</div>
+
+<script>
+// =====================================================
+// 3. Config
+// =====================================================
+var CONFIG={
+  storageKey:'ai-literacy-delegation-boundary-v03',
+  eventLogKey:'ai-literacy-delegation-boundary-v03-events',
+  sessionIdKey:'ai-literacy-v03-session-id',
+  version:'v0.3',
+  pointThresholds:{S:90,A:70,B:50,C:30},
+  cardBoost:20,
+  detectedIssueBoost:10
+};
+var DELEGATION_DELTA={'++':2,'+':1,'0':0,'-':-1,'--':-2};
+var GRADE_LABEL={S:'S',A:'A',B:'B',C:'C',D:'D'};
+
+// =====================================================
+// 4. Scenario Data — 어린왕자 (인라인 JSON, file:// 호환)
+// =====================================================
+var SCENARIO_EORINWANGJA = {
+  "id": "eorinwangja",
+  "category": 3,
+  "categoryName": "본인 경험 기반",
+  "title": "어린왕자 독후감",
+  "version": "v1",
+  "learningMessage": "경험은 위임 불가. 본인이 안 한 일은 AI도, 인터넷도, 친구도 대신해 줄 수 없다.",
+  "aiSuitability": "low",
+  "timeBudgetSec": 720,
+  "situation": {
+    "text": "어린왕자 독후감을 100자로 써야 하는데 책을 안 읽었습니다.",
+    "image": "../images/s01_ch1.webp"
+  },
+  "tier1": [
+    { "id": "A", "label": "책을 읽고 쓴다", "desc": "직접 읽는 길을 선택한다." },
+    { "id": "B", "label": "AI에게 맡긴다", "desc": "위임의 깊이를 선택한다." },
+    { "id": "C", "label": "안 읽고 직접 쓴다", "desc": "우회의 방식을 선택한다." }
+  ],
+  "tier2": {
+    "A": [
+      { "id": "A1", "label": "전체 정독 후 본인 감상으로 작성", "delegation": "++" },
+      { "id": "A2", "label": "요약본·줄거리 위주로 빠르게 읽고 작성", "delegation": "+" },
+      { "id": "A3", "label": "첫 챕터만 읽고 나머지는 추측해서 작성", "delegation": "0" }
+    ],
+    "B": [
+      { "id": "B1", "label": "그냥 부탁", "delegation": "--" },
+      { "id": "B2", "label": "키워드·인용을 받고 본인이 정리", "delegation": "0" },
+      { "id": "B3", "label": "검색 후 AI 협업", "delegation": "+" }
+    ],
+    "C": [
+      { "id": "C1", "label": "인터넷 줄거리 요약만 보고 직접 작성", "delegation": "-" },
+      { "id": "C2", "label": "친구에게 줄거리 듣고 직접 작성", "delegation": "-" },
+      { "id": "C3", "label": "대충 상상해서 직접 작성", "delegation": "--" }
+    ]
+  },
+  "results": {
+    "A1": { "text": "어린왕자는 별들을 지나며 어른들이 숫자와 소유에 갇힌 모습을 본다. 나는 여우의 말처럼 관계는 시간을 들여 길들일 때 특별해진다는 점이 가장 오래 남았다.", "basePoint": 91, "deltaR2": 3,  "deltaR3": 6,  "summary": "경험이 살아난 독후감" },
+    "A2": { "text": "어린왕자는 여러 별을 여행하며 이상한 어른들을 만나고 지구에서 여우를 만난다. 중요한 것은 눈에 보이지 않는다는 말이 인상 깊었고, 관계의 소중함을 느꼈다.", "basePoint": 68, "deltaR2": 6,  "deltaR3": 12, "summary": "줄거리는 맞지만 얕음" },
+    "A3": { "text": "어린왕자는 비행기 조종사를 만나 자기 별 이야기를 들려준다. 아마 그는 많은 친구를 사귀며 성장했고, 마지막에는 모두와 함께 행복하게 별로 돌아갔을 것 같다.", "basePoint": 42, "deltaR2": 10, "deltaR3": 21, "summary": "초반 감상 뒤 추측" },
+    "B1": { "text": "어린왕자는 사막에서 여우와 캥거루를 만나 모험을 한다. 그는 장미를 구하기 위해 여러 행성을 돌며 용기를 배우고, 마지막에는 친구들과 왕국을 세운다.", "basePoint": 12, "deltaR2": 12, "deltaR3": 23, "summary": "환각 섞인 AI 글", "hiddenIssues": ["캥거루 (책에 없음)","왕국 세움 (책에 없음)","전체 구조 책과 어긋남"] },
+    "B2": { "text": "어린왕자는 여러 별에서 어른들의 이상한 태도를 본다. \"가장 중요한 것은 마음으로 본다\"는 말처럼, 나는 관계와 책임이 이 책의 핵심이라고 생각했다.", "basePoint": 55, "deltaR2": 10, "deltaR3": 21, "summary": "협업했지만 인용 불안" },
+    "B3": { "text": "어린왕자는 장미를 떠나 여러 별을 지나 지구에 온다. 여우를 만나 길들임의 의미를 배우고, 자기 장미가 특별한 이유가 함께 보낸 시간 때문임을 깨닫는다.", "basePoint": 67, "deltaR2": 7,  "deltaR3": 17, "summary": "줄거리는 맞지만 덜 개인적" },
+    "C1": { "text": "어린왕자는 여러 행성을 여행하며 어른들의 어리석음을 보고, 지구에서 여우를 만난다. 이 이야기는 순수한 마음과 사랑이 중요하다는 교훈을 주는 책이다.", "basePoint": 48, "deltaR2": 9,  "deltaR3": 16, "summary": "요약 의존 독후감" },
+    "C2": { "text": "어린왕자는 자기 별에서 장미와 싸우고 지구로 와서 여우와 뱀을 만난다. 친구 말로는 마지막에 별로 돌아간다는데, 그래서 이 책은 이별에 관한 이야기 같다.", "basePoint": 38, "deltaR2": 11, "deltaR3": 22, "summary": "전달 오류가 섞임" },
+    "C3": { "text": "어린왕자는 어린아이의 순수한 마음을 가진 왕자가 세상을 여행하는 이야기다. 우리는 모두 꿈을 잃지 말고 착하게 살아야 하며, 친구를 소중히 해야 한다.", "basePoint": 10, "deltaR2": 11, "deltaR3": 20, "summary": "일반론뿐인 글" }
+  },
+  "reviews": [
+    { "id": "R1", "label": "그대로 제출",                "desc": "검토 없이 그대로 낸다.",        "boostType": "none" },
+    { "id": "R2", "label": "한 번 읽고 이상한 곳만 표시", "desc": "명시적인 환각·오류만 발견.",     "boostType": "explicit" },
+    { "id": "R3", "label": "출처 확인 + 크로스체크",      "desc": "미세 오류까지 발견.",            "boostType": "all" }
+  ],
+  "reviewSupplements": {
+    "A1R2":"문장 반복과 어색한 표현만 조금 발견된다. 점수 +3.",
+    "A1R3":"실제 장면과 감상이 잘 맞는지 확인한다. 발견 사항은 미미하다. 점수 +6.",
+    "A2R2":"일반적인 감상 표현이 많다는 점을 발견한다. 점수 +6.",
+    "A2R3":"요약에 빠진 장미와 책임의 맥락을 보완한다. 점수 +12.",
+    "A3R2":"\"모두와 행복하게\" 같은 추측 표현을 발견한다. 점수 +10.",
+    "A3R3":"결말과 핵심 주제가 실제와 다름을 확인한다. 점수 +21.",
+    "B1R2":"책에 없는 캥거루와 왕국 설정을 발견한다. 점수 +12.",
+    "B1R3":"환각뿐 아니라 전체 구조가 책과 어긋남을 확인한다. 점수 +23.",
+    "B2R2":"인용 문장이 정확하지 않다는 느낌을 잡는다. 점수 +10.",
+    "B2R3":"실제 문장과 의미를 대조해 인용과 감상을 정리한다. 점수 +21.",
+    "B3R2":"AI식 매끈한 표현과 덜 개인적인 문장을 발견한다. 점수 +7.",
+    "B3R3":"검색 출처와 책의 핵심 장면을 대조해 근거를 강화한다. 점수 +17.",
+    "C1R2":"\"사랑이 중요하다\" 같은 뻔한 표현을 발견한다. 점수 +9.",
+    "C1R3":"요약만으로는 책임의 뉘앙스가 빠졌음을 확인한다. 점수 +16.",
+    "C2R2":"친구에게 들은 표현이 모호하고 근거가 약함을 발견한다. 점수 +11.",
+    "C2R3":"뱀과 결말에 대한 잘못된 이해를 확인하고 수정한다. 점수 +22.",
+    "C3R2":"틀린 말은 적지만 책의 구체 장면이 없음을 발견한다. 점수 +11.",
+    "C3R3":"책 내용과 거의 연결되지 않는 일반론임을 확인한다. 점수 +20."
+  },
+  "finals": {
+    "A1R1":{"score":91,"grade":"S","item":"깊은 독서가 카드","delegation":"++","knowledge":"+", "awareness":"다 읽으니 독후감이 내 말처럼 나왔다."},
+    "A1R2":{"score":94,"grade":"S","item":"깊은 독서가 카드","delegation":"++","knowledge":"+", "awareness":"한 번 읽어보니 문장이 더 정리됐다."},
+    "A1R3":{"score":97,"grade":"S","item":"깊은 독서가 카드","delegation":"++","knowledge":"++","awareness":"확인까지 하니까 발표해도 덜 떨릴 것 같다."},
+    "A2R1":{"score":68,"grade":"B","item":"반쪽 독후감 카드","delegation":"+", "knowledge":"0", "awareness":"줄거리는 맞는데 내 생각은 좀 얕았다."},
+    "A2R2":{"score":74,"grade":"A","item":"검증의 눈 카드",  "delegation":"+", "knowledge":"+", "awareness":"이상한 표현을 고치니 조금 살아났다."},
+    "A2R3":{"score":80,"grade":"A","item":"검증의 눈 카드",  "delegation":"+", "knowledge":"+", "awareness":"요약만 보면 놓치는 게 꽤 있었다."},
+    "A3R1":{"score":42,"grade":"C","item":"위태로운 위임 카드","delegation":"0","knowledge":"-", "awareness":"초반만 읽고 끝까지 아는 척했다."},
+    "A3R2":{"score":52,"grade":"B","item":"반쪽 독후감 카드","delegation":"0","knowledge":"0", "awareness":"내가 읽은 부분과 상상한 부분이 섞였다."},
+    "A3R3":{"score":63,"grade":"B","item":"반쪽 독후감 카드","delegation":"0","knowledge":"+", "awareness":"확인해 보니 결말도 느낌도 달랐다."},
+    "B1R1":{"score":12,"grade":"D","item":null,             "delegation":"--","knowledge":"--","awareness":"책도 안 읽고 맡기니 캥거루까지 나왔다."},
+    "B1R2":{"score":24,"grade":"D","item":null,             "delegation":"--","knowledge":"-", "awareness":"한 번 읽었더니 큰 오류는 보였다."},
+    "B1R3":{"score":35,"grade":"C","item":"위태로운 위임 카드","delegation":"--","knowledge":"0", "awareness":"검토하니까 거의 새로 써야 하는 글이었다."},
+    "B2R1":{"score":55,"grade":"B","item":"반쪽 독후감 카드","delegation":"0","knowledge":"0", "awareness":"AI 도움을 받았지만 확인은 내가 안 했다."},
+    "B2R2":{"score":65,"grade":"B","item":"반쪽 독후감 카드","delegation":"0","knowledge":"+", "awareness":"그럴듯한 인용도 그냥 믿으면 위험했다."},
+    "B2R3":{"score":76,"grade":"A","item":"검증의 눈 카드",  "delegation":"+","knowledge":"+", "awareness":"AI는 도구고, 기준은 내가 가져야 했다."},
+    "B3R1":{"score":67,"grade":"B","item":"반쪽 독후감 카드","delegation":"+","knowledge":"0", "awareness":"자료를 보고 협업했지만 내 감상은 약했다."},
+    "B3R2":{"score":74,"grade":"A","item":"검증의 눈 카드",  "delegation":"+","knowledge":"+", "awareness":"읽은 자료가 있으니 고칠 힘이 생겼다."},
+    "B3R3":{"score":84,"grade":"A","item":"검증의 눈 카드",  "delegation":"+","knowledge":"++","awareness":"검색, AI, 내 판단이 같이 움직였다."},
+    "C1R1":{"score":48,"grade":"C","item":"위태로운 위임 카드","delegation":"-","knowledge":"0", "awareness":"내가 썼지만 사실 인터넷 요약의 말이었다."},
+    "C1R2":{"score":57,"grade":"B","item":"반쪽 독후감 카드","delegation":"-","knowledge":"+", "awareness":"뻔한 말은 줄였지만 깊이는 부족했다."},
+    "C1R3":{"score":64,"grade":"B","item":"반쪽 독후감 카드","delegation":"0","knowledge":"+", "awareness":"확인할수록 직접 안 읽은 티가 났다."},
+    "C2R1":{"score":38,"grade":"C","item":"위태로운 위임 카드","delegation":"-","knowledge":"-", "awareness":"친구 설명은 줄거리의 그림자 같았다."},
+    "C2R2":{"score":49,"grade":"C","item":"위태로운 위임 카드","delegation":"-","knowledge":"0", "awareness":"이상한 건 알겠는데 근거가 부족했다."},
+    "C2R3":{"score":60,"grade":"B","item":"반쪽 독후감 카드","delegation":"0","knowledge":"+", "awareness":"남이 읽은 책은 내 경험이 될 수 없었다."},
+    "C3R1":{"score":10,"grade":"D","item":null,             "delegation":"--","knowledge":"--","awareness":"안 읽고 쓰니 착한 말만 늘어놨다."},
+    "C3R2":{"score":21,"grade":"D","item":null,             "delegation":"--","knowledge":"-", "awareness":"틀리진 않아도 독후감 같지는 않았다."},
+    "C3R3":{"score":30,"grade":"C","item":"위태로운 위임 카드","delegation":"--","knowledge":"0", "awareness":"결국 책 이야기가 아니라 내 상상이었다."}
+  },
+  "cardSlots": {
+    "B1R2":{"boostCard":"AI 환각 식별","bonusPoint":20,"note":"캥거루 즉시 식별, B1R3급 결과로 상향"},
+    "B1R3":{"boostCard":"검증 방법","bonusPoint":15,"note":"크로스체크 효과 강화"},
+    "C3R2":{"boostCard":"비판적 사고","bonusPoint":15,"note":"일반론 자가 식별 강화"},
+    "B2R3":{"boostCard":"AI 한계","bonusPoint":10,"note":"인용 검증 깊이 강화 → S등급 가능"}
+  },
+  "cuts": {
+    "1":"상황 제시",
+    "2":"1차 선택지 (A·B·C)",
+    "3":"2차 선택지 (선택된 1차의 3개)",
+    "4":"결과 (raw 결과물)",
+    "5":"검토 선택 (R1·R2·R3) — 인과 자각의 핵심",
+    "6":"최종 점수 + 획득 아이템"
+  }
+};
+
+// 시나리오당 6컷 이미지 매핑 (이번 빌드는 기존 3컷 재사용)
+// 컷1 상황 → s01_ch1 / 컷2 1차 → s01_ch1 / 컷3 2차 → s01_ch2
+// 컷4 결과 → s01_ch2 / 컷5 검토 → s01_ch3 / 컷6 최종 → s01_ch3
+var CUT_IMAGES = {
+  1:'../images/s01_ch1.webp',
+  2:'../images/s01_ch1.webp',
+  3:'../images/s01_ch2.webp',
+  4:'../images/s01_ch2.webp',
+  5:'../images/s01_ch3.webp',
+  6:'../images/s01_ch3.webp'
+};
+
+var SCENARIOS = { 'eorinwangja': SCENARIO_EORINWANGJA };
+
+// =====================================================
+// 5. Game State (v0.3 — 두 역량)
+// =====================================================
+var gameState=null,currentRow=null;
+
+function createInitialState(){
+  return {
+    currentScenarioId:'eorinwangja',
+    currentTier:1,
+    selectedTier1:null,
+    selectedTier2:null,
+    selectedReview:null,
+    competencies:{
+      delegationChoice:{value:0,history:[]},
+      knowledge:{value:0,history:[]}
+    },
+    score:0,
+    totalScore:0,
+    itemsCollected:[],
+    cardsHeld:[],
+    scenarioHistory:[],
+    completed:false
+  };
+}
+
+// =====================================================
+// 6. Game Engine (v0.3 — 트리 진행)
+// =====================================================
+function getScenario(){return SCENARIOS[gameState.currentScenarioId];}
+
+function getLeafPath(){
+  if(!gameState.selectedTier2||!gameState.selectedReview)return null;
+  return gameState.selectedTier2+gameState.selectedReview;
+}
+
+function getTier2Delegation(t2id){
+  var sc=getScenario(),firstChar=t2id.charAt(0);
+  var arr=sc.tier2[firstChar];
+  for(var i=0;i<arr.length;i++)if(arr[i].id===t2id)return arr[i].delegation;
+  return '0';
+}
+
+function applyTier1(t1id){
+  var snap=stateSnap();
+  gameState.selectedTier1=t1id;
+  gameState.currentTier=2;
+  // 1차 선택은 위임 선택력 누적에 포함되지 않음 (방향 분기만, 점수는 2차에서)
+  trackEvent('tier1_selected',{scenarioId:gameState.currentScenarioId,tier1:t1id,before:snap,after:stateSnap()});
+  saveGame();
+}
+
+function applyTier2(t2id){
+  var snap=stateSnap();
+  gameState.selectedTier2=t2id;
+  gameState.currentTier='result';
+  // 위임 선택력 누적 — tier2.delegation 기준
+  var dlg=getTier2Delegation(t2id);
+  var delta=DELEGATION_DELTA[dlg]||0;
+  gameState.competencies.delegationChoice.value+=delta;
+  gameState.competencies.delegationChoice.history.push({tier2:t2id,delegation:dlg,delta:delta});
+  trackEvent('tier2_selected',{scenarioId:gameState.currentScenarioId,tier2:t2id,delegation:dlg,delta:delta,before:snap,after:stateSnap()});
+  saveGame();
+}
+
+function applyReview(rid){
+  var snap=stateSnap();
+  gameState.selectedReview=rid;
+  gameState.currentTier='final';
+  // 지식 누적 — finals[leafPath].knowledge 기준
+  var leaf=getLeafPath();
+  var fin=getScenario().finals[leaf];
+  var knl=fin?fin.knowledge:'0';
+  var delta=DELEGATION_DELTA[knl]||0;
+  gameState.competencies.knowledge.value+=delta;
+  gameState.competencies.knowledge.history.push({leaf:leaf,knowledge:knl,delta:delta});
+  // 점수 산정 — finals.score 사용 (basePoint+detected*10 사전 계산값) + cardBonus(이번 빌드는 0)
+  var cardBonus=getCardBonus(leaf);
+  gameState.score=(fin?fin.score:0)+cardBonus;
+  gameState.totalScore+=gameState.score;
+  if(fin&&fin.item)gameState.itemsCollected.push(fin.item);
+  trackEvent('review_selected',{scenarioId:gameState.currentScenarioId,review:rid,leaf:leaf,knowledge:knl,delta:delta,score:gameState.score,cardBonus:cardBonus,before:snap,after:stateSnap()});
+  saveGame();
+}
+
+function getCardBonus(leaf){
+  var sc=getScenario(),slots=sc.cardSlots||{};
+  if(!slots[leaf])return 0;
+  // 이번 빌드는 카드 보유 미니게임 비활성 → cardsHeld 비어있음 → 항상 0
+  // 단, cardSlots 데이터 구조는 인식
+  for(var i=0;i<gameState.cardsHeld.length;i++){
+    if(gameState.cardsHeld[i]===slots[leaf].boostCard)return slots[leaf].bonusPoint;
+  }
+  return 0;
+}
+
+function getGrade(score){
+  if(score>=CONFIG.pointThresholds.S)return 'S';
+  if(score>=CONFIG.pointThresholds.A)return 'A';
+  if(score>=CONFIG.pointThresholds.B)return 'B';
+  if(score>=CONFIG.pointThresholds.C)return 'C';
+  return 'D';
+}
+
+// =====================================================
+// 7. Storage (v0.2 보존, key만 v03)
+// =====================================================
+function saveGame(){localStorage.setItem(CONFIG.storageKey,JSON.stringify({state:gameState,at:new Date().toISOString()}));}
+function loadGame(){try{var d=JSON.parse(localStorage.getItem(CONFIG.storageKey));return d?d.state:null;}catch(e){return null;}}
+function clearGame(){localStorage.removeItem(CONFIG.storageKey);}
+function hasSave(){return!!localStorage.getItem(CONFIG.storageKey);}
+function getSid(){var s=sessionStorage.getItem(CONFIG.sessionIdKey);if(!s){s='s_'+Date.now()+'_'+Math.random().toString(36).slice(2);sessionStorage.setItem(CONFIG.sessionIdKey,s);}return s;}
+function resetSid(){sessionStorage.removeItem(CONFIG.sessionIdKey);}
+
+// =====================================================
+// 8. Event Logger (v0.2 보존)
+// =====================================================
+function stateSnap(){
+  if(!gameState)return{};
+  return{
+    sid:gameState.currentScenarioId,
+    tier:gameState.currentTier,
+    t1:gameState.selectedTier1,
+    t2:gameState.selectedTier2,
+    rv:gameState.selectedReview,
+    dlg:gameState.competencies.delegationChoice.value,
+    knl:gameState.competencies.knowledge.value,
+    score:gameState.score,
+    total:gameState.totalScore,
+    items:gameState.itemsCollected.length,
+    cards:gameState.cardsHeld.length
+  };
+}
+
+function trackEvent(t,p){
+  var e={type:t,sid:getSid(),at:new Date().toISOString(),scenarioId:gameState?gameState.currentScenarioId:null,snap:stateSnap(),payload:p||{}};
+  console.log('[AI Literacy v0.3]',e);
+  try{
+    var l=JSON.parse(localStorage.getItem(CONFIG.eventLogKey)||'[]');
+    l.push(e);
+    localStorage.setItem(CONFIG.eventLogKey,JSON.stringify(l));
+  }catch(x){}
+}
+
+function getEvents(){try{return JSON.parse(localStorage.getItem(CONFIG.eventLogKey)||'[]');}catch(e){return[];}}
+function clearEvents(){localStorage.removeItem(CONFIG.eventLogKey);}
+function downloadLog(){var l=localStorage.getItem(CONFIG.eventLogKey)||'[]';var b=new Blob([l],{type:'application/json'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download='ai-literacy-v03-log.json';a.click();URL.revokeObjectURL(u);}
+
+// =====================================================
+// 9. Render Functions (v0.3 — 6컷 흐름)
+// =====================================================
+var container=document.getElementById('main-container');
+
+function showStats(){document.getElementById('stats-bar').classList.add('visible');}
+function hideStats(){document.getElementById('stats-bar').classList.remove('visible');}
+
+function updateStats(){
+  if(!gameState)return;
+  var dlg=gameState.competencies.delegationChoice.value;
+  var knl=gameState.competencies.knowledge.value;
+  document.getElementById('num-delegation').textContent=(dlg>0?'+':'')+dlg;
+  document.getElementById('num-knowledge').textContent=(knl>0?'+':'')+knl;
+  // 게이지 — -4..+4 범위에서 0~100% 매핑 (양수 영역만 채움 표시: 50% 중심)
+  document.getElementById('gauge-delegation').style.width=Math.max(0,Math.min(100,50+dlg*12.5))+'%';
+  document.getElementById('gauge-knowledge').style.width=Math.max(0,Math.min(100,50+knl*12.5))+'%';
+  document.getElementById('score-stat').textContent='점수 '+gameState.score+(gameState.itemsCollected.length>0?' / 아이템 '+gameState.itemsCollected.length+'개':'');
+  // 진행 표시
+  var cutNum=getCurrentCutNum();
+  document.getElementById('stat-progress').textContent='컷 '+cutNum+'/6';
+}
+
+function getCurrentCutNum(){
+  if(!gameState)return 1;
+  if(gameState.completed)return 6;
+  if(gameState.selectedReview)return 6;
+  if(gameState.selectedTier2)return gameState.currentTier==='final'?6:(gameState.currentTier==='result'?4:5);
+  if(gameState.selectedTier1)return 3;
+  return gameState.currentTier===1?1:2;
+}
+
+function animateStat(which,oldVal,newVal){
+  var diff=newVal-oldVal;if(diff===0)return;
+  var st=document.getElementById('stat-'+which),nm=document.getElementById('num-'+which),dl=document.getElementById('delta-'+which);
+  st.classList.add(diff>0?'flash-up':'flash-down');
+  nm.textContent=(newVal>0?'+':'')+newVal;
+  nm.classList.add('pulsing');
+  dl.textContent=(diff>0?'+':'')+diff;
+  dl.className='stat-change-indicator show '+(diff>0?'up':'down');
+  setTimeout(function(){st.classList.remove('flash-up','flash-down');nm.classList.remove('pulsing');dl.className='stat-change-indicator';},2000);
+}
+
+function showStartScreen(){
+  hideStats();
+  container.innerHTML='<div class="overlay-card"><div class="card-inner"><h1>AI 리터러시: 위임의 경계</h1><div class="subtitle">이건 AI한테 맡겨도 돼?</div><div class="vtag">v0.3 — 어린왕자 prototype</div><p>어린왕자 독후감을 100자로 써야 한다.<br>그런데 책을 안 읽었다.<br><br>너는 어떻게 할까? 1차 선택 → 2차 선택 → 검토 단계까지, 너의 길을 따라가 보자.</p><button class="start-btn" onclick="startNewGame()">시작하기</button>'+(hasSave()?'<button class="start-btn secondary" onclick="continueGame()">이어하기</button>':'')+'</div></div>';
+}
+
+function ensureRow(){
+  if(currentRow)return currentRow;
+  var sc=getScenario();
+  var row=document.createElement('div');row.className='scenario-row';row.id='scenario-row';
+  // 6 panels in 2 rows of 3
+  var panels='';
+  for(var i=1;i<=6;i++){
+    panels+='<div class="panel" data-cut="'+i+'"><div class="panel-image"><span class="cut-num">CUT '+i+'</span><span class="cut-label">'+i+'</span></div><div class="panel-body"></div></div>';
+    if(i===3)panels='<div class="panels-grid panels-row1">'+panels+'</div><div class="panels-grid panels-row2">';
+  }
+  panels+='</div>';
+  row.innerHTML=panels+'<div class="next-btn-wrap" id="next-wrap"><button class="next-btn" id="next-btn" onclick="onNext()">다음 &#8594;</button></div>';
+  container.appendChild(row);
+  currentRow=row;
+  return row;
+}
+
+function setPanelImage(cutNum,labelText){
+  var panel=currentRow.querySelector('[data-cut="'+cutNum+'"]');
+  if(!panel)return;
+  var imgEl=panel.querySelector('.panel-image');
+  var src=CUT_IMAGES[cutNum];
+  if(src){
+    var img=new Image();img.src=src;
+    img.onload=function(){imgEl.innerHTML='<img src="'+src+'" alt="컷 '+cutNum+'"><span class="cut-num">CUT '+cutNum+'</span>'+(labelText?'<span class="panel-place">'+labelText+'</span>':'');};
+    img.onerror=function(){imgEl.innerHTML='<span class="cut-num">CUT '+cutNum+'</span><span class="cut-label">'+cutNum+'</span>'+(labelText?'<span class="panel-place">'+labelText+'</span>':'');};
+  }
+}
+
+function activatePanel(cutNum){
+  var panel=currentRow.querySelector('[data-cut="'+cutNum+'"]');
+  if(!panel)return null;
+  panel.classList.add('active','slide-in');
+  setTimeout(function(){panel.scrollIntoView({behavior:'smooth',block:'center'});},80);
+  return panel;
+}
+
+// 컷 1: 상황 제시
+function renderCut1(){
+  var sc=getScenario();
+  ensureRow();
+  trackEvent('scenario_viewed',{scenarioId:sc.id,title:sc.title});
+  setPanelImage(1,sc.categoryName);
+  var panel=activatePanel(1);
+  panel.querySelector('.panel-body').innerHTML=
+    '<p class="highlight">'+sc.title+'</p>'+
+    '<p>'+sc.situation.text+'</p>'+
+    '<div class="advance-wrap"><button class="advance-btn" onclick="goCut2()">어떻게 할까? &#8594;</button></div>';
+  updateStats();
+}
+
+// 컷 2: 1차 선택 (A·B·C)
+function goCut2(){
+  var sc=getScenario();
+  // 컷1의 advance 버튼 숨김
+  var c1=currentRow.querySelector('[data-cut="1"] .advance-wrap');if(c1)c1.style.display='none';
+  setPanelImage(2,'1차 선택');
+  var panel=activatePanel(2);
+  var area=document.createElement('div');area.className='choices-area';area.id='tier1-choices';
+  area.innerHTML='<div class="choices-q">어떻게 할까?</div>';
+  panel.querySelector('.panel-body').innerHTML='';
+  panel.querySelector('.panel-body').appendChild(area);
+  sc.tier1.forEach(function(c,i){
+    var card=document.createElement('div');
+    card.className='choice-card';
+    card.onclick=function(){onTier1(c.id);};
+    card.innerHTML='<div class="choice-num">'+c.id+'</div><div class="choice-body"><div class="choice-text">'+c.label+'</div><div class="choice-desc">'+c.desc+'</div></div>';
+    area.appendChild(card);
+    setTimeout(function(){card.classList.add('visible');},i*120+150);
+  });
+  updateStats();
+}
+
+// 컷 3: 2차 선택 (선택된 1차의 3개)
+function goCut3(){
+  var sc=getScenario(),t1=gameState.selectedTier1;
+  // 컷2 영역에 선택 요약 표시
+  var c2body=currentRow.querySelector('[data-cut="2"] .panel-body');
+  var t1obj=sc.tier1.find(function(x){return x.id===t1;});
+  c2body.innerHTML='<div class="chosen-summary"><div class="chosen-label">1차 선택</div><div class="chosen-title">'+t1+'. '+t1obj.label+'</div><div class="chosen-way">'+t1obj.desc+'</div></div>';
+  setPanelImage(3,'2차 선택');
+  var panel=activatePanel(3);
+  var area=document.createElement('div');area.className='choices-area';area.id='tier2-choices';
+  area.innerHTML='<div class="choices-q">더 자세히 — 어떻게 할까?</div>';
+  panel.querySelector('.panel-body').innerHTML='';
+  panel.querySelector('.panel-body').appendChild(area);
+  var t2list=sc.tier2[t1];
+  t2list.forEach(function(c,i){
+    var card=document.createElement('div');
+    card.className='choice-card';
+    card.onclick=function(){onTier2(c.id);};
+    var dlgTag=c.delegation?'<div class="delegation-tag">위임 '+c.delegation+'</div>':'';
+    card.innerHTML='<div class="choice-num">'+(i+1)+'</div><div class="choice-body"><div class="choice-text">'+c.label+'</div>'+dlgTag+'</div>';
+    area.appendChild(card);
+    setTimeout(function(){card.classList.add('visible');},i*120+150);
+  });
+  updateStats();
+}
+
+// 컷 4: 결과 (raw 결과물)
+function goCut4(){
+  var sc=getScenario(),t2=gameState.selectedTier2;
+  var t2obj=sc.tier2[gameState.selectedTier1].find(function(x){return x.id===t2;});
+  // 컷3 요약
+  var c3body=currentRow.querySelector('[data-cut="3"] .panel-body');
+  c3body.innerHTML='<div class="chosen-summary"><div class="chosen-label">2차 선택</div><div class="chosen-title">'+t2+'. '+t2obj.label+'</div><div class="chosen-way">위임 깊이: '+t2obj.delegation+'</div></div>';
+  setPanelImage(4,'결과');
+  var panel=activatePanel(4);
+  var result=sc.results[t2];
+  panel.querySelector('.panel-body').innerHTML=
+    '<p class="highlight">결과 — 100자 독후감</p>'+
+    '<div class="result-text">'+result.text+'</div>'+
+    '<div class="result-meta">'+result.summary+' (기본 '+result.basePoint+'점)</div>'+
+    '<div class="advance-wrap"><button class="advance-btn" onclick="goCut5()">검토할까? &#8594;</button></div>';
+  trackEvent('result_viewed',{scenarioId:sc.id,tier2:t2,basePoint:result.basePoint});
+  updateStats();
+}
+
+// 컷 5: 검토 선택 (R1·R2·R3)
+function goCut5(){
+  var sc=getScenario();
+  // 컷4 advance 버튼 숨김
+  var c4btn=currentRow.querySelector('[data-cut="4"] .advance-wrap');if(c4btn)c4btn.style.display='none';
+  setPanelImage(5,'검토');
+  var panel=activatePanel(5);
+  var area=document.createElement('div');area.className='choices-area';area.id='review-choices';
+  area.innerHTML='<div class="choices-q">제출 전, 어떻게 검토할까?</div>';
+  panel.querySelector('.panel-body').innerHTML='';
+  panel.querySelector('.panel-body').appendChild(area);
+  sc.reviews.forEach(function(r,i){
+    var card=document.createElement('div');
+    card.className='choice-card';
+    card.onclick=function(){onReview(r.id);};
+    card.innerHTML='<div class="choice-num">'+r.id+'</div><div class="choice-body"><div class="choice-text">'+r.label+'</div><div class="choice-desc">'+r.desc+'</div></div>';
+    area.appendChild(card);
+    setTimeout(function(){card.classList.add('visible');},i*120+150);
+  });
+  updateStats();
+}
+
+// 컷 6: 최종 점수 + 아이템 + 자각
+function goCut6(){
+  var sc=getScenario(),leaf=getLeafPath(),fin=sc.finals[leaf];
+  // 컷5 요약
+  var c5body=currentRow.querySelector('[data-cut="5"] .panel-body');
+  var rvObj=sc.reviews.find(function(x){return x.id===gameState.selectedReview;});
+  var supplement=sc.reviewSupplements[leaf]||'';
+  c5body.innerHTML='<div class="chosen-summary"><div class="chosen-label">검토 선택</div><div class="chosen-title">'+rvObj.id+'. '+rvObj.label+'</div>'+(supplement?'<div class="chosen-way">'+supplement+'</div>':'')+'</div>';
+  setPanelImage(6,'최종');
+  var panel=activatePanel(6);
+  var grade=fin?fin.grade:getGrade(gameState.score);
+  var item=fin?fin.item:null;
+  var awareness=fin?fin.awareness:'';
+  var h='<div class="final-score"><div class="final-grade '+grade+'">'+grade+'</div><div class="final-num">'+gameState.score+'점</div></div>';
+  if(item){
+    h+='<div class="final-item"><div class="final-item-label">획득 아이템</div><div class="final-item-name">'+item+'</div></div>';
+  }else{
+    h+='<div class="final-item empty"><div class="final-item-label">획득 아이템</div><div class="final-item-name">없음</div></div>';
+  }
+  if(awareness){
+    h+='<div class="awareness">'+awareness+'</div>';
+  }
+  h+='<div class="result-meta" style="margin-top:8px">위임 선택력 누적: '+(gameState.competencies.delegationChoice.value>0?'+':'')+gameState.competencies.delegationChoice.value+' / 지식 누적: '+(gameState.competencies.knowledge.value>0?'+':'')+gameState.competencies.knowledge.value+'</div>';
+  panel.querySelector('.panel-body').innerHTML=h;
+  trackEvent('final_viewed',{scenarioId:sc.id,leaf:leaf,score:gameState.score,grade:grade,item:item});
+  // 시나리오 완료 처리
+  gameState.scenarioHistory.push({
+    scenarioId:sc.id,
+    tier1:gameState.selectedTier1,
+    tier2:gameState.selectedTier2,
+    review:gameState.selectedReview,
+    leaf:leaf,
+    finalScore:gameState.score,
+    grade:grade,
+    item:item
+  });
+  gameState.completed=true;
+  saveGame();
+  trackEvent('scenario_completed',{scenarioId:sc.id,leaf:leaf,score:gameState.score,grade:grade});
+  updateStats();
+  // 다음 버튼: 리포트로
+  var nw=document.getElementById('next-wrap');
+  var nb=document.getElementById('next-btn');
+  nb.textContent='활동 리포트 보기';
+  nb.onclick=showReport;
+  setTimeout(function(){nw.classList.add('visible');},700);
+}
+
+// =====================================================
+// 10. Event Handlers
+// =====================================================
+function startNewGame(){
+  gameState=createInitialState();
+  resetSid();
+  clearGame();
+  saveGame();
+  currentRow=null;
+  trackEvent('session_started',{version:CONFIG.version});
+  container.innerHTML='';
+  showStats();
+  updateStats();
+  renderCut1();
+}
+
+function continueGame(){
+  gameState=loadGame();
+  if(!gameState){startNewGame();return;}
+  trackEvent('session_continued',{version:CONFIG.version});
+  container.innerHTML='';
+  currentRow=null;
+  showStats();
+  updateStats();
+  if(gameState.completed){showReport();return;}
+  // 진행 단계에 따라 복원
+  renderCut1();
+  if(gameState.selectedTier1){
+    setTimeout(function(){
+      goCut2();
+      // 1차 선택 표시
+      setTimeout(function(){
+        applyTier1ToView();
+        if(gameState.selectedTier2){
+          goCut3();
+          setTimeout(function(){
+            applyTier2ToView();
+            goCut4();
+            if(gameState.selectedReview){
+              setTimeout(function(){
+                goCut5();
+                setTimeout(function(){
+                  applyReviewToView();
+                  goCut6();
+                },200);
+              },200);
+            }
+          },200);
+        }
+      },200);
+    },200);
+  }
+}
+
+function applyTier1ToView(){/* state already has selection — used by continueGame */}
+function applyTier2ToView(){/* state already has selection */}
+function applyReviewToView(){/* state already has selection */}
+
+function fadeOutChoices(areaId,cb){
+  var area=document.getElementById(areaId);
+  if(!area){if(cb)cb();return;}
+  var cards=area.querySelectorAll('.choice-card');
+  cards.forEach(function(c,i){setTimeout(function(){c.classList.add('fade-out');},i*60);});
+  setTimeout(function(){if(cb)cb();},Math.max(300,cards.length*60+200));
+}
+
+function onTier1(t1id){
+  applyTier1(t1id);
+  fadeOutChoices('tier1-choices',function(){
+    goCut3();
+    updateStats();
+  });
+}
+
+function onTier2(t2id){
+  var prev=gameState.competencies.delegationChoice.value;
+  applyTier2(t2id);
+  var now=gameState.competencies.delegationChoice.value;
+  fadeOutChoices('tier2-choices',function(){
+    goCut4();
+    animateStat('delegation',prev,now);
+    updateStats();
+  });
+}
+
+function onReview(rid){
+  var prevK=gameState.competencies.knowledge.value;
+  applyReview(rid);
+  var nowK=gameState.competencies.knowledge.value;
+  fadeOutChoices('review-choices',function(){
+    goCut6();
+    animateStat('knowledge',prevK,nowK);
+    updateStats();
+  });
+}
+
+function onNext(){/* placeholder — overridden in goCut6 */}
+
+function resetGame(){
+  trackEvent('session_reset',{});
+  clearGame();
+  resetSid();
+  gameState=null;currentRow=null;
+  showStartScreen();
+}
+
+// =====================================================
+// 11. Report Generator (v0.3 — 두 역량 + 아이템)
+// =====================================================
+function showReport(){
+  hideStats();
+  trackEvent('final_report_viewed',{totalScore:gameState.totalScore,items:gameState.itemsCollected,history:gameState.scenarioHistory});
+  var sc=getScenario();
+  var last=gameState.scenarioHistory[gameState.scenarioHistory.length-1];
+  var msg=sc.learningMessage;
+  var h='<div class="report-overlay"><div class="report-inner"><h2>활동 리포트</h2>';
+  h+='<div class="report-grid">';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+gameState.score+'</div><div class="report-stat-label">최종 점수</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(last?last.grade:'-')+'</div><div class="report-stat-label">등급</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(gameState.competencies.delegationChoice.value>0?'+':'')+gameState.competencies.delegationChoice.value+'</div><div class="report-stat-label">위임 선택력</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(gameState.competencies.knowledge.value>0?'+':'')+gameState.competencies.knowledge.value+'</div><div class="report-stat-label">지식</div></div>';
+  h+='</div>';
+  if(last){
+    h+='<div class="report-comment"><b>너의 경로</b>: '+last.tier1+' → '+last.tier2+' → '+last.review+' ('+last.leaf+')<br><br>';
+    if(last.item)h+='<b>획득 아이템</b>: '+last.item+'<br><br>';
+    var fin=sc.finals[last.leaf];
+    if(fin&&fin.awareness)h+='<i>"'+fin.awareness+'"</i><br><br>';
+    h+='<b>이 시나리오의 메시지</b>: '+msg+'</div>';
+  }
+  h+='<button class="start-btn" onclick="resetGame()">처음부터 다시 하기</button>';
+  h+='</div></div>';
+  container.innerHTML=h;
+}
+
+// =====================================================
+// 12. Debug Panel
+// =====================================================
+var dbgOn=false;
+function toggleDebug(){dbgOn=!dbgOn;document.getElementById('debug-panel').classList.toggle('active',dbgOn);if(dbgOn)renderDebug();}
+function renderDebug(){
+  if(!dbgOn)return;
+  var p=document.getElementById('debug-panel'),logs=getEvents(),last=logs.length?logs[logs.length-1]:null;
+  var h='<div class="debug-section"><div class="debug-label">State</div>';
+  if(gameState){
+    h+='<div>scenario:'+gameState.currentScenarioId+'</div>';
+    h+='<div>tier:'+gameState.currentTier+' | t1:'+gameState.selectedTier1+' t2:'+gameState.selectedTier2+' rv:'+gameState.selectedReview+'</div>';
+    h+='<div>leaf:'+(getLeafPath()||'-')+'</div>';
+    h+='<div>delegation:'+gameState.competencies.delegationChoice.value+' (h:'+gameState.competencies.delegationChoice.history.length+')</div>';
+    h+='<div>knowledge:'+gameState.competencies.knowledge.value+' (h:'+gameState.competencies.knowledge.history.length+')</div>';
+    h+='<div>score:'+gameState.score+' / total:'+gameState.totalScore+'</div>';
+    h+='<div>items:'+gameState.itemsCollected.length+' '+(gameState.itemsCollected.join(', ')||'-')+'</div>';
+    h+='<div>cards:'+gameState.cardsHeld.length+' (미니게임 비활성)</div>';
+  }else{
+    h+='<div>no game</div>';
+  }
+  h+='</div>';
+  h+='<div class="debug-section"><div class="debug-label">Events: '+logs.length+'</div>';
+  if(last)h+='<div>last: '+last.type+'</div>';
+  h+='</div>';
+  h+='<div class="debug-section"><div class="debug-label">Jump (시나리오 점프 / 컷)</div>';
+  h+='<div class="debug-buttons">';
+  h+='<button class="debug-btn" onclick="dbgJumpCut(1)">Cut1</button>';
+  h+='<button class="debug-btn" onclick="dbgJumpCut(2)">Cut2 (1차)</button>';
+  h+='<button class="debug-btn" onclick="dbgJumpCut(5)">Cut5 (검토)</button>';
+  h+='<button class="debug-btn" onclick="dbgJumpCut(6)">Cut6 (최종)</button>';
+  h+='</div></div>';
+  h+='<div class="debug-section"><div class="debug-label">Cards (강제 추가)</div>';
+  h+='<div class="debug-buttons">';
+  h+='<button class="debug-btn" onclick="dbgAddCard(\'AI 환각 식별\')">+환각</button>';
+  h+='<button class="debug-btn" onclick="dbgAddCard(\'검증 방법\')">+검증</button>';
+  h+='<button class="debug-btn" onclick="dbgAddCard(\'AI 한계\')">+한계</button>';
+  h+='<button class="debug-btn" onclick="dbgAddCard(\'비판적 사고\')">+비판</button>';
+  h+='</div></div>';
+  h+='<div class="debug-section"><div class="debug-buttons">';
+  h+='<button class="debug-btn" onclick="resetGame();renderDebug()">Reset</button>';
+  h+='<button class="debug-btn" onclick="clearGame();clearEvents();renderDebug()">Clear All</button>';
+  h+='<button class="debug-btn" onclick="downloadLog()">Log DL</button>';
+  h+='</div></div>';
+  p.innerHTML=h;
+}
+
+function dbgJumpCut(n){
+  if(!gameState)startNewGame();
+  if(n===1){renderCut1();}
+  else if(n===2){renderCut1();setTimeout(goCut2,200);}
+  else if(n===5){
+    // A1 → R 미선택 상태로 점프
+    gameState.selectedTier1='A';gameState.selectedTier2='A1';gameState.currentTier='result';
+    container.innerHTML='';currentRow=null;
+    renderCut1();
+    setTimeout(function(){goCut2();setTimeout(function(){goCut3();setTimeout(function(){goCut4();setTimeout(goCut5,300);},300);},300);},300);
+  }
+  else if(n===6){
+    // 임의 경로 A1R3 점프
+    gameState.selectedTier1='A';gameState.selectedTier2='A1';
+    gameState.competencies.delegationChoice.value=2;
+    gameState.competencies.knowledge.value=2;
+    gameState.selectedReview='R3';
+    var fin=getScenario().finals['A1R3'];
+    gameState.score=fin.score;gameState.totalScore+=fin.score;gameState.itemsCollected.push(fin.item);
+    container.innerHTML='';currentRow=null;
+    renderCut1();
+    setTimeout(function(){goCut2();setTimeout(function(){goCut3();setTimeout(function(){goCut4();setTimeout(function(){goCut5();setTimeout(goCut6,300);},300);},300);},300);},300);
+  }
+  saveGame();updateStats();renderDebug();
+}
+
+function dbgAddCard(name){
+  if(!gameState)startNewGame();
+  if(gameState.cardsHeld.indexOf(name)===-1)gameState.cardsHeld.push(name);
+  saveGame();updateStats();renderDebug();
+}
+
+setInterval(function(){if(dbgOn)renderDebug();},3000);
+
+// =====================================================
+// 13. Initialization
+// =====================================================
+showStartScreen();
+</script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+{
+  "id": "eorinwangja",
+  "category": 3,
+  "categoryName": "본인 경험 기반",
+  "title": "어린왕자 독후감",
+  "version": "v1",
+  "source": "Assets/incoming/AI리터러시/_Archives/gpt_시나리오_어린왕자_v_1.md",
+  "createdAt": "2026-04-27",
+
+  "learningMessage": "경험은 위임 불가. 본인이 안 한 일은 AI도, 인터넷도, 친구도 대신해 줄 수 없다.",
+
+  "aiSuitability": "low",
+
+  "timeBudgetSec": 720,
+
+  "situation": {
+    "text": "어린왕자 독후감을 100자로 써야 하는데 책을 안 읽었습니다.",
+    "image": "images/eorinwangja_cut1_situation.webp"
+  },
+
+  "tier1": [
+    {
+      "id": "A",
+      "label": "책을 읽고 쓴다",
+      "desc": "직접 읽는 길을 선택한다."
+    },
+    {
+      "id": "B",
+      "label": "AI에게 맡긴다",
+      "desc": "위임의 깊이를 선택한다."
+    },
+    {
+      "id": "C",
+      "label": "안 읽고 직접 쓴다",
+      "desc": "우회의 방식을 선택한다."
+    }
+  ],
+
+  "tier2": {
+    "A": [
+      { "id": "A1", "label": "전체 정독 후 본인 감상으로 작성", "delegation": "++" },
+      { "id": "A2", "label": "요약본·줄거리 위주로 빠르게 읽고 작성", "delegation": "+" },
+      { "id": "A3", "label": "첫 챕터만 읽고 나머지는 추측해서 작성", "delegation": "0" }
+    ],
+    "B": [
+      { "id": "B1", "label": "그냥 부탁", "delegation": "--" },
+      { "id": "B2", "label": "키워드·인용을 받고 본인이 정리", "delegation": "0" },
+      { "id": "B3", "label": "검색 후 AI 협업", "delegation": "+" }
+    ],
+    "C": [
+      { "id": "C1", "label": "인터넷 줄거리 요약만 보고 직접 작성", "delegation": "-" },
+      { "id": "C2", "label": "친구에게 줄거리 듣고 직접 작성", "delegation": "-" },
+      { "id": "C3", "label": "대충 상상해서 직접 작성", "delegation": "--" }
+    ]
+  },
+
+  "results": {
+    "A1": {
+      "text": "어린왕자는 별들을 지나며 어른들이 숫자와 소유에 갇힌 모습을 본다. 나는 여우의 말처럼 관계는 시간을 들여 길들일 때 특별해진다는 점이 가장 오래 남았다.",
+      "basePoint": 91,
+      "deltaR2": 3,
+      "deltaR3": 6,
+      "summary": "경험이 살아난 독후감"
+    },
+    "A2": {
+      "text": "어린왕자는 여러 별을 여행하며 이상한 어른들을 만나고 지구에서 여우를 만난다. 중요한 것은 눈에 보이지 않는다는 말이 인상 깊었고, 관계의 소중함을 느꼈다.",
+      "basePoint": 68,
+      "deltaR2": 6,
+      "deltaR3": 12,
+      "summary": "줄거리는 맞지만 얕음"
+    },
+    "A3": {
+      "text": "어린왕자는 비행기 조종사를 만나 자기 별 이야기를 들려준다. 아마 그는 많은 친구를 사귀며 성장했고, 마지막에는 모두와 함께 행복하게 별로 돌아갔을 것 같다.",
+      "basePoint": 42,
+      "deltaR2": 10,
+      "deltaR3": 21,
+      "summary": "초반 감상 뒤 추측"
+    },
+    "B1": {
+      "text": "어린왕자는 사막에서 여우와 캥거루를 만나 모험을 한다. 그는 장미를 구하기 위해 여러 행성을 돌며 용기를 배우고, 마지막에는 친구들과 왕국을 세운다.",
+      "basePoint": 12,
+      "deltaR2": 12,
+      "deltaR3": 23,
+      "summary": "환각 섞인 AI 글",
+      "hiddenIssues": ["캥거루 (책에 없음)", "왕국 세움 (책에 없음)", "전체 구조 책과 어긋남"]
+    },
+    "B2": {
+      "text": "어린왕자는 여러 별에서 어른들의 이상한 태도를 본다. \"가장 중요한 것은 마음으로 본다\"는 말처럼, 나는 관계와 책임이 이 책의 핵심이라고 생각했다.",
+      "basePoint": 55,
+      "deltaR2": 10,
+      "deltaR3": 21,
+      "summary": "협업했지만 인용 불안"
+    },
+    "B3": {
+      "text": "어린왕자는 장미를 떠나 여러 별을 지나 지구에 온다. 여우를 만나 길들임의 의미를 배우고, 자기 장미가 특별한 이유가 함께 보낸 시간 때문임을 깨닫는다.",
+      "basePoint": 67,
+      "deltaR2": 7,
+      "deltaR3": 17,
+      "summary": "줄거리는 맞지만 덜 개인적"
+    },
+    "C1": {
+      "text": "어린왕자는 여러 행성을 여행하며 어른들의 어리석음을 보고, 지구에서 여우를 만난다. 이 이야기는 순수한 마음과 사랑이 중요하다는 교훈을 주는 책이다.",
+      "basePoint": 48,
+      "deltaR2": 9,
+      "deltaR3": 16,
+      "summary": "요약 의존 독후감"
+    },
+    "C2": {
+      "text": "어린왕자는 자기 별에서 장미와 싸우고 지구로 와서 여우와 뱀을 만난다. 친구 말로는 마지막에 별로 돌아간다는데, 그래서 이 책은 이별에 관한 이야기 같다.",
+      "basePoint": 38,
+      "deltaR2": 11,
+      "deltaR3": 22,
+      "summary": "전달 오류가 섞임"
+    },
+    "C3": {
+      "text": "어린왕자는 어린아이의 순수한 마음을 가진 왕자가 세상을 여행하는 이야기다. 우리는 모두 꿈을 잃지 말고 착하게 살아야 하며, 친구를 소중히 해야 한다.",
+      "basePoint": 10,
+      "deltaR2": 11,
+      "deltaR3": 20,
+      "summary": "일반론뿐인 글"
+    }
+  },
+
+  "reviews": [
+    {
+      "id": "R1",
+      "label": "그대로 제출",
+      "desc": "검토 없이 그대로 낸다.",
+      "boostType": "none"
+    },
+    {
+      "id": "R2",
+      "label": "한 번 읽고 이상한 곳만 표시",
+      "desc": "명시적인 환각·오류만 발견.",
+      "boostType": "explicit"
+    },
+    {
+      "id": "R3",
+      "label": "출처 확인 + 크로스체크",
+      "desc": "미세 오류까지 발견.",
+      "boostType": "all"
+    }
+  ],
+
+  "reviewSupplements": {
+    "A1R2": "문장 반복과 어색한 표현만 조금 발견된다. 점수 +3.",
+    "A1R3": "실제 장면과 감상이 잘 맞는지 확인한다. 발견 사항은 미미하다. 점수 +6.",
+    "A2R2": "일반적인 감상 표현이 많다는 점을 발견한다. 점수 +6.",
+    "A2R3": "요약에 빠진 장미와 책임의 맥락을 보완한다. 점수 +12.",
+    "A3R2": "\"모두와 행복하게\" 같은 추측 표현을 발견한다. 점수 +10.",
+    "A3R3": "결말과 핵심 주제가 실제와 다름을 확인한다. 점수 +21.",
+    "B1R2": "책에 없는 캥거루와 왕국 설정을 발견한다. 점수 +12.",
+    "B1R3": "환각뿐 아니라 전체 구조가 책과 어긋남을 확인한다. 점수 +23.",
+    "B2R2": "인용 문장이 정확하지 않다는 느낌을 잡는다. 점수 +10.",
+    "B2R3": "실제 문장과 의미를 대조해 인용과 감상을 정리한다. 점수 +21.",
+    "B3R2": "AI식 매끈한 표현과 덜 개인적인 문장을 발견한다. 점수 +7.",
+    "B3R3": "검색 출처와 책의 핵심 장면을 대조해 근거를 강화한다. 점수 +17.",
+    "C1R2": "\"사랑이 중요하다\" 같은 뻔한 표현을 발견한다. 점수 +9.",
+    "C1R3": "요약만으로는 책임의 뉘앙스가 빠졌음을 확인한다. 점수 +16.",
+    "C2R2": "친구에게 들은 표현이 모호하고 근거가 약함을 발견한다. 점수 +11.",
+    "C2R3": "뱀과 결말에 대한 잘못된 이해를 확인하고 수정한다. 점수 +22.",
+    "C3R2": "틀린 말은 적지만 책의 구체 장면이 없음을 발견한다. 점수 +11.",
+    "C3R3": "책 내용과 거의 연결되지 않는 일반론임을 확인한다. 점수 +20."
+  },
+
+  "finals": {
+    "A1R1": { "score": 91, "grade": "S", "item": "깊은 독서가 카드", "delegation": "++", "knowledge": "+",  "awareness": "다 읽으니 독후감이 내 말처럼 나왔다." },
+    "A1R2": { "score": 94, "grade": "S", "item": "깊은 독서가 카드", "delegation": "++", "knowledge": "+",  "awareness": "한 번 읽어보니 문장이 더 정리됐다." },
+    "A1R3": { "score": 97, "grade": "S", "item": "깊은 독서가 카드", "delegation": "++", "knowledge": "++", "awareness": "확인까지 하니까 발표해도 덜 떨릴 것 같다." },
+    "A2R1": { "score": 68, "grade": "B", "item": "반쪽 독후감 카드", "delegation": "+",  "knowledge": "0",  "awareness": "줄거리는 맞는데 내 생각은 좀 얕았다." },
+    "A2R2": { "score": 74, "grade": "A", "item": "검증의 눈 카드",   "delegation": "+",  "knowledge": "+",  "awareness": "이상한 표현을 고치니 조금 살아났다." },
+    "A2R3": { "score": 80, "grade": "A", "item": "검증의 눈 카드",   "delegation": "+",  "knowledge": "+",  "awareness": "요약만 보면 놓치는 게 꽤 있었다." },
+    "A3R1": { "score": 42, "grade": "C", "item": "위태로운 위임 카드","delegation": "0", "knowledge": "-",  "awareness": "초반만 읽고 끝까지 아는 척했다." },
+    "A3R2": { "score": 52, "grade": "B", "item": "반쪽 독후감 카드", "delegation": "0", "knowledge": "0",  "awareness": "내가 읽은 부분과 상상한 부분이 섞였다." },
+    "A3R3": { "score": 63, "grade": "B", "item": "반쪽 독후감 카드", "delegation": "0", "knowledge": "+",  "awareness": "확인해 보니 결말도 느낌도 달랐다." },
+
+    "B1R1": { "score": 12, "grade": "D", "item": null,                 "delegation": "--", "knowledge": "--", "awareness": "책도 안 읽고 맡기니 캥거루까지 나왔다." },
+    "B1R2": { "score": 24, "grade": "D", "item": null,                 "delegation": "--", "knowledge": "-",  "awareness": "한 번 읽었더니 큰 오류는 보였다." },
+    "B1R3": { "score": 35, "grade": "C", "item": "위태로운 위임 카드","delegation": "--", "knowledge": "0",  "awareness": "검토하니까 거의 새로 써야 하는 글이었다." },
+    "B2R1": { "score": 55, "grade": "B", "item": "반쪽 독후감 카드", "delegation": "0", "knowledge": "0",  "awareness": "AI 도움을 받았지만 확인은 내가 안 했다." },
+    "B2R2": { "score": 65, "grade": "B", "item": "반쪽 독후감 카드", "delegation": "0", "knowledge": "+",  "awareness": "그럴듯한 인용도 그냥 믿으면 위험했다." },
+    "B2R3": { "score": 76, "grade": "A", "item": "검증의 눈 카드",   "delegation": "+",  "knowledge": "+",  "awareness": "AI는 도구고, 기준은 내가 가져야 했다." },
+    "B3R1": { "score": 67, "grade": "B", "item": "반쪽 독후감 카드", "delegation": "+",  "knowledge": "0",  "awareness": "자료를 보고 협업했지만 내 감상은 약했다." },
+    "B3R2": { "score": 74, "grade": "A", "item": "검증의 눈 카드",   "delegation": "+",  "knowledge": "+",  "awareness": "읽은 자료가 있으니 고칠 힘이 생겼다." },
+    "B3R3": { "score": 84, "grade": "A", "item": "검증의 눈 카드",   "delegation": "+",  "knowledge": "++", "awareness": "검색, AI, 내 판단이 같이 움직였다." },
+
+    "C1R1": { "score": 48, "grade": "C", "item": "위태로운 위임 카드","delegation": "-", "knowledge": "0",  "awareness": "내가 썼지만 사실 인터넷 요약의 말이었다." },
+    "C1R2": { "score": 57, "grade": "B", "item": "반쪽 독후감 카드", "delegation": "-", "knowledge": "+",  "awareness": "뻔한 말은 줄였지만 깊이는 부족했다." },
+    "C1R3": { "score": 64, "grade": "B", "item": "반쪽 독후감 카드", "delegation": "0", "knowledge": "+",  "awareness": "확인할수록 직접 안 읽은 티가 났다." },
+    "C2R1": { "score": 38, "grade": "C", "item": "위태로운 위임 카드","delegation": "-", "knowledge": "-",  "awareness": "친구 설명은 줄거리의 그림자 같았다." },
+    "C2R2": { "score": 49, "grade": "C", "item": "위태로운 위임 카드","delegation": "-", "knowledge": "0",  "awareness": "이상한 건 알겠는데 근거가 부족했다." },
+    "C2R3": { "score": 60, "grade": "B", "item": "반쪽 독후감 카드", "delegation": "0", "knowledge": "+",  "awareness": "남이 읽은 책은 내 경험이 될 수 없었다." },
+    "C3R1": { "score": 10, "grade": "D", "item": null,                 "delegation": "--", "knowledge": "--", "awareness": "안 읽고 쓰니 착한 말만 늘어놨다." },
+    "C3R2": { "score": 21, "grade": "D", "item": null,                 "delegation": "--", "knowledge": "-",  "awareness": "틀리진 않아도 독후감 같지는 않았다." },
+    "C3R3": { "score": 30, "grade": "C", "item": "위태로운 위임 카드","delegation": "--", "knowledge": "0",  "awareness": "결국 책 이야기가 아니라 내 상상이었다." }
+  },
+
+  "cardSlots": {
+    "B1R2": { "boostCard": "AI 환각 식별", "bonusPoint": 20, "note": "캥거루 즉시 식별, B1R3급 결과로 상향" },
+    "B1R3": { "boostCard": "검증 방법", "bonusPoint": 15, "note": "크로스체크 효과 강화" },
+    "C3R2": { "boostCard": "비판적 사고", "bonusPoint": 15, "note": "일반론 자가 식별 강화" },
+    "B2R3": { "boostCard": "AI 한계", "bonusPoint": 10, "note": "인용 검증 깊이 강화 → S등급 가능" }
+  },
+
+  "cuts": {
+    "1": "상황 제시",
+    "2": "1차 선택지 (A·B·C)",
+    "3": "2차 선택지 (선택된 1차의 3개)",
+    "4": "결과 (raw 결과물)",
+    "5": "검토 선택 (R1·R2·R3) — 인과 자각의 핵심",
+    "6": "최종 점수 + 획득 아이템"
+  },
+
+  "metadata": {
+    "totalLeafPaths": 27,
+    "gradeDistribution": { "S": 3, "A": 4, "B": 8, "C": 7, "D": 4 },
+    "modelCases": {
+      "exemplar": "B2R3 (76 A) — AI 도구화 + 본인 기준 모범 위임",
+      "warning": "B1R1 (12 D) — 위임 + 검토 X 최악",
+      "deceptive": "C3R1 (10 D) — 우회 + 상상 최악, 학습 메시지 가장 강력",
+      "best": "A1R3 (97 S) — 직접 + 검토 최고"
+    }
+  }
+}
