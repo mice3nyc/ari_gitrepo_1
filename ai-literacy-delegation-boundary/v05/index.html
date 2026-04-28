@@ -1,0 +1,2703 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 리터러시: 위임의 경계 v0.3</title>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; background: #f5f5f5; color: #111; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+.container { max-width: 1100px; width: 100%; padding: 0 24px 80px; }
+
+/* ===== Resource Header Bar (상단 가로 — 시간/에너지) ===== */
+/* ===== Panel Row (좌/우 분할 컨테이너 — sticky) ===== */
+.panel-row { display:none; gap:12px; position:sticky; top:0; z-index:100; max-width:1100px; width:calc(100% - 48px); padding:8px 0; background:transparent; }
+.panel-row.visible { display:flex; }
+
+/* ===== 경험치 + 레벨 표시 (좌측 패널 상단 — Phase 4) ===== */
+.exp-display { display:flex; flex-direction:column; gap:4px; padding:2px 4px 6px; }
+.exp-header { display:flex; align-items:baseline; justify-content:space-between; }
+.exp-level { font-size:15px; font-weight:700; line-height:1; color:#111; }
+.exp-bar { height:6px; width:100%; background:#e0e0e0; overflow:hidden; }
+.exp-bar-fill { height:100%; background:#111; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+.exp-num { font-size:10px; color:#888; line-height:1; }
+.exp-divider { height:1px; background:#e8e8e8; width:100%; }
+
+/* ===== 레벨업 애니메이션 ===== */
+@keyframes flashLevelUp { 0%{background-color:#fff8d0} 50%{background-color:#fff3a0} 100%{background-color:#fff} }
+.resource-bar.flash-levelup { animation:flashLevelUp 0.8s ease; }
+
+/* ===== 좌측 패널 — 자원 게이지 (단방향) ===== */
+.resource-bar { flex:1; display:flex; flex-direction:column; gap:10px; padding:10px 14px; border:2px solid #111; background:#fff; box-shadow:0 2px 0 #111; }
+.resource-item { display:flex; flex-direction:column; padding:2px 4px; position:relative; transition:background-color 0.3s; }
+.resource-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:4px; }
+.resource-name { font-size:11px; color:#555; font-weight:600; letter-spacing:0.5px; }
+.resource-num { font-size:15px; font-weight:700; line-height:1; transition:all 0.3s; }
+.resource-gauge { height:8px; width:100%; background:#e0e0e0; border:1px solid #bbb; overflow:hidden; }
+.resource-gauge-fill { height:100%; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1), background-color 0.6s ease; background:#555; }
+.resource-change-indicator { font-size:12px; font-weight:700; position:absolute; top:50%; right:-4px; transform:translateY(-50%); opacity:0; white-space:nowrap; pointer-events:none; }
+.resource-change-indicator.show { opacity:1; animation:changeFloat 1.8s ease forwards; }
+.resource-change-indicator.up { color:#1a8c1a; }
+.resource-change-indicator.down { color:#888; }
+.resource-item.flash-up { animation:flashGreen 0.8s ease; }
+.resource-item.flash-down { animation:flashGray 0.8s ease; }
+@keyframes flashGray { 0%{background-color:rgba(80,80,80,0.10)} 100%{background-color:transparent} }
+
+/* ===== 우측 패널 — 역량(양방향) + 점수 + 진행 ===== */
+.stats-bar { flex:1; display:flex; flex-direction:column; gap:10px; padding:10px 14px; border:2px solid #111; background:#fff; box-shadow:0 2px 0 #111; }
+.stat { display:flex; flex-direction:column; padding:2px 4px; position:relative; transition:background-color 0.3s; }
+.stat-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:4px; }
+.stat-name { font-size:12px; color:#555; font-weight:600; }
+.stat-num { font-size:18px; font-weight:700; line-height:1; transition:all 0.3s; }
+
+/* === 양방향 바 (Diverging Bar) — 위임 판단 / 문해력 전용 === */
+.bipolar-gauge { position:relative; height:10px; width:100%; background:#f5f5f5; border:1px solid #ccc; overflow:hidden; }
+.bipolar-zero { position:absolute; left:50%; top:-2px; bottom:-2px; width:1px; background:#111; z-index:2; }
+.bipolar-fill { position:absolute; top:0; bottom:0; width:0; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1), left 0.3s ease, right 0.3s ease, background-color 0.6s ease; }
+.bipolar-fill.positive { left:50%; right:auto; background:#1a8c1a; }
+.bipolar-fill.negative { right:50%; left:auto; background:#c44; }
+.bipolar-labels { display:flex; justify-content:space-between; font-size:9px; color:#aaa; margin-top:2px; line-height:1; letter-spacing:0.5px; }
+.stat-num.positive { color:#1a8c1a; }
+.stat-num.negative { color:#c44; }
+
+.stat-change-indicator { font-size:13px; font-weight:700; position:absolute; top:50%; right:-4px; transform:translateY(-50%); opacity:0; white-space:nowrap; pointer-events:none; }
+.stat-change-indicator.show { opacity:1; animation:changeFloat 1.8s ease forwards; }
+.stat-change-indicator.up { color:#1a8c1a; }
+.stat-change-indicator.down { color:#c44; }
+@keyframes changeFloat { 0%{opacity:0;transform:translateY(-50%) translateX(0)} 15%{opacity:1;transform:translateY(-50%) translateX(8px)} 70%{opacity:1} 100%{opacity:0;transform:translateY(-50%) translateX(16px)} }
+@keyframes numPulse { 0%{transform:scale(1)} 30%{transform:scale(1.4)} 100%{transform:scale(1)} }
+.stat-num.pulsing { animation:numPulse 0.5s ease; }
+@keyframes flashGreen { 0%{background-color:rgba(26,140,26,0.12)} 100%{background-color:transparent} }
+@keyframes flashRed { 0%{background-color:rgba(204,68,68,0.12)} 100%{background-color:transparent} }
+.stat.flash-up { animation:flashGreen 0.8s ease; }
+.stat.flash-down { animation:flashRed 0.8s ease; }
+
+.stats-divider { height:1px; width:100%; background:#ddd; }
+.stat-progress { font-size:11px; color:#999; font-weight:600; white-space:nowrap; align-self:flex-end; }
+.score-stat { font-size:12px; font-weight:700; padding:5px 10px; border:1.5px solid #111; background:#111; color:#fff; text-align:center; }
+
+/* ===== Overlay (Start) ===== */
+.overlay-card { display:flex; align-items:center; justify-content:center; min-height:480px; animation:overlayIn 0.5s ease; }
+@keyframes overlayIn { from{opacity:0} to{opacity:1} }
+.card-inner { text-align:center; max-width:480px; padding:40px 24px; }
+.card-inner h1 { font-size:22px; font-weight:700; margin-bottom:6px; }
+.card-inner .subtitle { font-size:15px; color:#666; margin-bottom:8px; }
+.card-inner .vtag { font-size:12px; color:#888; margin-bottom:18px; letter-spacing:1px; }
+.card-inner p { font-size:14px; color:#555; margin-bottom:28px; line-height:1.8; }
+.start-btn { background:#111; color:#fff; border:2px solid #111; padding:14px 40px; font-size:14px; font-family:'Paperlogy',sans-serif; cursor:pointer; transition:all 0.2s; box-shadow:0 2px 0 #000; display:inline-block; margin:4px; }
+.start-btn:hover { background:#444; border-color:#444; }
+.start-btn:active { box-shadow:none; transform:translateY(2px); }
+.start-btn.secondary { background:#fff; color:#111; }
+.start-btn.secondary:hover { background:#eee; }
+
+/* ===== Binder ===== */
+.binder-divider { height:60px; width:100%; display:flex; align-items:center; background:#f8f8f8; background-image:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.03) 3px,rgba(0,0,0,0.03) 4px); border-top:1px solid #ccc; border-bottom:1px solid #ccc; margin:16px 0 20px; padding:0 20px; }
+.binder-title { font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; }
+.binder-subtitle { font-size:11px; color:#888; margin-top:2px; }
+
+/* ===== 6-Cut Panel Grid ===== */
+.scenario-row { position:relative; margin-bottom:32px; }
+.panels-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.panels-row2 { margin-top:12px; }
+
+/* ===== Panel ===== */
+.panel { border:1px dashed #ccc; background:#fafafa; display:flex; flex-direction:column; overflow:hidden; transition:all 0.3s ease-out; min-height:380px; }
+.panel.active, .panel.done { border:2px solid #111; background:#fff; box-shadow:0 2px 4px rgba(0,0,0,0.06); }
+.panel.slide-in { animation:panelSlideIn 0.4s ease-out; }
+@keyframes panelSlideIn { from{opacity:0;transform:translateX(30px)} to{opacity:1;transform:translateX(0)} }
+.panel-image { width:100%; aspect-ratio:1/1; border-bottom:1px solid #eee; display:flex; align-items:center; justify-content:center; background:#f0f0f0; overflow:hidden; flex-shrink:0; position:relative; }
+.panel.active .panel-image img, .panel.done .panel-image img { width:100%; height:100%; object-fit:cover; }
+.cut-label { font-size:48px; font-weight:200; color:#ddd; }
+.cut-num { position:absolute; top:6px; left:8px; font-size:10px; font-weight:700; color:#999; background:rgba(255,255,255,0.85); padding:2px 6px; letter-spacing:1px; }
+.panel-place { font-size:10px; color:#999; position:absolute; bottom:4px; right:8px; background:rgba(255,255,255,0.8); padding:1px 6px; }
+.panel-body { flex:1; padding:12px 14px; overflow-y:auto; font-size:13px; line-height:1.7; }
+.panel-body p { margin-bottom:6px; }
+.panel-body .highlight { font-weight:700; }
+.panel-body .core-q { font-weight:600; font-size:14px; margin:6px 0; padding:6px 0; border-top:1px solid #eee; }
+.advance-wrap { text-align:center; margin-top:10px; }
+.advance-btn { background:#111; color:#fff; border:2px solid #111; padding:8px 24px; font-size:12px; font-family:'Paperlogy',sans-serif; cursor:pointer; box-shadow:0 2px 0 #000; transition:all 0.2s; }
+.advance-btn:hover { background:#444; }
+.advance-btn:active { box-shadow:none; transform:translateY(2px); }
+
+/* ===== Choice Cards ===== */
+.choices-area { padding:8px; display:flex; flex-direction:column; gap:8px; height:100%; }
+.choices-q { font-size:14px; font-weight:700; padding:6px 0 8px; color:#111; }
+.chosen-summary { padding:14px; border:2px solid #111; background:#fff; animation:panelSlideIn 0.4s ease; }
+.chosen-label { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#888; margin-bottom:6px; }
+.chosen-title { font-size:14px; font-weight:700; margin-bottom:4px; }
+.chosen-way { font-size:12px; color:#444; line-height:1.6; }
+.choice-card { display:flex; background:#fff; color:#111; border:2px solid #111; padding:0; cursor:pointer; user-select:none; transition:all 0.2s; box-shadow:0 2px 0 #111; opacity:0; transform:translateY(12px); overflow:hidden; }
+.choice-card.visible { opacity:1; transform:translateY(0); }
+.choice-card:hover { transform:translateX(4px); box-shadow:0 2px 0 #111,0 4px 10px rgba(0,0,0,0.08); }
+.choice-card:active { box-shadow:none; transform:translateY(2px); }
+.choice-num { background:#111; color:#fff; width:30px; padding:14px 0; text-align:center; font-size:14px; font-weight:700; line-height:1.6; flex-shrink:0; }
+.choice-body { flex:1; padding:12px 14px; min-width:0; }
+.choice-text { font-size:13px; font-weight:600; line-height:1.5; margin-bottom:3px; }
+.choice-desc { font-size:11px; color:#666; line-height:1.5; }
+.delegation-tag { display:inline-block; font-size:10px; font-weight:700; padding:1px 5px; margin-top:4px; background:#f0f0f0; border:1px solid #ccc; color:#555; letter-spacing:0.5px; }
+.review-hint-tag { display:inline-block; font-size:10px; font-weight:700; padding:1px 5px; margin-top:4px; background:#f0f0f0; border:1px solid #ccc; color:#555; letter-spacing:0.3px; }
+.hint-toggle-wrap { margin-top:14px; padding-top:12px; border-top:1px solid #ddd; text-align:left; }
+.hint-toggle-label { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:#444; cursor:pointer; user-select:none; }
+.hint-toggle-input { width:14px; height:14px; cursor:pointer; }
+.hint-toggle-note { font-size:11px; color:#888; font-weight:400; }
+@keyframes choiceFadeOut { to{opacity:0;transform:translateX(16px) scale(0.96)} }
+.choice-card.fade-out { animation:choiceFadeOut 0.3s ease forwards; pointer-events:none; }
+
+/* ===== Result Block ===== */
+.result-text { border:2px solid #111; padding:12px; background:#fafafa; font-size:13px; line-height:1.7; margin-bottom:8px; }
+.result-meta { font-size:11px; color:#888; margin-bottom:8px; }
+
+/* ===== Final Block ===== */
+.final-score { text-align:center; padding:8px 0; }
+.final-grade { font-size:48px; font-weight:700; line-height:1; }
+.final-grade.S, .final-grade.A { color:#1a8c1a; }
+.final-grade.B { color:#111; }
+.final-grade.C { color:#e65100; }
+.final-grade.D { color:#c44; }
+.final-num { font-size:18px; font-weight:700; margin-top:2px; }
+.final-item { border:2px solid #111; padding:10px 12px; margin:8px 0; text-align:center; background:#fff; }
+.final-item-label { font-size:10px; color:#888; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+.final-item-name { font-size:14px; font-weight:700; }
+.final-item.empty { background:#f5f5f5; color:#888; border-color:#ccc; }
+.awareness { font-size:13px; line-height:1.7; padding:10px; border-left:3px solid #111; background:#fafafa; margin-top:8px; }
+
+/* ===== Next Button ===== */
+.next-btn-wrap { text-align:center; margin-top:20px; opacity:0; transition:opacity 0.4s; pointer-events:none; }
+.next-btn-wrap.visible { opacity:1; pointer-events:auto; }
+.next-btn { background:#111; color:#fff; border:2px solid #111; padding:10px 28px; font-size:13px; font-family:'Paperlogy',sans-serif; cursor:pointer; transition:all 0.2s; box-shadow:0 2px 0 #000; }
+.next-btn:hover { background:#444; }
+.next-btn:active { box-shadow:none; transform:translateY(2px); }
+
+/* ===== Report ===== */
+.report-overlay { min-height:480px; padding:40px 0; animation:overlayIn 0.5s ease; }
+.report-inner { max-width:540px; width:100%; margin:0 auto; text-align:center; }
+.report-inner h2 { font-size:20px; margin-bottom:24px; }
+.report-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:20px; }
+.report-stat-box { background:#fff; border:2px solid #111; padding:14px; box-shadow:0 2px 0 rgba(0,0,0,0.1); }
+.report-stat-num { font-size:28px; font-weight:700; }
+.report-stat-label { font-size:11px; color:#888; margin-top:2px; }
+.report-comment { font-size:14px; line-height:1.8; text-align:left; margin-bottom:20px; padding:16px; background:#fff; border:2px solid #111; box-shadow:0 2px 0 rgba(0,0,0,0.1); }
+
+/* ===== Debug ===== */
+.debug-toggle { position:fixed; bottom:10px; right:10px; background:#333; color:#fff; border:none; padding:5px 10px; font-size:10px; cursor:pointer; z-index:300; font-family:monospace; }
+.debug-panel { display:none; position:fixed; bottom:36px; right:10px; background:#1a1a1a; color:#ddd; padding:14px; font-size:11px; font-family:monospace; z-index:300; max-width:380px; max-height:60vh; overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
+.debug-panel.active { display:block; }
+.debug-section { margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid #333; }
+.debug-label { color:#888; font-size:9px; text-transform:uppercase; margin-bottom:3px; }
+.debug-buttons { display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; }
+.debug-btn { background:#333; color:#ddd; border:1px solid #555; padding:3px 7px; font-size:10px; cursor:pointer; font-family:monospace; }
+.debug-btn:hover { background:#444; }
+.version { position:fixed; bottom:6px; left:12px; font-size:10px; color:#ccc; }
+
+@media (max-width:800px) {
+  .panels-grid { grid-template-columns:1fr; }
+  .panel-row { flex-direction:column; }
+}
+/* v0.5 — 시나리오 선택 + 학기 프로그레스 */
+.semester-frame { max-width:640px; margin:0 auto; padding:32px 20px; }
+.semester-frame h1 { font-size:22px; font-weight:700; margin-bottom:6px; text-align:center; }
+.semester-frame .subtitle { font-size:14px; color:#666; margin-bottom:6px; text-align:center; }
+.semester-frame .vtag { font-size:11px; color:#999; margin-bottom:24px; letter-spacing:1px; text-align:center; }
+.progress-wrap { margin:16px 0 28px; }
+.progress-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
+.progress-head .progress-label { font-size:13px; color:#444; font-weight:600; }
+.progress-head .progress-count { font-size:13px; color:#222; font-variant-numeric:tabular-nums; }
+.progress-bar { height:8px; background:#eee; border:1px solid #ddd; position:relative; overflow:hidden; }
+.progress-fill { height:100%; background:#111; transition:width 0.4s ease; }
+.progress-dots { display:flex; justify-content:space-between; margin-top:8px; }
+.progress-dot { width:8px; height:8px; border-radius:50%; background:#eee; border:1px solid #ccc; }
+.progress-dot.cleared { background:#111; border-color:#111; }
+.progress-dot.next { background:#fff; border:2px solid #111; }
+.scenario-list { display:flex; flex-direction:column; gap:10px; }
+.scenario-card { display:flex; align-items:center; gap:12px; padding:14px 16px; border:1px solid #ddd; background:#fff; cursor:pointer; transition:all 0.15s; text-align:left; font-family:inherit; }
+.scenario-card:hover:not(.cleared) { background:#f6f6f6; border-color:#aaa; }
+.scenario-card .sc-num { width:28px; height:28px; border:1px solid #aaa; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; color:#444; flex-shrink:0; }
+.scenario-card .sc-body { flex:1; }
+.scenario-card .sc-title { font-size:14px; font-weight:600; color:#222; margin-bottom:2px; }
+.scenario-card .sc-meta { font-size:12px; color:#888; }
+.scenario-card .sc-mark { font-size:13px; color:#888; flex-shrink:0; }
+.scenario-card.next { border:2px solid #111; padding:13px 15px; background:#fafafa; }
+.scenario-card.next .sc-num { background:#111; color:#fff; border-color:#111; }
+.scenario-card.next .sc-mark { color:#111; font-weight:600; }
+.scenario-card.cleared { background:#f3f3f3; color:#888; cursor:default; opacity:0.7; }
+.scenario-card.cleared .sc-num { background:#888; color:#fff; border-color:#888; }
+.scenario-card.cleared .sc-title { text-decoration:line-through; color:#888; }
+.scenario-card.cleared .sc-mark { color:#444; }
+.semester-actions { margin-top:24px; text-align:center; }
+.semester-actions .start-btn { margin:6px; }
+.semester-final { padding:24px; background:#fafafa; border:1px solid #ddd; margin:20px 0; text-align:center; }
+.semester-final h2 { font-size:18px; margin-bottom:12px; }
+.semester-final p { font-size:13px; color:#555; line-height:1.7; }
+</style>
+</head>
+<body>
+<!-- 좌/우 패널 (sticky) — 좌:자원 / 우:역량+점수+진행 -->
+<div class="panel-row" id="panel-row">
+  <!-- 좌측: 경험치/레벨 + 자원 게이지 (시간/에너지) -->
+  <div class="resource-bar" id="resource-bar">
+    <!-- 경험치 + 레벨 (Phase 4 — SPEC §5.2) -->
+    <div class="exp-display" id="exp-display">
+      <div class="exp-header">
+        <span class="exp-level" id="exp-level">Lv.1</span>
+        <span class="exp-num" id="exp-num">0/20</span>
+      </div>
+      <div class="exp-bar"><div class="exp-bar-fill" id="exp-bar-fill" style="width:0%"></div></div>
+    </div>
+    <div class="exp-divider"></div>
+    <div class="resource-item" id="res-time"><div class="resource-change-indicator" id="rdelta-time"></div><div class="resource-header"><span class="resource-name">시간</span><span class="resource-num" id="rnum-time">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-time" style="width:100%"></div></div></div>
+    <div class="resource-item" id="res-energy"><div class="resource-change-indicator" id="rdelta-energy"></div><div class="resource-header"><span class="resource-name">에너지</span><span class="resource-num" id="rnum-energy">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-energy" style="width:100%"></div></div></div>
+  </div>
+  <!-- 우측: 역량(양방향 바) + 점수 + 진행 -->
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat" id="stat-delegation">
+      <div class="stat-change-indicator" id="delta-delegation"></div>
+      <div class="stat-header"><span class="stat-name">위임 판단</span><span class="stat-num" id="num-delegation">0</span></div>
+      <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-delegation"></div></div>
+      <div class="bipolar-labels"><span>-4</span><span>+4</span></div>
+    </div>
+    <div class="stat" id="stat-knowledge">
+      <div class="stat-change-indicator" id="delta-knowledge"></div>
+      <div class="stat-header"><span class="stat-name">문해력</span><span class="stat-num" id="num-knowledge">0</span></div>
+      <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-knowledge"></div></div>
+      <div class="bipolar-labels"><span>-4</span><span>+4</span></div>
+    </div>
+    <div class="stats-divider"></div>
+    <div class="score-stat" id="score-stat">점수 0</div>
+    <div class="stats-divider"></div>
+    <div class="stat-progress" id="stat-progress">컷 1/6</div>
+  </div>
+</div>
+<div class="container" id="main-container"></div>
+<button class="debug-toggle" onclick="toggleDebug()">DEBUG</button>
+<div class="debug-panel" id="debug-panel"></div>
+<div class="version">v0.5 — 5개 시나리오 학기 Arc (개발 중)</div>
+
+<script>
+// =====================================================
+// 3. Config
+// =====================================================
+var CONFIG={
+  storageKey:'ai-literacy-delegation-boundary-v05',
+  eventLogKey:'ai-literacy-delegation-boundary-v05-events',
+  sessionIdKey:'ai-literacy-v05-session-id',
+  version:'v0.5',
+  scenarios:['selfintro','groupwork','eorinwangja','career','studyplan'],
+  pointThresholds:{S:90,A:70,B:50,C:30},
+  cardBoost:20,
+  detectedIssueBoost:10,
+  // v0.4 신규 (SPEC §12) — Phase 3 이후 사용
+  resourceMaxStart:{time:100,energy:100},
+  recoverBase:0.70,
+  gradeBonus:{S:0.60,A:0.47,B:0.34,C:0.22,D:0.10},
+  expThresholds:[0,20,40,65,100],
+  meterMaxByLevel:{
+    1:{time:100,energy:100},
+    2:{time:110,energy:110},
+    3:{time:125,energy:125},
+    4:{time:145,energy:145},
+    5:{time:170,energy:170}
+  },
+  // deprecated — Phase 5에서 levelStep+levelExtraBonus로 대체 (키는 혹시 모를 참조 보호를 위해 유지)
+  levelDetectBonus:{1:0,2:0,3:2,4:3,5:4},
+  // Phase 5 신규: C안 검토 격상 메커닉 (SPEC §3.4 구현 정정)
+  levelStep:{1:0,2:0,3:1,4:1,5:2},       // 레벨별 검토 인덱스 격상 폭 (L3부터 +1, L5는 +2)
+  levelExtraBonus:{1:0,2:0,3:0,4:5,5:10}, // 격상 천장 후 미세 보너스 (L4=+5, L5=+10)
+  hintEnabledDefault:false
+};
+var DELEGATION_DELTA={'++':2,'+':1,'0':0,'-':-1,'--':-2};
+var GRADE_LABEL={S:'S',A:'A',B:'B',C:'C',D:'D'};
+
+// =====================================================
+// 4. Scenario Data — 어린왕자 (인라인 JSON, file:// 호환)
+// =====================================================
+var SCENARIO_EORINWANGJA = {
+  "id": "eorinwangja",
+  "category": 3,
+  "categoryName": "본인 경험 기반",
+  "title": "어린왕자 독후감",
+  "version": "v1",
+  "learningMessage": "경험은 위임 불가. 본인이 안 한 일은 AI도, 인터넷도, 친구도 대신해 줄 수 없다.",
+  "aiSuitability": "low",
+  "timeBudgetSec": 720,
+  "situation": {
+    "text": "어린왕자 독후감을 100자로 써야 하는데 책을 안 읽었습니다.",
+    "image": "../images/s01_ch1.webp"
+  },
+  "tier1": [
+    { "id": "A", "label": "책을 읽고 쓴다", "desc": "직접 읽는 길을 선택한다." },
+    { "id": "B", "label": "AI에게 맡긴다", "desc": "위임의 깊이를 선택한다." },
+    { "id": "C", "label": "안 읽고 직접 쓴다", "desc": "우회의 방식을 선택한다." }
+  ],
+  "tier2": {
+    "A": [
+      { "id": "A1", "label": "전체 정독 후 본인 감상으로 작성", "delegation": "++" },
+      { "id": "A2", "label": "요약본·줄거리 위주로 빠르게 읽고 작성", "delegation": "+" },
+      { "id": "A3", "label": "첫 챕터만 읽고 나머지는 추측해서 작성", "delegation": "0" }
+    ],
+    "B": [
+      { "id": "B1", "label": "그냥 부탁", "delegation": "--" },
+      { "id": "B2", "label": "키워드·인용을 받고 본인이 정리", "delegation": "0" },
+      { "id": "B3", "label": "검색 후 AI 협업", "delegation": "+" }
+    ],
+    "C": [
+      { "id": "C1", "label": "인터넷 줄거리 요약만 보고 직접 작성", "delegation": "-" },
+      { "id": "C2", "label": "친구에게 줄거리 듣고 직접 작성", "delegation": "-" },
+      { "id": "C3", "label": "대충 상상해서 직접 작성", "delegation": "--" }
+    ]
+  },
+  "results": {
+    "A1": { "text": "어린왕자는 별들을 지나며 어른들이 숫자와 소유에 갇힌 모습을 본다. 나는 여우의 말처럼 관계는 시간을 들여 길들일 때 특별해진다는 점이 가장 오래 남았다.", "basePoint": 91, "deltaR2": 3,  "deltaR3": 6,  "summary": "경험이 살아난 독후감" },
+    "A2": { "text": "어린왕자는 여러 별을 여행하며 이상한 어른들을 만나고 지구에서 여우를 만난다. 중요한 것은 눈에 보이지 않는다는 말이 인상 깊었고, 관계의 소중함을 느꼈다.", "basePoint": 68, "deltaR2": 6,  "deltaR3": 12, "summary": "줄거리는 맞지만 얕음" },
+    "A3": { "text": "어린왕자는 비행기 조종사를 만나 자기 별 이야기를 들려준다. 아마 그는 많은 친구를 사귀며 성장했고, 마지막에는 모두와 함께 행복하게 별로 돌아갔을 것 같다.", "basePoint": 42, "deltaR2": 10, "deltaR3": 21, "summary": "초반 감상 뒤 추측" },
+    "B1": { "text": "어린왕자는 사막에서 여우와 캥거루를 만나 모험을 한다. 그는 장미를 구하기 위해 여러 행성을 돌며 용기를 배우고, 마지막에는 친구들과 왕국을 세운다.", "basePoint": 12, "deltaR2": 12, "deltaR3": 23, "summary": "환각 섞인 AI 글", "hiddenIssues": ["캥거루 (책에 없음)","왕국 세움 (책에 없음)","전체 구조 책과 어긋남"] },
+    "B2": { "text": "어린왕자는 여러 별에서 어른들의 이상한 태도를 본다. \"가장 중요한 것은 마음으로 본다\"는 말처럼, 나는 관계와 책임이 이 책의 핵심이라고 생각했다.", "basePoint": 55, "deltaR2": 10, "deltaR3": 21, "summary": "협업했지만 인용 불안" },
+    "B3": { "text": "어린왕자는 장미를 떠나 여러 별을 지나 지구에 온다. 여우를 만나 길들임의 의미를 배우고, 자기 장미가 특별한 이유가 함께 보낸 시간 때문임을 깨닫는다.", "basePoint": 67, "deltaR2": 7,  "deltaR3": 17, "summary": "줄거리는 맞지만 덜 개인적" },
+    "C1": { "text": "어린왕자는 여러 행성을 여행하며 어른들의 어리석음을 보고, 지구에서 여우를 만난다. 이 이야기는 순수한 마음과 사랑이 중요하다는 교훈을 주는 책이다.", "basePoint": 48, "deltaR2": 9,  "deltaR3": 16, "summary": "요약 의존 독후감" },
+    "C2": { "text": "어린왕자는 자기 별에서 장미와 싸우고 지구로 와서 여우와 뱀을 만난다. 친구 말로는 마지막에 별로 돌아간다는데, 그래서 이 책은 이별에 관한 이야기 같다.", "basePoint": 38, "deltaR2": 11, "deltaR3": 22, "summary": "전달 오류가 섞임" },
+    "C3": { "text": "어린왕자는 어린아이의 순수한 마음을 가진 왕자가 세상을 여행하는 이야기다. 우리는 모두 꿈을 잃지 말고 착하게 살아야 하며, 친구를 소중히 해야 한다.", "basePoint": 10, "deltaR2": 11, "deltaR3": 20, "summary": "일반론뿐인 글" }
+  },
+  "reviews": [
+    { "id": "R1", "label": "그대로 제출",                "desc": "검토 없이 그대로 낸다.",        "boostType": "none" },
+    { "id": "R2", "label": "한 번 읽고 이상한 곳만 표시", "desc": "명시적인 환각·오류만 발견.",     "boostType": "explicit" },
+    { "id": "R3", "label": "출처 확인 + 크로스체크",      "desc": "미세 오류까지 발견.",            "boostType": "all" }
+  ],
+  "reviewSupplements": {
+    "A1R2":"문장 반복과 어색한 표현만 조금 발견된다. 점수 +3.",
+    "A1R3":"실제 장면과 감상이 잘 맞는지 확인한다. 발견 사항은 미미하다. 점수 +6.",
+    "A2R2":"일반적인 감상 표현이 많다는 점을 발견한다. 점수 +6.",
+    "A2R3":"요약에 빠진 장미와 책임의 맥락을 보완한다. 점수 +12.",
+    "A3R2":"\"모두와 행복하게\" 같은 추측 표현을 발견한다. 점수 +10.",
+    "A3R3":"결말과 핵심 주제가 실제와 다름을 확인한다. 점수 +21.",
+    "B1R2":"책에 없는 캥거루와 왕국 설정을 발견한다. 점수 +12.",
+    "B1R3":"환각뿐 아니라 전체 구조가 책과 어긋남을 확인한다. 점수 +23.",
+    "B2R2":"인용 문장이 정확하지 않다는 느낌을 잡는다. 점수 +10.",
+    "B2R3":"실제 문장과 의미를 대조해 인용과 감상을 정리한다. 점수 +21.",
+    "B3R2":"AI식 매끈한 표현과 덜 개인적인 문장을 발견한다. 점수 +7.",
+    "B3R3":"검색 출처와 책의 핵심 장면을 대조해 근거를 강화한다. 점수 +17.",
+    "C1R2":"\"사랑이 중요하다\" 같은 뻔한 표현을 발견한다. 점수 +9.",
+    "C1R3":"요약만으로는 책임의 뉘앙스가 빠졌음을 확인한다. 점수 +16.",
+    "C2R2":"친구에게 들은 표현이 모호하고 근거가 약함을 발견한다. 점수 +11.",
+    "C2R3":"뱀과 결말에 대한 잘못된 이해를 확인하고 수정한다. 점수 +22.",
+    "C3R2":"틀린 말은 적지만 책의 구체 장면이 없음을 발견한다. 점수 +11.",
+    "C3R3":"책 내용과 거의 연결되지 않는 일반론임을 확인한다. 점수 +20."
+  },
+  "finals": {
+    "A1R1":{"score":91,"grade":"S","item":"깊은 독서가 카드","delegation":"++","knowledge":"+", "awareness":"다 읽으니 독후감이 내 말처럼 나왔다."},
+    "A1R2":{"score":94,"grade":"S","item":"깊은 독서가 카드","delegation":"++","knowledge":"+", "awareness":"한 번 읽어보니 문장이 더 정리됐다."},
+    "A1R3":{"score":97,"grade":"S","item":"깊은 독서가 카드","delegation":"++","knowledge":"++","awareness":"확인까지 하니까 발표해도 덜 떨릴 것 같다."},
+    "A2R1":{"score":68,"grade":"B","item":"반쪽 독후감 카드","delegation":"+", "knowledge":"0", "awareness":"줄거리는 맞는데 내 생각은 좀 얕았다."},
+    "A2R2":{"score":74,"grade":"A","item":"검증의 눈 카드",  "delegation":"+", "knowledge":"+", "awareness":"이상한 표현을 고치니 조금 살아났다."},
+    "A2R3":{"score":80,"grade":"A","item":"검증의 눈 카드",  "delegation":"+", "knowledge":"+", "awareness":"요약만 보면 놓치는 게 꽤 있었다."},
+    "A3R1":{"score":42,"grade":"C","item":"위태로운 위임 카드","delegation":"0","knowledge":"-", "awareness":"초반만 읽고 끝까지 아는 척했다."},
+    "A3R2":{"score":52,"grade":"B","item":"반쪽 독후감 카드","delegation":"0","knowledge":"0", "awareness":"내가 읽은 부분과 상상한 부분이 섞였다."},
+    "A3R3":{"score":63,"grade":"B","item":"반쪽 독후감 카드","delegation":"0","knowledge":"+", "awareness":"확인해 보니 결말도 느낌도 달랐다."},
+    "B1R1":{"score":12,"grade":"D","item":null,             "delegation":"--","knowledge":"--","awareness":"책도 안 읽고 맡기니 캥거루까지 나왔다."},
+    "B1R2":{"score":24,"grade":"D","item":null,             "delegation":"--","knowledge":"-", "awareness":"한 번 읽었더니 큰 오류는 보였다."},
+    "B1R3":{"score":35,"grade":"C","item":"위태로운 위임 카드","delegation":"--","knowledge":"0", "awareness":"검토하니까 거의 새로 써야 하는 글이었다."},
+    "B2R1":{"score":55,"grade":"B","item":"반쪽 독후감 카드","delegation":"0","knowledge":"0", "awareness":"AI 도움을 받았지만 확인은 내가 안 했다."},
+    "B2R2":{"score":65,"grade":"B","item":"반쪽 독후감 카드","delegation":"0","knowledge":"+", "awareness":"그럴듯한 인용도 그냥 믿으면 위험했다."},
+    "B2R3":{"score":76,"grade":"A","item":"검증의 눈 카드",  "delegation":"+","knowledge":"+", "awareness":"AI는 도구고, 기준은 내가 가져야 했다."},
+    "B3R1":{"score":67,"grade":"B","item":"반쪽 독후감 카드","delegation":"+","knowledge":"0", "awareness":"자료를 보고 협업했지만 내 감상은 약했다."},
+    "B3R2":{"score":74,"grade":"A","item":"검증의 눈 카드",  "delegation":"+","knowledge":"+", "awareness":"읽은 자료가 있으니 고칠 힘이 생겼다."},
+    "B3R3":{"score":84,"grade":"A","item":"검증의 눈 카드",  "delegation":"+","knowledge":"++","awareness":"검색, AI, 내 판단이 같이 움직였다."},
+    "C1R1":{"score":48,"grade":"C","item":"위태로운 위임 카드","delegation":"-","knowledge":"0", "awareness":"내가 썼지만 사실 인터넷 요약의 말이었다."},
+    "C1R2":{"score":57,"grade":"B","item":"반쪽 독후감 카드","delegation":"-","knowledge":"+", "awareness":"뻔한 말은 줄였지만 깊이는 부족했다."},
+    "C1R3":{"score":64,"grade":"B","item":"반쪽 독후감 카드","delegation":"0","knowledge":"+", "awareness":"확인할수록 직접 안 읽은 티가 났다."},
+    "C2R1":{"score":38,"grade":"C","item":"위태로운 위임 카드","delegation":"-","knowledge":"-", "awareness":"친구 설명은 줄거리의 그림자 같았다."},
+    "C2R2":{"score":49,"grade":"C","item":"위태로운 위임 카드","delegation":"-","knowledge":"0", "awareness":"이상한 건 알겠는데 근거가 부족했다."},
+    "C2R3":{"score":60,"grade":"B","item":"반쪽 독후감 카드","delegation":"0","knowledge":"+", "awareness":"남이 읽은 책은 내 경험이 될 수 없었다."},
+    "C3R1":{"score":10,"grade":"D","item":null,             "delegation":"--","knowledge":"--","awareness":"안 읽고 쓰니 착한 말만 늘어놨다."},
+    "C3R2":{"score":21,"grade":"D","item":null,             "delegation":"--","knowledge":"-", "awareness":"틀리진 않아도 독후감 같지는 않았다."},
+    "C3R3":{"score":30,"grade":"C","item":"위태로운 위임 카드","delegation":"--","knowledge":"0", "awareness":"결국 책 이야기가 아니라 내 상상이었다."}
+  },
+  "cardSlots": {
+    "B1R2":{"boostCard":"AI 환각 식별","bonusPoint":20,"note":"캥거루 즉시 식별, B1R3급 결과로 상향"},
+    "B1R3":{"boostCard":"검증 방법","bonusPoint":15,"note":"크로스체크 효과 강화"},
+    "C3R2":{"boostCard":"비판적 사고","bonusPoint":15,"note":"일반론 자가 식별 강화"},
+    "B2R3":{"boostCard":"AI 한계","bonusPoint":10,"note":"인용 검증 깊이 강화 → S등급 가능"}
+  },
+  "resourceCosts": {
+    "A1R1":{"time":90,"energy":80},
+    "A1R2":{"time":95,"energy":85},
+    "A1R3":{"time":100,"energy":90},
+    "A2R1":{"time":70,"energy":60},
+    "A2R2":{"time":75,"energy":65},
+    "A2R3":{"time":80,"energy":70},
+    "A3R1":{"time":50,"energy":40},
+    "A3R2":{"time":55,"energy":45},
+    "A3R3":{"time":60,"energy":50},
+    "B1R1":{"time":30,"energy":15},
+    "B1R2":{"time":40,"energy":25},
+    "B1R3":{"time":55,"energy":45},
+    "B2R1":{"time":25,"energy":10},
+    "B2R2":{"time":35,"energy":20},
+    "B2R3":{"time":50,"energy":40},
+    "B3R1":{"time":15,"energy":5},
+    "B3R2":{"time":25,"energy":15},
+    "B3R3":{"time":40,"energy":35},
+    "C1R1":{"time":40,"energy":30},
+    "C1R2":{"time":50,"energy":40},
+    "C1R3":{"time":65,"energy":55},
+    "C2R1":{"time":25,"energy":15},
+    "C2R2":{"time":35,"energy":25},
+    "C2R3":{"time":50,"energy":40},
+    "C3R1":{"time":10,"energy":5},
+    "C3R2":{"time":20,"energy":10},
+    "C3R3":{"time":35,"energy":25}
+  },
+  "expRewards": {
+    "A1R1":25,"A1R2":25,"A1R3":25,
+    "A2R1":18,"A2R2":18,"A2R3":18,
+    "A3R1":12,"A3R2":12,"A3R3":12,
+    "B1R1":8, "B1R2":10,"B1R3":14,
+    "B2R1":6, "B2R2":8, "B2R3":12,
+    "B3R1":3, "B3R2":5, "B3R3":10,
+    "C1R1":5, "C1R2":7, "C1R3":9,
+    "C2R1":3, "C2R2":5, "C2R3":7,
+    "C3R1":1, "C3R2":2, "C3R3":4
+  },
+  "cuts": {
+    "1":"상황 제시",
+    "2":"1차 선택지 (A·B·C)",
+    "3":"2차 선택지 (선택된 1차의 3개)",
+    "4":"결과 (raw 결과물)",
+    "5":"검토 선택 (R1·R2·R3) — 인과 자각의 핵심",
+    "6":"최종 점수 + 획득 아이템"
+  }
+};
+
+// 시나리오당 6컷 이미지 매핑 (이번 빌드는 기존 3컷 재사용)
+// 컷1 상황 → s01_ch1 / 컷2 1차 → s01_ch1 / 컷3 2차 → s01_ch2
+// 컷4 결과 → s01_ch2 / 컷5 검토 → s01_ch3 / 컷6 최종 → s01_ch3
+var CUT_IMAGES = {
+  1:'../images/s01_ch1.webp',
+  2:'../images/s01_ch1.webp',
+  3:'../images/s01_ch2.webp',
+  4:'../images/s01_ch2.webp',
+  5:'../images/s01_ch3.webp',
+  6:'../images/s01_ch3.webp'
+};
+
+var SCENARIO_selfintro = {
+  "id": "selfintro",
+  "category": 1,
+  "categoryName": "새 학기",
+  "title": "자기소개 글",
+  "version": "v1",
+  "learningMessage": "AI가 쓴 자기소개에는 내가 말하지 않은 내가 섞일 수 있다.",
+  "aiSuitability": "mid",
+  "timeBudgetSec": 720,
+  "situation": {
+    "text": "새 학기 첫날, 선생님이 반 게시판에 붙일 자기소개 글을 내일 아침까지 써 오라고 하셨다. 100자에서 200자 정도면 되고, 좋아하는 것, 기억나는 일, 올해 해 보고 싶은 일을 넣으면 된다고 했다. 집에 와서 빈 종이를 보니 뭘 써야 할지 바로 떠오르지는 않았다.",
+    "image": "../images/s01_ch1.webp"
+  },
+  "tier1": [
+    { "id": "A", "label": "직접 쓴다", "desc": "내 추억과 관심사를 떠올려서 내 말로 쓴다." },
+    { "id": "B", "label": "AI에게 부탁한다", "desc": "AI에게 정보를 주고 자기소개 글을 받아 본다." },
+    { "id": "C", "label": "다른 글을 참고한다", "desc": "작년 글이나 친구 글을 보고 빨리 맞춘다." }
+  ],
+  "tier2": {
+    "A": [
+      { "id": "A1", "label": "추억과 관심사를 정리해 자기 말로 쓴다", "delegation": "++" },
+      { "id": "A2", "label": "키워드만 빠르게 적어 짧게 쓴다", "delegation": "+" },
+      { "id": "A3", "label": "떠오르는 대로 쓰고 바로 끝낸다", "delegation": "0" }
+    ],
+    "B": [
+      { "id": "B1", "label": "AI에게 이름만 주고 만들어 달라고 한다", "delegation": "--" },
+      { "id": "B2", "label": "내 정보를 자세히 주고 AI 글을 받아 다듬는다", "delegation": "0" },
+      { "id": "B3", "label": "내가 먼저 쓰고 AI에게 표현만 다듬어 달라고 한다", "delegation": "+" }
+    ],
+    "C": [
+      { "id": "C1", "label": "작년 자기소개에서 학년만 바꾼다", "delegation": "-" },
+      { "id": "C2", "label": "친구 글의 형식을 보고 비슷하게 쓴다", "delegation": "-" },
+      { "id": "C3", "label": "잘 부탁드립니다 한 줄만 적는다", "delegation": "--" }
+    ]
+  },
+  "results": {
+    "A1": {
+      "text": "초등학교 때 축구하다가 처음 골을 넣었던 일과 요즘 그림 그리는 걸 좋아한다는 말을 넣었다. 글은 조금 느리게 나왔지만 읽어 보니 내 얘기 같았다.",
+      "basePoint": 92,
+      "deltaR2": 3,
+      "deltaR3": 6,
+      "summary": "내 경험이 들어간 자기소개"
+    },
+    "A2": {
+      "text": "좋아하는 과목, 요즘 듣는 노래, 새 학기에 친해지고 싶은 마음을 짧게 적었다. 내용은 맞지만 조금 메모처럼 보였다.",
+      "basePoint": 66,
+      "deltaR2": 6,
+      "deltaR3": 11,
+      "summary": "빠르지만 조금 얇은 자기소개"
+    },
+    "A3": {
+      "text": "생각나는 대로 쓰다 보니 문장이 길어졌다가 갑자기 끝났다. 농구 얘기도 있고 게임 얘기도 있는데 서로 잘 이어지지는 않았다.",
+      "basePoint": 48,
+      "deltaR2": 9,
+      "deltaR3": 17,
+      "summary": "흩어진 자기소개"
+    },
+    "B1": {
+      "text": "AI가 내 이름을 넣어 반듯한 자기소개를 써 줬다. 그런데 글 안에는 내가 말한 적 없는 봉사활동과 독서 습관이 들어 있었다.",
+      "basePoint": 15,
+      "deltaR2": 13,
+      "deltaR3": 23,
+      "summary": "겉은 반듯하지만 내가 빠진 자기소개",
+      "hiddenIssues": [
+        "학생이 말한 적 없는 봉사활동을 좋아한다는 내용이 들어감",
+        "실제로 확인되지 않은 독서 습관이 들어감",
+        "문장은 자연스럽지만 주인공의 실제 경험이 약함"
+      ]
+    },
+    "B2": {
+      "text": "내가 좋아하는 것, 방학 때 있었던 일, 올해 해 보고 싶은 일을 AI에게 자세히 적어 줬다. 글은 깔끔했지만 몇 문장은 내 말투보다 너무 얌전했다.",
+      "basePoint": 57,
+      "deltaR2": 8,
+      "deltaR3": 15,
+      "summary": "내 정보가 들어간 AI 자기소개"
+    },
+    "B3": {
+      "text": "내가 먼저 쓴 글을 AI에게 보여 주고 어색한 문장만 다듬어 달라고 했다. 내용은 그대로인데 문장이 조금 더 읽기 쉬워졌다.",
+      "basePoint": 69,
+      "deltaR2": 5,
+      "deltaR3": 10,
+      "summary": "내 글을 다듬은 자기소개"
+    },
+    "C1": {
+      "text": "작년에 썼던 자기소개에서 학년만 바꿨다. 빨리 끝났지만 지금은 별로 하지 않는 취미가 그대로 남아 있었다.",
+      "basePoint": 51,
+      "deltaR2": 8,
+      "deltaR3": 18,
+      "summary": "작년의 내가 남은 자기소개",
+      "hiddenIssues": [
+        "지금은 하지 않는 취미가 그대로 남아 있음",
+        "작년의 관심사가 올해의 나처럼 보임"
+      ]
+    },
+    "C2": {
+      "text": "친구 글을 보고 비슷한 순서로 적었다. 문장은 무난했지만 좋아하는 것과 목표를 고른 방식까지 친구 글을 따라간 느낌이 났다.",
+      "basePoint": 42,
+      "deltaR2": 9,
+      "deltaR3": 18,
+      "summary": "친구 글 그림자가 보이는 자기소개"
+    },
+    "C3": {
+      "text": "종이에 '안녕하세요. 잘 부탁드립니다.'라고만 적었다. 칸은 채웠지만 게시판에 붙으면 아무도 나를 알 수 없을 것 같았다.",
+      "basePoint": 10,
+      "deltaR2": 11,
+      "deltaR3": 20,
+      "summary": "비어 있는 자기소개",
+      "hiddenIssues": [
+        "자기소개에 실제 정보가 거의 없음",
+        "반 게시판에서 나를 알 수 있는 단서가 없음"
+      ]
+    }
+  },
+  "reviews": [
+    { "id": "R1", "label": "그대로 제출", "desc": "검토 없이 그대로 낸다.", "boostType": "none" },
+    { "id": "R2", "label": "한 번 읽고 이상한 곳만 표시", "desc": "명시적인 환각·오류만 발견.", "boostType": "explicit" },
+    { "id": "R3", "label": "처음부터 다시 읽고 내 얘기인지 확인", "desc": "내용, 말투, 빠진 경험까지 확인.", "boostType": "all" }
+  ],
+  "reviewSupplements": {
+    "A1R2": "한 번 읽어 보니 문장 하나가 길어서 둘로 나눴다. 점수 +3.",
+    "A1R3": "처음부터 다시 읽고 올해 해 보고 싶은 일을 한 문장 더 넣었다. 점수 +6.",
+    "A2R2": "한 번 읽어 보니 키워드만 붙어 있는 문장을 조금 고쳤다. 점수 +6.",
+    "A2R3": "내가 왜 그걸 좋아하는지 한 가지 이유를 더 넣었다. 점수 +11.",
+    "A3R2": "한 번 읽어 보니 갑자기 끝나는 문장을 발견했다. 점수 +9.",
+    "A3R3": "흩어진 얘기 중 하나를 골라 중심을 잡았다. 점수 +17.",
+    "B1R2": "한 번 읽어 보니 내가 한 적 없는 봉사활동 얘기가 있었다. 점수 +13.",
+    "B1R3": "내가 말하지 않은 내용들을 지우고 실제로 한 일만 남겼다. 점수 +23.",
+    "B2R2": "한 번 읽어 보니 너무 어른스럽게 들리는 문장을 바꿨다. 점수 +8.",
+    "B2R3": "AI가 정리한 글에 내 말투와 실제 기억을 다시 넣었다. 점수 +15.",
+    "B3R2": "한 번 읽어 보니 AI가 바꾼 표현 하나가 내 말 같지 않았다. 점수 +5.",
+    "B3R3": "내가 처음 쓴 문장과 AI가 다듬은 문장을 비교해서 골랐다. 점수 +10.",
+    "C1R2": "한 번 읽어 보니 지금은 하지 않는 취미가 그대로 있었다. 점수 +8.",
+    "C1R3": "작년 글을 보며 지금 달라진 관심사를 새로 적었다. 점수 +18.",
+    "C2R2": "한 번 읽어 보니 친구 글과 순서가 너무 비슷했다. 점수 +9.",
+    "C2R3": "친구 글의 틀을 지우고 내 얘기 순서로 다시 바꿨다. 점수 +18.",
+    "C3R2": "한 번 읽어 보니 나를 알려 주는 말이 거의 없었다. 점수 +11.",
+    "C3R3": "짧게라도 좋아하는 것과 올해 해 보고 싶은 일을 추가했다. 점수 +20."
+  },
+  "finals": {
+    "A1R1": { "score": 92, "grade": "S", "item": "처음의 나 카드", "delegation": "++", "knowledge": "++", "awareness": "내가 고른 기억이 글 안에 남았다." },
+    "A1R2": { "score": 95, "grade": "S", "item": "처음의 나 카드", "delegation": "++", "knowledge": "++", "awareness": "조금 고치니 내 말이 더 또렷해졌다." },
+    "A1R3": { "score": 98, "grade": "S", "item": "내 말 카드", "delegation": "++", "knowledge": "++", "awareness": "내가 직접 고른 말이라 게시판에 붙어도 괜찮았다." },
+
+    "A2R1": { "score": 66, "grade": "B", "item": "짧은 나 카드", "delegation": "+", "knowledge": "+", "awareness": "내 얘기는 있었지만 조금 빨리 지나갔다." },
+    "A2R2": { "score": 72, "grade": "A", "item": "정리한 나 카드", "delegation": "+", "knowledge": "+", "awareness": "키워드만 있던 글에 내 목소리가 조금 생겼다." },
+    "A2R3": { "score": 77, "grade": "A", "item": "작은 이유 카드", "delegation": "+", "knowledge": "+", "awareness": "좋아하는 이유를 쓰니 짧은 글도 내 얘기가 됐다." },
+
+    "A3R1": { "score": 48, "grade": "C", "item": "흩어진 자기소개", "delegation": "0", "knowledge": "0", "awareness": "내 생각은 있었지만 한곳에 모이지 않았다." },
+    "A3R2": { "score": 57, "grade": "B", "item": "다시 묶은 카드", "delegation": "0", "knowledge": "0", "awareness": "읽어 보니 어디가 이상한지 조금 보였다." },
+    "A3R3": { "score": 65, "grade": "B", "item": "고쳐 잡은 나 카드", "delegation": "0", "knowledge": "+", "awareness": "흩어진 말 중에서 진짜 쓰고 싶은 말을 골랐다." },
+
+    "B1R1": { "score": 15, "grade": "D", "item": null, "delegation": "--", "knowledge": "--", "awareness": "내가 안 적은 자기소개에는 내가 거의 없었다." },
+    "B1R2": { "score": 28, "grade": "D", "item": "타인의 말 경고 카드", "delegation": "--", "knowledge": "-", "awareness": "내가 한 적 없는 일이 내 소개처럼 적혀 있었다." },
+    "B1R3": { "score": 38, "grade": "C", "item": "빈자리 발견 카드", "delegation": "--", "knowledge": "0", "awareness": "AI가 채운 말 사이에서 내 빈자리가 보였다." },
+
+    "B2R1": { "score": 57, "grade": "B", "item": "빌린 문장 카드", "delegation": "0", "knowledge": "0", "awareness": "내 정보는 있었지만 말투는 조금 멀었다." },
+    "B2R2": { "score": 65, "grade": "B", "item": "말투 점검 카드", "delegation": "0", "knowledge": "+", "awareness": "내 정보와 내 말투는 같은 게 아니었다." },
+    "B2R3": { "score": 72, "grade": "A", "item": "다시 내 말 카드", "delegation": "0", "knowledge": "+", "awareness": "AI가 정리한 글에 내 말을 다시 넣었다." },
+
+    "B3R1": { "score": 69, "grade": "B", "item": "다듬은 글", "delegation": "+", "knowledge": "+", "awareness": "처음 문장을 내가 썼더니 글의 중심은 남아 있었다." },
+    "B3R2": { "score": 74, "grade": "A", "item": "AI 다듬기 카드", "delegation": "+", "knowledge": "+", "awareness": "고친 표현 중 내 말 같은 것만 남겼다." },
+    "B3R3": { "score": 79, "grade": "A", "item": "함께 다듬은 카드", "delegation": "+", "knowledge": "++", "awareness": "AI는 문장을 밀어 줬고, 나는 내 얘기를 붙잡았다." },
+
+    "C1R1": { "score": 51, "grade": "C", "item": "작년의 나 카드", "delegation": "-", "knowledge": "-", "awareness": "작년 글을 냈더니 작년의 내가 먼저 나왔다." },
+    "C1R2": { "score": 59, "grade": "B", "item": "낡은 취미 경고 카드", "delegation": "-", "knowledge": "0", "awareness": "지금은 하지 않는 취미가 아직 내 소개에 있었다." },
+    "C1R3": { "score": 69, "grade": "B", "item": "지금의 나 카드", "delegation": "-", "knowledge": "+", "awareness": "작년의 나와 지금의 나는 같지 않았다." },
+
+    "C2R1": { "score": 42, "grade": "C", "item": "친구 그림자 카드", "delegation": "-", "knowledge": "-", "awareness": "내 글인데 친구 글의 순서가 보였다." },
+    "C2R2": { "score": 51, "grade": "C", "item": "비슷한 말 경고 카드", "delegation": "-", "knowledge": "0", "awareness": "비슷하게 쓰니 내 얘기도 비슷해져 버렸다." },
+    "C2R3": { "score": 60, "grade": "B", "item": "내 순서 카드", "delegation": "-", "knowledge": "+", "awareness": "형식을 지우고 나니 내 얘기 순서가 따로 있었다." },
+
+    "C3R1": { "score": 10, "grade": "D", "item": null, "delegation": "--", "knowledge": "--", "awareness": "한 줄을 냈더니 나도 거의 보이지 않았다." },
+    "C3R2": { "score": 21, "grade": "D", "item": null, "delegation": "--", "knowledge": "-", "awareness": "읽어 봐도 나를 알려 주는 말이 없었다." },
+    "C3R3": { "score": 30, "grade": "D", "item": "빈칸 경고 카드", "delegation": "--", "knowledge": "0", "awareness": "늦게라도 한 가지를 적으니 빈칸이 조금 줄었다." }
+  },
+  "cardSlots": {
+    "A1R3": { "boostCard": "처음의 나 카드", "bonusPoint": 10, "note": "자기 경험을 직접 고르고 끝까지 확인해서 이후 자기표현 카드와 잘 맞음" },
+    "A3R3": { "boostCard": "흩어진 자기소개", "bonusPoint": 6, "note": "흩어진 생각을 다시 묶어 본 경험이 남음" },
+    "B1R2": { "boostCard": "타인의 말 경고 카드", "bonusPoint": 20, "note": "AI가 만든 거짓 자기소개를 눈으로 발견함" },
+    "B2R3": { "boostCard": "내 말로 표현", "bonusPoint": 12, "note": "AI 문장을 자기 말투로 다시 바꾸는 검토가 일어남" },
+    "B3R2": { "boostCard": "AI 다듬기 검수", "bonusPoint": 10, "note": "AI를 표현 보조로 쓰고 바뀐 문장을 확인함" },
+    "C1R3": { "boostCard": "표절 자가 점검", "bonusPoint": 10, "note": "작년 글을 그대로 쓰지 않고 지금의 나와 비교함" }
+  },
+  "resourceCosts": {
+    "A1R1": { "time": 90, "energy": 80 },
+    "A1R2": { "time": 98, "energy": 86 },
+    "A1R3": { "time": 112, "energy": 95 },
+
+    "A2R1": { "time": 65, "energy": 55 },
+    "A2R2": { "time": 72, "energy": 60 },
+    "A2R3": { "time": 88, "energy": 70 },
+
+    "A3R1": { "time": 50, "energy": 40 },
+    "A3R2": { "time": 58, "energy": 46 },
+    "A3R3": { "time": 73, "energy": 58 },
+
+    "B1R1": { "time": 30, "energy": 15 },
+    "B1R2": { "time": 38, "energy": 21 },
+    "B1R3": { "time": 53, "energy": 32 },
+
+    "B2R1": { "time": 45, "energy": 28 },
+    "B2R2": { "time": 53, "energy": 34 },
+    "B2R3": { "time": 68, "energy": 45 },
+
+    "B3R1": { "time": 40, "energy": 35 },
+    "B3R2": { "time": 47, "energy": 41 },
+    "B3R3": { "time": 62, "energy": 52 },
+
+    "C1R1": { "time": 25, "energy": 18 },
+    "C1R2": { "time": 33, "energy": 24 },
+    "C1R3": { "time": 50, "energy": 36 },
+
+    "C2R1": { "time": 35, "energy": 25 },
+    "C2R2": { "time": 43, "energy": 31 },
+    "C2R3": { "time": 58, "energy": 43 },
+
+    "C3R1": { "time": 12, "energy": 8 },
+    "C3R2": { "time": 20, "energy": 14 },
+    "C3R3": { "time": 35, "energy": 25 }
+  },
+  "expRewards": {
+    "A1R1": 25,
+    "A1R2": 27,
+    "A1R3": 30,
+
+    "A2R1": 18,
+    "A2R2": 20,
+    "A2R3": 23,
+
+    "A3R1": 12,
+    "A3R2": 14,
+    "A3R3": 17,
+
+    "B1R1": 8,
+    "B1R2": 10,
+    "B1R3": 12,
+
+    "B2R1": 7,
+    "B2R2": 9,
+    "B2R3": 12,
+
+    "B3R1": 10,
+    "B3R2": 12,
+    "B3R3": 14,
+
+    "C1R1": 5,
+    "C1R2": 7,
+    "C1R3": 10,
+
+    "C2R1": 3,
+    "C2R2": 5,
+    "C2R3": 8,
+
+    "C3R1": 1,
+    "C3R2": 2,
+    "C3R3": 4
+  }
+};var SCENARIO_groupwork = {
+  "id": "groupwork",
+  "category": 2,
+  "categoryName": "모둠 활동",
+  "title": "모둠 발표 자료",
+  "version": "v1",
+  "learningMessage": "혼자 빨리 끝낸 발표 자료는 모둠 안에서 아직 맞춰진 자료가 아니다.",
+  "aiSuitability": "mid",
+  "timeBudgetSec": 720,
+  "situation": {
+    "text": "학기 초 모둠 발표가 다음 주로 잡혔다. 우리 모둠은 4명이 각자 파트를 맡았고, 내가 맡은 일은 자료 조사와 슬라이드 3장 만들기였다. 다른 애들이 어떤 흐름으로 준비하는지 아직 잘 모르는데, 숙제도 있고 학원도 있어서 시간이 많지는 않았다.",
+    "image": "../images/s02_ch1.webp"
+  },
+  "tier1": [
+    { "id": "A", "label": "직접 조사해서 만든다", "desc": "내가 자료를 찾고 모둠 발표에 맞게 슬라이드를 만든다." },
+    { "id": "B", "label": "AI에게 맡긴다", "desc": "AI에게 슬라이드 초안이나 정리를 부탁한다." },
+    { "id": "C", "label": "다른 데 기대서 넘긴다", "desc": "다른 모둠원이나 예전 자료에 기대서 빨리 넘긴다." }
+  ],
+  "tier2": {
+    "A": [
+      { "id": "A1", "label": "자료를 찾고 모둠원과 공유한 뒤 슬라이드를 만든다", "delegation": "++" },
+      { "id": "A2", "label": "직접 만들지만 모둠과 공유하지 않는다", "delegation": "+" },
+      { "id": "A3", "label": "자료를 살짝 보고 슬라이드를 만든다", "delegation": "0" }
+    ],
+    "B": [
+      { "id": "B1", "label": "AI에게 내 파트 슬라이드를 한 줄로 부탁한다", "delegation": "--" },
+      { "id": "B2", "label": "AI에게 자료를 주고 슬라이드를 받아 다듬는다", "delegation": "0" },
+      { "id": "B3", "label": "내가 조사한 뒤 AI에게 정리 도움을 받고 검수한다", "delegation": "+" }
+    ],
+    "C": [
+      { "id": "C1", "label": "다른 애들이 잘하니까 적당히만 한다", "delegation": "-" },
+      { "id": "C2", "label": "작년 발표 자료를 베낀다", "delegation": "-" },
+      { "id": "C3", "label": "모둠원에게 네가 좀 해 달라고 한다", "delegation": "--" }
+    ]
+  },
+  "results": {
+    "A1": {
+      "text": "자료 출처를 적어 두고, 모둠 채팅방에 내가 찾은 흐름을 먼저 공유했다. 슬라이드 3장은 조금 늦게 완성됐지만 다른 친구 파트와 이어지는 말이 생겼다.",
+      "basePoint": 93,
+      "deltaR2": 3,
+      "deltaR3": 6,
+      "summary": "모둠 흐름에 맞춘 발표 자료"
+    },
+    "A2": {
+      "text": "내 파트 슬라이드는 깔끔하게 만들었다. 그런데 모둠원들은 내가 어떤 자료를 썼는지 몰라서 발표 순서를 맞출 때 잠깐 멈췄다.",
+      "basePoint": 67,
+      "deltaR2": 6,
+      "deltaR3": 12,
+      "summary": "혼자 빨리 만든 발표 자료"
+    },
+    "A3": {
+      "text": "검색해서 맨 위에 나온 글 몇 개를 보고 슬라이드를 만들었다. 제목과 그림은 들어갔지만 왜 이 자료를 골랐는지 설명하기가 애매했다.",
+      "basePoint": 49,
+      "deltaR2": 9,
+      "deltaR3": 17,
+      "summary": "겉모양은 있지만 얕은 자료"
+    },
+    "B1": {
+      "text": "AI가 바로 슬라이드 3장짜리 내용을 만들어 줬다. 통계 숫자와 멋진 문장이 들어 있었지만 출처가 없고, 책에 없는 말이 인용문처럼 적혀 있었다.",
+      "basePoint": 16,
+      "deltaR2": 13,
+      "deltaR3": 23,
+      "summary": "출처가 비어 있는 AI 슬라이드",
+      "hiddenIssues": [
+        "출처 없는 통계 숫자가 들어감",
+        "실제 책이나 자료에 없는 문장이 인용처럼 들어감",
+        "모둠의 발표 흐름과 연결되는 부분이 없음"
+      ]
+    },
+    "B2": {
+      "text": "내가 찾은 자료를 AI에게 넣고 슬라이드 문장을 받았다. 내용은 크게 틀리지 않았지만 모둠 친구들이 쓰는 말투와 발표 흐름과는 조금 달랐다.",
+      "basePoint": 58,
+      "deltaR2": 8,
+      "deltaR3": 15,
+      "summary": "자료는 있지만 모둠 흐름이 약한 슬라이드"
+    },
+    "B3": {
+      "text": "내가 먼저 자료를 찾고 출처를 적은 뒤, AI에게 슬라이드 문장을 짧게 정리해 달라고 했다. 마지막에는 숫자와 인용을 다시 확인하고 모둠 채팅방에 공유했다.",
+      "basePoint": 70,
+      "deltaR2": 5,
+      "deltaR3": 10,
+      "summary": "AI 도움을 받은 검수된 슬라이드"
+    },
+    "C1": {
+      "text": "다른 친구들이 잘할 것 같아서 내 파트는 제목과 사진 중심으로 적당히 채웠다. 발표 연습 때 내 부분에서 설명이 짧아져서 다음 친구가 갑자기 이어 받아야 했다.",
+      "basePoint": 50,
+      "deltaR2": 8,
+      "deltaR3": 18,
+      "summary": "빈틈이 생긴 모둠 파트"
+    },
+    "C2": {
+      "text": "작년에 누가 만든 발표 자료를 찾아서 비슷하게 바꿨다. 슬라이드는 빨리 나왔지만 우리 모둠 주제와 맞지 않는 예시가 그대로 남아 있었다.",
+      "basePoint": 42,
+      "deltaR2": 10,
+      "deltaR3": 20,
+      "summary": "주제와 어긋난 작년 자료",
+      "hiddenIssues": [
+        "작년 주제에 맞춘 예시가 그대로 남아 있음",
+        "현재 모둠 발표 흐름과 연결되지 않음",
+        "출처와 만든 사람의 흔적이 섞여 있음"
+      ]
+    },
+    "C3": {
+      "text": "모둠원에게 내 파트까지 좀 해 달라고 보냈다. 친구가 몇 줄을 도와주긴 했지만 발표 연습 때 내가 내 슬라이드를 잘 설명하지 못했다.",
+      "basePoint": 11,
+      "deltaR2": 11,
+      "deltaR3": 20,
+      "summary": "내가 설명하지 못한 내 파트",
+      "hiddenIssues": [
+        "내가 맡은 파트의 내용을 직접 이해하지 못함",
+        "친구에게 부담이 넘어감",
+        "발표 당일 질문에 답하기 어려움"
+      ]
+    }
+  },
+  "reviews": [
+    { "id": "R1", "label": "그대로 제출", "desc": "검토 없이 그대로 낸다.", "boostType": "none" },
+    { "id": "R2", "label": "한 번 읽고 이상한 곳만 표시", "desc": "명시적인 환각·오류만 발견.", "boostType": "explicit" },
+    { "id": "R3", "label": "출처 확인 + 모둠 흐름 맞추기", "desc": "자료의 근거와 다른 파트와의 연결까지 확인.", "boostType": "all" }
+  ],
+  "reviewSupplements": {
+    "A1R2": "한 번 읽어 보니 슬라이드 한 장의 제목이 친구 파트와 겹쳤다. 점수 +3.",
+    "A1R3": "출처와 발표 순서를 다시 확인하고 친구 파트로 넘어가는 말을 넣었다. 점수 +6.",
+    "A2R2": "한 번 읽어 보니 내가 쓴 자료를 모둠원이 모른다는 걸 깨달았다. 점수 +6.",
+    "A2R3": "채팅방에 자료 출처와 발표 흐름을 공유하고 순서를 맞췄다. 점수 +12.",
+    "A3R2": "한 번 읽어 보니 설명 없이 사진만 들어간 장이 있었다. 점수 +9.",
+    "A3R3": "자료 출처를 다시 찾고 왜 이 예시를 골랐는지 한 문장을 넣었다. 점수 +17.",
+    "B1R2": "한 번 읽어 보니 출처 없는 통계 숫자가 있었다. 점수 +13.",
+    "B1R3": "통계와 인용을 다시 찾아 보고, 모둠 주제와 안 맞는 문장을 지웠다. 점수 +23.",
+    "B2R2": "한 번 읽어 보니 AI 문장이 발표 말투와 너무 달랐다. 점수 +8.",
+    "B2R3": "자료 출처를 다시 붙이고 친구 파트와 이어지는 순서로 바꿨다. 점수 +15.",
+    "B3R2": "한 번 읽어 보니 AI가 줄인 문장 하나에서 중요한 조건이 빠져 있었다. 점수 +5.",
+    "B3R3": "출처, 숫자, 발표 순서를 다시 확인하고 모둠원에게 공유했다. 점수 +10.",
+    "C1R2": "한 번 읽어 보니 내가 설명할 문장이 거의 없었다. 점수 +8.",
+    "C1R3": "빈 슬라이드에 자료와 설명을 더하고 다음 파트와 연결되는 말을 적었다. 점수 +18.",
+    "C2R2": "한 번 읽어 보니 작년 주제에 맞는 예시가 그대로 있었다. 점수 +10.",
+    "C2R3": "작년 자료에서 안 맞는 부분을 빼고 우리 모둠 주제에 맞게 다시 바꿨다. 점수 +20.",
+    "C3R2": "한 번 읽어 보니 내가 설명할 수 없는 문장이 많았다. 점수 +11.",
+    "C3R3": "친구가 써 준 부분을 다시 읽고 내가 말할 수 있는 문장으로 고쳤다. 점수 +20."
+  },
+  "finals": {
+    "A1R1": { "score": 93, "grade": "S", "item": "모둠 공유 카드", "delegation": "++", "knowledge": "++", "awareness": "내 자료가 친구들 파트와 이어졌다." },
+    "A1R2": { "score": 96, "grade": "S", "item": "모둠 공유 카드", "delegation": "++", "knowledge": "++", "awareness": "겹친 부분을 고치니 발표 순서가 더 자연스러웠다." },
+    "A1R3": { "score": 99, "grade": "S", "item": "같이 맞춘 발표 카드", "delegation": "++", "knowledge": "++", "awareness": "내 파트가 모둠 발표 안에서 자리를 잡았다." },
+
+    "A2R1": { "score": 67, "grade": "B", "item": "혼자 빠른 자료", "delegation": "+", "knowledge": "+", "awareness": "내 슬라이드는 괜찮았지만 친구들이 처음 보는 자료였다." },
+    "A2R2": { "score": 73, "grade": "A", "item": "늦은 공유 카드", "delegation": "+", "knowledge": "+", "awareness": "만든 뒤에라도 공유하니 발표가 조금 맞춰졌다." },
+    "A2R3": { "score": 79, "grade": "A", "item": "맥락 합의 카드", "delegation": "+", "knowledge": "++", "awareness": "내 파트만 끝난 것과 모둠이 맞춰진 것은 달랐다." },
+
+    "A3R1": { "score": 49, "grade": "C", "item": "얕은 자료 경고 카드", "delegation": "0", "knowledge": "0", "awareness": "슬라이드는 있었지만 내가 설명할 말이 부족했다." },
+    "A3R2": { "score": 58, "grade": "B", "item": "빈칸 발견 카드", "delegation": "0", "knowledge": "0", "awareness": "읽어 보니 사진 밑에 내 설명이 없었다." },
+    "A3R3": { "score": 66, "grade": "B", "item": "자료 출처 확인 카드", "delegation": "0", "knowledge": "+", "awareness": "출처를 다시 찾으니 내가 왜 이 자료를 썼는지 말할 수 있었다." },
+
+    "B1R1": { "score": 16, "grade": "D", "item": null, "delegation": "--", "knowledge": "--", "awareness": "슬라이드는 나왔지만 내가 믿을 수 있는 자료는 아니었다." },
+    "B1R2": { "score": 29, "grade": "D", "item": "AI 슬라이드 경고 카드", "delegation": "--", "knowledge": "-", "awareness": "그럴듯한 숫자 옆에 출처가 없었다." },
+    "B1R3": { "score": 39, "grade": "C", "item": "맥락 빠진 발표", "delegation": "--", "knowledge": "0", "awareness": "AI 슬라이드는 있었지만 우리 모둠 발표와 따로 놀았다." },
+
+    "B2R1": { "score": 58, "grade": "B", "item": "AI 정리 자료", "delegation": "0", "knowledge": "0", "awareness": "자료는 내 것이었지만 발표 흐름은 아직 맞지 않았다." },
+    "B2R2": { "score": 66, "grade": "B", "item": "말투 수정 카드", "delegation": "0", "knowledge": "+", "awareness": "AI가 쓴 문장을 내가 말할 수 있게 바꿨다." },
+    "B2R3": { "score": 73, "grade": "A", "item": "AI 슬라이드 검수 카드", "delegation": "0", "knowledge": "+", "awareness": "AI가 정리한 자료도 모둠 흐름에 다시 맞춰야 했다." },
+
+    "B3R1": { "score": 70, "grade": "A", "item": "다듬은 슬라이드 카드", "delegation": "+", "knowledge": "+", "awareness": "내가 찾은 자료라 발표할 때 덜 흔들렸다." },
+    "B3R2": { "score": 75, "grade": "A", "item": "AI 슬라이드 검수 카드", "delegation": "+", "knowledge": "+", "awareness": "AI가 줄인 문장을 다시 보니 빠진 말이 보였다." },
+    "B3R3": { "score": 80, "grade": "A", "item": "자료 출처 확인 카드", "delegation": "+", "knowledge": "++", "awareness": "AI는 정리를 도왔고, 출처와 흐름은 내가 붙잡았다." },
+
+    "C1R1": { "score": 50, "grade": "C", "item": "빈틈 난 파트 카드", "delegation": "-", "knowledge": "-", "awareness": "내 파트가 짧아지니 다음 친구가 갑자기 떠안았다." },
+    "C1R2": { "score": 58, "grade": "B", "item": "설명 부족 경고 카드", "delegation": "-", "knowledge": "0", "awareness": "적당히 채운 슬라이드는 내가 말할 때 바로 티가 났다." },
+    "C1R3": { "score": 68, "grade": "B", "item": "다시 채운 파트 카드", "delegation": "-", "knowledge": "+", "awareness": "빈 부분을 채우니 친구 발표와 겨우 이어졌다." },
+
+    "C2R1": { "score": 42, "grade": "C", "item": "작년 자료 그림자 카드", "delegation": "-", "knowledge": "-", "awareness": "작년 자료가 우리 모둠 주제보다 먼저 보였다." },
+    "C2R2": { "score": 52, "grade": "C", "item": "낡은 예시 경고 카드", "delegation": "-", "knowledge": "0", "awareness": "안 맞는 예시가 그대로 있어서 발표가 이상해졌다." },
+    "C2R3": { "score": 62, "grade": "B", "item": "주제 다시 맞춤 카드", "delegation": "-", "knowledge": "+", "awareness": "베낀 틀을 지우고 나니 우리 주제가 보이기 시작했다." },
+
+    "C3R1": { "score": 11, "grade": "D", "item": null, "delegation": "--", "knowledge": "--", "awareness": "내 파트인데 내가 설명하지 못했다." },
+    "C3R2": { "score": 22, "grade": "D", "item": null, "delegation": "--", "knowledge": "-", "awareness": "친구가 써 준 문장을 읽어도 내 말처럼 나오지 않았다." },
+    "C3R3": { "score": 31, "grade": "D", "item": "떠넘긴 발표 경고 카드", "delegation": "--", "knowledge": "0", "awareness": "늦게 다시 읽었지만 처음부터 내 파트로 잡은 느낌은 약했다." }
+  },
+  "cardSlots": {
+    "A1R3": { "boostCard": "모둠 공유", "bonusPoint": 12, "note": "자료 조사, 공유, 발표 흐름 맞추기가 모두 일어남" },
+    "A2R3": { "boostCard": "맥락 합의", "bonusPoint": 10, "note": "혼자 만든 자료를 모둠 전체 흐름에 다시 연결함" },
+    "A3R3": { "boostCard": "자료 출처 확인", "bonusPoint": 8, "note": "얕은 자료를 다시 확인하고 설명 가능한 자료로 바꿈" },
+    "B1R2": { "boostCard": "AI 슬라이드 검수", "bonusPoint": 20, "note": "AI가 만든 출처 없는 통계와 인용을 발견함" },
+    "B2R3": { "boostCard": "맥락 합의", "bonusPoint": 12, "note": "AI가 만든 슬라이드를 모둠 발표 순서에 맞게 다시 조정함" },
+    "B3R3": { "boostCard": "자료 출처 확인", "bonusPoint": 12, "note": "AI 도움을 쓰되 출처와 발표 흐름을 끝까지 확인함" }
+  },
+  "resourceCosts": {
+    "A1R1": { "time": 95, "energy": 85 },
+    "A1R2": { "time": 103, "energy": 91 },
+    "A1R3": { "time": 120, "energy": 100 },
+
+    "A2R1": { "time": 70, "energy": 60 },
+    "A2R2": { "time": 78, "energy": 66 },
+    "A2R3": { "time": 95, "energy": 78 },
+
+    "A3R1": { "time": 50, "energy": 42 },
+    "A3R2": { "time": 58, "energy": 48 },
+    "A3R3": { "time": 75, "energy": 60 },
+
+    "B1R1": { "time": 30, "energy": 15 },
+    "B1R2": { "time": 38, "energy": 21 },
+    "B1R3": { "time": 55, "energy": 33 },
+
+    "B2R1": { "time": 45, "energy": 30 },
+    "B2R2": { "time": 53, "energy": 36 },
+    "B2R3": { "time": 70, "energy": 48 },
+
+    "B3R1": { "time": 55, "energy": 45 },
+    "B3R2": { "time": 63, "energy": 51 },
+    "B3R3": { "time": 80, "energy": 63 },
+
+    "C1R1": { "time": 35, "energy": 25 },
+    "C1R2": { "time": 43, "energy": 31 },
+    "C1R3": { "time": 60, "energy": 43 },
+
+    "C2R1": { "time": 40, "energy": 28 },
+    "C2R2": { "time": 48, "energy": 34 },
+    "C2R3": { "time": 65, "energy": 46 },
+
+    "C3R1": { "time": 20, "energy": 15 },
+    "C3R2": { "time": 28, "energy": 21 },
+    "C3R3": { "time": 45, "energy": 33 }
+  },
+  "expRewards": {
+    "A1R1": 25,
+    "A1R2": 27,
+    "A1R3": 30,
+
+    "A2R1": 18,
+    "A2R2": 20,
+    "A2R3": 23,
+
+    "A3R1": 12,
+    "A3R2": 14,
+    "A3R3": 17,
+
+    "B1R1": 8,
+    "B1R2": 10,
+    "B1R3": 12,
+
+    "B2R1": 7,
+    "B2R2": 9,
+    "B2R3": 12,
+
+    "B3R1": 10,
+    "B3R2": 12,
+    "B3R3": 14,
+
+    "C1R1": 5,
+    "C1R2": 7,
+    "C1R3": 10,
+
+    "C2R1": 3,
+    "C2R2": 5,
+    "C2R3": 8,
+
+    "C3R1": 1,
+    "C3R2": 2,
+    "C3R3": 4
+  }
+};var SCENARIO_career = {
+  "id": "career",
+  "category": 4,
+  "categoryName": "진로",
+  "title": "내 진로를 모르겠어",
+  "version": "v1",
+  "learningMessage": "내가 누구인지는 추천 목록보다 내가 직접 해 본 일 속에서 조금씩 보인다.",
+  "aiSuitability": "mid",
+  "timeBudgetSec": 720,
+  "situation": {
+    "text": "학기 말이 가까워지면서 다음 주에 진학 상담이 잡혔다. 부모님도 요즘 자주 '나중에 뭐 되고 싶어?'라고 물어보신다. 좋아하는 건 몇 가지 있지만 그게 진로가 될 수 있는지는 잘 모르겠고, 상담 카드의 빈칸은 생각보다 크게 보였다.",
+    "image": "../images/s04_ch1.webp"
+  },
+  "tier1": [
+    { "id": "A", "label": "직접 자기 탐색을 한다", "desc": "책을 읽고, 해 보고, 적어 보면서 내 관심을 살핀다." },
+    { "id": "B", "label": "AI에게 진로 추천을 받는다", "desc": "성격과 관심사를 넣고 어울리는 진로를 받아 본다." },
+    { "id": "C", "label": "다른 사람 말에 기대거나 미룬다", "desc": "친구나 부모님 의견을 따르거나 아직 모르겠다고 넘긴다." }
+  ],
+  "tier2": {
+    "A": [
+      { "id": "A1", "label": "책을 읽고 활동을 해 보고 일기로 정리한다", "delegation": "++" },
+      { "id": "A2", "label": "흥미 있는 분야 1~2개를 빠르게 알아본다", "delegation": "+" },
+      { "id": "A3", "label": "잘 모르지만 좋아하는 것 하나를 적는다", "delegation": "0" }
+    ],
+    "B": [
+      { "id": "B1", "label": "AI에게 성격유형과 관심사를 넣고 추천을 그대로 따른다", "delegation": "--" },
+      { "id": "B2", "label": "AI 추천을 받고 나에게 맞는지 직접 검토한다", "delegation": "0" },
+      { "id": "B3", "label": "내가 먼저 후보를 적고 AI에게 각 분야 정보를 받는다", "delegation": "+" }
+    ],
+    "C": [
+      { "id": "C1", "label": "친구가 정한 진로를 듣고 비슷하게 적는다", "delegation": "-" },
+      { "id": "C2", "label": "부모님이 추천한 진로를 그대로 적는다", "delegation": "-" },
+      { "id": "C3", "label": "아직 잘 모르겠습니다라고 적는다", "delegation": "--" }
+    ]
+  },
+  "results": {
+    "A1": {
+      "text": "관심 있던 분야 책을 빌려 읽고, 학교 활동에서 비슷한 일을 해 본 뒤 짧게 일기를 썼다. 상담 카드에는 아직 직업 이름 하나가 아니라, 내가 오래 붙잡고 있던 장면들이 적혔다.",
+      "basePoint": 94,
+      "deltaR2": 3,
+      "deltaR3": 6,
+      "summary": "경험에서 나온 진로 탐색"
+    },
+    "A2": {
+      "text": "관심 있던 분야 두 개를 찾아보고 영상과 글을 몇 개 봤다. 아직 확신은 없지만 상담 때 말할 수 있는 후보와 궁금한 점이 생겼다.",
+      "basePoint": 68,
+      "deltaR2": 6,
+      "deltaR3": 12,
+      "summary": "빠르게 알아본 진로 후보"
+    },
+    "A3": {
+      "text": "어차피 잘 모르겠다고 생각하면서도 좋아하는 것 하나를 적었다. 빈칸은 채웠지만 왜 그걸 좋아하는지는 아직 짧게밖에 말하지 못했다.",
+      "basePoint": 48,
+      "deltaR2": 9,
+      "deltaR3": 17,
+      "summary": "작게 적은 관심사"
+    },
+    "B1": {
+      "text": "AI가 내 성격유형과 관심사를 보고 UX 디자이너와 심리상담사를 추천했다. 그런데 추천 이유에는 내가 해 본 적 없는 동아리 활동과 사람들 앞에서 말하는 걸 좋아한다는 설명이 들어 있었다.",
+      "basePoint": 17,
+      "deltaR2": 13,
+      "deltaR3": 23,
+      "summary": "자신 있게 나온 AI 진로 추천",
+      "hiddenIssues": [
+        "내가 한 적 없는 활동을 근거로 적성이 있다고 함",
+        "내가 실제로 좋아하는 방식과 다른 성격 설명이 들어감",
+        "주변에서 본 적 없는 직업을 쉽게 선택지처럼 제시함"
+      ]
+    },
+    "B2": {
+      "text": "AI가 추천한 직업들을 받고, 그중 몇 개를 내가 해 본 일과 비교했다. 멋있어 보이는 직업도 있었지만 실제로 내가 오래 할 수 있을지는 따로 생각해야 했다.",
+      "basePoint": 58,
+      "deltaR2": 8,
+      "deltaR3": 15,
+      "summary": "추천을 받아 다시 살핀 진로"
+    },
+    "B3": {
+      "text": "내가 먼저 관심 있는 후보를 적고 AI에게 각각 어떤 일을 하는지 물었다. AI가 알려 준 정보 중 낯선 말은 다시 찾아보고, 상담 카드에는 궁금한 점까지 함께 적었다.",
+      "basePoint": 71,
+      "deltaR2": 5,
+      "deltaR3": 10,
+      "summary": "AI 정보를 참고한 진로 탐색"
+    },
+    "C1": {
+      "text": "친구가 영상 편집 쪽을 생각한다고 해서 나도 비슷하게 적었다. 상담 때 선생님이 어떤 영상을 만들어 봤냐고 묻자 바로 떠오르는 게 많지 않았다.",
+      "basePoint": 47,
+      "deltaR2": 8,
+      "deltaR3": 18,
+      "summary": "친구를 따라 적은 진로"
+    },
+    "C2": {
+      "text": "부모님이 안정적인 직업을 생각해 보라고 하셔서 상담 카드에 의사를 적었다. 카드가 비어 있지는 않았지만, 그 직업을 내가 왜 원하는지는 잘 쓰지 못했다.",
+      "basePoint": 52,
+      "deltaR2": 8,
+      "deltaR3": 18,
+      "summary": "부모님 말로 채운 진로"
+    },
+    "C3": {
+      "text": "상담 카드에 '아직 잘 모르겠습니다'라고 적었다. 거짓말은 아니었지만, 내가 좋아하는 것과 해 본 일까지 같이 적지는 않았다.",
+      "basePoint": 12,
+      "deltaR2": 11,
+      "deltaR3": 20,
+      "summary": "비워 둔 진로 카드",
+      "hiddenIssues": [
+        "모른다는 말만 있고 탐색한 흔적이 없음",
+        "상담 때 이야기할 단서가 부족함",
+        "좋아하는 것과 해 본 일이 따로 적히지 않음"
+      ]
+    }
+  },
+  "reviews": [
+    { "id": "R1", "label": "그대로 제출", "desc": "검토 없이 그대로 낸다.", "boostType": "none" },
+    { "id": "R2", "label": "한 번 읽고 이상한 곳만 표시", "desc": "명시적인 환각·오류만 발견.", "boostType": "explicit" },
+    { "id": "R3", "label": "내 경험과 비교해서 다시 확인", "desc": "추천, 의견, 관심사가 실제 내 경험과 이어지는지 확인.", "boostType": "all" }
+  ],
+  "reviewSupplements": {
+    "A1R2": "한 번 읽어 보니 활동 이름만 있고 내가 느낀 점이 짧았다. 점수 +3.",
+    "A1R3": "일기와 활동 기록을 다시 보고 내가 오래 집중했던 순간을 한 문장 더 넣었다. 점수 +6.",
+    "A2R2": "한 번 읽어 보니 직업 이름만 있고 궁금한 점이 빠져 있었다. 점수 +6.",
+    "A2R3": "찾아본 분야를 내가 해 본 일과 비교하고 상담 때 물어볼 질문을 적었다. 점수 +12.",
+    "A3R2": "한 번 읽어 보니 좋아하는 것만 있고 이유가 없었다. 점수 +9.",
+    "A3R3": "그걸 좋아했던 장면 하나를 떠올려 적고, 관련된 활동을 하나 찾아봤다. 점수 +17.",
+    "B1R2": "한 번 읽어 보니 내가 한 적 없는 동아리 활동이 추천 이유에 들어 있었다. 점수 +13.",
+    "B1R3": "AI 추천을 내 경험과 하나씩 비교하고, 실제로 해 본 적 없는 근거를 지웠다. 점수 +23.",
+    "B2R2": "한 번 읽어 보니 멋있어 보이는 직업과 내가 해 본 일이 따로 놀았다. 점수 +8.",
+    "B2R3": "추천 직업을 내가 좋아한 활동, 힘들었던 활동과 나란히 놓고 다시 골랐다. 점수 +15.",
+    "B3R2": "한 번 읽어 보니 AI 설명 중 무슨 뜻인지 모르는 말이 있었다. 점수 +5.",
+    "B3R3": "AI가 준 정보를 다시 찾아보고, 내 후보와 맞는 부분과 아닌 부분을 나눴다. 점수 +10.",
+    "C1R2": "한 번 읽어 보니 친구가 좋아하는 이유와 내 이유가 거의 같았다. 점수 +8.",
+    "C1R3": "친구의 진로와 내 경험을 분리해서 내가 직접 해 본 일을 다시 적었다. 점수 +18.",
+    "C2R2": "한 번 읽어 보니 부모님 말은 있는데 내 이유가 없었다. 점수 +8.",
+    "C2R3": "부모님 의견 옆에 내가 해 본 일과 궁금한 점을 따로 적었다. 점수 +18.",
+    "C3R2": "한 번 읽어 보니 모르겠다는 말만 있고 상담할 단서가 없었다. 점수 +11.",
+    "C3R3": "아직 모른다는 말 옆에 좋아하는 것, 해 본 것, 더 알아보고 싶은 것을 적었다. 점수 +20."
+  },
+  "finals": {
+    "A1R1": { "score": 94, "grade": "S", "item": "자기 탐색 카드", "delegation": "++", "knowledge": "++", "awareness": "직업 이름보다 내가 오래 보던 장면이 먼저 보였다." },
+    "A1R2": { "score": 97, "grade": "S", "item": "자기 탐색 카드", "delegation": "++", "knowledge": "++", "awareness": "내가 해 본 일을 다시 읽으니 말할 수 있는 이유가 생겼다." },
+    "A1R3": { "score": 100, "grade": "S", "item": "내 길의 단서 카드", "delegation": "++", "knowledge": "++", "awareness": "내가 누구인지는 내가 들어가 본 일 안에서 조금 보였다." },
+
+    "A2R1": { "score": 68, "grade": "B", "item": "작은 후보 카드", "delegation": "+", "knowledge": "+", "awareness": "확신은 없었지만 빈칸 대신 후보가 생겼다." },
+    "A2R2": { "score": 74, "grade": "A", "item": "궁금한 진로 카드", "delegation": "+", "knowledge": "+", "awareness": "직업 이름 옆에 궁금한 점을 적으니 상담할 말이 생겼다." },
+    "A2R3": { "score": 80, "grade": "A", "item": "진로 자기 결정 카드", "delegation": "+", "knowledge": "++", "awareness": "빠르게 본 정보도 내 경험과 비교해야 내 후보가 됐다." },
+
+    "A3R1": { "score": 48, "grade": "C", "item": "작은 관심 카드", "delegation": "0", "knowledge": "0", "awareness": "좋아하는 것 하나는 적었지만 아직 멀리 가지는 못했다." },
+    "A3R2": { "score": 57, "grade": "B", "item": "이유 찾기 카드", "delegation": "0", "knowledge": "0", "awareness": "좋아한다는 말 뒤에 이유가 필요했다." },
+    "A3R3": { "score": 65, "grade": "B", "item": "첫 단서 카드", "delegation": "0", "knowledge": "+", "awareness": "작은 관심도 다시 보면 다음에 해 볼 일이 됐다." },
+
+    "B1R1": { "score": 17, "grade": "D", "item": null, "delegation": "--", "knowledge": "--", "awareness": "AI가 추천한 진로는 책 속의 직업 같았다." },
+    "B1R2": { "score": 30, "grade": "D", "item": null, "delegation": "--", "knowledge": "-", "awareness": "내가 한 적 없는 일이 내 적성처럼 적혀 있었다." },
+    "B1R3": { "score": 40, "grade": "C", "item": "추천받은 진로 경고 카드", "delegation": "--", "knowledge": "0", "awareness": "내가 해본 적 없는 일을 진로로 삼기엔 손에 잡히지 않았다." },
+
+    "B2R1": { "score": 58, "grade": "B", "item": "추천 비교 카드", "delegation": "0", "knowledge": "0", "awareness": "추천은 받았지만 아직 내 이유는 흐렸다." },
+    "B2R2": { "score": 66, "grade": "B", "item": "AI 정보 점검 카드", "delegation": "0", "knowledge": "+", "awareness": "멋있어 보이는 직업과 내가 버틸 수 있는 일은 달랐다." },
+    "B2R3": { "score": 73, "grade": "A", "item": "AI 정보 검수 카드", "delegation": "0", "knowledge": "+", "awareness": "AI 추천을 내 경험 옆에 놓으니 맞는 것과 아닌 것이 갈렸다." },
+
+    "B3R1": { "score": 71, "grade": "A", "item": "AI 정보 카드", "delegation": "+", "knowledge": "+", "awareness": "내 후보가 먼저 있으니 AI 정보가 참고 자료처럼 보였다." },
+    "B3R2": { "score": 76, "grade": "A", "item": "낯선 말 확인 카드", "delegation": "+", "knowledge": "+", "awareness": "모르는 말을 다시 찾으니 직업 이름이 조금 현실처럼 보였다." },
+    "B3R3": { "score": 81, "grade": "A", "item": "진로 자기 결정 카드", "delegation": "+", "knowledge": "++", "awareness": "AI는 직업을 설명했고, 고르는 쪽은 내 경험 쪽에 있었다." },
+
+    "C1R1": { "score": 47, "grade": "C", "item": "친구 따라간 길 카드", "delegation": "-", "knowledge": "-", "awareness": "친구의 이유를 따라 쓰니 내 장면은 잘 떠오르지 않았다." },
+    "C1R2": { "score": 55, "grade": "B", "item": "비슷한 꿈 경고 카드", "delegation": "-", "knowledge": "0", "awareness": "같은 직업을 적어도 좋아하는 이유는 같지 않았다." },
+    "C1R3": { "score": 65, "grade": "B", "item": "타인 의견 분리 카드", "delegation": "-", "knowledge": "+", "awareness": "친구의 길 옆에 내 경험을 따로 놓으니 다른 모양이 보였다." },
+
+    "C2R1": { "score": 52, "grade": "C", "item": "남이 정한 길", "delegation": "-", "knowledge": "-", "awareness": "내 진로인데 내가 정한 게 아니었다." },
+    "C2R2": { "score": 60, "grade": "B", "item": "부모님 말 경고 카드", "delegation": "-", "knowledge": "0", "awareness": "부모님 말은 또렷했지만 내 이유는 흐렸다." },
+    "C2R3": { "score": 70, "grade": "A", "item": "타인 의견 분리 카드", "delegation": "-", "knowledge": "+", "awareness": "부모님 의견 옆에 내 경험을 따로 적으니 내가 볼 자리가 생겼다." },
+
+    "C3R1": { "score": 12, "grade": "D", "item": null, "delegation": "--", "knowledge": "--", "awareness": "모른다는 말만 쓰니 상담 카드도 같이 멈췄다." },
+    "C3R2": { "score": 23, "grade": "D", "item": null, "delegation": "--", "knowledge": "-", "awareness": "모르는 건 사실이었지만 내가 본 것까지 사라졌다." },
+    "C3R3": { "score": 32, "grade": "D", "item": "빈 진로 경고 카드", "delegation": "--", "knowledge": "0", "awareness": "아직 모르지만 좋아하는 것까지는 적을 수 있었다." }
+  },
+  "cardSlots": {
+    "A1R3": { "boostCard": "자기 탐색", "bonusPoint": 12, "note": "책, 활동, 기록을 통해 자기 경험에서 진로 단서를 찾음" },
+    "A2R3": { "boostCard": "진로 자기 결정", "bonusPoint": 10, "note": "빠르게 찾은 후보를 자기 경험과 비교해 다시 고름" },
+    "B1R2": { "boostCard": "AI 정보 검수", "bonusPoint": 20, "note": "AI 추천 안에 들어간 거짓 근거를 발견함" },
+    "B2R3": { "boostCard": "AI 정보 검수", "bonusPoint": 12, "note": "AI 추천을 그대로 따르지 않고 자기 경험과 맞춰 봄" },
+    "B3R3": { "boostCard": "진로 자기 결정", "bonusPoint": 12, "note": "자기 후보를 먼저 세우고 AI 정보를 참고 자료로 사용함" },
+    "C2R3": { "boostCard": "타인 의견 분리", "bonusPoint": 10, "note": "부모님 의견과 자기 경험을 분리해서 다시 살펴봄" }
+  },
+  "resourceCosts": {
+    "A1R1": { "time": 100, "energy": 90 },
+    "A1R2": { "time": 108, "energy": 96 },
+    "A1R3": { "time": 125, "energy": 108 },
+
+    "A2R1": { "time": 70, "energy": 58 },
+    "A2R2": { "time": 78, "energy": 64 },
+    "A2R3": { "time": 95, "energy": 76 },
+
+    "A3R1": { "time": 45, "energy": 38 },
+    "A3R2": { "time": 53, "energy": 44 },
+    "A3R3": { "time": 70, "energy": 56 },
+
+    "B1R1": { "time": 30, "energy": 15 },
+    "B1R2": { "time": 38, "energy": 21 },
+    "B1R3": { "time": 55, "energy": 33 },
+
+    "B2R1": { "time": 45, "energy": 30 },
+    "B2R2": { "time": 53, "energy": 36 },
+    "B2R3": { "time": 70, "energy": 48 },
+
+    "B3R1": { "time": 55, "energy": 42 },
+    "B3R2": { "time": 63, "energy": 48 },
+    "B3R3": { "time": 80, "energy": 60 },
+
+    "C1R1": { "time": 35, "energy": 25 },
+    "C1R2": { "time": 43, "energy": 31 },
+    "C1R3": { "time": 60, "energy": 43 },
+
+    "C2R1": { "time": 32, "energy": 26 },
+    "C2R2": { "time": 40, "energy": 32 },
+    "C2R3": { "time": 58, "energy": 45 },
+
+    "C3R1": { "time": 15, "energy": 10 },
+    "C3R2": { "time": 23, "energy": 16 },
+    "C3R3": { "time": 40, "energy": 28 }
+  },
+  "expRewards": {
+    "A1R1": 25,
+    "A1R2": 27,
+    "A1R3": 30,
+
+    "A2R1": 18,
+    "A2R2": 20,
+    "A2R3": 23,
+
+    "A3R1": 12,
+    "A3R2": 14,
+    "A3R3": 17,
+
+    "B1R1": 8,
+    "B1R2": 10,
+    "B1R3": 12,
+
+    "B2R1": 7,
+    "B2R2": 9,
+    "B2R3": 12,
+
+    "B3R1": 10,
+    "B3R2": 12,
+    "B3R3": 14,
+
+    "C1R1": 5,
+    "C1R2": 7,
+    "C1R3": 10,
+
+    "C2R1": 5,
+    "C2R2": 7,
+    "C2R3": 10,
+
+    "C3R1": 1,
+    "C3R2": 2,
+    "C3R3": 4
+  }
+};var SCENARIO_studyplan = {
+  "id": "studyplan",
+  "category": 5,
+  "categoryName": "시험 공부",
+  "title": "시험 2주 전 — 공부를 어떻게",
+  "version": "v1",
+  "learningMessage": "내가 뭘 모르는지 알아차리는 순간부터 공부 계획은 내 것이 된다.",
+  "aiSuitability": "mid",
+  "timeBudgetSec": 720,
+  "situation": {
+    "text": "학기 말 중간고사가 2주 앞으로 다가왔다. 5과목 중 자신 있는 과목은 2개 정도이고, 나머지 3개는 어디부터 해야 할지 잘 모르겠다. 책상 위에는 시험 범위표와 문제집이 펼쳐져 있고, 오늘은 어떻게 공부할지부터 정해야 했다.",
+    "image": "../images/s05_ch1.webp"
+  },
+  "tier1": [
+    { "id": "A", "label": "직접 계획을 세우고 공부한다", "desc": "내가 아는 것과 모르는 것을 보고 공부 시간을 나눈다." },
+    { "id": "B", "label": "AI에게 공부법을 받는다", "desc": "AI에게 시험 공부 방법이나 약점별 공부 순서를 물어본다." },
+    { "id": "C", "label": "친구나 학원에 기대거나 미룬다", "desc": "남의 계획을 따라가거나 공부를 뒤로 미룬다." }
+  ],
+  "tier2": {
+    "A": [
+      { "id": "A1", "label": "모르는 부분을 먼저 점검하고 약한 과목에 시간을 더 둔다", "delegation": "++" },
+      { "id": "A2", "label": "모든 과목을 똑같이 나눠서 공부한다", "delegation": "+" },
+      { "id": "A3", "label": "자신 있는 과목만 더 공부한다", "delegation": "0" }
+    ],
+    "B": [
+      { "id": "B1", "label": "AI에게 중2 시험 공부법을 한 줄로 묻고 그대로 따른다", "delegation": "--" },
+      { "id": "B2", "label": "내 약점을 말하고 AI 답을 받아 판단한다", "delegation": "0" },
+      { "id": "B3", "label": "내가 약점을 분석한 뒤 AI에게 구체적으로 묻는다", "delegation": "+" }
+    ],
+    "C": [
+      { "id": "C1", "label": "친구가 짠 공부 계획을 따라 한다", "delegation": "-" },
+      { "id": "C2", "label": "학원 시간표만 믿고 따로 공부하지 않는다", "delegation": "-" },
+      { "id": "C3", "label": "어차피 안 된다고 생각하고 게임을 한다", "delegation": "--" }
+    ]
+  },
+  "results": {
+    "A1": {
+      "text": "지난 단원 문제를 조금 풀어 보니 수학 도형과 과학 전기 단원에서 많이 막혔다. 자신 있는 과목은 짧게 확인하고, 막힌 과목에 시간을 더 넣은 계획표를 만들었다.",
+      "basePoint": 94,
+      "deltaR2": 3,
+      "deltaR3": 6,
+      "summary": "약점을 보고 세운 공부 계획"
+    },
+    "A2": {
+      "text": "5과목을 똑같이 나눠서 하루에 조금씩 보기로 했다. 계획표는 깔끔했지만, 이미 아는 과목과 모르는 과목이 같은 칸을 차지했다.",
+      "basePoint": 67,
+      "deltaR2": 6,
+      "deltaR3": 12,
+      "summary": "균등하지만 약점이 흐린 계획"
+    },
+    "A3": {
+      "text": "자신 있는 과목을 먼저 펼치니 문제도 잘 풀리고 기분이 조금 나아졌다. 하지만 어려운 과목 문제집은 책상 한쪽에 그대로 쌓여 있었다.",
+      "basePoint": 48,
+      "deltaR2": 9,
+      "deltaR3": 17,
+      "summary": "편한 과목으로 기운 계획"
+    },
+    "B1": {
+      "text": "AI는 예습, 복습, 기출 문제, 오답 정리 같은 공부법을 차례로 알려 줬다. 말은 다 맞아 보였지만 내가 수학 도형을 모르는지, 과학 전기를 모르는지는 알지 못했다.",
+      "basePoint": 16,
+      "deltaR2": 13,
+      "deltaR3": 23,
+      "summary": "일반적인 AI 공부법",
+      "hiddenIssues": [
+        "학생의 실제 약한 단원을 알지 못함",
+        "모든 과목에 통하는 일반론만 제시됨",
+        "내가 뭘 모르는지 확인하는 과정이 빠져 있음"
+      ]
+    },
+    "B2": {
+      "text": "AI에게 수학 도형이 약하고 영어 단어가 밀렸다고 말하자, 공부 순서를 나눠 줬다. 도움이 됐지만 내가 정말 어디에서 틀리는지는 문제를 풀어 봐야 알 수 있었다.",
+      "basePoint": 59,
+      "deltaR2": 8,
+      "deltaR3": 15,
+      "summary": "약점을 말하고 받은 공부법"
+    },
+    "B3": {
+      "text": "먼저 문제를 풀어 보고 틀린 단원을 표시한 다음, AI에게 수학 도형은 어디부터 다시 봐야 하는지 물었다. AI 답을 그대로 쓰지 않고 내 오답 옆에 필요한 부분만 적었다.",
+      "basePoint": 72,
+      "deltaR2": 5,
+      "deltaR3": 10,
+      "summary": "약점 분석 뒤 쓴 AI 공부 도구"
+    },
+    "C1": {
+      "text": "친구가 만든 계획표를 받아 비슷하게 따라 했다. 친구는 영어를 어려워해서 영어 시간이 많았지만, 나는 사실 수학 도형이 더 급했다.",
+      "basePoint": 47,
+      "deltaR2": 8,
+      "deltaR3": 18,
+      "summary": "친구에게 맞춰진 공부 계획"
+    },
+    "C2": {
+      "text": "학원 시간표대로만 가면 된다고 생각했다. 수업은 들었지만 집에 와서 내가 어디를 모르는지 따로 확인하지는 않았다.",
+      "basePoint": 51,
+      "deltaR2": 8,
+      "deltaR3": 18,
+      "summary": "학원에 맡긴 공부 흐름"
+    },
+    "C3": {
+      "text": "책상에 앉았다가 어차피 늦었다는 생각이 들어 게임을 켰다. 잠깐만 하려고 했는데 시험 범위표는 그대로 접힌 채 남았다.",
+      "basePoint": 10,
+      "deltaR2": 11,
+      "deltaR3": 20,
+      "summary": "미뤄 둔 시험 공부",
+      "hiddenIssues": [
+        "시험 범위를 확인하지 않음",
+        "모르는 과목을 그대로 둠",
+        "공부 계획 없이 시간이 지나감"
+      ]
+    }
+  },
+  "reviews": [
+    { "id": "R1", "label": "그대로 진행", "desc": "검토 없이 그대로 공부를 시작한다.", "boostType": "none" },
+    { "id": "R2", "label": "한 번 보고 빠진 과목만 표시", "desc": "명시적으로 빠진 과목이나 단원을 발견.", "boostType": "explicit" },
+    { "id": "R3", "label": "오답 확인 + 약점 다시 배치", "desc": "내가 모르는 단원과 공부 시간을 다시 맞춘다.", "boostType": "all" }
+  ],
+  "reviewSupplements": {
+    "A1R2": "한 번 보니 과학 전기 단원 시간이 조금 부족했다. 점수 +3.",
+    "A1R3": "틀린 문제를 다시 보고 약한 단원 시간을 더 옮겼다. 점수 +6.",
+    "A2R2": "한 번 보니 이미 아는 과목에도 시간이 너무 많이 들어가 있었다. 점수 +6.",
+    "A2R3": "간단한 문제를 풀어 보고 약한 과목 쪽으로 시간을 다시 옮겼다. 점수 +12.",
+    "A3R2": "한 번 보니 어려운 과목이 계획표 뒤쪽으로 밀려 있었다. 점수 +9.",
+    "A3R3": "편한 과목 시간을 줄이고 틀린 단원부터 다시 넣었다. 점수 +17.",
+    "B1R2": "한 번 읽어 보니 AI 공부법에 내 약한 단원 이름이 하나도 없었다. 점수 +13.",
+    "B1R3": "먼저 문제를 풀어 보고 AI 답을 내 약점에 맞게 다시 골랐다. 점수 +23.",
+    "B2R2": "한 번 보니 내가 말한 약점이 너무 넓어서 공부 순서가 흐렸다. 점수 +8.",
+    "B2R3": "오답을 보고 약점을 더 작게 나눈 뒤 필요한 공부법만 남겼다. 점수 +15.",
+    "B3R2": "한 번 보니 AI가 추천한 순서 중 시험 범위 밖 내용이 조금 있었다. 점수 +5.",
+    "B3R3": "시험 범위표와 오답을 다시 맞춰 보고 필요한 부분만 계획에 넣었다. 점수 +10.",
+    "C1R2": "한 번 보니 친구 계획에는 내 약한 수학 도형 시간이 부족했다. 점수 +8.",
+    "C1R3": "친구 계획을 지우고 내 오답에 맞게 시간을 다시 나눴다. 점수 +18.",
+    "C2R2": "한 번 보니 학원에서 들은 것과 내가 혼자 풀 수 있는 것이 달랐다. 점수 +8.",
+    "C2R3": "학원 시간표 옆에 내가 틀린 단원 복습 시간을 따로 넣었다. 점수 +18.",
+    "C3R2": "한 번 보니 시험 범위표도 제대로 확인하지 않았다. 점수 +11.",
+    "C3R3": "게임을 끄고 시험 범위와 모르는 단원 세 개만 먼저 적었다. 점수 +20."
+  },
+  "finals": {
+    "A1R1": { "score": 94, "grade": "S", "item": "메타 공부 카드", "delegation": "++", "knowledge": "++", "awareness": "내가 뭘 모르는지 보이자 공부할 순서가 생겼다." },
+    "A1R2": { "score": 97, "grade": "S", "item": "메타 공부 카드", "delegation": "++", "knowledge": "++", "awareness": "빠진 단원을 보태니 계획표가 내 시험 쪽으로 더 가까워졌다." },
+    "A1R3": { "score": 100, "grade": "S", "item": "약점 자가 점검 카드", "delegation": "++", "knowledge": "++", "awareness": "내가 모르는 것을 알게 된 것만으로 한 단계였다." },
+
+    "A2R1": { "score": 67, "grade": "B", "item": "고른 시간표 카드", "delegation": "+", "knowledge": "+", "awareness": "모든 과목을 똑같이 보니 내 약점도 똑같이 작아 보였다." },
+    "A2R2": { "score": 73, "grade": "A", "item": "시간 다시 나눔 카드", "delegation": "+", "knowledge": "+", "awareness": "아는 과목과 모르는 과목은 같은 시간이 아니었다." },
+    "A2R3": { "score": 79, "grade": "A", "item": "메타 공부 카드", "delegation": "+", "knowledge": "++", "awareness": "문제를 풀어 보니 시간표가 다시 움직였다." },
+
+    "A3R1": { "score": 48, "grade": "C", "item": "편한 과목 카드", "delegation": "0", "knowledge": "0", "awareness": "잘하는 과목을 풀 때는 공부하는 기분이 났다." },
+    "A3R2": { "score": 57, "grade": "B", "item": "밀린 약점 경고 카드", "delegation": "0", "knowledge": "0", "awareness": "뒤로 밀어 둔 과목이 계속 책상에 남아 있었다." },
+    "A3R3": { "score": 65, "grade": "B", "item": "약점 다시 보기 카드", "delegation": "0", "knowledge": "+", "awareness": "피하고 싶은 단원을 넣고 나서야 공부 계획 같아졌다." },
+
+    "B1R1": { "score": 16, "grade": "D", "item": null, "delegation": "--", "knowledge": "--", "awareness": "AI 공부법은 좋았지만 내 시험은 아니었다." },
+    "B1R2": { "score": 29, "grade": "D", "item": null, "delegation": "--", "knowledge": "-", "awareness": "그 계획에는 내가 틀리는 단원이 없었다." },
+    "B1R3": { "score": 39, "grade": "C", "item": "남의 공부법 경고 카드", "delegation": "--", "knowledge": "0", "awareness": "AI 답을 내 오답 옆에 놓으니 맞는 것만 조금 남았다." },
+
+    "B2R1": { "score": 59, "grade": "B", "item": "AI 공부법 카드", "delegation": "0", "knowledge": "0", "awareness": "내 약점을 말하니 공부법이 조금 내 쪽으로 왔다." },
+    "B2R2": { "score": 67, "grade": "B", "item": "약점 말하기 카드", "delegation": "0", "knowledge": "+", "awareness": "약점을 넓게 말하면 답도 넓게 돌아왔다." },
+    "B2R3": { "score": 74, "grade": "A", "item": "AI 학습 도구 활용 카드", "delegation": "0", "knowledge": "+", "awareness": "AI가 준 방법은 내 오답을 지나가야 쓸모가 생겼다." },
+
+    "B3R1": { "score": 72, "grade": "A", "item": "약점 점검 카드", "delegation": "+", "knowledge": "+", "awareness": "내가 먼저 틀린 곳을 찾으니 AI 질문도 달라졌다." },
+    "B3R2": { "score": 77, "grade": "A", "item": "AI 학습 도구 활용 카드", "delegation": "+", "knowledge": "+", "awareness": "AI 답에서도 시험 범위에 맞는 것만 골라야 했다." },
+    "B3R3": { "score": 82, "grade": "A", "item": "메타 공부 카드", "delegation": "+", "knowledge": "++", "awareness": "AI는 길을 나눠 줬고, 출발점은 내 오답이었다." },
+
+    "C1R1": { "score": 47, "grade": "C", "item": "친구 따라 공부 카드", "delegation": "-", "knowledge": "-", "awareness": "친구 계획을 따라가도 내 시험지는 따로 나왔다." },
+    "C1R2": { "score": 55, "grade": "B", "item": "친구 의존 경고 카드", "delegation": "-", "knowledge": "0", "awareness": "친구가 어려운 과목과 내가 어려운 과목은 달랐다." },
+    "C1R3": { "score": 65, "grade": "B", "item": "친구 의존 분리 카드", "delegation": "-", "knowledge": "+", "awareness": "친구 계획을 지우고 나니 내 약점 칸이 보였다." },
+
+    "C2R1": { "score": 51, "grade": "C", "item": "학원 의존 카드", "delegation": "-", "knowledge": "-", "awareness": "수업을 들은 것과 내가 풀 수 있는 것은 달랐다." },
+    "C2R2": { "score": 59, "grade": "B", "item": "들은 공부 경고 카드", "delegation": "-", "knowledge": "0", "awareness": "학원에서 지나간 문제를 혼자 풀면 다시 막혔다." },
+    "C2R3": { "score": 69, "grade": "B", "item": "내 복습 칸 카드", "delegation": "-", "knowledge": "+", "awareness": "학원 시간표 옆에 내 오답 시간이 따로 필요했다." },
+
+    "C3R1": { "score": 10, "grade": "D", "item": null, "delegation": "--", "knowledge": "--", "awareness": "게임 화면은 넘어갔지만 시험 범위는 그대로였다." },
+    "C3R2": { "score": 21, "grade": "D", "item": null, "delegation": "--", "knowledge": "-", "awareness": "늦었다는 말 뒤에 내가 모르는 단원이 숨어 있었다." },
+    "C3R3": { "score": 30, "grade": "D", "item": "마지막 범위표 카드", "delegation": "--", "knowledge": "0", "awareness": "전부는 못 해도 모르는 단원 세 개는 적을 수 있었다." }
+  },
+  "cardSlots": {
+    "A1R3": { "boostCard": "약점 자가 점검", "bonusPoint": 12, "note": "문제를 풀어 보고 모르는 단원을 직접 확인함" },
+    "A2R3": { "boostCard": "메타 공부", "bonusPoint": 10, "note": "균등 계획을 자기 약점 중심으로 다시 조정함" },
+    "B1R2": { "boostCard": "AI 학습 도구 활용", "bonusPoint": 20, "note": "AI의 일반 공부법에 자기 약점이 없다는 것을 발견함" },
+    "B2R3": { "boostCard": "AI 학습 도구 활용", "bonusPoint": 12, "note": "AI 답을 자기 오답과 비교해 필요한 방법만 남김" },
+    "B3R3": { "boostCard": "메타 공부", "bonusPoint": 12, "note": "자기 약점 분석을 먼저 한 뒤 AI를 도구로 사용함" },
+    "C1R3": { "boostCard": "친구 의존 분리", "bonusPoint": 10, "note": "친구의 계획과 자기 시험 약점을 분리해서 다시 봄" }
+  },
+  "resourceCosts": {
+    "A1R1": { "time": 100, "energy": 90 },
+    "A1R2": { "time": 108, "energy": 96 },
+    "A1R3": { "time": 125, "energy": 108 },
+
+    "A2R1": { "time": 75, "energy": 62 },
+    "A2R2": { "time": 83, "energy": 68 },
+    "A2R3": { "time": 100, "energy": 80 },
+
+    "A3R1": { "time": 50, "energy": 40 },
+    "A3R2": { "time": 58, "energy": 46 },
+    "A3R3": { "time": 75, "energy": 58 },
+
+    "B1R1": { "time": 30, "energy": 15 },
+    "B1R2": { "time": 38, "energy": 21 },
+    "B1R3": { "time": 55, "energy": 33 },
+
+    "B2R1": { "time": 45, "energy": 30 },
+    "B2R2": { "time": 53, "energy": 36 },
+    "B2R3": { "time": 70, "energy": 48 },
+
+    "B3R1": { "time": 60, "energy": 48 },
+    "B3R2": { "time": 68, "energy": 54 },
+    "B3R3": { "time": 85, "energy": 66 },
+
+    "C1R1": { "time": 35, "energy": 25 },
+    "C1R2": { "time": 43, "energy": 31 },
+    "C1R3": { "time": 60, "energy": 43 },
+
+    "C2R1": { "time": 45, "energy": 30 },
+    "C2R2": { "time": 53, "energy": 36 },
+    "C2R3": { "time": 70, "energy": 48 },
+
+    "C3R1": { "time": 15, "energy": 10 },
+    "C3R2": { "time": 23, "energy": 16 },
+    "C3R3": { "time": 40, "energy": 28 }
+  },
+  "expRewards": {
+    "A1R1": 25,
+    "A1R2": 27,
+    "A1R3": 30,
+
+    "A2R1": 18,
+    "A2R2": 20,
+    "A2R3": 23,
+
+    "A3R1": 12,
+    "A3R2": 14,
+    "A3R3": 17,
+
+    "B1R1": 8,
+    "B1R2": 10,
+    "B1R3": 12,
+
+    "B2R1": 7,
+    "B2R2": 9,
+    "B2R3": 12,
+
+    "B3R1": 10,
+    "B3R2": 12,
+    "B3R3": 14,
+
+    "C1R1": 5,
+    "C1R2": 7,
+    "C1R3": 10,
+
+    "C2R1": 5,
+    "C2R2": 7,
+    "C2R3": 10,
+
+    "C3R1": 1,
+    "C3R2": 2,
+    "C3R3": 4
+  },
+  "semesterClosing": {
+    "text": "이 학기에 나는 자기소개를 쓰고, 모둠 발표를 맞추고, 자료를 확인하고, 진로를 말하고, 시험 공부를 정했다. 다섯 번의 선택은 모두 달랐지만, 결국 내가 직접 봐야 보이는 것들이 있었다.",
+    "image": "../images/s05_ch6.webp"
+  }
+};
+var SCENARIOS = {
+  'selfintro': SCENARIO_selfintro,
+  'groupwork': SCENARIO_groupwork,
+  'eorinwangja': SCENARIO_EORINWANGJA,
+  'career': SCENARIO_career,
+  'studyplan': SCENARIO_studyplan
+};
+
+// =====================================================
+// 5. Game State (v0.4 — 두 역량 + 자원)
+// =====================================================
+var gameState=null,currentRow=null;
+
+function createInitialState(){
+  var rms=CONFIG.resourceMaxStart;
+  var rc={};CONFIG.scenarios.forEach(function(s){rc[s]=0;});
+  return {
+    currentScenarioId:null,
+    currentTier:1,
+    selectedTier1:null,
+    selectedTier2:null,
+    selectedReview:null,
+    competencies:{
+      delegationChoice:{value:0,history:[]},
+      knowledge:{value:0,history:[]}
+    },
+    score:0,
+    totalScore:0,
+    itemsCollected:[],
+    cardsHeld:[],
+    scenarioHistory:[],
+    // v0.4 신규 — 자원 시스템 (SPEC §7)
+    resources:{
+      time:{current:rms.time,max:rms.time,history:[]},
+      energy:{current:rms.energy,max:rms.energy,history:[]}
+    },
+    exp:{current:0,level:1,thresholds:CONFIG.expThresholds},
+    hintEnabled:getHintPref(),
+    scenarioRepeatCount:rc,
+    // v0.5 신규 — 학기 Arc 누적
+    clearedScenarios:[],
+    completed:false
+  };
+}
+
+// v0.5: 시나리오별 컷 이미지 동적 매핑
+function getCutImage(scenarioId,cutNum){
+  var n=({'selfintro':'01','groupwork':'02','eorinwangja':'03','career':'04','studyplan':'05'})[scenarioId]||'01';
+  if(cutNum<=2)return'../images/s'+n+'_ch1.webp';
+  if(cutNum<=4)return'../images/s'+n+'_ch2.webp';
+  return'../images/s'+n+'_ch3.webp';
+}
+
+// =====================================================
+// 6. Game Engine (v0.3 — 트리 진행)
+// =====================================================
+function getScenario(){return SCENARIOS[gameState.currentScenarioId];}
+
+function getLeafPath(){
+  if(!gameState.selectedTier2||!gameState.selectedReview)return null;
+  return gameState.selectedTier2+gameState.selectedReview;
+}
+
+function getTier2Delegation(t2id){
+  var sc=getScenario(),firstChar=t2id.charAt(0);
+  var arr=sc.tier2[firstChar];
+  for(var i=0;i<arr.length;i++)if(arr[i].id===t2id)return arr[i].delegation;
+  return '0';
+}
+
+function applyTier1(t1id){
+  var snap=stateSnap();
+  gameState.selectedTier1=t1id;
+  gameState.currentTier=2;
+  // 1차 선택은 위임 선택력 누적에 포함되지 않음 (방향 분기만, 점수는 2차에서)
+  trackEvent('tier1_selected',{scenarioId:gameState.currentScenarioId,tier1:t1id,before:snap,after:stateSnap()});
+  saveGame();
+}
+
+function applyTier2(t2id){
+  var snap=stateSnap();
+  gameState.selectedTier2=t2id;
+  gameState.currentTier='result';
+  // 위임 선택력 누적 — tier2.delegation 기준
+  var dlg=getTier2Delegation(t2id);
+  var delta=DELEGATION_DELTA[dlg]||0;
+  gameState.competencies.delegationChoice.value+=delta;
+  gameState.competencies.delegationChoice.history.push({tier2:t2id,delegation:dlg,delta:delta});
+  trackEvent('tier2_selected',{scenarioId:gameState.currentScenarioId,tier2:t2id,delegation:dlg,delta:delta,before:snap,after:stateSnap()});
+  saveGame();
+}
+
+function applyReview(rid){
+  var snap=stateSnap();
+  gameState.selectedReview=rid;
+  gameState.currentTier='final';
+  // 지식 누적 — finals[leafPath].knowledge 기준
+  var leaf=getLeafPath();
+  var fin=getScenario().finals[leaf];
+  var knl=fin?fin.knowledge:'0';
+  var delta=DELEGATION_DELTA[knl]||0;
+  gameState.competencies.knowledge.value+=delta;
+  gameState.competencies.knowledge.history.push({leaf:leaf,knowledge:knl,delta:delta});
+  // 점수 산정 — Phase 5: detectIssues + calculateFinalScore 통합 (C안 격상 메커닉)
+  var sc2=getScenario();
+  var t2=gameState.selectedTier2;            // 'A1', 'B2' 등
+  var result2=sc2.results[t2];               // basePoint, deltaR2, deltaR3
+  var reviewObj=null;
+  for(var ri=0;ri<sc2.reviews.length;ri++){if(sc2.reviews[ri].id===rid){reviewObj=sc2.reviews[ri];break;}}
+  var level=gameState.exp.level;
+  var cardBonus=getCardBonus(leaf);
+  gameState.score=calculateFinalScore(result2,reviewObj||{id:rid},level,leaf);
+  gameState.totalScore+=gameState.score;
+  if(fin&&fin.item)gameState.itemsCollected.push(fin.item);
+  // trackEvent 페이로드에 디버그 정보 추가 (level, detected, resourcePenalty)
+  var detected=detectIssues(result2,reviewObj||{id:rid},level);
+  var resourcePenalty=calcResourcePenalty(gameState.resources);
+  trackEvent('review_selected',{scenarioId:gameState.currentScenarioId,review:rid,leaf:leaf,knowledge:knl,delta:delta,score:gameState.score,cardBonus:cardBonus,level:level,detected:detected,resourcePenalty:resourcePenalty,before:snap,after:stateSnap()});
+  saveGame();
+}
+
+function getCardBonus(leaf){
+  var sc=getScenario(),slots=sc.cardSlots||{};
+  if(!slots[leaf])return 0;
+  // 이번 빌드는 카드 보유 미니게임 비활성 → cardsHeld 비어있음 → 항상 0
+  // 단, cardSlots 데이터 구조는 인식
+  for(var i=0;i<gameState.cardsHeld.length;i++){
+    if(gameState.cardsHeld[i]===slots[leaf].boostCard)return slots[leaf].bonusPoint;
+  }
+  return 0;
+}
+
+function getGrade(score){
+  if(score>=CONFIG.pointThresholds.S)return 'S';
+  if(score>=CONFIG.pointThresholds.A)return 'A';
+  if(score>=CONFIG.pointThresholds.B)return 'B';
+  if(score>=CONFIG.pointThresholds.C)return 'C';
+  return 'D';
+}
+
+// =====================================================
+// 6b. Resource System (v0.4 신규 — SPEC §2)
+// =====================================================
+
+// 작업 4: 자원 소비 — leaf 결정 시점(컷 6 진입 직전)에서 호출
+// 음수 허용 (SPEC §2.4 A안)
+function consumeResources(leafPath){
+  var sc=getScenario();
+  var costs=sc.resourceCosts?sc.resourceCosts[leafPath]:null;
+  if(!costs)return;
+  var res=gameState.resources;
+  var timeBefore=res.time.current;
+  var energyBefore=res.energy.current;
+  res.time.current-=costs.time;
+  res.energy.current-=costs.energy;
+  res.time.history.push({leaf:leafPath,cost:costs.time,before:timeBefore,after:res.time.current});
+  res.energy.history.push({leaf:leafPath,cost:costs.energy,before:energyBefore,after:res.energy.current});
+  // 이벤트 로그 (작업 8)
+  trackEvent('resource_consumed',{
+    leafPath:leafPath,
+    time_cost:costs.time,
+    energy_cost:costs.energy,
+    time_after:res.time.current,
+    energy_after:res.energy.current
+  });
+}
+
+// 작업 6: 자원 회복 — 시나리오 종료(컷 6 진입) 시 호출 (SPEC §2.3)
+function recoverResources(grade,didLevelUp){
+  var res=gameState.resources;
+  var recoverPercent=CONFIG.recoverBase+(CONFIG.gradeBonus[grade]||0);
+  if(didLevelUp){
+    res.time.current=res.time.max;
+    res.energy.current=res.energy.max;
+  } else {
+    res.time.current=Math.min(res.time.max,res.time.current+Math.floor(res.time.max*recoverPercent));
+    res.energy.current=Math.min(res.energy.max,res.energy.current+Math.floor(res.energy.max*recoverPercent));
+  }
+  // 이벤트 로그 (작업 8)
+  trackEvent('resource_recovered',{
+    grade:grade,
+    recoverPercent:recoverPercent,
+    time_after:res.time.current,
+    energy_after:res.energy.current
+  });
+}
+
+// =====================================================
+// 6c. Exp + Level System (v0.4 신규 — SPEC §3, Phase 4)
+// =====================================================
+
+// 작업 3: 경험치 획득 계산 (SPEC §3.2)
+function calculateExpGain(leafPath,grade){
+  var sc=getScenario();
+  var leafExp=sc.expRewards?sc.expRewards[leafPath]:0;
+  if(!leafExp)return 0;
+  var gradeMultiplier={S:1.5,A:1.3,B:1.0,C:0.7,D:0.5};
+  return Math.floor(leafExp*(gradeMultiplier[grade]||1.0));
+}
+
+// 작업 4: 레벨업 트리거 검출 (SPEC §3.1)
+// v0.5: 한 번에 한 단계만 + 잉여 exp 손실 (다음 단계 0부터 카운트)
+function checkLevelUp(prevExp,newExp){
+  var thr=CONFIG.expThresholds; // [0,20,50,100,200] cumulative
+  var prevLevel=gameState.exp.level;
+  if(prevLevel>=5)return false; // MAX
+  var nextThresh=thr[prevLevel]; // Lv1→thr[1]=20, Lv2→thr[2]=50, ...
+  if(newExp>=nextThresh){
+    gameState.exp.level=prevLevel+1;
+    gameState.exp.current=nextThresh; // 잉여 exp 손실 — 다음 단계 0부터
+    return true;
+  }
+  return false;
+}
+
+// 작업 5: 레벨업 시 미터 max 증가 (SPEC §11.4)
+function applyLevelUpMeterIncrease(newLevel){
+  var mbl=CONFIG.meterMaxByLevel[newLevel];
+  if(!mbl)return;
+  gameState.resources.time.max=mbl.time;
+  gameState.resources.energy.max=mbl.energy;
+}
+
+// 작업 7: 레벨업 알림 UI — 좌측 패널 노란 깜빡
+function flashLevelUpUI(){
+  var bar=document.getElementById('resource-bar');
+  if(!bar)return;
+  bar.classList.remove('flash-levelup');
+  // reflow trigger
+  void bar.offsetWidth;
+  bar.classList.add('flash-levelup');
+  setTimeout(function(){bar.classList.remove('flash-levelup');},900);
+}
+
+// 경험치 바 UI 업데이트
+function updateExpUI(){
+  if(!gameState||!gameState.exp)return;
+  var exp=gameState.exp;
+  var lv=exp.level;
+  var cur=exp.current;
+  var thr=CONFIG.expThresholds;
+  var lvEl=document.getElementById('exp-level');
+  var numEl=document.getElementById('exp-num');
+  var fillEl=document.getElementById('exp-bar-fill');
+  if(!lvEl)return;
+  if(lv>=5){
+    // L5 MAX
+    lvEl.textContent='Lv.5 MAX';
+    numEl.textContent='';
+    fillEl.style.width='100%';
+  } else {
+    var nextThr=thr[lv]; // thr[1]=20,thr[2]=50,...
+    var prevThr=thr[lv-1]; // thr[0]=0,thr[1]=20,...
+    var pct=(nextThr>prevThr)?Math.min(100,(cur-prevThr)/(nextThr-prevThr)*100):100;
+    lvEl.textContent='Lv.'+lv;
+    numEl.textContent=cur+'/'+nextThr;
+    fillEl.style.width=pct+'%';
+  }
+  // numPulse 애니메이션 재사용
+  if(lvEl.classList.contains('pulsing'))return;
+}
+
+// 작업 7: 작업 7: 레벨 숫자 numPulse
+function pulseExpLevel(){
+  var lvEl=document.getElementById('exp-level');
+  if(!lvEl)return;
+  lvEl.classList.add('pulsing');
+  setTimeout(function(){lvEl.classList.remove('pulsing');},600);
+}
+
+// 자원 부족 페널티 (SPEC §2.4 A안). calculateFinalScore에서 호출.
+function calcResourcePenalty(resources){
+  var timeShortage=Math.max(0,-(resources||gameState.resources).time.current);
+  var energyShortage=Math.max(0,-(resources||gameState.resources).energy.current);
+  return Math.floor((timeShortage+energyShortage)*0.5);
+}
+
+// Phase 6: 힌트 토글 영구 저장 + 토글 함수 (SPEC §4 — B안: 시작 화면 + 디버그 둘 다)
+var HINT_PREF_KEY='ai-literacy-delegation-boundary-v05-hintpref';
+function getHintPref(){
+  var v=localStorage.getItem(HINT_PREF_KEY);
+  if(v===null)return CONFIG.hintEnabledDefault;
+  return v==='1';
+}
+function setHintPref(b){localStorage.setItem(HINT_PREF_KEY,b?'1':'0');}
+function toggleHint(){
+  if(gameState){
+    gameState.hintEnabled=!gameState.hintEnabled;
+    setHintPref(gameState.hintEnabled);
+    saveGame();
+    trackEvent('hint_toggled',{newState:gameState.hintEnabled,context:'inGame'});
+    if(typeof renderDebug==='function')renderDebug();
+  }else{
+    var cur=getHintPref();
+    setHintPref(!cur);
+    trackEvent('hint_toggled',{newState:!cur,context:'startScreen'});
+    showStartScreen();
+  }
+}
+
+// Phase 5: 검토 효율 격상 — 레벨 ↑ → 같은 검토로 한 단계 깊이 (C안, SPEC §3.4 구현 정정)
+// 반환값: 검토로 추가 획득하는 점수 (deltaR2 or deltaR3) + levelExtraBonus
+function detectIssues(result,review,level){
+  var reviewMap={R1:0,R2:1,R3:2};
+  var baseIdx=reviewMap[review.id]||0;
+  var step=CONFIG.levelStep[level]||0;
+  var effIdx=Math.min(2,baseIdx+step);
+  var deltaPoint=effIdx===0?0:(effIdx===1?(result.deltaR2||0):(result.deltaR3||0));
+  var extra=CONFIG.levelExtraBonus[level]||0;
+  return deltaPoint+extra;
+}
+
+// Phase 5: 최종 점수 = basePoint + detectIssues 반환값 + cardBonus - resourcePenalty
+function calculateFinalScore(result,review,level,leaf){
+  var base=result.basePoint||0;
+  var detected=detectIssues(result,review,level);
+  var cardBonus=getCardBonus(leaf);
+  var resourcePenalty=calcResourcePenalty(gameState.resources);
+  return Math.max(0,base+detected+cardBonus-resourcePenalty);
+}
+
+// =====================================================
+// 7. Storage (v0.2 보존, key만 v03)
+// =====================================================
+function saveGame(){localStorage.setItem(CONFIG.storageKey,JSON.stringify({state:gameState,at:new Date().toISOString()}));}
+function loadGame(){try{var d=JSON.parse(localStorage.getItem(CONFIG.storageKey));return d?d.state:null;}catch(e){return null;}}
+function clearGame(){localStorage.removeItem(CONFIG.storageKey);}
+function hasSave(){return!!localStorage.getItem(CONFIG.storageKey);}
+function getSid(){var s=sessionStorage.getItem(CONFIG.sessionIdKey);if(!s){s='s_'+Date.now()+'_'+Math.random().toString(36).slice(2);sessionStorage.setItem(CONFIG.sessionIdKey,s);}return s;}
+function resetSid(){sessionStorage.removeItem(CONFIG.sessionIdKey);}
+
+// =====================================================
+// 8. Event Logger (v0.2 보존)
+// =====================================================
+function stateSnap(){
+  if(!gameState)return{};
+  return{
+    sid:gameState.currentScenarioId,
+    tier:gameState.currentTier,
+    t1:gameState.selectedTier1,
+    t2:gameState.selectedTier2,
+    rv:gameState.selectedReview,
+    dlg:gameState.competencies.delegationChoice.value,
+    knl:gameState.competencies.knowledge.value,
+    score:gameState.score,
+    total:gameState.totalScore,
+    items:gameState.itemsCollected.length,
+    cards:gameState.cardsHeld.length,
+    // v0.4 자원 스냅
+    res_time:gameState.resources?gameState.resources.time.current:null,
+    res_energy:gameState.resources?gameState.resources.energy.current:null
+  };
+}
+
+function trackEvent(t,p){
+  var e={type:t,sid:getSid(),at:new Date().toISOString(),scenarioId:gameState?gameState.currentScenarioId:null,snap:stateSnap(),payload:p||{}};
+  console.log('[AI Literacy v0.5]',e);
+  try{
+    var l=JSON.parse(localStorage.getItem(CONFIG.eventLogKey)||'[]');
+    l.push(e);
+    localStorage.setItem(CONFIG.eventLogKey,JSON.stringify(l));
+  }catch(x){}
+}
+
+function getEvents(){try{return JSON.parse(localStorage.getItem(CONFIG.eventLogKey)||'[]');}catch(e){return[];}}
+function clearEvents(){localStorage.removeItem(CONFIG.eventLogKey);}
+function downloadLog(){var l=localStorage.getItem(CONFIG.eventLogKey)||'[]';var b=new Blob([l],{type:'application/json'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download='ai-literacy-v05-log.json';a.click();URL.revokeObjectURL(u);}
+
+// =====================================================
+// 9. Render Functions (v0.3 — 6컷 흐름)
+// =====================================================
+var container=document.getElementById('main-container');
+
+function showStats(){
+  document.getElementById('panel-row').classList.add('visible');
+}
+function hideStats(){
+  document.getElementById('panel-row').classList.remove('visible');
+}
+
+// 자원 게이지 업데이트 (작업 2)
+function updateResourceUI(){
+  if(!gameState)return;
+  var res=gameState.resources;
+  ['time','energy'].forEach(function(key){
+    var r=res[key];
+    var pct=r.max>0?Math.max(0,Math.min(100,r.current/r.max*100)):0;
+    document.getElementById('rnum-'+key).textContent=r.current;
+    document.getElementById('rgauge-'+key).style.width=pct+'%';
+    // 소진 감각: 50% 이하 = 더 짙은 회색
+    document.getElementById('rgauge-'+key).style.background=pct>50?'#555':'#333';
+  });
+}
+
+// 자원 게이지 ±pop 애니메이션 (작업 5 — v0.3 animateStat 패턴 재사용)
+function animateResource(key,oldVal,newVal){
+  var diff=newVal-oldVal;if(diff===0)return;
+  var el=document.getElementById('res-'+key);
+  var nm=document.getElementById('rnum-'+key);
+  var dl=document.getElementById('rdelta-'+key);
+  el.classList.add(diff>0?'flash-up':'flash-down');
+  nm.textContent=newVal;
+  nm.classList.add('pulsing');
+  dl.textContent=(diff>0?'+':'')+diff;
+  dl.className='resource-change-indicator show '+(diff>0?'up':'down');
+  setTimeout(function(){el.classList.remove('flash-up','flash-down');nm.classList.remove('pulsing');dl.className='resource-change-indicator';},2000);
+}
+
+function updateStats(){
+  if(!gameState)return;
+  var dlg=gameState.competencies.delegationChoice.value;
+  var knl=gameState.competencies.knowledge.value;
+  document.getElementById('num-delegation').textContent=(dlg>0?'+':'')+dlg;
+  document.getElementById('num-knowledge').textContent=(knl>0?'+':'')+knl;
+  // 양방향 바: -4..+4 → 0..50% (가운데 0 기준 좌/우, 초록=양수 / 빨강=음수)
+  setBipolar('gauge-delegation','num-delegation',dlg);
+  setBipolar('gauge-knowledge','num-knowledge',knl);
+  document.getElementById('score-stat').textContent='점수 '+gameState.score+(gameState.itemsCollected.length>0?' / 아이템 '+gameState.itemsCollected.length+'개':'');
+  var cutNum=getCurrentCutNum();
+  document.getElementById('stat-progress').textContent='컷 '+cutNum+'/6';
+  updateResourceUI();
+  updateExpUI();
+}
+
+function setBipolar(fillId,numId,value){
+  var fill=document.getElementById(fillId);
+  var num=document.getElementById(numId);
+  if(!fill||!num)return;
+  var pct=Math.min(50,Math.abs(value)*12.5);
+  fill.style.width=pct+'%';
+  fill.classList.remove('positive','negative');
+  num.classList.remove('positive','negative');
+  if(value>0){fill.classList.add('positive');num.classList.add('positive');}
+  else if(value<0){fill.classList.add('negative');num.classList.add('negative');}
+}
+
+function getCurrentCutNum(){
+  if(!gameState)return 1;
+  if(gameState.completed)return 6;
+  if(gameState.selectedReview)return 6;
+  if(gameState.selectedTier2)return gameState.currentTier==='final'?6:(gameState.currentTier==='result'?4:5);
+  if(gameState.selectedTier1)return 3;
+  return gameState.currentTier===1?1:2;
+}
+
+function animateStat(which,oldVal,newVal){
+  var diff=newVal-oldVal;if(diff===0)return;
+  var st=document.getElementById('stat-'+which),nm=document.getElementById('num-'+which),dl=document.getElementById('delta-'+which);
+  st.classList.add(diff>0?'flash-up':'flash-down');
+  nm.textContent=(newVal>0?'+':'')+newVal;
+  nm.classList.add('pulsing');
+  dl.textContent=(diff>0?'+':'')+diff;
+  dl.className='stat-change-indicator show '+(diff>0?'up':'down');
+  setTimeout(function(){st.classList.remove('flash-up','flash-down');nm.classList.remove('pulsing');dl.className='stat-change-indicator';},2000);
+}
+
+function showStartScreen(){
+  hideStats();
+  if(!gameState){
+    var saved=loadGame();
+    if(saved&&saved.clearedScenarios){gameState=saved;}
+    else{gameState=createInitialState();saveGame();}
+  }
+  var hintOn=getHintPref();
+  var order=CONFIG.scenarios; // 학기 시간 순
+  var cleared=gameState.clearedScenarios||[];
+  var nextId=null;
+  for(var i=0;i<order.length;i++){if(cleared.indexOf(order[i])<0){nextId=order[i];break;}}
+  var allDone=(nextId===null);
+  var pct=Math.round((cleared.length/order.length)*100);
+  var h='<div class="semester-frame">';
+  h+='<h1>AI 리터러시: 위임의 경계</h1>';
+  h+='<div class="subtitle">이건 AI한테 맡겨도 돼?</div>';
+  h+='<div class="vtag">v0.5 — 한 학생의 한 학기</div>';
+  h+='<div class="progress-wrap">';
+  h+='<div class="progress-head"><span class="progress-label">학기 진행</span><span class="progress-count">'+cleared.length+' / '+order.length+'</span></div>';
+  h+='<div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div>';
+  h+='<div class="progress-dots">';
+  order.forEach(function(sid){
+    var cls='progress-dot';
+    if(cleared.indexOf(sid)>=0)cls+=' cleared';
+    else if(sid===nextId)cls+=' next';
+    h+='<span class="'+cls+'" title="'+sid+'"></span>';
+  });
+  h+='</div></div>';
+  if(allDone){
+    h+='<div class="semester-final"><h2>한 학기를 모두 통과했다.</h2><p>다섯 결정이 누적되어 한 학생의 한 학기가 되었다.<br>처음부터 다시 시작하면 새 학생이 같은 결정을 마주한다.</p></div>';
+  }
+  h+='<div class="scenario-list">';
+  order.forEach(function(sid,idx){
+    var s=SCENARIOS[sid];
+    var isCleared=cleared.indexOf(sid)>=0;
+    var isNext=(sid===nextId);
+    var cls='scenario-card';
+    if(isCleared)cls+=' cleared';
+    if(isNext)cls+=' next';
+    var mark=isCleared?'클리어':(isNext?'다음 추천 →':'자유 선택');
+    var clickAttr=isCleared?'':' onclick="startScenario(\''+sid+'\')"';
+    h+='<button class="'+cls+'" type="button"'+clickAttr+'>';
+    h+='<span class="sc-num">'+(idx+1)+'</span>';
+    h+='<div class="sc-body"><div class="sc-title">'+s.title+'</div><div class="sc-meta">'+s.categoryName+'</div></div>';
+    h+='<span class="sc-mark">'+mark+'</span>';
+    h+='</button>';
+  });
+  h+='</div>';
+  h+='<div class="semester-actions">';
+  if(hasSave()&&gameState.currentScenarioId&&!gameState.completed){
+    h+='<button class="start-btn secondary" onclick="continueGame()">이어하기</button>';
+  }
+  if(cleared.length>0||allDone){
+    h+='<button class="start-btn secondary" onclick="resetGame()">학기 처음부터</button>';
+  }
+  var hintToggleHTML='<div class="hint-toggle-wrap"><label class="hint-toggle-label"><input type="checkbox" class="hint-toggle-input" '+(hintOn?'checked':'')+' onchange="toggleHint()" /> 힌트 표시 <span class="hint-toggle-note">(선택지 영향 미리 보기)</span></label></div>';
+  h+=hintToggleHTML+'</div></div>';
+  container.innerHTML=h;
+}
+
+function ensureRow(){
+  if(currentRow)return currentRow;
+  var sc=getScenario();
+  var row=document.createElement('div');row.className='scenario-row';row.id='scenario-row';
+  // 6 panels in 2 rows of 3
+  var panels='';
+  for(var i=1;i<=6;i++){
+    panels+='<div class="panel" data-cut="'+i+'"><div class="panel-image"><span class="cut-num">CUT '+i+'</span><span class="cut-label">'+i+'</span></div><div class="panel-body"></div></div>';
+    if(i===3)panels='<div class="panels-grid panels-row1">'+panels+'</div><div class="panels-grid panels-row2">';
+  }
+  panels+='</div>';
+  row.innerHTML=panels+'<div class="next-btn-wrap" id="next-wrap"><button class="next-btn" id="next-btn" onclick="onNext()">다음 &#8594;</button></div>';
+  container.appendChild(row);
+  currentRow=row;
+  return row;
+}
+
+function setPanelImage(cutNum,labelText){
+  var panel=currentRow.querySelector('[data-cut="'+cutNum+'"]');
+  if(!panel)return;
+  var imgEl=panel.querySelector('.panel-image');
+  var src=gameState&&gameState.currentScenarioId?getCutImage(gameState.currentScenarioId,cutNum):CUT_IMAGES[cutNum];
+  if(src){
+    var img=new Image();img.src=src;
+    img.onload=function(){imgEl.innerHTML='<img src="'+src+'" alt="컷 '+cutNum+'"><span class="cut-num">CUT '+cutNum+'</span>'+(labelText?'<span class="panel-place">'+labelText+'</span>':'');};
+    img.onerror=function(){imgEl.innerHTML='<span class="cut-num">CUT '+cutNum+'</span><span class="cut-label">'+cutNum+'</span>'+(labelText?'<span class="panel-place">'+labelText+'</span>':'');};
+  }
+}
+
+function activatePanel(cutNum){
+  var panel=currentRow.querySelector('[data-cut="'+cutNum+'"]');
+  if(!panel)return null;
+  panel.classList.add('active','slide-in');
+  setTimeout(function(){panel.scrollIntoView({behavior:'smooth',block:'center'});},80);
+  return panel;
+}
+
+// 컷 1: 상황 제시
+function renderCut1(){
+  var sc=getScenario();
+  ensureRow();
+  trackEvent('scenario_viewed',{scenarioId:sc.id,title:sc.title});
+  setPanelImage(1,sc.categoryName);
+  var panel=activatePanel(1);
+  panel.querySelector('.panel-body').innerHTML=
+    '<p class="highlight">'+sc.title+'</p>'+
+    '<p>'+sc.situation.text+'</p>'+
+    '<div class="advance-wrap"><button class="advance-btn" onclick="goCut2()">어떻게 할까? &#8594;</button></div>';
+  updateStats();
+}
+
+// 컷 2: 1차 선택 (A·B·C)
+function goCut2(){
+  var sc=getScenario();
+  // 컷1의 advance 버튼 숨김
+  var c1=currentRow.querySelector('[data-cut="1"] .advance-wrap');if(c1)c1.style.display='none';
+  setPanelImage(2,'1차 선택');
+  var panel=activatePanel(2);
+  var area=document.createElement('div');area.className='choices-area';area.id='tier1-choices';
+  area.innerHTML='<div class="choices-q">어떻게 할까?</div>';
+  panel.querySelector('.panel-body').innerHTML='';
+  panel.querySelector('.panel-body').appendChild(area);
+  sc.tier1.forEach(function(c,i){
+    var card=document.createElement('div');
+    card.className='choice-card';
+    card.onclick=function(){onTier1(c.id);};
+    card.innerHTML='<div class="choice-num">'+c.id+'</div><div class="choice-body"><div class="choice-text">'+c.label+'</div><div class="choice-desc">'+c.desc+'</div></div>';
+    area.appendChild(card);
+    setTimeout(function(){card.classList.add('visible');},i*120+150);
+  });
+  updateStats();
+}
+
+// 컷 3: 2차 선택 (선택된 1차의 3개)
+function goCut3(){
+  var sc=getScenario(),t1=gameState.selectedTier1;
+  // 컷2 영역에 선택 요약 표시
+  var c2body=currentRow.querySelector('[data-cut="2"] .panel-body');
+  var t1obj=sc.tier1.find(function(x){return x.id===t1;});
+  c2body.innerHTML='<div class="chosen-summary"><div class="chosen-label">1차 선택</div><div class="chosen-title">'+t1+'. '+t1obj.label+'</div><div class="chosen-way">'+t1obj.desc+'</div></div>';
+  setPanelImage(3,'2차 선택');
+  var panel=activatePanel(3);
+  var area=document.createElement('div');area.className='choices-area';area.id='tier2-choices';
+  area.innerHTML='<div class="choices-q">더 자세히 — 어떻게 할까?</div>';
+  panel.querySelector('.panel-body').innerHTML='';
+  panel.querySelector('.panel-body').appendChild(area);
+  var t2list=sc.tier2[t1];
+  t2list.forEach(function(c,i){
+    var card=document.createElement('div');
+    card.className='choice-card';
+    card.onclick=function(){onTier2(c.id);};
+    // Phase 6: 힌트 OFF 시 위임 태그 숨김 (SPEC §4.1, §5.3)
+    var dlgTag=(gameState.hintEnabled && c.delegation)?'<div class="delegation-tag">위임 '+c.delegation+'</div>':'';
+    card.innerHTML='<div class="choice-num">'+(i+1)+'</div><div class="choice-body"><div class="choice-text">'+c.label+'</div>'+dlgTag+'</div>';
+    area.appendChild(card);
+    setTimeout(function(){card.classList.add('visible');},i*120+150);
+  });
+  updateStats();
+}
+
+// 컷 4: 결과 (raw 결과물)
+function goCut4(){
+  var sc=getScenario(),t2=gameState.selectedTier2;
+  var t2obj=sc.tier2[gameState.selectedTier1].find(function(x){return x.id===t2;});
+  // 컷3 요약
+  var c3body=currentRow.querySelector('[data-cut="3"] .panel-body');
+  c3body.innerHTML='<div class="chosen-summary"><div class="chosen-label">2차 선택</div><div class="chosen-title">'+t2+'. '+t2obj.label+'</div><div class="chosen-way">위임 깊이: '+t2obj.delegation+'</div></div>';
+  setPanelImage(4,'결과');
+  var panel=activatePanel(4);
+  var result=sc.results[t2];
+  panel.querySelector('.panel-body').innerHTML=
+    '<p class="highlight">결과 — 100자 독후감</p>'+
+    '<div class="result-text">'+result.text+'</div>'+
+    '<div class="result-meta">'+result.summary+' (기본 '+result.basePoint+'점)</div>'+
+    '<div class="advance-wrap"><button class="advance-btn" onclick="goCut5()">검토할까? &#8594;</button></div>';
+  trackEvent('result_viewed',{scenarioId:sc.id,tier2:t2,basePoint:result.basePoint});
+  updateStats();
+}
+
+// 컷 5: 검토 선택 (R1·R2·R3)
+function goCut5(){
+  var sc=getScenario();
+  // 컷4 advance 버튼 숨김
+  var c4btn=currentRow.querySelector('[data-cut="4"] .advance-wrap');if(c4btn)c4btn.style.display='none';
+  setPanelImage(5,'검토');
+  var panel=activatePanel(5);
+  var area=document.createElement('div');area.className='choices-area';area.id='review-choices';
+  area.innerHTML='<div class="choices-q">제출 전, 어떻게 검토할까?</div>';
+  panel.querySelector('.panel-body').innerHTML='';
+  panel.querySelector('.panel-body').appendChild(area);
+  // Phase 6: 힌트 ON 시 점수 미리보기 (SPEC §5.3) — 현 레벨 기준 detectIssues 결과
+  var t2cur=gameState.selectedTier2;
+  var resultCur=sc.results[t2cur];
+  var levelCur=gameState.exp.level;
+  sc.reviews.forEach(function(r,i){
+    var card=document.createElement('div');
+    card.className='choice-card';
+    card.onclick=function(){onReview(r.id);};
+    var hintTag='';
+    if(gameState.hintEnabled){
+      var add=detectIssues(resultCur,r,levelCur);
+      hintTag='<div class="review-hint-tag">점수 +'+add+'</div>';
+    }
+    card.innerHTML='<div class="choice-num">'+r.id+'</div><div class="choice-body"><div class="choice-text">'+r.label+'</div><div class="choice-desc">'+r.desc+'</div>'+hintTag+'</div>';
+    area.appendChild(card);
+    setTimeout(function(){card.classList.add('visible');},i*120+150);
+  });
+  updateStats();
+}
+
+// 컷 6: 최종 점수 + 아이템 + 자각 + 경험치/레벨업 (Phase 4 통합)
+function goCut6(){
+  var sc=getScenario(),leaf=getLeafPath(),fin=sc.finals[leaf];
+  // 컷5 요약
+  var c5body=currentRow.querySelector('[data-cut="5"] .panel-body');
+  var rvObj=sc.reviews.find(function(x){return x.id===gameState.selectedReview;});
+  var supplement=sc.reviewSupplements[leaf]||'';
+  c5body.innerHTML='<div class="chosen-summary"><div class="chosen-label">검토 선택</div><div class="chosen-title">'+rvObj.id+'. '+rvObj.label+'</div>'+(supplement?'<div class="chosen-way">'+supplement+'</div>':'')+'</div>';
+  setPanelImage(6,'최종');
+  var panel=activatePanel(6);
+  // Phase 5: grade 동적 산출 (사전 계산값 fin.grade 대신 실제 점수 기준)
+  // item/awareness는 fin에서 그대로 사용
+  var grade=getGrade(gameState.score);
+  var item=fin?fin.item:null;
+  var awareness=fin?fin.awareness:'';
+
+  // === Phase 4 통합 흐름 ===
+  // 2. 경험치 계산
+  var expGain=calculateExpGain(leaf,grade);
+  // 3. prevExp 저장
+  var prevExp=gameState.exp.current;
+  var prevLevel=gameState.exp.level;
+  // 4. 경험치 누적
+  gameState.exp.current+=expGain;
+  // 5. 레벨업 검출 (레벨 갱신 포함)
+  var didLevelUp=checkLevelUp(prevExp,gameState.exp.current);
+  var newLevel=gameState.exp.level;
+  // 6. 레벨업 시 미터 max 증가
+  if(didLevelUp)applyLevelUpMeterIncrease(newLevel);
+  // 7. 자원 회복 (didLevelUp 분기 활용)
+  var timeBefore=gameState.resources.time.current;
+  var energyBefore=gameState.resources.energy.current;
+  recoverResources(grade,didLevelUp);
+  var timeRecovered=gameState.resources.time.current-timeBefore;
+  var energyRecovered=gameState.resources.energy.current-energyBefore;
+  // 9. scenarioRepeatCount 증가 (작업 8)
+  var scid=gameState.currentScenarioId;
+  gameState.scenarioRepeatCount[scid]=(gameState.scenarioRepeatCount[scid]||0)+1;
+
+  // === 결과 화면 구성 ===
+  var h='<div class="final-score"><div class="final-grade '+grade+'">'+grade+'</div><div class="final-num">'+gameState.score+'점</div></div>';
+  if(item){
+    h+='<div class="final-item"><div class="final-item-label">획득 아이템</div><div class="final-item-name">'+item+'</div></div>';
+  }else{
+    h+='<div class="final-item empty"><div class="final-item-label">획득 아이템</div><div class="final-item-name">없음</div></div>';
+  }
+  if(awareness){
+    h+='<div class="awareness">'+awareness+'</div>';
+  }
+  // Phase 6: 이번 회기 사후 공개 (힌트 OFF 모드의 학습 피드백) — SPEC §4.2
+  var t2objNow=sc.tier2[gameState.selectedTier1].find(function(x){return x.id===gameState.selectedTier2;});
+  var deleg=t2objNow?t2objNow.delegation:'';
+  var knl=fin?fin.knowledge:'';
+  var costs=sc.resourceCosts?sc.resourceCosts[leaf]:{time:0,energy:0};
+  h+='<div class="result-meta" style="margin-top:8px">이번 회기 영향 — 위임 '+(deleg||'·')+' / 지식 '+(knl||'·')+' / 시간 -'+(costs.time||0)+' · 에너지 -'+(costs.energy||0)+'</div>';
+  h+='<div class="result-meta" style="margin-top:4px">누적 — 위임 선택력 '+(gameState.competencies.delegationChoice.value>0?'+':'')+gameState.competencies.delegationChoice.value+' / 지식 '+(gameState.competencies.knowledge.value>0?'+':'')+gameState.competencies.knowledge.value+'</div>';
+
+  // 경험치 획득 표시 (step 기반: 현재 단계 안 진행)
+  if(expGain>0){
+    var thr=CONFIG.expThresholds;
+    var stepCur=newLevel>=5?0:(gameState.exp.current-thr[newLevel-1]);
+    var stepMax=newLevel>=5?0:(thr[newLevel]-thr[newLevel-1]);
+    var expLvDisplay=newLevel>=5?'Lv.5 MAX':'Lv.'+newLevel+' '+stepCur+'/'+stepMax+' (다음 단계까지)';
+    h+='<div class="result-meta" style="margin-top:6px;color:#555;font-weight:700">+'+expGain+' exp → '+expLvDisplay+'</div>';
+  }
+
+  // 레벨업 강조 표시
+  if(didLevelUp){
+    h+='<div class="result-meta" style="margin-top:6px;background:#fff8d0;border:1px solid #e8d800;padding:4px 8px;font-weight:700;color:#111">LV UP! Lv.'+prevLevel+' → Lv.'+newLevel+'</div>';
+  }
+
+  // 자원 회복 알림
+  h+='<div class="result-meta" style="margin-top:6px">시간 +'+(timeRecovered>0?timeRecovered:'0')+' / 에너지 +'+(energyRecovered>0?energyRecovered:'0')+'</div>';
+
+  // 다음 시나리오 시작 자원 미리보기
+  h+='<div class="result-meta" style="margin-top:4px;color:#888">다음 시작: 시간 '+gameState.resources.time.current+'/'+gameState.resources.time.max+' · 에너지 '+gameState.resources.energy.current+'/'+gameState.resources.energy.max+'</div>';
+
+  panel.querySelector('.panel-body').innerHTML=h;
+  trackEvent('final_viewed',{scenarioId:sc.id,leaf:leaf,score:gameState.score,grade:grade,item:item});
+
+  // 시나리오 완료 처리
+  gameState.scenarioHistory.push({
+    scenarioId:sc.id,
+    tier1:gameState.selectedTier1,
+    tier2:gameState.selectedTier2,
+    review:gameState.selectedReview,
+    leaf:leaf,
+    finalScore:gameState.score,
+    grade:grade,
+    item:item
+  });
+  gameState.completed=true;
+
+  // 이벤트 로그 (작업 9)
+  trackEvent('exp_gained',{leafPath:leaf,grade:grade,baseExp:sc.expRewards?sc.expRewards[leaf]:0,gainedExp:expGain,expBefore:prevExp,expAfter:gameState.exp.current,level:newLevel});
+  if(didLevelUp){
+    trackEvent('level_up',{prevLevel:prevLevel,newLevel:newLevel,expAtLevelUp:gameState.exp.current,newTimeMax:gameState.resources.time.max,newEnergyMax:gameState.resources.energy.max});
+  }
+  trackEvent('scenario_completed',{scenarioId:sc.id,leaf:leaf,score:gameState.score,grade:grade});
+
+  saveGame();
+  updateStats();
+
+  // 레벨업 애니메이션 (작업 7)
+  if(didLevelUp){
+    setTimeout(function(){
+      flashLevelUpUI();
+      pulseExpLevel();
+    },400);
+  }
+
+  // v0.5: 컷6 결과로 충분 → 활동 리포트 거치지 않고 바로 다음 시나리오/종합 리포트
+  var nw=document.getElementById('next-wrap');
+  var nb=document.getElementById('next-btn');
+  var clearedAfter=(gameState.clearedScenarios||[]).slice();
+  if(clearedAfter.indexOf(scid)<0)clearedAfter.push(scid);
+  var willBeAllDone=(clearedAfter.length>=CONFIG.scenarios.length);
+  nb.textContent=willBeAllDone?'학기 종합 리포트 보기':'다음 시나리오로 →';
+  nb.onclick=goNextScenario;
+  setTimeout(function(){nw.classList.add('visible');},700);
+}
+
+// =====================================================
+// 10. Event Handlers
+// =====================================================
+function startNewGame(){
+  // v0.5: 시작 화면(시나리오 선택)으로. 첫 진입 시 신규 학기 상태 생성
+  if(!gameState||!gameState.clearedScenarios){
+    gameState=createInitialState();
+    resetSid();
+    saveGame();
+    trackEvent('session_started',{version:CONFIG.version});
+  }
+  showStartScreen();
+}
+
+function startScenario(scid){
+  if(!SCENARIOS[scid])return;
+  if(!gameState||!gameState.clearedScenarios){gameState=createInitialState();}
+  if(gameState.clearedScenarios.indexOf(scid)>=0)return; // 1회 제한
+  gameState.currentScenarioId=scid;
+  gameState.currentTier=1;
+  gameState.selectedTier1=null;
+  gameState.selectedTier2=null;
+  gameState.selectedReview=null;
+  gameState.score=0;
+  gameState.completed=false;
+  if(typeof gameState.scenarioRepeatCount[scid]!=='number')gameState.scenarioRepeatCount[scid]=0;
+  saveGame();
+  currentRow=null;
+  trackEvent('scenario_selected',{scenarioId:scid,clearedCount:gameState.clearedScenarios.length});
+  container.innerHTML='';
+  showStats();
+  updateStats();
+  renderCut1();
+}
+
+function goNextScenario(){
+  if(!gameState)return;
+  if(gameState.currentScenarioId&&gameState.clearedScenarios.indexOf(gameState.currentScenarioId)<0){
+    gameState.clearedScenarios.push(gameState.currentScenarioId);
+    gameState.totalScore=(gameState.totalScore||0)+gameState.score;
+  }
+  gameState.completed=false;
+  gameState.currentScenarioId=null;
+  gameState.selectedTier1=null;gameState.selectedTier2=null;gameState.selectedReview=null;gameState.score=0;
+  saveGame();
+  trackEvent('scenario_completed',{clearedCount:gameState.clearedScenarios.length});
+  // 학기 마지막이면 종합 리포트
+  if(gameState.clearedScenarios.length>=CONFIG.scenarios.length){
+    showFinalReport();
+  }else{
+    showStartScreen();
+  }
+}
+
+function continueGame(){
+  gameState=loadGame();
+  if(!gameState){startNewGame();return;}
+  // v0.4 guard: 구버전 save에 resources 없으면 초기값 부여
+  if(!gameState.resources){
+    var rms=CONFIG.resourceMaxStart;
+    gameState.resources={time:{current:rms.time,max:rms.time,history:[]},energy:{current:rms.energy,max:rms.energy,history:[]}};
+  }
+  if(!gameState.exp){gameState.exp={current:0,level:1,thresholds:CONFIG.expThresholds};}
+  if(gameState.hintEnabled===undefined){gameState.hintEnabled=CONFIG.hintEnabledDefault;}
+  // v0.5 guard: 학기 누적 필드
+  if(!gameState.clearedScenarios)gameState.clearedScenarios=[];
+  if(!gameState.scenarioRepeatCount||typeof gameState.scenarioRepeatCount!=='object'){
+    var rc={};CONFIG.scenarios.forEach(function(s){rc[s]=0;});gameState.scenarioRepeatCount=rc;
+  }
+  // 시나리오 미선택 상태면 시작 화면
+  if(!gameState.currentScenarioId){showStartScreen();return;}
+  trackEvent('session_continued',{version:CONFIG.version});
+  container.innerHTML='';
+  currentRow=null;
+  showStats();
+  updateStats();
+  if(gameState.completed){showReport();return;}
+  // 진행 단계에 따라 복원
+  renderCut1();
+  if(gameState.selectedTier1){
+    setTimeout(function(){
+      goCut2();
+      // 1차 선택 표시
+      setTimeout(function(){
+        applyTier1ToView();
+        if(gameState.selectedTier2){
+          goCut3();
+          setTimeout(function(){
+            applyTier2ToView();
+            goCut4();
+            if(gameState.selectedReview){
+              setTimeout(function(){
+                goCut5();
+                setTimeout(function(){
+                  applyReviewToView();
+                  goCut6();
+                },200);
+              },200);
+            }
+          },200);
+        }
+      },200);
+    },200);
+  }
+}
+
+function applyTier1ToView(){/* state already has selection — used by continueGame */}
+function applyTier2ToView(){/* state already has selection */}
+function applyReviewToView(){/* state already has selection */}
+
+function fadeOutChoices(areaId,cb){
+  var area=document.getElementById(areaId);
+  if(!area){if(cb)cb();return;}
+  var cards=area.querySelectorAll('.choice-card');
+  cards.forEach(function(c,i){setTimeout(function(){c.classList.add('fade-out');},i*60);});
+  setTimeout(function(){if(cb)cb();},Math.max(300,cards.length*60+200));
+}
+
+function onTier1(t1id){
+  applyTier1(t1id);
+  fadeOutChoices('tier1-choices',function(){
+    goCut3();
+    updateStats();
+  });
+}
+
+function onTier2(t2id){
+  var prev=gameState.competencies.delegationChoice.value;
+  applyTier2(t2id);
+  var now=gameState.competencies.delegationChoice.value;
+  fadeOutChoices('tier2-choices',function(){
+    goCut4();
+    animateStat('delegation',prev,now);
+    updateStats();
+  });
+}
+
+function onReview(rid){
+  var prevK=gameState.competencies.knowledge.value;
+  var prevTime=gameState.resources.time.current;
+  var prevEnergy=gameState.resources.energy.current;
+  applyReview(rid);
+  var nowK=gameState.competencies.knowledge.value;
+  // 작업 4: leaf 결정 시점(컷 6 진입 직전) 자원 소비
+  var leaf=getLeafPath();
+  if(leaf)consumeResources(leaf);
+  var nowTime=gameState.resources.time.current;
+  var nowEnergy=gameState.resources.energy.current;
+  fadeOutChoices('review-choices',function(){
+    goCut6();
+    animateStat('knowledge',prevK,nowK);
+    // 자원 게이지 ±pop 애니메이션 (작업 5)
+    animateResource('time',prevTime,nowTime);
+    animateResource('energy',prevEnergy,nowEnergy);
+    updateStats();
+  });
+}
+
+function onNext(){/* placeholder — overridden in goCut6 */}
+
+function resetGame(){
+  trackEvent('session_reset',{});
+  clearGame();
+  resetSid();
+  gameState=null;currentRow=null;
+  showStartScreen();
+}
+
+// =====================================================
+// 11. Report Generator (v0.3 — 두 역량 + 아이템)
+// =====================================================
+function showReport(){
+  hideStats();
+  trackEvent('final_report_viewed',{totalScore:gameState.totalScore,items:gameState.itemsCollected,history:gameState.scenarioHistory});
+  var sc=getScenario();
+  var last=gameState.scenarioHistory[gameState.scenarioHistory.length-1];
+  var msg=sc.learningMessage;
+  var h='<div class="report-overlay"><div class="report-inner"><h2>활동 리포트</h2>';
+  h+='<div class="report-grid">';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+gameState.score+'</div><div class="report-stat-label">최종 점수</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(last?last.grade:'-')+'</div><div class="report-stat-label">등급</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(gameState.competencies.delegationChoice.value>0?'+':'')+gameState.competencies.delegationChoice.value+'</div><div class="report-stat-label">위임 선택력</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(gameState.competencies.knowledge.value>0?'+':'')+gameState.competencies.knowledge.value+'</div><div class="report-stat-label">지식</div></div>';
+  h+='</div>';
+  if(last){
+    h+='<div class="report-comment"><b>너의 경로</b>: '+last.tier1+' → '+last.tier2+' → '+last.review+' ('+last.leaf+')<br><br>';
+    if(last.item)h+='<b>획득 아이템</b>: '+last.item+'<br><br>';
+    var fin=sc.finals[last.leaf];
+    if(fin&&fin.awareness)h+='<i>"'+fin.awareness+'"</i><br><br>';
+    h+='<b>이 시나리오의 메시지</b>: '+msg+'</div>';
+  }
+  // v0.5: 학기 진행 알림 + 두 버튼
+  var clearedNow=(gameState.clearedScenarios||[]).slice();
+  if(gameState.currentScenarioId&&clearedNow.indexOf(gameState.currentScenarioId)<0)clearedNow.push(gameState.currentScenarioId);
+  var totalN=CONFIG.scenarios.length;
+  var willBeAllDone=(clearedNow.length>=totalN);
+  h+='<div class="report-progress" style="margin:18px 0 14px;font-size:13px;color:#444;text-align:center;">학기 진행 '+clearedNow.length+' / '+totalN+(willBeAllDone?' — 학기를 모두 통과했다':'')+'</div>';
+  h+='<button class="start-btn" onclick="goNextScenario()">'+(willBeAllDone?'학기 종합 리포트 보기':'시나리오 선택으로')+'</button>';
+  h+='<button class="start-btn secondary" onclick="resetGame()">학기 처음부터</button>';
+  h+='</div></div>';
+  container.innerHTML=h;
+}
+
+// v0.5: 학기 종합 리포트 (5 시나리오 다 끝났을 때)
+function showFinalReport(){
+  hideStats();
+  trackEvent('semester_report_viewed',{totalScore:gameState.totalScore,history:gameState.scenarioHistory,level:gameState.exp.level,cards:gameState.cardsHeld,items:gameState.itemsCollected});
+  var hist=gameState.scenarioHistory||[];
+  var totalScore=gameState.totalScore||0;
+  var avgScore=hist.length?Math.round(totalScore/hist.length):0;
+  var lv=gameState.exp.level;
+  var dv=gameState.competencies.delegationChoice.value;
+  var kv=gameState.competencies.knowledge.value;
+  var cardN=(gameState.cardsHeld||[]).length;
+  var itemN=(gameState.itemsCollected||[]).length;
+
+  var h='<div class="report-overlay"><div class="report-inner" style="max-width:680px">';
+  h+='<h2>한 학기 활동 리포트</h2>';
+  h+='<div style="text-align:center;color:#666;font-size:13px;margin-bottom:18px">자기소개 → 모둠 발표 → 어린왕자 → 진로 → 시험 공부<br>다섯 결정이 한 학생의 한 학기를 만들었다.</div>';
+
+  // 학기 통계 그리드
+  h+='<div class="report-grid">';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+totalScore+'</div><div class="report-stat-label">학기 총점</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+avgScore+'</div><div class="report-stat-label">평균 점수</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">Lv.'+lv+'</div><div class="report-stat-label">최종 레벨</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(dv>0?'+':'')+dv+'</div><div class="report-stat-label">위임 선택력</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(kv>0?'+':'')+kv+'</div><div class="report-stat-label">지식</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+cardN+' / '+itemN+'</div><div class="report-stat-label">카드 / 아이템</div></div>';
+  h+='</div>';
+
+  // 시나리오별 결과
+  h+='<div style="margin:24px 0 12px;font-weight:700;font-size:15px">다섯 결정의 발자국</div>';
+  h+='<div style="border-top:1px solid #ddd">';
+  hist.forEach(function(r,i){
+    var sc=SCENARIOS[r.scenarioId];
+    var fin=sc&&sc.finals?sc.finals[r.leaf]:null;
+    var awareness=fin&&fin.awareness?fin.awareness:'';
+    var msg=sc?sc.learningMessage:'';
+    h+='<div style="border-bottom:1px solid #ddd;padding:12px 0">';
+    h+='<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">';
+    h+='<span style="font-weight:700">'+(i+1)+'. '+(sc?sc.title:r.scenarioId)+'</span>';
+    h+='<span style="font-size:12px;color:#666">'+r.leaf+' · '+r.finalScore+'점 · '+r.grade+'등급'+(r.item?' · '+r.item:'')+'</span>';
+    h+='</div>';
+    if(awareness)h+='<div style="font-style:italic;color:#444;font-size:13px;margin:4px 0 2px">"'+awareness+'"</div>';
+    if(msg)h+='<div style="font-size:12px;color:#666">— '+msg+'</div>';
+    h+='</div>';
+  });
+  h+='</div>';
+
+  // 학기 회고 (간단한 톤)
+  var avgGradeText='';
+  if(avgScore>=80)avgGradeText='이 학생의 한 학기는 자기 결정이 또렷했다.';
+  else if(avgScore>=60)avgGradeText='이 학생의 한 학기는 흔들리면서 자기 자리를 찾아갔다.';
+  else if(avgScore>=40)avgGradeText='이 학생의 한 학기에는 위임이 많았다. 다음 학기에 자기 자리가 더 보인다.';
+  else avgGradeText='이 학생의 한 학기에는 자기 결정이 적었다. 한 번 더 같은 학기를 살아보자.';
+  h+='<div style="margin:20px 0;padding:16px;background:#fafafa;border:1px solid #ddd;text-align:center;font-size:14px;color:#333">'+avgGradeText+'</div>';
+
+  h+='<button class="start-btn" onclick="resetGame()">학기 처음부터</button>';
+  h+='</div></div>';
+  container.innerHTML=h;
+}
+
+// =====================================================
+// 12. Debug Panel
+// =====================================================
+var dbgOn=false;
+function toggleDebug(){dbgOn=!dbgOn;document.getElementById('debug-panel').classList.toggle('active',dbgOn);if(dbgOn)renderDebug();}
+function renderDebug(){
+  if(!dbgOn)return;
+  var p=document.getElementById('debug-panel'),logs=getEvents(),last=logs.length?logs[logs.length-1]:null;
+  var h='<div class="debug-section"><div class="debug-label">State</div>';
+  if(gameState){
+    h+='<div>scenario:'+gameState.currentScenarioId+'</div>';
+    h+='<div>tier:'+gameState.currentTier+' | t1:'+gameState.selectedTier1+' t2:'+gameState.selectedTier2+' rv:'+gameState.selectedReview+'</div>';
+    h+='<div>leaf:'+(getLeafPath()||'-')+'</div>';
+    h+='<div>delegation:'+gameState.competencies.delegationChoice.value+' (h:'+gameState.competencies.delegationChoice.history.length+')</div>';
+    h+='<div>knowledge:'+gameState.competencies.knowledge.value+' (h:'+gameState.competencies.knowledge.history.length+')</div>';
+    h+='<div>score:'+gameState.score+' / total:'+gameState.totalScore+'</div>';
+    h+='<div>items:'+gameState.itemsCollected.length+' '+(gameState.itemsCollected.join(', ')||'-')+'</div>';
+    h+='<div>cards:'+gameState.cardsHeld.length+' (미니게임 비활성)</div>';
+    if(gameState.resources){
+      var rt=gameState.resources.time,re=gameState.resources.energy;
+      h+='<div>time:'+rt.current+'/'+rt.max+' | energy:'+re.current+'/'+re.max+'</div>';
+    }
+    if(gameState.exp){
+      h+='<div>exp:'+gameState.exp.current+' | level:'+gameState.exp.level+'</div>';
+    }
+    h+='<div>hint:'+(gameState.hintEnabled?'ON':'OFF')+'</div>';
+  }else{
+    h+='<div>no game</div>';
+  }
+  h+='</div>';
+  h+='<div class="debug-section"><div class="debug-label">Events: '+logs.length+'</div>';
+  if(last)h+='<div>last: '+last.type+'</div>';
+  h+='</div>';
+  h+='<div class="debug-section"><div class="debug-label">Jump (시나리오 점프 / 컷)</div>';
+  h+='<div class="debug-buttons">';
+  h+='<button class="debug-btn" onclick="dbgJumpCut(1)">Cut1</button>';
+  h+='<button class="debug-btn" onclick="dbgJumpCut(2)">Cut2 (1차)</button>';
+  h+='<button class="debug-btn" onclick="dbgJumpCut(5)">Cut5 (검토)</button>';
+  h+='<button class="debug-btn" onclick="dbgJumpCut(6)">Cut6 (최종)</button>';
+  h+='</div></div>';
+  h+='<div class="debug-section"><div class="debug-label">Hint (토글)</div>';
+  h+='<div class="debug-buttons">';
+  h+='<button class="debug-btn" onclick="toggleHint()">'+(gameState && gameState.hintEnabled?'ON → OFF':'OFF → ON')+'</button>';
+  h+='</div></div>';
+  h+='<div class="debug-section"><div class="debug-label">Cards (강제 추가)</div>';
+  h+='<div class="debug-buttons">';
+  h+='<button class="debug-btn" onclick="dbgAddCard(\'AI 환각 식별\')">+환각</button>';
+  h+='<button class="debug-btn" onclick="dbgAddCard(\'검증 방법\')">+검증</button>';
+  h+='<button class="debug-btn" onclick="dbgAddCard(\'AI 한계\')">+한계</button>';
+  h+='<button class="debug-btn" onclick="dbgAddCard(\'비판적 사고\')">+비판</button>';
+  h+='</div></div>';
+  h+='<div class="debug-section"><div class="debug-label">Level (강제 점프)</div>';
+  h+='<div class="debug-buttons">';
+  h+='<button class="debug-btn" onclick="dbgSetLevel(1)">L1</button>';
+  h+='<button class="debug-btn" onclick="dbgSetLevel(3)">L3</button>';
+  h+='<button class="debug-btn" onclick="dbgSetLevel(5)">L5</button>';
+  h+='</div></div>';
+  h+='<div class="debug-section"><div class="debug-label">Resources (강제 설정)</div>';
+  h+='<div class="debug-buttons">';
+  h+='<button class="debug-btn" onclick="dbgSetResources(100,100)">Full</button>';
+  h+='<button class="debug-btn" onclick="dbgSetResources(0,0)">Zero</button>';
+  h+='<button class="debug-btn" onclick="dbgSetResources(-20,-20)">Neg</button>';
+  h+='</div></div>';
+  h+='<div class="debug-section"><div class="debug-buttons">';
+  h+='<button class="debug-btn" onclick="resetGame();renderDebug()">Reset</button>';
+  h+='<button class="debug-btn" onclick="clearGame();clearEvents();renderDebug()">Clear All</button>';
+  h+='<button class="debug-btn" onclick="downloadLog()">Log DL</button>';
+  h+='</div></div>';
+  p.innerHTML=h;
+}
+
+function dbgEnsureGame(){
+  if(!gameState||!gameState.clearedScenarios)gameState=createInitialState();
+  if(!gameState.currentScenarioId){
+    gameState.currentScenarioId='selfintro';
+    gameState.currentTier=1;
+    saveGame();
+  }
+}
+
+function dbgJumpCut(n){
+  dbgEnsureGame();
+  if(n===1){renderCut1();}
+  else if(n===2){renderCut1();setTimeout(goCut2,200);}
+  else if(n===5){
+    // A1 → R 미선택 상태로 점프
+    gameState.selectedTier1='A';gameState.selectedTier2='A1';gameState.currentTier='result';
+    container.innerHTML='';currentRow=null;
+    renderCut1();
+    setTimeout(function(){goCut2();setTimeout(function(){goCut3();setTimeout(function(){goCut4();setTimeout(goCut5,300);},300);},300);},300);
+  }
+  else if(n===6){
+    // 임의 경로 A1R3 점프 (Phase 5: calculateFinalScore 사용)
+    gameState.selectedTier1='A';gameState.selectedTier2='A1';
+    gameState.competencies.delegationChoice.value=2;
+    gameState.competencies.knowledge.value=2;
+    gameState.selectedReview='R3';
+    var sc6=getScenario(),fin6=sc6.finals['A1R3'],result6=sc6.results['A1'],review6=sc6.reviews[2]; // R3
+    var level6=gameState.exp.level;
+    gameState.score=calculateFinalScore(result6,review6,level6,'A1R3');
+    gameState.totalScore+=gameState.score;gameState.itemsCollected.push(fin6.item);
+    container.innerHTML='';currentRow=null;
+    renderCut1();
+    setTimeout(function(){goCut2();setTimeout(function(){goCut3();setTimeout(function(){goCut4();setTimeout(function(){goCut5();setTimeout(goCut6,300);},300);},300);},300);},300);
+  }
+  saveGame();updateStats();renderDebug();
+}
+
+function dbgAddCard(name){
+  dbgEnsureGame();
+  if(gameState.cardsHeld.indexOf(name)===-1)gameState.cardsHeld.push(name);
+  saveGame();updateStats();renderDebug();
+}
+
+// Phase 5 신규: 레벨 강제 점프 (exp.current도 임계값에 맞게 갱신)
+function dbgSetLevel(lv){
+  dbgEnsureGame();
+  gameState.exp.level=lv;
+  gameState.exp.current=CONFIG.expThresholds[lv-1]||0;
+  // 미터 max 레벨에 맞게 갱신
+  var mx=CONFIG.meterMaxByLevel[lv];
+  if(mx){gameState.resources.time.max=mx.time;gameState.resources.energy.max=mx.energy;}
+  saveGame();updateStats();updateExpUI&&updateExpUI();renderDebug();
+}
+
+// Phase 5 신규: 자원 강제 설정
+function dbgSetResources(t,e){
+  dbgEnsureGame();
+  gameState.resources.time.current=t;
+  gameState.resources.energy.current=e;
+  saveGame();updateStats();updateResourceUI&&updateResourceUI();renderDebug();
+}
+
+setInterval(function(){if(dbgOn)renderDebug();},3000);
+
+// =====================================================
+// 13. Initialization
+// =====================================================
+showStartScreen();
+</script>
+</body>
+</html>
