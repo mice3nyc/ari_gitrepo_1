@@ -61,13 +61,19 @@
 
 ---
 
-#### Phase 4 — 자원 페널티 타이밍 수정
+#### Phase 4 — 회복 없는 학기 + 단계 소비 + cost meter ✅ 9/9 (4/29 세션254)
 
-- [ ] consumeResources(leaf, R) 호출 위치 확인 (현재 L1261)
-- [ ] calculateFinalScore 호출 전으로 이동
-- [ ] calcResourcePenalty가 소비 후 자원 상태 기준으로 계산되는지 검증
-- [ ] 반복 진입 시 자원 페널티 정상 작동 (scenarioRepeatCount=2 시 손계산)
-- [ ] applyReview 함수 흐름 재검증
+> **방향 전환 (4/29)**: "자원 페널티 타이밍 수정" 단순 작업이었으나 피터공 4축 사유 후 "회복 모델 전환 + 단계별 소비 + cost meter + 게이지 색상 + LV/SCORE 중앙 표시"로 확장. 결정 근거: [[v05/DECISIONS|DECISIONS.md]] §7
+
+- [x] 단계별 자원 소비 분할 — onTier1/onTier2/onReview 각각 consumeStage 호출
+- [x] min 기반 incremental 분배 공식 — 합계 = leaf 총비용 (`getTier1/Tier2/ReviewCost`)
+- [x] 모든 선택 버튼에 cost meter (시간/에너지 숫자+바, 정규화)
+- [x] 게이지 4단계 색상 (≥70 초록 / 50~70 노랑 / 30~50 주황 / <30 빨강)
+- [x] 회복 모델 전환 — 자원 자동 회복 OFF (`CONFIG.autoRecoverOnEnd=false`)
+- [x] 비용 multiplier — 데이터 보존 + 튜닝 한 줄 (`CONFIG.resourceCostMultiplier=0.6`)
+- [x] LV/SCORE 중앙 큰 표시(34px) + XP 좌측 진행 바
+- [x] 힌트 토글/위임·점수 태그 제거
+- [x] 결과 화면 "학기 잔여" 메시지 (회복 알림 → 잔여 표시)
 
 ---
 
@@ -104,6 +110,26 @@
 
 ---
 
+#### Phase 7 — 카드 시스템 (역량 카드, 4/29 결정 §7.3)
+
+> **SPEC**: [[CARD-SPEC]] — Lv2~5 카드 4종 + 효과 hook 위치 + DebugPanel + 학기 종합 리포트 통합
+
+- [x] CARD-SPEC.md 신설 (4/29 세션254)
+- [x] 검토 격상 메커닉 OFF — `CONFIG.useReviewLevelBoost=false` + `calculateFinalScore` 분기 (4/29 세션254)
+- [ ] CONFIG.competencyCards 객체 추가 (LV2_PROMPT / LV3_CROSSCHECK / LV4_CONTEXT / LV5_FLUENCY)
+- [ ] gameState.competencyCards 배열 신설 + localStorage 보존 + createInitialState/continueGame 가드
+- [ ] goCut6 안 카드 획득 hook (didLevelUp 분기, competency_card_acquired 이벤트)
+- [ ] `_applyCardModifiers(cost, context)` 함수 신설 → getTier1/Tier2/ReviewCost 호출 체인 통합
+- [ ] `competencyCardScoreBonus(leaf)` 함수 신설 → calculateFinalScore 통합
+- [ ] showStartScreen 보유 카드 표시 UI
+- [ ] goCut6 카드 획득 알림 박스
+- [ ] showFinalReport "획득한 역량 카드" 박스
+- [ ] DebugPanel 카드 토글 버튼 (4종 + 모두/제거)
+- [ ] 손계산 검증 (Lv2 카드 보유 → B 분기 cost meter -10% 표시)
+- [ ] git commit + push
+
+---
+
 #### 차단 / 미해결
 
 - 이미지 12장 (s02/s04/s05) — 별도 작업 필요. 코드 통합과 병렬 가능
@@ -117,8 +143,9 @@
 - Phase 2: 6/6 ✅
 - Phase 3: 5/5 ✅
 - Phase 3.5 (추가 결정): ✅ 활동 리포트 흐름 + 레벨업 단계별 + thresholds 조정 + DECISIONS.md 신설
-- Phase 4: 0/5
+- Phase 4: 9/9 ✅ (4/29 세션254 — 회복 없는 학기 + 단계 소비 + cost meter)
 - Phase 5: 9/9 ✅
 - Phase 6: 0/13
+- Phase 7: 2/13 (CARD-SPEC + 검토 격상 OFF — 4/29 세션254)
 
-**전체: 34/52** — Phase 4 대기 (자원 페널티 타이밍 수정)
+**전체: 45/65** — 다음: Phase 7 카드 시스템 코드 구현 + Phase 6 통합 테스트 + 배포

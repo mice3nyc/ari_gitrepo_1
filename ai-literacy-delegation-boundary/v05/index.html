@@ -77,6 +77,23 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .stat-progress { font-size:11px; color:#999; font-weight:600; white-space:nowrap; align-self:flex-end; }
 .score-stat { font-size:12px; font-weight:700; padding:5px 10px; border:1.5px solid #111; background:#111; color:#fff; text-align:center; }
 
+/* ===== 중앙 LV·SCORE 큰 디스플레이 ===== */
+.score-display { flex:0 0 auto; display:flex; flex-direction:row; align-items:center; gap:18px; padding:6px 18px; border:2px solid #111; background:#fff; box-shadow:0 2px 0 #111; min-width:160px; justify-content:center; }
+.score-block { display:flex; flex-direction:column; align-items:center; gap:3px; min-width:54px; }
+.display-label { font-size:9px; color:#888; letter-spacing:1.5px; line-height:1; font-weight:700; }
+.display-num { font-size:34px; font-weight:700; color:#111; line-height:1; transition:transform 0.3s, color 0.3s; }
+.display-num.pulsing { animation:numPulse 0.5s ease; }
+.score-vsep { width:1px; height:46px; background:#ddd; }
+
+/* ===== 선택 버튼 비용 미터 (시간/에너지) ===== */
+.choice-cost { display:flex; gap:14px; margin-top:8px; padding-top:8px; border-top:1px dashed #ddd; }
+.choice-cost-item { display:flex; flex-direction:column; flex:1; gap:3px; }
+.choice-cost-label { font-size:9px; color:#888; letter-spacing:0.5px; line-height:1; font-weight:600; }
+.choice-cost-row { display:flex; align-items:center; gap:6px; }
+.choice-cost-num { font-size:11px; font-weight:700; color:#333; min-width:28px; text-align:right; line-height:1; }
+.choice-cost-bar { flex:1; height:5px; background:#f0f0f0; border:1px solid #ddd; overflow:hidden; }
+.choice-cost-bar-fill { height:100%; background:#666; }
+
 /* ===== Overlay (Start) ===== */
 .overlay-card { display:flex; align-items:center; justify-content:center; min-height:480px; animation:overlayIn 0.5s ease; }
 @keyframes overlayIn { from{opacity:0} to{opacity:1} }
@@ -193,6 +210,8 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 @media (max-width:800px) {
   .panels-grid { grid-template-columns:1fr; }
   .panel-row { flex-direction:column; }
+  .score-display { flex-direction:row; min-width:0; padding:8px 14px; }
+  .display-num { font-size:28px; }
 }
 /* v0.5 — 시나리오 선택 + 학기 프로그레스 */
 .semester-frame { max-width:640px; margin:0 auto; padding:32px 20px; }
@@ -234,12 +253,12 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 <body>
 <!-- 좌/우 패널 (sticky) — 좌:자원 / 우:역량+점수+진행 -->
 <div class="panel-row" id="panel-row">
-  <!-- 좌측: 경험치/레벨 + 자원 게이지 (시간/에너지) -->
+  <!-- 좌측: XP + 자원 게이지 (시간/에너지) -->
   <div class="resource-bar" id="resource-bar">
-    <!-- 경험치 + 레벨 (Phase 4 — SPEC §5.2) -->
+    <!-- XP 진행 바 (LV은 중앙으로 이동) -->
     <div class="exp-display" id="exp-display">
       <div class="exp-header">
-        <span class="exp-level" id="exp-level">Lv.1</span>
+        <span class="exp-level" id="exp-level">XP</span>
         <span class="exp-num" id="exp-num">0/20</span>
       </div>
       <div class="exp-bar"><div class="exp-bar-fill" id="exp-bar-fill" style="width:0%"></div></div>
@@ -248,7 +267,19 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
     <div class="resource-item" id="res-time"><div class="resource-change-indicator" id="rdelta-time"></div><div class="resource-header"><span class="resource-name">시간</span><span class="resource-num" id="rnum-time">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-time" style="width:100%"></div></div></div>
     <div class="resource-item" id="res-energy"><div class="resource-change-indicator" id="rdelta-energy"></div><div class="resource-header"><span class="resource-name">에너지</span><span class="resource-num" id="rnum-energy">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-energy" style="width:100%"></div></div></div>
   </div>
-  <!-- 우측: 역량(양방향 바) + 점수 + 진행 -->
+  <!-- 중앙: LV + SCORE 큰 글씨 -->
+  <div class="score-display" id="score-display">
+    <div class="score-block">
+      <span class="display-label">LV</span>
+      <span class="display-num" id="lv-num">1</span>
+    </div>
+    <div class="score-vsep"></div>
+    <div class="score-block">
+      <span class="display-label">SCORE</span>
+      <span class="display-num" id="score-num">0</span>
+    </div>
+  </div>
+  <!-- 우측: 역량(양방향 바) + 진행 -->
   <div class="stats-bar" id="stats-bar">
     <div class="stat" id="stat-delegation">
       <div class="stat-change-indicator" id="delta-delegation"></div>
@@ -262,8 +293,6 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
       <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-knowledge"></div></div>
       <div class="bipolar-labels"><span>-4</span><span>+4</span></div>
     </div>
-    <div class="stats-divider"></div>
-    <div class="score-stat" id="score-stat">점수 0</div>
     <div class="stats-divider"></div>
     <div class="stat-progress" id="stat-progress">컷 1/6</div>
   </div>
@@ -288,6 +317,10 @@ var CONFIG={
   detectedIssueBoost:10,
   // v0.4 신규 (SPEC §12) — Phase 3 이후 사용
   resourceMaxStart:{time:100,energy:100},
+  // v0.5 — 비용 multiplier (데이터 보존 + 튜닝 조정용). 0.6 = 적정 선택 시 1.7~3 시나리오 버팀
+  resourceCostMultiplier:0.6,
+  // v0.5 — 시나리오 종료 시 자원 자동 회복 OFF ([[요청.26.0429.1925-v05회복없는학기]])
+  autoRecoverOnEnd:false,
   recoverBase:0.70,
   gradeBonus:{S:0.60,A:0.47,B:0.34,C:0.22,D:0.10},
   expThresholds:[0,20,40,65,100],
@@ -298,6 +331,9 @@ var CONFIG={
     4:{time:145,energy:145},
     5:{time:170,energy:170}
   },
+  // v0.5 — 검토 격상 메커닉 OFF (DECISIONS §7.3 — 카드 시스템으로 대체)
+  // false 시 detectIssues 결과는 점수에 합산되지 않음. levelStep / levelExtraBonus는 보존 (v0.6 재평가 시 부활 가능)
+  useReviewLevelBoost:false,
   // deprecated — Phase 5에서 levelStep+levelExtraBonus로 대체 (키는 혹시 모를 참조 보호를 위해 유지)
   levelDetectBonus:{1:0,2:0,3:2,4:3,5:4},
   // Phase 5 신규: C안 검토 격상 메커닉 (SPEC §3.4 구현 정정)
@@ -1660,27 +1696,90 @@ function getGrade(score){
 // 6b. Resource System (v0.4 신규 — SPEC §2)
 // =====================================================
 
-// 작업 4: 자원 소비 — leaf 결정 시점(컷 6 진입 직전)에서 호출
-// 음수 허용 (SPEC §2.4 A안)
+// 단계별 비용 헬퍼 — 각 선택(t1/t2/review)이 leaf 총비용을 점진 소비
+// 분배 원칙(min 기반 incremental):
+//   t1.X        = min(leaf cost) over all leaves under X
+//   t2.X.Y      = min(leaf cost) over leaves under X.Y  -  t1.X
+//   review leaf = leafTotal - (t1 + t2)
+// → 합계는 항상 leaf 총비용과 일치, 각 단계는 0 이상
+// 내부: multiplier 미적용 raw 값 (재귀 일관성 위해 분리)
+function _rawTier1Cost(t1){
+  var sc=getScenario();
+  if(!sc.resourceCosts)return {time:0,energy:0};
+  var minT=Infinity,minE=Infinity;
+  Object.keys(sc.resourceCosts).forEach(function(k){
+    if(k.charAt(0)===t1){
+      var c=sc.resourceCosts[k];
+      if(c.time<minT)minT=c.time;
+      if(c.energy<minE)minE=c.energy;
+    }
+  });
+  return {time:isFinite(minT)?minT:0, energy:isFinite(minE)?minE:0};
+}
+function _rawTier2Cost(t2){
+  var sc=getScenario();
+  if(!sc.resourceCosts||!t2)return {time:0,energy:0};
+  var minT=Infinity,minE=Infinity;
+  Object.keys(sc.resourceCosts).forEach(function(k){
+    if(k.substr(0,2)===t2){
+      var c=sc.resourceCosts[k];
+      if(c.time<minT)minT=c.time;
+      if(c.energy<minE)minE=c.energy;
+    }
+  });
+  var t1c=_rawTier1Cost(t2.charAt(0));
+  return {
+    time:Math.max(0,(isFinite(minT)?minT:0)-t1c.time),
+    energy:Math.max(0,(isFinite(minE)?minE:0)-t1c.energy)
+  };
+}
+function _rawReviewCost(leaf){
+  var sc=getScenario();
+  if(!sc.resourceCosts||!sc.resourceCosts[leaf])return {time:0,energy:0};
+  var t2=leaf.substr(0,2);
+  var leafC=sc.resourceCosts[leaf];
+  var t1c=_rawTier1Cost(leaf.charAt(0));
+  var t2c=_rawTier2Cost(t2);
+  return {
+    time:Math.max(0,leafC.time-t1c.time-t2c.time),
+    energy:Math.max(0,leafC.energy-t1c.energy-t2c.energy)
+  };
+}
+// multiplier 적용 (UI·소비 양쪽이 같은 값을 사용하도록 한 군데서 처리)
+function _applyMult(c){
+  var m=(typeof CONFIG.resourceCostMultiplier==='number')?CONFIG.resourceCostMultiplier:1;
+  return {time:Math.round(c.time*m), energy:Math.round(c.energy*m)};
+}
+function getTier1Cost(t1){return _applyMult(_rawTier1Cost(t1));}
+function getTier2Cost(t2){return _applyMult(_rawTier2Cost(t2));}
+function getReviewCost(leaf){return _applyMult(_rawReviewCost(leaf));}
+
+// 단계별 소비 — onTier1/onTier2/onReview에서 호출
+function consumeStage(stage,costObj,leafPath){
+  if(!costObj||(costObj.time===0&&costObj.energy===0))return;
+  var res=gameState.resources;
+  var timeBefore=res.time.current;
+  var energyBefore=res.energy.current;
+  res.time.current-=costObj.time;
+  res.energy.current-=costObj.energy;
+  res.time.history.push({stage:stage,leaf:leafPath||null,cost:costObj.time,before:timeBefore,after:res.time.current});
+  res.energy.history.push({stage:stage,leaf:leafPath||null,cost:costObj.energy,before:energyBefore,after:res.energy.current});
+  trackEvent('resource_consumed',{
+    stage:stage,
+    leafPath:leafPath||null,
+    time_cost:costObj.time,
+    energy_cost:costObj.energy,
+    time_after:res.time.current,
+    energy_after:res.energy.current
+  });
+}
+
+// (legacy) leaf 단위 한 번에 소비 — Phase 5 이전 코드 호환용. 신규 호출은 consumeStage 사용
 function consumeResources(leafPath){
   var sc=getScenario();
   var costs=sc.resourceCosts?sc.resourceCosts[leafPath]:null;
   if(!costs)return;
-  var res=gameState.resources;
-  var timeBefore=res.time.current;
-  var energyBefore=res.energy.current;
-  res.time.current-=costs.time;
-  res.energy.current-=costs.energy;
-  res.time.history.push({leaf:leafPath,cost:costs.time,before:timeBefore,after:res.time.current});
-  res.energy.history.push({leaf:leafPath,cost:costs.energy,before:energyBefore,after:res.energy.current});
-  // 이벤트 로그 (작업 8)
-  trackEvent('resource_consumed',{
-    leafPath:leafPath,
-    time_cost:costs.time,
-    energy_cost:costs.energy,
-    time_after:res.time.current,
-    energy_after:res.energy.current
-  });
+  consumeStage('leaf',costs,leafPath);
 }
 
 // 작업 6: 자원 회복 — 시나리오 종료(컷 6 진입) 시 호출 (SPEC §2.3)
@@ -1750,40 +1849,36 @@ function flashLevelUpUI(){
   setTimeout(function(){bar.classList.remove('flash-levelup');},900);
 }
 
-// 경험치 바 UI 업데이트
+// 경험치 바 UI 업데이트 — XP 진행률만. LV은 중앙 디스플레이가 담당
 function updateExpUI(){
   if(!gameState||!gameState.exp)return;
   var exp=gameState.exp;
   var lv=exp.level;
   var cur=exp.current;
   var thr=CONFIG.expThresholds;
-  var lvEl=document.getElementById('exp-level');
   var numEl=document.getElementById('exp-num');
   var fillEl=document.getElementById('exp-bar-fill');
-  if(!lvEl)return;
+  var lvNumEl=document.getElementById('lv-num');
+  if(!fillEl)return;
   if(lv>=5){
-    // L5 MAX
-    lvEl.textContent='Lv.5 MAX';
-    numEl.textContent='';
+    if(numEl)numEl.textContent='MAX';
     fillEl.style.width='100%';
   } else {
-    var nextThr=thr[lv]; // thr[1]=20,thr[2]=50,...
-    var prevThr=thr[lv-1]; // thr[0]=0,thr[1]=20,...
+    var nextThr=thr[lv];
+    var prevThr=thr[lv-1];
     var pct=(nextThr>prevThr)?Math.min(100,(cur-prevThr)/(nextThr-prevThr)*100):100;
-    lvEl.textContent='Lv.'+lv;
-    numEl.textContent=cur+'/'+nextThr;
+    if(numEl)numEl.textContent=cur+'/'+nextThr;
     fillEl.style.width=pct+'%';
   }
-  // numPulse 애니메이션 재사용
-  if(lvEl.classList.contains('pulsing'))return;
+  if(lvNumEl)lvNumEl.textContent=lv;
 }
 
-// 작업 7: 작업 7: 레벨 숫자 numPulse
+// 레벨 숫자 numPulse — 중앙 LV 표시
 function pulseExpLevel(){
-  var lvEl=document.getElementById('exp-level');
-  if(!lvEl)return;
-  lvEl.classList.add('pulsing');
-  setTimeout(function(){lvEl.classList.remove('pulsing');},600);
+  var lvNumEl=document.getElementById('lv-num');
+  if(!lvNumEl)return;
+  lvNumEl.classList.add('pulsing');
+  setTimeout(function(){lvNumEl.classList.remove('pulsing');},600);
 }
 
 // 자원 부족 페널티 (SPEC §2.4 A안). calculateFinalScore에서 호출.
@@ -1829,9 +1924,10 @@ function detectIssues(result,review,level){
 }
 
 // Phase 5: 최종 점수 = basePoint + detectIssues 반환값 + cardBonus - resourcePenalty
+// v0.5: useReviewLevelBoost=false 면 detectIssues 점수 미합산 (카드 시스템으로 대체 — DECISIONS §7.3)
 function calculateFinalScore(result,review,level,leaf){
   var base=result.basePoint||0;
-  var detected=detectIssues(result,review,level);
+  var detected=CONFIG.useReviewLevelBoost?detectIssues(result,review,level):0;
   var cardBonus=getCardBonus(leaf);
   var resourcePenalty=calcResourcePenalty(gameState.resources);
   return Math.max(0,base+detected+cardBonus-resourcePenalty);
@@ -1897,6 +1993,13 @@ function hideStats(){
 }
 
 // 자원 게이지 업데이트 (작업 2)
+// 색상 단계: 70%↑ 초록 / 50~70% 노랑 / 30~50% 주황 / <30% 빨강
+function gaugeColorByPct(pct){
+  if(pct>=70)return '#1a8c1a';
+  if(pct>=50)return '#dcb800';
+  if(pct>=30)return '#e65100';
+  return '#c44';
+}
 function updateResourceUI(){
   if(!gameState)return;
   var res=gameState.resources;
@@ -1905,8 +2008,7 @@ function updateResourceUI(){
     var pct=r.max>0?Math.max(0,Math.min(100,r.current/r.max*100)):0;
     document.getElementById('rnum-'+key).textContent=r.current;
     document.getElementById('rgauge-'+key).style.width=pct+'%';
-    // 소진 감각: 50% 이하 = 더 짙은 회색
-    document.getElementById('rgauge-'+key).style.background=pct>50?'#555':'#333';
+    document.getElementById('rgauge-'+key).style.background=gaugeColorByPct(pct);
   });
 }
 
@@ -1933,9 +2035,15 @@ function updateStats(){
   // 양방향 바: -4..+4 → 0..50% (가운데 0 기준 좌/우, 초록=양수 / 빨강=음수)
   setBipolar('gauge-delegation','num-delegation',dlg);
   setBipolar('gauge-knowledge','num-knowledge',knl);
-  document.getElementById('score-stat').textContent='점수 '+gameState.score+(gameState.itemsCollected.length>0?' / 아이템 '+gameState.itemsCollected.length+'개':'');
+  // 중앙 SCORE 표시 (LV은 updateExpUI가 담당)
+  var scoreNumEl=document.getElementById('score-num');
+  if(scoreNumEl)scoreNumEl.textContent=gameState.score;
   var cutNum=getCurrentCutNum();
-  document.getElementById('stat-progress').textContent='컷 '+cutNum+'/6';
+  var sp=document.getElementById('stat-progress');
+  if(sp){
+    var itemsTxt=(gameState.itemsCollected&&gameState.itemsCollected.length>0)?(' · 아이템 '+gameState.itemsCollected.length):'';
+    sp.textContent='컷 '+cutNum+'/6'+itemsTxt;
+  }
   updateResourceUI();
   updateExpUI();
 }
@@ -2028,8 +2136,7 @@ function showStartScreen(){
   if(cleared.length>0||allDone){
     h+='<button class="start-btn secondary" onclick="resetGame()">학기 처음부터</button>';
   }
-  var hintToggleHTML='<div class="hint-toggle-wrap"><label class="hint-toggle-label"><input type="checkbox" class="hint-toggle-input" '+(hintOn?'checked':'')+' onchange="toggleHint()" /> 힌트 표시 <span class="hint-toggle-note">(선택지 영향 미리 보기)</span></label></div>';
-  h+=hintToggleHTML+'</div></div>';
+  h+='</div></div>';
   container.innerHTML=h;
 }
 
@@ -2084,10 +2191,25 @@ function renderCut1(){
   updateStats();
 }
 
+// 선택 버튼에 표시할 비용 미터 HTML — 시간/에너지 숫자+바
+function buildCostHTML(cost,maxT,maxE){
+  var pT=maxT>0?Math.min(100,(cost.time/maxT)*100):0;
+  var pE=maxE>0?Math.min(100,(cost.energy/maxE)*100):0;
+  return '<div class="choice-cost">'+
+    '<div class="choice-cost-item"><div class="choice-cost-label">시간</div>'+
+      '<div class="choice-cost-row"><span class="choice-cost-num">-'+cost.time+'</span>'+
+        '<div class="choice-cost-bar"><div class="choice-cost-bar-fill" style="width:'+pT+'%"></div></div>'+
+      '</div></div>'+
+    '<div class="choice-cost-item"><div class="choice-cost-label">에너지</div>'+
+      '<div class="choice-cost-row"><span class="choice-cost-num">-'+cost.energy+'</span>'+
+        '<div class="choice-cost-bar"><div class="choice-cost-bar-fill" style="width:'+pE+'%"></div></div>'+
+      '</div></div>'+
+  '</div>';
+}
+
 // 컷 2: 1차 선택 (A·B·C)
 function goCut2(){
   var sc=getScenario();
-  // 컷1의 advance 버튼 숨김
   var c1=currentRow.querySelector('[data-cut="1"] .advance-wrap');if(c1)c1.style.display='none';
   setPanelImage(2,'1차 선택');
   var panel=activatePanel(2);
@@ -2095,11 +2217,16 @@ function goCut2(){
   area.innerHTML='<div class="choices-q">어떻게 할까?</div>';
   panel.querySelector('.panel-body').innerHTML='';
   panel.querySelector('.panel-body').appendChild(area);
+  // 각 t1 비용 사전 계산 + 정규화 max
+  var costs=sc.tier1.map(function(c){return getTier1Cost(c.id);});
+  var maxT=Math.max(1,Math.max.apply(null,costs.map(function(c){return c.time;})));
+  var maxE=Math.max(1,Math.max.apply(null,costs.map(function(c){return c.energy;})));
   sc.tier1.forEach(function(c,i){
     var card=document.createElement('div');
     card.className='choice-card';
     card.onclick=function(){onTier1(c.id);};
-    card.innerHTML='<div class="choice-num">'+c.id+'</div><div class="choice-body"><div class="choice-text">'+c.label+'</div><div class="choice-desc">'+c.desc+'</div></div>';
+    var costHTML=buildCostHTML(costs[i],maxT,maxE);
+    card.innerHTML='<div class="choice-num">'+c.id+'</div><div class="choice-body"><div class="choice-text">'+c.label+'</div><div class="choice-desc">'+c.desc+'</div>'+costHTML+'</div>';
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
@@ -2109,7 +2236,6 @@ function goCut2(){
 // 컷 3: 2차 선택 (선택된 1차의 3개)
 function goCut3(){
   var sc=getScenario(),t1=gameState.selectedTier1;
-  // 컷2 영역에 선택 요약 표시
   var c2body=currentRow.querySelector('[data-cut="2"] .panel-body');
   var t1obj=sc.tier1.find(function(x){return x.id===t1;});
   c2body.innerHTML='<div class="chosen-summary"><div class="chosen-label">1차 선택</div><div class="chosen-title">'+t1+'. '+t1obj.label+'</div><div class="chosen-way">'+t1obj.desc+'</div></div>';
@@ -2121,13 +2247,16 @@ function goCut3(){
   panel.querySelector('.panel-body').innerHTML='';
   panel.querySelector('.panel-body').appendChild(area);
   var t2list=sc.tier2[t1];
+  // 각 t2 추가 비용 사전 계산
+  var costs=t2list.map(function(c){return getTier2Cost(c.id);});
+  var maxT=Math.max(1,Math.max.apply(null,costs.map(function(c){return c.time;})));
+  var maxE=Math.max(1,Math.max.apply(null,costs.map(function(c){return c.energy;})));
   t2list.forEach(function(c,i){
     var card=document.createElement('div');
     card.className='choice-card';
     card.onclick=function(){onTier2(c.id);};
-    // Phase 6: 힌트 OFF 시 위임 태그 숨김 (SPEC §4.1, §5.3)
-    var dlgTag=(gameState.hintEnabled && c.delegation)?'<div class="delegation-tag">위임 '+c.delegation+'</div>':'';
-    card.innerHTML='<div class="choice-num">'+(i+1)+'</div><div class="choice-body"><div class="choice-text">'+c.label+'</div>'+dlgTag+'</div>';
+    var costHTML=buildCostHTML(costs[i],maxT,maxE);
+    card.innerHTML='<div class="choice-num">'+(i+1)+'</div><div class="choice-body"><div class="choice-text">'+c.label+'</div>'+costHTML+'</div>';
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
@@ -2157,7 +2286,6 @@ function goCut4(){
 // 컷 5: 검토 선택 (R1·R2·R3)
 function goCut5(){
   var sc=getScenario();
-  // 컷4 advance 버튼 숨김
   var c4btn=currentRow.querySelector('[data-cut="4"] .advance-wrap');if(c4btn)c4btn.style.display='none';
   setPanelImage(5,'검토');
   var panel=activatePanel(5);
@@ -2165,20 +2293,17 @@ function goCut5(){
   area.innerHTML='<div class="choices-q">제출 전, 어떻게 검토할까?</div>';
   panel.querySelector('.panel-body').innerHTML='';
   panel.querySelector('.panel-body').appendChild(area);
-  // Phase 6: 힌트 ON 시 점수 미리보기 (SPEC §5.3) — 현 레벨 기준 detectIssues 결과
-  var t2cur=gameState.selectedTier2;
-  var resultCur=sc.results[t2cur];
-  var levelCur=gameState.exp.level;
+  var t2cur=gameState.selectedTier2; // 'A1','A2',...
+  // 각 review 잔여 비용 사전 계산 (해당 leaf = t2 + r.id)
+  var costs=sc.reviews.map(function(r){return getReviewCost(t2cur+r.id);});
+  var maxT=Math.max(1,Math.max.apply(null,costs.map(function(c){return c.time;})));
+  var maxE=Math.max(1,Math.max.apply(null,costs.map(function(c){return c.energy;})));
   sc.reviews.forEach(function(r,i){
     var card=document.createElement('div');
     card.className='choice-card';
     card.onclick=function(){onReview(r.id);};
-    var hintTag='';
-    if(gameState.hintEnabled){
-      var add=detectIssues(resultCur,r,levelCur);
-      hintTag='<div class="review-hint-tag">점수 +'+add+'</div>';
-    }
-    card.innerHTML='<div class="choice-num">'+r.id+'</div><div class="choice-body"><div class="choice-text">'+r.label+'</div><div class="choice-desc">'+r.desc+'</div>'+hintTag+'</div>';
+    var costHTML=buildCostHTML(costs[i],maxT,maxE);
+    card.innerHTML='<div class="choice-num">'+r.id+'</div><div class="choice-body"><div class="choice-text">'+r.label+'</div><div class="choice-desc">'+r.desc+'</div>'+costHTML+'</div>';
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
@@ -2209,24 +2334,23 @@ function goCut6(){
   }
 
   // === Phase 4 통합 흐름 ===
-  // 2. 경험치 계산
   var expGain=calculateExpGain(leaf,grade);
-  // 3. prevExp 저장
   var prevExp=gameState.exp.current;
   var prevLevel=gameState.exp.level;
-  // 4. 경험치 누적
   gameState.exp.current+=expGain;
-  // 5. 레벨업 검출 (레벨 갱신 포함)
   var didLevelUp=checkLevelUp(prevExp,gameState.exp.current);
   var newLevel=gameState.exp.level;
-  // 6. 레벨업 시 미터 max 증가
-  if(didLevelUp)applyLevelUpMeterIncrease(newLevel);
-  // 7. 자원 회복 (didLevelUp 분기 활용)
-  var timeBefore=gameState.resources.time.current;
-  var energyBefore=gameState.resources.energy.current;
-  recoverResources(grade,didLevelUp);
-  var timeRecovered=gameState.resources.time.current-timeBefore;
-  var energyRecovered=gameState.resources.energy.current-energyBefore;
+  // v0.5: 회복 모델 재설계 — 시나리오 종료 자동 회복 OFF (CONFIG.autoRecoverOnEnd)
+  // 학기 메타포: 한 학기 = 한정된 시간/에너지. 회복 없음. 레벨/카드로 효율↑
+  var timeRecovered=0,energyRecovered=0;
+  if(CONFIG.autoRecoverOnEnd){
+    if(didLevelUp)applyLevelUpMeterIncrease(newLevel);
+    var timeBefore=gameState.resources.time.current;
+    var energyBefore=gameState.resources.energy.current;
+    recoverResources(grade,didLevelUp);
+    timeRecovered=gameState.resources.time.current-timeBefore;
+    energyRecovered=gameState.resources.energy.current-energyBefore;
+  }
   // 9. scenarioRepeatCount 증가 (작업 8)
   var scid=gameState.currentScenarioId;
   gameState.scenarioRepeatCount[scid]=(gameState.scenarioRepeatCount[scid]||0)+1;
@@ -2264,11 +2388,13 @@ function goCut6(){
     h+='<div class="result-meta" style="margin-top:6px;background:#fff8d0;border:1px solid #e8d800;padding:4px 8px;font-weight:700;color:#111">LV UP! Lv.'+prevLevel+' → Lv.'+newLevel+'</div>';
   }
 
-  // 자원 회복 알림
-  h+='<div class="result-meta" style="margin-top:6px">시간 +'+(timeRecovered>0?timeRecovered:'0')+' / 에너지 +'+(energyRecovered>0?energyRecovered:'0')+'</div>';
+  // v0.5 회복 알림 (autoRecoverOnEnd ON 모드에서만)
+  if(CONFIG.autoRecoverOnEnd && (timeRecovered>0||energyRecovered>0)){
+    h+='<div class="result-meta" style="margin-top:6px">시간 +'+(timeRecovered>0?timeRecovered:'0')+' / 에너지 +'+(energyRecovered>0?energyRecovered:'0')+'</div>';
+  }
 
-  // 다음 시나리오 시작 자원 미리보기
-  h+='<div class="result-meta" style="margin-top:4px;color:#888">다음 시작: 시간 '+gameState.resources.time.current+'/'+gameState.resources.time.max+' · 에너지 '+gameState.resources.energy.current+'/'+gameState.resources.energy.max+'</div>';
+  // 학기 잔여 자원 (회복 없음 — 누적 관리)
+  h+='<div class="result-meta" style="margin-top:6px;color:#555">학기 잔여 — 시간 '+gameState.resources.time.current+'/'+gameState.resources.time.max+' · 에너지 '+gameState.resources.energy.current+'/'+gameState.resources.energy.max+'</div>';
 
   panel.querySelector('.panel-body').innerHTML=h;
   trackEvent('final_viewed',{scenarioId:sc.id,leaf:leaf,score:gameState.score,grade:grade,item:item});
@@ -2434,20 +2560,36 @@ function fadeOutChoices(areaId,cb){
 }
 
 function onTier1(t1id){
+  var prevTime=gameState.resources.time.current;
+  var prevEnergy=gameState.resources.energy.current;
   applyTier1(t1id);
+  // 단계 1 자원 소비
+  consumeStage('tier1',getTier1Cost(t1id),null);
+  var nowTime=gameState.resources.time.current;
+  var nowEnergy=gameState.resources.energy.current;
   fadeOutChoices('tier1-choices',function(){
     goCut3();
+    animateResource('time',prevTime,nowTime);
+    animateResource('energy',prevEnergy,nowEnergy);
     updateStats();
   });
 }
 
 function onTier2(t2id){
   var prev=gameState.competencies.delegationChoice.value;
+  var prevTime=gameState.resources.time.current;
+  var prevEnergy=gameState.resources.energy.current;
   applyTier2(t2id);
   var now=gameState.competencies.delegationChoice.value;
+  // 단계 2 자원 소비 (t2 = 'A1' 형식, 이미 t1 letter 포함)
+  consumeStage('tier2',getTier2Cost(t2id),null);
+  var nowTime=gameState.resources.time.current;
+  var nowEnergy=gameState.resources.energy.current;
   fadeOutChoices('tier2-choices',function(){
     goCut4();
     animateStat('delegation',prev,now);
+    animateResource('time',prevTime,nowTime);
+    animateResource('energy',prevEnergy,nowEnergy);
     updateStats();
   });
 }
@@ -2458,18 +2600,20 @@ function onReview(rid){
   var prevEnergy=gameState.resources.energy.current;
   applyReview(rid);
   var nowK=gameState.competencies.knowledge.value;
-  // 작업 4: leaf 결정 시점(컷 6 진입 직전) 자원 소비
+  // 단계 3 자원 소비 (review 잔여분만 — t1+t2는 이미 차감됨)
   var leaf=getLeafPath();
-  if(leaf)consumeResources(leaf);
+  if(leaf)consumeStage('review',getReviewCost(leaf),leaf);
   var nowTime=gameState.resources.time.current;
   var nowEnergy=gameState.resources.energy.current;
   fadeOutChoices('review-choices',function(){
     goCut6();
     animateStat('knowledge',prevK,nowK);
-    // 자원 게이지 ±pop 애니메이션 (작업 5)
     animateResource('time',prevTime,nowTime);
     animateResource('energy',prevEnergy,nowEnergy);
     updateStats();
+    // 중앙 SCORE 펄스 — 최종 점수 강조
+    var sn=document.getElementById('score-num');
+    if(sn){sn.classList.add('pulsing');setTimeout(function(){sn.classList.remove('pulsing');},600);}
   });
 }
 
