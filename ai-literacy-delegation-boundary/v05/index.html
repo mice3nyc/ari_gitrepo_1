@@ -1556,9 +1556,17 @@ function createInitialState(){
 // v0.5: 시나리오별 컷 이미지 동적 매핑
 function getCutImage(scenarioId,cutNum){
   var n=({'selfintro':'01','groupwork':'02','eorinwangja':'03','career':'04','studyplan':'05'})[scenarioId]||'01';
-  if(cutNum<=2)return'../images/s'+n+'_ch1.webp';
-  if(cutNum<=4)return'../images/s'+n+'_ch2.webp';
-  return'../images/s'+n+'_ch3.webp';
+  var base='../images/s'+n;
+  var t1=gameState&&gameState.selectedTier1;
+  var t2=gameState&&gameState.selectedTier2;
+  var rv=gameState&&gameState.selectedReview;
+  if(cutNum===1)return base+'_c1.webp';
+  if(cutNum===2)return t1?base+'_c2_'+t1+'.webp':null;
+  if(cutNum===3)return t2?base+'_c3_'+t2+'.webp':null;
+  if(cutNum===4)return t2?base+'_c4_'+t2+'.webp':null;
+  if(cutNum===5)return rv?base+'_c5_'+rv+'.webp':null;
+  if(cutNum===6)return null; // cut6는 등급 표시로 대체
+  return null;
 }
 
 // =====================================================
@@ -2105,6 +2113,7 @@ function goCut3(){
   var c2body=currentRow.querySelector('[data-cut="2"] .panel-body');
   var t1obj=sc.tier1.find(function(x){return x.id===t1;});
   c2body.innerHTML='<div class="chosen-summary"><div class="chosen-label">1차 선택</div><div class="chosen-title">'+t1+'. '+t1obj.label+'</div><div class="chosen-way">'+t1obj.desc+'</div></div>';
+  setPanelImage(2,'1차 선택');
   setPanelImage(3,'2차 선택');
   var panel=activatePanel(3);
   var area=document.createElement('div');area.className='choices-area';area.id='tier2-choices';
@@ -2132,6 +2141,7 @@ function goCut4(){
   // 컷3 요약
   var c3body=currentRow.querySelector('[data-cut="3"] .panel-body');
   c3body.innerHTML='<div class="chosen-summary"><div class="chosen-label">2차 선택</div><div class="chosen-title">'+t2+'. '+t2obj.label+'</div><div class="chosen-way">위임 깊이: '+t2obj.delegation+'</div></div>';
+  setPanelImage(3,'2차 선택');
   setPanelImage(4,'결과');
   var panel=activatePanel(4);
   var result=sc.results[t2];
@@ -2183,6 +2193,7 @@ function goCut6(){
   var rvObj=sc.reviews.find(function(x){return x.id===gameState.selectedReview;});
   var supplement=sc.reviewSupplements[leaf]||'';
   c5body.innerHTML='<div class="chosen-summary"><div class="chosen-label">검토 선택</div><div class="chosen-title">'+rvObj.id+'. '+rvObj.label+'</div>'+(supplement?'<div class="chosen-way">'+supplement+'</div>':'')+'</div>';
+  setPanelImage(5,'검토');
   setPanelImage(6,'최종');
   var panel=activatePanel(6);
   // Phase 5: grade 동적 산출 (사전 계산값 fin.grade 대신 실제 점수 기준)
@@ -2190,6 +2201,12 @@ function goCut6(){
   var grade=getGrade(gameState.score);
   var item=fin?fin.item:null;
   var awareness=fin?fin.awareness:'';
+  // cut6 panel-image에 등급+점수 큰 글자로 표시 (이미지 대신, final-grade 컬러 매칭)
+  var c6img=currentRow.querySelector('[data-cut="6"] .panel-image');
+  if(c6img){
+    var gradeColor=({S:'#1a8c1a',A:'#1a8c1a',B:'#111',C:'#e65100',D:'#c44'})[grade]||'#222';
+    c6img.innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;"><div style="font-size:140px;font-weight:700;color:'+gradeColor+';letter-spacing:-4px;line-height:1;">'+grade+'</div><div style="font-size:28px;color:#444;font-weight:600;">'+gameState.score+'점</div></div><span class="cut-num">CUT 6</span><span class="panel-place">최종</span>';
+  }
 
   // === Phase 4 통합 흐름 ===
   // 2. 경험치 계산
@@ -2215,7 +2232,8 @@ function goCut6(){
   gameState.scenarioRepeatCount[scid]=(gameState.scenarioRepeatCount[scid]||0)+1;
 
   // === 결과 화면 구성 ===
-  var h='<div class="final-score"><div class="final-grade '+grade+'">'+grade+'</div><div class="final-num">'+gameState.score+'점</div></div>';
+  // 등급/점수는 panel-image에 크게 표시되므로 panel-body에서는 생략
+  var h='';
   if(item){
     h+='<div class="final-item"><div class="final-item-label">획득 아이템</div><div class="final-item-name">'+item+'</div></div>';
   }else{

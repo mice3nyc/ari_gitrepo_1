@@ -71,14 +71,19 @@
 
 ---
 
-#### Phase 5 — 시나리오 이미지 작업
+#### Phase 5 — 시나리오 이미지 작업 ✅ 9/9 (4/29 세션253)
 
-- [ ] s01_ch{1,2,3}.png → webp 변환 (incoming에 png 3장 있음)
-- [ ] s02_ch{1,2,3}.webp 신규
-- [ ] s04_ch{1,2,3}.webp 신규
-- [ ] s05_ch{1,2,3}.webp 신규
-- [ ] s03(어린왕자) v04 기존 경로 확인 (`../images/s03_ch*` 또는 어린왕자 별도 경로)
-- [ ] 이미지 디렉토리 구조 정리 (`v05/images/` 또는 공통 `images/`)
+> **방향 전환**: 3 컷 그룹 매핑 → 25 컷 SPEC 1:1 매핑. 5×25 = 125장.
+
+- [x] 피터공 5x5 그리드 시나리오 1~5 생성 → 25프레임/시나리오 단위 직접 크롭(scenario_images/ 125장)
+- [x] 정사각 패딩(#f0f0f0) + webp 변환 + SPEC 명명 적용 (`s01_c1.webp` ~ `s05_c5_R3.webp`)
+- [x] 이미지 디렉토리: `_dev/ai-literacy-delegation-boundary/images/` 공통
+- [x] getCutImage 동적 매핑 (gameState.selectedTier1/Tier2/Review 분기) — line 1557
+- [x] 선택 전 빈칸(null 반환) → 선택 후 setPanelImage 재호출 (goCut3/4/6 각 +1줄)
+- [x] cut6 panel-image에 등급(140px) + 점수(28px), final-grade 컬러 매칭(S/A 초록, B 검정, C 주황, D 빨강) — line 2204
+- [x] panel-body의 final-score 블록 제거 (중복 방지) — line 2232
+- [x] 시각 검증 완료 (피터공 플테 — 시나리오 1~4 분기별 컷 확인)
+- [x] 시나리오 5 자산 추가 수령 → 125장 풀세트 통합
 
 ---
 
@@ -113,7 +118,7 @@
 - Phase 3: 5/5 ✅
 - Phase 3.5 (추가 결정): ✅ 활동 리포트 흐름 + 레벨업 단계별 + thresholds 조정 + DECISIONS.md 신설
 - Phase 4: 0/5
-- Phase 5: 0/6
+- Phase 5: 9/9 ✅
 - Phase 6: 0/13
 
-**전체: 25/49** — Phase 4 대기 (자원 페널티 타이밍 수정 / 캐싱 클리어 후 시각 검증 우선)
+**전체: 34/52** — Phase 4 대기 (자원 페널티 타이밍 수정)
