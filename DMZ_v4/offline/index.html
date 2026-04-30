@@ -1,0 +1,2446 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>DMZ Archive</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=Galmuri11:wght@400;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #fff;
+  --fg: #000;
+  --gray: #888;
+  --light-gray: #ccc;
+  --border: #000;
+  --green: #000;
+  --red: #000;
+}
+
+body {
+  font-family: 'Galmuri11', 'DotGothic16', monospace;
+  background: var(--bg); color: var(--fg);
+  min-height: 100vh; overflow-x: hidden;
+  image-rendering: pixelated;
+}
+
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+.screen-bg { display: none; }
+.screen > *:not(.screen-bg) { position: relative; z-index: 1; }
+
+/* ===== LOGIN ===== */
+#login-screen { align-items: center; justify-content: center; background: var(--bg); }
+.login-container { text-align: center; padding: 2rem; max-width: 400px; width: 90%; }
+.game-title {
+  font-family: 'Galmuri11', monospace; font-size: 2rem; font-weight: 700;
+  color: var(--fg); letter-spacing: 0.15em; margin-bottom: 0.5rem;
+  border-bottom: 3px solid var(--fg); padding-bottom: 0.5rem; display: inline-block;
+}
+.game-title::after { display: none; }
+.game-subtitle { font-size: 0.75rem; color: var(--gray); margin-bottom: 2rem; margin-top: 0.5rem; }
+.login-field { margin-bottom: 1rem; }
+.login-field label { display: block; color: var(--fg); font-size: 0.7rem; margin-bottom: 0.3rem; text-align: left; }
+.login-field input {
+  width: 100%; padding: 0.6rem 0.8rem; background: var(--bg);
+  border: 2px solid var(--fg); color: var(--fg); font-family: inherit; font-size: 0.9rem; outline: none;
+}
+.login-field input:focus { box-shadow: 4px 4px 0 var(--fg); }
+.login-error { color: var(--fg); font-size: 0.75rem; height: 1.2rem; margin-bottom: 0.3rem; font-weight: 700; }
+.btn-primary {
+  padding: 0.6rem 2rem; background: var(--fg); color: var(--bg);
+  border: 2px solid var(--fg); font-family: inherit; font-size: 0.85rem;
+  cursor: pointer; transition: all 0.1s;
+}
+.btn-primary:hover { box-shadow: 4px 4px 0 var(--gray); }
+.btn-primary:active { box-shadow: none; transform: translate(2px, 2px); }
+.login-hint { font-size: 0.65rem; color: var(--gray); margin-top: 1rem; }
+
+/* ===== CATEGORY SELECT ===== */
+#category-screen { align-items: center; padding: 2rem 1rem; background: var(--bg); }
+.screen-header { text-align: center; margin-bottom: 1.5rem; color: var(--fg); }
+.screen-header h2 { font-size: 1rem; font-weight: 700; }
+.screen-header .player-name { color: var(--gray); font-size: 0.8rem; margin-top: 0.3rem; }
+.category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; width: 100%; max-width: 500px; }
+.cat-card {
+  background: var(--bg); border: 2px solid var(--fg);
+  padding: 1rem; cursor: pointer; text-align: center; transition: all 0.1s;
+}
+.cat-card:hover { box-shadow: 4px 4px 0 var(--fg); }
+.cat-card:active { box-shadow: none; transform: translate(2px, 2px); }
+.cat-card .cat-icon { font-size: 1.5rem; margin-bottom: 0.3rem; }
+.cat-card h3 { color: var(--fg); font-size: 0.8rem; margin-bottom: 0.2rem; }
+.cat-card .cat-progress { color: var(--gray); font-size: 0.7rem; }
+.cat-card.completed { background: var(--fg); color: var(--bg); }
+.cat-card.completed h3 { color: var(--bg); }
+.cat-card.completed .cat-progress { color: var(--light-gray); }
+.cumulative-bar {
+  width: 100%; max-width: 500px; margin-top: 1.5rem; padding: 0.8rem;
+  border: 2px solid var(--fg); font-size: 0.7rem; text-align: center;
+}
+.cumulative-bar .counts { display: flex; justify-content: space-around; margin-top: 0.4rem; }
+.cumulative-bar .counts span { font-weight: 700; }
+
+/* ===== STORY SELECT ===== */
+#story-screen { align-items: center; padding: 2rem 1rem; background: var(--bg); }
+.story-list { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 0.5rem; }
+.story-card {
+  background: var(--bg); border: 2px solid var(--fg);
+  padding: 0.8rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.8rem; transition: all 0.1s;
+}
+.story-card:hover { box-shadow: 4px 4px 0 var(--fg); }
+.story-card .story-num { color: var(--gray); font-size: 0.7rem; min-width: 2rem; }
+.story-card h3 { color: var(--fg); font-size: 0.85rem; flex: 1; }
+.story-card .story-era { color: var(--gray); font-size: 0.7rem; }
+.story-card.completed { background: var(--fg); color: var(--bg); }
+.story-card.completed h3 { color: var(--bg); }
+.story-card.completed h3::after { content: ' ✓'; }
+.story-card.completed .story-num, .story-card.completed .story-era { color: var(--light-gray); }
+.btn-back {
+  background: var(--bg); border: 2px solid var(--fg); color: var(--fg);
+  padding: 0.4rem 1rem; font-family: inherit; font-size: 0.75rem;
+  cursor: pointer; margin-bottom: 1rem; align-self: flex-start;
+}
+.btn-back:hover { background: var(--fg); color: var(--bg); }
+
+/* ===== GAME SCREEN ===== */
+#game-screen { min-height: 100vh; background: var(--bg); }
+.game-header {
+  background: var(--fg); color: var(--bg);
+  padding: 0.6rem 1rem; display: flex; align-items: center; gap: 0.6rem;
+  position: sticky; top: 0; z-index: 100;
+}
+.game-header .btn-header-back {
+  background: none; border: 1px solid var(--bg); color: var(--bg);
+  padding: 0.2rem 0.5rem; font-family: inherit; font-size: 0.7rem;
+  cursor: pointer; flex-shrink: 0;
+}
+.game-header .btn-header-back:hover { background: var(--bg); color: var(--fg); }
+.game-header .location { color: var(--bg); font-size: 0.7rem; flex: 1; }
+.game-header .progress { color: var(--bg); font-size: 0.75rem; flex-shrink: 0; }
+.game-content { flex: 1; padding: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+.phase-banner { text-align: center; padding: 1rem; border: 2px solid var(--fg); margin-bottom: 0.5rem; }
+.phase-banner .phase-era { font-size: 0.7rem; color: var(--gray); }
+.phase-banner h2 { font-size: 1.1rem; font-weight: 700; margin-top: 0.2rem; }
+.phase-banner .phase-desc { font-size: 0.7rem; color: var(--gray); margin-top: 0.4rem; line-height: 1.5; }
+
+/* Source cards */
+.source-card { cursor: pointer; transition: all 0.1s; }
+.source-card .card-header { padding: 0.8rem; display: flex; align-items: center; gap: 0.6rem; }
+.card-icon { font-size: 1.2rem; flex-shrink: 0; }
+.card-title { font-size: 0.85rem; font-weight: 700; color: var(--fg); }
+.card-sub { font-size: 0.65rem; color: var(--gray); margin-top: 0.2rem; }
+.card-status { margin-left: auto; font-size: 0.65rem; padding: 0.2rem 0.5rem; border: 1px solid var(--fg); }
+.card-status.solved { background: var(--fg); color: var(--bg); }
+
+.source-letter, .source-diary, .source-scholar, .source-blog, .source-twitter, .source-report, .source-homework,
+.source-newspaper, .source-photo, .source-oral, .source-kakao, .source-text {
+  background: var(--bg); border: 2px solid var(--fg);
+}
+.source-card:hover { box-shadow: 4px 4px 0 var(--fg); }
+
+/* ===== SOURCE DETAIL ===== */
+.source-detail {
+  display: none; position: fixed; top:0; left:0; right:0; bottom:0; z-index: 200;
+  background: var(--bg); overflow-y: auto;
+}
+.source-detail.active { display: block; }
+.detail-inner { max-width: 500px; margin: 0 auto; padding: 1rem; min-height: 100vh; }
+.detail-close { position: sticky; top: 0; text-align: right; padding: 0.5rem; z-index: 10; background: var(--bg); }
+.detail-close button {
+  background: var(--fg); border: none; color: var(--bg);
+  padding: 0.3rem 0.8rem; cursor: pointer; font-family: inherit; font-size: 0.75rem;
+}
+
+/* All detail paper styles — unified monochrome */
+.letter-paper, .diary-paper, .scholar-paper {
+  border: 2px solid var(--fg); padding: 1.5rem; color: var(--fg);
+  line-height: 1.8; font-size: 0.9rem; font-family: inherit;
+}
+.letter-paper .letter-meta, .scholar-paper .scholar-meta { font-size: 0.7rem; color: var(--gray); margin-bottom: 1rem; border-bottom: 1px dashed var(--light-gray); padding-bottom: 0.6rem; }
+.letter-paper .letter-sign { text-align: right; margin-top: 1rem; }
+.diary-paper .diary-meta { font-size: 0.7rem; color: var(--gray); margin-bottom: 1rem; }
+.letter-paper p+p, .diary-paper p+p, .scholar-paper p+p { margin-top: 0.6rem; }
+
+.newspaper-paper {
+  border: 2px solid var(--fg); padding: 1.2rem; color: var(--fg); font-family: inherit;
+}
+.newspaper-paper .news-header { text-align: center; border-bottom: 3px double var(--fg); padding-bottom: 0.6rem; margin-bottom: 0.8rem; }
+.newspaper-paper .news-name { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.4em; }
+.newspaper-paper .news-date { font-size: 0.65rem; margin-top: 0.2rem; color: var(--gray); }
+.newspaper-paper .news-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.8rem; line-height: 1.4; }
+.newspaper-paper .news-body { font-size: 0.8rem; line-height: 1.7; }
+.newspaper-paper .news-body p+p { margin-top: 0.6rem; }
+
+.photo-frame {
+  border: 2px solid var(--fg); padding: 0.8rem; text-align: center; margin-bottom: 0.8rem;
+}
+.photo-frame img { width: 100%; max-height: 280px; object-fit: cover; border: 1px solid var(--fg); }
+.photo-frame .photo-caption { font-size: 0.75rem; color: var(--fg); margin-top: 0.6rem; line-height: 1.5; text-align: left; }
+.photo-frame .photo-source { font-size: 0.6rem; color: var(--gray); margin-top: 0.3rem; text-align: left; }
+
+.oral-player {
+  border: 2px solid var(--fg); padding: 1.2rem; color: var(--fg);
+}
+.oral-player .oral-icon { text-align: center; margin-bottom: 0.6rem; font-size: 1.5rem; }
+.oral-player .oral-meta { font-size: 0.65rem; color: var(--gray); margin-bottom: 0.8rem; padding-bottom: 0.4rem; border-bottom: 1px dashed var(--light-gray); }
+.oral-player .oral-text { font-size: 0.85rem; line-height: 1.8; font-style: italic; }
+.oral-player .oral-text p+p { margin-top: 0.8rem; }
+
+.twitter-thread, .kakao-chat, .blog-post, .report-doc, .homework-paper, .text-message, .qna-post {
+  border: 2px solid var(--fg); padding: 1.2rem; color: var(--fg); font-family: inherit; line-height: 1.7; font-size: 0.85rem;
+}
+.twitter-thread .tweet-header { font-size: 0.7rem; color: var(--gray); margin-bottom: 0.8rem; border-bottom: 1px dashed var(--light-gray); padding-bottom: 0.4rem; }
+.twitter-thread .tweet-body p+p { margin-top: 0.6rem; }
+.kakao-chat .chat-line { margin-bottom: 0.4rem; padding: 0.4rem 0.6rem; border: 1px solid var(--fg); max-width: 85%; }
+.kakao-chat .chat-line.right { margin-left: auto; background: var(--fg); color: var(--bg); }
+.kakao-chat .chat-name { font-size: 0.65rem; color: var(--gray); margin-bottom: 0.1rem; }
+.blog-post .blog-title { font-weight: 700; margin-bottom: 0.4rem; }
+.blog-post .blog-meta { font-size: 0.65rem; color: var(--gray); margin-bottom: 0.8rem; }
+.blog-post .blog-body p+p { margin-top: 0.6rem; }
+.report-doc .report-header { font-weight: 700; margin-bottom: 0.8rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--fg); }
+.report-doc p+p { margin-top: 0.6rem; }
+.homework-paper .hw-title { font-weight: 700; margin-bottom: 0.3rem; }
+.homework-paper .hw-meta { font-size: 0.65rem; color: var(--gray); margin-bottom: 0.8rem; }
+.homework-paper p+p { margin-top: 0.6rem; }
+.text-message .msg-bubble { padding: 0.4rem 0.6rem; border: 1px solid var(--fg); margin-bottom: 0.3rem; max-width: 80%; }
+.text-message .msg-bubble.sent { background: var(--fg); color: var(--bg); margin-left: auto; }
+.qna-post .qna-q { border: 1px solid var(--fg); padding: 0.8rem; margin-bottom: 0.8rem; }
+.qna-post .qna-a { border: 1px solid var(--fg); padding: 0.8rem; border-left: 3px solid var(--fg); }
+.qna-post .qna-label { font-size: 0.65rem; font-weight: 700; margin-bottom: 0.4rem; }
+.qna-post p+p { margin-top: 0.5rem; }
+
+/* ===== BLANK SLOTS ===== */
+.blank-slot {
+  display: inline-block; min-width: 50px; border-bottom: 2px solid var(--fg);
+  padding: 0.1rem 0.3rem; margin: 0 0.1rem; cursor: pointer; background: var(--bg);
+}
+.blank-slot.empty { background: var(--light-gray); animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { background: var(--bg); } }
+.blank-slot.filled { font-weight: 700; background: var(--fg); color: var(--bg); border-color: var(--fg); animation: none; }
+
+/* ===== ANSWER MODAL ===== */
+.modal-backdrop { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.3); z-index: 250; }
+.modal-backdrop.active { display: block; }
+.answer-modal {
+  display: none; position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--bg); border-top: 3px solid var(--fg);
+  padding: 1.2rem; z-index: 300; max-width: 500px; margin: 0 auto;
+}
+.answer-modal.active { display: block; }
+.answer-modal .modal-label { color: var(--fg); font-size: 0.7rem; margin-bottom: 0.4rem; font-weight: 700; }
+.answer-modal .modal-hint { color: var(--gray); font-size: 0.75rem; margin-bottom: 0.8rem; line-height: 1.5; }
+.answer-modal input {
+  width: 100%; padding: 0.6rem; background: var(--bg);
+  border: 2px solid var(--fg); color: var(--fg);
+  font-family: inherit; font-size: 0.9rem; outline: none; margin-bottom: 0.6rem;
+}
+.answer-modal input:focus { box-shadow: 3px 3px 0 var(--fg); }
+.answer-modal .modal-btns { display: flex; gap: 0.6rem; }
+.answer-modal .modal-btns button { flex: 1; padding: 0.5rem; font-family: inherit; font-size: 0.8rem; cursor: pointer; }
+.btn-submit { background: var(--fg); color: var(--bg); border: 2px solid var(--fg); }
+.btn-cancel { background: var(--bg); color: var(--fg); border: 2px solid var(--fg); }
+
+/* ===== ARCHIVE SELECTION ===== */
+.archive-prompt {
+  border: 2px solid var(--fg); padding: 1rem; text-align: center; margin-bottom: 1rem;
+}
+.archive-prompt h3 { font-size: 0.9rem; margin-bottom: 0.3rem; }
+.archive-prompt p { font-size: 0.75rem; color: var(--gray); }
+.archive-option {
+  border: 2px solid var(--fg); padding: 0.8rem; margin-bottom: 0.5rem; cursor: pointer;
+  display: flex; align-items: center; gap: 0.8rem; transition: all 0.1s;
+}
+.archive-option:hover { box-shadow: 4px 4px 0 var(--fg); }
+.archive-option.selected { background: var(--fg); color: var(--bg); }
+.archive-option .opt-icon { font-size: 1.2rem; }
+.archive-option .opt-title { font-size: 0.85rem; }
+.archive-option .opt-meaning { font-size: 0.65rem; color: var(--gray); margin-top: 0.2rem; }
+.archive-option.selected .opt-meaning { color: var(--light-gray); }
+.btn-confirm {
+  display: block; width: 100%; max-width: 400px; margin: 0.8rem auto 0; padding: 0.6rem;
+  background: var(--fg); color: var(--bg); border: 2px solid var(--fg);
+  font-family: inherit; font-size: 0.85rem; cursor: pointer;
+}
+.btn-confirm:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ===== COMPLETION SCREEN ===== */
+#completion-screen { align-items: center; justify-content: center; text-align: center; padding: 2rem; background: var(--bg); }
+.completion-box { max-width: 400px; }
+.completion-box h2 { font-size: 1rem; margin-bottom: 1rem; border-bottom: 2px solid var(--fg); padding-bottom: 0.5rem; display: inline-block; }
+.completion-box .comp-records { font-size: 0.85rem; line-height: 1.8; margin-bottom: 1rem; }
+.completion-box .comp-counts { font-size: 0.75rem; color: var(--gray); margin-bottom: 0.8rem; }
+.completion-box .comp-counts .count-bar { display: flex; justify-content: space-around; margin-top: 0.4rem; }
+.completion-box .comp-counts .count-bar span { font-weight: 700; color: var(--fg); }
+.comp-progress { font-size: 0.7rem; color: var(--gray); margin-bottom: 1.2rem; }
+
+/* ===== ARCHIVE SCREEN ===== */
+#archive-screen { align-items: center; padding: 2rem 1rem; background: var(--bg); }
+.archive-container { width: 100%; max-width: 500px; }
+.archive-header { text-align: center; margin-bottom: 1.5rem; }
+.archive-header h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+.archive-header .archive-player { font-size: 0.8rem; color: var(--gray); }
+
+.archive-section { margin-bottom: 1.5rem; }
+.archive-section-title {
+  font-size: 0.7rem; color: var(--gray); margin-bottom: 0.6rem;
+  border-bottom: 1px dashed var(--light-gray); padding-bottom: 0.3rem;
+}
+
+/* DMZ Pixel Map */
+.dmz-map-wrap { border: 2px solid var(--fg); padding: 1rem; }
+.dmz-map-labels { display: flex; justify-content: space-between; font-size: 0.6rem; color: var(--gray); margin-bottom: 0.4rem; }
+.dmz-pixel-map { display: flex; justify-content: center; margin-bottom: 0.6rem; }
+.dmz-pixel-map svg { width: 100%; max-width: 400px; image-rendering: pixelated; }
+.dmz-map-legend { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-top: 0.6rem; }
+.dmz-map-legend .legend-item { font-size: 0.6rem; display: flex; align-items: center; gap: 0.2rem; }
+.dmz-map-legend .legend-box { width: 10px; height: 10px; border: 1px solid var(--fg); }
+.dmz-map-status { text-align: center; font-size: 0.75rem; color: var(--fg); margin-top: 0.6rem; font-weight: 700; }
+
+/* Tendency bars */
+.tendency-wrap { border: 2px solid var(--fg); padding: 1rem; }
+.tendency-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+.tendency-row:last-child { margin-bottom: 0; }
+.tendency-label { font-size: 0.7rem; min-width: 5.5rem; }
+.tendency-bar-bg { flex: 1; height: 12px; border: 1px solid var(--fg); background: var(--bg); }
+.tendency-bar-fill { height: 100%; background: var(--fg); transition: width 0.3s; }
+.tendency-value { font-size: 0.7rem; font-weight: 700; min-width: 1.5rem; text-align: right; }
+
+/* Archivist preview */
+.archivist-preview {
+  border: 2px solid var(--fg); padding: 1rem; text-align: center;
+}
+.archivist-preview .preview-label { font-size: 0.7rem; color: var(--gray); margin-bottom: 0.3rem; }
+.archivist-preview .preview-type { font-size: 1.1rem; font-weight: 700; }
+.archivist-preview .preview-desc { font-size: 0.75rem; color: var(--gray); margin-top: 0.4rem; line-height: 1.5; }
+
+/* Category header button */
+.cat-header-row { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 500px; margin-bottom: 1rem; }
+.cat-header-row .header-left { text-align: left; }
+.cat-header-row h2 { font-size: 1rem; font-weight: 700; }
+.cat-header-row .player-name { color: var(--gray); font-size: 0.8rem; margin-top: 0.3rem; }
+.btn-archive {
+  background: var(--bg); border: 2px solid var(--fg); color: var(--fg);
+  padding: 0.3rem 0.6rem; font-family: inherit; font-size: 0.75rem;
+  cursor: pointer; display: flex; align-items: center; gap: 0.3rem;
+}
+.btn-archive:hover { background: var(--fg); color: var(--bg); }
+
+/* ===== RESULT SCREEN ===== */
+#result-screen { align-items: center; justify-content: center; text-align: center; padding: 2rem; background: var(--bg); }
+.result-box { max-width: 400px; }
+.result-box h2 { font-size: 0.8rem; margin-bottom: 0.3rem; color: var(--gray); }
+.result-type-name { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.8rem; border: 3px solid var(--fg); padding: 0.5rem 1rem; display: inline-block; }
+.result-type-desc { font-size: 0.8rem; line-height: 1.8; margin-bottom: 1.5rem; }
+.result-stat {
+  border: 2px solid var(--fg); padding: 0.8rem; margin-bottom: 0.5rem;
+  display: flex; justify-content: space-between;
+}
+.result-stat .stat-label { font-size: 0.75rem; }
+.result-stat .stat-value { font-weight: 700; }
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background: var(--bg); color: var(--fg); padding: 1.2rem 1.5rem;
+  z-index: 400; text-align: center; border: 3px solid var(--fg); max-width: 280px;
+}
+.toast .toast-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+.toast .toast-text { font-size: 0.8rem; line-height: 1.5; }
+
+/* ===== SOUND NOTE ===== */
+.sound-note { font-size: 0.6rem; color: var(--gray); margin-top: 0.4rem; }
+
+/* ===== TUTORIAL ===== */
+#tutorial-screen { align-items: center; padding: 2rem 1rem; background: var(--bg); }
+.tutorial-container { width: 100%; max-width: 500px; }
+.tutorial-container h2 { text-align: center; font-size: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--fg); padding-bottom: 0.5rem; display: inline-block; }
+.tutorial-step {
+  border: 2px solid var(--fg); padding: 1rem; margin-bottom: 0.8rem;
+  display: flex; align-items: flex-start; gap: 0.8rem;
+}
+.tutorial-step .step-num { font-size: 0.7rem; font-weight: 700; min-width: 1.4rem; height: 1.4rem; border: 2px solid var(--fg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.tutorial-step .step-icon { font-size: 1.2rem; flex-shrink: 0; }
+.tutorial-step .step-body h3 { font-size: 0.85rem; margin-bottom: 0.3rem; }
+.tutorial-step .step-body p { font-size: 0.75rem; color: var(--gray); line-height: 1.5; }
+.tutorial-step .step-example {
+  margin-top: 0.5rem; padding: 0.4rem 0.6rem; border: 1px dashed var(--light-gray);
+  font-size: 0.7rem; color: var(--gray);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 600px) {
+  .game-title { font-size: 2.5rem; }
+  .category-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+/* ===== OFFLINE MODE — BD HIDDEN (본문 흰색, 헤딩+빈칸만 노출) ===== */
+.bd-hidden, .bd-hidden * { color: transparent !important; }
+.bd-hidden .src-heading,
+.bd-hidden .src-heading * { color: var(--fg) !important; }
+.bd-hidden button, .bd-hidden a { color: var(--fg) !important; }
+.bd-hidden .blank-slot { color: var(--fg) !important; }
+.bd-hidden .blank-slot.empty { background: var(--light-gray) !important; }
+.bd-hidden .blank-slot.filled { color: var(--bg) !important; background: var(--fg) !important; }
+.bd-hidden img { opacity: 0.15; }
+.bd-hidden::before {
+  content: "📄 현장의 출력물에서 본문을 확인하세요";
+  display: block; padding: 0.6rem 1rem; margin: 0 0 1rem 0;
+  background: #fffbe6; border: 1px solid #f1c40f; border-radius: 4px;
+  color: #7f6000 !important; font-size: 0.85rem; text-align: center;
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SCREENS ===== -->
+<div id="login-screen" class="screen active">
+  <div class="screen-bg"></div>
+  <div class="login-container">
+    <h1 class="game-title">DMZ Archive</h1>
+    <p class="game-subtitle">DMZ를 기록하는 방법</p>
+    <div class="login-field"><label>이름</label><input type="text" id="input-name" placeholder="이름을 입력하세요" autocomplete="off"></div>
+    <div class="login-field"><label>게임 코드</label><input type="text" id="input-code" placeholder="게임 코드를 입력하세요" autocomplete="off"></div>
+    <div class="login-error" id="login-error"></div>
+    <button class="btn-primary" onclick="handleLogin()">입장</button>
+    <p class="login-hint">DMZ의 기록을 탐색합니다</p>
+  </div>
+</div>
+
+<div id="tutorial-screen" class="screen">
+  <div class="screen-bg"></div>
+  <div class="tutorial-container">
+    <h2>기록 탐색 안내</h2>
+    <div class="tutorial-step">
+      <span class="step-num">1</span>
+      <span class="step-icon">📄</span>
+      <div class="step-body">
+        <h3>자료 탐색</h3>
+        <p>각 스토리에는 4개의 자료가 있습니다. 편지, 신문, 사진, 인터뷰 등 다양한 형태의 기록을 읽어보세요.</p>
+      </div>
+    </div>
+    <div class="tutorial-step">
+      <span class="step-num">2</span>
+      <span class="step-icon">✏️</span>
+      <div class="step-body">
+        <h3>빈칸 복원</h3>
+        <p>각 자료에는 빈칸이 있습니다. 빈칸을 클릭하면 정답을 입력할 수 있어요.</p>
+        <div class="step-example">정답은 <strong>다른 자료</strong>에서 찾아야 합니다!</div>
+      </div>
+    </div>
+    <div class="tutorial-step">
+      <span class="step-num">3</span>
+      <span class="step-icon">🗂️</span>
+      <div class="step-body">
+        <h3>기록 선택</h3>
+        <p>모든 빈칸을 복원하면, 후대에 남길 기록 <strong>2개</strong>를 선택합니다.</p>
+      </div>
+    </div>
+    <div class="tutorial-step">
+      <span class="step-num">4</span>
+      <span class="step-icon">🏷️</span>
+      <div class="step-body">
+        <h3>아키비스트 유형</h3>
+        <p>모든 스토리를 완료하면 당신의 기록 성향이 분석되어 아키비스트 유형이 결정됩니다.</p>
+      </div>
+    </div>
+    <button class="btn-primary" style="width:100%;margin-top:1rem;" onclick="completeTutorial()">탐색 시작하기 →</button>
+  </div>
+</div>
+
+<div id="category-screen" class="screen">
+  <div class="screen-bg"></div>
+  <div class="cat-header-row">
+    <div class="header-left"><h2>카테고리 선택</h2><p class="player-name" id="cat-player-name"></p></div>
+    <button class="btn-archive" onclick="showArchive()">📦 보관소</button>
+  </div>
+  <div class="category-grid" id="category-grid"></div>
+</div>
+
+<div id="archive-screen" class="screen">
+  <div class="screen-bg"></div>
+  <button class="btn-back" onclick="showScreen('category-screen'); renderCategories();">← 돌아가기</button>
+  <div class="archive-container" id="archive-container"></div>
+</div>
+
+<div id="story-screen" class="screen">
+  <div class="screen-bg"></div>
+  <button class="btn-back" onclick="showScreen('category-screen'); renderCategories();">← 카테고리</button>
+  <div class="screen-header"><h2 id="story-screen-title"></h2></div>
+  <div class="story-list" id="story-list"></div>
+</div>
+
+<div id="game-screen" class="screen">
+  <div class="screen-bg"></div>
+  <div class="game-header">
+    <button class="btn-header-back" onclick="exitToStoryList()">←</button>
+    <span class="location" id="game-location"></span>
+    <span class="progress" id="game-progress"></span>
+  </div>
+  <div class="game-content" id="game-content"></div>
+</div>
+
+<div id="completion-screen" class="screen">
+  <div class="screen-bg"></div>
+  <div class="completion-box" id="completion-box"></div>
+</div>
+
+<div id="result-screen" class="screen">
+  <div class="screen-bg"></div>
+  <div class="result-box" id="result-box"></div>
+</div>
+
+<!-- Modals -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="closeAnswerModal()"></div>
+<div class="answer-modal" id="answer-modal">
+  <div class="modal-label" id="modal-label"></div>
+  <div class="modal-hint" id="modal-hint"></div>
+  <input type="text" id="modal-input" placeholder="정답을 입력하세요" autocomplete="off">
+  <div class="modal-btns">
+    <button class="btn-cancel" onclick="closeAnswerModal()">취소</button>
+    <button class="btn-submit" onclick="submitAnswer()">확인</button>
+  </div>
+</div>
+<div class="source-detail" id="source-detail"><div class="detail-inner" id="detail-inner"></div></div>
+
+<script>
+// ===== BUILD FLAGS =====
+// 빌드 시점 sed로 교체. mobile=false / offline=true.
+const OFFLINE_MODE = true;
+
+// localStorage 키: 빌드별 prefix (mobile/offline 격리)
+const LS_PREFIX = OFFLINE_MODE ? 'dmz_v4_o_' : 'dmz_v4_m_';
+const LS_STATE_KEY = LS_PREFIX + 'state';
+const LS_TUTORIAL_KEY = LS_PREFIX + 'tutorial';
+const LS_OFFLINE_UNLOCKS_KEY = LS_PREFIX + 'unlocks';
+
+// ===== GAME DATA =====
+// 데이터 로딩 중 메시지를 표시하기 위해 별도 파일로 분리 가능하지만,
+// 단일 HTML 파일 유지를 위해 인라인으로 포함합니다.
+
+const CATEGORIES = [
+  { id: 'cat01', name: 'DMZ 기본정보', icon: '🗺️' },
+  { id: 'cat02', name: '생태환경', icon: '🌿' },
+  { id: 'cat03', name: '국가유산·문화재', icon: '🏛️' },
+  { id: 'cat04', name: 'DMZ의 사람들', icon: '👥' },
+  { id: 'cat05', name: '갈등과 협력', icon: '⚖️' },
+  { id: 'cat06', name: '평화 관광', icon: '🕊️' },
+];
+
+// insertBlanks: {{A}}, {{A1}}, {{C2}} 등 마커를 빈칸 슬롯으로 변환
+function insertBlanks(text, blanks) {
+  return text.replace(/\{\{([A-D]\d?)\}\}/g, (match, key) => {
+    if (blanks[key]) {
+      return `<span class="blank-slot filled">${blanks[key]}</span>`;
+    }
+    return `<span class="blank-slot empty" onclick="event.stopPropagation();openAnswerModal('${key}')">[${key}]</span>`;
+  });
+}
+
+// 각 소스의 HTML을 생성하는 템플릿 함수
+function renderSource(src, solvedBlanks, allBlanks) {
+  const blanks = {};
+  for (const key of Object.keys(allBlanks)) {
+    blanks[key] = solvedBlanks[key] || null;
+  }
+
+  const ib = (text) => insertBlanks(text, blanks);
+  const d = src.templateData;
+
+  switch(src.type) {
+    case 'letter':
+      return `<div class="letter-paper">
+        <div class="letter-meta src-heading"><strong>${d.heading}</strong><br>${d.meta}</div>
+        ${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}
+        ${d.sign ? `<p class="letter-sign">${d.sign}</p>` : ''}
+        ${d.soundNote ? `<p class="sound-note">🔊 ${d.soundNote}</p>` : ''}
+      </div>`;
+
+    case 'diary':
+      return `<div class="diary-paper">
+        <div class="diary-meta src-heading">${d.meta}</div>
+        ${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}
+        ${d.soundNote ? `<p class="sound-note">🔊 ${d.soundNote}</p>` : ''}
+      </div>`;
+
+    case 'scholar':
+      return `<div class="scholar-paper">
+        <div class="scholar-meta src-heading"><strong>${d.heading}</strong><br>${d.meta}</div>
+        ${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}
+        ${d.soundNote ? `<p class="sound-note">🔊 ${d.soundNote}</p>` : ''}
+      </div>`;
+
+    case 'newspaper':
+      return `<div class="newspaper-paper">
+        <div class="news-header src-heading"><div class="news-name">${d.paperName}</div><div class="news-date">${d.date}</div></div>
+        <div class="news-title">${ib(d.headline)}</div>
+        <div class="news-body">${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}</div>
+      </div>`;
+
+    case 'photo':
+      return d.photos.map(function(ph) {
+        var imgTag = ph.src ? '<img src="' + ph.src + '" alt="' + (ph.alt || '') + '">' : '';
+        return '<div class="photo-frame">' +
+          imgTag +
+          '<div class="photo-caption">' + ib(ph.caption) + '</div>' +
+          '<div class="photo-source">출처: ' + ph.credit + '</div>' +
+          '</div>';
+      }).join('');
+
+    case 'oral':
+      return `<div class="oral-player">
+        <div class="oral-icon src-heading">🎙️</div>
+        <div class="oral-meta src-heading">${d.meta}</div>
+        <div class="oral-text">${d.quotes.map(q => `<p>${ib(q)}</p>`).join('')}</div>
+        ${d.soundNote ? `<p class="sound-note">🔊 ${d.soundNote}</p>` : ''}
+      </div>`;
+
+    case 'twitter':
+      return `<div class="twitter-thread">
+        <div class="tweet-header src-heading">${d.handle} · ${d.date}</div>
+        <div class="tweet-body">${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}</div>
+      </div>`;
+
+    case 'kakao':
+      return `<div class="kakao-chat">
+        ${d.messages.map(m => `<div class="chat-line ${m.align || 'left'}">
+          ${m.name ? `<div class="chat-name src-heading">${m.name}</div>` : ''}
+          ${ib(m.text)}
+        </div>`).join('')}
+      </div>`;
+
+    case 'blog':
+      return `<div class="blog-post">
+        <div class="blog-title src-heading">${d.title}</div>
+        <div class="blog-meta src-heading">${d.meta}</div>
+        <div class="blog-body">${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}</div>
+      </div>`;
+
+    case 'report':
+      return `<div class="report-doc">
+        <div class="report-header src-heading">${d.header}</div>
+        ${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}
+      </div>`;
+
+    case 'homework':
+      return `<div class="homework-paper">
+        <div class="hw-title src-heading">${d.title}</div>
+        <div class="hw-meta src-heading">${d.meta}</div>
+        ${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}
+      </div>`;
+
+    case 'text':
+      return `<div class="text-message">
+        ${d.messages.map(m => `<div class="msg-bubble ${m.sent ? 'sent' : 'received'}">${ib(m.text)}</div>`).join('')}
+      </div>`;
+
+    case 'qna':
+      return `<div class="qna-post">
+        <div class="qna-q"><div class="qna-label src-heading">Q.</div>${d.question.map(p => `<p>${ib(p)}</p>`).join('')}</div>
+        <div class="qna-a"><div class="qna-label src-heading">A. 채택된 답변</div>${d.answer.map(p => `<p>${ib(p)}</p>`).join('')}</div>
+      </div>`;
+
+    default:
+      return `<div class="letter-paper">${d.paragraphs ? d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('') : ''}</div>`;
+  }
+}
+
+// ===== STORY DATA =====
+// 각 카테고리별 스토리 데이터
+// 데이터가 매우 방대하여 별도 JS 파일로 분리하는 것이 이상적이지만,
+// 단일 HTML 요구사항에 따라 인라인으로 포함합니다.
+
+const STORIES = {};
+
+// === 카테고리 01: DMZ 기본정보 ===
+STORIES.cat01 = [
+  {
+    id: 's0101', title: 'DMZ의 탄생', era: '1953년 7월 27일',
+    location: '판문점, 중부전선, DMZ 일대',
+    soundNote: '포성이 줄어들다 침묵 → 벌레 소리, 바람 소리',
+    sources: [
+      { id:'A', type:'letter', icon:'✉️', title:'군인의 편지', sub:'DMZ에서 발견된 편지', styleClass:'source-letter',
+        templateData: {
+          heading: '총소리가 멈춘 밤에',
+          meta: '1953년 7월 27일 · 보내는 이: 국군 병장 박진우 · 받는 이: 어머니',
+          paragraphs: [
+            '어머니, 총소리가 멈췄습니다.',
+            '오늘 밤 열 시를 기해 모든 총성이 그쳤습니다. 아침에 {{A}}이라는 곳에서 정전협정이 체결되었다고 합니다. 서명에 단 10분밖에 걸리지 않았다 합니다. 3년이 넘는 전쟁을 그렇게 매듭짓다니.',
+            '이것은 평화가 아닙니다. \'정전\'이라 합니다. 총을 내려놓은 것이지 악수를 한 것이 아닙니다.',
+            '72시간 안에 우리는 2킬로미터를 물러납니다. 그 사이 빈 땅이 생기고, 군사분계선을 따라 1,292개의 표지판이 세워진다 합니다. 김 상병의 고향 마을도 그 안에 들어갑니다. 그는 오늘 밤 한마디도 하지 않았습니다.',
+            '달이 밝습니다. 이 전쟁은 멈추었지만, 끝나지 않았습니다.'
+          ],
+          sign: '아들 진우 올림',
+          soundNote: '포성이 줄어들며… 침묵. 벌레 소리, 바람 소리.'
+        }
+      },
+      { id:'B', type:'newspaper', icon:'📰', title:'신문 보도', sub:'통일뉴스 1953년 7월 28일', styleClass:'source-newspaper',
+        templateData: {
+          paperName: '통 일 뉴 스', date: '1953년 7월 28일 (화)',
+          headline: '정전협정 체결 — 판문점에서 쌍방 서명 완료',
+          paragraphs: [
+            '유엔군대표단 측 수석대표 미육군대장 {{B}}와 조선인민군 및 중국인민지원군대표단 수석대표 조선인민군대장 남일이 대표로 참석해 27일 오전 10시에 정전협정에 서명했다. 양측은 일체의 발언 없이 서명만을 교환하였다.',
+            '협정에 따라 발효 후 72시간 이내에 쌍방 군사력은 군사분계선으로부터 각 2킬로미터씩 후퇴하여야 한다. 이로써 서해 강화도에서 강원 고성까지 약 248킬로미터에 걸친 비무장지대가 설치된다.'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'정전협정 서명식 · 군사분계선 표지판', styleClass:'source-photo',
+        templateData: {
+          photos: [
+            { src:'photos/resized/01_signing_1953.jpg', alt:'정전협정 서명식',
+              caption:'[사진 1] 1953년 7월 27일 오전 10시, 판문점. 유엔군대표단 수석대표 미육군대장 해리슨 2세(왼쪽 테이블)가 정전협정문에 서명하고 있다. 반대쪽에는 조선인민군 및 중국인민지원군대표단 수석대표 {{C}} 대장이 앉아 있다.',
+              credit:'미국 국립문서기록관리청(NARA)' },
+            { src:'photos/resized/02_mdl_marker.jpg', alt:'군사분계선 표지판',
+              caption:'[사진 2] 판문점 DMZ 내 군사분계선 표지판. 서해 강화도에서 동해 고성까지 약 248킬로미터 구간에 총 1,292개가 설치되었다.',
+              credit:'미국 공군(USAF)' }
+          ]
+        }
+      },
+      { id:'D', type:'oral', icon:'🎙️', title:'구술 인터뷰', sub:'참전용사 김영수 (2010년 채록)', styleClass:'source-oral',
+        templateData: {
+          meta: '구술자: 김영수 (1933년생, 당시 이등병) · 채록: 2010년 6월<br>주제: 정전협정 당일 기억',
+          quotes: [
+            '"그날 밤 열 시에 총소리가 딱 멈추니까, 세상이 쥐 죽은 듯이 조용해졌어. 근데 아무도 안 웃었어. 울지도 않고. 그냥 멍했지."',
+            '"72시간 안에 물러나라 그래서, 3년 지킨 참호를 제 손으로 허물었어. 2킬로씩 물러나니까 폭이 {{D}}킬로짜리 빈 땅이 생기는 거야. 거기가 비무장지대가 된 거지."',
+            '"우리 부대에 연천 사람이 하나 있었는데, 그 친구 고향이 딱 그 안에 들어갔어. 그 친구는 그날 밤새 북쪽만 보고 있었어."'
+          ],
+          soundNote: '먼 곳의 침묵… 벌레 소리, 바람 소리'
+        }
+      }
+    ],
+    blanks: {
+      A: { answer: '판문점', hint: '이 편지 속 장소는 다른 자료에서 확인할 수 있습니다. 자료 B(신문)를 읽어보세요.', source: 'B' },
+      B: { answer: '해리슨 2세', hint: '이 인물은 사진 자료에서 확인할 수 있습니다. 자료 C(사진)의 캡션을 읽어보세요.', source: 'C', altAnswers: ['해리슨'] },
+      C: { answer: '남일', hint: '공산군 측 수석대표의 이름은 자료 B(신문)에서 확인할 수 있습니다.', source: 'B' },
+      D: { answer: '4', hint: '각 2킬로미터씩 후퇴하면 총 폭은? 자료 B(신문)를 참고하세요.', source: 'B', altAnswers: ['사', '4km', '4킬로미터'] }
+    },
+    choices: [
+      { id:'A', icon:'✉️', title:'군인의 편지', meaning:'개인의 감정과 체험을 기록으로 남긴다' },
+      { id:'B', icon:'📰', title:'신문 보도', meaning:'공식적 사실 기록을 남긴다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'시각적 증거를 남긴다' },
+      { id:'D', icon:'🎙️', title:'구술 인터뷰', meaning:'살아있는 목소리를 기록으로 남긴다' }
+    ]
+  },
+  {
+    id: 's0102', title: 'DMZ 명칭의 의미', era: '1953년 정전협정 ~ 현재',
+    location: '판문점, DMZ, 민간인통제구역',
+    sources: [
+      { id:'A', type:'qna', icon:'❓', title:'지식인 Q&A', sub:'DMZ가 뭔지 알려주세요!! (내공 100)', styleClass:'source-qna',
+        templateData: {
+          source: '온라인 Q&A 게시판에서 발견된 질문과 답변',
+          question: ['Q. DMZ가 뭔지 알려주세요!! (내공 100)', '질문자: 민지 (2025.07.15)', '안녕하세요. 초등학교 5학년인데요. 여름방학 숙제로 DMZ를 조사해 오라고 했는데 너무 어려워요.ㅠㅠ 휴전선이랑 DMZ랑 같은 건가요? 민통선은 또 뭔가요? 쉽게 설명해 주실 분 있나요??'],
+          answer: [
+            'A. 채택된 답변',
+            '답변자: 교육학과 대학생(2025.07.15)',
+            '안녕하세요. 채택 부탁드립니다.',
+            '1. 휴전선은 사실 정식 명칭이 아니에요.',
+            '정식 이름은 군사분계선(MDL)이에요. 1953년에 전쟁이 멈추고 나서, 그때 양쪽 군대가 서 있던 자리에 말뚝을 1,292개 세웠어요. 서해안 {{A1}} 하구에서 동해안 {{A2}}까지요. 그 말뚝들을 이은 가상의 선이',
+            '2. 비무장지대(DMZ)는 그 선 주변의 빈 공간이에요.',
+            '군사분계선에서 남쪽으로 2킬로미터, 북쪽으로 2킬로미터씩 물러나서 만든 빈 공간이 DMZ에요. 총 폭이 4km인 띠 모양이죠. 여기엔 군인도 못 들어가고 무기도 설치하면 안 됩니다. DMZ의 남쪽 끝을 남방한계선(SLL), 북쪽 끝을 북방한계선이라고 불러요.',
+            '3. 민간인통제선(CACL)은 DMZ와 다른 거예요!',
+            'DMZ 남쪽의 SLL 밖에 있는 통제 구역이에요. DMZ는 정전협정으로 만들어진 거지만, 민간인통제선은 1954년 2월 미 육군 제8군단사령관이 민간인의 귀농을 규제하기 위해 만들었어요. 그래서 귀농선이라고 불렀지만'
+          ]
+        }
+      },
+      { id:'B', type:'scholar', icon:'📜', title:'정전협정 원문 인용', sub:'정전협정 제1조 · 한국민족문화대백과사전', styleClass:'source-scholar',
+        templateData: {
+          heading: '정전협정 원문 인용',
+          meta: '「한국 군사정전에 관한 협정」 원문 (1953.7.27, 외교부 소장본) 및 한국민족문화대백과사전',
+          paragraphs: [
+            '[정전협정 제1조 제1항]',
+            '"A military demarcation line shall be fixed and both sides shall withdraw two 2kilometers from this line so as to establish a demilitarized zone between the opposing forces."',
+            '"한 개의 군사분계선을 확정하고 쌍방이 이 선으로부터 각기 2킬로미터씩 후퇴함으로써 적대 군대 간에 한 개의 비무장지대를 설정한다."',
+            '[한국민족문화대백과사전 — 비무장지대]',
+            '비무장지대란 국제적인 조약이나 협정에 의해 무장이 금지된 지역으로, 무력 충돌 방지를 위해 군 병력의 주둔, 무기의 배치, 군사시설의 설치가 금지된 완충지대이다.',
+            '[민간인통제구역의 법적 근거]',
+            '민간인통제구역은 정전협정에 근거하지 않는다. 1954년 미 육군 제8군단사령관이 군사시설 보안 및 민간인 귀농 규제를 목적으로 설정한 {{B}}에서 유래하며, 현재는 「군사기지 및 군사시설 보호법」 제5조에 따라 국방부장관이 군사분계선 이남 10킬로미터 범위 이내에서 지정한다.'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'MDL 표식물', styleClass:'source-photo',
+        templateData: {
+          photos: [{
+            src: 'photos/cat01/1-2.jpg',
+            alt: '군사분계선 표식물',
+            caption: '판문점 비무장지대 내 군사분계선(MDL) 표식물. 1953년 정전협정 직후 서해안 임진강 하구에서 동해안 고성까지 총 1,292개가 설치되었다. 이 표식물들이 만들어낸 가상의 선이 곧 {{C}}이며, 이 선을 기준으로 남북 각 2km씩 후퇴하여 설정된 완충지대가 비무장지대이다.',
+            credit: 'Tech. Sgt. Scott Stewart, 미 공군(USAF), 1993년 7월 1일 촬영. Public Domain (미국 연방정부 저작물)'
+          }]
+        }
+      },
+      { id:'D', type:'kakao', icon:'💬', title:'카카오톡 대화', sub:'학생과 선생님의 대화', styleClass:'source-kakao',
+        templateData: {
+          source: '사회 수업 후 학생이 선생님에게 보낸 카카오톡 질문과 답변 (가상 자료)',
+          messages: [
+            {name:'민지', text:'선생님! 오늘 수업에서 DMZ 남쪽 끝이 남방한계선이라고 하셨잖아요. 근데 북방한계선은 DMZ 북쪽 끝인 건가요?'},
+            {name:'선생님', text:'맞아요. 민지! 군사분계선에서 남쪽 2킬로미터가 남방한계선, 북쪽 2킬로미터가 북방한계선이에요. 그 사이 {{D}}킬로미터가 DMZ고요', align:'right'},
+            {name:'민지', text:'아 그리고 민통선은 DMZ랑 같은 건가요?'},
+            {name:'선생님', text:'아니에요! 민통선은 DMZ 바깥이에요. 군사기지 및 군사시설 보호법에 따라 국방부장관이 정하는 건데, 옛날에는 귀농선이라고 불렀어요.', align:'right'},
+            {name:'민지', text:'귀농선이요? 왜 그런 이름이에요?'},
+            {name:'선생님', text:'1954년에 미 8군단이 전쟁 끝나고 농민들이 함부로 올라가지 못하게 만든 게 시초예요. 농사짓는 걸 통제한다는 뜻에서 귀농선이라고 했대요.', align:'right'},
+            {name:'민지', text:'감사합니다 선생님!! 이제 이해가 돼요. ㅎㅎ'}
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A1: { answer: '임진강', hint: '사진 자료(C)의 캡션에서 서쪽 출발점을 확인하세요.', source: 'C' },
+      A2: { answer: '고성', hint: '사진 자료(C)의 캡션에서 동쪽 끝점을 확인하세요.', source: 'C' },
+      B: { answer: '귀농선', hint: '이 용어는 카카오톡 대화(D)에서 선생님이 언급합니다.', source: 'D' },
+      C: { answer: '군사분계선', hint: '지식인 Q&A(A)의 답변에서 이 선의 정식 명칭을 확인하세요.', source: 'A', altAnswers: ['MDL'] },
+      D: { answer: '4', hint: '지식인 Q&A(A)의 요약에서 DMZ의 총 폭을 확인하세요.', source: 'A' }
+    },
+    choices: [
+      { id:'A', icon:'❓', title:'지식인 Q&A', meaning:'누구나 이해할 수 있는 쉬운 설명을 남긴다' },
+      { id:'B', icon:'📜', title:'정전협정 원문', meaning:'법적 근거를 정확히 기록한다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'시각적 증거를 남긴다' },
+      { id:'D', icon:'💬', title:'카카오톡 대화', meaning:'일상 속 대화로 지식을 전달한다' }
+    ]
+  },
+  {
+    id: 's0103', title: 'DMZ의 지리적 위치', era: '1953년 정전협정 ~ 2019년 논문',
+    location: '서해 임진강 하구 ~ 동해 고성',
+    sources: [
+      { id:'A', type:'diary', icon:'📓', title:'중학생 일기', sub:'방학숙제 때문에 DMZ를 찾아봤다', styleClass:'source-diary',
+        templateData: {
+          heading: '방학숙제 때문에 DMZ를 찾아봤다',
+          meta: '2025년 8월 2일 토요일 · 중학교 2학년 서하 (가상)',
+          paragraphs: [
+            '방학 숙제로 \'DMZ의 지리적 위치\'를 조사하게 됐다. 우리 집이 김포인데, 조금만 올라가면 DMZ라 주제가 딱 맞았다.',
+            'DMZ는 서쪽 {{A}}에서 동쪽 고성까지 싹 이어진다고 한다. 길이는 239km, 면적은 약 904km². 서울보다 1.5배나 되는 넓은 땅인데 아무도 못 들어간다니 신기하다.',
+            'DMZ랑 닿아 있는 동네는 8개라고 한다. 경기도에서는 김포, 파주, 연천. 강원도에서는 철원, 화천, 양구, 인제, 고성. 서쪽에서 동쪽으로 쭉 이어진다. 내가 사는 김포도 들어있어서 괜히 뿌듯했다.',
+            '내일은 도서관에서 더 찾아봐야지. 쓸 게 너무 많다.'
+          ]
+        }
+      },
+      { id:'B', type:'scholar', icon:'📄', title:'논문 직접 인용', sub:'김창환(2019) · 김창환(2007)', styleClass:'source-scholar',
+        templateData: {
+          heading: '논문 직접 인용',
+          meta: '김창환(2019), "비무장지대 및 군사분계선의 길이에 관한 연구" · 김창환(2007), "DMZ의 공간적 범위에 관한 연구"',
+          paragraphs: [
+            '[군사분계선 길이 — 시·도별]',
+            '"본 연구는 비무장지대 및 군사분계선의 길이를 측정한 것이다. 정전협정문 첨부지도 9개 도엽을 ArcGIS의 지오레퍼런싱 기능을 사용하여 좌표를 부여하고 군사분계선을 디지타이징하였다."',
+            '"그 길이를 측정한 결과는 239.42km(148.77mile)이다. 이는 현재 비무장지대와 관련된 연구나 보고서 그리고 대중 매체에서 표기하는 \'155마일 휴전선\' 또는 \'248km 비무장지대\'라는 표현의 부적합을 의미하는 것이다."',
+            '[표] 구분: 강원도 / 경기도 / 합계 — km: 157.96 / 81.46 / 239.42 — mile: 98.15 / 50.62 / 148.77',
+            '— 김창환(2019), 비무장지대 및 군사분계선의 길이에 관한 연구에서 발췌',
+            '[DMZ 면적]',
+            '"DMZ의 면적은 약 903.8km²이다. 선행 연구들은 \'248km × 4km = 992km²\'로 단순 계산하였으나, 군사분계선이 직선이 아니므로 실측 값은 이보다 작다."',
+            '"DMZ는 동해안 고성군 명호리로부터 중부의 양구, 화천, 철원을 거쳐 개성 남쪽의 판문점을 지나 서쪽의 임진강 하구에 이르는 군사분계선을 따라 남북 방향으로 각각 2km씩 설정된 완충지대이다."',
+            '— 김창환(2019), DMZ의 공간적 범위에 관한 연구에서 발췌'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'NASA 위성 사진', styleClass:'source-photo',
+        templateData: {
+          photos: [{
+            src: 'photos/cat01/1-3.jpg',
+            alt: 'NASA 위성에서 본 DMZ',
+            caption: 'NASA 위성이 촬영한 한반도 중부. 남북 사이로 녹색 띠가 선명하게 보인다. 서쪽 한강하구에서 동쪽 고성까지 이어지는 비무장지대로, 총 면적은 약 {{C}}km²다.',
+            credit: 'Jesse Allen, NASA Earth Observatory, Landsat 4 & 5 위성 모자이크 (1989-1991). Public Domain (미국 연방정부 저작물)'
+          }]
+        }
+      },
+      { id:'D', type:'scholar', icon:'📄', title:'강의록', sub:'청소년 대상 DMZ 특강', styleClass:'source-scholar',
+        templateData: {
+          heading: 'DMZ는 어디에 있을까?',
+          meta: '강연자: 지리학 교수 (가상 재구성) · 대상: 청소년 대상 DMZ 특강',
+          paragraphs: [
+            '여러분, DMZ가 어디에 있는지 지도에서 찾아볼까요?',
+            '서쪽 한강하구에서 시작해서 동쪽 고성 해안까지, 한반도 허리를 가로지르는 선이 군사분계선이에요. 길이는 239.42km입니다. 248km라고 배운 분도 있죠? 그건 1952년 전쟁 중에 나온 추정치예요. 정확하지 않아요.',
+            '이 선을 중심으로 남북 각 2km, 합쳐서 폭 4km가 비무장지대, DMZ입니다. 면적은 약 903.8km². 서울이 605km²니까, 서울보다 1.5배 넓은 땅이네요.',
+            '자, DMZ에 맞닿은 지역을 서쪽부터 따라가 볼게요. 경기도에는 김포, 파주, 연천이 있고요. 강원도로 넘어가면 철원, 화천, 양구, 인제, 고성까지 이어집니다. 총 {{D}}개 시군이 DMZ와 닿아 있어요.',
+            '이 중 강원도 구간이 157.96km로 전체의 66%를 차지해요. 산악 지형을 따라 구불구불 이어지니까 경기도 구간보다 훨씬 길지요.'
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A: { answer: '임진강', hint: '사진 자료(C)의 캡션에서 서쪽 시작점을 확인하세요.', source: 'C' },
+      C: { answer: '904', hint: '일기(A)에서 DMZ 면적을 확인하세요.', source: 'A', altAnswers: ['903.8'] },
+      D: { answer: '8', hint: '일기(A)에서 DMZ에 닿아 있는 시군의 수를 세어보세요.', source: 'A' }
+    },
+    choices: [
+      { id:'A', icon:'📓', title:'중학생 일기', meaning:'또래의 시선으로 DMZ를 기록한다' },
+      { id:'B', icon:'📄', title:'학술 논문', meaning:'과학적 측정 결과를 기록한다' },
+      { id:'C', icon:'📷', title:'위성 사진', meaning:'우주에서 본 증거를 남긴다' },
+      { id:'D', icon:'📄', title:'강의록', meaning:'전문가의 쉬운 설명을 기록한다' }
+    ]
+  },
+  {
+    id: 's0104', title: 'DMZ의 관리체계', era: '1953년 정전협정 ~ 현재',
+    location: '판문점(NNSC 본부), DMZ, 민간인통제구역',
+    sources: [
+      { id:'A', type:'letter', icon:'✉️', title:'NNSC 장교의 편지', sub:'스웨덴 소령 에릭 린드그렌', styleClass:'source-letter',
+        templateData: {
+          heading: '세상에서 가장 긴 임무',
+          meta: '2026년 1월 15일 · 보내는 이: 에릭 린드그렌(가상), 스웨덴 육군 소령 · 받는 이: 아내 안나',
+          paragraphs: [
+            '사랑하는 안나에게.',
+            '판문점에 온 지 석 달이 지났다. 스톡홀름에서 여기까지 8,000km. 아이들은 잘 지내고 있지?',
+            '나는 중립국감독위원회(NNSC)의 스웨덴 대표단으로 이곳에 있어. 우리 임무는 1953년 정전협정이 제대로 지켜지고 있는지 감시하는 거야. 한반도에 새로운 무기나 추가 병력이 들어오지 않는지 확인하지.',
+            'NNSC는 원래 4개국이었어. 스웨덴과 {{A}}가 유엔군사령부(UNC) 측 지명이고, 폴란드와 체코가 북한 측 지명. 지금은 체코가 빠지고 폴란드도 상주하지 않아. 스웨덴 5명, 스위스 5명. 이렇게 10명이 세계에서',
+            '여기서 가장 인상 깊은 건 아침이야. 해가 뜰 때 DMZ 너머로 새소리가 들려. 세상에서 가장 무거운 침묵과 세상에서 가장 맑은 새소리가 공존하는 곳. 그게 이곳이야.',
+            '아이들에게 아빠가 보고 싶어 한다고 전해줘. 금방 갈게.'
+          ],
+          sign: '사랑을 담아, 에릭'
+        }
+      },
+      { id:'B', type:'newspaper', icon:'📰', title:'신문 기획보도', sub:'통일뉴스 2026.3.12', styleClass:'source-newspaper',
+        templateData: {
+          paperName: '통 일 뉴 스',
+          date: '2026년 3월 12일',
+          headline: '[기획] DMZ는 누가 어떻게 관리하나 — 정전협정·국내법·국제기구의 중첩 구조',
+          paragraphs: [
+            'DMZ의 관리 체계는 단일 기관이 아닌 복수의 국제, 국내 기관이 중층적으로 관여하는 구조다.',
+            'DMZ 자체의 관할은 정전협정에 따라 유엔군사령부(UNC)가 담당하며 DMZ 남쪽 민간인통제구역은 국방부, DMZ의 평화적 이용 정책은 통일부, 접경지역 발전은 행정안정부가 담당한다. 따라서 DMZ 내 출입은 UNC의 허가가 필요하며 동시 입장 인원은 {{B}}명 이하로 제한된다.',
+            '[DMZ 거버넌스 구조]',
+            '역할 구분 / 관할 영역 / 담당 / 근거',
+            'DMZ 관할 / 군사분계선 남·북 각 2km / 유엔사 (UNC) / 정전협정 (1953)',
+            '민간인통제구역 관리 / DMZ 남방 약 5~10km / 국방부 / 관할부대장 / 군사기지 및 군사시설 보호법',
+            '남북교류협력 정책 / DMZ 평화적 이용, 남북 교류 / 통일부 / 남북교류협력에 관한 법률',
+            '접경지역 발전 / 민간인통제구역 이남 접경 시·군 / 행정안전부 / 15개 시·군 / 접경지역 지원 특별법'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'판문점 JSA 내 NNSC 건물', styleClass:'source-photo',
+        templateData: {
+          photos: [{
+            src: 'photos/cat01/1-4.jpg',
+            alt: 'NNSC 건물',
+            caption: '스웨덴 대표단의 판문점 공동경비구역(JSA) 방문 시 {{C}}(NNSC) 건물 앞에서 미군과 한국군이 경비를 서고 있다. NNSC는 1953년 정전협정에 따라 설립되어 정전 이행을 중립적으로 감시하며, 현재 스웨덴과 스위스 각 5명이 판문점에 상주한다.',
+            credit: 'Cpl. Joseph Liggio, 8th Army (2025.10.15). DVIDS #9365309. Public Domain (미국 연방정부 저작물)'
+          }]
+        }
+      },
+      { id:'D', type:'kakao', icon:'💬', title:'카카오톡 대화', sub:'DMZ 출입 경험자와 후배의 대화', styleClass:'source-kakao',
+        templateData: {
+          source: 'DMZ 출입 경험자와 후배의 카카오톡 대화 (가상 자료)',
+          messages: [
+            {name:'유진', text:'선배 저 DMZ 관련 리서치 중인데요, 출입 절차가 어떻게 되는 거예요?'},
+            {name:'동현', text:'DMZ에 들어가려면 {{D}} 허가를 받아야 해.', align:'right'},
+            {name:'유진', text:'아 유엔사한테 허가를 받는 거예요?'},
+            {name:'동현', text:'ㅇㅇ 정전협정 제1조 제10항에 있어. 그리고 입장 제한 인원도 있어. 1,000명이 넘으면 안 돼.', align:'right'},
+            {name:'유진', text:'민통선은요?'},
+            {name:'동현', text:'거긴 별개야. 관할 부대장한테 출입허가신청서 내는 거야', align:'right'}
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A: { answer: '스위스', hint: '사진 자료(C)의 캡션에서 NNSC의 구성을 확인하세요.', source: 'C' },
+      B: { answer: '1,000', hint: '카카오톡 대화(D)에서 동현이 언급하는 인원 제한을 확인하세요.', source: 'D', altAnswers: ['1000'] },
+      C: { answer: '중립국감독위원회', hint: '편지(A)에서 NNSC의 한국어 명칭을 확인하세요.', source: 'A', altAnswers: ['NNSC'] },
+      D: { answer: '유엔사', hint: '신문 기획보도(B)에서 DMZ 관할 담당 기관을 확인하세요.', source: 'B', altAnswers: ['유엔군사령부', 'UNC'] }
+    },
+    choices: [
+      { id:'A', icon:'✉️', title:'NNSC 장교의 편지', meaning:'중립국 감시자의 시선을 기록한다' },
+      { id:'B', icon:'📰', title:'신문 기획보도', meaning:'복잡한 관리 체계를 정리한다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'현장의 증거를 남긴다' },
+      { id:'D', icon:'💬', title:'카카오톡 대화', meaning:'실무 경험자의 지식을 전달한다' }
+    ]
+  },
+  {
+    id: 's0105', title: 'JSA와 판문점', era: '2018년 비무장화 ~ 2023년 재무장',
+    location: '판문점, 공동경비구역(JSA)',
+    sources: [
+      { id:'A', type:'letter', icon:'✉️', title:'군인의 편지', sub:'JSA 근무 병장 최준혁', styleClass:'source-letter',
+        templateData: {
+          heading: '판문점에서 보내는 마지막 밤',
+          meta: '2026년 1월 20일 · 보내는 이: 육군 병장 최준혁(가상) · 받는 이: 동생 최민혁',
+          paragraphs: [
+            '민혁아,',
+            '네가 JSA에 지원하고 싶다고 했을 때 솔직히 놀랐어. 형이 근무하는 거 보고 멋있어서 지원하고 싶다니, 기특하면서도 걱정이 된다.',
+            '지원 조건부터 말해 줄게. 키 174cm 이상, 체중 65kg 이상, 교정시력 1.0 이상이어야 해. 병무청에서 전문 특기병으로 모집하는데, 1차 서류심사 통과하면 2차에서 체력 평가랑 면접을 봐. 팔굽혀펴기, 윗몸일으키기, 달리기.',
+            '합격하면 훈련소 수료 후 카투사 교육대에서 미군 기초 군사교육을 받아. 그 다음 유엔사 경비대대(UNCSB-JSA) 소속으로 배치돼. 한국군 신분인데 유엔사 지휘를 받는 독특한 구조야.',
+            '나는 주로 T2에서 근무해. 파란색 T2 건물 알지? 거기 안에 긴 탁자가 있는데, 그 탁자 중심선이 군사분계선이야. 탁자 건너편에는 북한 쪽 판문각이 보여. 겨우 발자국 거리인데, 세상에서 가장 먼 곳이야.',
+            '{{A1}}년에는 남북이 합의해서 이 안에서 무기를 다 치웠대. 양쪽 35명씩, 노란 완장만 차고 근무했다고 해. 잠깐이었지만 그때 여기서 남북 군인들이 자유롭게 오갔대. 근데 {{A2}}년에 북한이 다시 무장하면서, 지금은 원래대로야.',
+            '이제 곧 전역이다. 엄마한테 형이 된장찌개 먹고 싶어 한다고 전해줘.'
+          ],
+          sign: '형 준혁이가.'
+        }
+      },
+      { id:'B', type:'report', icon:'📋', title:'보도자료 타임라인', sub:'9.19 합의 타임라인', styleClass:'source-report',
+        templateData: {
+          header: '[타임라인] 공동경비구역(JSA)의 무장 경비 상태 변화 — 통일뉴스 2026년 3월 15일',
+          meta: '뉴스 보도 재구성 (정책브리핑·VOA·Korea Herald 참고)',
+          paragraphs: [
+            '■ 2018.09.19: 평양에서 9.19 군사합의 서명. JSA 비무장화 합의.',
+            '■ 2018.10.01~20: JSA 내 지뢰 제거 작업 완료.',
+            '■ 2018.10.25: 남북 초소 철수(남측 4곳·북측 5곳), 화기·탄약·병력 철수 완료. 이후 남북에서는 각 35명이 비무장 상태로 노란 완장("판문점 민사경찰") 착용 후 근무.',
+            '■ 2018.10.26~27: 남과 북, 그리고 {{B}}가 공동으로 JSA 내 9개 초소의 지뢰 제거, 화기·탄약 철수, 경비인원 조정 상태를 현장 확인. 1953년 JSA 설정 이후 65년 만의 비무장화 확인.',
+            '■ 2023.11.22: 북한, 9.19 군사합의 파기 선언. 이후 북한군 경비병이 권총을 착용한 것을 확인',
+            '■ 2023.12.19: 유엔사, 북한군 무장에 대응하여 유엔사 측 JSA 근무자에게 재무장 승인',
+            '■ 2024.06.04: 대한민국 정부, 국무회의 의결로 9.19 군사합의 전체 효력 정지',
+            '현재 JSA는 2018년 이전의 무장 경비 상태로 복귀했다.'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'JSA Conference Row', styleClass:'source-photo',
+        templateData: {
+          photos: [{
+            src: 'photos/cat01/1-5.jpg',
+            alt: 'JSA Conference Row',
+            caption: '남측에서 바라본 공동경비구역(JSA). 군사분계선 위에 놓인 파란색 유엔 회담장 건물 3동(T1, T2, T3)이 보인다. [T2] 내부 긴 탁자의 중심선이 곧 군사분계선이다. 뒤로 보이는 건물은 북측 판문각이다.',
+            credit: 'Lt.Cmdr. Brendan Trembath, United Nations Command (2025.1.7). DVIDS #8830815. Public Domain (미국 연방정부 저작물)'
+          }]
+        }
+      },
+      { id:'D', type:'text', icon:'💬', title:'문자 메시지', sub:'판문점 견학 전 학생과 선생님', styleClass:'source-text',
+        templateData: {
+          source: '판문점 견학 전 학생과 선생님의 문자 메시지 (가상 자료)',
+          messages: [
+            {text:'선생님! 내일 판문점 견학인데 궁금한 거 있어요. 판문점이랑 판문각이 같은 건가요?', sent:false},
+            {text:'아니에요! 둘은 달라요. 판문점은 동네 이름이고, 판문각은 북한 쪽 건물 이름이에요.', sent:true},
+            {text:'이름이 왜 이렇게 비슷한 거예요?', sent:false},
+            {text:'판문점은 원래 \'널문리\'라는 마을 이름에서 왔어요. 널빤지 대문이 많은 마을이었는데, 정전회담 때 미국과 중국이 한자로 옮기면서 판문점(板門店)이 된 거예요.', sent:true},
+            {text:'그럼 판문각은요?', sent:false},
+            {text:'판문각은 북한이 판문점 안에 세운 건물이에요. T2 회담장 안에서 탁자 건너편을 보면 보이는 큰 건물이 바로 {{D}}이에요', sent:true},
+            {text:'아~ 판문점 안에 판문각이 있는 거네요!', sent:false},
+            {text:'맞아요. 판문점은 구역, 판문각은 건물! 헷갈리지 마세요.', sent:true}
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A1: { answer: '2018', hint: '보도자료(B)의 타임라인에서 JSA 비무장화 합의 연도를 확인하세요.', source: 'B' },
+      A2: { answer: '2023', hint: '보도자료(B)의 타임라인에서 북한이 합의를 파기한 연도를 확인하세요.', source: 'B' },
+      B: { answer: '유엔사', hint: '편지(A)에서 JSA 경비대대의 지휘 체계를 확인하세요.', source: 'A', altAnswers: ['유엔사령부', 'UNC'] },
+      D: { answer: '판문각', hint: '편지(A)에서 탁자 건너편 북측 건물 이름을 확인하세요.', source: 'A' }
+    },
+    choices: [
+      { id:'A', icon:'✉️', title:'군인의 편지', meaning:'현장 군인의 생생한 체험을 기록한다' },
+      { id:'B', icon:'📋', title:'보도자료 타임라인', meaning:'역사적 변화를 시간순으로 정리한다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'현장의 모습을 시각적으로 남긴다' },
+      { id:'D', icon:'💬', title:'문자 메시지', meaning:'일상 속 대화로 정보를 전달한다' }
+    ]
+  },
+  {
+    id: 's0106', title: '세계사 속의 DMZ', era: '2026년 현재 · 세계 비무장지대 비교',
+    location: '독일 그뤼네스 반트, 베트남, 키프로스, 남극, 한반도 DMZ',
+    sources: [
+      { id:'A', type:'diary', icon:'📓', title:'생태학자의 일기', sub:'죽음의 띠가 생명의 띠가 되기까지', styleClass:'source-diary',
+        templateData: {
+          heading: '죽음의 띠가 생명의 띠가 되기까지',
+          meta: '2025년 9월 15일 · 쓰는 이: 박소연 연구원, DMZ 생태연구소',
+          paragraphs: [
+            '오늘 독일의 {{A}}를 걸었다.',
+            '여러 희귀 동식물이 이곳에 산다. 동독과 서독으로 나눠진 동안 사람의 발길이 닿지 않아서 생긴 일이다. 무려 41년이나 말이다.',
+            '옛 동독 국경경비대의 순찰로를 걷는데, 발밑에 꽃이 피어 있었다. 감시탑이 있던 자리에는 새가 둥지를 틀었다. 총구가 향하던 곳에 이제는 나비가 날고 있다.',
+            '우리의 DMZ는 어느덧 73년이다. 독일보다 30년이 넘는 시간이 지났다. 누군가 말했다. DMZ는 세계에서 가장 슬픈 이유로 만들어진, 가장 아름다운 자연이라고.',
+            '언젠가 한국의 DMZ도 누구나 드나드는 생태 길이 되어서 학생들과 함께 걷고 싶다.'
+          ]
+        }
+      },
+      { id:'B', type:'newspaper', icon:'📰', title:'신문 기획보도', sub:'통일뉴스 2026.3.18', styleClass:'source-newspaper',
+        templateData: {
+          paperName: '통 일 뉴 스',
+          date: '2026년 3월 18일',
+          headline: '[기획] 세계의 경계선 — 사라진 것과 남아 있는 것은 무엇인가?',
+          paragraphs: [
+            '■ 독일 그뤼네스 반트: 길이 약 1,393km, 면적 약 177km2. 1949~1990년(41년). 통일 후 생태 회랑으로 전환. 2024년 유네스코 세계유산 잠정목록 등재',
+            '■ 베트남 DMZ: 길이 약 100km. {{B}}강을 따라 남북 각 최대 5km. 1954~1976년(22년). 1954년 제네바 협정으로 설치. 1976년 7월 2일 통일 선포로 소멸되어 현재 관광지로 사용',
+            '■ 터키 키프로스 그린라인: 길이 약 180km. 1974년부터 현재까지. 유엔평화유지군이 관리 중이며 2003년부터 민간 통행을 허용하고 있음. 현재 9개 검문소 운영 중',
+            '■ 남극: 남극 대륙 전체. 1959년부터 현재. 세계 최초 비무장화 대륙. 군사기지, 훈련, 무기실험 금지. 과학연구 목적의 인력과 장비는 허용',
+            '■ 한반도 DMZ: 길이 약 248km, 면적 약 907km2. 1953년부터 현재까지. 현존하는 비무장 지대 중 최장 기간 지속 중'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'베트남 DMZ — 벤하이강의 히엔르엉 다리', styleClass:'source-photo',
+        templateData: {
+          photos: [{
+            src: 'photos/cat01/1-6.jpg',
+            alt: '베트남 벤하이강 히엔르엉 다리',
+            caption: '베트남 벤하이강의 히엔르엉 다리. 1954년 제네바 협정에 따라 이 강을 경계로 비무장지대가 설정되었다. {{C}}년간 베트남을 남북으로 가르던 이 다리는 통일 이후 유적지로 보존되고 있다.',
+            credit: 'Rolf Müller, Wikimedia Commons, CC BY-SA 3.0'
+          }]
+        }
+      },
+      { id:'D', type:'oral', icon:'🎙️', title:'구술 인터뷰', sub:'통일연구원 선임연구위원', styleClass:'source-oral',
+        templateData: {
+          meta: '구술자: 한정호(가상), 통일연구원 선임연구위원 · 채록 일시: 2025년 12월<br>주제: 세계 분단국가 비교 연구',
+          quotes: [
+            '"세계에서 DMZ라 불리는 곳을 다 가봤어요. 독일, 베트남, 키프로스. 세 곳 다 공통점이 있는데, 분단이 끝났거나 최소한 민간 통행이 가능해졌다는 거예요."',
+            '"베트남은 1954년에 제네바 협정으로 벤하이강에 DMZ를 만들었는데, 남북 각 5km씩이라 우리보다 넓었어요. 22년 만에 통일되면서 지금은 관광지가 됐죠."',
+            '"키프로스 그린라인은 {{D}}이 관리하는데, 2003년부터 검문소를 통해 남북 이동이 가능해졌어요. 완충지대 안에 만 명 이상이 거주하고 있어요. 우리하고는 차원이 다르죠."'
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A: { answer: '그뤼네스 반트', hint: '신문 기획보도(B)에서 독일의 생태 회랑 이름을 확인하세요.', source: 'B', altAnswers: ['그뤼네스반트'] },
+      B: { answer: '벤하이', hint: '구술 인터뷰(D)에서 베트남 DMZ의 강 이름을 확인하세요.', source: 'D' },
+      C: { answer: '22', hint: '신문 기획보도(B)에서 베트남 DMZ 존속 기간을 확인하세요.', source: 'B' },
+      D: { answer: '유엔평화유지군', hint: '신문 기획보도(B)에서 키프로스 그린라인 관리 기관을 확인하세요.', source: 'B', altAnswers: ['UNFICYP'] }
+    },
+    choices: [
+      { id:'A', icon:'📓', title:'생태학자의 일기', meaning:'개인의 감동과 희망을 기록한다' },
+      { id:'B', icon:'📰', title:'신문 기획보도', meaning:'세계적 비교를 통해 객관적 분석을 남긴다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'변화의 증거를 시각적으로 남긴다' },
+      { id:'D', icon:'🎙️', title:'구술 인터뷰', meaning:'연구자의 현장 경험을 기록한다' }
+    ]
+  }
+];
+
+// 나머지 카테고리 초기화 (데이터 추가 예정)
+STORIES.cat02 = [
+  {
+    id: 's0201', title: 'DMZ 생태계가 갖는 의의', era: '2026년 현재',
+    location: 'DMZ 일원',
+    sources: [
+      { id:'A', type:'diary', icon:'📓', title:'종군기자의 일기', sub:'산이 하얗게 죽었다', styleClass:'source-diary',
+        templateData: {
+          heading: '산이 하얗게 죽었다',
+          meta: '1952년 10월 · 글쓴이: 제임스 콜먼(가상), AP통신 종군기자',
+          paragraphs: [
+            '10월 8일',
+            '전선으로 향하는 트럭 위에서 이 글을 쓴다. 철원 북쪽, 한국군 제9사단이 지키고 있는 고지로 간다.',
+            '10월 12일',
+            '열흘 사이에 이 고지의 주인이 12번 바뀌었다. 중공군 제38군과 한국군 제9사단이 밤낮으로 고지를 빼앗고 빼앗겼다. 숫자로는 쓸 수 있지만, 눈앞의 광경은 숫자로 옮길 수 없다. 산이 하얗다. 나무가 하나도 없다.',
+            '10월 14일',
+            '고지 아래에 섰다. 숲이었던 자리에 부러진 나무 밑동만 줄지어 있다. 그을린 나뭇가지 사이로 연기가 피어오르고 있었다. 한 한국군 병사가 내게 말했다. 작년까지만 해도 노루가 살았었다고. 한국에 처음 왔을 때는 산이 초록색이었는데.'
+          ]
+        }
+      },
+      { id:'B', type:'report', icon:'📋', title:'환경부 보도자료', sub:'2018.6.14 DMZ 생태조사 결과', styleClass:'source-report',
+        templateData: {
+          header: '환 경 부 보 도 자 료          2018년 6월 14일',
+          meta: '환경부 보도자료 (2018.6.14) 기반 재구성',
+          paragraphs: [
+            'DMZ 일원에 멸종위기종 101종 포함 야생생물 5,929종 서식',
+            '— 전쟁으로 초토화된 땅, 70년 만에 한반도 최대 생태 보고로',
+            '한국전쟁 당시 비무장지대 일원은 대규모 포격과 네이팜탄(항공기에서 투하하는 소이탄의 일종으로, 고온의 젤리 형태 연소 물질이 넓은 면적을 태우는 무기) 폭격으로 산림이 대부분 소실되었다. 백마고지 전투에서는 열흘간 고지의 주인이 12번 바뀌었고, 산의 겉흙이 벗겨져 하얀 돌이 드러난 데에서 이름이 유래했다.',
+            '그로부터 많은 시간이 흐른 지금, 환경부와 국립생태원은 1974년부터 2017년까지의 누적 조사 자료를 종합한 결과, DMZ 일원에 총 5,929종의 야생생물이 서식하고 있음을 확인했다. 이 중 멸종위기 야생생물은 I급 18종, II급 83종 등 총 101종이다.',
+            '국토 면적의 약 1.6%에 불과한 이 좁은 띠에 생물다양성이 높게 나타나는 이유는 크게 세 가지다. 첫째, 민간인의 출입이 통제되면서 인위적 개발과 훼손이 차단되었고 둘째, DMZ 일원에는 산악, 하천, 습지, 농경지 등 다양한 서식 환경이 공존하며 셋째, 백두대간과 연결되어 남북 생태축의 역할을 하고 있다.'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'1956년 철원 항공사진 / 현재 DMZ 풍경', styleClass:'source-photo',
+        templateData: {
+          photos: [
+            { src:'photos/cat02/2-1.jpg', alt:'1956년 철원 항공사진',
+              caption:'1956년 강원도 철원 일대 항공사진. 사진 하단에 백마고지가 보인다. 한국전쟁이 끝난 지 3년이 지났지만, 대규모 포격과 {{C}} 폭격으로 겉흙이 벗겨진 산등성이가 보인다.',
+              credit:'부경근대사료연구소 김한근 소장. CC BY (한국저작권위원회 공유마당)' },
+            { src:'photos/cat02/2-2.png', alt:'현재 DMZ 풍경',
+              caption:'DMZ 일대의 현재 모습. 70여 년간 사람의 손길이 닿지 않은 비무장지대는 백두대간과 연결되는 한반도 핵심 생태 축으로 복원되었다. 환경부의 2018년 조사 결과에 따르면, DMZ 일원에는 총 5,929종의 야생생물이 서식하고 있다.',
+              credit:'국립수목원·녹색연합 발행 「평화와 생명의 DMZ」(2018) 발췌' }
+          ]
+        }
+      },
+      { id:'D', type:'oral', icon:'🎙️', title:'구술 인터뷰', sub:'철원 지역 주민 박순복', styleClass:'source-oral',
+        templateData: {
+          meta: '구술자: 박순복(가상), 1945년생, 철원군 주민 · 채록 일시: 2025년 10월<br>출처: 철원 지역 주민 구술 채록 (가상 자료)',
+          quotes: [
+            '"할머니가 여덟 살인가, 아홉 살인가 그랬을 때 전쟁이 끝났거든. 우리 마을 뒷산 있잖아. 그때는 산이 아니었어. 하얀 돌밖에 없었어."',
+            '"어른들이 그러시는 거야. 전쟁 때 포탄이 쏟아져서 산이 저렇게 됐다고. 하늘에서 보면 하얀 말이 누워 있는 것 같다고 해서 백마고지라고 부른다고."',
+            '"어릴 때는 무서웠어. 철조망 너머로는 아무도 못 가거든. 풀도 없고 짐승도 없고. 그냥 조용했어."',
+            '"근데 세월이 지나니까 달라지더라. 10년, 20년 지나니까 풀이 나고, 나무가 자라고. 어느 날 보니까 산이 초록색이 된 거야."',
+            '"요즘 텔레비전에서 그러더라. 여기가 동물들이 남북으로 오가는 {{D}}라고. 사람이 못 들어가니까 오히려 짐승들한테는 좋은 길이 된 거래."'
+          ]
+        }
+      }
+    ],
+    blanks: {
+      C: { answer: '네이팜탄', hint: '환경부 보도자료(B)에서 산림을 소실시킨 폭격 무기를 확인하세요.', source: 'B' },
+      D: { answer: '생태 통로', hint: '환경부 보도자료(B)에서 백두대간과 연결되는 DMZ의 역할을 확인하세요.', source: 'B', altAnswers: ['생태통로'] }
+    },
+    choices: [
+      { id:'A', icon:'📓', title:'종군기자의 일기', meaning:'전쟁 현장의 참상을 기록한다' },
+      { id:'B', icon:'📋', title:'환경부 보도자료', meaning:'공식 조사 결과를 기록한다' },
+      { id:'C', icon:'📷', title:'사진 자료', meaning:'과거와 현재의 변화를 보여준다' },
+      { id:'D', icon:'🎙️', title:'구술 인터뷰', meaning:'주민의 살아있는 경험을 기록한다' }
+    ]
+  },
+  {
+    id: 's0202', title: '두루미 월동지', era: '2025~2026년 겨울',
+    location: '철원평야, DMZ 일대',
+    sources: [
+      { id:'A', type:'diary', icon:'📓', title:'두루미의 일기', sub:'올해도 돌아왔습니다', styleClass:'source-diary',
+        templateData: {
+          heading: '올해도 돌아왔습니다',
+          meta: '2025년 10월 ~ 2026년 3월 · 작성자: 이름 없는 두루미 한 마리',
+          paragraphs: [
+            '10월 3일',
+            '{{A}}의 바람이 차가워졌습니다. 출발할 시간입니다. 올해도 남쪽으로 갑니다. 수천 킬로미터를 날아서, 매년 같은 곳으로. 나의 할머니도, 할머니의 할머니도 그곳에 갔습니다.',
+            '11월 18일',
+            '드디어 철원 평야에 도착했습니다. 하늘에서 내려다보면 이상한 곳입니다. 남쪽은 건물과 도로로 빽빽하고, 북쪽은 어둡고 고요합니다. 그 사이에 가느다란 초록색 띠가 있습니다. 사람들은 거기를 DMZ라고 부른다고 합니다.',
+            '12월 15일',
+            '들판에 내려앉으면 철조망이 보입니다. 사람들은 이쪽과 저쪽을 나누어 놓았습니다. 하지만 저에게는 경계가 없습니다. 바람이 부는 대로, 먹이가 있는 대로 날아갑니다. 70년 넘게 사람이 오지 않은 이 땅은, 저에게는 세상에서 가장 안전한 식탁입니다.',
+            '1월 20일',
+            '올해는 동료가 많이 왔습니다. 나와 같은 두루미 친구들은 1,500마리가 넘고, 재두루미는 몇 배는 더 되는 것 같습니다. 새벽에 함께 날아오르면 하늘을 하얗게 뒤덮곤 합니다. 사람들이 아래에서 올려다봅니다. 총을 쏘지 않는 사람들입니다.',
+            '3월 5일',
+            '다시 북쪽으로 떠날 시간입니다. 내년에도 이 들판이 있을까요? 이 고요가 있을까요? 사람들의 일은 모르겠습니다. 다만 저는 올해도, 내년에도, 그다음 해에도 돌아올 것입니다.'
+          ]
+        }
+      },
+      { id:'B', type:'newspaper', icon:'📰', title:'뉴스 보도', sub:'통일뉴스 2026.1.20', styleClass:'source-newspaper',
+        templateData: {
+          paperName: '통 일 뉴 스', date: '2026년 1월 20일',
+          headline: '"시베리아에서 철원까지 3,000km"… 두루미들의 대장정, 올겨울도 이어지다',
+          meta: '뉴스 보도 재구성 (문화재청 보도자료, International Crane Foundation 참고)',
+          paragraphs: [
+            '올겨울에도 철원 평야에 두루미와 재두루미가 찾아왔다. 두루미(학명 Grus japonensis, 천연기념물 제202호·멸종위기 야생생물 I급)는 약 1,500마리, {{B}}(학명 Antigone vipio, 천연기념물 제203호·멸종위기 야생생물 Ⅱ급)는 약 5,000마리 이상이 관찰되었다.',
+            '이들의 여정은 시베리아와 중국 동북부의 번식지에서 시작된다. 매년 9월 하순이면 북쪽의 찬바람을 신호 삼아 남하를 시작해, 중국 동북부 습지를 경유하고 북한 상공을 통과하여 약 2,000~3,000km를 날아 10월 하순에 철원·연천·파주 일대에 도착한다.',
+            '[두루미·재두루미 이동 경로]',
+            '두루미와 재두루미의 이동 경로는 조금 다르다. 두루미 대륙 이동 개체군은 러시아 극동과 중국 동북부에서 번식한 뒤 한반도 DMZ 일대에 집중적으로 월동한다. 전 세계 두루미 약 4,600마리 중 대륙 이동 개체군 대부분이 한반도를 찾는다.',
+            '재두루미는 몽골 동부·러시아·중국 동북부 등 더 넓은 지역에서 번식하며, 월동지도 한반도·일본 이즈미(가고시마현)·중국 포양호 등 3개국에 분산된다. 크게 두 무리로 나뉘어 이동하는데, 동쪽 무리는 한반도와 일본으로, 서쪽 무리는 중국 내륙으로 향한다.',
+            '전문가들은 "70여 년간 인간의 접근이 제한된 DMZ 일대의 농경지와 습지가 훼손되지 않아 핵심 서식지 역할을 하고 있다"라고 분석한다.'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'겨울 철원의 두루미', styleClass:'source-photo',
+        templateData: {
+          photos: [
+            { src:'photos/cat02/2-3.jpg', alt:'두루미',
+              caption:'겨울 철원 평야의 두루미. 흰 몸에 검은 목과 날개깃, 머리 꼭대기의 붉은 피부가 특징이다. 천연기념물 제{{C1}}호이자 멸종위기 야생생물 I급으로 지정되어 있으며, 전 세계 약 4,600마리에 불과한 희귀종이다.',
+              credit:'문화재청 국가유산포털, 천연기념물 제202호 두루미' },
+            { src:'photos/cat02/2-4.jpg', alt:'재두루미',
+              caption:'논에서 먹이를 찾는 재두루미 무리. 회색 몸통과 목덜미에 있는 흰 줄무늬, 눈 주위의 붉은 피부가 두루미와 구별되는 특징이다. 천연기념물 제{{C2}}호이자 멸종위기 야생생물 Ⅱ급으로 지정되어 있다. 매년 겨울 철원평야에 약 10,000마리 이상이 찾아온다.',
+              credit:'문화재청 국가유산포털, 천연기념물 제203호 재두루미' }
+          ]
+        }
+      },
+      { id:'D', type:'oral', icon:'🎙️', title:'현장 해설', sub:'철원 DMZ 문화해설사 김영숙', styleClass:'source-oral',
+        templateData: {
+          meta: '구술자: 김영숙(가상), 철원 DMZ 문화해설사 · 채록 일시: 2025년 12월<br>출처: 문화해설사 구술 채록 (가상 자료)',
+          quotes: [
+            '"두루미가 학인 거 알고 있죠? 500원짜리 동전 있잖아요. 뒤집어 보세요. 거기 새겨진 새가 바로 두루미예요. 매일 주머니에 넣고 다니면서도 모르는 사람이 많아요."',
+            '"옛날에 조선시대 문관 관리들 옷에 학 문양을 수놓았어요. 학흉배라고 하는데, {{D}}이 고결하고 청렴한 선비를 상징했거든요. 십장생에도 학이 들어가죠. 장수의 상징이에요."',
+            '"학수고대라는 말 아시죠? 학의 목처럼 길게 빼고 기다린다는 뜻이에요. 학춤도 있고요. 부산에는 동래학춤이라는 게 있는데 학이 걷고 날개 펴는 동작을 춤으로 만든 거죠."',
+            '"인천시 상징 새도 두루미고요. 전국에 학동, 학성, 학익동 같은 지명이 수두룩해요. 그만큼 우리 선조들한테 학은 늘 가까이 있던 새였어요."'
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A: { answer: '시베리아', hint: '뉴스 보도(B)에서 두루미의 번식지를 확인하세요.', source: 'B' },
+      B: { answer: '재두루미', hint: '구술 인터뷰(D)에서 두루미보다 더 많은 종을 확인하세요.', source: 'D' },
+      C1: { answer: '202', hint: '뉴스 보도(B)에서 두루미의 천연기념물 번호를 확인하세요.', source: 'B' },
+      C2: { answer: '203', hint: '뉴스 보도(B)에서 재두루미의 천연기념물 번호를 확인하세요.', source: 'B' },
+      D: { answer: '학', hint: '두루미의 일기(A)에서 두루미의 다른 이름을 확인하세요.', source: 'A' }
+    },
+    choices: [
+      { id:'A', icon:'📓', title:'두루미의 일기', meaning:'자연의 시선으로 DMZ를 기록한다' },
+      { id:'B', icon:'📰', title:'뉴스 보도', meaning:'과학적 사실을 기록한다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'시각적 증거를 남긴다' },
+      { id:'D', icon:'🎙️', title:'구술 인터뷰', meaning:'주민의 경험을 기록한다' }
+    ]
+  },
+  {
+    id: 's0203', title: '멸종위기 동식물', era: '2026년 현재',
+    location: 'DMZ 산악지대, 임진강',
+    sources: [
+      { id:'A', type:'twitter', icon:'🐦', title:'트위터(X) 스레드', sub:'국립생태원 생태조사팀', styleClass:'source-twitter',
+        templateData: {
+          source: '국립생태원 직원의 트위터(X) 스레드 (가상 자료)',
+          handle: '@nie_ecological_fieldsurvey_team_official',
+          bio: '국립생태원 생태조사팀 | DMZ 일원 야생생물 모니터링 | 무인카메라 약 90여 대 운영 중',
+          date: '@dmz_ecological_survey_diary_since2018 · 2018. 10. ○.',
+          paragraphs: [
+            '오늘 DMZ 무인 카메라 영상을 확인하다가 소리를 질렀다. (1/5)',
+            '우리 팀은 2014년부터 DMZ 일원에 무인 카메라 90여 대를 설치해서 야생동물을 모니터링하고 있다. 카메라를 설치하거나 회수할 때는 군 동행이 필수다. (2/5)',
+            '회수한 SD카드 영상을 돌려보는 게 내 일이다. 대부분 고라니, 멧돼지, 고라니, 또 멧돼지. 그래도 매번 기대하면서 재생 버튼을 누른다. (3/5)',
+            '10월 영상. 반달가슴곰. 어린 개체 한 마리가 카메라를 똑바로 쳐다보고 있었다. 손이 떨렸다. 남한의 야생에서 반달가슴곰이 찍힌 건 이게 처음이다. 지리산 방사 곰이 아니다. DMZ에 살던 야생 개체로 추정된다. (4/5)',
+            '이후에도 같은 구역에서 추가 촬영이 이어졌다. 같은 카메라에 천연기념물 제216호인 {{A}}도 여러 번 찍혔다. (5/5)',
+            '#DMZ #반달가슴곰 #멸종위기 #무인카메라 #국립생태원#보람'
+          ]
+        }
+      },
+      { id:'B', type:'report', icon:'📋', title:'국립생태원 보고서 요약', sub:'DMZ 일원 핵심 멸종위기종 서식 현황', styleClass:'source-report',
+        templateData: {
+          header: 'DMZ 일원 핵심 멸종위기종 서식 현황',
+          meta: '국립생태원, 「DMZ 일원 멸종위기 야생생물 서식 현황 보고서」(2018) 기반 재구성',
+          paragraphs: [
+            '사향노루 — 포유류 · 멸종위기 I급, 천연기념물 제216호. 몸길이 70~100cm, 체중 7~15kg. 암수 모두 뿔이 없고, 수컷만 위턱 송곳니가 입 밖으로 돌출. 수컷 배 쪽에 사향샘이 있어 짝짓기 때 향을 풍김. 화천·양구·인제·고성 산악 절벽지대와 DMZ 일원이 국내 최대 서식지. 단독 생활하며 해 뜨기 전과 해질 무렵에 주로 먹이 활동을 함. 과거 사향 채취 목적의 밀렵으로 개체수 급감',
+            '{{B}} — 포유류 · 멸종위기 I급, 천연기념물 제329호. 몸길이 138~192cm, 체중 80~200kg. 검은 털에 가슴의 V자형 흰색 반달무늬가 특징. 귀가 크고 둥글며 주둥이가 짧음. 2018년 무인카메라 최초 포착. 지리산 복원 개체가 아닌 순수 야생 개체군으로 추정. 잡식성이나 주로 열매·새순을 먹으며, 겨울에는 동면에 들어감.',
+            '수원청개구리 — 양서류 · 멸종위기 I급. 몸길이 25~40mm. 국내 개구리 중 가장 작음. 등은 녹색, 콧구멍에서 목덜미까지 갈색 줄무늬가 있음. 청개구리보다 머리가 뾰족하고 뒷다리가 짧음. 접경 지역 논과 농수로가 핵심 서식지. 도시화와 농약으로 민간 지역 서식지에서는 대부분 소실. 알려진 개체수 약 260마리',
+            '분홍장구채 — 식물 · 멸종위기 II급. 최대 40cm. 분홍색 꽃잎 5장이 두 갈래로 갈라짐. 주로 9~10월 개화하며 서늘한 곳에서 자생함. 2018년 철원 용양보 일대 암벽 절벽에서 105개체 자생지 신규 발견.'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'금강초롱꽃 / 수원청개구리', styleClass:'source-photo',
+        templateData: {
+          photos: [
+            { src:'photos/cat02/2-5.jpeg', alt:'분홍장구채',
+              caption:'{{C}}. 멸종위기 II급. 분홍색 꽃잎 5장이 끝에서 두 갈래로 갈라지며, 9~10월에 핀다. 바람이 잘 통하는 산지 바위틈에 붙어 자라는 북방계 식물로, 기후 변화로 점점 보기 힘들어지고 있다. 2018년 철원 용양보 일대 암벽에서 105개체가 발견되었다.',
+              credit:'국립백두대간수목원 (bdna.or.kr)' },
+            { src:'photos/cat02/2-6.jpg', alt:'수원청개구리',
+              caption:'수원청개구리. 멸종위기 I급. 몸길이 25~40mm로 국내 개구리 중 가장 작다. 청개구리와 비슷하지만 머리가 더 뾰족하고 뒷다리가 짧다. 논과 주변 농수로가 핵심 서식지이며, 도시화·농약·논 감소로 민간 지역 서식지가 대부분 사라졌다.',
+              credit:'Kim Hyun-tae, Wikimedia Commons, CC BY 4.0' }
+          ]
+        }
+      },
+      { id:'D', type:'kakao', icon:'💬', title:'카카오톡 대화', sub:'생태 다큐멘터리 촬영팀', styleClass:'source-kakao',
+        templateData: {
+          source: '생태 다큐멘터리 촬영팀의 카카오톡 대화 (가상 자료)',
+          messages: [
+            { name:'촬영감독', text:'PD님 내일 DMZ 들어가는 거 맞죠? 무인 카메라 몇 대 가져가요?' },
+            { name:'PD', text:'6대. 유엔사에서 촬영 허가를 2주 받았거든. 이제 카메라를 어디에 설치할 건지 결정해야 해.', align:'right' },
+            { name:'촬영감독', text:'사향노루 먼저 가야 하지 않아요? 동부 산악지대 절벽 쪽에?' },
+            { name:'PD', text:'맞아. 화천이랑 양구 쪽 바위 절벽 부근에 2대 설치하자. 해 뜨기 전이랑 해 질 무렵에 움직이니까 카메라 각도 신경 써야 해.', align:'right' },
+            { name:'촬영감독', text:'진짜 찍기 힘들겠네요.' },
+            { name:'PD', text:'그래도 발자국이랑 배설물은 꾸준히 발견되고 있어. 가능성 있어.', align:'right' },
+            { name:'촬영감독', text:'반달가슴곰은요? 2018년에 찍힌 구역으로 가는 거예요?' },
+            { name:'PD', text:'응. 같은 구역에서 성체 2마리가 2년 연속 찍혔으니까 거기 2대 더 설치하자. 잡식성이라 열매 많은 곳 위주로. 그리고 하나 더. 철원 접경 농경지 쪽에도 1대 놓고 싶어.', align:'right' },
+            { name:'촬영감독', text:'논이요? 거기서 뭘 찍으려고요?' },
+            { name:'PD', text:'{{D}}. 벼 줄기에 매달려서 우는 녀석이야.', align:'right' },
+            { name:'촬영감독', text:'논에서 어떻게 찾아요? 몸이 워낙 작잖아요.' },
+            { name:'PD', text:'소리로 찾아야지. 해 질 무렵에 소리가 들리면 그 녀석이야.', align:'right' }
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A: { answer: '사향노루', hint: '보고서(B)에서 천연기념물 제216호의 종명을 확인하세요.', source: 'B' },
+      B: { answer: '반달가슴곰', hint: '트위터(A)에서 무인카메라에 처음 포착된 동물을 확인하세요.', source: 'A' },
+      C: { answer: '분홍장구채', hint: '보고서(B)에서 멸종위기 II급 식물의 이름을 확인하세요.', source: 'B' },
+      D: { answer: '수원청개구리', hint: '보고서(B)에서 논에 사는 멸종위기 I급 양서류를 확인하세요.', source: 'B' }
+    },
+    choices: [
+      { id:'A', icon:'🐦', title:'트위터(X) 스레드', meaning:'현장 연구자의 발견을 기록한다' },
+      { id:'B', icon:'📋', title:'국립생태원 보고서', meaning:'공식 보호종 현황을 기록한다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'멸종위기종의 모습을 남긴다' },
+      { id:'D', icon:'💬', title:'카카오톡 대화', meaning:'촬영 현장의 생생한 대화를 기록한다' }
+    ]
+  },
+  {
+    id: 's0204', title: 'DMZ의 생명다양성', era: '2026년 세계환경의 날',
+    location: 'DMZ 일원',
+    sources: [
+      { id:'A', type:'twitter', icon:'🐦', title:'트위터(X) 스레드', sub:'@eco_reporter · 세계환경의 날', styleClass:'source-twitter',
+        templateData: {
+          handle: '@eco_reporter', date: '2026.06.05 세계환경의 날',
+          paragraphs: [
+            '🧵DMZ 생물다양성, 숫자로 보기 (1/4)',
+            '국토 면적의 1.6%에 불과한 DMZ 일원. 여기에 {{A}} 5,929종이 살고 있습니다. (2/4)',
+            '곤충 2,954종, 식물 1,926종, 조류 277종, 포유류 47종. 멸종위기종만 101종. 전국의 37.8%. (3/4)',
+            '70년간 사람이 오지 못한 결과입니다. DMZ 내부는 아직 본격 조사도 못 했어요. 실제 다양성은 이보다 훨씬 높을 겁니다. (4/4)'
+          ]
+        }
+      },
+      { id:'B', type:'scholar', icon:'📄', title:'환경부 보도자료', sub:'분류별 종수', styleClass:'source-scholar',
+        templateData: {
+          heading: 'DMZ 일원 야생생물 분류별 종수',
+          meta: '환경부·국립생태원 공동 발표 (2018.6.14)',
+          paragraphs: [
+            '"DMZ 일원에서 총 5,929종의 야생생물 서식이 확인되었다. 이 중 멸종위기 야생생물은 I급 18종, II급 83종 등 총 101종이다."',
+            '[분류별 종수] {{B}}: 2,954종 / 식물: 1,926종 / 조류: 277종 / 포유류: 47종 / 기타: 725종'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'수원청개구리', styleClass:'source-photo',
+        templateData: {
+          photos: [
+            { src:'photos/cat02/2-6.jpg', alt:'수원청개구리',
+              caption:'[사진] 수원청개구리(Dryophytes suweonensis). DMZ 일원에서 서식이 확인된 {{C}} 중 하나다. 멸종위기 I급으로, 논과 농수로가 핵심 서식지이며, DMZ에서 확인된 양서류·파충류는 총 32종에 달한다.',
+              credit:'Kim Hyun-tae, Wikimedia Commons, CC BY 4.0' }
+          ]
+        }
+      },
+      { id:'D', type:'oral', icon:'🎙️', title:'구술 인터뷰', sub:'국립생태원 연구자', styleClass:'source-oral',
+        templateData: {
+          meta: '구술자: 국립생태원 연구자(가상)<br>주제: DMZ 생물다양성 조사',
+          quotes: [
+            '"조사할 때마다 새로운 종이 나와요. 그런데 우리가 조사한 건 대부분 민통선 이남이에요. DMZ 안쪽은 거의 못 들어가거든요."',
+            '"{{D}} 2,954종이 확인됐는데, 실제로는 훨씬 많을 거예요."',
+            '"국토의 1.6%에 멸종위기종의 38%가 산다는 건, 여기가 얼마나 특별한 곳인지 보여주는 거죠."'
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A: { answer: '야생생물', hint: '환경부 보도자료(B)에서 확인된 생물의 총칭을 확인하세요.', source: 'B' },
+      B: { answer: '곤충류', hint: '트위터(A)에서 2,954종에 해당하는 분류군을 확인하세요.', source: 'A', altAnswers: ['곤충'] },
+      C: { answer: '포유류', hint: '환경부 보도자료(B)에서 47종에 해당하는 분류군을 확인하세요.', source: 'B' },
+      D: { answer: '곤충류', hint: '환경부 보도자료(B)에서 2,954종의 분류군을 확인하세요.', source: 'B', altAnswers: ['곤충'] }
+    },
+    choices: [
+      { id:'A', icon:'🐦', title:'트위터 스레드', meaning:'숫자로 사실을 전달한다' },
+      { id:'B', icon:'📄', title:'환경부 보도자료', meaning:'공식 데이터를 기록한다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'야생동물의 모습을 남긴다' },
+      { id:'D', icon:'🎙️', title:'구술 인터뷰', meaning:'연구자의 현장 경험을 기록한다' }
+    ]
+  },
+  {
+    id: 's0205', title: '유네스코 생물권보전지역', era: '2019년 유네스코 지정',
+    location: '강원 접경 5개 군, 연천임진강',
+    sources: [
+      { id:'A', type:'blog', icon:'📝', title:'연천 주민의 블로그', sub:'해진의 연천 살이', styleClass:'source-blog',
+        templateData: {
+          title: '탐사단 첫 활동, 임진강에서 새를 만나다',
+          meta: '해진의 연천 살이 · 작성자: 해진 (연천 토박이, 임진강 생물다양성 탐사단 3기)',
+          paragraphs: [
+            '드디어 탐사단 첫 활동 다녀왔다!!',
+            '연천 임진강 생물다양성 탐사단은 연천군이 유네스코 생물권보전지역으로 지정된 이후 2023년에 처음 만들어진 프로그램이다.',
+            '참가 조건이 연천군민이어야 해서 나는 바로 신청했다. 우리 동네가 유네스코 생물권보전지역이라는 게 아직도 신기하다. 2019년에 지정됐는데, 연천군 전역이랑 임진강 유역이 포함된다. 같은 해에 강원도에도 {{A}} 생물권보전지역이 지정됐다.',
+            '오늘은 차탄천에서 탐조했다. 망원경으로 새를 관찰하고, eBird라는 앱에 기록하는 거다. 내가 기록한 데이터가 진짜 연구에 쓰인다니까 좀 뿌듯하다.',
+            '해설사 선생님이 임진강이 깨끗한 건 비무장지대에서 흘러나오는 물이라 오염이 거의 없기 때문이고 했다.',
+            '다음 달에는 임진강 북삼교 쪽으로 간다고 한다. 무척 기대된다.',
+            '카테고리: 연천 일상 / 태그: 임진강, 생물다양성탐사단, 유네스코, 생물권보전지역, 탐조'
+          ]
+        }
+      },
+      { id:'B', type:'scholar', icon:'📄', title:'백과사전', sub:'유네스코 생물권보전지역', styleClass:'source-scholar',
+        templateData: {
+          heading: '유네스코 생물권보전지역',
+          meta: '환경백과사전 (가상) · 항목: 유네스코 생물권보전지역',
+          paragraphs: [
+            '유네스코 생물권보전지역(UNESCO Biosphere Reserve)은 유네스코가 운영하는 인간과 생물권 프로그램(Man and the Biosphere Programme, MAB)에 따라 지정되는 국제 보전 지역이다.',
+            '생물권보전지역은 세 가지 용도 구역으로 구성된다. 핵심구역(Core Area)은 법적 보호를 받는 구역으로, 사람의 출입과 개발 행위가 엄격히 제한된다. 완충구역(Buffer Zone)은 핵심구역을 둘러싸며, 환경교육과 생태관광 등 제한적 활동이 가능하다. 협력구역(Transition Area)은 주민이 거주하며 지속가능한 개발이 이루어지는 구역이다.',
+            '2019년 6월, 한반도 비무장지대 접경 두 곳이 생물권보전지역으로 동시에 지정되었다. 두 지역 모두 70년 이상 군사적 접근 통제로 인해 민간인 출입이 제한된 결과, 원시 생태계가 보존되어 있다. 군사분계선에 의한 분단이 역설적으로 생태적 가치를 높인 사례로 평가된다.',
+            '강원생태평화 생물권보전지역은 강원도 인제, 철원, 화천, 양구, 고성 다섯 개 군에 걸쳐 있다. 면적 1,828.5제곱킬로미터. 산양, 사향노루, 두루미 등 멸종위기종 서식지가 핵심구역에 포함된다.',
+            '{{B}} 생물권보전지역은 경기도 연천군 전역과 임진강 유역을 포함한다. 비무장지대에서 흘러나오는 임진강의 수질이 양호하여 가는납줄개, 묵납자루 등 한반도 고유 민물고기가 서식한다.',
+            '두 지역은 남북 접경에 위치하여, MAB 프로그램이 별도로 운영하는 초국경 생물권보전지역(Transboundary Biosphere Reserve) 지정의 잠재적 대상지로 분류된다.',
+            '관련 항목: 비무장지대, 인간과 생물권 프로그램(MAB), 초국경 생물권보전지역, 동아시아-대양주 철새이동경로',
+            '출처: 유네스코 한국위원회, 환경부'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'연천임진강 / 강원생태평화 생물권보전지역', styleClass:'source-photo',
+        templateData: {
+          photos: [
+            { src:'photos/cat02/2-7.png', alt:'연천임진강 생물권보전지역',
+              caption:'연천임진강 생물권보전지역의 가을. 사람의 손이 거의 닿지 않은 임진강 유역에는 가는납줄개, 묵납자루 같은 한반도 고유 민물고기와 수달, 삵이 살고 있다. 이 일대는 생물권보전지역의 세 구역 가운데 가장 안쪽에 위치한 {{C}}에 해당하며, 출입이 엄격히 제한되고 법적으로 보호받는 구역이다.',
+              credit:'UNESCO (unesco.org)' },
+            { src:'photos/cat02/2-8.png', alt:'강원생태평화 생물권보전지역',
+              caption:'강원생태평화 생물권보전지역. 강원도 접경 다섯 개 군(인제·철원·화천·양구·고성)에 걸쳐 있으며, 산양, 사향노루, 두루미 등 멸종위기 동물의 서식지와 백두대간 생태계를 포괄한다.',
+              credit:'UNESCO (unesco.org)' }
+          ]
+        }
+      },
+      { id:'D', type:'oral', icon:'🎙️', title:'라디오 인터뷰', sub:'임진강 보전 활동가 이정민', styleClass:'source-oral',
+        templateData: {
+          meta: '진행자: 김수정 · 출연: 이정민, 임진강 보전 활동가 (환경단체 \'맑은강\' 소속, 가상)<br>출처: 지역 라디오 프로그램 (가상)',
+          quotes: [
+            '[진행자] 오늘은 임진강에서 10년 넘게 생태 조사 활동을 하고 계신 환경단체 \'맑은강\'의 이정민 활동가를 모셨습니다. 안녕하세요.',
+            '[활동가] 네, 안녕하세요.',
+            '[진행자] 연천 임진강 유역이 2019년에 생물권보전지역으로 지정됐잖아요. 현장에서 직접 활동하시는 입장에서 어떤 의미인가요?',
+            '[활동가] 저희가 10년 넘게 이 지역의 보전 가치를 정부와 국제기구에 알려왔는데, 국제적으로 공식 인정받은 거라서 활동의 전환점이 됐어요. 단순히 타이틀이 붙은 게 아니라, 핵심구역·완충구역·협력구역이라는 관리 체계가 생긴 거니까요.',
+            '[진행자] 지정을 이끌어내기까지 어떤 노력이 있었나요?',
+            '[활동가] 국제 지정 신청서를 준비하려면 장기간의 생태 조사 데이터가 필요합니다. 저희 단체가 10년 넘게 임진강 유역의 수질, 어류, 수달 서식 현황을 기록해왔어요. 그 자료가 신청의 근거가 됐습니다. 연천군과 환경부도 적극 협력해주셨고요.',
+            '[진행자] 지정 이후에 달라진 점이 있나요?',
+            '[활동가] 가장 큰 변화는 제도적 뒷받침이에요. 연천군에서 생물다양성 탐사단을 만들어 주민이 직접 모니터링에 참여하게 했고, 환경영향평가 때 생물권보전지역이라는 점이 반영되기 시작했어요. 국제 사회가 인정한 보전지역이니까 함부로 개발하기 어려워진 거죠.',
+            '[진행자] 2024년에는 또 다른 국제 인정을 받았다면서요?',
+            '[활동가] 네. 연천 임진강이 동아시아-대양주 철새이동경로 네트워크 서식지로 등재됐어요. 이건 저희가 오랫동안 요청해온 건데, 국제 지정이 신뢰도를 높여준 결과라고 봅니다. 국제 네트워크에 들어가면 모니터링 기준이나 보전 노하우를 공유받을 수 있어요.',
+            '[진행자] 앞으로 바라는 점이 있다면요?',
+            '[활동가] 이 지역이 군사분계선 바로 아래에 있잖아요. {{D}}에는 초국경 생물권보전지역이라는 제도가 있어요. 남과 북이 공동 신청해서 하나의 보전지역으로 관리하는 겁니다. 아직은 어렵지만, 생태 보전이 평화 협력의 첫걸음이 될 수 있다고 생각합니다.'
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A: { answer: '강원생태평화', hint: '백과사전(B)에서 강원도 접경 5개 군에 걸쳐 있는 생물권보전지역 이름을 확인하세요.', source: 'B' },
+      B: { answer: '연천임진강', hint: '블로그(A)에서 연천군 전역과 임진강 유역이 포함된 보전지역 이름을 확인하세요.', source: 'A' },
+      C: { answer: '핵심구역', hint: '백과사전(B)에서 출입이 엄격히 제한되는 구역의 이름을 확인하세요.', source: 'B', altAnswers: ['Core Area'] },
+      D: { answer: 'MAB', hint: '백과사전(B)에서 유네스코가 운영하는 프로그램 약자를 확인하세요.', source: 'B', altAnswers: ['유네스코', 'MAB 프로그램'] }
+    },
+    choices: [
+      { id:'A', icon:'📝', title:'주민의 블로그', meaning:'지역 주민의 시선을 기록한다' },
+      { id:'B', icon:'📄', title:'백과사전', meaning:'공식 정보를 체계적으로 정리한다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'보전지역의 모습을 남긴다' },
+      { id:'D', icon:'🎙️', title:'라디오 인터뷰', meaning:'현장 활동가의 경험을 기록한다' }
+    ]
+  },
+  {
+    id: 's0206', title: '용늪 평화생태마을', era: '1997년 람사르 습지 등록 ~ 현재',
+    location: '인제군 대암산 용늪',
+    sources: [
+      { id:'A', type:'diary', icon:'📓', title:'용늪의 독백', sub:'의인화', styleClass:'source-diary',
+        templateData: {
+          heading: '용늪의 독백',
+          meta: '용늪 (의인화)',
+          paragraphs: [
+            '사람들은 나를 \'용늪\'이라 부른다.',
+            '{{A}} 꼭대기, 해발 1,280m. 여기가 내 집이다. 아래를 내려다보면 구름이 발 밑에 깔린다.',
+            '처음에는 물만 있었다. 빗물이 고이고, 이끼가 자라고 죽고, 또다시 자랐다. 죽은 이끼가 쌓이고 또 쌓여서 지금 내 몸이 되었고 4,500년 전의 빗물도 아직 내 안에 있다. 1m가 쌓이는 데 수천 년이 걸렸다. 나를 밟으면 그 시간이 무너진다.',
+            '내 몸은 스펀지처럼 빗물을 머금고, 천천히 내보낸다. 그래서 산꼭대기에도 물이 마르지 않는다. 사람들은 이런 곳을 고층습원이라 부르는데 한국에서는 나뿐이라고들 한다.',
+            '내 위에는 작은 것들이 모여 산다. 끈끈이주걱은 끈끈한 액체로 벌레를 잡아먹고 비로용담은 가을에 보라색 꽃을 피운다. 물매화는 여름에 하얗게 핀다. 모두 내 위에서 먹고 자고 태어난다.'
+          ]
+        }
+      },
+      { id:'B', type:'scholar', icon:'📄', title:'용늪 이모저모', sub:'Ramsar RSIS / 인제군청 / 문화재청', styleClass:'source-scholar',
+        templateData: {
+          heading: '용늪 이모저모',
+          meta: '참고: Ramsar RSIS (Site 898) / 인제군청 / 문화재청 / 한국민족문화대백과',
+          paragraphs: [
+            '[높이 비교 — 용늪은 어디에?] 대암산 정상 1,304m / 대암산 용늪 1,280m / 설악산 대청봉 1,708m / 서울 북한산 836m / 서울 남산 270m',
+            '[이탄층이란?] 이끼와 식물이 죽어도 물에 잠겨 산소가 부족한 데다, 낮은 기온과 산성 환경까지 겹쳐 완전히 분해되지 않는다. 수천 년간 쌓인 식물 잔해가 {{B}}이 된다. 이 층이 스펀지처럼 물을 머금어 산꼭대기에서도 습지가 유지된다.',
+            '[용늪의 구성] 용늪은 큰용늪과 작은용늪, 2개의 습지로 이루어져 있다. 큰용늪은 대암산 정상 직하 해발 약 1,280m에 위치하며, 작은용늪은 대우산 방향 능선 해발 약 1,190m에 있다. 천연기념물 명칭이 "대암산·대우산 천연보호구역"인 이유다.',
+            '[타임라인 — 용늪의 역사]',
+            '약 4,500년 전: 이탄층 퇴적 시작',
+            '예로부터: "용이 승천한 못" 전설 전래, \'용늪\' 지명 유래',
+            '1951년: 한국전쟁 동부전선 격전지(펀치볼 등)에 인접, 일대 교전',
+            '1954년: 민통선 설정, 민간인 접근 차단',
+            '1966년: 학술조사를 통해 고층습원으로 최초 보고',
+            '1973년: 천연기념물 제246호 지정 (대암산·대우산 천연보호구역)',
+            '1997년: 대한민국 최초 람사르 습지 등록 (Ramsar Site No. 898)',
+            '현재: 사전 예약제 운영 (인제군청)',
+            '람사르 협약은 1971년 이란 람사르(Ramsar)시에서 체결된 국제 습지 보전 협약이다. 정식 명칭은 "특히 물새 서식지로서 국제적으로 중요한 습지에 관한 협약"으로, 현재 172개국이 가입해 있다.'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'대암산 용늪 전경', styleClass:'source-photo',
+        templateData: {
+          photos: [
+            { src:'photos/cat02/2-9.jpg', alt:'대암산 용늪',
+              caption:'대암산·대우산 천연보호구역 내 용늪. 한국 유일의 {{C}}으로, 해발 약 1,280m에 위치한다. 1997년 대한민국 최초 람사르 습지로 등록되었다.',
+              credit:'문화재청(국가유산청), KOGL Type 1' }
+          ]
+        }
+      },
+      { id:'D', type:'oral', icon:'🎙️', title:'현장 해설', sub:'대암산 용늪 생태해설사 김소라', styleClass:'source-oral',
+        templateData: {
+          meta: '해설사: 김소라(가상), 대암산 용늪 생태해설사<br>출처: 용늪 탐방 현장 해설 기록 (가상)',
+          quotes: [
+            '여러분, 잠깐 여기 모여주세요. 데크 위로 올라가기 전에 꼭 알아야 할 것들이 있어요.',
+            '지금 발밑에 보이는 이 땅, 흙처럼 보이죠? 흙이 아니에요. {{D}}가 수천 년 동안 자라고 죽고를 반복하면서 쌓인 거예요. 썩지 않고 그대로 눌려서 층이 된 건데, 이걸 이탄층이라고 해요. 용늪은 그 두께가 1m에서 1.8m까지 돼요.',
+            '이탄층은 물을 잔뜩 머금고 있어요. 스펀지라고 생각하시면 돼요. 그래서 여기가 산꼭대기인데도 축축한 거예요. 밟으면 어떻게 되냐고요? 한 번 눌리면 원래대로 돌아오는 데 수백 년이 걸려요. 여러분 발자국 하나가 수백 년의 시간을 무너뜨리는 거예요.',
+            '그러니까 반드시 나무 데크 위로만 걸어주세요. 데크 밖으로 발을 내딛거나, 손을 뻗어서 식물을 만지는 것도 안 됩니다. 여기 있는 건 다 보호 대상입니다.'
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A: { answer: '대암산', hint: '용늪 이모저모(B)에서 용늪이 위치한 산 이름을 확인하세요.', source: 'B' },
+      B: { answer: '이탄층', hint: '용늪의 독백(A)에서 죽은 이끼가 쌓여서 된 것의 이름을 확인하세요.', source: 'A' },
+      C: { answer: '고층습원', hint: '용늪의 독백(A)에서 용늪의 유형을 확인하세요.', source: 'A' },
+      D: { answer: '이끼', hint: '용늪 이모저모(B)의 이탄층 설명에서 주요 식물을 확인하세요.', source: 'B' }
+    },
+    choices: [
+      { id:'A', icon:'📓', title:'용늪의 독백', meaning:'자연의 시선으로 자신을 소개한다' },
+      { id:'B', icon:'📄', title:'용늪 이모저모', meaning:'체계적 정보를 기록한다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'자연의 모습을 남긴다' },
+      { id:'D', icon:'🎙️', title:'현장 해설', meaning:'해설사의 생생한 설명을 기록한다' }
+    ]
+  }
+];
+STORIES.cat03 = [
+  {
+    id: 's0301', title: '고려시대 유산(만월대)', era: '918~1392년 고려 · 2007~2018년 발굴',
+    location: '개성 만월대',
+    sources: [
+      { id:'A', type:'diary', icon:'📓', title:'만월대의 일기', sub:'나는 천 년 동안 이 자리에 있었습니다', styleClass:'source-diary',
+        templateData: {
+          meta: '만월대 (고려 궁궐터) — 의인화',
+          paragraphs: [
+            '나는 만월대입니다. 고려의 정궁. 송악산 남쪽 기슭에서, 나는 약 470년간 이 나라의 중심이었습니다.',
+            '1361년, 홍건적이 들이닥쳤을 때 나는 불탔습니다. 그 뒤로 아무도 나를 다시 세우지 않았습니다.',
+            '2007년, 드디어 남과 북의 사람들이 함께 왔습니다. 내 몸을 파기 시작했습니다. 조심스럽게, 아주 조심스럽게.',
+            '8차례의 발굴 끝에 40여 동의 건물터가 드러났고, {{A}}여 점의 유물이 나왔습니다. 그중에는 금속활자도 있었습니다.',
+            '나는 2013년에 {{B}}이 되었습니다. 세계가 나를 알아본 것입니다.',
+            '하지만 발굴은 멈추었습니다. 남과 북의 사이가 다시 멀어졌기 때문입니다. 나는 기다립니다. 천 년을 기다렸으니, 조금 더 기다릴 수 있습니다.'
+          ]
+        }
+      },
+      { id:'B', type:'report', icon:'📋', title:'문화재청 보도자료', sub:'만월대 남북공동발굴 성과', styleClass:'source-report',
+        templateData: {
+          header: '문화재청 보도자료 — 개성 만월대 남북공동발굴 12년 성과',
+          paragraphs: [
+            '2007년부터 2018년까지 8차례에 걸친 남북공동발굴조사 결과, 서부건축군 약 33,000m²를 발굴하여 40여 동의 건물터를 확인했다.',
+            '출토 유물은 약 17,900여 점으로, 2015~2016년 발굴에서는 금속활자 5점이 출토되었다.',
+            '개성역사유적지구는 만월대, 개성 남대문, 고려 성균관, 선죽교, 왕건왕릉, {{C}} 등 12개 유적으로 구성되며, 2013년 유네스코 세계문화유산에 등재되었다.'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'개성 만월대 전경', styleClass:'source-photo',
+        templateData: {
+          photos: [
+            { src:'photos/cat03/3-1.jpg', alt:'만월대',
+              caption:'[사진] 개성 송악산 남쪽 기슭의 만월대. 고려 정궁 터로, 약 25만m² 규모이다. 2013년 개성역사유적지구의 일부로 유네스코 세계문화유산에 등재되었다. 개성역사유적지구에는 만월대 외에도 공민왕릉, 왕건왕릉, 선죽교 등 {{C}}개 유적이 포함되어 있다.',
+              credit:'Eternal and life, 2011. CC BY-SA 4.0' }
+          ]
+        }
+      },
+      { id:'D', type:'oral', icon:'🎙️', title:'구술 인터뷰', sub:'남북공동발굴단 연구원', styleClass:'source-oral',
+        templateData: {
+          meta: '구술자: 정승민(가상), 전 남북공동발굴단 연구원',
+          quotes: [
+            '"2007년에 처음 만월대 땅을 밟았을 때요, 손이 떨렸어요. 분단 이후 남쪽 고고학자가 북쪽 땅에서 발굴하는 거잖아요."',
+            '"북쪽 연구자들이랑 같이 일했는데, 신기한 게 뭐냐면 삽질하는 방법이 같아요. 같은 교과서로 배웠으니까."',
+            '"{{D}}이 나왔을 때는 진짜 울었어요. 고려시대에 이미 활자를 만들었다는 증거가 수백 년간 이 땅 아래 잠들어 있었던 거잖아요."',
+            '"발굴이 멈춘 지 벌써 몇 년이에요. 아직 궁성의 핵심 구역은 손도 못 댔어요."'
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A: { answer: '17,900', hint: '보도자료(B)에서 출토 유물 수를 확인하세요.', source: 'B', altAnswers: ['17900'] },
+      B: { answer: '세계문화유산', hint: '보도자료(B)에서 2013년 등재된 명칭을 확인하세요.', source: 'B', altAnswers: ['세계유산'] },
+      C: { answer: '12', hint: '보도자료(B)에서 개성역사유적지구의 유적 수를 확인하세요.', source: 'B' },
+      D: { answer: '금속활자', hint: '일기(A)에서 유물 중 특별한 발견을 확인하세요.', source: 'A' }
+    },
+    choices: [
+      { id:'A', icon:'📓', title:'만월대의 일기', meaning:'천 년의 기다림을 기록한다' },
+      { id:'B', icon:'📋', title:'보도자료', meaning:'발굴 성과를 공식 기록한다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'현장의 모습을 남긴다' },
+      { id:'D', icon:'🎙️', title:'구술 인터뷰', meaning:'발굴자의 감동을 기록한다' }
+    ]
+  },
+  {
+    id: 's0302', title: '경순왕릉', era: '935년 신라 멸망 ~ 현재',
+    location: '연천군 장남면 고랑포리',
+    sources: [
+      { id:'A', type:'letter', icon:'✉️', title:'경순왕의 편지', sub:'경주에 가지 못한 왕', styleClass:'source-letter',
+        templateData: {
+          heading: '경주에 가지 못한 왕',
+          meta: '시간을 초월하여 · 경순왕 김부 (신라 제56대, 마지막 왕)',
+          paragraphs: [
+            '나의 후손들에게,',
+            '나는 {{A}}의 마지막 왕, 김부입니다.',
+            '935년, 나는 신하들과 함께 고려에 나라를 넘겨주기로 했습니다. 더 이상의 피를 보고 싶지 않았습니다.',
+            '979년, 내가 세상을 떠났을 때 장례 행렬은 경주를 향했습니다. 하지만 고랑포에서 고려 조정이 막았습니다.',
+            '그래서 나는 이곳, 임진강이 보이는 언덕에 묻혔습니다. 경주가 아닌 곳에 잠든 유일한 신라의 왕.',
+            '천 년이 흘렀습니다. 나의 무덤 주변에는 {{D}}가 묻혔다고 합니다. 사람이 만든 것 중 가장 잔인한 것이, 나의 잠을 지키고 있습니다.'
+          ],
+          sign: '경순왕 김부 올림'
+        }
+      },
+      { id:'B', type:'newspaper', icon:'📰', title:'신문 보도', sub:'통일뉴스 2026.4.10', styleClass:'source-newspaper',
+        templateData: {
+          paperName: '통 일 뉴 스', date: '2026년 4월 10일',
+          headline: '[르포] 지뢰밭 속의 왕릉 — 경순왕릉을 찾아서',
+          paragraphs: [
+            '경기도 {{B}} 장남면 고랑포리. 사적 제244호 경순왕릉은 한때 민간인통제구역 안에 있었다. 능 주변 야산에는 미확인 지뢰가 매설되어 있어, 진입로 양쪽에 \'지뢰\' 표지 울타리가 세워져 있다.',
+            '경순왕은 신라 마지막 왕(제56대)이다. 935년 고려에 항복한 뒤, 979년 사망 시 장례 행렬이 경주로 향하다가 고랑포에서 고려 조정의 저지를 받았다.',
+            '오랫동안 잊혀져 있다가 조선 영조 때 재확인되었으며, 현재는 민간에 공개되어 누구나 참배할 수 있다.'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'경순왕릉', styleClass:'source-photo',
+        templateData: {
+          photos: [
+            { src:'photos/cat03/3-2.jpg', alt:'경순왕릉',
+              caption:'[사진] 경기도 연천군 소재 경순왕릉. {{C}} 제244호. 신라 마지막 왕의 무덤으로, 한때 민간인통제구역 내에 위치했다.',
+              credit:'Altostratus, 2011. CC BY-SA 3.0' }
+          ]
+        }
+      },
+      { id:'D', type:'kakao', icon:'💬', title:'카카오톡 대화', sub:'경순왕릉 방문 후 친구 대화', styleClass:'source-kakao',
+        templateData: {
+          messages: [
+            { name:'수아', text:'오늘 경순왕릉 다녀왔는데 소름 돋았어' },
+            { name:'민지', text:'거기 연천에 있는 거지? 신라 왕 무덤이 왜 거기 있어?' },
+            { name:'수아', text:'경주로 가다가 고려 조정이 막았대. 신라 부흥운동 일어날까 봐' },
+            { name:'민지', text:'헐 그래서 임진강 근처에 묻힌 거야?' },
+            { name:'수아', text:'ㅇㅇ 그리고 무덤 주위에 지뢰가 매설돼 있어' },
+            { name:'민지', text:'지뢰?? 진짜??' },
+            { name:'수아', text:'민통선 안에 있었거든. 지금은 공개됐지만 뒤쪽 철책 너머로는 절대 못 가' },
+            { name:'민지', text:'천 년 전 왕을 지뢰가 지키고 있는 거네...' }
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A: { answer: '신라', hint: '신문 보도(B)에서 경순왕의 왕조를 확인하세요.', source: 'B' },
+      B: { answer: '연천군', hint: '카카오톡(D)에서 왕릉 소재지를 확인하세요.', source: 'D' },
+      C: { answer: '사적', hint: '신문 보도(B)에서 왕릉의 문화재 지정 유형을 확인하세요.', source: 'B' },
+      D: { answer: '지뢰', hint: '신문 보도(B)에서 왕릉 주변에 매설된 것을 확인하세요.', source: 'B' }
+    },
+    choices: [
+      { id:'A', icon:'✉️', title:'경순왕의 편지', meaning:'천 년 전 왕의 목소리를 기록한다' },
+      { id:'B', icon:'📰', title:'신문 보도', meaning:'현장 르포를 기록한다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'왕릉의 모습을 남긴다' },
+      { id:'D', icon:'💬', title:'카카오톡 대화', meaning:'방문 경험을 기록한다' }
+    ]
+  },
+  {
+    id: 's0303', title: '허준의 무덤', era: '1537~1615년 허준 · 2009년 세계기록유산',
+    location: '파주시 진동면 하포리',
+    sources: [
+      { id:'A', type:'diary', icon:'📓', title:'허준 후손의 일기', sub:'증조할아버지의 산소를 찾아가는 길', styleClass:'source-diary',
+        templateData: {
+          meta: '1616년(광해군 8년) 가을 · 허준의 증손 허영(가상)',
+          paragraphs: [
+            '증조할아버지께서 돌아가신 지 한 해가 되었다.',
+            '올해 처음 산소에 성묘를 간다. 임진강을 건너 파주 진동의 산자락.',
+            '증조할아버지는 어의(御醫)이셨다. 임진왜란 때 선조 대왕을 의주까지 수행하셨고, 그 공으로 호성공신 3등에 오르셨다.',
+            '무엇보다 증조할아버지는 {{A}}을 남기셨다. 25권의 의학서. 선조 대왕이 명하시길 — 백성이 스스로 몸을 돌볼 수 있는 책을 만들라 하셨고, 16년의 연구 끝에 완성하셨다.',
+            '산소는 해발이 높은 곳에 있다. 쌍분으로, 왼쪽이 증조할아버지, 오른쪽이 증조할머니(안동김씨)이시다.',
+            '증조할아버지. 당신이 남기신 책이 백 년 뒤에도, 천 년 뒤에도 사람들을 살리고 있을 것입니다.'
+          ]
+        }
+      },
+      { id:'B', type:'newspaper', icon:'📰', title:'신문 보도', sub:'통일뉴스 2026.7.31', styleClass:'source-newspaper',
+        templateData: {
+          paperName: '통 일 뉴 스', date: '2026년 7월 31일',
+          headline: '[기획] 동의보감 {{B}} 등재 17주년… 허준 묘는 지금',
+          paragraphs: [
+            '2009년 7월 31일, 유네스코는 동의보감을 세계기록유산(Memory of the World)으로 등재했다. 의학 서적이 세계기록유산에 오른 것은 세계 최초다.',
+            '허준(1537~1615)의 묘는 경기도 {{C}} 진동면 하포리에 있다. 경기도 기념물 제128호.',
+            '1991년 재미 고문서연구가가 \'양천허씨족보\' 기록을 바탕으로 군부대 협조를 얻어 발견했다. 쌍분 형태로 좌측이 허준, 우측이 부인 안동김씨로 추정된다.'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'동의보감', styleClass:'source-photo',
+        templateData: {
+          photos: [
+            { src:'photos/cat03/3-3.jpg', alt:'동의보감',
+              caption:'[사진] 동의보감 목차 페이지. 허준이 16년간 연구하여 1610년 완성, 1613년 목판 간행한 {{D}}권의 방대한 의학 백과사전이다. 2009년 유네스코 세계기록유산에 등재되었다.',
+              credit:'허준 원저(1613). Public Domain' }
+          ]
+        }
+      },
+      { id:'D', type:'oral', icon:'🎙️', title:'구술 인터뷰', sub:'파주시 문화유산 해설사', styleClass:'source-oral',
+        templateData: {
+          meta: '구술자: 김종태(가상), 파주시 문화유산 해설사',
+          quotes: [
+            '"허준 묘가 발견된 게 1991년이에요. 임진강 건너 해발 159m 산자락에 있었는데, 족보 기록 보고 군부대 협조 얻어서 찾아간 거예요."',
+            '"쌍분이에요. 왼쪽이 허준 선생, 오른쪽이 부인. 문인석 두 기가 서 있는데 높이가 203cm."',
+            '"동의보감이 25권인데, 선조 임금이 명해서 16년 걸려 완성한 거예요. 백성이 스스로 몸을 돌볼 수 있게."',
+            '"지금은 무료로 누구나 올 수 있어요. 임진각에서 출발하는 관광 코스에 포함돼 있거든요."'
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A: { answer: '동의보감', hint: '신문 보도(B)에서 유네스코에 등재된 의학서 이름을 확인하세요.', source: 'B' },
+      B: { answer: '세계기록유산', hint: '구술 인터뷰(D) 또는 사진(C)에서 유네스코 등재 유형을 확인하세요.', source: 'C' },
+      C: { answer: '파주시', hint: '구술 인터뷰(D)에서 해설사의 소속 지역을 확인하세요.', source: 'D' },
+      D: { answer: '25', hint: '일기(A) 또는 구술(D)에서 동의보감의 권수를 확인하세요.', source: 'A' }
+    },
+    choices: [
+      { id:'A', icon:'📓', title:'후손의 일기', meaning:'가족의 기억을 기록한다' },
+      { id:'B', icon:'📰', title:'신문 보도', meaning:'역사적 사실을 기록한다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'문화유산의 모습을 남긴다' },
+      { id:'D', icon:'🎙️', title:'구술 인터뷰', meaning:'해설사의 지식을 기록한다' }
+    ]
+  },
+  {
+    id: 's0304', title: '병자호란 감화전투', era: '1637년 1월 병자호란',
+    location: '철원군 김화읍',
+    sources: [
+      { id:'A', type:'diary', icon:'📓', title:'군사의 딸 일기', sub:'아버지가 돌아오시면', styleClass:'source-diary',
+        templateData: {
+          meta: '1637년(인조 15년) 정월 · 연이(가상, 14세), 평안도 군사의 딸',
+          paragraphs: [
+            '아버지가 떠나신 지 열흘이 넘었다.',
+            '오랑캐가 쳐들어왔다고 했다. {{A}}이라고 했다. 아버지는 새벽에 창을 들고 나가셨다. 남한산성에 임금님이 갇혀 계시다고, 구하러 가야 한다고 하셨다.',
+            '평안도에서 5천 명이 모였다고 들었다. 아버지는 {{B}} 장군 휘하라고 하셨다.',
+            '아버지. 제발 다치지 마세요. 아버지가 돌아오시면, 제가 좋아하는 인절미를 만들어 드릴 거예요.',
+            '— 아버지는 돌아오지 않으셨다. 김화 백전 전투에서 전사하신 것이다. 마을 사람들이 흩어진 유해를 모아 무덤을 만들었다. 전골총이라 부른다. 가까이에는 {{C}}이라는 무덤도 있다.'
+          ]
+        }
+      },
+      { id:'B', type:'newspaper', icon:'📰', title:'신문 보도', sub:'통일뉴스 2026.1.28', styleClass:'source-newspaper',
+        templateData: {
+          paperName: '통 일 뉴 스', date: '2026년 1월 28일',
+          headline: '[기획] 병자호란 389주년 — DMZ 속에 잠든 김화 전투의 영웅들',
+          paragraphs: [
+            '1637년 1월 28일, 병자호란 당시 평안도관찰사 홍명구(1596~1637)가 이끄는 2,000명과 유림의 3,000명, 총 5,000명의 근왕군이 철원 김화에서 청군과 4차례 교전하여 약 3,000명의 적군을 섬멸했다.',
+            '홍명구 장군은 이 전투에서 장렬하게 전사하여 시호 \'충렬\'을 수여받았다.',
+            '전사한 병사들의 유해는 마을 주민들이 수습하여 전골총에 안장했다. 전골총은 현재 DMZ 남방한계선 내에 위치하여 현장 조사가 불가능하다. 인근의 매두분(고려 말 홍건적 매장지)도 마찬가지다.'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'연천 호로고루', styleClass:'source-photo',
+        templateData: {
+          photos: [
+            { src:'photos/cat03/3-4.jpg', alt:'호로고루',
+              caption:'[사진] 연천 호로고루(사적 제467호). 고구려시대 보루로, DMZ 접경지역에 위치한 문화유산의 대표적 사례다. 김화의 전골총과 매두분 역시 접경지역 내 문화유산이지만, {{D}} 남방한계선 안에 위치하여 현장 접근이 불가능하다.',
+              credit:'Jaehee Jang1, 2015. CC BY-SA 4.0' }
+          ]
+        }
+      },
+      { id:'D', type:'oral', icon:'🎙️', title:'구술 인터뷰', sub:'철원 향토사학자', styleClass:'source-oral',
+        templateData: {
+          meta: '구술자: 박종수(가상), 철원 향토사학자',
+          quotes: [
+            '"김화 백전 전투가 병자호란 2대 승첩 중 하나에요. 평안도에서 5천 명이 달려온 거예요."',
+            '"홍명구 장군이 전사하고, 마을 사람들이 유해를 모아서 전골총을 만들었어요."',
+            '"그 옆에 매두분이라는 무덤도 있어요. 고려 말 홍건적 시체를 묻은 곳이에요."',
+            '"문제는 둘 다 DMZ 안이라 가볼 수가 없어요. 389년 된 무덤을 현장 조사조차 못 하고 있는 거예요."'
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A: { answer: '병자호란', hint: '신문 보도(B)에서 전쟁의 이름을 확인하세요.', source: 'B' },
+      B: { answer: '홍명구', hint: '신문 보도(B)에서 2,000명을 이끈 장군 이름을 확인하세요.', source: 'B' },
+      C: { answer: '매두분', hint: '구술 인터뷰(D)에서 전골총 옆의 무덤 이름을 확인하세요.', source: 'D' },
+      D: { answer: 'DMZ', hint: '구술 인터뷰(D)에서 접근 불가능한 이유를 확인하세요.', source: 'D' }
+    },
+    choices: [
+      { id:'A', icon:'📓', title:'군사의 딸 일기', meaning:'전쟁 속 가족의 아픔을 기록한다' },
+      { id:'B', icon:'📰', title:'신문 보도', meaning:'역사적 전투를 기록한다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'접경 문화유산의 모습을 남긴다' },
+      { id:'D', icon:'🎙️', title:'구술 인터뷰', meaning:'향토사학자의 지식을 기록한다' }
+    ]
+  },
+  {
+    id: 's0305', title: '연천 전곡리 유적', era: '1978년 발견 · 약 30만 년 전',
+    location: '연천군 전곡읍 한탄강변',
+    sources: [
+      { id:'A', type:'letter', icon:'✉️', title:'보웬의 편지', sub:'교수님, 이것을 보셔야 합니다', styleClass:'source-letter',
+        templateData: {
+          heading: '교수님, 이것을 보셔야 합니다',
+          meta: '1978년 가을 · Greg Bowen (동두천 주둔 미군) → François Bordes 교수',
+          paragraphs: [
+            'Dear Professor Bordes,',
+            '저는 지금 한국의 동두천이라는 곳에 주둔하고 있습니다. 지난 주말, 근처 {{A}}이라는 강변을 걷다가 이상한 돌을 발견했습니다.',
+            '양면이 정교하게 가공되어 있었습니다. 한쪽은 날카롭고, 반대쪽은 손에 쥘 수 있도록 둥글게 다듬어져 있었습니다.',
+            '교수님, 이것은 {{C}} 주먹도끼가 아닌지요?',
+            '만약 제가 보는 것이 맞다면, 이것은 모비우스 교수님의 이론 — 인도 동쪽에는 이러한 석기가 존재하지 않는다는 — 에 대한 반증이 될 수 있지 않겠습니까.'
+          ],
+          sign: 'Respectfully, Greg Bowen'
+        }
+      },
+      { id:'B', type:'newspaper', icon:'📰', title:'신문 보도', sub:'통일뉴스 2026.5.10', styleClass:'source-newspaper',
+        templateData: {
+          paperName: '통 일 뉴 스', date: '2026년 5월 10일',
+          headline: '연천 전곡리 유적 발굴 48주년… \'세계 구석기 역사를 바꾼 발견\'',
+          paragraphs: [
+            '1978년 동두천 주둔 미군 그렉 보웬이 한탄강변에서 석기를 발견한 이래, 사적 제268호로 지정된 연천 전곡리 유적은 약 50년간 22회 이상의 발굴 조사를 거쳤다.',
+            '전곡리에서 출토된 아슐리안형 주먹도끼는 하버드대 {{B}}(Hallam Movius) 교수의 지배적 이론을 근본적으로 뒤집은 세계사적 발견이다.',
+            '보웬은 이 석기를 프랑수와 보르도 교수에게 보냈고, 보르도 교수는 서울대학교 김원룡 교수를 소개했다.'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'전곡리 주먹도끼', styleClass:'source-photo',
+        templateData: {
+          photos: [
+            { src:'photos/cat03/3-5.jpg', alt:'전곡리 주먹도끼',
+              caption:'[사진] 경기도 연천 전곡리에서 출토된 전기 구석기시대 주먹도끼. 국립중앙박물관 소장. 이 석기의 발견은 모비우스 라인의 {{D}} 구석기 기술 열등설을 뒤집어 세계 구석기 역사를 재평가하게 만든 사건이다.',
+              credit:'Ismoon, 2018. CC BY-SA 4.0' }
+          ]
+        }
+      },
+      { id:'D', type:'oral', icon:'🎙️', title:'구술 인터뷰', sub:'전곡리 선사박물관 학예사', styleClass:'source-oral',
+        templateData: {
+          meta: '구술자: 이현주(가상), 전곡리 선사박물관 학예사',
+          quotes: [
+            '"그렉 보웬이라는 미국인이 한탄강에서 돌을 주웠어요. 그게 시작이에요. 1978년."',
+            '"모비우스라는 학자가 그은 선이 있었거든요. 인도 동쪽에는 이런 정교한 주먹도끼가 없다는 이론. 전곡리가 그 이론을 완전히 깼어요."',
+            '"50년 가까이 22번 넘게 발굴했는데, 아직도 새로운 게 나와요. 동아시아 구석기 역사를 다시 쓰게 만든 곳이에요."'
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A: { answer: '한탄강', hint: '신문 보도(B)에서 석기 발견 장소를 확인하세요.', source: 'B' },
+      B: { answer: '모비우스', hint: '편지(A)에서 언급된 교수 이름을 확인하세요.', source: 'A' },
+      C: { answer: '아슐리안', hint: '신문 보도(B)에서 주먹도끼의 유형명을 확인하세요.', source: 'B' },
+      D: { answer: '동아시아', hint: '구술 인터뷰(D)에서 이 발견이 뒤집은 이론의 대상 지역을 확인하세요.', source: 'D' }
+    },
+    choices: [
+      { id:'A', icon:'✉️', title:'보웬의 편지', meaning:'발견자의 떨림을 기록한다' },
+      { id:'B', icon:'📰', title:'신문 보도', meaning:'학술적 의미를 기록한다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'30만 년 전 석기를 남긴다' },
+      { id:'D', icon:'🎙️', title:'구술 인터뷰', meaning:'박물관 전문가의 설명을 기록한다' }
+    ]
+  },
+  {
+    id: 's0306', title: '철원성', era: '905년 태봉 ~ 현재',
+    location: '철원 평화전망대, 철원성(DMZ 내)',
+    sources: [
+      { id:'A', type:'diary', icon:'📓', title:'역사학자의 일기', sub:'내가 죽기 전에', styleClass:'source-diary',
+        templateData: {
+          meta: '2026년 3월 · 역사학자 박종길(가상, 90세)',
+          paragraphs: [
+            '오늘도 평화전망대에 올랐다.',
+            '망원경으로 DMZ 너머를 본다. {{A}}가 905년에 세운 철원성. 군사분계선이 도성 한가운데를 가르고 있다.',
+            '외성 둘레만 12,306m. 내성, 궁성까지 3겹 구조. 우리 쪽에서 볼 수 있는 건 외성 남벽과 동벽 일부뿐이다.',
+            '2007년에 만월대 공동 발굴이 시작됐을 때, 다음은 철원성이라고 기대했다. 하지만 아직이다.',
+            '나이가 아흔이다. 내가 죽기 전에 저 성을 직접 밟아볼 수 있을까.'
+          ]
+        }
+      },
+      { id:'B', type:'newspaper', icon:'📰', title:'신문 보도', sub:'통일뉴스 2026.3.15', styleClass:'source-newspaper',
+        templateData: {
+          paperName: '통 일 뉴 스', date: '2026년 3월 15일',
+          headline: '태봉 철원성, 남북 공동 발굴 \'1순위\' 유적으로 재조명',
+          paragraphs: [
+            '태봉국(901~918) 궁예가 수도로 삼은 철원성은 외성·내성·궁성의 3겹 구조로, 외성 둘레만 약 12,306m에 달한다.',
+            '{{B}}이 도성 중앙부를 관통하고 있어 완전한 조사에는 남북 공동 작업이 불가피하다.',
+            '학계에서는 장기간 사람의 손길이 닿지 않아 역설적으로 양호한 보존 상태를 유지하고 있을 것으로 추정한다.'
+          ]
+        }
+      },
+      { id:'C', type:'photo', icon:'📷', title:'사진 자료', sub:'철원 민통선 일대', styleClass:'source-photo',
+        templateData: {
+          photos: [
+            { src:'photos/cat03/3-6.jpg', alt:'철원 민통선 일대 (철원성 터 방향 전경)',
+              caption:'[사진] 철원 민통선 일대. 이 일대에 궁예가 세운 태봉의 도성 철원성이 위치해 있다. 외성 둘레는 약 {{C}}m로 추정된다.',
+              credit:'대한민국 국방부, "2012년 전선에 서다" 시리즈 (CC BY-SA 2.0)' }
+          ]
+        }
+      },
+      { id:'D', type:'oral', icon:'🎙️', title:'구술 인터뷰', sub:'철원 향토사학자 최동원', styleClass:'source-oral',
+        templateData: {
+          meta: '구술자: 최동원(가상), 철원 향토사학자 · 채록: 2025년 11월',
+          quotes: [
+            '"철원성이 뭐냐면, 궁예가 나라를 세우고 수도를 만든 곳이에요. 외성, 내성, 궁성 3겹 구조인데, 외성 남벽하고 동벽 일부만 우리 쪽이고, 내성이랑 궁성은 전부 북쪽이에요."',
+            '"참 신기하죠? 군사분계선이 철원성을 거의 정확하게 반으로 가르고 있다고 합니다."',
+            '"{{D}}에서 망원경으로 보면 성벽 윤곽이 보여요. 70년간 풀숲에 덮여 있지만, 아직 살아있는 거예요."',
+            '"2007년에 남북이 만월대 공동 발굴을 시작했을 때, 다음은 철원성이라고 했는데… 그 뒤로 소식이 없어요."'
+          ]
+        }
+      }
+    ],
+    blanks: {
+      A: { answer: '궁예', hint: '구술 인터뷰(D)에서 철원성을 세운 인물을 확인하세요.', source: 'D' },
+      B: { answer: '군사분계선', hint: '구술 인터뷰(D)에서 철원성을 가르는 선의 이름을 확인하세요.', source: 'D' },
+      C: { answer: '12,306', hint: '신문 보도(B)에서 외성 둘레를 확인하세요.', source: 'B', altAnswers: ['12306'] },
+      D: { answer: '평화전망대', hint: '일기(A)에서 역사학자가 올라간 장소를 확인하세요.', source: 'A' }
+    },
+    choices: [
+      { id:'A', icon:'📓', title:'역사학자의 일기', meaning:'평생의 소망을 기록한다' },
+      { id:'B', icon:'📰', title:'신문 보도', meaning:'학술적 가치를 기록한다' },
+      { id:'C', icon:'📷', title:'사진', meaning:'현장의 모습을 남긴다' },
+      { id:'D', icon:'🎙️', title:'구술 인터뷰', meaning:'향토사학자의 열정을 기록한다' }
+    ]
+  }
+];
+STORIES.cat04 = [];
+STORIES.cat05 = [];
+STORIES.cat06 = [];
+
+// ===== ARCHIVIST TYPES =====
+const ARCHIVIST_TYPES = {
+  'AB': { name: '교차 기록가', desc: '개인의 감정과 공식 기록을 나란히 놓고 비교한다. 한쪽만으로는 불완전한 기록이 된다는 것을 안다.' },
+  'AC': { name: '현장 기록가', desc: '누군가의 이야기를 듣고, 그것이 실재했음을 증명할 사진을 함께 남긴다.' },
+  'AD': { name: '증언 수집가', desc: '공식 문서보다 사람에게 먼저 귀를 기울인다. 편지 속 떨리는 글씨와 녹음 속 침묵이 어떤 통계보다 많은 것을 말해준다고 믿는다.' },
+  'BC': { name: '실증 분석가', desc: '감정을 배제하고 검증 가능한 것만 남긴다. 신문 기사의 날짜와 사진 속 장소가 일치하는 순간, 기록은 역사가 된다.' },
+  'BD': { name: '구술사 연구자', desc: '신문이 보도하지 않은 이야기를 찾아 나선다. 공식 기록과 현장의 목소리를 대조할 때 숨겨진 진실이 드러난다.' },
+  'CD': { name: '현장 증언자', desc: '그 자리에 있었던 것처럼 기록한다. 사진이 보여주는 풍경과 그곳에 있던 사람의 목소리를 겹쳐놓으면 독자도 그 자리에 서게 된다.' },
+  'BALANCED': { name: '균형 잡힌 기록가', desc: '어떤 기록도 버리지 않는다. 모든 형태의 기록이 동등한 가치를 가진다고 믿는 사람.' }
+};
+
+// ===== GAME STATE =====
+const state = {
+  playerName: null,
+  currentCategory: null,
+  currentStory: null,
+  solvedBlanks: {},
+  selectedRecords: [],
+  archivistCounts: { A: 0, B: 0, C: 0, D: 0 },
+  completedStories: []
+};
+
+// Load saved state
+try {
+  const saved = JSON.parse(localStorage.getItem(LS_STATE_KEY));
+  if (saved) {
+    state.archivistCounts = saved.archivistCounts || { A:0, B:0, C:0, D:0 };
+    state.completedStories = saved.completedStories || [];
+    state.playerName = saved.playerName;
+  }
+} catch(e) {}
+
+// ===== SCREEN MANAGEMENT =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ===== LOGIN =====
+function handleLogin() {
+  const name = document.getElementById('input-name').value.trim();
+  const code = document.getElementById('input-code').value.trim();
+  const err = document.getElementById('login-error');
+  if (!name) { err.textContent = '이름을 입력해주세요.'; return; }
+  if (code.toUpperCase() !== 'DMZ') { err.textContent = '게임 코드가 올바르지 않습니다.'; return; }
+  state.playerName = name;
+  if (localStorage.getItem(LS_TUTORIAL_KEY)) {
+    showScreen('category-screen');
+    renderCategories();
+  } else {
+    showScreen('tutorial-screen');
+  }
+}
+
+function completeTutorial() {
+  localStorage.setItem(LS_TUTORIAL_KEY, '1');
+  showScreen('category-screen');
+  renderCategories();
+}
+document.getElementById('input-code').addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+document.getElementById('input-name').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('input-code').focus(); });
+
+// ===== CATEGORY SCREEN =====
+function renderCategories() {
+  document.getElementById('cat-player-name').textContent = `아키비스트 ${state.playerName}`;
+  const grid = document.getElementById('category-grid');
+  grid.innerHTML = CATEGORIES.map(cat => {
+    const stories = STORIES[cat.id] || [];
+    const completed = stories.filter(s => state.completedStories.includes(s.id)).length;
+    const total = stories.length;
+    const isDone = total > 0 && completed === total;
+    return `<div class="cat-card ${isDone ? 'completed' : ''}" onclick="selectCategory('${cat.id}')">
+      <div class="cat-icon">${cat.icon}</div>
+      <h3>${cat.name}</h3>
+      <div class="cat-progress">${completed}/${total} 완료</div>
+    </div>`;
+  }).join('');
+}
+
+// ===== ARCHIVE SCREEN =====
+function showArchive() {
+  showScreen('archive-screen');
+  renderArchive();
+}
+
+function getArchivistType() {
+  const c = state.archivistCounts;
+  const total = c.A + c.B + c.C + c.D;
+  if (total === 0) return null;
+  const sorted = Object.entries(c).sort((a, b) => b[1] - a[1]);
+  let typeKey;
+  if (sorted[0][1] === sorted[3][1]) {
+    typeKey = 'BALANCED';
+  } else if (sorted[0][1] === sorted[1][1] && sorted[1][1] === sorted[2][1]) {
+    typeKey = [sorted[0][0], sorted[1][0]].sort().join('');
+  } else {
+    typeKey = [sorted[0][0], sorted[1][0]].sort().join('');
+  }
+  return ARCHIVIST_TYPES[typeKey] || ARCHIVIST_TYPES['BALANCED'];
+}
+
+// 카테고리별 색상 (0~5 = cat01~cat06)
+const CAT_COLORS = ['#3B82F6', '#22C55E', '#A855F7', '#EF4444', '#F97316', '#06B6D4'];
+
+function buildDmzMapSvg() {
+  // DMZ pixel map: 37 cells = 최종 원고 수 (6+5+6+7+6+7)
+  // 1 pixel = 1 story, DMZ 곡선 형태 (서쪽 넓고 중부 남하, 동쪽 상승)
+  // 0=cat01(6) 1=cat02(5) 2=cat03(6) 3=cat04(7) 4=cat05(6) 5=cat06(7)
+  const map = [
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1, 4, 5, 5],
+    [-1,-1,-1,-1,-1,-1,-1,-1, 3, 3, 3, 4, 4, 4, 5, 5],
+    [ 0, 0, 0, 1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 5, 5, 5],
+    [ 0, 0, 0, 1, 1, 2, 2, 2,-1,-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1,-1, 1, 2,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+  ];
+
+  // 각 카테고리별 완료된 스토리 수
+  const catCompleted = CATEGORIES.map((cat) => {
+    const stories = STORIES[cat.id] || [];
+    return stories.filter(s => state.completedStories.includes(s.id)).length;
+  });
+
+  // 각 카테고리별 등장 순서 카운터 (맵 왼→오, 위→아래)
+  const catCounter = [0, 0, 0, 0, 0, 0];
+
+  const px = 18;
+  const cols = map[0].length;
+  const rows = map.length;
+  let cells = '';
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const zone = map[r][c];
+      if (zone === -1) continue;
+      const idx = catCounter[zone]++;
+      const done = idx < catCompleted[zone];
+      const fill = done ? CAT_COLORS[zone] : '#e5e5e5';
+      const stroke = done ? CAT_COLORS[zone] : '#ccc';
+      cells += `<rect x="${c*px}" y="${r*px}" width="${px-1}" height="${px-1}" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="0.5"/>`;
+    }
+  }
+
+  return `<svg viewBox="0 0 ${cols*px} ${rows*px}" xmlns="http://www.w3.org/2000/svg">${cells}</svg>`;
+}
+
+function renderArchive() {
+  const c = state.archivistCounts;
+  const maxCount = Math.max(c.A, c.B, c.C, c.D, 1);
+  const totalCompleted = state.completedStories.length;
+  const totalStories = Object.values(STORIES).reduce((sum, arr) => sum + arr.length, 0);
+
+  let statusText = 'DMZ의 기록을 탐색하세요';
+  if (totalCompleted > 0 && totalCompleted < totalStories) {
+    statusText = `${totalCompleted}건의 기록 복원 완료`;
+  } else if (totalCompleted === totalStories && totalStories > 0) {
+    statusText = 'DMZ 전 구역 복원 완료';
+  }
+
+  const archType = getArchivistType();
+  const archSection = archType ? `
+    <div class="archive-section">
+      <div class="archive-section-title">아키비스트 유형</div>
+      <div class="archivist-preview">
+        <div class="preview-label">현재 당신의 유형</div>
+        <div class="preview-type">${archType.name}</div>
+        <div class="preview-desc">${archType.desc}</div>
+      </div>
+    </div>` : `
+    <div class="archive-section">
+      <div class="archive-section-title">아키비스트 유형</div>
+      <div class="archivist-preview">
+        <div class="preview-label">스토리를 완료하면 유형이 나타납니다</div>
+      </div>
+    </div>`;
+
+  document.getElementById('archive-container').innerHTML = `
+    <div class="archive-header">
+      <h2>📦 기록 보관소</h2>
+      <div class="archive-player">아키비스트 ${state.playerName}</div>
+    </div>
+
+    <div class="archive-section">
+      <div class="archive-section-title">DMZ 지도 — ${totalCompleted}/${totalStories}건 복원</div>
+      <div class="dmz-map-wrap">
+        <div class="dmz-map-labels"><span>서해 임진강</span><span>동해 고성</span></div>
+        <div class="dmz-pixel-map">${buildDmzMapSvg()}</div>
+        <div class="dmz-map-legend">
+          ${CATEGORIES.map((cat, i) => `<span class="legend-item"><span class="legend-box" style="background:${CAT_COLORS[i]};border-color:${CAT_COLORS[i]}"></span>${cat.name}</span>`).join('')}
+        </div>
+        <div class="dmz-map-status">${statusText}</div>
+      </div>
+    </div>
+
+    <div class="archive-section">
+      <div class="archive-section-title">기록 선택 성향</div>
+      <div class="tendency-wrap">
+        <div class="tendency-row">
+          <span class="tendency-label">개인서사 (A)</span>
+          <div class="tendency-bar-bg"><div class="tendency-bar-fill" style="width:${(c.A/maxCount)*100}%"></div></div>
+          <span class="tendency-value">${c.A}</span>
+        </div>
+        <div class="tendency-row">
+          <span class="tendency-label">공식기록 (B)</span>
+          <div class="tendency-bar-bg"><div class="tendency-bar-fill" style="width:${(c.B/maxCount)*100}%"></div></div>
+          <span class="tendency-value">${c.B}</span>
+        </div>
+        <div class="tendency-row">
+          <span class="tendency-label">시각자료 (C)</span>
+          <div class="tendency-bar-bg"><div class="tendency-bar-fill" style="width:${(c.C/maxCount)*100}%"></div></div>
+          <span class="tendency-value">${c.C}</span>
+        </div>
+        <div class="tendency-row">
+          <span class="tendency-label">구술증언 (D)</span>
+          <div class="tendency-bar-bg"><div class="tendency-bar-fill" style="width:${(c.D/maxCount)*100}%"></div></div>
+          <span class="tendency-value">${c.D}</span>
+        </div>
+      </div>
+    </div>
+
+    ${archSection}
+  `;
+}
+
+// ===== STORY SELECT =====
+function selectCategory(catId) {
+  state.currentCategory = catId;
+  const cat = CATEGORIES.find(c => c.id === catId);
+  document.getElementById('story-screen-title').textContent = `${cat.icon} ${cat.name}`;
+  const stories = STORIES[catId] || [];
+  const list = document.getElementById('story-list');
+  if (stories.length === 0) {
+    list.innerHTML = '<p style="color:var(--accent);text-align:center;padding:2rem;">스토리 준비 중입니다.</p>';
+  } else {
+    list.innerHTML = stories.map((s, i) => {
+      const done = state.completedStories.includes(s.id);
+      return `<div class="story-card ${done ? 'completed' : ''}" onclick="${done ? '' : `startStory('${s.id}')`}">
+        <div class="story-num">${i+1}</div>
+        <h3>${s.title}</h3>
+        <div class="story-era">${s.era}</div>
+      </div>`;
+    }).join('');
+  }
+  showScreen('story-screen');
+}
+
+// ===== GAME =====
+function exitToStoryList() {
+  closeSource();
+  closeAnswerModal();
+  state.currentStory = null;
+  state.solvedBlanks = {};
+  state.selectedRecords = [];
+  selectCategory(state.currentCategory);
+}
+
+function startStory(storyId) {
+  const stories = STORIES[state.currentCategory] || [];
+  const story = stories.find(s => s.id === storyId);
+  if (!story) return;
+  state.currentStory = storyId;
+  state.solvedBlanks = {};
+  state.selectedRecords = [];
+  showScreen('game-screen');
+  renderExploration();
+}
+
+function getCurrentStory() {
+  const stories = STORIES[state.currentCategory] || [];
+  return stories.find(s => s.id === state.currentStory);
+}
+
+function getBlankKeysForSource(story, sourceId) {
+  // 해당 소스에 속한 빈칸 키 목록 반환 (A, A1, A2 등)
+  return Object.keys(story.blanks).filter(k => k.charAt(0) === sourceId);
+}
+
+function renderExploration() {
+  const story = getCurrentStory();
+  if (!story) return;
+  document.getElementById('game-location').textContent = `📍 ${story.location}`;
+  updateProgress();
+  const totalBlanks = Object.keys(story.blanks).length;
+  const solvedCount = Object.keys(state.solvedBlanks).length;
+  const content = document.getElementById('game-content');
+  content.innerHTML = `
+    <div class="phase-banner">
+      <div class="phase-era">${story.era}</div>
+      <h2>${story.title}</h2>
+      <div class="phase-desc">${story.sources.length}개의 자료를 탐색하고, 자료 간 교차 참조로 빈칸을 복원하세요.</div>
+      ${story.soundNote ? `<p class="sound-note">🔊 ${story.soundNote}</p>` : ''}
+    </div>
+    ${story.sources.map((src, i) => {
+      const blankKeys = getBlankKeysForSource(story, src.id);
+      const solvedKeys = blankKeys.filter(k => state.solvedBlanks[k]);
+      const allSolved = blankKeys.length > 0 && solvedKeys.length === blankKeys.length;
+      const statusText = allSolved ? '복원 완료' : (blankKeys.length > 1 ? `빈칸 ${blankKeys.length}개` : '빈칸 1개');
+      return `<div class="source-card ${src.styleClass}" onclick="openSource('${src.id}')" style="animation-delay:${i*0.1}s">
+        <div class="card-header">
+          <span class="card-icon">${src.icon}</span>
+          <div><div class="card-title">${src.title}</div><div class="card-sub">${src.sub}</div></div>
+          <span class="card-status ${allSolved ? 'solved' : ''}">${statusText}</span>
+        </div>
+      </div>`;
+    }).join('')}
+    ${solvedCount === totalBlanks ? `<button class="btn-confirm" onclick="goToArchive()">모든 빈칸 복원 완료 — 기록 선택으로 →</button>` : ''}
+  `;
+}
+
+function updateProgress() {
+  const story = getCurrentStory();
+  const total = story ? Object.keys(story.blanks).length : 4;
+  const solved = Object.keys(state.solvedBlanks).length;
+  document.getElementById('game-progress').textContent = `빈칸 복원 ${solved}/${total}`;
+}
+
+// ===== SOURCE DETAIL =====
+function isOfflineUnlocked(storyId, sourceId) {
+  try {
+    const unlocks = JSON.parse(localStorage.getItem(LS_OFFLINE_UNLOCKS_KEY) || '{}');
+    return (unlocks[storyId] || []).includes(sourceId);
+  } catch(e) { return false; }
+}
+
+function openSource(sourceId) {
+  const story = getCurrentStory();
+  const src = story.sources.find(s => s.id === sourceId);
+  const detail = document.getElementById('source-detail');
+  const inner = document.getElementById('detail-inner');
+  var rendered;
+  try {
+    rendered = renderSource(src, state.solvedBlanks, story.blanks);
+  } catch(e) {
+    rendered = '<pre style="color:red;">ERROR: ' + e.message + '\n' + e.stack + '</pre>';
+  }
+  detail.classList.add('active');
+  // OFFLINE_MODE: B/D 자료는 미unlock 상태에서 본문 흰색으로 가림. 정답 풀면 unlock 후 본문 노출
+  detail.classList.remove('bd-hidden');
+  if (OFFLINE_MODE && (sourceId === 'B' || sourceId === 'D') && !isOfflineUnlocked(story.id, sourceId)) {
+    detail.classList.add('bd-hidden');
+  }
+  inner.innerHTML = '<div class="detail-close"><button onclick="closeSource()">닫기 ✕</button></div>' +
+    rendered;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSource() {
+  document.getElementById('source-detail').classList.remove('active');
+  document.body.style.overflow = '';
+  renderExploration();
+}
+
+// ===== ANSWER MODAL =====
+let currentBlankId = null;
+
+function openAnswerModal(blankId) {
+  currentBlankId = blankId;
+  const story = getCurrentStory();
+  const blank = story.blanks[blankId];
+  document.getElementById('modal-label').textContent = `빈칸 [${blankId}]`;
+  document.getElementById('modal-hint').textContent = blank.hint;
+  document.getElementById('modal-input').value = '';
+  document.getElementById('modal-backdrop').classList.add('active');
+  document.getElementById('answer-modal').classList.add('active');
+  setTimeout(() => document.getElementById('modal-input').focus(), 100);
+}
+
+function closeAnswerModal() {
+  document.getElementById('modal-backdrop').classList.remove('active');
+  document.getElementById('answer-modal').classList.remove('active');
+  currentBlankId = null;
+}
+
+document.getElementById('modal-input').addEventListener('keydown', e => { if (e.key === 'Enter') submitAnswer(); });
+
+function normalizeAnswer(str) { return (str || '').trim().replace(/\s+/g, '').replace(/[()（）]/g, '').toLowerCase(); }
+
+function submitAnswer() {
+  if (!currentBlankId) return;
+  const story = getCurrentStory();
+  const blank = story.blanks[currentBlankId];
+  const input = document.getElementById('modal-input').value.trim();
+  if (!input) return;
+  const norm = normalizeAnswer(input);
+  const correct = norm === normalizeAnswer(blank.answer) || (blank.altAnswers && blank.altAnswers.some(alt => norm === normalizeAnswer(alt)));
+  if (correct) {
+    const solvedId = currentBlankId;
+    const sourceId = solvedId.charAt(0); // A1→A, C2→C
+    state.solvedBlanks[solvedId] = blank.answer;
+
+    // OFFLINE_MODE: BD source 안 빈칸 풀면 unlock 저장. 다음 openSource에서 bd-hidden 안 붙음
+    if (OFFLINE_MODE && (sourceId === 'B' || sourceId === 'D')) {
+      try {
+        const unlocks = JSON.parse(localStorage.getItem(LS_OFFLINE_UNLOCKS_KEY) || '{}');
+        if (!unlocks[story.id]) unlocks[story.id] = [];
+        if (!unlocks[story.id].includes(sourceId)) {
+          unlocks[story.id].push(sourceId);
+          localStorage.setItem(LS_OFFLINE_UNLOCKS_KEY, JSON.stringify(unlocks));
+        }
+      } catch(e) {}
+    }
+
+    closeAnswerModal();
+    showToast('correct', '복원되었습니다.', '');
+    setTimeout(() => { openSource(sourceId); }, 1200);
+  } else {
+    showToast('incorrect', '다시 확인해보세요', '다른 자료를 교차 참조하여 정답을 찾아보세요.');
+  }
+}
+
+function showToast(type, title, text) {
+  const existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<div class="toast-icon">${type === 'correct' ? '✓' : '✗'}</div><div class="toast-text"><strong>${title}</strong><br>${text}</div>`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2000);
+}
+
+// ===== ARCHIVE SELECTION =====
+function goToArchive() {
+  closeSource();
+  const story = getCurrentStory();
+  state.selectedRecords = [];
+  const content = document.getElementById('game-content');
+  content.innerHTML = `
+    <div class="archive-prompt">
+      <h3>당신은 아키비스트입니다.</h3>
+      <p>이 기록에 대해 후대에 남길 자료 <strong>2개</strong>를 선택하십시오.</p>
+    </div>
+    ${story.choices.map((c, i) => `
+      <div class="archive-option" id="arch-opt-${i}" onclick="toggleArchive(${i})">
+        <span class="opt-icon">${c.icon}</span>
+        <div><div class="opt-title">${c.title}</div><div class="opt-meaning">${c.meaning}</div></div>
+      </div>
+    `).join('')}
+    <button class="btn-confirm" id="btn-confirm-archive" disabled onclick="confirmArchive()">기록 선택 완료 (0/2)</button>
+  `;
+  document.getElementById('game-progress').textContent = '기록 선택';
+}
+
+function toggleArchive(idx) {
+  const el = document.getElementById(`arch-opt-${idx}`);
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+    state.selectedRecords = state.selectedRecords.filter(i => i !== idx);
+  } else {
+    if (state.selectedRecords.length >= 2) return;
+    el.classList.add('selected');
+    state.selectedRecords.push(idx);
+  }
+  const btn = document.getElementById('btn-confirm-archive');
+  btn.textContent = `기록 선택 완료 (${state.selectedRecords.length}/2)`;
+  btn.disabled = state.selectedRecords.length !== 2;
+}
+
+function confirmArchive() {
+  if (state.selectedRecords.length !== 2) return;
+  const story = getCurrentStory();
+
+  // 아키비스트 카운트 누적
+  state.selectedRecords.forEach(idx => {
+    const choiceId = story.choices[idx].id;
+    state.archivistCounts[choiceId]++;
+  });
+
+  state.completedStories.push(state.currentStory);
+
+  // 저장
+  try {
+    localStorage.setItem(LS_STATE_KEY, JSON.stringify({
+      archivistCounts: state.archivistCounts,
+      completedStories: state.completedStories,
+      playerName: state.playerName
+    }));
+  } catch(e) {}
+
+  showCompletion();
+}
+
+// ===== COMPLETION SCREEN =====
+function showCompletion() {
+  const story = getCurrentStory();
+  const selected = state.selectedRecords.map(i => story.choices[i].title).join(', ');
+  const c = state.archivistCounts;
+  const totalStories = Object.values(STORIES).reduce((sum, arr) => sum + arr.length, 0);
+  const allDone = state.completedStories.length >= totalStories && totalStories > 0;
+
+  showScreen('completion-screen');
+  document.getElementById('completion-box').innerHTML = `
+    <h2>기록이 완료되었습니다</h2>
+    <div class="comp-records">
+      <strong>${state.playerName}</strong> 아키비스트가 선택한 기록:<br>
+      <em>${selected}</em>
+    </div>
+    <div class="comp-counts">
+      누적 기록 선택 현황
+      <div class="count-bar">
+        <span>A: ${c.A}</span> <span>B: ${c.B}</span> <span>C: ${c.C}</span> <span>D: ${c.D}</span>
+      </div>
+    </div>
+    <div class="comp-progress">완료된 기록: ${state.completedStories.length}/${totalStories}</div>
+    ${allDone
+      ? `<button class="btn-primary" onclick="showResult()">아키비스트 유형 확인 →</button>`
+      : `<button class="btn-primary" onclick="showScreen('category-screen'); renderCategories();">다른 기록 탐색하기</button>`
+    }
+  `;
+}
+
+// ===== RESULT SCREEN =====
+function showResult() {
+  const c = state.archivistCounts;
+  const sorted = Object.entries(c).sort((a, b) => b[1] - a[1]);
+
+  let typeKey;
+  if (sorted[0][1] === sorted[3][1]) {
+    typeKey = 'BALANCED';
+  } else if (sorted[0][1] === sorted[1][1] && sorted[1][1] === sorted[2][1]) {
+    // 3개 이상 동점 — 마지막 스토리 선택 우선 (간단히 상위 2개 사용)
+    typeKey = [sorted[0][0], sorted[1][0]].sort().join('');
+  } else {
+    typeKey = [sorted[0][0], sorted[1][0]].sort().join('');
+  }
+
+  const type = ARCHIVIST_TYPES[typeKey] || ARCHIVIST_TYPES['BALANCED'];
+
+  showScreen('result-screen');
+  document.getElementById('result-box').innerHTML = `
+    <h2>당신의 아키비스트 유형</h2>
+    <div class="result-type-name">${type.name}</div>
+    <div class="result-type-desc">${type.desc}</div>
+    <div class="result-stat"><span class="stat-label">개인 서사 (A)</span><span class="stat-value">${c.A}회</span></div>
+    <div class="result-stat"><span class="stat-label">공식 기록 (B)</span><span class="stat-value">${c.B}회</span></div>
+    <div class="result-stat"><span class="stat-label">시각 자료 (C)</span><span class="stat-value">${c.C}회</span></div>
+    <div class="result-stat"><span class="stat-label">구술 증언 (D)</span><span class="stat-value">${c.D}회</span></div>
+    <button class="btn-primary" style="margin-top:2rem;" onclick="resetGame()">처음부터 다시하기</button>
+  `;
+}
+
+function resetGame() {
+  state.archivistCounts = { A:0, B:0, C:0, D:0 };
+  state.completedStories = [];
+  state.playerName = null;
+  localStorage.removeItem(LS_STATE_KEY);
+  localStorage.removeItem(LS_TUTORIAL_KEY);
+  showScreen('login-screen');
+}
+</script>
+</body>
+</html>
