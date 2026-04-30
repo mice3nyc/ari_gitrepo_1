@@ -1,0 +1,22 @@
+﻿key,value,note
+scenarios,"[""selfintro"",""groupwork"",""eorinwangja"",""career"",""studyplan""]",학기 시나리오 순서
+resourceMaxStart,"{""time"":100,""energy"":100}",L1 시작 자원 (시간/에너지)
+resourceCostMultiplier,0.6,raw 비용 배율 (작을수록 자원 덜 깎임)
+competencyDiscountMult,2,위/도 1점 → 비용 N 감소 / 음수 페널티
+rpRewardByGrade,"{""S"":15,""A"":10,""B"":6,""C"":3,""D"":1}",등급별 RP(자원토큰) 보상
+rpLevelUpBonus,20,레벨업 보너스 RP
+rpCost,"{""time"":1,""energy"":1}",RP 1개로 회복하는 자원량
+expThresholds,"[0,20,40,65,100]",레벨업 누적 EXP 컷
+meterMaxByLevel,"{""1"":{""time"":100,""energy"":100},""2"":{""time"":110,""energy"":110},""3"":{""time"":125,""energy"":125},""4"":{""time"":145,""energy"":145},""5"":{""time"":170,""energy"":170}}",레벨별 자원 천장
+pointThresholds,"{""S"":90,""A"":70,""B"":50,""C"":30}",S/A/B/C 등급 점수 컷
+cardBoost,20,카드 부스트 점수
+detectedIssueBoost,10,환각 발견 점수
+autoRecoverOnEnd,false,시나리오 종료 자동 회복 여부
+recoverBase,0.7,회복 기본 비율 (deprecated)
+gradeBonus,"{""S"":0.6,""A"":0.47,""B"":0.34,""C"":0.22,""D"":0.1}",등급별 회복 보너스 (deprecated)
+useReviewLevelBoost,false,검토 격상 메커닉 ON/OFF
+levelStep,"{""1"":0,""2"":0,""3"":1,""4"":1,""5"":2}",레벨별 검토 인덱스 격상 폭
+levelExtraBonus,"{""1"":0,""2"":0,""3"":0,""4"":5,""5"":10}",격상 천장 후 미세 보너스
+hintEnabledDefault,false,힌트 기본값
+resultMidZone,2,0±N zone (mid 판정)
+DELEGATION_DELTA,"{""++"":2,""+"":1,""0"":0,""-"":-1,""--"":-2}",위 점수 변화량 매핑
