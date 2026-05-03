@@ -1,0 +1,204 @@
+## SPEC — v0.6 점수 framework
+
+**최종 업데이트**: 2026-05-01 세션267 (스켈레톤)
+**PLAN**: [[PLAN|PLAN.md]] / **TASKS**: [[TASKS|TASKS.md]]
+
+> 에이전트 전달용 기술 상세. 코드와 동기화. 변경 시 build.py / extract_balance.js / index.html 영향 점검.
+
+---
+
+#### 0. 핵심 변경 요약 (v0.5 → v0.6)
+
+| 영역 | v0.5 | v0.6 |
+|---|---|---|
+| 점수 기여 | tier2 delegation에만 부분적 | tier1 / tier2 / review **모든 단계** |
+| 점수 축 | 단일 (basePoint) | **두 축 분리 (위 / 도)** |
+| 비용 보정 | `resourceCostMultiplier: 0.6` 글로벌 | **폐지** — raw 재조정 |
+| 카드 키 | `cardSlots.boostCard` | **`axisDelta`** |
+| 학생 노출 | 매 단계 점수 미터 | **시나리오 끝 종합만** |
+| 학기 끝 | basePoint 누적 → result 라벨 | **누적 위/도 → 4유형 라벨 (pp/pn/np/nn)** |
+
+---
+
+#### 1. yaml 스키마 — delta 필드
+
+##### 1.1 tier1 (큰 방향 선택)
+
+```yaml
+tier1:
+  - id: A
+    label: AI에게 먼저 물어본다
+    delta: { 위: +1, 도: 0 }
+  - id: B
+    label: 친구한테 묻는다
+    delta: { 위: 0, 도: +1 }
+```
+
+##### 1.2 tier2 (행동 선택, tier1 분기 아래)
+
+```yaml
+tier2:
+  A:
+    - id: A1
+      label: 직접 검색해본다
+      delta: { 위: +2, 도: +1 }
+      cost: { time: 30, energy: 10 }   # raw, 0.6 곱하기 없음
+    - id: A2
+      label: AI 답을 그대로 믿는다
+      delta: { 위: -2, 도: 0 }
+      cost: { time: 5, energy: 2 }
+```
+
+##### 1.3 reviews (검토 강도)
+
+```yaml
+reviews:
+  - id: R1
+    label: 그냥 제출
+    delta: { 위: -1, 도: 0 }
+    cost: { time: 0, energy: 0 }
+  - id: R3
+    label: 출처 비교 + 다시 정리
+    delta: { 위: 0, 도: +3 }
+    cost: { time: 40, energy: 15 }
+```
+
+##### 1.4 axisDelta — 시나리오별 카드 슬롯
+
+> **Phase 2 현재 상태 (parent key만 rename)**:
+
+```yaml
+axisDelta:                  # ← v0.5의 cardSlots에서 rename
+  A1R1:                     # leaf id
+    boostCard: 처음의 나 카드 # 카드 이름 (Phase 5 재구조 예정)
+    bonusPoint: 20           # 점수 보너스 (Phase 5 → delta {위/도}로 재구조)
+```
+
+> **Phase 5 목표 형태** (카드 4안 결정 + final_item 연결 시):
+
+```yaml
+axisDelta:
+  - id: card_self_inquiry
+    label: 자기 탐색
+    delta: { 위: +3, 도: 0 }
+    triggerLeafIds: [A1R3, A2R3]
+```
+
+---
+
+#### 2. 점수 누적 로직
+
+##### 2.1 누적 식
+
+```
+score_위 = sum(leaf.delta.위) for leaf in 학기 전체 선택 경로
+score_도 = sum(leaf.delta.도) for leaf in 학기 전체 선택 경로
++ axisDelta cards 보유분 합산
+```
+
+##### 2.2 4유형 판정 (학기 끝)
+
+| score_위 | score_도 | 라벨 |
+|---|---|---|
+| ≥ +N | ≥ +N | **pp** — 판단도 도메인도 단단 |
+| ≥ +N | < +N | **pn** — 판단 단단, 도메인 가벼움 |
+| < +N | ≥ +N | **np** — 도메인 단단, 판단 가벼움 |
+| < +N | < +N | **nn** — 둘 다 가벼움 |
+
+> 임계값 N은 시나리오 5개 마이그레이션 후 발란스에서 확정. 가안: N = 0 (양/음 부호로만 판정).
+
+##### 2.3 학생 노출 정책
+
+- **시나리오 진행 중**: 점수 노출 X. cost meter는 유지 (시간/에너지만)
+- **시나리오 끝**: 위·도 두 축 점수 + 그 시나리오 누적 한 줄
+- **학기 끝**: 4유형 라벨 + 그동안 누적된 axisDelta 카드 모음
+
+---
+
+#### 3. 비용 계산식 (multiplier 폐지)
+
+##### 3.1 v0.5 (폐지)
+
+```
+actual_cost = raw_cost × resourceCostMultiplier (0.6)
+```
+
+##### 3.2 v0.6
+
+```
+actual_cost = raw_cost
+```
+
+raw 비용은 학기 시작 자원(`resourceMaxStart`) 대비 leaf 기여를 명시적으로 짜서 재조정. 가안 분포:
+
+- tier1 raw cost: 0~5 (큰 방향, 가벼움)
+- tier2 raw cost: 5~25 (행동, 중간)
+- review raw cost: 0~40 (R1=0, R3=무거움)
+- 학기 = 5 시나리오 × (tier1 + tier2 + review 한 사이클)
+- `resourceMaxStart` = 100 유지 (가안)
+
+> v0.5 career A1R1 raw 100 같은 경우는 실제 발란스 작업에서 재분배.
+
+---
+
+#### 4. build.py 영향
+
+| 영역 | 수정 내용 |
+|---|---|
+| 출력 변수명 | `SCENARIO_*` → `SCENARIOS` (v0.5 단일 객체와 동일) |
+| 키 변경 | `cardSlots.boostCard` → `axisDelta` |
+| 새 필드 | tier1/tier2/reviews에 `delta`, `cost` 처리 |
+| 산출 | `index.html.template`에 `__SCENARIOS__`, `__CUT_IMAGES__` 자리 (v0.5와 동일) |
+
+---
+
+#### 5. extract_balance.js 영향
+
+| 영역 | 수정 내용 |
+|---|---|
+| 새 컬럼 | `delta_위`, `delta_도` (tier1/tier2/review 각 행에) |
+| 제거 컬럼 | basePoint (사용 시) |
+| 보존 | peter_note 보존 로직 그대로 |
+| 출력 | `~/Downloads/v06_balance_{date}/choices.csv` |
+
+---
+
+#### 6. index.html (코드) 영향
+
+##### 6.1 점수 누적 (런타임)
+
+```js
+// 선택 시 마다 누적 (학생 비노출)
+state.score = state.score || { 위: 0, 도: 0 };
+state.score.위 += leaf.delta.위;
+state.score.도 += leaf.delta.도;
+```
+
+##### 6.2 cost meter
+
+`actual_cost = leaf.cost` (multiplier 곱셈 제거).
+
+##### 6.3 시나리오 끝 화면
+
+새 컴포넌트: 위/도 두 축 점수 + 누적 카드 표시.
+
+##### 6.4 학기 끝 화면
+
+새 컴포넌트: 4유형 라벨 (pp/pn/np/nn) + 카드 모음 + 짧은 해석문(선택).
+
+---
+
+#### 7. 미정 / 다음 결정
+
+- 4유형 임계값 N (Phase 4 발란스 후)
+- 카드 메시지 메카닉 4안 (Phase 5)
+- `axisDelta` 트리거 조건 — leafIds 조합 / 누적 점수 임계 / 둘 다 (Phase 5)
+
+---
+
+#### 8. 참조
+
+- [[PLAN|PLAN.md]] — 단계별 구현 순서
+- [[TASKS|TASKS.md]] — 진행 체크리스트
+- [[26.0501 v0.6 기획 결정 요약]] — 이 빌드의 출발점
+- `_dev/ai-literacy-delegation-boundary/v05/SPEC.md` — v0.5 기준선
