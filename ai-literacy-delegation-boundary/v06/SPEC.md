@@ -1,6 +1,6 @@
 ## SPEC — v0.6 점수 framework
 
-**최종 업데이트**: 2026-05-03 세션275 (코드 framework 1차 진행)
+**최종 업데이트**: 2026-05-03 세션278 (시나리오 끝 chain 재배치 + 카드 reward 단건 컨펌)
 **PLAN**: [[PLAN|PLAN.md]] / **TASKS**: [[TASKS|TASKS.md]]
 
 > 에이전트 전달용 기술 상세. 코드와 동기화. 변경 시 build.py / extract_balance.js / index.html 영향 점검.
@@ -195,9 +195,31 @@ gameState.competencies.knowledge.value += getAxisDelta(sign);
 
 SPEC: `actual_cost = leaf.cost` (multiplier 곱셈 제거). 현재 `_applyMult` 함수에서 0.6 곱셈 잔존. raw 재조정과 묶여 후속.
 
-##### 6.3 시나리오 끝 화면 (부분 작동)
+##### 6.3 시나리오 끝 chain (5/3 세션278 재배치)
 
-현재 `score-display` 요소가 항상 노출되어 v0.5 패턴. 진행 중 숨김 정책 미적용. 토글 위치 후보: `updateStats()` 함수에서 `currentTier` 보고 가시성 토글.
+cut6 결과 패널 표시 후 1.4초 → 모달 chain. 카드 단계가 첫 자리. 학기 끝일 땐 자원 충전 단계 건너뛰고 종합 리포트로.
+
+```
+[0] 결과 패널 (cut6 본체)            등급·획득 아이템·awareness·위/도 delta+누적·비용·exp·잔여 자원
+        ↓ 1.4초 자동
+[1] 카드 reward (조건부)             도 축 양수 + leaf의 competencyCards 비지 않음
+        - 카드 1장씩 단건 컨펌
+        - 라벨 + note + "획득" 버튼
+        - 클릭 → 인벤토리로 travel → 다음 카드 자동 fadein
+        - 마지막 카드 travel 끝나면 자동 닫힘
+        ↓
+[2] 레벨업 모달 (조건부)             didLevelUp일 때만. 자원 max 증가 + 자원토큰 보너스. "확인" 버튼
+        ↓
+[3] 자원 충전 모달 (조건부)          학기 끝 아닐 때만. RP 분배 (showRPDistributionModal)
+        ↓
+[4] 다음 버튼                        "다음 시나리오로 →" / "학기 종합 리포트 보기"
+```
+
+**카드 못 받은 회기 (도 축 음수 또는 카드 0장)**: 결과 패널에 "이번엔 역량 카드를 받지 못했어요" 한 줄 박스 노출 (학습 피드백 자리 명확화).
+
+**chain 구현**: `Promise.resolve()` → 각 단계 함수가 Promise 반환. 카드 단계는 `playCardRewardSequential(cards, note)`로 모든 카드 컨펌 끝나면 resolve.
+
+**호출 자리 이동 (5/3 세션278)**: `awardCompetencyCards`의 데이터 적립은 review 선택 시점 그대로 (cut5→cut6 전환 직전, line ~3893), 시각 reward(`playCardRewardSequential`)만 chain의 첫 단계로 분리.
 
 ##### 6.4 학기 끝 화면 (이미 작동)
 
@@ -261,13 +283,20 @@ selfintro:
 - **카드 표시**: 라벨 + 카운트 그룹화 (같은 라벨 N장 → "문해력 ×3"). 클릭 시 시나리오·leaf 출처 expand
 - **빈 상태**: "아직 획득한 카드가 없어요. 시나리오 끝에 카드를 받을 수 있습니다."
 
-##### 7.6 reward 팝업 (획득 시점)
+##### 7.6 reward 팝업 — 단건 컨펌 (5/3 세션278 재작성, cascade·skip 폐기)
 
-- **트리거**: 시나리오 끝 시점, 도 축 양수 + `competencyCards` 배열 비지 않음
-- **연출**: 화면 중앙에 카드 1~N장 등장 (1초 fadein) → 잠시 멈춤 → 우측 탭 버튼 위치로 이동(travel 0.6초) + scale 축소 → 사라짐. 이동 후 탭 버튼에 빨간 점(unread badge).
-- **`note` 텍스트**: 카드 등장 시 카드 본문에 표시 ("자기 경험을 직접 고르고 끝까지 확인해서 이후 자기표현 카드와 잘 맞음")
-- **복수 카드**: 1초 간격 cascade
-- **"적당하게"**: 학생 부담 안 주는 짧은 연출. 스킵 버튼 제공
+- **트리거**: 시나리오 끝 chain의 [1] 단계. 도 축 양수 + `competencyCards` 배열 비지 않음
+- **연출 (단건)**:
+  1. 카드 1장 화면 중앙 fadein (0.5s) — 라벨 + note + **"획득" 버튼**
+  2. 학생이 "획득" 클릭 → 우측 탭 버튼 위치로 travel (0.6s) + scale 축소 → 사라짐
+  3. 다음 카드 자동 fadein (간격 0.2s buffer)
+  4. 마지막 카드 travel 끝나면 chain 다음 단계로 자동 진행
+- **인벤토리 badge**: travel 끝나는 시점부터 탭 버튼 unread badge 노출
+- **`note` 텍스트**: 카드 본문에 표시 ("자기 경험을 직접 고르고 끝까지 확인해서 이후 자기표현 카드와 잘 맞음")
+- **폐기**: cascade 자동 진입(2s 간격), 스킵 버튼, ESC 단축키, 배경 클릭 닫기 — 모두 제거
+- **이유**: 학생이 카드가 무엇인지 + 획득했다는 사실을 강조. 모방·회피로 흐를 수 있는 자동 연출 폐기. 컨펌 = "이 카드를 내 것으로 받았다"는 능동적 자리
+
+**카드 못 받은 회기**: cut6 결과 패널에 음수 안내 박스(`"이번엔 역량 카드를 받지 못했어요"`) — 도 축 음수 || competencyCards 0장일 때 출력. 카드 reward 단계는 건너뜀.
 
 ##### 7.7 위 축(위임 판단력) 표현 — 별도 결정 큐
 

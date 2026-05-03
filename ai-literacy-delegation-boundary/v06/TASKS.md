@@ -1,6 +1,6 @@
 ## TASKS — v0.6
 
-**최종 업데이트**: 2026-05-03 세션275
+**최종 업데이트**: 2026-05-03 세션278 (시나리오 끝 chain 재배치 + 카드 reward 단건 컨펌)
 **PLAN**: [[PLAN|PLAN.md]] / **SPEC**: [[SPEC|SPEC.md]]
 
 > 매 작업 완료 시 즉시 체크. 에이전트 위임 시 이 노트만 보고 자급자족 가능해야 함.
@@ -73,7 +73,8 @@
 - [x] 5a.4 인벤토리 슬라이드 패널 + reward 팝업 코드 통합
 - [x] 5a.5 selfintro 27 review 매핑 (16건 카드 / 11건 미보유)
 - [x] 5a.6 빌드 검증 (240,876 bytes, JS syntax OK)
-- [ ] 5b selfintro 1차 플테 — 발란스/연출 피드백
+- [x] 5a.7 시나리오 끝 chain 재배치 + 카드 reward 단건 컨펌 (5/3 세션278) — cascade·skip 폐기, "획득" 버튼 + travel + 다음 카드 자동 진입. chain: 결과 패널 → 카드 → 레벨업 → 자원 충전. 카드 못 받은 회기 안내 박스 (242,906 bytes)
+- [ ] 5b selfintro 1차 플테 — 발란스/연출 피드백 (chain 단건 컨펌 동작 포함, 케이스: A1R3 3장 / A2R1 1장 / A3R1 0장)
 - [ ] 5c.1 groupwork 카드 매핑 (백도)
 - [ ] 5c.2 eorinwangja 카드 매핑 (백도)
 - [ ] 5c.3 career 카드 매핑 (백도)

@@ -355,18 +355,20 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .inv-card-count { font-size:13px; color:#555; font-weight:700; }
 .inv-card-detail { font-size:11px; color:#666; margin-top:8px; padding-top:8px; border-top:1px dashed #ddd; line-height:1.6; display:none; }
 .inv-card.expanded .inv-card-detail { display:block; }
-/* ===== reward 팝업 (§7.6) ===== */
+/* ===== reward 팝업 — 단건 컨펌 (§7.6, 5/3 세션278) ===== */
 .card-reward-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:400; display:flex; align-items:center; justify-content:center; pointer-events:auto; }
 .card-reward-overlay.hidden { display:none; }
-.card-reward-skip { position:fixed; top:20px; right:20px; padding:6px 12px; border:1.5px solid #fff; background:rgba(0,0,0,0.4); color:#fff; font-family:inherit; font-size:11px; font-weight:600; letter-spacing:1px; cursor:pointer; z-index:410; }
-.card-reward-skip:hover { background:rgba(0,0,0,0.6); }
-.card-reward-card { position:fixed; top:50%; left:50%; width:280px; padding:22px 20px 22px 28px; border:2px solid #111; background:#fff; box-shadow:0 4px 0 #111; border-radius:12px; transform:translate(-50%,-50%) scale(0.9); opacity:0; transition:opacity 0.5s ease, transform 0.6s cubic-bezier(0.4,0,0.2,1); z-index:405; border-left-width:8px; }
+.card-reward-card { position:fixed; top:50%; left:50%; width:300px; padding:22px 22px 18px 28px; border:2px solid #111; background:#fff; box-shadow:0 4px 0 #111; border-radius:12px; transform:translate(-50%,-50%) scale(0.9); opacity:0; transition:opacity 0.5s ease, transform 0.6s cubic-bezier(0.4,0,0.2,1); z-index:405; border-left-width:8px; }
 .card-reward-card.appear { opacity:1; transform:translate(-50%,-50%) scale(1); }
 .card-reward-card.travel { opacity:0; }
 .card-reward-tag { font-size:10px; color:#888; letter-spacing:1.5px; font-weight:700; margin-bottom:6px; }
 .card-reward-label { font-size:22px; font-weight:700; color:#111; margin-bottom:10px; letter-spacing:0.5px; }
 .card-reward-divider { height:1px; background:#ddd; margin:8px 0 10px; }
-.card-reward-note { font-size:12px; color:#555; line-height:1.7; }
+.card-reward-note { font-size:12px; color:#555; line-height:1.7; margin-bottom:14px; }
+.card-reward-confirm { display:block; width:100%; padding:10px 14px; border:1.5px solid #111; background:#111; color:#fff; font-family:inherit; font-size:13px; font-weight:700; letter-spacing:1px; cursor:pointer; transition:background 0.15s ease; }
+.card-reward-confirm:hover { background:#333; }
+.card-reward-confirm:disabled { background:#888; border-color:#888; cursor:default; }
+.no-card-notice { margin-top:10px; padding:8px 12px; background:#f7f7f7; border-left:3px solid #bbb; font-size:12px; color:#666; }
 </style>
 </head>
 <body>
@@ -4878,6 +4880,13 @@ function goCut6(){
 
   // v0.5 Phase 8.7 — 자원 회복 알림 제거 (DECISIONS §10.1). 8.11에서 RP 적립 박스로 대체
 
+  // 카드 못 받은 회기 안내 (5/3 세션278) — 도 축 음수 또는 leaf에 카드 없음
+  var _cardsForLeaf=(sc.competencyCards||{})[leaf]||[];
+  var _gotCards=(gameState.competencies.knowledge.value>0)&&_cardsForLeaf.length>0;
+  if(!_gotCards){
+    h+='<div class="no-card-notice">이번엔 역량 카드를 받지 못했어요.</div>';
+  }
+
   // 학기 잔여 자원 (회복 없음 — 누적 관리)
   h+='<div class="result-meta" style="margin-top:6px;color:#555">학기 잔여 — 시간 '+gameState.resources.time.current+'/'+gameState.resources.time.max+' · 에너지 '+gameState.resources.energy.current+'/'+gameState.resources.energy.max+'</div>';
 
@@ -4924,15 +4933,22 @@ function goCut6(){
   nb.textContent=willBeAllDone?'학기 종합 리포트 보기':'다음 시나리오로 →';
   nb.onclick=goNextScenario;
 
-  // v0.5 Phase 8.10 — 모달 chain (DECISIONS §10.8 게임 루프)
-  // 결과 1.4초 보여주고 → 레벨업 팝업(있으면) → 자원토큰 분배 팝업(학기 끝 아닐 때) → 다음 버튼 노출
+  // 시나리오 끝 chain (SPEC §6.3, 5/3 세션278 재배치)
+  // 결과 패널 1.4초 보여주고 → [1] 카드 단건 컨펌 → [2] 레벨업 → [3] 자원 충전 → 다음 버튼
   setTimeout(function(){
     var chain=Promise.resolve();
+    // [1] 카드 reward (도 축 양수 + leaf 카드 비지 않음)
+    if(_gotCards){
+      var _note=(sc.reviewSupplements||{})[leaf]||'';
+      chain=chain.then(function(){return playCardRewardSequential(_cardsForLeaf,_note);});
+    }
+    // [2] 레벨업
     if(didLevelUp){
       var prevMax=CONFIG.meterMaxByLevel[prevLevel]||{time:100,energy:100};
       var newMax={time:gameState.resources.time.max,energy:gameState.resources.energy.max};
-      chain=showLevelUpModal(prevLevel,newLevel,prevMax,newMax,rpAwardInfo.fromLevelUp);
+      chain=chain.then(function(){return showLevelUpModal(prevLevel,newLevel,prevMax,newMax,rpAwardInfo.fromLevelUp);});
     }
+    // [3] 자원 충전 (학기 끝 아닐 때만)
     if(!willBeAllDone){
       chain=chain.then(function(){return showRPDistributionModal();});
     }
@@ -5646,76 +5662,67 @@ function renderInventory(){
   list.innerHTML=html;
 }
 function awardCompetencyCards(scenarioId,scenarioTitle,leafId,cards,note){
+  // 데이터 적립만. 시각 reward(playCardRewardSequential)는 cut6 chain에서 호출.
   if(!cards||!cards.length)return;
   ensureInventory();
   var ts=Date.now();
   for(var i=0;i<cards.length;i++){
     gameState.inventory.competencyCards.push({label:cards[i],scenario:scenarioId,scenarioTitle:scenarioTitle||scenarioId,leaf:leafId,note:note||'',ts:ts});
   }
-  var panel=document.getElementById('inv-panel');
-  var badge=document.getElementById('inv-tab-badge');
-  if(badge&&panel&&!panel.classList.contains('open'))badge.classList.remove('hidden');
-  playCardRewardCascade(cards,note);
   saveGame();
 }
-var _cardRewardTimers=[];
-function playCardRewardCascade(cards,note){
-  var overlay=document.getElementById('card-reward-overlay');
-  if(!overlay)return;
-  cancelCardReward();
-  overlay.classList.remove('hidden');overlay.innerHTML='';
-  var skip=document.createElement('button');
-  skip.className='card-reward-skip';skip.textContent='건너뛰기 (Esc)';skip.onclick=cancelCardReward;
-  overlay.appendChild(skip);
-  document.addEventListener('keydown',_onCardRewardKey);
-  overlay.onclick=function(ev){if(ev.target===overlay)cancelCardReward();};
-  // 한 장씩 완전히 끝나고 다음 장 — 간격 = 0.5(fadein) + 0.7(hold) + 0.6(travel) + 0.2(buffer) = 2.0s
-  for(var i=0;i<cards.length;i++){
-    (function(idx,label){
-      var t=setTimeout(function(){showOneCard(label,note,idx,cards.length);},idx*2000);
-      _cardRewardTimers.push(t);
-    })(i,cards[i]);
-  }
-  var endT=setTimeout(function(){cancelCardReward();},cards.length*2000+400);
-  _cardRewardTimers.push(endT);
-}
-function showOneCard(label,note,idx,total){
-  var overlay=document.getElementById('card-reward-overlay');
-  if(!overlay)return;
-  var color=_cardColor(label);
-  var card=document.createElement('div');
-  card.className='card-reward-card';
-  card.style.borderLeftColor=color;
-  card.innerHTML='<div class="card-reward-tag">역량 카드 획득 · '+(idx+1)+'/'+total+'</div>'+
-    '<div class="card-reward-label" style="color:'+color+'">'+_invEscapeHTML(label)+'</div>'+
-    (note?'<div class="card-reward-divider"></div><div class="card-reward-note">'+_invEscapeHTML(note)+'</div>':'');
-  overlay.appendChild(card);
-  requestAnimationFrame(function(){card.classList.add('appear');});
-  // 0.5s fadein + 0.7s hold = 1.2s → travel 시작
-  var t1=setTimeout(function(){
-    var tab=document.getElementById('inv-tab');
-    if(tab){
-      var r=tab.getBoundingClientRect();
-      var tx=r.left+r.width/2-window.innerWidth/2;
-      var ty=r.top+r.height/2-window.innerHeight/2;
-      card.style.transition='opacity 0.6s ease, transform 0.6s cubic-bezier(0.4,0,1,1)';
-      card.style.transform='translate(calc(-50% + '+tx+'px), calc(-50% + '+ty+'px)) scale(0.15)';
+// 단건 컨펌 reward — Promise 반환, chain에서 호출. cascade·skip·ESC 폐기 (5/3 세션278)
+function playCardRewardSequential(cards,note){
+  return new Promise(function(resolve){
+    var overlay=document.getElementById('card-reward-overlay');
+    if(!overlay||!cards||!cards.length){resolve();return;}
+    overlay.classList.remove('hidden');overlay.innerHTML='';
+    var idx=0;
+    function showNext(){
+      if(idx>=cards.length){
+        overlay.classList.add('hidden');overlay.innerHTML='';
+        // travel 끝나는 시점에 인벤토리 badge 노출
+        var panel=document.getElementById('inv-panel');
+        var badge=document.getElementById('inv-tab-badge');
+        if(badge&&panel&&!panel.classList.contains('open'))badge.classList.remove('hidden');
+        resolve();return;
+      }
+      var label=cards[idx];
+      var color=_cardColor(label);
+      var card=document.createElement('div');
+      card.className='card-reward-card';
+      card.style.borderLeftColor=color;
+      var btnId='card-confirm-'+idx;
+      card.innerHTML='<div class="card-reward-tag">역량 카드 획득 · '+(idx+1)+'/'+cards.length+'</div>'+
+        '<div class="card-reward-label" style="color:'+color+'">'+_invEscapeHTML(label)+'</div>'+
+        (note?'<div class="card-reward-divider"></div><div class="card-reward-note">'+_invEscapeHTML(note)+'</div>':'')+
+        '<button class="card-reward-confirm" id="'+btnId+'">획득</button>';
+      overlay.appendChild(card);
+      requestAnimationFrame(function(){card.classList.add('appear');});
+      var btn=document.getElementById(btnId);
+      btn.onclick=function(){
+        btn.disabled=true;
+        // travel: 우측 인벤토리 탭으로 이동 + scale 축소
+        var tab=document.getElementById('inv-tab');
+        if(tab){
+          var r=tab.getBoundingClientRect();
+          var tx=r.left+r.width/2-window.innerWidth/2;
+          var ty=r.top+r.height/2-window.innerHeight/2;
+          card.style.transition='opacity 0.6s ease, transform 0.6s cubic-bezier(0.4,0,1,1)';
+          card.style.transform='translate(calc(-50% + '+tx+'px), calc(-50% + '+ty+'px)) scale(0.15)';
+        }
+        card.classList.add('travel');
+        // 0.6s travel + 0.2s buffer = 0.8s → 다음 카드
+        setTimeout(function(){
+          if(card.parentNode)card.parentNode.removeChild(card);
+          idx++;
+          showNext();
+        },800);
+      };
     }
-    card.classList.add('travel');
-  },1200);
-  _cardRewardTimers.push(t1);
-  // 1.2 + 0.6 = 1.8s → 제거
-  var t2=setTimeout(function(){if(card.parentNode)card.parentNode.removeChild(card);},1800);
-  _cardRewardTimers.push(t2);
+    showNext();
+  });
 }
-function cancelCardReward(){
-  for(var i=0;i<_cardRewardTimers.length;i++)clearTimeout(_cardRewardTimers[i]);
-  _cardRewardTimers=[];
-  var overlay=document.getElementById('card-reward-overlay');
-  if(overlay){overlay.classList.add('hidden');overlay.innerHTML='';overlay.onclick=null;}
-  document.removeEventListener('keydown',_onCardRewardKey);
-}
-function _onCardRewardKey(e){if(e.key==='Escape')cancelCardReward();}
 
 // =====================================================
 // 13. Initialization
