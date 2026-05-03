@@ -34,7 +34,7 @@
 - [x] 3a.3 빌드 검증
 - [x] 3a.4 SPEC §6 진행 상태 표 갱신 + 미정 결정 갱신
 - [x] 3a.5 multiplier 1.0 변경 (raw에 0.6 곱한 값으로 재조정 완료 후)
-- [x] 3a.6 score-display·stats-bar 진행 중 숨김 정책 (`updateStats` 함수에 currentTier 기반 visibility 토글)
+- [~] 3a.6 score-display·stats-bar 진행 중 숨김 정책 — **폐기 (5/3 plate)**: 점수 UI는 항상 보이는 상태가 기본. visibility 토글 코드 제거 (커밋 28fa77c → 후속)
 
 ##### Phase 3b — selfintro yaml 채움 ✅ (5/3 세션275, 백도+직도)
 - [x] 3b.0 raw 비용 재조정 — 5 시나리오 × 270 라인 × 0.6 (백도 결과, 0 발생 없음, 백업 `scenarios.yaml.before-raw-rebalance`)
@@ -63,10 +63,8 @@
 - [ ] 4b.4 studyplan 검수 시트 분석
 - [ ] 4b.5 5 시나리오 통합 플테
 
-##### Phase 4c — 시나리오 끝 화면 노출 정책
-- [ ] 4c.1 score-display 토글 자리 식별 (`updateStats` 함수 후보)
-- [ ] 4c.2 진행 중(currentTier 1·2) 숨김 + 시나리오 끝(result/review) 표시
-- [ ] 4c.3 cost meter는 진행 중에도 유지 (SPEC §2.3)
+##### Phase 4c — 시나리오 끝 화면 노출 정책 [폐기 — 5/3]
+- [~] 폐기. 점수 UI는 항상 보이는 상태가 기본. score-display는 이미 항상 노출이라 추가 작업 불필요. 점수 게임 변질 방지가 필요하면 점수 업데이트 시점·표현 방식으로 별도 결정.
 
 ##### Phase 5 — 카드 메시지 메카닉 (final_item)
 - [ ] 5.1 카드 4안 결정 ([[26.0501 v0.5 카드 인벤토리]] 참조)

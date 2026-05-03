@@ -107,9 +107,11 @@ score_도 = sum(leaf.delta.도) for leaf in 학기 전체 선택 경로
 
 > 임계값 N은 시나리오 5개 마이그레이션 후 발란스에서 확정. 가안: N = 0 (양/음 부호로만 판정).
 
-##### 2.3 학생 노출 정책
+##### 2.3 학생 노출 정책 [폐기 — 5/3]
 
-- **시나리오 진행 중**: 점수 노출 X. cost meter는 유지 (시간/에너지만)
+> 5/3 plate에서 발견: "진행 중 점수 노출 X"를 visibility 토글로 구현 → 정보 UI 통째로 사라진 인상. **점수 UI는 항상 보이는 상태가 기본**, 숨김이 필요하다면 UI 토글이 아니라 점수 업데이트 시점을 지연(delay)하는 방식으로 다뤄야 한다는 피터공 명시. 이 정책 자체 폐기. 점수 노출 시점 결정은 별도 자리에서.
+
+- **점수 UI**: 항상 노출 (LV / SCORE / 위 / 도 / 진행 카운터)
 - **시나리오 끝**: 위·도 두 축 점수 + 그 시나리오 누적 한 줄
 - **학기 끝**: 4유형 라벨 + 그동안 누적된 axisDelta 카드 모음
 
@@ -172,7 +174,7 @@ raw 비용은 학기 시작 자원(`resourceMaxStart`) 대비 leaf 기여를 명
 | 6.1 점수 누적 (두 축) | **이미 작동** | `competencies.delegationChoice` (위) + `competencies.knowledge` (도). 이름만 v0.5 변수명, 동작은 두 축 분리 누적 동일 |
 | 6.1 tier1 점수 기여 | **5/3 framework 추가** ✅ | `applyTier1`에 `getAxisDelta` 호출 자리 추가. yaml tier1에 `delegation`·`knowledge` 필드 없으면 fallback 0 |
 | 6.2 multiplier 폐지 | **미진행** ❌ | `CONFIG.resourceCostMultiplier:0.6` 잔존. raw 재조정과 묶인 발란스 작업이라 외부 LLM 분석 결과 반영 사이클에서 같이 진행 |
-| 6.3 시나리오 끝 화면 | **부분 작동** | `score-display` 항상 노출. SPEC §2.3 "시나리오 진행 중 점수 노출 X" 미적용 — 진행 중 숨김 정책 후속 |
+| 6.3 시나리오 끝 화면 | **이미 작동** ✅ | `score-display` 항상 노출 (5/3 §2.3 진행 중 숨김 정책 폐기 — 점수 UI는 항상 보이는 상태가 기본) |
 | 6.4 학기 끝 화면 | **이미 작동** ✅ | v0.5 Phase 8에서 `showFinalReport`(line 1998)·4유형 분류(line 1991)·4유형 의미 박스(line 2021) 구현됨. 4유형 라벨(pp/pn/np/nn) + 등급(S/A/B/C/D) + 무드 메시지 |
 | 6.5 음수 delta 매핑 | **5/3 결정** ✅ | `DELTA_NEG={'-':-1,'--':-1}`로 음수 폭 압축. `getAxisDelta` 함수 분기로 양수·음수 다른 룰 적용 가능 구조 |
 

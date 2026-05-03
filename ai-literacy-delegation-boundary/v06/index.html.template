@@ -1257,7 +1257,6 @@ function animateResource(key,oldVal,newVal){
 
 function updateStats(){
   if(!gameState)return;
-  // v0.6 SPEC §2.3 진행 중 점수 숨김 정책 — 5/3 plate에서 정보 UI 사라진 인상 → 임시 비활성화. 정책 재검토 자리.
   var dlg=gameState.competencies.delegationChoice.value;
   var knl=gameState.competencies.knowledge.value;
   document.getElementById('num-delegation').textContent=(dlg>0?'+':'')+dlg;
