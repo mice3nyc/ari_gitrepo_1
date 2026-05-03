@@ -4349,14 +4349,7 @@ function animateResource(key,oldVal,newVal){
 
 function updateStats(){
   if(!gameState)return;
-  // v0.6 SPEC §2.3: 진행 중(tier 1,2,result) 점수 노출 X. 시나리오 끝(final)·학기 끝에서만 표시.
-  // cost meter(resource-item)는 진행 중에도 유지.
-  var ct=gameState.currentTier;
-  var hideScores=(ct===1||ct===2||ct==='result');
-  var sd=document.getElementById('score-display');
-  var sb=document.getElementById('stats-bar');
-  if(sd)sd.style.visibility=hideScores?'hidden':'visible';
-  if(sb)sb.style.visibility=hideScores?'hidden':'visible';
+  // v0.6 SPEC §2.3 진행 중 점수 숨김 정책 — 5/3 plate에서 정보 UI 사라진 인상 → 임시 비활성화. 정책 재검토 자리.
   var dlg=gameState.competencies.delegationChoice.value;
   var knl=gameState.competencies.knowledge.value;
   document.getElementById('num-delegation').textContent=(dlg>0?'+':'')+dlg;
