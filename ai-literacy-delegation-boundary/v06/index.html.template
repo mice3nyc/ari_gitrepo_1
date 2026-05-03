@@ -78,7 +78,9 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .score-stat { font-size:12px; font-weight:700; padding:5px 10px; border:1.5px solid #111; background:#111; color:#fff; text-align:center; }
 
 /* ===== 중앙 LV·SCORE 큰 디스플레이 ===== */
-.score-display { flex:0 0 auto; display:flex; flex-direction:row; align-items:center; gap:18px; padding:6px 18px; border:2px solid #111; background:#fff; box-shadow:0 2px 0 #111; min-width:160px; justify-content:center; }
+.score-display { flex:0 0 auto; display:flex; flex-direction:column; align-items:stretch; gap:8px; padding:8px 18px; border:2px solid #111; background:#fff; box-shadow:0 2px 0 #111; min-width:180px; }
+.score-display-row { display:flex; flex-direction:row; align-items:center; gap:18px; justify-content:center; }
+.panel-title { font-size:11px; font-weight:700; color:#111; letter-spacing:2px; padding:0 0 6px; border-bottom:1px solid #111; margin-bottom:4px; text-align:center; }
 .score-block { display:flex; flex-direction:column; align-items:center; gap:3px; min-width:54px; }
 .display-label { font-size:9px; color:#888; letter-spacing:1.5px; line-height:1; font-weight:700; }
 .display-num { font-size:34px; font-weight:700; color:#111; line-height:1; transition:transform 0.3s, color 0.3s; }
@@ -239,7 +241,9 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 @media (max-width:800px) {
   .panels-grid { grid-template-columns:1fr; }
   .panel-row { flex-direction:column; }
-  .score-display { flex-direction:row; min-width:0; padding:8px 14px; }
+  .score-display { flex-direction:column; min-width:0; padding:6px 12px; }
+  .score-display-row { gap:12px; }
+  .panel-title { font-size:10px; padding:0 0 4px; margin-bottom:2px; }
   .display-num { font-size:28px; }
 }
 /* v0.5 — 시나리오 선택 + 학기 프로그레스 */
@@ -327,14 +331,65 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .rp-confirm:hover:not(:disabled) { background:#444; }
 .rp-confirm:active:not(:disabled) { box-shadow:none; transform:translateY(2px); }
 .rp-confirm:disabled { background:#bbb; color:#fff; cursor:not-allowed; box-shadow:none; }
+/* ===== 역량 카드 인벤토리 (§7.5) ===== */
+.inv-tab { position:fixed; top:50%; right:0; transform:translateY(-50%); z-index:200; padding:14px 8px; border:2px solid #111; border-right:none; background:#fff; color:#111; font-family:inherit; font-size:12px; font-weight:700; letter-spacing:1.5px; writing-mode:vertical-rl; cursor:pointer; box-shadow:-2px 2px 0 #111; transition:background 0.2s; }
+.inv-tab:hover { background:#f5f5f5; }
+.inv-tab-badge { position:absolute; top:6px; right:6px; width:8px; height:8px; background:#c44; border-radius:50%; writing-mode:horizontal-tb; }
+.inv-tab-badge.hidden { display:none; }
+.inv-panel-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.25); z-index:300; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
+.inv-panel-backdrop.open { opacity:1; pointer-events:auto; }
+.inv-panel { position:fixed; top:0; right:0; height:100vh; width:320px; max-width:90vw; background:#fff; border-left:2px solid #111; box-shadow:-4px 0 0 #111; z-index:310; transform:translateX(100%); transition:transform 0.35s cubic-bezier(0.34,1.2,0.64,1); display:flex; flex-direction:column; }
+.inv-panel.open { transform:translateX(0); }
+.inv-panel-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:2px solid #111; }
+.inv-panel-title { font-size:16px; font-weight:700; letter-spacing:1px; }
+.inv-panel-close { background:none; border:1.5px solid #111; width:28px; height:28px; font-size:16px; font-weight:700; cursor:pointer; line-height:1; }
+.inv-panel-close:hover { background:#f0f0f0; }
+.inv-panel-body { flex:1; overflow-y:auto; padding:16px 20px; }
+.inv-empty { font-size:13px; color:#888; text-align:center; padding:40px 12px; line-height:1.7; }
+.inv-card { display:flex; flex-direction:column; padding:10px 14px; margin-bottom:8px; border:1.5px solid #111; background:#fff; box-shadow:0 2px 0 #111; cursor:pointer; transition:transform 0.15s, box-shadow 0.15s; }
+.inv-card:hover { transform:translate(-1px,-1px); box-shadow:1px 3px 0 #111; }
+.inv-card-row { display:flex; align-items:center; justify-content:space-between; }
+.inv-card-label { font-size:14px; font-weight:700; color:#111; }
+.inv-card-count { font-size:13px; color:#555; font-weight:700; }
+.inv-card-detail { font-size:11px; color:#666; margin-top:8px; padding-top:8px; border-top:1px dashed #ddd; line-height:1.6; display:none; }
+.inv-card.expanded .inv-card-detail { display:block; }
+/* ===== reward 팝업 (§7.6) ===== */
+.card-reward-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:400; display:flex; align-items:center; justify-content:center; pointer-events:auto; }
+.card-reward-overlay.hidden { display:none; }
+.card-reward-skip { position:fixed; top:20px; right:20px; padding:6px 12px; border:1.5px solid #fff; background:rgba(0,0,0,0.4); color:#fff; font-family:inherit; font-size:11px; font-weight:600; letter-spacing:1px; cursor:pointer; z-index:410; }
+.card-reward-skip:hover { background:rgba(0,0,0,0.6); }
+.card-reward-card { position:fixed; top:50%; left:50%; width:280px; padding:22px 20px; border:2px solid #111; background:#fff; box-shadow:0 4px 0 #111; transform:translate(-50%,-50%) scale(0.9); opacity:0; transition:opacity 1s ease, transform 0.6s cubic-bezier(0.4,0,0.2,1); z-index:405; }
+.card-reward-card.appear { opacity:1; transform:translate(-50%,-50%) scale(1); }
+.card-reward-card.travel { opacity:0; }
+.card-reward-tag { font-size:10px; color:#888; letter-spacing:1.5px; font-weight:700; margin-bottom:6px; }
+.card-reward-label { font-size:22px; font-weight:700; color:#111; margin-bottom:10px; letter-spacing:0.5px; }
+.card-reward-divider { height:1px; background:#ddd; margin:8px 0 10px; }
+.card-reward-note { font-size:12px; color:#555; line-height:1.7; }
 </style>
 </head>
 <body>
 <!-- 좌/우 패널 (sticky) — 좌:자원 / 우:역량+점수+진행 -->
 <div class="panel-row" id="panel-row">
-  <!-- 좌측: XP + 자원 게이지 (시간/에너지) -->
+  <!-- 좌측: 자원 게이지 (시간/에너지) -->
   <div class="resource-bar" id="resource-bar">
-    <!-- XP 진행 바 (LV은 중앙으로 이동) -->
+    <div class="panel-title">자원</div>
+    <div class="resource-item" id="res-time"><div class="resource-change-indicator" id="rdelta-time"></div><div class="resource-header"><span class="resource-name">시간</span><span class="resource-num" id="rnum-time">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-time" style="width:100%"></div></div></div>
+    <div class="resource-item" id="res-energy"><div class="resource-change-indicator" id="rdelta-energy"></div><div class="resource-header"><span class="resource-name">에너지</span><span class="resource-num" id="rnum-energy">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-energy" style="width:100%"></div></div></div>
+  </div>
+  <!-- 중앙: LV + SCORE + XP -->
+  <div class="score-display" id="score-display">
+    <div class="score-display-row">
+      <div class="score-block">
+        <span class="display-label">LV</span>
+        <span class="display-num" id="lv-num">1</span>
+      </div>
+      <div class="score-vsep"></div>
+      <div class="score-block">
+        <span class="display-label">SCORE</span>
+        <span class="display-num" id="score-num">0</span>
+      </div>
+    </div>
+    <!-- XP 진행 바 (LV/SCORE 아래) -->
     <div class="exp-display" id="exp-display">
       <div class="exp-header">
         <span class="exp-level" id="exp-level">XP</span>
@@ -342,33 +397,19 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
       </div>
       <div class="exp-bar"><div class="exp-bar-fill" id="exp-bar-fill" style="width:0%"></div></div>
     </div>
-    <div class="exp-divider"></div>
-    <div class="resource-item" id="res-time"><div class="resource-change-indicator" id="rdelta-time"></div><div class="resource-header"><span class="resource-name">시간</span><span class="resource-num" id="rnum-time">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-time" style="width:100%"></div></div></div>
-    <div class="resource-item" id="res-energy"><div class="resource-change-indicator" id="rdelta-energy"></div><div class="resource-header"><span class="resource-name">에너지</span><span class="resource-num" id="rnum-energy">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-energy" style="width:100%"></div></div></div>
-  </div>
-  <!-- 중앙: LV + SCORE 큰 글씨 -->
-  <div class="score-display" id="score-display">
-    <div class="score-block">
-      <span class="display-label">LV</span>
-      <span class="display-num" id="lv-num">1</span>
-    </div>
-    <div class="score-vsep"></div>
-    <div class="score-block">
-      <span class="display-label">SCORE</span>
-      <span class="display-num" id="score-num">0</span>
-    </div>
   </div>
   <!-- 우측: 역량(양방향 바) + 진행 -->
   <div class="stats-bar" id="stats-bar">
+    <div class="panel-title">역량</div>
     <div class="stat" id="stat-delegation">
       <div class="stat-change-indicator" id="delta-delegation"></div>
-      <div class="stat-header"><span class="stat-name">위임 판단</span><span class="stat-num" id="num-delegation">0</span></div>
+      <div class="stat-header"><span class="stat-name">위임 판단력</span><span class="stat-num" id="num-delegation">0</span></div>
       <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-delegation"></div></div>
       <div class="bipolar-labels"><span>-4</span><span>+4</span></div>
     </div>
     <div class="stat" id="stat-knowledge">
       <div class="stat-change-indicator" id="delta-knowledge"></div>
-      <div class="stat-header"><span class="stat-name">문해력</span><span class="stat-num" id="num-knowledge">0</span></div>
+      <div class="stat-header"><span class="stat-name" id="stat-name-knowledge">도메인 지식</span><span class="stat-num" id="num-knowledge">0</span></div>
       <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-knowledge"></div></div>
       <div class="bipolar-labels"><span>-4</span><span>+4</span></div>
     </div>
@@ -377,6 +418,19 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
   </div>
 </div>
 <div class="container" id="main-container"></div>
+<!-- 역량 카드 인벤토리 탭 (우측 가장자리 고정) -->
+<button class="inv-tab" id="inv-tab" onclick="toggleInventory()" aria-label="역량 카드 인벤토리 열기">역량 카드<span class="inv-tab-badge hidden" id="inv-tab-badge"></span></button>
+<div class="inv-panel-backdrop" id="inv-panel-backdrop" onclick="toggleInventory(false)"></div>
+<aside class="inv-panel" id="inv-panel" aria-hidden="true">
+  <div class="inv-panel-header">
+    <span class="inv-panel-title">역량 카드</span>
+    <button class="inv-panel-close" onclick="toggleInventory(false)" aria-label="닫기">×</button>
+  </div>
+  <div class="inv-panel-body" id="inv-list">
+    <div class="inv-empty">아직 획득한 카드가 없어요.<br>시나리오 끝에 카드를 받을 수 있습니다.</div>
+  </div>
+</aside>
+<div class="card-reward-overlay hidden" id="card-reward-overlay"></div>
 <button class="debug-toggle" onclick="toggleDebug()">DEBUG</button>
 <div class="debug-panel" id="debug-panel"></div>
 <div class="version">v0.6 — 점수 framework 재설계 (개발 중)</div>
@@ -659,6 +713,14 @@ function applyReview(rid){
   gameState.score=calculateFinalScore(result2,reviewObj||{id:rid},level,leaf);
   gameState.totalScore+=gameState.score;
   if(fin&&fin.item)gameState.itemsCollected.push(fin.item);
+  // 역량 카드 획득 (§7.4): 시나리오 누적 도 축 양수 + leaf의 competencyCards 비지 않음
+  if(gameState.competencies.knowledge.value>0){
+    var cardsForLeaf=(sc2.competencyCards||{})[leaf]||[];
+    if(cardsForLeaf.length){
+      var note=(sc2.reviewSupplements||{})[leaf]||'';
+      awardCompetencyCards(gameState.currentScenarioId,sc2.title||gameState.currentScenarioId,leaf,cardsForLeaf,note);
+    }
+  }
   // trackEvent 페이로드에 디버그 정보 추가 (level, detected, resourcePenalty)
   var detected=detectIssues(result2,reviewObj||{id:rid},level);
   var resourcePenalty=calcResourcePenalty(gameState.resources);
@@ -1737,7 +1799,17 @@ function startScenario(scid){
   container.innerHTML='';
   showStats();
   updateStats();
+  updateDomainLabel();
   renderCut1();
+}
+
+// 시나리오별 도메인 지식 라벨 갱신 — yaml domainLabel 또는 domainPool 첫 요소
+function updateDomainLabel(){
+  var sc=getScenario();
+  var el=document.getElementById('stat-name-knowledge');
+  if(!sc||!el)return;
+  var label=sc.domainLabel||(sc.domainPool&&sc.domainPool[0])||'도메인 지식';
+  el.textContent='도메인 지식 ('+label+')';
 }
 
 function goNextScenario(){
@@ -2336,6 +2408,127 @@ function dbgShowRPModal(){
 }
 
 setInterval(function(){if(dbgOn)renderDebug();},3000);
+
+// =====================================================
+// 12. 역량 카드 인벤토리 + reward 팝업 (§7.4 ~ §7.6)
+// =====================================================
+function ensureInventory(){
+  if(!gameState)return;
+  if(!gameState.inventory)gameState.inventory={competencyCards:[]};
+  if(!gameState.inventory.competencyCards)gameState.inventory.competencyCards=[];
+}
+function toggleInventory(force){
+  var panel=document.getElementById('inv-panel');
+  var bd=document.getElementById('inv-panel-backdrop');
+  if(!panel)return;
+  var open=(typeof force==='boolean')?force:!panel.classList.contains('open');
+  if(open){
+    ensureInventory();renderInventory();
+    panel.classList.add('open');panel.setAttribute('aria-hidden','false');
+    if(bd)bd.classList.add('open');
+    var badge=document.getElementById('inv-tab-badge');
+    if(badge)badge.classList.add('hidden');
+  }else{
+    panel.classList.remove('open');panel.setAttribute('aria-hidden','true');
+    if(bd)bd.classList.remove('open');
+  }
+}
+function _invEscapeHTML(s){
+  if(s==null)return '';
+  return String(s).replace(/[&<>"']/g,function(c){return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];});
+}
+function renderInventory(){
+  ensureInventory();
+  var list=document.getElementById('inv-list');
+  if(!list)return;
+  var cards=gameState.inventory.competencyCards;
+  if(!cards||cards.length===0){
+    list.innerHTML='<div class="inv-empty">아직 획득한 카드가 없어요.<br>시나리오 끝에 카드를 받을 수 있습니다.</div>';
+    return;
+  }
+  var groups={};
+  for(var i=0;i<cards.length;i++){var c=cards[i];if(!groups[c.label])groups[c.label]=[];groups[c.label].push(c);}
+  var html='';
+  Object.keys(groups).forEach(function(label){
+    var g=groups[label];
+    var detailItems=g.map(function(c){
+      var sc=c.scenarioTitle||c.scenario||'';
+      var lf=c.leaf?' / '+c.leaf:'';
+      var nt=c.note?'<br><span style="color:#888">'+_invEscapeHTML(c.note)+'</span>':'';
+      return '<div style="margin-bottom:6px">· '+_invEscapeHTML(sc)+_invEscapeHTML(lf)+nt+'</div>';
+    }).join('');
+    html+='<div class="inv-card" onclick="this.classList.toggle(\'expanded\')">'+
+      '<div class="inv-card-row"><span class="inv-card-label">'+_invEscapeHTML(label)+'</span><span class="inv-card-count">×'+g.length+'</span></div>'+
+      '<div class="inv-card-detail">'+detailItems+'</div></div>';
+  });
+  list.innerHTML=html;
+}
+function awardCompetencyCards(scenarioId,scenarioTitle,leafId,cards,note){
+  if(!cards||!cards.length)return;
+  ensureInventory();
+  var ts=Date.now();
+  for(var i=0;i<cards.length;i++){
+    gameState.inventory.competencyCards.push({label:cards[i],scenario:scenarioId,scenarioTitle:scenarioTitle||scenarioId,leaf:leafId,note:note||'',ts:ts});
+  }
+  var panel=document.getElementById('inv-panel');
+  var badge=document.getElementById('inv-tab-badge');
+  if(badge&&panel&&!panel.classList.contains('open'))badge.classList.remove('hidden');
+  playCardRewardCascade(cards,note);
+  saveGame();
+}
+var _cardRewardTimers=[];
+function playCardRewardCascade(cards,note){
+  var overlay=document.getElementById('card-reward-overlay');
+  if(!overlay)return;
+  cancelCardReward();
+  overlay.classList.remove('hidden');overlay.innerHTML='';
+  var skip=document.createElement('button');
+  skip.className='card-reward-skip';skip.textContent='건너뛰기 (Esc)';skip.onclick=cancelCardReward;
+  overlay.appendChild(skip);
+  document.addEventListener('keydown',_onCardRewardKey);
+  overlay.onclick=function(ev){if(ev.target===overlay)cancelCardReward();};
+  for(var i=0;i<cards.length;i++){
+    (function(idx,label){
+      var t=setTimeout(function(){showOneCard(label,note,idx,cards.length);},idx*1000);
+      _cardRewardTimers.push(t);
+    })(i,cards[i]);
+  }
+  var endT=setTimeout(function(){cancelCardReward();},cards.length*1000+2200);
+  _cardRewardTimers.push(endT);
+}
+function showOneCard(label,note,idx,total){
+  var overlay=document.getElementById('card-reward-overlay');
+  if(!overlay)return;
+  var card=document.createElement('div');
+  card.className='card-reward-card';
+  card.innerHTML='<div class="card-reward-tag">역량 카드 획득 · '+(idx+1)+'/'+total+'</div>'+
+    '<div class="card-reward-label">'+_invEscapeHTML(label)+'</div>'+
+    (note?'<div class="card-reward-divider"></div><div class="card-reward-note">'+_invEscapeHTML(note)+'</div>':'');
+  overlay.appendChild(card);
+  requestAnimationFrame(function(){card.classList.add('appear');});
+  var t1=setTimeout(function(){
+    var tab=document.getElementById('inv-tab');
+    if(tab){
+      var r=tab.getBoundingClientRect();
+      var tx=r.left+r.width/2-window.innerWidth/2;
+      var ty=r.top+r.height/2-window.innerHeight/2;
+      card.style.transition='opacity 0.6s ease, transform 0.6s cubic-bezier(0.4,0,1,1)';
+      card.style.transform='translate(calc(-50% + '+tx+'px), calc(-50% + '+ty+'px)) scale(0.15)';
+    }
+    card.classList.add('travel');
+  },1500);
+  _cardRewardTimers.push(t1);
+  var t2=setTimeout(function(){if(card.parentNode)card.parentNode.removeChild(card);},2100);
+  _cardRewardTimers.push(t2);
+}
+function cancelCardReward(){
+  for(var i=0;i<_cardRewardTimers.length;i++)clearTimeout(_cardRewardTimers[i]);
+  _cardRewardTimers=[];
+  var overlay=document.getElementById('card-reward-overlay');
+  if(overlay){overlay.classList.add('hidden');overlay.innerHTML='';overlay.onclick=null;}
+  document.removeEventListener('keydown',_onCardRewardKey);
+}
+function _onCardRewardKey(e){if(e.key==='Escape')cancelCardReward();}
 
 // =====================================================
 // 13. Initialization

@@ -66,10 +66,19 @@
 ##### Phase 4c — 시나리오 끝 화면 노출 정책 [폐기 — 5/3]
 - [~] 폐기. 점수 UI는 항상 보이는 상태가 기본. score-display는 이미 항상 노출이라 추가 작업 불필요. 점수 게임 변질 방지가 필요하면 점수 업데이트 시점·표현 방식으로 별도 결정.
 
-##### Phase 5 — 카드 메시지 메카닉 (final_item)
-- [ ] 5.1 카드 4안 결정 ([[26.0501 v0.5 카드 인벤토리]] 참조)
-- [ ] 5.2 어린왕자 컬렉션 패턴 시나리오별 확장 검토
-- [ ] 5.3 final_item ↔ axisDelta 매핑
+##### Phase 5 — 역량 카드 시스템 (5/3 신설, boostCard 폐기 정합)
+- [x] 5a.1 SPEC §7 신설 (라벨 풀 + leaf 매핑 + 인벤토리 + reward 팝업)
+- [x] 5a.2 UI 3건 (XP 위치 / 자원·역량 타이틀)
+- [x] 5a.3 yaml 스키마 확장 (`domainPool`/`domainLabel`/`competencyCards`)
+- [x] 5a.4 인벤토리 슬라이드 패널 + reward 팝업 코드 통합
+- [x] 5a.5 selfintro 27 review 매핑 (16건 카드 / 11건 미보유)
+- [x] 5a.6 빌드 검증 (240,876 bytes, JS syntax OK)
+- [ ] 5b selfintro 1차 플테 — 발란스/연출 피드백
+- [ ] 5c.1 groupwork 카드 매핑 (백도)
+- [ ] 5c.2 eorinwangja 카드 매핑 (백도)
+- [ ] 5c.3 career 카드 매핑 (백도)
+- [ ] 5c.4 studyplan 카드 매핑 (백도)
+- [ ] 5d 위 축 표현 결정 (§7.7 — 점수+게이지 vs 카드 vs 메시지)
 
 ---
 

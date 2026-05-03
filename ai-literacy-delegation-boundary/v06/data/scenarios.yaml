@@ -7,6 +7,8 @@ selfintro:
   learningMessage: AI가 쓴 자기소개에는 내가 말하지 않은 내가 섞일 수 있다.
   aiSuitability: mid
   timeBudgetSec: 720
+  domainPool: [자기지식, 표현력, 정리력]
+  domainLabel: 자기지식
   situation:
     text: 새 학기 첫날, 선생님이 반 게시판에 붙일 자기소개 글을 내일 아침까지 써 오라고 하셨다. 100자에서 200자 정도면 되고, 좋아하는 것, 기억나는 일, 올해 해 보고 싶은 일을 넣으면 된다고 했다. 집에 와서 빈 종이를 보니 뭘 써야 할지 바로 떠오르지는 않았다.
     image: ../images/s01_ch1.webp
@@ -512,6 +514,34 @@ selfintro:
     C3R1: 1
     C3R2: 2
     C3R3: 4
+  competencyCards:
+    A1R1: [자기지식, 정리력]
+    A1R2: [자기지식, 정리력, 표현력]
+    A1R3: [자기지식, 정리력, 표현력]
+    A2R1: [자기지식]
+    A2R2: [자기지식, 표현력]
+    A2R3: [자기지식, 표현력]
+    A3R1: []
+    A3R2: []
+    A3R3: [자기지식, 정리력]
+    B1R1: []
+    B1R2: []
+    B1R3: []
+    B2R1: []
+    B2R2: [표현력]
+    B2R3: [자기지식, 표현력]
+    B3R1: [자기지식, 표현력]
+    B3R2: [자기지식, 표현력]
+    B3R3: [자기지식, 표현력, 정리력]
+    C1R1: []
+    C1R2: []
+    C1R3: [자기지식]
+    C2R1: []
+    C2R2: []
+    C2R3: [자기지식, 정리력]
+    C3R1: []
+    C3R2: []
+    C3R3: []
 groupwork:
   id: groupwork
   category: 2
