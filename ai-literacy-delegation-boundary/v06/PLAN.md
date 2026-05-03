@@ -1,6 +1,6 @@
 ## PLAN — AI 리터러시: 위임의 경계 v0.6
 
-**최종 업데이트**: 2026-05-01 세션267 — v0.6 빌드 진입, 점수 framework 전면 재설계
+**최종 업데이트**: 2026-05-03 세션275 — 코드 framework 1차 진행 (tier1 점수 기여 + 음수 매핑 압축). 발란스 작업(multiplier·raw 재조정)·진행 중 노출 정책은 외부 LLM 분석 사이클로 분리
 **진입점**: [[26.0501 v0.6 기획 결정 요약]]
 **v0.5 PLAN**: [[v05/PLAN|PLAN.md]] (freeze, 5/4 경기도 송부본)
 
@@ -54,10 +54,13 @@ v0.5 `data/`, `balance/`, `build.py`, `index.html.template` 복사. localStorage
 SPEC.md 본문 작성. yaml에 tier1/tier2/reviews delta 필드 추가. build.py가 axisDelta 키로 출력.
 
 ##### Phase 3 — career 시나리오 첫 마이그레이션
-5 시나리오 중 가장 진행된 career에 새 framework 적용. raw 비용 재조정. 플테로 검증.
+**3a 코드 framework** ✅ (5/3 세션275): tier1 점수 기여 자리 추가(`applyTier1` 함수에 `getAxisDelta` 호출), 음수 매핑 압축(`DELTA_NEG`). yaml tier1 데이터 채움은 외부 LLM 분석 사이클.
+**3b 시나리오 데이터 마이그**: 검수 시트 외부 LLM 분석 결과로 yaml의 위·도 두 축 데이터 검증·정정. career 27 leaf delta. raw 비용 재조정.
 
 ##### Phase 4 — 나머지 4 시나리오 마이그레이션 + 4유형 종합 화면
-selfintro / groupwork / eorinwangja / studyplan에 framework 확장. 학기 끝 누적 점수 → 4유형 라벨 화면 신설.
+**4a 학기 끝 4유형 화면**: 이미 v0.5 Phase 8에서 구현됨 ✅ (line 1998 `showFinalReport`, line 1991 4유형 분류, line 2021 4유형 의미 박스).
+**4b 시나리오 데이터 마이그**: selfintro / groupwork / eorinwangja / studyplan 시트 분석 결과 반영.
+**4c 시나리오 끝 화면 노출 정책**: SPEC §2.3 "진행 중 점수 노출 X" 적용. score-display 토글 자리 + 시나리오 끝 표시 시점 결정.
 
 ##### Phase 5 — 카드 메시지 메카닉 (final_item 재설계)
 점수 framework 안정화 후 카드 4안 결정 → 어린왕자 컬렉션 패턴 확장 검토.

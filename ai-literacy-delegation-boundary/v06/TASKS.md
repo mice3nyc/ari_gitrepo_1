@@ -1,13 +1,13 @@
 ## TASKS — v0.6
 
-**최종 업데이트**: 2026-05-01 세션267
+**최종 업데이트**: 2026-05-03 세션275
 **PLAN**: [[PLAN|PLAN.md]] / **SPEC**: [[SPEC|SPEC.md]]
 
 > 매 작업 완료 시 즉시 체크. 에이전트 위임 시 이 노트만 보고 자급자족 가능해야 함.
 
 ---
 
-#### 현재 단계: Phase 2 — SPEC 본문 + 스키마 확장
+#### 현재 단계: Phase 3a (코드 framework) ✅ — Phase 3b·4b·4c 진행 대기 (외부 LLM 분석 사이클)
 
 ##### Phase 1 — 자산 인수 ✅ (5/1 세션267)
 - [x] 1.1 v05 → v06 자산 복사 (data/, balance/, build.py, index.html.template, SCENARIO-GUIDELINES.md)
@@ -28,17 +28,35 @@
 
 **완료**: axisDelta 키 7건 정상 출력(yaml 5 + code 2). 내부 `boostCard`/`bonusPoint` 28건은 Phase 5에서 재구조. csv 8 delta 컬럼은 Phase 3에서 leaf delta 채워질 때까지 빈값.
 
-##### Phase 3 — career 첫 마이그레이션
-- [ ] 3.1 career 시나리오 tier1/tier2/review 모든 leaf에 delta 필드 부여
-- [ ] 3.2 career raw 비용 재조정 (multiplier 0.6 폐지 가정)
-- [ ] 3.3 시나리오 끝 종합 화면(위/도 점수 노출) UI 추가
-- [ ] 3.4 피터공 플테 → 발란스 피드백 인입
-- [ ] 3.5 검수 노트([[26.0501 v0.5 시나리오 검수 결과]]) 사이클 1 갱신
+##### Phase 3a — 코드 framework ✅ (5/3 세션275)
+- [x] 3a.1 음수 매핑 압축 — `DELTA_NEG={'-':-1,'--':-1}`, `getAxisDelta` 함수 분기 (커밋 3afd831)
+- [x] 3a.2 tier1 점수 기여 framework — `applyTier1`에 `getAxisDelta` 호출 자리, yaml fallback 0
+- [x] 3a.3 빌드 검증 (227,543 bytes)
+- [x] 3a.4 SPEC §6 진행 상태 표 갱신 + 미정 결정 갱신
 
-##### Phase 4 — 나머지 4 시나리오 + 학기 끝 4유형 화면
-- [ ] 4.1 selfintro / groupwork / eorinwangja / studyplan 순서로 마이그레이션
-- [ ] 4.2 학기 끝 누적 위·도 → 4유형 라벨 화면 (pp/pn/np/nn)
-- [ ] 4.3 5 시나리오 통합 플테
+##### Phase 3b — career 시나리오 데이터 마이그 (외부 LLM 분석 사이클)
+- [ ] 3b.1 career 검수 시트 외부 LLM 분석 → 위·도 두 축 delta 검증·정정
+- [ ] 3b.2 career 27 leaf delta yaml 정합성 반영
+- [ ] 3b.3 yaml tier1에 `delegation`·`knowledge` 필드 추가 (분석 결과 따라)
+- [ ] 3b.4 career raw 비용 재조정 + multiplier 0.6 폐지 (묶음 작업)
+- [ ] 3b.5 피터공 플테 → 발란스 피드백 인입
+
+##### Phase 4a — 학기 끝 4유형 화면 ✅ (v0.5 Phase 8에서 이미 구현)
+- [x] 4a.1 `showFinalReport` (line 1998)
+- [x] 4a.2 4유형 분류 함수 (line 1991, pp/pn/np/nn/mid)
+- [x] 4a.3 4유형 의미 박스 (line 2021)
+
+##### Phase 4b — 나머지 4 시나리오 데이터 마이그 (외부 LLM 분석 사이클)
+- [ ] 4b.1 selfintro 검수 시트 분석 ([[26.0503 시나리오 리뷰 — 1 selfintro]] 시작점)
+- [ ] 4b.2 groupwork 검수 시트 분석
+- [ ] 4b.3 eorinwangja 검수 시트 분석
+- [ ] 4b.4 studyplan 검수 시트 분석
+- [ ] 4b.5 5 시나리오 통합 플테
+
+##### Phase 4c — 시나리오 끝 화면 노출 정책
+- [ ] 4c.1 score-display 토글 자리 식별 (`updateStats` 함수 후보)
+- [ ] 4c.2 진행 중(currentTier 1·2) 숨김 + 시나리오 끝(result/review) 표시
+- [ ] 4c.3 cost meter는 진행 중에도 유지 (SPEC §2.3)
 
 ##### Phase 5 — 카드 메시지 메카닉 (final_item)
 - [ ] 5.1 카드 4안 결정 ([[26.0501 v0.5 카드 인벤토리]] 참조)

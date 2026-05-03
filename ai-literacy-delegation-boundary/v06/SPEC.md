@@ -1,6 +1,6 @@
 ## SPEC — v0.6 점수 framework
 
-**최종 업데이트**: 2026-05-01 세션267 (스켈레톤)
+**최종 업데이트**: 2026-05-03 세션275 (코드 framework 1차 진행)
 **PLAN**: [[PLAN|PLAN.md]] / **TASKS**: [[TASKS|TASKS.md]]
 
 > 에이전트 전달용 기술 상세. 코드와 동기화. 변경 시 build.py / extract_balance.js / index.html 영향 점검.
@@ -165,34 +165,62 @@ raw 비용은 학기 시작 자원(`resourceMaxStart`) 대비 leaf 기여를 명
 
 #### 6. index.html (코드) 영향
 
+##### 6.0 진행 상태 (5/3 세션275)
+
+| 영역 | 상태 | 비고 |
+|---|---|---|
+| 6.1 점수 누적 (두 축) | **이미 작동** | `competencies.delegationChoice` (위) + `competencies.knowledge` (도). 이름만 v0.5 변수명, 동작은 두 축 분리 누적 동일 |
+| 6.1 tier1 점수 기여 | **5/3 framework 추가** ✅ | `applyTier1`에 `getAxisDelta` 호출 자리 추가. yaml tier1에 `delegation`·`knowledge` 필드 없으면 fallback 0 |
+| 6.2 multiplier 폐지 | **미진행** ❌ | `CONFIG.resourceCostMultiplier:0.6` 잔존. raw 재조정과 묶인 발란스 작업이라 외부 LLM 분석 결과 반영 사이클에서 같이 진행 |
+| 6.3 시나리오 끝 화면 | **부분 작동** | `score-display` 항상 노출. SPEC §2.3 "시나리오 진행 중 점수 노출 X" 미적용 — 진행 중 숨김 정책 후속 |
+| 6.4 학기 끝 화면 | **이미 작동** ✅ | v0.5 Phase 8에서 `showFinalReport`(line 1998)·4유형 분류(line 1991)·4유형 의미 박스(line 2021) 구현됨. 4유형 라벨(pp/pn/np/nn) + 등급(S/A/B/C/D) + 무드 메시지 |
+| 6.5 음수 delta 매핑 | **5/3 결정** ✅ | `DELTA_NEG={'-':-1,'--':-1}`로 음수 폭 압축. `getAxisDelta` 함수 분기로 양수·음수 다른 룰 적용 가능 구조 |
+
 ##### 6.1 점수 누적 (런타임)
 
+현재 코드는 v0.5 변수명을 유지하되 두 축 분리 누적 작동:
+
 ```js
-// 선택 시 마다 누적 (학생 비노출)
-state.score = state.score || { 위: 0, 도: 0 };
-state.score.위 += leaf.delta.위;
-state.score.도 += leaf.delta.도;
+// 위: tier1 + tier2의 delegation 누적 (5/3부터 tier1 기여)
+gameState.competencies.delegationChoice.value += getAxisDelta(sign);
+// 도: tier1 + finals[leaf]의 knowledge 누적 (5/3부터 tier1 기여)
+gameState.competencies.knowledge.value += getAxisDelta(sign);
 ```
 
-##### 6.2 cost meter
+이름 마이그(`competencies.delegationChoice` → `state.score.위`)는 사실상 변경이지 동작 변화 없음. 우선순위 낮음.
 
-`actual_cost = leaf.cost` (multiplier 곱셈 제거).
+##### 6.2 cost meter (미진행)
 
-##### 6.3 시나리오 끝 화면
+SPEC: `actual_cost = leaf.cost` (multiplier 곱셈 제거). 현재 `_applyMult` 함수에서 0.6 곱셈 잔존. raw 재조정과 묶여 후속.
 
-새 컴포넌트: 위/도 두 축 점수 + 누적 카드 표시.
+##### 6.3 시나리오 끝 화면 (부분 작동)
 
-##### 6.4 학기 끝 화면
+현재 `score-display` 요소가 항상 노출되어 v0.5 패턴. 진행 중 숨김 정책 미적용. 토글 위치 후보: `updateStats()` 함수에서 `currentTier` 보고 가시성 토글.
 
-새 컴포넌트: 4유형 라벨 (pp/pn/np/nn) + 카드 모음 + 짧은 해석문(선택).
+##### 6.4 학기 끝 화면 (이미 작동)
+
+v0.5 Phase 8에서 신설된 자리. line 1998 `showFinalReport`, line 1991 4유형 분류 함수, line 2021 4유형 의미 박스. SPEC v0.6 요구가 이미 충족된 자리.
+
+##### 6.5 음수 delta 매핑 (5/3)
+
+```js
+var DELTA_POS={'++':2,'+':1};
+var DELTA_NEG={'-':-1,'--':-1};
+function getAxisDelta(sign){...}  // 부호 분기 자리
+```
 
 ---
 
 #### 7. 미정 / 다음 결정
 
-- 4유형 임계값 N (Phase 4 발란스 후)
+- 4유형 임계값 N (Phase 4 발란스 후, 가안 N=0)
 - 카드 메시지 메카닉 4안 (Phase 5)
 - `axisDelta` 트리거 조건 — leafIds 조합 / 누적 점수 임계 / 둘 다 (Phase 5)
+- multiplier 0.6 폐지 + raw 재조정 (외부 LLM 분석 결과 반영 사이클에서 묶음)
+- score-display 진행 중 숨김 정책 (토글 자리 + 시나리오 끝 표시 시점 결정)
+- yaml tier1에 `delegation`·`knowledge` 필드 추가 (외부 LLM 분석 후 채움)
+- 변수명 마이그 (`competencies.delegationChoice` / `knowledge` → `state.score.위` / `도`) — 동작 변화 없음, 우선순위 낮음
+- 5 시나리오 → 3 레벨×3 시나리오 = 9 시나리오 확장 ([[요청.26.0503.0955-AI리터러시3x3구조]])
 
 ---
 

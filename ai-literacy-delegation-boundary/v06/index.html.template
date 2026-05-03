@@ -604,7 +604,22 @@ function applyTier1(t1id){
   var snap=stateSnap();
   gameState.selectedTier1=t1id;
   gameState.currentTier=2;
-  // 1차 선택은 위임 선택력 누적에 포함되지 않음 (방향 분기만, 점수는 2차에서)
+  // v0.6 framework: tier1도 위·도 두 축 점수 기여 (가벼움, ±1 정도)
+  // yaml tier1에 delegation·knowledge 필드 있으면 적용. 없으면 0 (fallback).
+  var sc=getScenario(),t1Obj=null;
+  for(var i=0;i<sc.tier1.length;i++){if(sc.tier1[i].id===t1id){t1Obj=sc.tier1[i];break;}}
+  if(t1Obj){
+    var dlgT1=getAxisDelta(t1Obj.delegation);
+    var knlT1=getAxisDelta(t1Obj.knowledge);
+    if(dlgT1!==0){
+      gameState.competencies.delegationChoice.value+=dlgT1;
+      gameState.competencies.delegationChoice.history.push({tier1:t1id,delegation:t1Obj.delegation,delta:dlgT1});
+    }
+    if(knlT1!==0){
+      gameState.competencies.knowledge.value+=knlT1;
+      gameState.competencies.knowledge.history.push({tier1:t1id,knowledge:t1Obj.knowledge,delta:knlT1});
+    }
+  }
   trackEvent('tier1_selected',{scenarioId:gameState.currentScenarioId,tier1:t1id,before:snap,after:stateSnap()});
   saveGame();
 }
