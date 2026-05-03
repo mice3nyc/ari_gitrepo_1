@@ -2,8 +2,11 @@
 /**
  * extract_balance.js — AI Literacy v0.5 발란스 CSV 추출기
  *
- * index.html 의 CONFIG / SCENARIO_* / DELEGATION_DELTA 5개 객체를 읽어
+ * index.html 의 CONFIG / DELEGATION_DELTA / SCENARIOS 객체를 읽어
  * 4종 CSV 를 balance/ 폴더에 생성한다.
+ *
+ * (Phase 8.15 이후 SCENARIO_* 7개 var → SCENARIOS 단일 객체로 통합됨.
+ *  build.py 가 data/scenarios.yaml 에서 inject 한다.)
  *
  * 실행: node extract_balance.js
  */
@@ -55,15 +58,7 @@ function sliceVarBlock(source, varName) {
   throw new Error(`closing bracket for ${varName} not found`);
 }
 
-const blocks = [
-  'CONFIG',
-  'DELEGATION_DELTA',
-  'SCENARIO_EORINWANGJA',
-  'SCENARIO_selfintro',
-  'SCENARIO_groupwork',
-  'SCENARIO_career',
-  'SCENARIO_studyplan',
-];
+const blocks = ['CONFIG', 'DELEGATION_DELTA', 'SCENARIOS'];
 
 const sandboxSrc = blocks.map(n => sliceVarBlock(html, n)).join('\n');
 
@@ -73,13 +68,13 @@ vm.runInContext(sandboxSrc, ctx);
 
 const CONFIG = ctx.CONFIG;
 const DELEGATION_DELTA = ctx.DELEGATION_DELTA;
-const SCENARIOS = {
-  selfintro:   ctx.SCENARIO_selfintro,
-  groupwork:   ctx.SCENARIO_groupwork,
-  eorinwangja: ctx.SCENARIO_EORINWANGJA,
-  career:      ctx.SCENARIO_career,
-  studyplan:   ctx.SCENARIO_studyplan,
-};
+const SCENARIOS = ctx.SCENARIOS;
+
+// 5개 시나리오 키 검증 (Phase 8.15 build.py 와 동일)
+const REQUIRED_KEYS = ['selfintro', 'groupwork', 'eorinwangja', 'career', 'studyplan'];
+REQUIRED_KEYS.forEach(k => {
+  if (!SCENARIOS[k]) throw new Error(`SCENARIOS.${k} missing in index.html`);
+});
 
 // ----------------------------------------------------------
 // 2) 비용 분할 함수 (index.html 의 _rawTier1Cost / _rawTier2Cost / _rawReviewCost
@@ -179,13 +174,74 @@ writeCSV('scenarios.csv', scenariosRows);
 // ----------------------------------------------------------
 // 5) choices.csv (leaf 단위)
 // ----------------------------------------------------------
+// 기존 choices.csv 가 있으면 peter_note 컬럼만 보존 (재실행 시 메모 유지)
+function loadExistingNotes() {
+  const filepath = path.join(OUT_DIR, 'choices.csv');
+  if (!fs.existsSync(filepath)) return new Map();
+  const text = fs.readFileSync(filepath, 'utf8').replace(/^﻿/, '');  // strip BOM
+  const lines = text.split(/\r?\n/).filter(l => l.length > 0);
+  if (lines.length < 2) return new Map();
+  // simple CSV parse — handle quoted fields
+  function parseLine(line) {
+    const cells = [];
+    let cur = '', inStr = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (inStr) {
+        if (ch === '"' && line[i + 1] === '"') { cur += '"'; i++; }
+        else if (ch === '"') inStr = false;
+        else cur += ch;
+      } else {
+        if (ch === ',') { cells.push(cur); cur = ''; }
+        else if (ch === '"') inStr = true;
+        else cur += ch;
+      }
+    }
+    cells.push(cur);
+    return cells;
+  }
+  const headers = parseLine(lines[0]);
+  const sIdx = headers.indexOf('scenario_id');
+  const lIdx = headers.indexOf('leaf');
+  const nIdx = headers.indexOf('peter_note');
+  if (sIdx < 0 || lIdx < 0 || nIdx < 0) return new Map();
+  const map = new Map();
+  for (let i = 1; i < lines.length; i++) {
+    const cells = parseLine(lines[i]);
+    const note = cells[nIdx];
+    if (note) map.set(`${cells[sIdx]}|${cells[lIdx]}`, note);
+  }
+  return map;
+}
+const existingNotes = loadExistingNotes();
+console.log(`기존 peter_note 보존: ${existingNotes.size}건`);
+
 const choiceHeaders = [
+  // 식별자
   'scenario_id', 'leaf', 'tier1', 'tier2', 'review',
+  // 시나리오 메타 (시나리오마다 동일, leaf마다 반복)
+  'scenario_title', 'scenario_learningMessage', 'situation_text',
+  // tier1 텍스트 (t1당 동일)
+  'tier1_label', 'tier1_desc', 'tier1_lesson',
+  // tier2 텍스트 + 위임 (t2당 동일)
+  'tier2_label', 'tier2_lesson',
   't2_delegation_label', 't2_delegation_delta',
+  // result (t2 단위)
+  'result_text', 'result_summary', 'result_lesson', 'result_basePoint',
+  // review (R1/R2/R3별)
+  'review_label', 'review_desc', 'review_lesson',
+  // reviewSupplement (leaf 단위, R1엔 빈값 — 디자인 의도)
+  'reviewSupplement',
+  // finals (leaf 단위)
+  'final_score', 'final_grade', 'final_item',
+  'final_delegation', 'final_knowledge', 'final_awareness',
+  // 비용
   'raw_time', 'raw_energy',
   'mult_time', 'mult_energy',
   'discount_time_위+3', 'discount_energy_도+3',
   'discount_time_위-3', 'discount_energy_도-3',
+  // 피터공 검수 메모 (yaml 외 — 재실행 시 보존)
+  'peter_note',
 ];
 const choiceRows = [choiceHeaders];
 
@@ -196,20 +252,39 @@ scenarioOrder.forEach(sid => {
     const t1 = leaf.charAt(0);
     const t2 = leaf.substr(0, 2);
     const review = leaf.substr(2);  // "R1" / "R2" / "R3"
-    const t2Entry = (sc.tier2 && sc.tier2[t1] || []).find(o => o.id === t2);
-    const dlgLabel = t2Entry ? t2Entry.delegation : '';
+    const t1Entry = (sc.tier1 || []).find(o => o.id === t1) || {};
+    const t2Entry = (sc.tier2 && sc.tier2[t1] || []).find(o => o.id === t2) || {};
+    const resultEntry = (sc.results && sc.results[t2]) || {};
+    const reviewEntry = (sc.reviews || []).find(o => o.id === review) || {};
+    const supplement = (sc.reviewSupplements || {})[leaf] || '';
+    const finalEntry = (sc.finals || {})[leaf] || {};
+    const dlgLabel = t2Entry.delegation || '';
     const dlgDelta = (DELEGATION_DELTA[dlgLabel] !== undefined) ? DELEGATION_DELTA[dlgLabel] : '';
     const raw = sc.resourceCosts[leaf];
     const mult = applyMult(raw);
     const dPlus  = applyDiscount(mult,  3,  3);
     const dMinus = applyDiscount(mult, -3, -3);
+    const peterNote = existingNotes.get(`${sid}|${leaf}`) || '';
     choiceRows.push([
       sid, leaf, t1, t2, review,
+      sc.title || '',
+      sc.learningMessage || '',
+      (sc.situation && sc.situation.text) || '',
+      t1Entry.label || '', t1Entry.desc || '', t1Entry.lesson || '',
+      t2Entry.label || '', t2Entry.lesson || '',
       dlgLabel, dlgDelta,
+      resultEntry.text || '', resultEntry.summary || '', resultEntry.lesson || '',
+      (resultEntry.basePoint != null) ? resultEntry.basePoint : '',
+      reviewEntry.label || '', reviewEntry.desc || '', reviewEntry.lesson || '',
+      supplement,
+      (finalEntry.score != null) ? finalEntry.score : '',
+      finalEntry.grade || '', finalEntry.item || '',
+      finalEntry.delegation || '', finalEntry.knowledge || '', finalEntry.awareness || '',
       raw.time, raw.energy,
       mult.time, mult.energy,
       dPlus.time, dPlus.energy,
       dMinus.time, dMinus.energy,
+      peterNote,
     ]);
   });
 });

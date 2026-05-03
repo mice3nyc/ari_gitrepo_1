@@ -329,3 +329,30 @@
 - Phase 8.12 발란스 + 플테: 0/7
 
 **전체: 94/146** — 세션257 진행 중: 8.7~8.10 ✅ → 8.12 부분 ✅ (배율 도입+hold-to-repeat) → **8.13 결과 리포트 재설계 (다음, 폴더 위치 확인 후 진입)** → 8.11 검증 → 8.12 발란스 잔여 (학기 시뮬·multiplier 재평가). Phase 7 카드 + Phase 6 배포는 Phase 8 완료 후
+
+---
+
+#### Phase 8.14 시나리오 콘텐츠 재작성 — 자료화 단계 (5/1 세션262 ✅)
+
+- [x] AI 리터러시 자료 5건 분석 (NN/g + 백도 4)
+- [x] 종합 매트릭스 노트 (`_놀공노트/26.0501 AI 리터러시 자료 5건 종합 매트릭스.md`)
+- [x] SCENARIO-GUIDELINES.md 외부 AI 핸드오프 v1.1 (휴룹 10건 반영, 1축/2축/3축 정의 정정 + §3.0 학습 축 체화 + §5 거름 보강)
+- [x] 4유형 격자 초중등 맥락 탐구 노트 (sonnet)
+- [x] choices.csv 텍스트 4컬럼 보강 (`tier1_label` / `tier2_label` / `result_summary` / `result_lesson`) — 피터공 발란스 활주로
+- [x] DECISIONS §10.15 신설
+
+#### Phase 8.15 — YAML 분리 + build.py (5/1 세션263)
+
+- [x] 안 결정: A안 (scenarios.yaml + cuts.yaml 2파일, types.yaml은 다음 박스)
+- [x] `data/cuts.yaml` 추출 — `default` 네임스페이스 6컷 (백도 sonnet)
+- [x] `data/scenarios.yaml` 추출 — 5개 시나리오 86KB, 2,489행 (직도, node vm 파싱 → PyYAML safe_dump)
+- [x] `index.html.template` 생성 — 행 521~1763 영역을 `// __SCENARIOS_INJECT__` placeholder로 치환 (119KB, 2,323행)
+- [x] `build.py` 작성 — yaml 로드 → JSON dump(`ensure_ascii=False, indent=2`) → 치환 → `index.html` 출력. 키 순서/네임스페이스 검증 포함
+- [x] 빌드 검증 — node vm으로 `index.html.before-build` vs `index.html`의 SCENARIOS·CUT_IMAGES 추출 후 `JSON.stringify` 비교: byte-level 동등 (50,536 bytes), 5개 시나리오 키 카운트·타이틀 한글 모두 일치
+- [x] 백업: `index.html.before-build` 보존 (다음 인라인 사이클 비교용)
+
+**다음 세션 진입점 (Phase 8.16+)**:
+- [ ] `types.yaml` 신설 — 4유형 메시지 + axisStage + domainKnowledge 메타 (시나리오 results/finals에서 추출 또는 별도 정의)
+- [ ] 외부 AI 분담 시작 (ChatGPT 창작 / 클공 검수 / NotebookLM 자료 횡단). yaml 단위로 시나리오 핸드오프 가능
+- [ ] career 톤 정정 1차 (가이드라인 §3.4 + 정답 없는 질문 마주하기 원칙)
+- [ ] (옵션) 시나리오별 yaml 분리 (`data/scenarios/{id}.yaml`) — 외부 AI 1 시나리오 = 1 파일 핸드오프 시
