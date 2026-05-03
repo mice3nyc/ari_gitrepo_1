@@ -31,15 +31,25 @@
 ##### Phase 3a — 코드 framework ✅ (5/3 세션275)
 - [x] 3a.1 음수 매핑 압축 — `DELTA_NEG={'-':-1,'--':-1}`, `getAxisDelta` 함수 분기 (커밋 3afd831)
 - [x] 3a.2 tier1 점수 기여 framework — `applyTier1`에 `getAxisDelta` 호출 자리, yaml fallback 0
-- [x] 3a.3 빌드 검증 (227,543 bytes)
+- [x] 3a.3 빌드 검증
 - [x] 3a.4 SPEC §6 진행 상태 표 갱신 + 미정 결정 갱신
+- [x] 3a.5 multiplier 1.0 변경 (raw에 0.6 곱한 값으로 재조정 완료 후)
+- [x] 3a.6 score-display·stats-bar 진행 중 숨김 정책 (`updateStats` 함수에 currentTier 기반 visibility 토글)
 
-##### Phase 3b — career 시나리오 데이터 마이그 (외부 LLM 분석 사이클)
-- [ ] 3b.1 career 검수 시트 외부 LLM 분석 → 위·도 두 축 delta 검증·정정
-- [ ] 3b.2 career 27 leaf delta yaml 정합성 반영
-- [ ] 3b.3 yaml tier1에 `delegation`·`knowledge` 필드 추가 (분석 결과 따라)
-- [ ] 3b.4 career raw 비용 재조정 + multiplier 0.6 폐지 (묶음 작업)
-- [ ] 3b.5 피터공 플테 → 발란스 피드백 인입
+##### Phase 3b — selfintro yaml 채움 ✅ (5/3 세션275, 백도+직도)
+- [x] 3b.0 raw 비용 재조정 — 5 시나리오 × 270 라인 × 0.6 (백도 결과, 0 발생 없음, 백업 `scenarios.yaml.before-raw-rebalance`)
+- [x] 3b.1 selfintro tier1 3건에 위·도 두 축 추가 (백도 가설값 적용)
+- [x] 3b.2 selfintro tier2 9건에 knowledge 추가 (백도 가설값 적용)
+- [x] 3b.3 selfintro finals 27건 점검 — 어긋남 없음 (백도 결과)
+- [ ] 3b.4 selfintro 피터공 플테 → 발란스 피드백 인입
+- [ ] 3b.5 의문 4건 결정 ([[26.0503 yaml 채움 — selfintro]] §의문)
+
+##### Phase 3c — 나머지 4 시나리오 yaml 채움 (다음 세션, 백도 4개 병렬)
+- [ ] 3c.1 groupwork yaml 채움
+- [ ] 3c.2 eorinwangja yaml 채움
+- [ ] 3c.3 career yaml 채움
+- [ ] 3c.4 studyplan yaml 채움
+- [ ] 3c.5 5 시나리오 통합 플테
 
 ##### Phase 4a — 학기 끝 4유형 화면 ✅ (v0.5 Phase 8에서 이미 구현)
 - [x] 4a.1 `showFinalReport` (line 1998)

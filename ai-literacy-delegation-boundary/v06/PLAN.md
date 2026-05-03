@@ -1,6 +1,6 @@
 ## PLAN — AI 리터러시: 위임의 경계 v0.6
 
-**최종 업데이트**: 2026-05-03 세션275 — 코드 framework 1차 진행 (tier1 점수 기여 + 음수 매핑 압축). 발란스 작업(multiplier·raw 재조정)·진행 중 노출 정책은 외부 LLM 분석 사이클로 분리
+**최종 업데이트**: 2026-05-03 세션275 — 코드 framework 완료 + selfintro yaml 채움 + raw 재조정 + multiplier 폐지 + score-display 정책. 나머지 4 시나리오 yaml 채움 다음 세션
 **진입점**: [[26.0501 v0.6 기획 결정 요약]]
 **v0.5 PLAN**: [[v05/PLAN|PLAN.md]] (freeze, 5/4 경기도 송부본)
 
