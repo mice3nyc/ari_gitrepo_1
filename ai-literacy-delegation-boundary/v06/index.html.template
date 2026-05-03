@@ -515,7 +515,15 @@ var CONFIG={
   levelExtraBonus:{1:0,2:0,3:0,4:5,5:10}, // 격상 천장 후 미세 보너스 (L4=+5, L5=+10)
   hintEnabledDefault:false
 };
-var DELEGATION_DELTA={'++':2,'+':1,'0':0,'-':-1,'--':-2};
+// 위·도 두 축 점수 매핑 — 양수·음수 분리 (5/3 결정: -인 경우 x1, flexibility 위해 두 벌)
+var DELTA_POS={'++':2,'+':1};
+var DELTA_NEG={'-':-1,'--':-1};
+function getAxisDelta(sign){
+  if(!sign||sign==='0')return 0;
+  if(DELTA_POS.hasOwnProperty(sign))return DELTA_POS[sign];
+  if(DELTA_NEG.hasOwnProperty(sign))return DELTA_NEG[sign];
+  return 0;
+}
 var GRADE_LABEL={S:'S',A:'A',B:'B',C:'C',D:'D'};
 
 // __SCENARIOS_INJECT__
@@ -607,7 +615,7 @@ function applyTier2(t2id){
   gameState.currentTier='result';
   // 위임 선택력 누적 — tier2.delegation 기준
   var dlg=getTier2Delegation(t2id);
-  var delta=DELEGATION_DELTA[dlg]||0;
+  var delta=getAxisDelta(dlg);
   gameState.competencies.delegationChoice.value+=delta;
   gameState.competencies.delegationChoice.history.push({tier2:t2id,delegation:dlg,delta:delta});
   trackEvent('tier2_selected',{scenarioId:gameState.currentScenarioId,tier2:t2id,delegation:dlg,delta:delta,before:snap,after:stateSnap()});
@@ -622,7 +630,7 @@ function applyReview(rid){
   var leaf=getLeafPath();
   var fin=getScenario().finals[leaf];
   var knl=fin?fin.knowledge:'0';
-  var delta=DELEGATION_DELTA[knl]||0;
+  var delta=getAxisDelta(knl);
   gameState.competencies.knowledge.value+=delta;
   gameState.competencies.knowledge.history.push({leaf:leaf,knowledge:knl,delta:delta});
   // 점수 산정 — Phase 5: detectIssues + calculateFinalScore 통합 (C안 격상 메커닉)
