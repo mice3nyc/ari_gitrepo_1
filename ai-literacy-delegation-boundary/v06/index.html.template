@@ -80,7 +80,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 /* ===== 중앙 LV·SCORE 큰 디스플레이 ===== */
 .score-display { flex:0 0 auto; display:flex; flex-direction:column; align-items:stretch; gap:8px; padding:8px 18px; border:2px solid #111; background:#fff; box-shadow:0 2px 0 #111; min-width:180px; }
 .score-display-row { display:flex; flex-direction:row; align-items:center; gap:18px; justify-content:center; }
-.panel-title { font-size:11px; font-weight:700; color:#111; letter-spacing:2px; padding:0 0 6px; border-bottom:1px solid #111; margin-bottom:4px; text-align:center; }
+.panel-title { font-size:15px; font-weight:700; color:#111; letter-spacing:3px; padding:2px 0 8px; border-bottom:1.5px solid #111; margin-bottom:8px; text-align:center; }
 .score-block { display:flex; flex-direction:column; align-items:center; gap:3px; min-width:54px; }
 .display-label { font-size:9px; color:#888; letter-spacing:1.5px; line-height:1; font-weight:700; }
 .display-num { font-size:34px; font-weight:700; color:#111; line-height:1; transition:transform 0.3s, color 0.3s; }
@@ -243,7 +243,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
   .panel-row { flex-direction:column; }
   .score-display { flex-direction:column; min-width:0; padding:6px 12px; }
   .score-display-row { gap:12px; }
-  .panel-title { font-size:10px; padding:0 0 4px; margin-bottom:2px; }
+  .panel-title { font-size:13px; letter-spacing:2px; padding:1px 0 5px; margin-bottom:5px; }
   .display-num { font-size:28px; }
 }
 /* v0.5 — 시나리오 선택 + 학기 프로그레스 */
