@@ -44,20 +44,20 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .resource-item.flash-down { animation:flashGray 0.8s ease; }
 @keyframes flashGray { 0%{background-color:rgba(80,80,80,0.10)} 100%{background-color:transparent} }
 
-/* ===== 우측 패널 — 역량(양방향) + 점수 + 진행 ===== */
-.stats-bar { flex:1; display:flex; flex-direction:column; gap:10px; padding:10px 14px; border:2px solid #111; background:#fff; box-shadow:0 2px 0 #111; }
-.stat { display:flex; flex-direction:column; padding:2px 4px; position:relative; transition:background-color 0.3s; }
-.stat-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:4px; }
-.stat-name { font-size:12px; color:#555; font-weight:600; }
-.stat-num { font-size:18px; font-weight:700; line-height:1; transition:all 0.3s; }
+/* ===== 우측 패널 — 역량(양방향) + 점수 (5/3 — 컷/아이템은 중앙 progress-strip로 분리) ===== */
+.stats-bar { flex:1; display:flex; flex-direction:column; gap:6px; padding:6px 10px; border:2px solid #111; background:#fff; box-shadow:0 2px 0 #111; }
+.stat { display:flex; flex-direction:column; padding:1px 2px; position:relative; transition:background-color 0.3s; }
+.stat-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:2px; }
+.stat-name { font-size:11px; color:#555; font-weight:600; }
+.stat-num { font-size:16px; font-weight:700; line-height:1; transition:all 0.3s; }
 
 /* === 양방향 바 (Diverging Bar) — 위임 판단 / 문해력 전용 === */
-.bipolar-gauge { position:relative; height:10px; width:100%; background:#f5f5f5; border:1px solid #ccc; overflow:hidden; }
+.bipolar-gauge { position:relative; height:8px; width:100%; background:#f5f5f5; border:1px solid #ccc; overflow:hidden; }
 .bipolar-zero { position:absolute; left:50%; top:-2px; bottom:-2px; width:1px; background:#111; z-index:2; }
 .bipolar-fill { position:absolute; top:0; bottom:0; width:0; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1), left 0.3s ease, right 0.3s ease, background-color 0.6s ease; }
 .bipolar-fill.positive { left:50%; right:auto; background:#1a8c1a; }
 .bipolar-fill.negative { right:50%; left:auto; background:#c44; }
-.bipolar-labels { display:flex; justify-content:space-between; font-size:9px; color:#aaa; margin-top:2px; line-height:1; letter-spacing:0.5px; }
+.bipolar-labels { display:flex; justify-content:space-between; font-size:8px; color:#aaa; margin-top:1px; line-height:1; letter-spacing:0.3px; }
 .stat-num.positive { color:#1a8c1a; }
 .stat-num.negative { color:#c44; }
 
@@ -74,8 +74,14 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .stat.flash-down { animation:flashRed 0.8s ease; }
 
 .stats-divider { height:1px; width:100%; background:#ddd; }
-.stat-progress { font-size:11px; color:#999; font-weight:600; white-space:nowrap; align-self:flex-end; }
 .score-stat { font-size:12px; font-weight:700; padding:5px 10px; border:1.5px solid #111; background:#111; color:#fff; text-align:center; }
+
+/* 5/3 — 시나리오 화면 헤더 progress-strip (컷 N/6 + 아이템 N개). 학생이 회기 중 자주 보는 자리로 stats-bar에서 분리. */
+.scenario-progress-strip { display:flex; align-items:center; justify-content:space-between; padding:8px 14px; margin:0 0 12px; border:1.5px solid #111; background:#fafafa; box-shadow:0 1px 0 #111; }
+.scenario-progress-strip .sps-cut { font-size:13px; font-weight:700; color:#111; letter-spacing:0.5px; }
+.scenario-progress-strip .sps-cut-num { font-size:18px; font-weight:800; color:#111; }
+.scenario-progress-strip .sps-items { font-size:12px; color:#555; font-weight:600; padding:3px 10px; border:1px solid #aaa; background:#fff; border-radius:3px; }
+.scenario-progress-strip .sps-items.zero { color:#bbb; border-color:#ddd; }
 
 /* ===== 중앙 LV·SCORE 큰 디스플레이 ===== */
 .score-display { flex:0 0 auto; display:flex; flex-direction:column; align-items:stretch; gap:8px; padding:8px 18px; border:2px solid #111; background:#fff; box-shadow:0 2px 0 #111; min-width:180px; }
@@ -217,15 +223,52 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .comic-scene:first-child { border-top:none; }
 .comic-scene-title { font-size:14px; font-weight:700; color:#222; margin-bottom:14px; text-align:center; width:100%; }
 .comic-scene-meta { font-weight:400; color:#888; font-size:12px; margin-left:6px; }
-.comic-strip { display:flex; flex-direction:row; flex-wrap:nowrap; gap:10px; overflow-x:auto; align-items:flex-start; padding-bottom:8px; -webkit-overflow-scrolling:touch; justify-content:center; }
+.comic-strip { display:flex; flex-direction:row; flex-wrap:nowrap; gap:5px; overflow-x:auto; align-items:flex-start; padding-bottom:8px; -webkit-overflow-scrolling:touch; justify-content:center; }
 /* 4/30 세션260 — 코믹스트립: 컷마다 이미지+캡션 panel */
 .comic-panel { display:flex; flex-direction:column; gap:6px; flex:0 0 160px; width:160px; }
 .comic-cut { display:block; width:160px; height:auto; }
+/* 5/3 — 시상 panel 2/3 축소 (160 → 107). prize 영역만 좁힘 */
+.comic-panel-prize { flex:0 0 107px; width:107px; }
+.comic-panel-prize .comic-cut.comic-prize { width:107px; }
+.comic-panel-prize .comic-caption { width:107px; }
 .comic-prize { /* 시상도 같은 크기로 strip 말미에 */ }
 .comic-caption { width:160px; font-size:12px; line-height:1.5; color:#333; text-align:left; word-break:keep-all; padding:0 2px; box-sizing:border-box; }
 .comic-caption b { display:block; font-size:13px; font-weight:700; color:#111; margin-bottom:3px; line-height:1.4; }
 .comic-caption-mood { font-weight:600; color:#111; padding-top:4px; border-top:2px solid #111; }
+.comic-scene-summary { font-size:12px; line-height:1.55; color:#555; margin:-8px 0 12px; text-align:center; word-break:keep-all; }
+.comic-scene-summary .seg { white-space:nowrap; }
+.comic-scene-summary .seg + .seg::before { content:" · "; color:#bbb; }
+.comic-scene-summary b { color:#222; font-weight:700; }
 .comic-mood { font-size:14px; line-height:1.6; color:#222; margin-top:12px; padding:10px 16px; background:#fafafa; border-left:3px solid #111; width:100%; text-align:left; box-sizing:border-box; } /* deprecated — 시상 panel caption으로 통합 */
+
+/* 5/3 — 학기 종합 리포트: 카드 누적 리뷰 섹션 (4유형 의미 박스 다음 / 카툰 위) */
+.report-cards-section { background:#fff; border:2px solid #111; padding:18px 20px; margin-bottom:28px; box-shadow:0 2px 0 rgba(0,0,0,0.1); text-align:left; }
+.report-cards-title { font-size:13px; font-weight:700; color:#111; margin-bottom:12px; letter-spacing:0.3px; }
+/* 5/3 — 3컬럼 grid (19종 다 차도 한 화면). 좌측 색띠 + 카운트 + 라벨 한 줄. */
+.report-cards-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.report-card-row { display:flex; flex-direction:column; gap:0; background:#fff; border:1px solid #e5e5e5; border-radius:4px; overflow:hidden; }
+.report-card-row-head { display:flex; align-items:stretch; min-height:38px; }
+.report-card-count { font-size:16px; font-weight:800; color:#fff; padding:0 10px; display:flex; align-items:center; justify-content:center; min-width:42px; line-height:1; background:#888; }
+.report-card-label { font-size:13px; font-weight:700; color:#111; padding:8px 10px; flex:1; display:flex; align-items:center; line-height:1.3; word-break:keep-all; }
+.report-card-source { font-size:10px; color:#888; line-height:1.4; word-break:keep-all; padding:6px 10px; border-top:1px dashed #eee; background:#fafafa; max-height:2.8em; overflow:hidden; }
+.report-cards-empty { padding:14px 16px; background:#fafafa; border-left:3px solid #aaa; color:#555; font-size:13px; line-height:1.6; }
+@media (max-width:720px) {
+  .report-cards-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:480px) {
+  .report-cards-grid { grid-template-columns:1fr; }
+}
+
+/* 5/3 — 리포트 narrative 박스 (4유형 의미 박스 다음, 카드 누적 위) */
+.report-narrative { background:#fafafa; border:1.5px solid #111; padding:18px 20px; margin-bottom:24px; box-shadow:0 2px 0 rgba(0,0,0,0.08); text-align:left; }
+.report-narrative-block { margin-bottom:14px; }
+.report-narrative-block:last-child { margin-bottom:0; }
+.report-narrative-title { font-size:11px; font-weight:700; color:#888; letter-spacing:1.2px; margin-bottom:8px; text-transform:uppercase; }
+.report-narrative-body { font-size:14px; line-height:1.7; color:#222; word-break:keep-all; }
+.report-narrative-body b { color:#111; font-weight:700; }
+.report-narrative-body .narrative-line { padding:3px 0; border-top:1px dotted transparent; }
+.report-narrative-body .narrative-line + .narrative-line { border-top-color:#eee; padding-top:6px; margin-top:3px; }
+.report-narrative-cardtype { font-size:15px; font-weight:800; color:#fff; background:#111; padding:4px 10px; border-radius:3px; letter-spacing:0.3px; display:inline-block; margin-bottom:8px; }
 
 /* ===== Debug ===== (4/30 세션260: 노안 친화 — font-size 1.4배 + max-width 460px) */
 .debug-toggle { position:fixed; bottom:10px; right:10px; background:#333; color:#fff; border:none; padding:6px 12px; font-size:13px; cursor:pointer; z-index:300; font-family:monospace; }
@@ -276,11 +319,68 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .scenario-card.cleared .sc-num { background:#888; color:#fff; border-color:#888; }
 .scenario-card.cleared .sc-title { text-decoration:line-through; color:#888; }
 .scenario-card.cleared .sc-mark { color:#444; }
-.semester-actions { margin-top:24px; text-align:center; }
-.semester-actions .start-btn { margin:6px; }
+.semester-actions { margin-top:24px; display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap; }
+.semester-actions .start-btn { margin:0; }
+.semester-actions .action-main { padding:18px 56px; font-size:16px; font-weight:700; letter-spacing:2px; background:#111; color:#fff; border:2px solid #111; box-shadow:0 3px 0 #000; cursor:pointer; font-family:inherit; transition:all 0.15s ease; }
+.semester-actions .action-main:hover { background:#333; }
+.semester-actions .action-main:active { transform:translateY(2px); box-shadow:none; }
+.semester-actions .action-secondary { padding:10px 20px; font-size:12px; background:#fff; color:#666; border:1px solid #bbb; cursor:pointer; font-family:inherit; transition:all 0.15s ease; }
+.semester-actions .action-secondary:hover { background:#f3f3f3; color:#111; border-color:#888; }
+/* 확인 모달 (학기 처음부터 — 5/3 세션278) */
+.confirm-actions { display:flex; gap:10px; margin-top:18px; }
+.confirm-actions button { flex:1; padding:12px 16px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.15s ease; border:2px solid #111; }
+.confirm-actions .confirm-cancel { background:#fff; color:#111; }
+.confirm-actions .confirm-cancel:hover { background:#f3f3f3; }
+.confirm-actions .confirm-destructive { background:#c44; color:#fff; border-color:#c44; }
+.confirm-actions .confirm-destructive:hover { background:#a33; border-color:#a33; }
 .semester-final { padding:24px; background:#fafafa; border:1px solid #ddd; margin:20px 0; text-align:center; }
 .semester-final h2 { font-size:18px; margin-bottom:12px; }
 .semester-final p { font-size:13px; color:#555; line-height:1.7; }
+
+/* ===== pending 원 마커 (§12, 5/3 세션278) ===== */
+/* 좌우 분할: 좌측 50%(음수, 중앙 쪽으로 모임) / 우측 50%(양수, 중앙에서 우측으로 뻗음) */
+/* 분할 비율은 bipolar-gauge zero 위치(left:50% = 시각 중앙선)와 정렬 — SPEC 라벨 -4/+8은 점수 max(단위당 폭 비대칭)이지 시각 자리가 아니다 */
+.pending-dots { display:flex; align-items:center; min-height:12px; margin:2px 0 4px; }
+.pending-dots-neg { flex:0 0 50%; display:flex; flex-direction:row-reverse; justify-content:flex-start; align-items:center; gap:4px; padding-right:2px; overflow:hidden; }
+.pending-dots-pos { flex:0 0 50%; display:flex; flex-direction:row; justify-content:flex-start; align-items:center; gap:4px; padding-left:2px; overflow:hidden; }
+.pending-dot { width:11px; height:11px; border-radius:50%; flex-shrink:0; transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease; }
+.pending-dot.positive { background:#1a8c1a; box-shadow:0 1px 0 rgba(0,0,0,0.15); }
+.pending-dot.negative { background:#c44; box-shadow:0 1px 0 rgba(0,0,0,0.15); }
+.pending-dot.appearing { animation:dotAppear 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes dotAppear {
+  0% { transform:scale(0); opacity:0; }
+  60% { transform:scale(1.25); opacity:1; }
+  100% { transform:scale(1); opacity:1; }
+}
+.pending-dot.breaking { animation:dotBreak 0.35s ease forwards; }
+@keyframes dotBreak {
+  0% { transform:scale(1) rotate(0deg); opacity:1; }
+  40% { transform:scale(1.3) rotate(15deg); opacity:0.8; }
+  100% { transform:scale(0.4) rotate(-180deg); opacity:0; }
+}
+.pending-dot.absorbing { animation:dotAbsorb 0.6s cubic-bezier(0.55,0,0.85,0.3) forwards; }
+@keyframes dotAbsorb {
+  0% { transform:translateY(0) scale(1); opacity:1; }
+  60% { transform:translateY(8px) scale(0.7); opacity:0.6; }
+  100% { transform:translateY(18px) scale(0.1); opacity:0; }
+}
+
+/* ===== 타이틀 화면 (§11, 5/3 세션278) ===== */
+.title-frame { max-width:640px; margin:0 auto; padding:40px 24px 32px; }
+.title-frame h1 { font-size:26px; font-weight:700; text-align:center; margin-bottom:32px; letter-spacing:0.5px; }
+.intro-text { font-size:14px; color:#555; line-height:1.9; text-align:center; margin-bottom:28px; padding:0 12px; }
+.host-text { background:#fafafa; border:2px solid #111; padding:22px 24px; margin-bottom:28px; text-align:center; line-height:1.8; }
+.host-text .host-q { font-size:14px; color:#444; margin-bottom:14px; }
+.host-text .host-call { font-size:18px; font-weight:700; color:#111; margin-bottom:12px; letter-spacing:0.5px; }
+.host-text .host-line { font-size:13px; color:#555; line-height:1.7; }
+.host-text .host-line.bold { font-weight:700; color:#111; margin-top:6px; }
+.tutorial-list { padding:0; margin:0 0 32px; list-style:none; counter-reset:tut; }
+.tutorial-list li { position:relative; padding:14px 14px 14px 48px; margin-bottom:10px; border-left:3px solid #111; background:#fff; font-size:13px; color:#333; line-height:1.75; counter-increment:tut; }
+.tutorial-list li::before { content:counter(tut); position:absolute; left:14px; top:14px; width:24px; height:24px; border:1.5px solid #111; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#111; background:#fff; }
+.start-btn-large { display:block; width:100%; padding:16px; border:2px solid #111; background:#111; color:#fff; font-family:inherit; font-size:15px; font-weight:700; letter-spacing:2px; cursor:pointer; transition:background 0.15s ease; }
+.start-btn-large:hover { background:#333; }
+.tutorial-link { display:block; text-align:center; margin-top:14px; font-size:11px; color:#888; cursor:pointer; text-decoration:underline; background:none; border:none; font-family:inherit; }
+.tutorial-link:hover { color:#444; }
 
 /* ===== Phase 8.10 — 모달 공통 ===== */
 .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center; z-index:1000; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
@@ -322,6 +422,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .rp-btn { background:#fff; border:1.5px solid #111; width:34px; height:34px; font-size:18px; font-weight:700; cursor:pointer; line-height:1; font-family:'Paperlogy',sans-serif; transition:all 0.15s; }
 .rp-btn:hover:not(:disabled) { background:#111; color:#fff; }
 .rp-btn:active:not(:disabled) { transform:scale(0.95); }
+.rp-btn.charging:not(:disabled) { background:#111; color:#fff; transform:scale(0.95); box-shadow:0 0 0 3px rgba(17,17,17,0.15); }
 .rp-btn:disabled { opacity:0.25; cursor:not-allowed; }
 .rp-allocate { font-size:15px; font-weight:700; color:#111; min-width:30px; text-align:center; }
 .rp-preview { font-size:12px; color:#444; padding:12px; text-align:center; border:1px dashed #ccc; margin-bottom:14px; min-height:20px; line-height:1.5; }
@@ -348,27 +449,74 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .inv-panel-close:hover { background:#f0f0f0; }
 .inv-panel-body { flex:1; overflow-y:auto; padding:16px 20px; }
 .inv-empty { font-size:13px; color:#888; text-align:center; padding:40px 12px; line-height:1.7; }
-.inv-card { display:flex; flex-direction:column; padding:10px 14px 10px 18px; margin-bottom:8px; border:1.5px solid #111; background:#fff; box-shadow:0 2px 0 #111; cursor:pointer; transition:transform 0.15s, box-shadow 0.15s; border-radius:8px; border-left-width:6px; }
+/* 5/3 — inv-card 재배치: 좌측 색띠(카드색+카운트, 흰 글씨) + 우측 본문(라벨 큰 글씨) */
+.inv-card { display:flex; flex-direction:column; margin-bottom:8px; border:1.5px solid #111; background:#fff; box-shadow:0 2px 0 #111; cursor:pointer; transition:transform 0.15s, box-shadow 0.15s; border-radius:8px; overflow:hidden; }
 .inv-card:hover { transform:translate(-1px,-1px); box-shadow:1px 3px 0 #111; }
-.inv-card-row { display:flex; align-items:center; justify-content:space-between; }
-.inv-card-label { font-size:14px; font-weight:700; color:#111; }
-.inv-card-count { font-size:13px; color:#555; font-weight:700; }
-.inv-card-detail { font-size:11px; color:#666; margin-top:8px; padding-top:8px; border-top:1px dashed #ddd; line-height:1.6; display:none; }
+.inv-card-row { display:flex; align-items:stretch; gap:0; min-height:54px; }
+.inv-card-count { font-size:22px; font-weight:800; color:#fff; background:#888; flex:0 0 50px; display:flex; align-items:center; justify-content:center; line-height:1; letter-spacing:0.3px; }
+.inv-card-body { flex:1; display:flex; align-items:center; padding:12px 14px; }
+.inv-card-label { font-size:18px; font-weight:700; color:#111; line-height:1.25; word-break:keep-all; }
+/* 5/3 — expand 시각 신호 (chevron). 닫힘 ⌄ → 열림 180deg 회전 */
+.inv-card-chevron { flex:0 0 auto; display:flex; align-items:center; justify-content:center; padding:0 14px 0 4px; font-size:16px; color:#888; line-height:1; transition:transform 0.25s ease; transform-origin:center; }
+.inv-card.expanded .inv-card-chevron { transform:rotate(180deg); }
+.inv-card-detail { font-size:11px; color:#666; padding:8px 14px 10px; border-top:1px dashed #ddd; line-height:1.6; display:none; background:#fafafa; }
 .inv-card.expanded .inv-card-detail { display:block; }
+/* 5/3 — expand 영역 카드 의미 박스 (좌측 색띠 + 본문) */
+.inv-card-meaning { display:none; padding:12px 14px; border-top:1px dashed #ddd; border-left:4px solid #888; background:#fff; }
+.inv-card.expanded .inv-card-meaning { display:block; }
+.inv-card-meaning-label { font-size:14px; font-weight:800; color:#111; margin-bottom:4px; }
+.inv-card-meaning-def { font-size:12px; font-weight:600; color:#333; margin-bottom:8px; line-height:1.5; word-break:keep-all; }
+.inv-card-meaning-desc { font-size:12px; color:#555; line-height:1.7; word-break:keep-all; white-space:pre-line; }
+.inv-card-detail-title { font-size:10px; font-weight:700; color:#888; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
 /* ===== reward 팝업 — 단건 컨펌 (§7.6, 5/3 세션278) ===== */
 .card-reward-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:400; display:flex; align-items:center; justify-content:center; pointer-events:auto; }
 .card-reward-overlay.hidden { display:none; }
-.card-reward-card { position:fixed; top:50%; left:50%; width:300px; padding:22px 22px 18px 28px; border:2px solid #111; background:#fff; box-shadow:0 4px 0 #111; border-radius:12px; transform:translate(-50%,-50%) scale(0.9); opacity:0; transition:opacity 0.5s ease, transform 0.6s cubic-bezier(0.4,0,0.2,1); z-index:405; border-left-width:8px; }
-.card-reward-card.appear { opacity:1; transform:translate(-50%,-50%) scale(1); }
-.card-reward-card.travel { opacity:0; }
-.card-reward-tag { font-size:10px; color:#888; letter-spacing:1.5px; font-weight:700; margin-bottom:6px; }
-.card-reward-label { font-size:22px; font-weight:700; color:#111; margin-bottom:10px; letter-spacing:0.5px; }
-.card-reward-divider { height:1px; background:#ddd; margin:8px 0 10px; }
-.card-reward-note { font-size:12px; color:#555; line-height:1.7; margin-bottom:14px; }
-.card-reward-confirm { display:block; width:100%; padding:10px 14px; border:1.5px solid #111; background:#111; color:#fff; font-family:inherit; font-size:13px; font-weight:700; letter-spacing:1px; cursor:pointer; transition:background 0.15s ease; }
+/* 5/3 — Pop In! 애니메이션 (fadein 폐기): scale + rotate 오버슛 + box-shadow pulse
+   5/3 정정 — 카드 N장 동시 펼침 (5점 별/W 패턴 좌표). 각 카드마다 다른 (top,left) %로 배치. */
+.card-reward-card { position:fixed; width:220px; padding:18px 18px 14px 22px; border:2px solid #111; background:#fff; box-shadow:0 4px 0 #111; border-radius:12px; opacity:0; z-index:405; border-left-width:6px;
+  /* 기본: 중앙 (1장 분기 / fallback). top/left는 JS에서 인라인으로 덮어씀
+     5/3 정정 — 폭 280→220, 좌표 압축에 맞춰 카드도 작게 */
+  top:50%; left:50%; transform:translate(-50%,-50%) scale(0.3) rotate(-5deg);
+}
+.card-reward-card.appear { animation:cardPopIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards, cardGlow 0.6s ease 0.15s; }
+@keyframes cardPopIn {
+  0%   { opacity:0; transform:translate(-50%,-50%) scale(0.3) rotate(-5deg); }
+  60%  { opacity:1; transform:translate(-50%,-50%) scale(1.15) rotate(2deg); }
+  80%  { transform:translate(-50%,-50%) scale(0.96) rotate(-1deg); }
+  100% { opacity:1; transform:translate(-50%,-50%) scale(1) rotate(0deg); }
+}
+@keyframes cardGlow {
+  0%   { box-shadow:0 4px 0 #111, 0 0 0 0 rgba(255,220,80,0); }
+  35%  { box-shadow:0 4px 0 #111, 0 0 36px 14px rgba(255,220,80,0.55); }
+  100% { box-shadow:0 4px 0 #111, 0 0 0 0 rgba(255,220,80,0); }
+}
+.card-reward-card.travel { opacity:0; transition:opacity 0.35s ease-in, transform 0.35s cubic-bezier(0.55,0,0.85,0.3); }
+.card-reward-tag { font-size:9px; color:#888; letter-spacing:1.4px; font-weight:700; margin-bottom:5px; }
+.card-reward-label { font-size:19px; font-weight:700; color:#111; margin-bottom:8px; letter-spacing:0.4px; }
+.card-reward-divider { height:1px; background:#ddd; margin:6px 0 8px; }
+.card-reward-note { font-size:11px; color:#555; line-height:1.65; margin-bottom:12px; }
+.card-reward-confirm { display:block; width:100%; padding:8px 12px; border:1.5px solid #111; background:#111; color:#fff; font-family:inherit; font-size:12px; font-weight:700; letter-spacing:1px; cursor:pointer; transition:background 0.15s ease; }
 .card-reward-confirm:hover { background:#333; }
 .card-reward-confirm:disabled { background:#888; border-color:#888; cursor:default; }
 .no-card-notice { margin-top:10px; padding:8px 12px; background:#f7f7f7; border-left:3px solid #bbb; font-size:12px; color:#666; }
+/* ===== GAME OVER 모달 (5/3 정정 — 자원 부족) ===== */
+.gameover-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:1100; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
+.gameover-overlay.visible { opacity:1; pointer-events:auto; }
+.gameover-overlay.hidden { display:none; }
+.gameover-card { background:#fff; border:2px solid #111; padding:24px 28px; width:min(440px,90vw); box-shadow:0 8px 32px rgba(0,0,0,0.3); transform:translateY(8px); transition:transform 0.25s ease; font-family:'Paperlogy',sans-serif; text-align:center; }
+.gameover-overlay.visible .gameover-card { transform:translateY(0); }
+.gameover-title { font-size:26px; font-weight:800; color:#111; letter-spacing:2px; margin-bottom:10px; }
+.gameover-body { font-size:13px; color:#333; line-height:1.6; margin-bottom:14px; }
+.gameover-resources { display:flex; justify-content:center; gap:14px; margin-bottom:18px; padding:10px; background:#f7f7f7; border:1px dashed #bbb; }
+.gameover-resource { display:flex; flex-direction:column; align-items:center; }
+.gameover-resource-label { font-size:10px; color:#888; letter-spacing:1px; font-weight:700; }
+.gameover-resource-num { font-size:20px; font-weight:800; color:#c44; }
+.gameover-actions { display:flex; gap:10px; }
+.gameover-actions button { flex:1; padding:12px 16px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.15s ease; border:2px solid #111; }
+.gameover-actions .gameover-report { background:#111; color:#fff; }
+.gameover-actions .gameover-report:hover { background:#333; }
+.gameover-actions .gameover-restart { background:#fff; color:#111; }
+.gameover-actions .gameover-restart:hover { background:#f3f3f3; }
 </style>
 </head>
 <body>
@@ -408,26 +556,26 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
     <div class="stat" id="stat-delegation">
       <div class="stat-change-indicator" id="delta-delegation"></div>
       <div class="stat-header"><span class="stat-name">위임 판단력</span><span class="stat-num" id="num-delegation">0</span></div>
+      <div class="pending-dots" id="pending-dots-delegation" aria-label="이번 시나리오 위임 판단력 변화"><div class="pending-dots-neg" id="pending-dots-delegation-neg"></div><div class="pending-dots-pos" id="pending-dots-delegation-pos"></div></div>
       <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-delegation"></div></div>
       <div class="bipolar-labels"><span>-4</span><span>+8</span></div>
     </div>
     <div class="stat" id="stat-knowledge">
       <div class="stat-change-indicator" id="delta-knowledge"></div>
       <div class="stat-header"><span class="stat-name" id="stat-name-knowledge">도메인 지식</span><span class="stat-num" id="num-knowledge">0</span></div>
+      <div class="pending-dots" id="pending-dots-knowledge" aria-label="이번 시나리오 도메인 지식 변화"><div class="pending-dots-neg" id="pending-dots-knowledge-neg"></div><div class="pending-dots-pos" id="pending-dots-knowledge-pos"></div></div>
       <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-knowledge"></div></div>
       <div class="bipolar-labels"><span>-4</span><span>+8</span></div>
     </div>
-    <div class="stats-divider"></div>
-    <div class="stat-progress" id="stat-progress">컷 1/6</div>
   </div>
 </div>
 <div class="container" id="main-container"></div>
-<!-- 역량 카드 인벤토리 탭 (우측 가장자리 고정) -->
-<button class="inv-tab" id="inv-tab" onclick="toggleInventory()" aria-label="역량 카드 인벤토리 열기"><span class="inv-tab-name">역량 카드</span><span class="inv-tab-desc">모은 카드 보기</span><span class="inv-tab-badge hidden" id="inv-tab-badge"></span></button>
+<!-- 역량 카드 인벤토리 탭 (우측 가장자리 고정 / texts.yaml inject — 초기값은 fallback) -->
+<button class="inv-tab" id="inv-tab" onclick="toggleInventory()" aria-label="역량 카드 인벤토리 열기"><span class="inv-tab-name" id="inv-tab-name">역량 카드</span><span class="inv-tab-desc" id="inv-tab-desc">모은 카드 보기</span><span class="inv-tab-badge hidden" id="inv-tab-badge"></span></button>
 <div class="inv-panel-backdrop" id="inv-panel-backdrop" onclick="toggleInventory(false)"></div>
 <aside class="inv-panel" id="inv-panel" aria-hidden="true">
   <div class="inv-panel-header">
-    <span class="inv-panel-title">역량 카드</span>
+    <span class="inv-panel-title" id="inv-panel-title">역량 카드</span>
     <button class="inv-panel-close" onclick="toggleInventory(false)" aria-label="닫기">×</button>
   </div>
   <div class="inv-panel-body" id="inv-list">
@@ -459,6 +607,34 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
       </div>
     </div>
     <button id="lvup-confirm" class="lvup-confirm" type="button">확인 →</button>
+  </div>
+</div>
+
+<!-- GAME OVER 모달 (5/3 정정 — 자원 부족 시 / texts.yaml inject) -->
+<div id="gameover-modal" class="gameover-overlay hidden">
+  <div class="gameover-card">
+    <div class="gameover-title" id="gameover-title">GAME OVER</div>
+    <div class="gameover-body" id="gameover-body">자원이 부족해요.<br>시간과 에너지가 모자라 더 이상 선택할 수 없습니다.</div>
+    <div class="gameover-resources">
+      <div class="gameover-resource"><span class="gameover-resource-label" id="gameover-time-label">시간</span><span class="gameover-resource-num" id="gameover-time">0</span></div>
+      <div class="gameover-resource"><span class="gameover-resource-label" id="gameover-energy-label">에너지</span><span class="gameover-resource-num" id="gameover-energy">0</span></div>
+    </div>
+    <div class="gameover-actions">
+      <button class="gameover-report" id="gameover-btn-report" onclick="gameOverShowReport()">리포트 보기</button>
+      <button class="gameover-restart" id="gameover-btn-restart" onclick="gameOverRestart()">학기 처음부터</button>
+    </div>
+  </div>
+</div>
+
+<!-- 학기 처음부터 확인 모달 (5/3 세션278) -->
+<div id="reset-confirm-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-title">학기를 처음부터 시작할까요?</div>
+    <div class="modal-subtitle">지금까지 진행한 학기가 모두 사라지고 새 학생으로 다시 시작합니다.</div>
+    <div class="confirm-actions">
+      <button class="confirm-cancel" onclick="closeResetConfirm()">계속하기</button>
+      <button class="confirm-destructive" onclick="confirmResetDo()">다시 시작</button>
+    </div>
   </div>
 </div>
 
@@ -531,10 +707,11 @@ var CONFIG={
   rpRewardByGrade:{S:15,A:10,B:6,C:3,D:1},
   rpLevelUpBonus:20,
   rpCost:{time:1,energy:1}, // 2축 전용 (DECISIONS §10.4 — 위/도 분배 폐기)
-  // v0.5 발란스 — 위/도 효과 배율 (DECISIONS §10.6 4/30 세션257 8.12 발란스 2차)
-  // 위 +1점 → 시간 비용 -N. 도 +1점 → 에너지 비용 -N. 음수 시 대칭 페널티.
-  // 1차 플테 (배율 3): "무적". 2차 (배율 2)로 완화.
-  competencyDiscountMult:2,
+  // v0.6 발란스 — 시나리오 단위 누적 + 대칭 효과 (5/3 세션278 root cause 정정)
+  // 한 시나리오 안 비용 효과 고정. 매 선택은 pending에 박힘. 시나리오 끝에 흡수.
+  // pending이 안전장치라 음수 ×2 대칭 가능 (한 회기 안 폭주 회로 자체가 폐기됨).
+  competencyDiscountMultPos:2,
+  competencyDiscountMultNeg:2,
   // v0.5 Phase 8.13 — 결과 리포트 (DECISIONS §10.13)
   // 위/도 4유형 텍스트. AI 리터러시 메시지: 비판적 위임 + 도메인 지식 둘 다 키워서 AI를 잘 쓰자.
   // "AI 안 쓰는 게 좋은 것"으로 읽히지 않도록. (피터공 4/30 시정)
@@ -573,14 +750,12 @@ var CONFIG={
   levelExtraBonus:{1:0,2:0,3:0,4:5,5:10}, // 격상 천장 후 미세 보너스 (L4=+5, L5=+10)
   hintEnabledDefault:false
 };
-// 위·도 두 축 점수 매핑 — 양수·음수 분리 (5/3 결정: -인 경우 x1, flexibility 위해 두 벌)
-// 양수 보상 폭은 음수 페널티 폭의 두 배 (5/3 결정 — "양수 경우 실제 계산에 적용되는 숫자, 2=4")
-var DELTA_POS={'++':4,'+':2};
-var DELTA_NEG={'-':-1,'--':-1};
+// 위·도 두 축 점수 매핑 (5/3 세션278 단순화 — 선택당 ±1만, 한 시나리오 max ±3)
+// ++/+/-/--/0 → 부호만 보고 +1/0/-1로 매핑. 학생이 원 1·2·3개로 직관적으로 잡힘.
 function getAxisDelta(sign){
   if(!sign||sign==='0')return 0;
-  if(DELTA_POS.hasOwnProperty(sign))return DELTA_POS[sign];
-  if(DELTA_NEG.hasOwnProperty(sign))return DELTA_NEG[sign];
+  if(sign==='+'||sign==='++')return 1;
+  if(sign==='-'||sign==='--')return -1;
   return 0;
 }
 var GRADE_LABEL={S:'S',A:'A',B:'B',C:'C',D:'D'};
@@ -622,7 +797,11 @@ function createInitialState(){
     clearedScenarios:[],
     // v0.5 Phase 8.8 — 자원토큰(RP) 시스템
     rp:{balance:0,history:[]},
-    completed:false
+    completed:false,
+    // v0.6 Phase 6 (5/3 세션278) — 타이틀+튜토리얼 1회 노출 플래그
+    tutorialSeen:false,
+    // v0.6 §12 (5/3 세션278) — pending 점수 (시나리오 끝에 누적 흡수)
+    pending:{delegation:0,knowledge:0}
   };
 }
 
@@ -652,10 +831,17 @@ function getLeafPath(){
   return gameState.selectedTier2+gameState.selectedReview;
 }
 
-function getTier2Delegation(t2id){
+// v0.6 옵션 1 — leaf 점수가 tier1 누적에 따라 달라짐. leaf.delta.afterX 우선, 없으면 단일 필드 fallback (다른 시나리오 호환)
+function getLeafDelta(leaf,t1Id){
+  if(leaf&&leaf.delta&&t1Id&&leaf.delta['after'+t1Id])return leaf.delta['after'+t1Id];
+  return {delegation:(leaf&&leaf.delegation)||'0',knowledge:(leaf&&leaf.knowledge)||'0'};
+}
+
+function getTier2Delegation(t2id,t1IdArg){
   var sc=getScenario(),firstChar=t2id.charAt(0);
   var arr=sc.tier2[firstChar];
-  for(var i=0;i<arr.length;i++)if(arr[i].id===t2id)return arr[i].delegation;
+  var t1Id=t1IdArg||gameState.selectedTier1;
+  for(var i=0;i<arr.length;i++)if(arr[i].id===t2id)return getLeafDelta(arr[i],t1Id).delegation;
   return '0';
 }
 
@@ -663,20 +849,19 @@ function applyTier1(t1id){
   var snap=stateSnap();
   gameState.selectedTier1=t1id;
   gameState.currentTier=2;
-  // v0.6 framework: tier1도 위·도 두 축 점수 기여 (가벼움, ±1 정도)
-  // yaml tier1에 delegation·knowledge 필드 있으면 적용. 없으면 0 (fallback).
+  // v0.6 §12 — pending에 박음 (시나리오 끝에 누적 흡수)
   var sc=getScenario(),t1Obj=null;
   for(var i=0;i<sc.tier1.length;i++){if(sc.tier1[i].id===t1id){t1Obj=sc.tier1[i];break;}}
   if(t1Obj){
     var dlgT1=getAxisDelta(t1Obj.delegation);
     var knlT1=getAxisDelta(t1Obj.knowledge);
     if(dlgT1!==0){
-      gameState.competencies.delegationChoice.value+=dlgT1;
-      gameState.competencies.delegationChoice.history.push({tier1:t1id,delegation:t1Obj.delegation,delta:dlgT1});
+      gameState.pending.delegation+=dlgT1;
+      gameState.competencies.delegationChoice.history.push({tier1:t1id,delegation:t1Obj.delegation,delta:dlgT1,pending:true});
     }
     if(knlT1!==0){
-      gameState.competencies.knowledge.value+=knlT1;
-      gameState.competencies.knowledge.history.push({tier1:t1id,knowledge:t1Obj.knowledge,delta:knlT1});
+      gameState.pending.knowledge+=knlT1;
+      gameState.competencies.knowledge.history.push({tier1:t1id,knowledge:t1Obj.knowledge,delta:knlT1,pending:true});
     }
   }
   trackEvent('tier1_selected',{scenarioId:gameState.currentScenarioId,tier1:t1id,before:snap,after:stateSnap()});
@@ -687,12 +872,22 @@ function applyTier2(t2id){
   var snap=stateSnap();
   gameState.selectedTier2=t2id;
   gameState.currentTier='result';
-  // 위임 선택력 누적 — tier2.delegation 기준
-  var dlg=getTier2Delegation(t2id);
+  // v0.6 옵션 1 — leaf 점수가 tier1 누적에 따라 결정 (getLeafDelta lookup)
+  var sc=getScenario(),t2Obj=null,firstChar=t2id.charAt(0);
+  var arr=sc.tier2[firstChar]||[];
+  for(var i=0;i<arr.length;i++){if(arr[i].id===t2id){t2Obj=arr[i];break;}}
+  var leafDelta=getLeafDelta(t2Obj,gameState.selectedTier1);
+  var dlg=leafDelta.delegation,knl=leafDelta.knowledge;
+  // v0.6 §12 — pending에 박음
   var delta=getAxisDelta(dlg);
-  gameState.competencies.delegationChoice.value+=delta;
-  gameState.competencies.delegationChoice.history.push({tier2:t2id,delegation:dlg,delta:delta});
-  trackEvent('tier2_selected',{scenarioId:gameState.currentScenarioId,tier2:t2id,delegation:dlg,delta:delta,before:snap,after:stateSnap()});
+  gameState.pending.delegation+=delta;
+  var knlDelta=getAxisDelta(knl);
+  if(knlDelta!==0){
+    gameState.pending.knowledge+=knlDelta;
+    gameState.competencies.knowledge.history.push({tier2:t2id,knowledge:knl,delta:knlDelta,pending:true,afterTier1:gameState.selectedTier1});
+  }
+  gameState.competencies.delegationChoice.history.push({tier2:t2id,delegation:dlg,delta:delta,pending:true,afterTier1:gameState.selectedTier1});
+  trackEvent('tier2_selected',{scenarioId:gameState.currentScenarioId,tier2:t2id,delegation:dlg,delta:delta,afterTier1:gameState.selectedTier1,before:snap,after:stateSnap()});
   saveGame();
 }
 
@@ -700,13 +895,13 @@ function applyReview(rid){
   var snap=stateSnap();
   gameState.selectedReview=rid;
   gameState.currentTier='final';
-  // 지식 누적 — finals[leafPath].knowledge 기준
+  // v0.6 §12 — pending에 박음 (도 축, 시나리오 끝 흡수)
   var leaf=getLeafPath();
   var fin=getScenario().finals[leaf];
   var knl=fin?fin.knowledge:'0';
   var delta=getAxisDelta(knl);
-  gameState.competencies.knowledge.value+=delta;
-  gameState.competencies.knowledge.history.push({leaf:leaf,knowledge:knl,delta:delta});
+  gameState.pending.knowledge+=delta;
+  gameState.competencies.knowledge.history.push({leaf:leaf,knowledge:knl,delta:delta,pending:true});
   // 점수 산정 — Phase 5: detectIssues + calculateFinalScore 통합 (C안 격상 메커닉)
   var sc2=getScenario();
   var t2=gameState.selectedTier2;            // 'A1', 'B2' 등
@@ -718,8 +913,9 @@ function applyReview(rid){
   gameState.score=calculateFinalScore(result2,reviewObj||{id:rid},level,leaf);
   gameState.totalScore+=gameState.score;
   if(fin&&fin.item)gameState.itemsCollected.push(fin.item);
-  // 역량 카드 획득 (§7.4): 시나리오 누적 도 축 양수 + leaf의 competencyCards 비지 않음
-  if(gameState.competencies.knowledge.value>0){
+  // 역량 카드 획득 (§7.4): 흡수 후 누적 도 축 양수 (= 누적 + pending) + leaf 카드 있음
+  var knlAfterAbsorb=gameState.competencies.knowledge.value+((gameState.pending&&gameState.pending.knowledge)||0);
+  if(knlAfterAbsorb>0){
     var cardsForLeaf=(sc2.competencyCards||{})[leaf]||[];
     if(cardsForLeaf.length){
       var note=(sc2.reviewSupplements||{})[leaf]||'';
@@ -810,19 +1006,20 @@ function _applyMult(c){
   var m=(typeof CONFIG.resourceCostMultiplier==='number')?CONFIG.resourceCostMultiplier:1;
   return {time:Math.round(c.time*m), energy:Math.round(c.energy*m)};
 }
-// v0.5 Phase 8.9 + 발란스 배율 — 위/도 자동 할인/페널티 (DECISIONS §10.6, §10.7)
-// 위임 선택력 N점 → 시간 비용 -N×mult (음수면 +|N|×mult 페널티). 도메인 지식 동일.
-// _discount.dlgEffect/knlEffect = 배율 적용된 효과량(박스 표시용). dlg/knl은 자체값(향후 사용).
+// v0.6 발란스 — 비대칭 효과 배율 (5/3 세션278 정정)
+// 양수 점수 N → 비용 -N×mPos (할인). 음수 점수 -N → 비용 +N×mNeg (페널티).
+// 양수 ×2, 음수 ×1 — 학생이 점수를 올리는 동기 강화, 페널티는 가볍게.
 function _applyDiscount(c){
   var dlg=(gameState&&gameState.competencies)?gameState.competencies.delegationChoice.value||0:0;
   var knl=(gameState&&gameState.competencies)?gameState.competencies.knowledge.value||0:0;
-  var mult=(typeof CONFIG.competencyDiscountMult==='number')?CONFIG.competencyDiscountMult:1;
-  var dlgEffect=dlg*mult;
-  var knlEffect=knl*mult;
+  var mPos=(typeof CONFIG.competencyDiscountMultPos==='number')?CONFIG.competencyDiscountMultPos:2;
+  var mNeg=(typeof CONFIG.competencyDiscountMultNeg==='number')?CONFIG.competencyDiscountMultNeg:1;
+  var dlgEffect=dlg>=0?dlg*mPos:dlg*mNeg;
+  var knlEffect=knl>=0?knl*mPos:knl*mNeg;
   return {
     time:Math.max(0,c.time-dlgEffect),
     energy:Math.max(0,c.energy-knlEffect),
-    _discount:{dlg:dlg,knl:knl,dlgEffect:dlgEffect,knlEffect:knlEffect,mult:mult,rawTime:c.time,rawEnergy:c.energy}
+    _discount:{dlg:dlg,knl:knl,dlgEffect:dlgEffect,knlEffect:knlEffect,mPos:mPos,mNeg:mNeg,rawTime:c.time,rawEnergy:c.energy}
   };
 }
 function getTier1Cost(t1){return _applyDiscount(_applyMult(_rawTier1Cost(t1)));}
@@ -932,22 +1129,34 @@ function applyRPDistribution(distribution){
 // v0.5 Phase 8.10 — 모달 (DECISIONS §10.5, §10.11)
 // =====================================================
 
-// 버튼 hold-to-repeat: mousedown 시 즉시 1회 + 350ms 후 80ms 간격 반복. mouseup/leave/touchend 시 정지.
-// 단발 클릭에도 1회 동작 (mousedown 첫 호출). disabled되면 자동 정지.
+// 버튼 hold-to-repeat with acceleration: mousedown 즉시 1회 + 시작 간격(180ms)부터 0.93배수로 가속,
+// 최소 간격(35ms)까지 단축. 손 떼면 즉시 중단 + 다음 누름 시 처음 간격부터 (가속 누적 X).
+// disabled되면 자동 정지. setTimeout 재귀 패턴 (setInterval보다 동적 간격 제어 쉬움).
 function bindHoldRepeat(btn,action){
-  var t1,t2;
+  var START_INTERVAL=180, MIN_INTERVAL=35, ACCEL=0.93;
+  var chargingTimer=null, currentInterval=START_INTERVAL;
+  function tick(){
+    if(btn.disabled){stop();return;}
+    action();
+    if(btn.disabled){stop();return;} // action으로 disabled가 됐을 수 있음 (RP=0, max 도달)
+    currentInterval=Math.max(MIN_INTERVAL,currentInterval*ACCEL);
+    chargingTimer=setTimeout(tick,currentInterval);
+  }
   function start(e){
     if(e&&e.preventDefault)e.preventDefault();
     if(btn.disabled)return;
-    action();
-    t1=setTimeout(function(){
-      t2=setInterval(function(){
-        if(btn.disabled){stop();return;}
-        action();
-      },80);
-    },350);
+    if(chargingTimer)clearTimeout(chargingTimer); // 중복 누름 방어
+    btn.classList.add('charging');
+    action(); // 첫 충전 즉시
+    if(btn.disabled){stop();return;}
+    currentInterval=START_INTERVAL;
+    chargingTimer=setTimeout(tick,currentInterval);
   }
-  function stop(){clearTimeout(t1);clearInterval(t2);t1=null;t2=null;}
+  function stop(){
+    if(chargingTimer){clearTimeout(chargingTimer);chargingTimer=null;}
+    currentInterval=START_INTERVAL; // 가속 리셋
+    btn.classList.remove('charging');
+  }
   btn.onmousedown=start;
   btn.onmouseup=stop;
   btn.onmouseleave=stop;
@@ -1322,6 +1531,100 @@ function animateResource(key,oldVal,newVal){
   setTimeout(function(){el.classList.remove('flash-up','flash-down');nm.classList.remove('pulsing');dl.className='resource-change-indicator';},2000);
 }
 
+// v0.6 §12 — pending 점수를 원 마커로 렌더 (양수=초록, 음수=빨강)
+// 좌우 분할: value 부호에 따라 -neg(좌측 33%, 중앙 쪽 정렬) 또는 -pos(우측 67%) 컨테이너에만 렌더
+// prevValue 비교로 양수↔음수 전환 시 깨짐 연출
+function renderPendingDots(containerId,value,prevValue){
+  var negBox=document.getElementById(containerId+'-neg');
+  var posBox=document.getElementById(containerId+'-pos');
+  if(!negBox||!posBox)return;
+  var activeBox=value>0?posBox:(value<0?negBox:null);
+  var inactiveBox=value>0?negBox:(value<0?posBox:null);
+  // 비활성 컨테이너에 잔존 dot이 있으면 정리 (안전망)
+  if(inactiveBox){
+    var stray=inactiveBox.querySelectorAll('.pending-dot:not(.breaking)');
+    stray.forEach(function(d){d.classList.add('breaking');(function(node){setTimeout(function(){if(node.parentNode)node.parentNode.removeChild(node);},350);})(d);});
+  }
+  // 0이면 활성 박스 없음 — 양쪽 모두 비움(깨짐 연출)
+  if(value===0){
+    [negBox,posBox].forEach(function(box){
+      var dots=box.querySelectorAll('.pending-dot:not(.breaking)');
+      dots.forEach(function(d){d.classList.add('breaking');(function(node){setTimeout(function(){if(node.parentNode)node.parentNode.removeChild(node);},350);})(d);});
+    });
+    return;
+  }
+  // 양수↔음수 전환 — 이전 활성 박스의 dot은 위 inactive 정리에서 이미 처리됨. 새 박스에 처음부터 그림
+  var crossing=(typeof prevValue==='number')&&((prevValue>0&&value<0)||(prevValue<0&&value>0));
+  if(crossing){
+    var existing=activeBox.querySelectorAll('.pending-dot:not(.breaking)');
+    existing.forEach(function(d){d.classList.add('breaking');});
+    setTimeout(function(){activeBox.innerHTML='';drawDots(activeBox,value,true);},350);
+    return;
+  }
+  // 추가/감소 — 동일 부호 내에서 활성 박스만 조작
+  var prevAbs=Math.abs(prevValue||0), curAbs=Math.abs(value);
+  if(curAbs>prevAbs){
+    // 추가 — 새 dot N개 등장
+    for(var i=prevAbs;i<curAbs;i++){
+      var d=document.createElement('div');
+      d.className='pending-dot '+(value>0?'positive':'negative')+' appearing';
+      activeBox.appendChild(d);
+    }
+  }else if(curAbs<prevAbs){
+    // 감소 — 끝(중앙에서 가장 먼 쪽)에서 깨짐
+    var dots=activeBox.querySelectorAll('.pending-dot:not(.breaking)');
+    for(var j=dots.length-1;j>=curAbs;j--){
+      dots[j].classList.add('breaking');
+      (function(node){setTimeout(function(){if(node.parentNode)node.parentNode.removeChild(node);},350);})(dots[j]);
+    }
+  }
+  // 부호는 같지만 dot 색이 안 맞으면 강제 재그림 (edge case)
+  if(prevValue!==undefined){
+    var firstDot=activeBox.querySelector('.pending-dot');
+    if(firstDot&&((value>0&&!firstDot.classList.contains('positive'))||(value<0&&!firstDot.classList.contains('negative')))){
+      activeBox.innerHTML='';drawDots(activeBox,value,true);
+    }
+  }
+}
+function drawDots(box,value,animate){
+  var n=Math.abs(value);
+  for(var i=0;i<n;i++){
+    var d=document.createElement('div');
+    d.className='pending-dot '+(value>0?'positive':'negative')+(animate?' appearing':'');
+    box.appendChild(d);
+  }
+}
+// pending 흡수 애니메이션 — 모든 dot이 게이지로 흘러내림. Promise 반환
+function absorbPending(){
+  return new Promise(function(resolve){
+    if(!gameState||!gameState.pending){resolve();return;}
+    var dlgPending=gameState.pending.delegation||0;
+    var knlPending=gameState.pending.knowledge||0;
+    if(dlgPending===0&&knlPending===0){resolve();return;}
+    var boxes=[document.getElementById('pending-dots-delegation'),document.getElementById('pending-dots-knowledge')];
+    boxes.forEach(function(box){
+      if(!box)return;
+      var dots=box.querySelectorAll('.pending-dot');
+      dots.forEach(function(d){d.classList.add('absorbing');});
+    });
+    setTimeout(function(){
+      // 누적에 박고 pending 0
+      gameState.competencies.delegationChoice.value+=dlgPending;
+      gameState.competencies.knowledge.value+=knlPending;
+      gameState.pending.delegation=0;
+      gameState.pending.knowledge=0;
+      // dot 클리어 + 게이지 갱신 — sub container(.pending-dots-neg/.pending-dots-pos) 구조는 보존
+      boxes.forEach(function(box){if(!box)return;var subs=box.querySelectorAll('.pending-dots-neg, .pending-dots-pos');subs.forEach(function(s){s.innerHTML='';});});
+      updateStats();
+      saveGame();
+      resolve();
+    },650);  // 0.6s 흡수 + 0.05s buffer
+  });
+}
+
+// renderPendingDots용 prev 추적
+var _prevPending={delegation:0,knowledge:0};
+
 function updateStats(){
   if(!gameState)return;
   var dlg=gameState.competencies.delegationChoice.value;
@@ -1331,14 +1634,25 @@ function updateStats(){
   // 양방향 바: -4..+4 → 0..50% (가운데 0 기준 좌/우, 초록=양수 / 빨강=음수)
   setBipolar('gauge-delegation','num-delegation',dlg);
   setBipolar('gauge-knowledge','num-knowledge',knl);
+  // §12 pending 원 마커
+  if(gameState.pending){
+    renderPendingDots('pending-dots-delegation',gameState.pending.delegation||0,_prevPending.delegation);
+    renderPendingDots('pending-dots-knowledge',gameState.pending.knowledge||0,_prevPending.knowledge);
+    _prevPending.delegation=gameState.pending.delegation||0;
+    _prevPending.knowledge=gameState.pending.knowledge||0;
+  }
   // 중앙 SCORE 표시 (LV은 updateExpUI가 담당)
   var scoreNumEl=document.getElementById('score-num');
   if(scoreNumEl)scoreNumEl.textContent=gameState.score;
   var cutNum=getCurrentCutNum();
-  var sp=document.getElementById('stat-progress');
-  if(sp){
-    var itemsTxt=(gameState.itemsCollected&&gameState.itemsCollected.length>0)?(' · 아이템 '+gameState.itemsCollected.length):'';
-    sp.textContent='컷 '+cutNum+'/6'+itemsTxt;
+  // 5/3 — progress-strip (시나리오 화면 헤더)으로 이동. stats-bar의 stat-progress 폐기.
+  var spsCut=document.getElementById('sps-cut-num');
+  if(spsCut)spsCut.textContent=cutNum;
+  var spsItems=document.getElementById('sps-items');
+  if(spsItems){
+    var n=(gameState.itemsCollected&&gameState.itemsCollected.length)||0;
+    spsItems.textContent='아이템 '+n+'개';
+    if(n===0)spsItems.classList.add('zero'); else spsItems.classList.remove('zero');
   }
   updateResourceUI();
   updateExpUI();
@@ -1375,6 +1689,44 @@ function animateStat(which,oldVal,newVal){
   dl.textContent=(diff>0?'+':'')+diff;
   dl.className='stat-change-indicator show '+(diff>0?'up':'down');
   setTimeout(function(){st.classList.remove('flash-up','flash-down');nm.classList.remove('pulsing');dl.className='stat-change-indicator';},2000);
+}
+
+// 타이틀+튜토리얼 화면 (§11, 5/3 세션278)
+function showTitleScreen(){
+  hideStats();
+  if(!gameState){
+    var saved=loadGame();
+    if(saved&&saved.clearedScenarios){gameState=saved;}
+    else{gameState=createInitialState();saveGame();}
+  }
+  var h='<div class="title-frame">';
+  h+='<h1>AI 리터러시 — 위임의 경계</h1>';
+  h+='<div class="intro-text">';
+  h+='딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>';
+  h+='누구나 할 수 있다면, 누구인가가 중요하다.';
+  h+='</div>';
+  h+='<div class="host-text">';
+  h+='<div class="host-q">무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지.<br>당신은 구별할 수 있을까?</div>';
+  h+='<div class="host-call">AI 리터러시, 위임의 경계!</div>';
+  h+='<div class="host-line">상황에 따른 당신의 선택이 결과물의 점수를 바꾼다.</div>';
+  h+='<div class="host-line bold">높은 점수, 역량 레벨업!</div>';
+  h+='</div>';
+  h+='<ol class="tutorial-list">';
+  h+='<li>한 학기 동안 다섯 가지 상황을 만난다 — 자기소개, 모둠활동, 어린왕자 독서, 진로 탐색, 학습계획.</li>';
+  h+='<li>각 상황에서 세 번의 선택의 순간이 있다 (큰 방향 → 행동 → 검토). 어떤 행동을 선택하는지에 따라 결과 점수가 달라진다.</li>';
+  h+='<li>점수가 쌓이며 경험치가 오른다. 경험치를 높이고 역량을 레벨업 하라.</li>';
+  h+='</ol>';
+  h+='<button class="start-btn-large" onclick="enterFromTitle()">게임 시작</button>';
+  h+='</div>';
+  container.innerHTML=h;
+  trackEvent('title_viewed',{tutorialSeenBefore:!!gameState.tutorialSeen});
+}
+
+function enterFromTitle(){
+  if(!gameState)return;
+  gameState.tutorialSeen=true;
+  saveGame();
+  showStartScreen();
 }
 
 function showStartScreen(){
@@ -1426,14 +1778,24 @@ function showStartScreen(){
     h+='</button>';
   });
   h+='</div>';
+  // §13 (5/3 세션278) — 메인 액션 가운데 큰 버튼 + 좌측 학기 처음부터 (보조)
   h+='<div class="semester-actions">';
-  if(hasSave()&&gameState.currentScenarioId&&!gameState.completed){
-    h+='<button class="start-btn secondary" onclick="continueGame()">이어하기</button>';
-  }
+  // 학기 처음부터 (cleared 1+ 또는 allDone일 때만)
   if(cleared.length>0||allDone){
-    h+='<button class="start-btn secondary" onclick="resetGame()">학기 처음부터</button>';
+    h+='<button class="action-secondary" onclick="confirmReset()">학기 처음부터</button>';
   }
-  h+='</div></div>';
+  // 메인 액션 — 진행 중 / 다음 시나리오 / 종합 리포트
+  if(allDone){
+    h+='<button class="action-main" onclick="showFinalReport()">학기 종합 리포트</button>';
+  }else if(hasSave()&&gameState.currentScenarioId&&!gameState.completed){
+    h+='<button class="action-main" onclick="continueGame()">이어서 진행</button>';
+  }else if(nextId){
+    h+='<button class="action-main" onclick="startScenario(\''+nextId+'\')">다음 시나리오</button>';
+  }
+  h+='</div>';
+  // 튜토리얼 다시 보기 (§11)
+  h+='<button class="tutorial-link" onclick="showTitleScreen()">튜토리얼 다시 보기</button>';
+  h+='</div>';
   container.innerHTML=h;
 }
 
@@ -1441,6 +1803,11 @@ function ensureRow(){
   if(currentRow)return currentRow;
   var sc=getScenario();
   var row=document.createElement('div');row.className='scenario-row';row.id='scenario-row';
+  // 5/3 — 컷/아이템 progress-strip (시나리오 화면 상단, stats-bar에서 분리)
+  var stripHTML='<div class="scenario-progress-strip" id="scenario-progress-strip">'
+    +'<div class="sps-cut">컷 <span class="sps-cut-num" id="sps-cut-num">1</span> / 6</div>'
+    +'<div class="sps-items zero" id="sps-items">아이템 0개</div>'
+    +'</div>';
   // 6 panels in 2 rows of 3
   var panels='';
   for(var i=1;i<=6;i++){
@@ -1448,7 +1815,7 @@ function ensureRow(){
     if(i===3)panels='<div class="panels-grid panels-row1">'+panels+'</div><div class="panels-grid panels-row2">';
   }
   panels+='</div>';
-  row.innerHTML=panels+'<div class="next-btn-wrap" id="next-wrap"><button class="next-btn" id="next-btn" onclick="onNext()">다음 &#8594;</button></div>';
+  row.innerHTML=stripHTML+panels+'<div class="next-btn-wrap" id="next-wrap"><button class="next-btn" id="next-btn" onclick="onNext()">다음 &#8594;</button></div>';
   container.appendChild(row);
   currentRow=row;
   return row;
@@ -1493,6 +1860,52 @@ function renderCut1(){
 function canAffordCost(cost){
   if(!gameState.resources)return true;
   return cost.time<=gameState.resources.time.current && cost.energy<=gameState.resources.energy.current;
+}
+
+// 5/3 정정 — 모든 선택지 비용 부족 시 GAME OVER. costs 배열 받아서 어느 것도 못 고르면 트리거.
+// 학생이 disable된 선택지를 0.7초 인지한 후 모달 노출.
+function _checkAllUnaffordable(costs){
+  if(!costs||!costs.length)return false;
+  for(var i=0;i<costs.length;i++){if(canAffordCost(costs[i]))return false;}
+  return true;
+}
+function triggerGameOver(){
+  // 중복 호출 방지
+  if(gameState&&gameState._gameOverShown)return;
+  if(!gameState)gameState={};
+  gameState._gameOverShown=true;
+  setTimeout(function(){
+    var modal=document.getElementById('gameover-modal');
+    if(!modal)return;
+    var t=document.getElementById('gameover-time');
+    var e=document.getElementById('gameover-energy');
+    if(t&&gameState.resources)t.textContent=gameState.resources.time.current;
+    if(e&&gameState.resources)e.textContent=gameState.resources.energy.current;
+    modal.classList.remove('hidden');
+    requestAnimationFrame(function(){modal.classList.add('visible');});
+    trackEvent('game_over_triggered',{time:gameState.resources?gameState.resources.time.current:null,energy:gameState.resources?gameState.resources.energy.current:null,scenarioId:gameState.currentScenarioId});
+  },700);
+}
+function _closeGameOverModal(){
+  var modal=document.getElementById('gameover-modal');
+  if(!modal)return;
+  modal.classList.remove('visible');
+  setTimeout(function(){modal.classList.add('hidden');},250);
+}
+function gameOverShowReport(){
+  _closeGameOverModal();
+  // 미완 시나리오 history 정리 — 자동으로 처리: scenarioHistory만 사용
+  setTimeout(function(){
+    if(gameState)gameState._gameOverShown=false;
+    showFinalReport();
+  },150);
+}
+function gameOverRestart(){
+  _closeGameOverModal();
+  setTimeout(function(){
+    if(gameState)gameState._gameOverShown=false;
+    resetGame();
+  },150);
 }
 // v0.5 Phase 8.9 + 비용 표시 디자인 (DECISIONS §10.6 4/30 세션257)
 // raw cost (빨강) + 위/도 효과 (초록 할인 / 빨강 페널티 / 회색 점선 0) 4박스 그리드
@@ -1544,6 +1957,8 @@ function goCut2(){
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
   updateStats();
+  // 5/3 정정 — 모든 tier1 선택지 비용 부족이면 GAME OVER
+  if(_checkAllUnaffordable(costs))triggerGameOver();
 }
 
 // 컷 3: 2차 선택 (선택된 1차의 3개)
@@ -1576,15 +1991,20 @@ function goCut3(){
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
   updateStats();
+  // 5/3 정정 — 모든 tier2 선택지 비용 부족이면 GAME OVER
+  if(_checkAllUnaffordable(costs))triggerGameOver();
 }
 
 // 컷 4: 결과 (raw 결과물)
 function goCut4(){
   var sc=getScenario(),t2=gameState.selectedTier2;
-  var t2obj=sc.tier2[gameState.selectedTier1].find(function(x){return x.id===t2;});
+  // v0.6 옵션 1 — 9 leaf 모두 가능. 묶음 묻지 않고 모든 그룹 검색
+  var t2obj=null;
+  ['A','B','C'].forEach(function(g){if(!t2obj&&sc.tier2[g])t2obj=sc.tier2[g].find(function(x){return x.id===t2;});});
+  var t2Delta=getLeafDelta(t2obj,gameState.selectedTier1);
   // 컷3 요약
   var c3body=currentRow.querySelector('[data-cut="3"] .panel-body');
-  c3body.innerHTML='<div class="chosen-summary"><div class="chosen-label">2차 선택</div><div class="chosen-title">'+t2+'. '+t2obj.label+'</div><div class="chosen-way">위임 깊이: '+t2obj.delegation+'</div></div>';
+  c3body.innerHTML='<div class="chosen-summary"><div class="chosen-label">2차 선택</div><div class="chosen-title">'+t2+'. '+t2obj.label+'</div><div class="chosen-way">위임 깊이: '+t2Delta.delegation+'</div></div>';
   setPanelImage(3,'2차 선택');
   setPanelImage(4,'결과');
   var panel=activatePanel(4);
@@ -1625,6 +2045,8 @@ function goCut5(){
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
   updateStats();
+  // 5/3 정정 — 모든 review 선택지 비용 부족이면 GAME OVER
+  if(_checkAllUnaffordable(costs))triggerGameOver();
 }
 
 // 컷 6: 최종 점수 + 아이템 + 자각 + 경험치/레벨업 (Phase 4 통합)
@@ -1677,17 +2099,19 @@ function goCut6(){
     h+='<div class="awareness">'+awareness+'</div>';
   }
   // Phase 6: 이번 회기 사후 공개 (힌트 OFF 모드의 학습 피드백) — SPEC §4.2
-  var t2objNow=sc.tier2[gameState.selectedTier1].find(function(x){return x.id===gameState.selectedTier2;});
-  var deleg=t2objNow?t2objNow.delegation:'';
+  // v0.6 옵션 1 — 9 leaf 모두 가능. 묶음 묻지 않고 검색
+  var t2objNow=null;
+  ['A','B','C'].forEach(function(g){if(!t2objNow&&sc.tier2[g])t2objNow=sc.tier2[g].find(function(x){return x.id===gameState.selectedTier2;});});
+  var t2DeltaNow=getLeafDelta(t2objNow,gameState.selectedTier1);
+  var deleg=t2DeltaNow.delegation||'';
   var knl=fin?fin.knowledge:'';
   var costs=sc.resourceCosts?sc.resourceCosts[leaf]:{time:0,energy:0};
   // v0.5 Phase 8 — 역량 변화 강조 (이번 회기 delta + 누적)
-  var dlgHist=gameState.competencies.delegationChoice.history;
-  var knlHist=gameState.competencies.knowledge.history;
-  var dlgDelta=dlgHist.length?dlgHist[dlgHist.length-1].delta:0;
-  var knlDelta=knlHist.length?knlHist[knlHist.length-1].delta:0;
-  var dlgTotal=gameState.competencies.delegationChoice.value;
-  var knlTotal=gameState.competencies.knowledge.value;
+  // §12 — 이번 회기 변화 = pending 합. 누적 = 흡수 후 값 (지금은 흡수 전이라 직접 합산)
+  var dlgDelta=(gameState.pending&&typeof gameState.pending.delegation==='number')?gameState.pending.delegation:0;
+  var knlDelta=(gameState.pending&&typeof gameState.pending.knowledge==='number')?gameState.pending.knowledge:0;
+  var dlgTotal=gameState.competencies.delegationChoice.value+dlgDelta;
+  var knlTotal=gameState.competencies.knowledge.value+knlDelta;
   var fmtSign=function(v){return (v>0?'+':(v<0?'':'±'))+v;};
   var deltaColor=function(v){return v>0?'#1a8c1a':(v<0?'#c44':'#666');};
   h+='<div class="result-meta" style="margin-top:10px;padding:8px 10px;background:#f7f7f7;border-left:3px solid #111;">';
@@ -1711,11 +2135,14 @@ function goCut6(){
 
   // v0.5 Phase 8.7 — 자원 회복 알림 제거 (DECISIONS §10.1). 8.11에서 RP 적립 박스로 대체
 
-  // 카드 못 받은 회기 안내 (5/3 세션278) — 도 축 음수 또는 leaf에 카드 없음
+  // 카드 못 받은 회기 안내 (5/3 세션278) — 도 축 흡수 후 누적 양수 + leaf에 카드 있음
   var _cardsForLeaf=(sc.competencyCards||{})[leaf]||[];
-  var _gotCards=(gameState.competencies.knowledge.value>0)&&_cardsForLeaf.length>0;
+  var _knlAfterAbsorb=gameState.competencies.knowledge.value+((gameState.pending&&gameState.pending.knowledge)||0);
+  var _gotCards=(_knlAfterAbsorb>0)&&_cardsForLeaf.length>0;
   if(!_gotCards){
-    h+='<div class="no-card-notice">이번엔 역량 카드를 받지 못했어요.</div>';
+    var ncMsg=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.ui_messages && TEXTS.ui_messages.scenario_result && TEXTS.ui_messages.scenario_result.no_card_notice)
+      || '이번엔 역량 카드를 받지 못했어요.';
+    h+='<div class="no-card-notice">'+ncMsg+'</div>';
   }
 
   // 학기 잔여 자원 (회복 없음 — 누적 관리)
@@ -1725,6 +2152,7 @@ function goCut6(){
   trackEvent('final_viewed',{scenarioId:sc.id,leaf:leaf,score:gameState.score,grade:grade,item:item});
 
   // 시나리오 완료 처리
+  // 5/3 세션278+ — 종합 리포트용 Δ/누적 스냅샷 동봉 (흡수 직전 시점, 위 dlgDelta·knlDelta·dlgTotal·knlTotal과 동일)
   gameState.scenarioHistory.push({
     scenarioId:sc.id,
     tier1:gameState.selectedTier1,
@@ -1733,7 +2161,11 @@ function goCut6(){
     leaf:leaf,
     finalScore:gameState.score,
     grade:grade,
-    item:item
+    item:item,
+    dlgDelta:dlgDelta,
+    knlDelta:knlDelta,
+    dlgTotal:dlgTotal,
+    knlTotal:knlTotal
   });
   gameState.completed=true;
 
@@ -1765,9 +2197,11 @@ function goCut6(){
   nb.onclick=goNextScenario;
 
   // 시나리오 끝 chain (SPEC §6.3, 5/3 세션278 재배치)
-  // 결과 패널 1.4초 보여주고 → [1] 카드 단건 컨펌 → [2] 레벨업 → [3] 자원 충전 → 다음 버튼
+  // 결과 패널 1.4초 보여주고 → [0] pending 흡수 → [1] 카드 → [2] 레벨업 → [3] 자원 충전 → 다음 버튼
   setTimeout(function(){
     var chain=Promise.resolve();
+    // [0] §12 pending → 누적 흡수 (원 마커가 게이지로 흘러내림)
+    chain=chain.then(function(){return absorbPending();});
     // [1] 카드 reward (도 축 양수 + leaf 카드 비지 않음)
     if(_gotCards){
       var _note=(sc.reviewSupplements||{})[leaf]||'';
@@ -1812,6 +2246,13 @@ function startScenario(scid){
   gameState.selectedReview=null;
   gameState.score=0;
   gameState.completed=false;
+  gameState._gameOverShown=false; // 5/3 정정 — 새 시나리오 진입 시 GAME OVER 플래그 reset
+  // §12 — 시나리오 시작 시 pending reset
+  if(!gameState.pending)gameState.pending={delegation:0,knowledge:0};
+  gameState.pending.delegation=0;
+  gameState.pending.knowledge=0;
+  _prevPending.delegation=0;
+  _prevPending.knowledge=0;
   if(typeof gameState.scenarioRepeatCount[scid]!=='number')gameState.scenarioRepeatCount[scid]=0;
   saveGame();
   currentRow=null;
@@ -1870,6 +2311,12 @@ function continueGame(){
   if(!gameState.rp||typeof gameState.rp!=='object')gameState.rp={balance:0,history:[]};
   if(typeof gameState.rp.balance!=='number')gameState.rp.balance=0;
   if(!Array.isArray(gameState.rp.history))gameState.rp.history=[];
+  // v0.6 Phase 6 guard: 진행 중인 학기는 튜토리얼 다시 안 보여줌
+  if(gameState.tutorialSeen===undefined)gameState.tutorialSeen=true;
+  // v0.6 §12 guard: pending 필드 호환
+  if(!gameState.pending||typeof gameState.pending!=='object')gameState.pending={delegation:0,knowledge:0};
+  if(typeof gameState.pending.delegation!=='number')gameState.pending.delegation=0;
+  if(typeof gameState.pending.knowledge!=='number')gameState.pending.knowledge=0;
   // 시나리오 미선택 상태면 시작 화면
   if(!gameState.currentScenarioId){showStartScreen();return;}
   trackEvent('session_continued',{version:CONFIG.version});
@@ -1987,6 +2434,24 @@ function resetGame(){
   showStartScreen();
 }
 
+// 학기 처음부터 — 확인 모달 (5/3 세션278)
+function confirmReset(){
+  var modal=document.getElementById('reset-confirm-modal');
+  if(!modal)return;
+  modal.classList.remove('hidden');
+  requestAnimationFrame(function(){modal.classList.add('visible');});
+}
+function closeResetConfirm(){
+  var modal=document.getElementById('reset-confirm-modal');
+  if(!modal)return;
+  modal.classList.remove('visible');
+  setTimeout(function(){modal.classList.add('hidden');},250);
+}
+function confirmResetDo(){
+  closeResetConfirm();
+  setTimeout(function(){resetGame();},150);
+}
+
 // =====================================================
 // 11. Report Generator (v0.3 — 두 역량 + 아이템)
 // =====================================================
@@ -2102,6 +2567,228 @@ function getCompetencyType(d, k){
   return (d>0?'p':'n')+(k>0?'p':'n');
 }
 
+// 5/3 — 종합 리포트용 헬퍼: scenarioHistory 한 회기에서 학생이 고른 leaf의 라벨/path 회수
+function _reportLeafInfo(r){
+  var sc=SCENARIOS[r.scenarioId]; if(!sc) return {path:r.leaf||'',label:''};
+  var t1=r.leaf?r.leaf.charAt(0):null;
+  var t2=r.leaf?r.leaf.substr(0,2):null;
+  var rv=r.leaf?r.leaf.substr(2):null;
+  var t1Label='',t2Label='',rvLabel='';
+  if(t1&&sc.tier1){for(var i=0;i<sc.tier1.length;i++){if(sc.tier1[i].id===t1){t1Label=sc.tier1[i].label||'';break;}}}
+  if(t2&&sc.tier2&&sc.tier2[t1]){var arr=sc.tier2[t1];for(var j=0;j<arr.length;j++){if(arr[j].id===t2){t2Label=arr[j].label||'';break;}}}
+  if(rv&&sc.reviews){for(var k=0;k<sc.reviews.length;k++){if(sc.reviews[k].id===rv){rvLabel=sc.reviews[k].label||'';break;}}}
+  // tier2 라벨이 학생이 실제 고른 행동 — 가장 의미 있는 한 줄
+  return {path:r.leaf||'',t1:t1Label,t2:t2Label,rv:rvLabel,label:t2Label||t1Label||r.leaf||''};
+}
+
+// 5/3 — inventory를 시나리오ID로 그룹화 (회기별 받은 카드 리스트)
+function _reportCardsByScenario(){
+  var groups={};
+  if(!gameState||!gameState.inventory||!gameState.inventory.competencyCards)return groups;
+  var arr=gameState.inventory.competencyCards;
+  for(var i=0;i<arr.length;i++){
+    var c=arr[i],sid=c.scenario;
+    if(!groups[sid])groups[sid]=[];
+    groups[sid].push(c.label);
+  }
+  return groups;
+}
+
+// 5/3 — 시상 panel mood 자리에 들어갈 학생 맥락 한두 줄 생성
+// (CONFIG.resultMoods 등급 정형 메시지를 학생 선택+카드 관점으로 갈음)
+function _reportSceneMood(r,cardsThisScene){
+  var info=_reportLeafInfo(r);
+  var sc=SCENARIOS[r.scenarioId];
+  // leaf 보조 텍스트 — supplements > tier2 desc > review label 순으로 한 호흡
+  var supp=(sc&&sc.reviewSupplements&&sc.reviewSupplements[r.leaf])||'';
+  var hint=supp;
+  if(!hint && sc && sc.tier2){
+    var t1c=r.leaf?r.leaf.charAt(0):null;
+    var t2c=r.leaf?r.leaf.substr(0,2):null;
+    if(t1c&&sc.tier2[t1c]){var arr=sc.tier2[t1c];for(var i=0;i<arr.length;i++){if(arr[i].id===t2c){hint=arr[i].desc||'';break;}}}
+  }
+  function _esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function _firstSent(t){if(!t)return '';var m=t.match(/^[^.!?。]+[.!?。]/);return m?m[0].trim():t;}
+  var hintShort=_firstSent(hint);
+  // texts.yaml — scene_mood 메시지
+  var smM=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.ui_messages && TEXTS.ui_messages.scene_mood) || {};
+  if(cardsThisScene && cardsThisScene.length){
+    // 중복 제거 + 최대 2장 노출
+    var seen={},uniq=[];
+    for(var k=0;k<cardsThisScene.length;k++){if(!seen[cardsThisScene[k]]){seen[cardsThisScene[k]]=1;uniq.push(cardsThisScene[k]);}}
+    var labelsHTML=uniq.slice(0,2).map(function(l){return '<b>'+_esc(l)+'</b>';}).join(', ');
+    var msg;
+    if(uniq.length>2){
+      var tplM=smM.received_more||'이번 회기에 {cards} 외 {extra}장 카드를 얻었다.';
+      msg=tplM.replace(/\{cards\}/g,labelsHTML).replace(/\{extra\}/g,(uniq.length-2));
+    }else{
+      var tplO=smM.received_one_or_two||'이번 회기에 {cards} 카드를 얻었다.';
+      msg=tplO.replace(/\{cards\}/g,labelsHTML);
+    }
+    return msg+(hintShort?'<br>'+_esc(hintShort):'');
+  }
+  var nrMsg=smM.not_received||'이번 회기는 카드를 받지 못했다.';
+  return nrMsg+(hintShort?'<br>'+_esc(hintShort):'');
+}
+
+// 5/3 — 학기 종합 리포트 narrative (compType + 카드 누적 + tier1 분포)
+// 학생이 자기 결과를 한 호흡에 읽고 패턴을 인식하도록.
+// 텍스트는 texts.yaml로 분리 (TEXTS.cards[label].short / TEXTS.narrative.types / TEXTS.narrative.tier1_patterns).
+var _COMMON_CARDS={'검수능력':1,'자기검증':1,'자기성찰':1,'비판적 사고':1};
+function _cardShort(label){
+  // texts.yaml의 cards[label].short — narrative 카드 인사이트 한 줄
+  var c=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.cards && TEXTS.cards[label]);
+  return (c && c.short) || '';
+}
+function _typeLabel(t){
+  var n=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.narrative && TEXTS.narrative.types && TEXTS.narrative.types[t]);
+  return (n && n.label) || (t==='mid'?'In-Between':t);
+}
+function _typeText(t){
+  var n=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.narrative && TEXTS.narrative.types && TEXTS.narrative.types[t]);
+  if(n && n.text)return n.text;
+  var mid=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.narrative && TEXTS.narrative.types && TEXTS.narrative.types['mid']);
+  return (mid && mid.text) || '';
+}
+function _reportNarrative(compType,inventory,history){
+  function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  // texts.yaml에서 narrative 텍스트 회수 (fallback 안전 가드 포함)
+  var N=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.narrative) || {};
+  var titles=(N.section_titles)||{};
+  var t1pat=(N.tier1_patterns)||{};
+  var cdist=(N.card_distribution)||{};
+  var noCards=(N.no_cards)||{};
+  var html='';
+  // (1) 4유형 패턴 narrative — 라벨 큰 글씨 한 줄 + 본문 단락 + 사이 여백 (5/3 정정)
+  var typeName=_typeLabel(compType);
+  var typeText=_typeText(compType);
+  html+='<div class="report-narrative-block">';
+  html+='<div class="report-narrative-title">'+_esc(titles.type||'학습자 패턴')+'</div>';
+  html+='<div class="report-narrative-cardtype">'+_esc(typeName)+'</div>';
+  html+='<div class="report-narrative-body">'+typeText+'</div>';
+  html+='</div>';
+
+  // (2) 카드 누적 인사이트 — 항목 하나하나 줄바꿈 (5/3 정정)
+  var cards=(inventory&&inventory.competencyCards)||[];
+  var groupCounts={};
+  var commonCount=0,specificCount=0;
+  for(var i=0;i<cards.length;i++){
+    var lbl=cards[i].label;
+    groupCounts[lbl]=(groupCounts[lbl]||0)+1;
+    if(_COMMON_CARDS[lbl])commonCount++; else specificCount++;
+  }
+  var labels=Object.keys(groupCounts).sort(function(a,b){return groupCounts[b]-groupCounts[a];});
+  var top=labels.slice(0,3);
+  // 회기별 카드 0장 체크
+  var cardsByScene={};
+  if(history)for(var k=0;k<history.length;k++){cardsByScene[history[k].scenarioId]=0;}
+  for(var ci=0;ci<cards.length;ci++){var sid=cards[ci].scenario;if(sid in cardsByScene)cardsByScene[sid]++;}
+  var zeroScenes=[];
+  if(history)for(var hi=0;hi<history.length;hi++){
+    var r=history[hi];
+    if((cardsByScene[r.scenarioId]||0)===0){
+      var sc=SCENARIOS[r.scenarioId];
+      zeroScenes.push(sc?sc.title:r.scenarioId);
+    }
+  }
+  html+='<div class="report-narrative-block">';
+  html+='<div class="report-narrative-title">'+_esc(titles.cards||'카드 누적 인사이트')+'</div>';
+  html+='<div class="report-narrative-body">';
+  if(cards.length===0){
+    html+='<div class="narrative-line">'+(noCards.title||'이번 학기는 카드를 한 장도 받지 못했다.')+'</div>';
+    html+='<div class="narrative-line">'+(noCards.body||'시나리오 후반부의 leaf 선택이 카드 보상과 연결되어 있다 — 다음 학기에는 자기 선택이 어떤 카드로 이어지는지 의식해 보자.')+'</div>';
+  }else{
+    // top1 — 한 줄
+    if(top[0]){
+      html+='<div class="narrative-line">가장 많이 받은 카드: <b>'+_esc(top[0])+'</b> '+groupCounts[top[0]]+'장</div>';
+    }
+    // top2/top3 — 한 줄
+    if(top.length>=2){
+      var nextLine='다음 많이 받은 카드: <b>'+_esc(top[1])+'</b> '+groupCounts[top[1]]+'장';
+      if(top.length>=3){
+        nextLine+=' / <b>'+_esc(top[2])+'</b> '+groupCounts[top[2]]+'장';
+      }
+      html+='<div class="narrative-line">'+nextLine+'</div>';
+    }
+    // 카드별 해석 — 각 top 카드 한 줄씩 (texts.yaml cards[label].short)
+    for(var ti=0;ti<top.length;ti++){
+      var l=top[ti];
+      var insight=_cardShort(l);
+      if(insight){
+        html+='<div class="narrative-line"><b>'+_esc(l)+'</b>은(는) '+_esc(insight)+'.</div>';
+      }
+    }
+    // 공통 vs 특화 — 한 줄 (텍스트는 texts.yaml에서, {common}/{specialized} 치환)
+    if(commonCount+specificCount>0){
+      var balKey;
+      if(commonCount>=specificCount*1.5)balKey='common_dominant';
+      else if(specificCount>=commonCount*1.5)balKey='specialized_dominant';
+      else balKey='balanced';
+      var balTpl=cdist[balKey] ||
+        (balKey==='common_dominant'?'공통 카드 {common}장 / 특화 카드 {specialized}장 — <b>검증·성찰 시선</b>이 학기 통틀어 일관되게 자랐다.':
+         balKey==='specialized_dominant'?'공통 카드 {common}장 / 특화 카드 {specialized}장 — <b>특정 도메인</b>에서 깊은 카드가 쌓였다.':
+         '공통 카드 {common}장 / 특화 카드 {specialized}장 — 검증·성찰과 도메인이 균형 있게 쌓였다.');
+      var balLine=balTpl.replace(/\{common\}/g,commonCount).replace(/\{specialized\}/g,specificCount);
+      html+='<div class="narrative-line">'+balLine+'</div>';
+    }
+    // 0장 회기 — 한 줄
+    if(zeroScenes.length>0){
+      var zeroTpl=N.zero_card_scenes||'<b>{scenarios}</b> 회기에서는 카드를 받지 못했다 — 다음 학기 도전 포인트.';
+      html+='<div class="narrative-line">'+zeroTpl.replace(/\{scenarios\}/g,_esc(zeroScenes.join(', ')))+'</div>';
+    }
+  }
+  html+='</div></div>';
+
+  // (3) 학생 선택 패턴 (tier1 분포) — 분포 한 줄 + 해석 한 줄 (5/3 정정)
+  if(history && history.length>0){
+    var tier1Counts={A:0,B:0,C:0};
+    for(var hi2=0;hi2<history.length;hi2++){
+      var t=history[hi2].tier1;
+      if(t && tier1Counts.hasOwnProperty(t))tier1Counts[t]++;
+    }
+    var maxT=Math.max(tier1Counts.A,tier1Counts.B,tier1Counts.C);
+    var totalT=tier1Counts.A+tier1Counts.B+tier1Counts.C;
+    var distLine='';
+    var interpLine='';
+    function _patternFor(key){
+      var p=t1pat[key]||{};
+      return {pattern:p.pattern||'', interpretation:p.interpretation||''};
+    }
+    function _distLine(patKey){
+      var p=_patternFor(patKey);
+      return totalT+' 시나리오 중 <b>'+_esc(p.pattern)+'</b> (A '+tier1Counts.A+'·B '+tier1Counts.B+'·C '+tier1Counts.C+').';
+    }
+    if(totalT===0){
+      var nd=t1pat.no_data||{};
+      distLine=nd.distribution||'1차 선택 데이터가 없다.';
+      interpLine=nd.interpretation||'패턴을 보기 어렵다.';
+    }else if(tier1Counts.A===tier1Counts.B && tier1Counts.B===tier1Counts.C){
+      distLine=_distLine('balanced');
+      interpLine=_patternFor('balanced').interpretation;
+    }else if(tier1Counts.A===maxT && tier1Counts.B<maxT && tier1Counts.C<maxT){
+      distLine=_distLine('A_dominant');
+      interpLine=_patternFor('A_dominant').interpretation;
+    }else if(tier1Counts.B===maxT && tier1Counts.A<maxT && tier1Counts.C<maxT){
+      distLine=_distLine('B_dominant');
+      interpLine=_patternFor('B_dominant').interpretation;
+    }else if(tier1Counts.C===maxT && tier1Counts.A<maxT && tier1Counts.B<maxT){
+      distLine=_distLine('C_dominant');
+      interpLine=_patternFor('C_dominant').interpretation;
+    }else{
+      distLine=_distLine('mixed');
+      interpLine=_patternFor('mixed').interpretation;
+    }
+    html+='<div class="report-narrative-block">';
+    html+='<div class="report-narrative-title">'+_esc(titles.tier1||'학생 선택 패턴')+'</div>';
+    html+='<div class="report-narrative-body">';
+    html+='<div class="narrative-line">'+distLine+'</div>';
+    html+='<div class="narrative-line">'+interpLine+'</div>';
+    html+='</div></div>';
+  }
+
+  return '<div class="report-narrative">'+html+'</div>';
+}
+
 function showFinalReport(){
   hideStats();
   trackEvent('semester_report_viewed',{totalScore:gameState.totalScore,history:gameState.scenarioHistory,level:gameState.exp.level,cards:gameState.cardsHeld,items:gameState.itemsCollected});
@@ -2112,17 +2799,22 @@ function showFinalReport(){
   var kv=gameState.competencies.knowledge.value;
   var compType=getCompetencyType(dv,kv);
   var compText=(CONFIG.resultTextsByType||{})[compType]||'';
+  function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
+  // texts.yaml — report 섹션 텍스트
+  var R=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.report) || {};
+  var statL=R.stat_labels||{};
+  var cardsSec=R.cards_section||{};
   var h='<div class="report-overlay"><div class="report-inner report-v813">';
-  h+='<h2>한 학기 활동 리포트</h2>';
-  h+='<div class="report-subtitle">자기소개 → 모둠 발표 → 어린왕자 → 진로 → 시험 공부<br>다섯 결정이 한 학생의 한 학기를 만들었다.</div>';
+  h+='<h2>'+_esc(R.title||'한 학기 활동 리포트')+'</h2>';
+  h+='<div class="report-subtitle">'+(R.subtitle||'자기소개 → 모둠 발표 → 어린왕자 → 진로 → 시험 공부<br>다섯 결정이 한 학생의 한 학기를 만들었다.')+'</div>';
 
   // 상단: 4박스 통계 (총점/레벨/위/도)
   h+='<div class="report-grid-4">';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+totalScore+'</div><div class="report-stat-label">학기 총점</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">Lv.'+lv+'</div><div class="report-stat-label">최종 레벨</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+(dv>0?'+':'')+dv+'</div><div class="report-stat-label">위임 판단력</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+(kv>0?'+':'')+kv+'</div><div class="report-stat-label">도메인 지식</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+totalScore+'</div><div class="report-stat-label">'+_esc(statL.total||'학기 총점')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">Lv.'+lv+'</div><div class="report-stat-label">'+_esc(statL.level||'최종 레벨')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(dv>0?'+':'')+dv+'</div><div class="report-stat-label">'+_esc(statL.delegation||'위임 판단력')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(kv>0?'+':'')+kv+'</div><div class="report-stat-label">'+_esc(statL.knowledge||'도메인 지식')+'</div></div>';
   h+='</div>';
 
   // 위/도 4유형 의미 박스
@@ -2133,15 +2825,80 @@ function showFinalReport(){
     h+='</div>';
   }
 
+  // 5/3 — narrative 박스 (4유형 의미 박스 다음, 카드 누적 위). AI 리터러시 교육 관점 한 호흡.
+  ensureInventory();
+  h+=_reportNarrative(compType, gameState.inventory||{competencyCards:[]}, hist);
+
+  // 5/3 — 카드 누적 리뷰 섹션 (narrative 다음 / 카툰 위)
+  var allCards=(gameState.inventory&&gameState.inventory.competencyCards)||[];
+  var totalCardCount=allCards.length;
+  h+='<div class="report-cards-section">';
+  var cardsTitleTpl=cardsSec.title||'한 학기 동안 모은 역량 카드 — 총 {N}장';
+  h+='<div class="report-cards-title">'+cardsTitleTpl.replace(/\{N\}/g,totalCardCount)+'</div>';
+  if(totalCardCount===0){
+    h+='<div class="report-cards-empty">'+_esc(cardsSec.empty||'이번 학기는 역량 카드를 받지 못했어요. 다시 도전!')+'</div>';
+  }else{
+    // 라벨로 그룹화 + 회기 출처 회수 (renderInventory와 동일 패턴)
+    var cardGroups={};
+    for(var ci=0;ci<allCards.length;ci++){
+      var cc=allCards[ci];
+      if(!cardGroups[cc.label])cardGroups[cc.label]={count:0,sources:[]};
+      cardGroups[cc.label].count++;
+      var stitle=cc.scenarioTitle||cc.scenario||'';
+      // 같은 시나리오 중복은 보존 (같은 회기에 여러 장 받았다는 정보)
+      cardGroups[cc.label].sources.push(stitle);
+    }
+    h+='<div class="report-cards-grid">';
+    Object.keys(cardGroups).sort(function(a,b){
+      return cardGroups[b].count - cardGroups[a].count || a.localeCompare(b,'ko');
+    }).forEach(function(label){
+      var g=cardGroups[label];
+      var color=_cardColor(label);
+      // 출처 unique 보존 + 순서대로
+      var seen={},uniqSrc=[];
+      for(var si=0;si<g.sources.length;si++){var s=g.sources[si];if(!seen[s]){seen[s]=1;uniqSrc.push(s);}}
+      h+='<div class="report-card-row">';
+      h+='<div class="report-card-row-head">';
+      h+='<span class="report-card-count" style="background:'+color+'">x'+g.count+'</span>';
+      h+='<span class="report-card-label">'+_esc(label)+'</span>';
+      h+='</div>';
+      h+='<div class="report-card-source">'+_esc(uniqSrc.join(', '))+'</div>';
+      h+='</div>';
+    });
+    h+='</div>';
+  }
+  h+='</div>';
+
+  // 회기별 카드 그룹 (시상 panel mood + scene summary 양쪽에서 사용)
+  var cardsByScene=_reportCardsByScenario();
+
   // 하단: 시나리오별 카툰 6컷 시리얼 (위→아래)
   h+='<div class="report-comic">';
   hist.forEach(function(r,i){
     var sc=SCENARIOS[r.scenarioId];
     var grade=r.grade||'D';
     var gradeLow=grade.toLowerCase();
-    var mood=(CONFIG.resultMoods||{})[grade]||'';
+    var info=_reportLeafInfo(r);
+    var thisCards=cardsByScene[r.scenarioId]||[];
+    // β. scene-summary 한 줄 — 선택 / Δ위 / Δ도 / 카드
+    var dlgD=(typeof r.dlgDelta==='number')?r.dlgDelta:null;
+    var knlD=(typeof r.knlDelta==='number')?r.knlDelta:null;
+    var fmtD=function(v){return (v>0?'+':(v<0?'':'±'))+v;};
+    var seenC={},uniqC=[];
+    for(var cc2=0;cc2<thisCards.length;cc2++){if(!seenC[thisCards[cc2]]){seenC[thisCards[cc2]]=1;uniqC.push(thisCards[cc2]);}}
+    var cardsLabel='';
+    if(uniqC.length===0)cardsLabel='카드 0장';
+    else if(uniqC.length<=2)cardsLabel='카드 '+uniqC.length+'장 — '+uniqC.join(', ');
+    else cardsLabel='카드 '+uniqC.length+'장 — '+uniqC.slice(0,2).join(', ')+' 외';
+    var summarySegs=[];
+    if(info.label)summarySegs.push('<span class="seg">선택: <b>'+_esc(info.label)+'</b></span>');
+    if(dlgD!==null)summarySegs.push('<span class="seg">위 '+fmtD(dlgD)+'</span>');
+    if(knlD!==null)summarySegs.push('<span class="seg">도 '+fmtD(knlD)+'</span>');
+    summarySegs.push('<span class="seg">'+_esc(cardsLabel)+'</span>');
+
     h+='<div class="comic-scene">';
-    h+='<div class="comic-scene-title">'+(i+1)+'. '+(sc?sc.title:r.scenarioId)+' <span class="comic-scene-meta">'+r.finalScore+'점 · '+grade+'등급</span></div>';
+    h+='<div class="comic-scene-title">'+(i+1)+'. '+_esc(sc?sc.title:r.scenarioId)+' <span class="comic-scene-meta">'+r.finalScore+'점 · '+grade+'등급</span></div>';
+    h+='<div class="comic-scene-summary">'+summarySegs.join('')+'</div>';
     h+='<div class="comic-strip">';
     // 4/30 세션260 — 코믹스트립: 각 컷 = panel(이미지 + 캡션)
     for(var c=1;c<=5;c++){
@@ -2152,17 +2909,18 @@ function showFinalReport(){
       if(cap)h+='<div class="comic-caption">'+cap+'</div>';
       h+='</div>';
     }
-    // 시상 panel — 등급 이미지 + 무드 캡션 (기존 .comic-mood 한 줄을 통합)
-    h+='<div class="comic-panel">';
+    // 시상 panel — 등급 이미지 + 학생 맥락 캡션 (mood 갈음, 5/3)
+    var sceneMood=_reportSceneMood(r,thisCards);
+    h+='<div class="comic-panel comic-panel-prize">';
     h+='<img class="comic-cut comic-prize" src="../scenario_results/scenario_result__'+gradeLow+'.png" alt="'+grade+' 시상" onerror="this.style.display=\'none\'">';
-    if(mood)h+='<div class="comic-caption comic-caption-mood">'+mood+'</div>';
+    if(sceneMood)h+='<div class="comic-caption comic-caption-mood">'+sceneMood+'</div>';
     h+='</div>';
     h+='</div>'; // /strip
     h+='</div>'; // /scene
   });
   h+='</div>';
 
-  h+='<button class="start-btn" onclick="resetGame()">학기 처음부터</button>';
+  h+='<button class="start-btn" onclick="resetGame()">'+_esc(R.btn_restart||'학기 처음부터')+'</button>';
   h+='</div></div>';
   container.innerHTML=h;
 }
@@ -2432,13 +3190,16 @@ setInterval(function(){if(dbgOn)renderDebug();},3000);
 // =====================================================
 // 12. 역량 카드 인벤토리 + reward 팝업 (§7.4 ~ §7.6)
 // =====================================================
-// 라벨 → 색 매핑 (잉크 톤 8색, B&W 위 액센트). 같은 라벨은 항상 같은 색.
-var _CARD_PALETTE=['#5b8aa0','#a86b4c','#3f6b5b','#b08940','#6b5b95','#5c8a73','#a55c5c','#4d6b8a'];
+// 5/3 — 카드 색상 매핑 (TEXTS.cards[label].color) — texts.yaml 분리. 코드 하드코딩 폐기.
+// fallback: hue circle 분산 (매핑에 없는 라벨)
+var _CARD_PALETTE_FALLBACK=['#d32f2f','#1976d2','#388e3c','#7b1fa2','#f57c00','#00897b','#c2185b','#5d4037'];
 function _cardColor(label){
-  if(!label)return _CARD_PALETTE[0];
+  if(!label)return _CARD_PALETTE_FALLBACK[0];
+  var c=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.cards && TEXTS.cards[label] && TEXTS.cards[label].color);
+  if(c)return c;
   var h=0;
   for(var i=0;i<label.length;i++)h=((h<<5)-h+label.charCodeAt(i))|0;
-  return _CARD_PALETTE[Math.abs(h)%_CARD_PALETTE.length];
+  return _CARD_PALETTE_FALLBACK[Math.abs(h)%_CARD_PALETTE_FALLBACK.length];
 }
 function ensureInventory(){
   if(!gameState)return;
@@ -2469,15 +3230,17 @@ function renderInventory(){
   ensureInventory();
   var list=document.getElementById('inv-list');
   if(!list)return;
+  var emptyMsg=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.ui_messages && TEXTS.ui_messages.inventory && TEXTS.ui_messages.inventory.empty)
+    ||'아직 획득한 카드가 없어요.<br>시나리오 끝에 카드를 받을 수 있습니다.';
   var cards=gameState.inventory.competencyCards;
   if(!cards||cards.length===0){
-    list.innerHTML='<div class="inv-empty">아직 획득한 카드가 없어요.<br>시나리오 끝에 카드를 받을 수 있습니다.</div>';
+    list.innerHTML='<div class="inv-empty">'+emptyMsg+'</div>';
     return;
   }
   var groups={};
   for(var i=0;i<cards.length;i++){var c=cards[i];if(!groups[c.label])groups[c.label]=[];groups[c.label].push(c);}
   var html='';
-  Object.keys(groups).forEach(function(label){
+  Object.keys(groups).sort(function(a,b){return groups[b].length - groups[a].length || a.localeCompare(b,'ko');}).forEach(function(label){
     var g=groups[label];
     var detailItems=g.map(function(c){
       var sc=c.scenarioTitle||c.scenario||'';
@@ -2486,9 +3249,28 @@ function renderInventory(){
       return '<div style="margin-bottom:6px">· '+_invEscapeHTML(sc)+_invEscapeHTML(lf)+nt+'</div>';
     }).join('');
     var color=_cardColor(label);
-    html+='<div class="inv-card" style="border-left-color:'+color+'" onclick="this.classList.toggle(\'expanded\')">'+
-      '<div class="inv-card-row"><span class="inv-card-label" style="color:'+color+'">'+_invEscapeHTML(label)+'</span><span class="inv-card-count">×'+g.length+'</span></div>'+
-      '<div class="inv-card-detail">'+detailItems+'</div></div>';
+    // 5/3 — 카드 의미 박스 (expand 영역 최상단). texts.yaml inject (TEXTS.cards[label]).
+    var meaning=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.cards && TEXTS.cards[label]) || null;
+    var meaningHTML='';
+    if(meaning){
+      var fullDef=meaning.full_definition||(label+(meaning.short?' — '+meaning.short:''));
+      var desc=meaning.description||'';
+      meaningHTML='<div class="inv-card-meaning" style="border-left-color:'+color+'">'+
+        '<div class="inv-card-meaning-label" style="color:'+color+'">'+_invEscapeHTML(label)+'</div>'+
+        '<div class="inv-card-meaning-def">'+_invEscapeHTML(fullDef)+'</div>'+
+        (desc?'<div class="inv-card-meaning-desc">'+_invEscapeHTML(desc)+'</div>':'')+
+      '</div>';
+    }
+    // 5/3 — 좌측 색띠(카드색 배경 + 흰 카운트) + 우측 본문(라벨)
+    // expand 순서: 카드 의미 박스 → 출처 목록
+    html+='<div class="inv-card" onclick="this.classList.toggle(\'expanded\')">'+
+      '<div class="inv-card-row">'+
+        '<span class="inv-card-count" style="background:'+color+'">×'+g.length+'</span>'+
+        '<div class="inv-card-body"><span class="inv-card-label">'+_invEscapeHTML(label)+'</span></div>'+
+        '<span class="inv-card-chevron" aria-hidden="true">⌄</span>'+
+      '</div>'+
+      meaningHTML+
+      '<div class="inv-card-detail"><div class="inv-card-detail-title">출처</div>'+detailItems+'</div></div>';
   });
   list.innerHTML=html;
 }
@@ -2502,63 +3284,141 @@ function awardCompetencyCards(scenarioId,scenarioTitle,leafId,cards,note){
   }
   saveGame();
 }
-// 단건 컨펌 reward — Promise 반환, chain에서 호출. cascade·skip·ESC 폐기 (5/3 세션278)
+// 5/3 정정(2차) — 좌표 중앙 압축. 카드 폭 220px(↓280) 기준, 화면 중앙 ~520x320px 안에 모이게.
+// 가로 spacing은 카드 폭+한 호흡, 세로 spacing은 카드 높이의 1/3~1/2 수준. 별/W 패턴은 유지.
+// 시간차 등장 0.18s 간격(Pop In 유지). 학생이 어느 카드부터 획득해도 OK (순서 무관).
+var _CARD_REWARD_POSITIONS={
+  1:[{top:'50%',left:'50%'}],
+  2:[{top:'50%',left:'37%'},{top:'50%',left:'63%'}],
+  3:[{top:'35%',left:'38%'},{top:'35%',left:'62%'},{top:'65%',left:'50%'}],
+  4:[{top:'38%',left:'35%'},{top:'38%',left:'65%'},{top:'65%',left:'35%'},{top:'65%',left:'65%'}],
+  5:[{top:'30%',left:'30%'},{top:'30%',left:'70%'},{top:'45%',left:'50%'},{top:'70%',left:'35%'},{top:'70%',left:'65%'}]
+};
 function playCardRewardSequential(cards,note){
   return new Promise(function(resolve){
     var overlay=document.getElementById('card-reward-overlay');
     if(!overlay||!cards||!cards.length){resolve();return;}
     overlay.classList.remove('hidden');overlay.innerHTML='';
-    var idx=0;
-    function showNext(){
-      if(idx>=cards.length){
-        overlay.classList.add('hidden');overlay.innerHTML='';
-        // travel 끝나는 시점에 인벤토리 badge 노출
-        var panel=document.getElementById('inv-panel');
-        var badge=document.getElementById('inv-tab-badge');
-        if(badge&&panel&&!panel.classList.contains('open'))badge.classList.remove('hidden');
-        resolve();return;
-      }
+    var n=Math.min(cards.length,5);
+    var positions=_CARD_REWARD_POSITIONS[n]||_CARD_REWARD_POSITIONS[5];
+    var remaining=cards.length;
+    function finishAll(){
+      overlay.classList.add('hidden');overlay.innerHTML='';
+      // 모든 카드 획득 시점에 인벤토리 badge 노출
+      var panel=document.getElementById('inv-panel');
+      var badge=document.getElementById('inv-tab-badge');
+      if(badge&&panel&&!panel.classList.contains('open'))badge.classList.remove('hidden');
+      resolve();
+    }
+    function makeCard(idx){
       var label=cards[idx];
       var color=_cardColor(label);
       var card=document.createElement('div');
       card.className='card-reward-card';
       card.style.borderLeftColor=color;
+      // 위치 인라인 (5점 좌표 중 하나 — cards.length>5는 5점 안에서 modulo)
+      var pos=positions[idx%positions.length];
+      card.style.top=pos.top;
+      card.style.left=pos.left;
       var btnId='card-confirm-'+idx;
-      card.innerHTML='<div class="card-reward-tag">역량 카드 획득 · '+(idx+1)+'/'+cards.length+'</div>'+
+      // texts.yaml — card_reward 메시지 (tag_format / btn_acquire)
+      var crM=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.ui_messages && TEXTS.ui_messages.card_reward) || {};
+      var tagTpl=crM.tag_format||'역량 카드 획득 · {idx}/{total}';
+      var btnLabel=crM.btn_acquire||'획득';
+      var tagText=tagTpl.replace(/\{idx\}/g,(idx+1)).replace(/\{total\}/g,cards.length);
+      card.innerHTML='<div class="card-reward-tag">'+_invEscapeHTML(tagText)+'</div>'+
         '<div class="card-reward-label" style="color:'+color+'">'+_invEscapeHTML(label)+'</div>'+
         (note?'<div class="card-reward-divider"></div><div class="card-reward-note">'+_invEscapeHTML(note)+'</div>':'')+
-        '<button class="card-reward-confirm" id="'+btnId+'">획득</button>';
+        '<button class="card-reward-confirm" id="'+btnId+'">'+_invEscapeHTML(btnLabel)+'</button>';
       overlay.appendChild(card);
-      requestAnimationFrame(function(){card.classList.add('appear');});
+      // 시간차 등장 — 0.18s 간격
+      setTimeout(function(){card.classList.add('appear');},idx*180);
       var btn=document.getElementById(btnId);
       btn.onclick=function(){
         btn.disabled=true;
-        // travel: 우측 인벤토리 탭으로 이동 + scale 축소
+        // travel: 우측 인벤토리 탭으로 휘리릭 + 회전 + scale 축소 (5/3 세션278)
+        // Pop In 끝났는지 무관하게 .appear 제거 + 인라인 transition로 travel 강제
+        card.classList.remove('appear');
+        card.style.animation='none';
         var tab=document.getElementById('inv-tab');
         if(tab){
           var r=tab.getBoundingClientRect();
-          var tx=r.left+r.width/2-window.innerWidth/2;
-          var ty=r.top+r.height/2-window.innerHeight/2;
-          card.style.transition='opacity 0.6s ease, transform 0.6s cubic-bezier(0.4,0,1,1)';
-          card.style.transform='translate(calc(-50% + '+tx+'px), calc(-50% + '+ty+'px)) scale(0.15)';
+          // 카드 현재 위치(viewport 좌표) 기준 → tab까지의 delta
+          var cr=card.getBoundingClientRect();
+          var cx=cr.left+cr.width/2;
+          var cy=cr.top+cr.height/2;
+          var tx=r.left+r.width/2-cx;
+          var ty=r.top+r.height/2-cy;
+          card.style.transition='opacity 0.35s ease-in, transform 0.35s cubic-bezier(0.55,0,0.85,0.3)';
+          card.style.transform='translate(calc(-50% + '+tx+'px), calc(-50% + '+ty+'px)) scale(0.12) rotate(720deg)';
         }
         card.classList.add('travel');
-        // 0.6s travel + 0.2s buffer = 0.8s → 다음 카드
         setTimeout(function(){
           if(card.parentNode)card.parentNode.removeChild(card);
-          idx++;
-          showNext();
-        },800);
+          remaining--;
+          if(remaining<=0)finishAll();
+        },450);
       };
     }
-    showNext();
+    for(var i=0;i<cards.length;i++)makeCard(i);
   });
 }
 
 // =====================================================
 // 13. Initialization
 // =====================================================
-showStartScreen();
+// 5/3 — 정적 HTML 텍스트(GAME OVER 모달, 인벤토리 탭/패널, reset confirm) → texts.yaml inject
+function _applyStaticTexts(){
+  if(typeof TEXTS==='undefined' || !TEXTS) return;
+  var U=TEXTS.ui_messages||{};
+  function _set(id,val){var el=document.getElementById(id); if(el && val!=null) el.innerHTML=val;}
+  // GAME OVER 모달
+  var go=U.game_over||{};
+  _set('gameover-title',go.title);
+  _set('gameover-body',go.body);
+  _set('gameover-time-label',go.time_label);
+  _set('gameover-energy-label',go.energy_label);
+  _set('gameover-btn-report',go.btn_report);
+  _set('gameover-btn-restart',go.btn_restart);
+  // 인벤토리 탭 + 패널 헤더 + 빈 상태
+  var inv=U.inventory||{};
+  _set('inv-tab-name',inv.tab_name);
+  _set('inv-tab-desc',inv.tab_desc);
+  _set('inv-panel-title',inv.panel_title);
+  if(inv.empty){
+    var list=document.getElementById('inv-list');
+    if(list && list.children.length===1 && list.firstElementChild && list.firstElementChild.classList.contains('inv-empty')){
+      list.firstElementChild.innerHTML=inv.empty;
+    }
+  }
+  // reset confirm 모달 — id 없는 부분은 querySelector로
+  var rc=U.reset_confirm||{};
+  var rcModal=document.getElementById('reset-confirm-modal');
+  if(rcModal){
+    var rcTitle=rcModal.querySelector('.modal-title');
+    var rcSub=rcModal.querySelector('.modal-subtitle');
+    var rcCancel=rcModal.querySelector('.confirm-cancel');
+    var rcDestructive=rcModal.querySelector('.confirm-destructive');
+    if(rcTitle && rc.title)rcTitle.innerHTML=rc.title;
+    if(rcSub && rc.subtitle)rcSub.innerHTML=rc.subtitle;
+    if(rcCancel && rc.btn_cancel)rcCancel.innerHTML=rc.btn_cancel;
+    if(rcDestructive && rc.btn_destructive)rcDestructive.innerHTML=rc.btn_destructive;
+  }
+}
+_applyStaticTexts();
+
+// §11 진입 분기 — 새 학기 + 튜토리얼 미시청만 타이틀 화면
+// 진행 중인 학기(구버전 save 포함) 또는 튜토리얼 본 적 있으면 시나리오 선택으로
+(function initEntry(){
+  var saved=loadGame();
+  var hasProgress=saved&&((saved.clearedScenarios||[]).length>0);
+  var seen=saved&&saved.tutorialSeen===true;
+  if(seen||hasProgress){
+    showStartScreen();
+  }else{
+    showTitleScreen();
+  }
+})();
 </script>
 </body>
 </html>
