@@ -722,7 +722,7 @@ var CONFIG={
   sessionIdKey:'ai-literacy-v07-session-id',
   version:'v0.7',
   scenarios:['selfintro','groupwork','eorinwangja','career','studyplan'],
-  pointThresholds:{S:90,A:70,B:50,C:30},
+  pointThresholds:{S:95,A:90,B:80,C:70,D:60},
   cardBoost:20,
   detectedIssueBoost:10,
   // v0.4 신규 (SPEC §12) — Phase 3 이후 사용
@@ -824,8 +824,8 @@ var SCENARIOS = {
         "lesson": "내 손으로 직접 했다 — 자기 일은 자기가 한다.",
         "delegation": "+",
         "knowledge": "+",
-        "basePoint": 20,
-        "varPoint": 8
+        "basePoint": 10,
+        "varPoint": 15
       },
       {
         "id": "B",
@@ -834,8 +834,8 @@ var SCENARIOS = {
         "lesson": "AI에 위임했다 — 자기소개를 AI에 시킬 일인지 따져봐야 한다.",
         "delegation": "-",
         "knowledge": "-",
-        "basePoint": 20,
-        "varPoint": 4
+        "basePoint": 10,
+        "varPoint": 0
       },
       {
         "id": "C",
@@ -844,8 +844,8 @@ var SCENARIOS = {
         "lesson": "다른 데서 가져왔다 — 적절히 골라 쓸 수도, 자기 자리를 비울 수도 있다.",
         "delegation": "0",
         "knowledge": "0",
-        "basePoint": 20,
-        "varPoint": 6
+        "basePoint": 10,
+        "varPoint": 8
       }
     ],
     "tier2": {
@@ -868,8 +868,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "내 경험을 들여다봤다 — 자기 안에서 글이 나온다.",
-          "basePoint": 20,
-          "varPoint": 10
+          "basePoint": 10,
+          "varPoint": 25
         },
         {
           "id": "A2",
@@ -889,8 +889,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "자기 글에 AI 손이 점만 닿았다 — 내용은 내 것이고 표현이 매끄러워졌다.",
-          "basePoint": 20,
-          "varPoint": 7
+          "basePoint": 10,
+          "varPoint": 12
         },
         {
           "id": "A3",
@@ -910,8 +910,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "떠오르는 대로 내보냈다 — 자기 안에서 끌어냈지만 정리 없이 나갔다.",
-          "basePoint": 20,
-          "varPoint": 3
+          "basePoint": 10,
+          "varPoint": 0
         }
       ],
       "B": [
@@ -933,8 +933,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "AI에 다 맡겼다 — 내 빈자리를 가짜로 메운다.",
-          "basePoint": 20,
-          "varPoint": 1
+          "basePoint": 10,
+          "varPoint": -10
         },
         {
           "id": "B2",
@@ -954,7 +954,7 @@ var SCENARIOS = {
             }
           },
           "lesson": "재료는 줬지만 글까지 맡겼다 — 말투가 내 것이 아니다.",
-          "basePoint": 20,
+          "basePoint": 10,
           "varPoint": 5
         },
         {
@@ -975,8 +975,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "내 글이 중심이고 AI는 거들었다 — 표현만 받고 내 말투로 검수하면 글이 단단해진다.",
-          "basePoint": 20,
-          "varPoint": 10
+          "basePoint": 10,
+          "varPoint": 25
         }
       ],
       "C": [
@@ -998,8 +998,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "작년의 글이 거름이 되어 올해의 나를 자기 말로 자라게 했다 — 자기 자료를 적극 활용했다.",
-          "basePoint": 20,
-          "varPoint": 10
+          "basePoint": 10,
+          "varPoint": 25
         },
         {
           "id": "C2",
@@ -1019,8 +1019,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "친구의 글이 내 자리에 들어왔다 — 친구의 자기소개는 내 것이 아니다.",
-          "basePoint": 20,
-          "varPoint": 1
+          "basePoint": 10,
+          "varPoint": -10
         },
         {
           "id": "C3",
@@ -1040,8 +1040,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "한 줄만 적었다 — 자기소개를 건너뛰었다.",
-          "basePoint": 20,
-          "varPoint": 1
+          "basePoint": 10,
+          "varPoint": -10
         }
       ]
     },
@@ -1138,7 +1138,7 @@ var SCENARIOS = {
         "desc": "명시적인 환각·오류만 발견.",
         "boostType": "explicit",
         "lesson": "한 번 훑어 명백한 오류를 잡았다. 도메인지식 +1",
-        "points": 20
+        "points": 18
       },
       {
         "id": "R3",
@@ -1751,8 +1751,8 @@ var SCENARIOS = {
         "lesson": "내 손으로 직접 했다 — 모둠 발표는 내가 이해해야 내 파트가 된다.",
         "delegation": "+",
         "knowledge": "+",
-        "basePoint": 20,
-        "varPoint": 8
+        "basePoint": 10,
+        "varPoint": 15
       },
       {
         "id": "B",
@@ -1761,8 +1761,8 @@ var SCENARIOS = {
         "lesson": "AI에 위임했다 — 모둠 자료에 AI를 어디까지 쓸지 따져봐야 한다.",
         "delegation": "-",
         "knowledge": "-",
-        "basePoint": 20,
-        "varPoint": 4
+        "basePoint": 10,
+        "varPoint": 0
       },
       {
         "id": "C",
@@ -1771,8 +1771,8 @@ var SCENARIOS = {
         "lesson": "다른 데서 가져왔다 — 적절히 골라 쓸 수도, 내 파트를 비울 수도 있다.",
         "delegation": "0",
         "knowledge": "0",
-        "basePoint": 20,
-        "varPoint": 6
+        "basePoint": 10,
+        "varPoint": 8
       }
     ],
     "tier2": {
@@ -1795,8 +1795,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "조사하고 모둠과 맞췄다 — 내 파트가 모둠 흐름 안에 자리 잡는다.",
-          "basePoint": 20,
-          "varPoint": 10
+          "basePoint": 10,
+          "varPoint": 25
         },
         {
           "id": "A2",
@@ -1816,8 +1816,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "자기 슬라이드에 AI 손이 점만 닿았다 — 자료와 흐름은 내 것이고 표현이 매끄러워졌다.",
-          "basePoint": 20,
-          "varPoint": 7
+          "basePoint": 10,
+          "varPoint": 12
         },
         {
           "id": "A3",
@@ -1837,8 +1837,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "얕게 보고 만들었다 — 슬라이드는 있지만 설명할 깊이가 없다.",
-          "basePoint": 20,
-          "varPoint": 3
+          "basePoint": 10,
+          "varPoint": 0
         }
       ],
       "B": [
@@ -1860,8 +1860,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "AI에 다 맡겼다 — 출처 없는 자료가 내 발표가 된다.",
-          "basePoint": 20,
-          "varPoint": 1
+          "basePoint": 10,
+          "varPoint": -10
         },
         {
           "id": "B2",
@@ -1881,7 +1881,7 @@ var SCENARIOS = {
             }
           },
           "lesson": "재료는 줬지만 정리까지 맡겼다 — 모둠 흐름이 빠진 자료가 나온다.",
-          "basePoint": 20,
+          "basePoint": 10,
           "varPoint": 5
         },
         {
@@ -1902,8 +1902,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "자료와 출처는 내가 잡고 AI는 정리만 도왔다 — 자기 조사 위에 적절한 결합이 얹혔다.",
-          "basePoint": 20,
-          "varPoint": 10
+          "basePoint": 10,
+          "varPoint": 25
         }
       ],
       "C": [
@@ -1925,8 +1925,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "기성 자료를 거름으로 삼아 우리 주제로 다시 채웠다 — 빌리되 내 자리는 내가 채웠다.",
-          "basePoint": 20,
-          "varPoint": 10
+          "basePoint": 10,
+          "varPoint": 25
         },
         {
           "id": "C2",
@@ -1946,8 +1946,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "다른 모둠 슬라이드가 내 자리에 들어왔다 — 다른 모둠의 자료는 내 것이 아니다.",
-          "basePoint": 20,
-          "varPoint": 1
+          "basePoint": 10,
+          "varPoint": -10
         },
         {
           "id": "C3",
@@ -1967,8 +1967,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "내 파트를 떠넘겼다 — 발표 당일 내가 답할 수 없게 된다.",
-          "basePoint": 20,
-          "varPoint": 1
+          "basePoint": 10,
+          "varPoint": -10
         }
       ]
     },
@@ -2076,7 +2076,7 @@ var SCENARIOS = {
         "desc": "명시적인 환각·오류만 발견.",
         "boostType": "explicit",
         "lesson": "한 번 훑어 명백한 오류를 잡았다. 도메인지식 +1",
-        "points": 20
+        "points": 18
       },
       {
         "id": "R3",
@@ -2692,8 +2692,8 @@ var SCENARIOS = {
         "lesson": "내가 읽었다 — 책 안에서 내 감상이 나온다.",
         "delegation": "+",
         "knowledge": "+",
-        "basePoint": 20,
-        "varPoint": 8
+        "basePoint": 10,
+        "varPoint": 15
       },
       {
         "id": "B",
@@ -2702,8 +2702,8 @@ var SCENARIOS = {
         "lesson": "AI에 위임했다 — 안 읽은 책을 AI가 대신 읽어 줄 수는 없다.",
         "delegation": "-",
         "knowledge": "-",
-        "basePoint": 20,
-        "varPoint": 4
+        "basePoint": 10,
+        "varPoint": 0
       },
       {
         "id": "C",
@@ -2712,8 +2712,8 @@ var SCENARIOS = {
         "lesson": "다른 데서 가져왔다 — 적절히 골라 쓸 수도, 책 자리를 비울 수도 있다.",
         "delegation": "0",
         "knowledge": "0",
-        "basePoint": 20,
-        "varPoint": 6
+        "basePoint": 10,
+        "varPoint": 8
       }
     ],
     "tier2": {
@@ -2736,8 +2736,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "끝까지 읽고 한 장면에 머물렀다 — 책이 내 안에 자리 잡는다.",
-          "basePoint": 20,
-          "varPoint": 10
+          "basePoint": 10,
+          "varPoint": 25
         },
         {
           "id": "A2",
@@ -2757,8 +2757,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "자기 감상에 AI 손이 점만 닿았다 — 내용은 내 것이고 표현이 매끄러워졌다.",
-          "basePoint": 20,
-          "varPoint": 7
+          "basePoint": 10,
+          "varPoint": 12
         },
         {
           "id": "A3",
@@ -2778,8 +2778,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "책 일부만 통과해 감상을 끌어냈다 — 자기 안에서 나왔지만 책이 얕게 들어왔다.",
-          "basePoint": 20,
-          "varPoint": 3
+          "basePoint": 10,
+          "varPoint": 0
         }
       ],
       "B": [
@@ -2801,8 +2801,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "AI에 다 맡겼다 — 안 읽은 책을 AI가 환각으로 새로 쓴다.",
-          "basePoint": 20,
-          "varPoint": 1
+          "basePoint": 10,
+          "varPoint": -10
         },
         {
           "id": "B2",
@@ -2822,7 +2822,7 @@ var SCENARIOS = {
             }
           },
           "lesson": "재료는 받았지만 책은 통과하지 않았다 — 인용이 내 것이 아니라 검증이 필요하다.",
-          "basePoint": 20,
+          "basePoint": 10,
           "varPoint": 5
         },
         {
@@ -2843,8 +2843,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "감상은 내가 끝까지 통과했고 AI는 표현만 다듬었다 — 내 책, 내 말.",
-          "basePoint": 20,
-          "varPoint": 10
+          "basePoint": 10,
+          "varPoint": 25
         }
       ],
       "C": [
@@ -2866,8 +2866,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "다른 매체로 통과한 어린왕자를 자기 감상으로 다시 썼고, 책 자리와 매체 자리를 분리했다 — 자기 자료를 적극적으로, 정직하게 가져왔다.",
-          "basePoint": 20,
-          "varPoint": 10
+          "basePoint": 10,
+          "varPoint": 25
         },
         {
           "id": "C2",
@@ -2887,8 +2887,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "친구가 읽은 책이 내 자리에 들어왔다 — 친구의 책은 내 것이 아니다.",
-          "basePoint": 20,
-          "varPoint": 1
+          "basePoint": 10,
+          "varPoint": -10
         },
         {
           "id": "C3",
@@ -2908,8 +2908,8 @@ var SCENARIOS = {
             }
           },
           "lesson": "한 줄만 적었다 — 책도 자기도 통과하지 않았다.",
-          "basePoint": 20,
-          "varPoint": 1
+          "basePoint": 10,
+          "varPoint": -10
         }
       ]
     },
@@ -3019,7 +3019,7 @@ var SCENARIOS = {
         "desc": "명시적인 환각·오류만 발견.",
         "boostType": "explicit",
         "lesson": "한 번 훑어 명백한 오류를 잡았다. 도메인지식 +1",
-        "points": 20
+        "points": 18
       },
       {
         "id": "R3",
@@ -3640,8 +3640,8 @@ var SCENARIOS = {
         "lesson": "내 안에서 시작했다 — 진로 판단은 여기서 출발한다.",
         "delegation": "+",
         "knowledge": "+",
-        "basePoint": 20,
-        "varPoint": 8
+        "basePoint": 10,
+        "varPoint": 15
       },
       {
         "id": "B",
@@ -3650,8 +3650,8 @@ var SCENARIOS = {
         "lesson": "AI에 위임했다 — 답은 받았지만 내 이유가 함께 오지는 않는다.",
         "delegation": "-",
         "knowledge": "-",
-        "basePoint": 20,
-        "varPoint": 4
+        "basePoint": 10,
+        "varPoint": 0
       },
       {
         "id": "C",
@@ -3660,8 +3660,8 @@ var SCENARIOS = {
         "lesson": "다른 데서 가져왔다 — 적절히 골라 쓸 수도, 자기 자리를 비울 수도 있다.",
         "delegation": "0",
         "knowledge": "0",
-        "basePoint": 20,
-        "varPoint": 6
+        "basePoint": 10,
+        "varPoint": 8
       }
     ],
     "tier2": {
@@ -3672,8 +3672,8 @@ var SCENARIOS = {
           "delegation": "++",
           "knowledge": "++",
           "lesson": "내 경험을 나눠 봤다 — 자기 안에서 진로 단서가 나온다.",
-          "basePoint": 20,
-          "varPoint": 10
+          "basePoint": 10,
+          "varPoint": 25
         },
         {
           "id": "A2",
@@ -3681,8 +3681,8 @@ var SCENARIOS = {
           "delegation": "+",
           "knowledge": "+",
           "lesson": "내 출발에 AI 자료가 점만 닿았다 — 고르는 쪽은 내 자리에 남는다.",
-          "basePoint": 20,
-          "varPoint": 7
+          "basePoint": 10,
+          "varPoint": 12
         },
         {
           "id": "A3",
@@ -3690,8 +3690,8 @@ var SCENARIOS = {
           "delegation": "0",
           "knowledge": "+",
           "lesson": "자기 질문을 끌어냈지만 다음으로 이어지지 않았다.",
-          "basePoint": 20,
-          "varPoint": 3
+          "basePoint": 10,
+          "varPoint": 0
         }
       ],
       "B": [
@@ -3701,8 +3701,8 @@ var SCENARIOS = {
           "delegation": "--",
           "knowledge": "-",
           "lesson": "AI 답을 그대로 받았다 — 내 이유가 빠진 직업 이름만 남는다.",
-          "basePoint": 20,
-          "varPoint": 1
+          "basePoint": 10,
+          "varPoint": -10
         },
         {
           "id": "B2",
@@ -3710,7 +3710,7 @@ var SCENARIOS = {
           "delegation": "0",
           "knowledge": "0",
           "lesson": "재료는 줬지만 판단까지 맡겼다 — 답은 받았는데 내 기준은 흐리다.",
-          "basePoint": 20,
+          "basePoint": 10,
           "varPoint": 5
         },
         {
@@ -3719,8 +3719,8 @@ var SCENARIOS = {
           "delegation": "++",
           "knowledge": "++",
           "lesson": "질문을 내가 세웠다 — AI 답은 결정이 아니라 비교 재료가 되었다.",
-          "basePoint": 20,
-          "varPoint": 10
+          "basePoint": 10,
+          "varPoint": 25
         }
       ],
       "C": [
@@ -3730,8 +3730,8 @@ var SCENARIOS = {
           "delegation": "++",
           "knowledge": "++",
           "lesson": "다른 사람의 진로를 거름으로 썼다 — 사례를 듣고 내 자리에서 다시 보면 자기 기준이 자라난다.",
-          "basePoint": 20,
-          "varPoint": 10
+          "basePoint": 10,
+          "varPoint": 25
         },
         {
           "id": "C2",
@@ -3739,8 +3739,8 @@ var SCENARIOS = {
           "delegation": "--",
           "knowledge": "-",
           "lesson": "친구의 선택이 내 자리에 들어왔다 — 친구의 진로는 내 것이 아니다.",
-          "basePoint": 20,
-          "varPoint": 1
+          "basePoint": 10,
+          "varPoint": -10
         },
         {
           "id": "C3",
@@ -3748,8 +3748,8 @@ var SCENARIOS = {
           "delegation": "--",
           "knowledge": "-",
           "lesson": "한 줄도 적지 않았다 — 진로 사고를 건너뛰었다.",
-          "basePoint": 20,
-          "varPoint": 1
+          "basePoint": 10,
+          "varPoint": -10
         }
       ]
     },
@@ -3847,7 +3847,7 @@ var SCENARIOS = {
         "desc": "명백히 이상하거나 내 경험과 안 맞는 부분만 표시한다.",
         "boostType": "explicit",
         "lesson": "이상한 부분을 잡았다. 도메인지식 +1",
-        "points": 20
+        "points": 18
       },
       {
         "id": "R3",
@@ -4473,8 +4473,8 @@ var SCENARIOS = {
         "lesson": "내 손으로 약점부터 봤다 — 내 시험은 내가 가장 잘 안다.",
         "delegation": "+",
         "knowledge": "+",
-        "basePoint": 20,
-        "varPoint": 8
+        "basePoint": 10,
+        "varPoint": 15
       },
       {
         "id": "B",
@@ -4483,8 +4483,8 @@ var SCENARIOS = {
         "lesson": "AI에 공부법을 맡겼다 — 내 약점을 누가 알아야 하는지 따져봐야 한다.",
         "delegation": "-",
         "knowledge": "-",
-        "basePoint": 20,
-        "varPoint": 4
+        "basePoint": 10,
+        "varPoint": 0
       },
       {
         "id": "C",
@@ -4493,8 +4493,8 @@ var SCENARIOS = {
         "lesson": "다른 데서 가져왔다 — 적절히 골라 쓸 수도, 자기 약점을 못 볼 수도 있다.",
         "delegation": "0",
         "knowledge": "0",
-        "basePoint": 20,
-        "varPoint": 6
+        "basePoint": 10,
+        "varPoint": 8
       }
     ],
     "tier2": {
@@ -4505,8 +4505,8 @@ var SCENARIOS = {
           "delegation": "++",
           "knowledge": "++",
           "lesson": "내가 뭘 모르는지부터 봤다 — 약점이 보이는 자리에서 공부 순서가 생긴다.",
-          "basePoint": 20,
-          "varPoint": 10
+          "basePoint": 10,
+          "varPoint": 25
         },
         {
           "id": "A2",
@@ -4514,8 +4514,8 @@ var SCENARIOS = {
           "delegation": "+",
           "knowledge": "+",
           "lesson": "내가 길을 안 다음에 AI 손이 점만 닿았다 — 출발은 내 오답이고 도구는 AI다.",
-          "basePoint": 20,
-          "varPoint": 7
+          "basePoint": 10,
+          "varPoint": 12
         },
         {
           "id": "A3",
@@ -4523,8 +4523,8 @@ var SCENARIOS = {
           "delegation": "0",
           "knowledge": "+",
           "lesson": "시간을 공평하게 나눴다 — 깔끔하지만 약점 단원이 같은 칸에 묻힌다.",
-          "basePoint": 20,
-          "varPoint": 3
+          "basePoint": 10,
+          "varPoint": 0
         }
       ],
       "B": [
@@ -4534,8 +4534,8 @@ var SCENARIOS = {
           "delegation": "--",
           "knowledge": "-",
           "lesson": "한 줄로 묻고 따랐다 — AI는 내 약점을 모른 채 일반론을 준다.",
-          "basePoint": 20,
-          "varPoint": 1
+          "basePoint": 10,
+          "varPoint": -10
         },
         {
           "id": "B2",
@@ -4543,7 +4543,7 @@ var SCENARIOS = {
           "delegation": "0",
           "knowledge": "0",
           "lesson": "약점을 말하고 답을 받았다 — 내 정보만큼만 답이 좁아진다.",
-          "basePoint": 20,
+          "basePoint": 10,
           "varPoint": 5
         },
         {
@@ -4552,8 +4552,8 @@ var SCENARIOS = {
           "delegation": "++",
           "knowledge": "++",
           "lesson": "내 약점이 먼저 보이고 나서 AI가 도구가 됐다 — 출발은 내 오답이고 AI 답은 내 검수를 거친다.",
-          "basePoint": 20,
-          "varPoint": 10
+          "basePoint": 10,
+          "varPoint": 25
         }
       ],
       "C": [
@@ -4563,8 +4563,8 @@ var SCENARIOS = {
           "delegation": "++",
           "knowledge": "++",
           "lesson": "작년의 내가 거름이 되어 올해 약점 자리에 시간이 옮겨졌다 — 자기 자료를 적극 활용하면 자기 약점이 또렷해진다.",
-          "basePoint": 20,
-          "varPoint": 10
+          "basePoint": 10,
+          "varPoint": 25
         },
         {
           "id": "C2",
@@ -4572,8 +4572,8 @@ var SCENARIOS = {
           "delegation": "--",
           "knowledge": "-",
           "lesson": "친구 계획이 내 자리에 들어왔다 — 친구의 약점은 내 약점이 아니다.",
-          "basePoint": 20,
-          "varPoint": 1
+          "basePoint": 10,
+          "varPoint": -10
         },
         {
           "id": "C3",
@@ -4581,8 +4581,8 @@ var SCENARIOS = {
           "delegation": "--",
           "knowledge": "-",
           "lesson": "선택을 미뤘다 — 시간은 흘러도 시험 범위는 그대로다.",
-          "basePoint": 20,
-          "varPoint": 1
+          "basePoint": 10,
+          "varPoint": -10
         }
       ]
     },
@@ -4690,7 +4690,7 @@ var SCENARIOS = {
         "desc": "명시적으로 빠진 과목이나 단원을 발견.",
         "boostType": "explicit",
         "lesson": "한 번 훑어 빠진 단원을 잡았다. 도메인지식 +1",
-        "points": 20
+        "points": 18
       },
       {
         "id": "R3",
@@ -5782,7 +5782,7 @@ function getGrade(score){
   if(score>=CONFIG.pointThresholds.A)return 'A';
   if(score>=CONFIG.pointThresholds.B)return 'B';
   if(score>=CONFIG.pointThresholds.C)return 'C';
-  return 'D';
+  return 'D'; // pointThresholds.D 미만도 D로 통일 (별도 F 등급 없음)
 }
 
 // =====================================================

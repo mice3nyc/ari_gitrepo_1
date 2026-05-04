@@ -19,24 +19,24 @@ selfintro:
     lesson: 내 손으로 직접 했다 — 자기 일은 자기가 한다.
     delegation: +
     knowledge: +
-    basePoint: 10            # v0.7 합산 모델 베이스
-    varPoint: 15              # v0.7 변수 — 자기 자리 직접, selfintro 디자인 의도 정점
+    basePoint: 20            # v0.7 합산 모델 베이스
+    varPoint: 8              # v0.7 변수 — 자기 자리 직접, selfintro 디자인 의도 정점
   - id: B
     label: AI에게 부탁한다
     desc: AI에게 정보를 주고 자기소개 글을 받아 본다.
     lesson: AI에 위임했다 — 자기소개를 AI에 시킬 일인지 따져봐야 한다.
     delegation: '-'
     knowledge: '-'
-    basePoint: 10
-    varPoint: 0              # v0.7 변수 — 위임 큰 방향, B3 살리는 갈래는 tier2에서 회복
+    basePoint: 20
+    varPoint: 4              # v0.7 변수 — 위임 큰 방향, B3 살리는 갈래는 tier2에서 회복
   - id: C
     label: 다른 사람·기성 자료에 기댄다
     desc: 친구 글이나 작년 내가 쓴 글에 기대서 풀어간다.
     lesson: 다른 데서 가져왔다 — 적절히 골라 쓸 수도, 자기 자리를 비울 수도 있다.
     delegation: '0'
     knowledge: '0'
-    basePoint: 10
-    varPoint: 8              # v0.7 변수 — 양면 갈래, C1 살리는 자리
+    basePoint: 20
+    varPoint: 6              # v0.7 변수 — 양면 갈래, C1 살리는 자리
   tier2:
     A:
     - id: A1
@@ -46,8 +46,8 @@ selfintro:
         afterB: { delegation: '+', knowledge: '+' }
         afterC: { delegation: '+', knowledge: '+' }
       lesson: 내 경험을 들여다봤다 — 자기 안에서 글이 나온다.
-      basePoint: 10            # v0.7 합산 모델 베이스
-      varPoint: 25             # v0.7 변수 — 자기 자리 정점, 직접 + 풍부
+      basePoint: 20            # v0.7 합산 모델 베이스
+      varPoint: 10             # v0.7 변수 — 자기 자리 정점, 직접 + 풍부
     - id: A2
       label: 자기 말로 쓰다가 한두 표현만 AI에 다듬어 달라 한다
       delta:
@@ -55,8 +55,8 @@ selfintro:
         afterB: { delegation: '+', knowledge: '+' }
         afterC: { delegation: '+', knowledge: '+' }
       lesson: 자기 글에 AI 손이 점만 닿았다 — 내용은 내 것이고 표현이 매끄러워졌다.
-      basePoint: 10
-      varPoint: 12              # v0.7 변수 — 자기 글 + AI 점만, 적절 자리
+      basePoint: 20
+      varPoint: 7              # v0.7 변수 — 자기 글 + AI 점만, 적절 자리
     - id: A3
       label: 떠오르는 대로 쓰고 바로 끝낸다
       delta:
@@ -64,8 +64,8 @@ selfintro:
         afterB: { delegation: '-', knowledge: '0' }
         afterC: { delegation: '0', knowledge: '0' }
       lesson: 떠오르는 대로 내보냈다 — 자기 안에서 끌어냈지만 정리 없이 나갔다.
-      basePoint: 10
-      varPoint: 0              # v0.7 변수 — 얕음 자리, 자기 안에서 나왔지만 정리 X
+      basePoint: 20
+      varPoint: 3              # v0.7 변수 — 얕음 자리, 자기 안에서 나왔지만 정리 X
     B:
     - id: B1
       label: AI에게 이름만 주고 만들어 달라고 한다
@@ -74,8 +74,8 @@ selfintro:
         afterB: { delegation: '--', knowledge: '-' }
         afterC: { delegation: '--', knowledge: '-' }
       lesson: AI에 다 맡겼다 — 내 빈자리를 가짜로 메운다.
-      basePoint: 10
-      varPoint: -10              # v0.7 변수 — 회피 자리, 자기 자리 가짜로 채움
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 자기 자리 가짜로 채움
     - id: B2
       label: 내 정보를 자세히 주고 AI 글을 받아 다듬는다
       delta:
@@ -83,7 +83,7 @@ selfintro:
         afterB: { delegation: '0', knowledge: '0' }
         afterC: { delegation: '0', knowledge: '0' }
       lesson: 재료는 줬지만 글까지 맡겼다 — 말투가 내 것이 아니다.
-      basePoint: 10
+      basePoint: 20
       varPoint: 5              # v0.7 변수 — 중립 자리, 재료는 자기 + 글은 위임
     - id: B3
       label: 내가 먼저 자기소개를 쓰고 AI에게 표현 두세 개만 보여 달라 한다 — 내 말투에 맞는 것만 골라 쓴다
@@ -92,8 +92,8 @@ selfintro:
         afterB: { delegation: '++', knowledge: '++' }
         afterC: { delegation: '++', knowledge: '++' }
       lesson: 내 글이 중심이고 AI는 거들었다 — 표현만 받고 내 말투로 검수하면 글이 단단해진다.
-      basePoint: 10
-      varPoint: 25             # v0.7 변수 — 정점 자리, AI 거들기 + 자기 검수
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, AI 거들기 + 자기 검수
     C:
     - id: C1
       label: 작년 자기소개를 다시 읽고 올해의 나를 처음부터 새로 쓴다
@@ -102,8 +102,8 @@ selfintro:
         afterB: { delegation: '++', knowledge: '++' }
         afterC: { delegation: '++', knowledge: '++' }
       lesson: 작년의 글이 거름이 되어 올해의 나를 자기 말로 자라게 했다 — 자기 자료를 적극 활용했다.
-      basePoint: 10
-      varPoint: 25             # v0.7 변수 — 정점 자리, 작년 자기 자료 거름 삼아 다시
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 작년 자기 자료 거름 삼아 다시
     - id: C2
       label: 친구 작년 자기소개를 가져와 이름만 바꿔 낸다
       delta:
@@ -111,8 +111,8 @@ selfintro:
         afterB: { delegation: '--', knowledge: '-' }
         afterC: { delegation: '--', knowledge: '-' }
       lesson: 친구의 글이 내 자리에 들어왔다 — 친구의 자기소개는 내 것이 아니다.
-      basePoint: 10
-      varPoint: -10              # v0.7 변수 — 부정 자리, 친구 글 표절
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 부정 자리, 친구 글 표절
     - id: C3
       label: 잘 부탁드립니다 한 줄만 적는다
       delta:
@@ -120,8 +120,8 @@ selfintro:
         afterB: { delegation: '--', knowledge: '-' }
         afterC: { delegation: '--', knowledge: '-' }
       lesson: 한 줄만 적었다 — 자기소개를 건너뛰었다.
-      basePoint: 10
-      varPoint: -10              # v0.7 변수 — 회피 자리, 한 줄로 건너뜀
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 한 줄로 건너뜀
   results:
     # v0.7 — results[t2].basePoint 폐기 (코드 미사용). text·summary·lesson 보존.
     # deltaR2·deltaR3는 lookup 모델 잔재로 v0.7.x 정리 자리, 일단 검수 참고용 보존.
@@ -195,13 +195,13 @@ selfintro:
     desc: 검토 없이 그대로 낸다.
     boostType: none
     lesson: 검토를 건너뛰었다 — 검증할 기회를 놓쳤다.
-    points: 10               # v0.7 합산 모델 — 단순 분배 (R1=10·R2=18·R3=30)
+    points: 10               # v0.7 합산 모델 — 단순 분배 (R1=10·R2=20·R3=30)
   - id: R2
     label: 한 번 읽고 이상한 곳만 표시
     desc: 명시적인 환각·오류만 발견.
     boostType: explicit
     lesson: 한 번 훑어 명백한 오류를 잡았다. 도메인지식 +1
-    points: 18               # v0.7 합산 모델
+    points: 20               # v0.7 합산 모델
   - id: R3
     label: 처음부터 다시 읽고 내 얘기인지 확인
     desc: 내용, 말투, 빠진 경험까지 확인.
@@ -637,24 +637,24 @@ groupwork:
     lesson: 내 손으로 직접 했다 — 모둠 발표는 내가 이해해야 내 파트가 된다.
     delegation: +
     knowledge: +
-    basePoint: 10            # v0.7 합산 모델 베이스
-    varPoint: 15              # v0.7 변수 — 자기 자리 직접, groupwork 디자인 의도 정점 (모둠 안 자기 파트)
+    basePoint: 20            # v0.7 합산 모델 베이스
+    varPoint: 8              # v0.7 변수 — 자기 자리 직접, groupwork 디자인 의도 정점 (모둠 안 자기 파트)
   - id: B
     label: AI에게 맡긴다
     desc: AI에게 슬라이드 초안이나 정리를 부탁한다.
     lesson: AI에 위임했다 — 모둠 자료에 AI를 어디까지 쓸지 따져봐야 한다.
     delegation: '-'
     knowledge: '-'
-    basePoint: 10
-    varPoint: 0              # v0.7 변수 — 위임 큰 방향, B3 살리는 갈래는 tier2에서 회복
+    basePoint: 20
+    varPoint: 4              # v0.7 변수 — 위임 큰 방향, B3 살리는 갈래는 tier2에서 회복
   - id: C
     label: 다른 모둠·기성 자료에 기댄다
     desc: 모둠원·작년 발표·다른 학년 자료에 기대서 풀어간다.
     lesson: 다른 데서 가져왔다 — 적절히 골라 쓸 수도, 내 파트를 비울 수도 있다.
     delegation: '0'
     knowledge: '0'
-    basePoint: 10
-    varPoint: 8              # v0.7 변수 — 양면 갈래, C1 살리는 자리
+    basePoint: 20
+    varPoint: 6              # v0.7 변수 — 양면 갈래, C1 살리는 자리
   tier2:
     A:
     - id: A1
@@ -664,8 +664,8 @@ groupwork:
         afterB: { delegation: '+', knowledge: '+' }
         afterC: { delegation: '+', knowledge: '+' }
       lesson: 조사하고 모둠과 맞췄다 — 내 파트가 모둠 흐름 안에 자리 잡는다.
-      basePoint: 10            # v0.7 합산 모델 베이스
-      varPoint: 25             # v0.7 변수 — 정점 자리, 조사 + 모둠 공유 둘 다
+      basePoint: 20            # v0.7 합산 모델 베이스
+      varPoint: 10             # v0.7 변수 — 정점 자리, 조사 + 모둠 공유 둘 다
     - id: A2
       label: 직접 자료를 찾아 슬라이드를 만들고 한 장 제목·표현만 AI에 다듬어 달라 한다
       delta:
@@ -673,8 +673,8 @@ groupwork:
         afterB: { delegation: '+', knowledge: '+' }
         afterC: { delegation: '+', knowledge: '+' }
       lesson: 자기 슬라이드에 AI 손이 점만 닿았다 — 자료와 흐름은 내 것이고 표현이 매끄러워졌다.
-      basePoint: 10
-      varPoint: 12              # v0.7 변수 — 자기 자료 + AI 점만, 적절 자리
+      basePoint: 20
+      varPoint: 7              # v0.7 변수 — 자기 자료 + AI 점만, 적절 자리
     - id: A3
       label: 자료를 살짝 보고 슬라이드를 만든다
       delta:
@@ -682,8 +682,8 @@ groupwork:
         afterB: { delegation: '-', knowledge: '0' }
         afterC: { delegation: '0', knowledge: '0' }
       lesson: 얕게 보고 만들었다 — 슬라이드는 있지만 설명할 깊이가 없다.
-      basePoint: 10
-      varPoint: 0              # v0.7 변수 — 얕음 자리, 자기 손이지만 깊이 X
+      basePoint: 20
+      varPoint: 3              # v0.7 변수 — 얕음 자리, 자기 손이지만 깊이 X
     B:
     - id: B1
       label: AI에게 주제만 주고 슬라이드 3장을 만들어 달라고 한다
@@ -692,8 +692,8 @@ groupwork:
         afterB: { delegation: '--', knowledge: '-' }
         afterC: { delegation: '--', knowledge: '-' }
       lesson: AI에 다 맡겼다 — 출처 없는 자료가 내 발표가 된다.
-      basePoint: 10
-      varPoint: -10              # v0.7 변수 — 회피 자리, 출처 없는 AI 산출물 그대로
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 출처 없는 AI 산출물 그대로
     - id: B2
       label: 내가 찾은 자료를 AI에게 주고 슬라이드 문장을 받아 다듬는다
       delta:
@@ -701,7 +701,7 @@ groupwork:
         afterB: { delegation: '0', knowledge: '0' }
         afterC: { delegation: '0', knowledge: '0' }
       lesson: 재료는 줬지만 정리까지 맡겼다 — 모둠 흐름이 빠진 자료가 나온다.
-      basePoint: 10
+      basePoint: 20
       varPoint: 5              # v0.7 변수 — 중립 자리, 재료는 자기 + 정리는 위임
     - id: B3
       label: 내가 조사하고 출처를 적은 뒤 AI에게 정리만 부탁하고 끝까지 검수한다
@@ -710,8 +710,8 @@ groupwork:
         afterB: { delegation: '++', knowledge: '++' }
         afterC: { delegation: '++', knowledge: '++' }
       lesson: 자료와 출처는 내가 잡고 AI는 정리만 도왔다 — 자기 조사 위에 적절한 결합이 얹혔다.
-      basePoint: 10
-      varPoint: 25             # v0.7 변수 — 정점 자리, 자기 조사 위 AI 정리 + 검수
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 자기 조사 위 AI 정리 + 검수
     C:
     - id: C1
       label: 다른 학년의 같은 단원 발표 자료에서 흐름을 빌려 보고 우리 모둠 주제로 직접 다시 채운다
@@ -720,8 +720,8 @@ groupwork:
         afterB: { delegation: '++', knowledge: '++' }
         afterC: { delegation: '++', knowledge: '++' }
       lesson: 기성 자료를 거름으로 삼아 우리 주제로 다시 채웠다 — 빌리되 내 자리는 내가 채웠다.
-      basePoint: 10
-      varPoint: 25             # v0.7 변수 — 정점 자리, 기성 자료 거름 + 우리 주제 직접
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 기성 자료 거름 + 우리 주제 직접
     - id: C2
       label: 다른 모둠 작년 발표 슬라이드를 그대로 가져와 제목만 바꿔 낸다
       delta:
@@ -729,8 +729,8 @@ groupwork:
         afterB: { delegation: '--', knowledge: '-' }
         afterC: { delegation: '--', knowledge: '-' }
       lesson: 다른 모둠 슬라이드가 내 자리에 들어왔다 — 다른 모둠의 자료는 내 것이 아니다.
-      basePoint: 10
-      varPoint: -10              # v0.7 변수 — 부정 자리, 다른 모둠 슬라이드 베끼기
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 부정 자리, 다른 모둠 슬라이드 베끼기
     - id: C3
       label: 모둠원에게 내 파트까지 좀 해 달라고 부탁한다
       delta:
@@ -738,8 +738,8 @@ groupwork:
         afterB: { delegation: '--', knowledge: '-' }
         afterC: { delegation: '--', knowledge: '-' }
       lesson: 내 파트를 떠넘겼다 — 발표 당일 내가 답할 수 없게 된다.
-      basePoint: 10
-      varPoint: -10              # v0.7 변수 — 회피 자리, 내 파트 떠넘김
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 내 파트 떠넘김
   results:
     # v0.7 — results[t2].basePoint 폐기 (코드 미사용). text·summary·lesson 보존.
     # deltaR2·deltaR3는 lookup 모델 잔재로 v0.7.x 정리 자리, 일단 검수 참고용 보존.
@@ -824,13 +824,13 @@ groupwork:
     desc: 검토 없이 그대로 낸다.
     boostType: none
     lesson: 검토를 건너뛰었다 — 검증할 기회를 놓쳤다.
-    points: 10               # v0.7 합산 모델 — 단순 분배 (R1=10·R2=18·R3=30)
+    points: 10               # v0.7 합산 모델 — 단순 분배 (R1=10·R2=20·R3=30)
   - id: R2
     label: 한 번 읽고 이상한 곳만 표시
     desc: 명시적인 환각·오류만 발견.
     boostType: explicit
     lesson: 한 번 훑어 명백한 오류를 잡았다. 도메인지식 +1
-    points: 18               # v0.7 합산 모델
+    points: 20               # v0.7 합산 모델
   - id: R3
     label: 출처 확인 + 모둠 흐름 맞추기
     desc: 자료의 근거와 다른 파트와의 연결까지 확인.
@@ -1266,24 +1266,24 @@ eorinwangja:
     lesson: 내가 읽었다 — 책 안에서 내 감상이 나온다.
     delegation: +
     knowledge: +
-    basePoint: 10            # v0.7 합산 모델 베이스
-    varPoint: 15              # v0.7 변수 — 책 통과 직접, eorinwangja 디자인 의도 정점
+    basePoint: 20            # v0.7 합산 모델 베이스
+    varPoint: 8              # v0.7 변수 — 책 통과 직접, eorinwangja 디자인 의도 정점
   - id: B
     label: AI에게 부탁한다
     desc: AI에게 책 내용과 감상을 받아 본다.
     lesson: AI에 위임했다 — 안 읽은 책을 AI가 대신 읽어 줄 수는 없다.
     delegation: '-'
     knowledge: '-'
-    basePoint: 10
-    varPoint: 0              # v0.7 변수 — 위임 큰 방향, B3 살리는 갈래는 tier2에서 회복
+    basePoint: 20
+    varPoint: 4              # v0.7 변수 — 위임 큰 방향, B3 살리는 갈래는 tier2에서 회복
   - id: C
     label: 다른 자료·사람에게 기댄다
     desc: 전에 본 영화나 친구 줄거리, 흔한 인상에 기대 풀어간다.
     lesson: 다른 데서 가져왔다 — 적절히 골라 쓸 수도, 책 자리를 비울 수도 있다.
     delegation: '0'
     knowledge: '0'
-    basePoint: 10
-    varPoint: 8              # v0.7 변수 — 양면 갈래, C1 살리는 자리
+    basePoint: 20
+    varPoint: 6              # v0.7 변수 — 양면 갈래, C1 살리는 자리
   tier2:
     A:
     - id: A1
@@ -1293,8 +1293,8 @@ eorinwangja:
         afterB: { delegation: '+', knowledge: '+' }
         afterC: { delegation: '+', knowledge: '+' }
       lesson: 끝까지 읽고 한 장면에 머물렀다 — 책이 내 안에 자리 잡는다.
-      basePoint: 10            # v0.7 합산 모델 베이스
-      varPoint: 25             # v0.7 변수 — 자기 통과 정점, 끝까지 읽고 한 장면 머묾
+      basePoint: 20            # v0.7 합산 모델 베이스
+      varPoint: 10             # v0.7 변수 — 자기 통과 정점, 끝까지 읽고 한 장면 머묾
     - id: A2
       label: 책을 읽고 본인 감상을 쓰다가 한두 표현만 AI에 다듬어 달라 한다
       delta:
@@ -1302,8 +1302,8 @@ eorinwangja:
         afterB: { delegation: '+', knowledge: '+' }
         afterC: { delegation: '+', knowledge: '+' }
       lesson: 자기 감상에 AI 손이 점만 닿았다 — 내용은 내 것이고 표현이 매끄러워졌다.
-      basePoint: 10
-      varPoint: 12              # v0.7 변수 — 책 통과 + AI 점만, 적절 자리
+      basePoint: 20
+      varPoint: 7              # v0.7 변수 — 책 통과 + AI 점만, 적절 자리
     - id: A3
       label: 책을 펴서 처음 몇 쪽만 읽고 떠오르는 대로 쓴다
       delta:
@@ -1311,8 +1311,8 @@ eorinwangja:
         afterB: { delegation: '-', knowledge: '0' }
         afterC: { delegation: '0', knowledge: '0' }
       lesson: 책 일부만 통과해 감상을 끌어냈다 — 자기 안에서 나왔지만 책이 얕게 들어왔다.
-      basePoint: 10
-      varPoint: 0              # v0.7 변수 — 얕음 자리, 일부만 읽음
+      basePoint: 20
+      varPoint: 3              # v0.7 변수 — 얕음 자리, 일부만 읽음
     B:
     - id: B1
       label: AI에게 책 제목만 주고 독후감을 통째로 받아 낸다
@@ -1321,8 +1321,8 @@ eorinwangja:
         afterB: { delegation: '--', knowledge: '-' }
         afterC: { delegation: '--', knowledge: '-' }
       lesson: AI에 다 맡겼다 — 안 읽은 책을 AI가 환각으로 새로 쓴다.
-      basePoint: 10
-      varPoint: -10              # v0.7 변수 — 회피 자리, 환각 통째 위임
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 환각 통째 위임
     - id: B2
       label: AI에게 책 줄거리와 인용을 받아 본인이 정리해 쓴다
       delta:
@@ -1330,7 +1330,7 @@ eorinwangja:
         afterB: { delegation: '0', knowledge: '0' }
         afterC: { delegation: '0', knowledge: '0' }
       lesson: 재료는 받았지만 책은 통과하지 않았다 — 인용이 내 것이 아니라 검증이 필요하다.
-      basePoint: 10
+      basePoint: 20
       varPoint: 5              # v0.7 변수 — 중립 자리, 재료는 받음 + 책은 통과 X
     - id: B3
       label: 본인이 먼저 감상을 끝까지 써 보고 AI에게 표현만 다듬어 달라 한다
@@ -1339,8 +1339,8 @@ eorinwangja:
         afterB: { delegation: '++', knowledge: '++' }
         afterC: { delegation: '++', knowledge: '++' }
       lesson: 감상은 내가 끝까지 통과했고 AI는 표현만 다듬었다 — 내 책, 내 말.
-      basePoint: 10
-      varPoint: 25             # v0.7 변수 — 정점 자리, 자기 감상 + AI 거들기
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 자기 감상 + AI 거들기
     C:
     - id: C1
       label: 전에 본 어린왕자 영화·애니메이션 기억을 끝까지 끌어내어 본인 감상으로 다시 쓰고 책 자리와 분리해 표시한다
@@ -1349,8 +1349,8 @@ eorinwangja:
         afterB: { delegation: '++', knowledge: '++' }
         afterC: { delegation: '++', knowledge: '++' }
       lesson: 다른 매체로 통과한 어린왕자를 자기 감상으로 다시 썼고, 책 자리와 매체 자리를 분리했다 — 자기 자료를 적극적으로, 정직하게 가져왔다.
-      basePoint: 10
-      varPoint: 25             # v0.7 변수 — 정점 자리, 다른 매체 통과 + 정직 분리
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 다른 매체 통과 + 정직 분리
     - id: C2
       label: 책을 읽은 친구에게 줄거리를 듣고 그대로 옮겨 쓴다
       delta:
@@ -1358,8 +1358,8 @@ eorinwangja:
         afterB: { delegation: '--', knowledge: '-' }
         afterC: { delegation: '--', knowledge: '-' }
       lesson: 친구가 읽은 책이 내 자리에 들어왔다 — 친구의 책은 내 것이 아니다.
-      basePoint: 10
-      varPoint: -10              # v0.7 변수 — 부정 자리, 친구 줄거리 옮겨 쓰기
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 부정 자리, 친구 줄거리 옮겨 쓰기
     - id: C3
       label: '"꿈을 잃지 말자" 같은 일반론 한 줄로 칸만 채운다'
       delta:
@@ -1367,8 +1367,8 @@ eorinwangja:
         afterB: { delegation: '--', knowledge: '-' }
         afterC: { delegation: '--', knowledge: '-' }
       lesson: 한 줄만 적었다 — 책도 자기도 통과하지 않았다.
-      basePoint: 10
-      varPoint: -10              # v0.7 변수 — 회피 자리, 일반론 한 줄
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 일반론 한 줄
   results:
     # v0.7 — results[t2].basePoint 폐기 (코드 미사용). text·summary·lesson 보존.
     # deltaR2·deltaR3는 lookup 모델 잔재로 v0.7.x 정리 자리, 일단 검수 참고용 보존.
@@ -1454,13 +1454,13 @@ eorinwangja:
     desc: 검토 없이 그대로 낸다.
     boostType: none
     lesson: 검토를 건너뛰었다 — 검증할 기회를 놓쳤다.
-    points: 10               # v0.7 합산 모델 — 단순 분배 (R1=10·R2=18·R3=30)
+    points: 10               # v0.7 합산 모델 — 단순 분배 (R1=10·R2=20·R3=30)
   - id: R2
     label: 한 번 읽고 이상한 곳만 표시
     desc: 명시적인 환각·오류만 발견.
     boostType: explicit
     lesson: 한 번 훑어 명백한 오류를 잡았다. 도메인지식 +1
-    points: 18               # v0.7 합산 모델
+    points: 20               # v0.7 합산 모델
   - id: R3
     label: 출처 확인 + 크로스체크
     desc: 미세 오류까지 발견.
@@ -1902,24 +1902,24 @@ career:
     lesson: 내 안에서 시작했다 — 진로 판단은 여기서 출발한다.
     delegation: +
     knowledge: +
-    basePoint: 10            # v0.7 합산 모델 베이스
-    varPoint: 15              # v0.7 변수 — 자기 경험에서 직접, career 디자인 의도 정점
+    basePoint: 20            # v0.7 합산 모델 베이스
+    varPoint: 8              # v0.7 변수 — 자기 경험에서 직접, career 디자인 의도 정점
   - id: B
     label: AI에게 미래 직업을 묻는다
     desc: 사라질 직업과 유망한 직업을 AI에게 물어본다.
     lesson: AI에 위임했다 — 답은 받았지만 내 이유가 함께 오지는 않는다.
     delegation: '-'
     knowledge: '-'
-    basePoint: 10
-    varPoint: 0              # v0.7 변수 — 위임 큰 방향, B3 살리는 갈래는 tier2에서 회복
+    basePoint: 20
+    varPoint: 4              # v0.7 변수 — 위임 큰 방향, B3 살리는 갈래는 tier2에서 회복
   - id: C
     label: 다른 사람·기성 정보에 기댄다
     desc: 친구 말, 부모님 말, 선배 사례, 인터넷 글에 기대서 풀어간다.
     lesson: 다른 데서 가져왔다 — 적절히 골라 쓸 수도, 자기 자리를 비울 수도 있다.
     delegation: '0'
     knowledge: '0'
-    basePoint: 10
-    varPoint: 8              # v0.7 변수 — 양면 갈래, C1 살리는 자리
+    basePoint: 20
+    varPoint: 6              # v0.7 변수 — 양면 갈래, C1 살리는 자리
   tier2:
     A:
     - id: A1
@@ -1927,66 +1927,66 @@ career:
       delegation: ++
       knowledge: ++
       lesson: 내 경험을 나눠 봤다 — 자기 안에서 진로 단서가 나온다.
-      basePoint: 10            # v0.7 합산 모델 베이스
-      varPoint: 25             # v0.7 변수 — 자기 자리 정점, 네 칸으로 진로 단서 직접 도출
+      basePoint: 20            # v0.7 합산 모델 베이스
+      varPoint: 10             # v0.7 변수 — 자기 자리 정점, 네 칸으로 진로 단서 직접 도출
     - id: A2
       label: 내 후보를 먼저 적고 AI에는 직업 정보만 묻는다
       delegation: +
       knowledge: +
       lesson: 내 출발에 AI 자료가 점만 닿았다 — 고르는 쪽은 내 자리에 남는다.
-      basePoint: 10
-      varPoint: 12              # v0.7 변수 — 자기 후보 + AI 자료 점만, 적절 자리
+      basePoint: 20
+      varPoint: 7              # v0.7 변수 — 자기 후보 + AI 자료 점만, 적절 자리
     - id: A3
       label: 불안한 질문 하나만 적고 멈춘다
       delegation: '0'
       knowledge: +
       lesson: 자기 질문을 끌어냈지만 다음으로 이어지지 않았다.
-      basePoint: 10
-      varPoint: 0              # v0.7 변수 — 얕음 자리, 자기 안에서 끌어냈지만 멈춤
+      basePoint: 20
+      varPoint: 3              # v0.7 변수 — 얕음 자리, 자기 안에서 끌어냈지만 멈춤
     B:
     - id: B1
       label: AI가 뽑은 유망 직업을 그대로 적는다
       delegation: --
       knowledge: '-'
       lesson: AI 답을 그대로 받았다 — 내 이유가 빠진 직업 이름만 남는다.
-      basePoint: 10
-      varPoint: -10              # v0.7 변수 — 회피 자리, AI 답 그대로 받음
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, AI 답 그대로 받음
     - id: B2
       label: AI에게 자세히 묻고 받은 답을 다듬어 낸다
       delegation: '0'
       knowledge: '0'
       lesson: 재료는 줬지만 판단까지 맡겼다 — 답은 받았는데 내 기준은 흐리다.
-      basePoint: 10
+      basePoint: 20
       varPoint: 5              # v0.7 변수 — 중립 자리, 정보 자세히 줬지만 판단 위임
     - id: B3
       label: 내가 먼저 후보를 정하고 AI에는 자료만 묻는다 — 답을 받아도 비교는 내 자리에 둔다
       delegation: '++'
       knowledge: '++'
       lesson: 질문을 내가 세웠다 — AI 답은 결정이 아니라 비교 재료가 되었다.
-      basePoint: 10
-      varPoint: 25             # v0.7 변수 — 정점 자리, 자기 질문 + AI 자료 + 비교 자기 자리
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 자기 질문 + AI 자료 + 비교 자기 자리
     C:
     - id: C1
       label: 부모·선배의 실제 일과를 듣고 내 기준으로 비교한다 — 사례를 거름 삼아 내 자리에서 다시 본다
       delegation: '++'
       knowledge: '++'
       lesson: 다른 사람의 진로를 거름으로 썼다 — 사례를 듣고 내 자리에서 다시 보면 자기 기준이 자라난다.
-      basePoint: 10
-      varPoint: 25             # v0.7 변수 — 정점 자리, 사례 거름 삼아 자기 기준
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 사례 거름 삼아 자기 기준
     - id: C2
       label: 친구가 적은 진로를 비슷하게 따라 적는다
       delegation: --
       knowledge: '-'
       lesson: 친구의 선택이 내 자리에 들어왔다 — 친구의 진로는 내 것이 아니다.
-      basePoint: 10
-      varPoint: -10              # v0.7 변수 — 부정 자리, 친구 선택 따라감
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 부정 자리, 친구 선택 따라감
     - id: C3
       label: 아직 모르겠다고 비워 둔다
       delegation: --
       knowledge: '-'
       lesson: 한 줄도 적지 않았다 — 진로 사고를 건너뛰었다.
-      basePoint: 10
-      varPoint: -10              # v0.7 변수 — 회피 자리, 비워 둠
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 비워 둠
   results:
     # v0.7 — results[t2].basePoint 폐기 (코드 미사용). text·summary·lesson 보존.
     # deltaR2·deltaR3는 lookup 모델 잔재로 v0.7.x 정리 자리, 일단 검수 참고용 보존.
@@ -2061,13 +2061,13 @@ career:
     desc: 검토 없이 그대로 낸다.
     boostType: none
     lesson: 검토를 건너뛰면 불안도 그대로 남는다.
-    points: 10               # v0.7 합산 모델 — 단순 분배 (R1=10·R2=18·R3=30)
+    points: 10               # v0.7 합산 모델 — 단순 분배 (R1=10·R2=20·R3=30)
   - id: R2
     label: 한 번 읽고 이상한 곳만 표시
     desc: 명백히 이상하거나 내 경험과 안 맞는 부분만 표시한다.
     boostType: explicit
     lesson: 이상한 부분을 잡았다. 도메인지식 +1
-    points: 18               # v0.7 합산 모델
+    points: 20               # v0.7 합산 모델
   - id: R3
     label: 내 질문과 경험에 비춰 다시 확인
     desc: AI 답, 남의 의견, 내 생각이 실제 경험과 이어지는지 확인한다.
@@ -2511,24 +2511,24 @@ studyplan:
     lesson: 내 손으로 약점부터 봤다 — 내 시험은 내가 가장 잘 안다.
     delegation: +
     knowledge: +
-    basePoint: 10            # v0.7 합산 모델 베이스
-    varPoint: 15              # v0.7 변수 — 자기 약점 직접 진단, studyplan 디자인 의도 정점
+    basePoint: 20            # v0.7 합산 모델 베이스
+    varPoint: 8              # v0.7 변수 — 자기 약점 직접 진단, studyplan 디자인 의도 정점
   - id: B
     label: AI에게 공부법을 받는다
     desc: AI에게 시험 공부 방법이나 약점별 공부 순서를 물어본다.
     lesson: AI에 공부법을 맡겼다 — 내 약점을 누가 알아야 하는지 따져봐야 한다.
     delegation: '-'
     knowledge: '-'
-    basePoint: 10
-    varPoint: 0              # v0.7 변수 — 위임 큰 방향, B3 살리는 갈래는 tier2에서 회복
+    basePoint: 20
+    varPoint: 4              # v0.7 변수 — 위임 큰 방향, B3 살리는 갈래는 tier2에서 회복
   - id: C
     label: 다른 사람·기성 자료에 기댄다
     desc: 친구 계획·학원 시간표·작년 시험지에 기대서 공부 방향을 잡는다.
     lesson: 다른 데서 가져왔다 — 적절히 골라 쓸 수도, 자기 약점을 못 볼 수도 있다.
     delegation: '0'
     knowledge: '0'
-    basePoint: 10
-    varPoint: 8              # v0.7 변수 — 양면 갈래, C1 살리는 자리
+    basePoint: 20
+    varPoint: 6              # v0.7 변수 — 양면 갈래, C1 살리는 자리
   tier2:
     A:
     - id: A1
@@ -2536,66 +2536,66 @@ studyplan:
       delegation: ++
       knowledge: ++
       lesson: 내가 뭘 모르는지부터 봤다 — 약점이 보이는 자리에서 공부 순서가 생긴다.
-      basePoint: 10            # v0.7 합산 모델 베이스
-      varPoint: 25             # v0.7 변수 — 자기 약점 진단 정점, 직접 + 약점 보고 시간 배치
+      basePoint: 20            # v0.7 합산 모델 베이스
+      varPoint: 10             # v0.7 변수 — 자기 약점 진단 정점, 직접 + 약점 보고 시간 배치
     - id: A2
       label: 약점을 직접 짚은 뒤 막힌 한 단원만 AI에게 어디부터 다시 봐야 하는지 묻는다
       delegation: +
       knowledge: +
       lesson: 내가 길을 안 다음에 AI 손이 점만 닿았다 — 출발은 내 오답이고 도구는 AI다.
-      basePoint: 10
-      varPoint: 12              # v0.7 변수 — 자기 약점 + AI 점만, 적절 자리
+      basePoint: 20
+      varPoint: 7              # v0.7 변수 — 자기 약점 + AI 점만, 적절 자리
     - id: A3
       label: 모든 과목을 똑같이 나눠서 공부한다
       delegation: '0'
       knowledge: +
       lesson: 시간을 공평하게 나눴다 — 깔끔하지만 약점 단원이 같은 칸에 묻힌다.
-      basePoint: 10
-      varPoint: 0              # v0.7 변수 — 얕음 자리, 자기 손이지만 약점이 묻힘
+      basePoint: 20
+      varPoint: 3              # v0.7 변수 — 얕음 자리, 자기 손이지만 약점이 묻힘
     B:
     - id: B1
       label: AI에게 중2 시험 공부법을 한 줄로 묻고 그대로 따른다
       delegation: --
       knowledge: '-'
       lesson: 한 줄로 묻고 따랐다 — AI는 내 약점을 모른 채 일반론을 준다.
-      basePoint: 10
-      varPoint: -10              # v0.7 변수 — 회피 자리, 자기 약점 정보 없이 일반론
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 자기 약점 정보 없이 일반론
     - id: B2
       label: 내 약점을 말하고 AI 공부 순서를 받아 그대로 쓴다
       delegation: '0'
       knowledge: '0'
       lesson: 약점을 말하고 답을 받았다 — 내 정보만큼만 답이 좁아진다.
-      basePoint: 10
+      basePoint: 20
       varPoint: 5              # v0.7 변수 — 중립 자리, 약점 정보는 줌 + 순서는 위임
     - id: B3
       label: 내가 먼저 오답을 분석하고 약점을 짚은 뒤, AI에게 단원별로 구체적으로 묻고 답을 내 오답 옆에서 검수한다
       delegation: '++'
       knowledge: '++'
       lesson: 내 약점이 먼저 보이고 나서 AI가 도구가 됐다 — 출발은 내 오답이고 AI 답은 내 검수를 거친다.
-      basePoint: 10
-      varPoint: 25             # v0.7 변수 — 정점 자리, 자기 분석 + AI 도구 + 검수
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 자기 분석 + AI 도구 + 검수
     C:
     - id: C1
       label: 작년 기말 시험지와 오답노트를 다시 꺼내 약했던 단원을 짚고, 올해 문제집과 비교해 시간을 다시 배치한다
       delegation: '++'
       knowledge: '++'
       lesson: 작년의 내가 거름이 되어 올해 약점 자리에 시간이 옮겨졌다 — 자기 자료를 적극 활용하면 자기 약점이 또렷해진다.
-      basePoint: 10
-      varPoint: 25             # v0.7 변수 — 정점 자리, 작년 자기 자료 거름 + 올해 약점 비교
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 작년 자기 자료 거름 + 올해 약점 비교
     - id: C2
       label: 잘하는 친구의 공부 계획표를 받아 그대로 따라 한다
       delegation: --
       knowledge: '-'
       lesson: 친구 계획이 내 자리에 들어왔다 — 친구의 약점은 내 약점이 아니다.
-      basePoint: 10
-      varPoint: -10              # v0.7 변수 — 부정 자리, 친구 약점 자리에 내 시간
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 부정 자리, 친구 약점 자리에 내 시간
     - id: C3
       label: 어차피 안 된다고 생각하고 게임을 한다
       delegation: --
       knowledge: '-'
       lesson: 선택을 미뤘다 — 시간은 흘러도 시험 범위는 그대로다.
-      basePoint: 10
-      varPoint: -10              # v0.7 변수 — 회피 자리, 미룸
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 미룸
   results:
     # v0.7 — results[t2].basePoint 폐기 (코드 미사용). text·summary·lesson 보존.
     # deltaR2·deltaR3는 lookup 모델 잔재로 v0.7.x 정리 자리, 일단 검수 참고용 보존.
@@ -2680,13 +2680,13 @@ studyplan:
     desc: 검토 없이 그대로 공부를 시작한다.
     boostType: none
     lesson: 검토를 건너뛰었다 — 내 계획을 다시 볼 기회를 놓쳤다.
-    points: 10               # v0.7 합산 모델 — 단순 분배 (R1=10·R2=18·R3=30)
+    points: 10               # v0.7 합산 모델 — 단순 분배 (R1=10·R2=20·R3=30)
   - id: R2
     label: 한 번 보고 빠진 과목만 표시
     desc: 명시적으로 빠진 과목이나 단원을 발견.
     boostType: explicit
     lesson: 한 번 훑어 빠진 단원을 잡았다. 도메인지식 +1
-    points: 18               # v0.7 합산 모델
+    points: 20               # v0.7 합산 모델
   - id: R3
     label: 오답 확인 + 약점 다시 배치
     desc: 내가 모르는 단원과 공부 시간을 다시 맞춘다.

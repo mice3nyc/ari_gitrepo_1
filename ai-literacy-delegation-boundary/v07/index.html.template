@@ -722,7 +722,7 @@ var CONFIG={
   sessionIdKey:'ai-literacy-v07-session-id',
   version:'v0.7',
   scenarios:['selfintro','groupwork','eorinwangja','career','studyplan'],
-  pointThresholds:{S:90,A:70,B:50,C:30},
+  pointThresholds:{S:95,A:90,B:80,C:70,D:60},
   cardBoost:20,
   detectedIssueBoost:10,
   // v0.4 신규 (SPEC §12) — Phase 3 이후 사용
@@ -1050,7 +1050,7 @@ function getGrade(score){
   if(score>=CONFIG.pointThresholds.A)return 'A';
   if(score>=CONFIG.pointThresholds.B)return 'B';
   if(score>=CONFIG.pointThresholds.C)return 'C';
-  return 'D';
+  return 'D'; // pointThresholds.D 미만도 D로 통일 (별도 F 등급 없음)
 }
 
 // =====================================================
