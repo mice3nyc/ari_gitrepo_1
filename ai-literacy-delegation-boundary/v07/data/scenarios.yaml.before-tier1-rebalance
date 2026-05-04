@@ -1,0 +1,3101 @@
+selfintro:
+  id: selfintro
+  category: 1
+  categoryName: 새 학기
+  title: 자기소개 글
+  version: v1
+  learningMessage: AI가 쓴 자기소개에는 내가 말하지 않은 내가 섞일 수 있다.
+  aiSuitability: mid
+  timeBudgetSec: 720
+  domainPool: [자기지식, 표현력, 정리력, 검수능력, 자기검증, 자기성찰, 비판적 사고]
+  domainLabel: 자기지식
+  situation:
+    text: 새 학기 첫날, 선생님이 반 게시판에 붙일 자기소개 글을 내일 아침까지 써 오라고 하셨다. 100자에서 200자 정도면 되고, 좋아하는 것, 기억나는 일, 올해 해 보고 싶은 일을 넣으면 된다고 했다. 집에 와서 빈 종이를 보니 뭘 써야 할지 바로 떠오르지는 않았다.
+    image: ../images/s01_ch1.webp
+  tier1:
+  - id: A
+    label: 직접 쓴다
+    desc: 내 추억과 관심사를 떠올려서 내 말로 쓴다.
+    lesson: 내 손으로 직접 했다 — 자기 일은 자기가 한다.
+    delegation: +
+    knowledge: +
+    basePoint: 20            # v0.7 합산 모델 베이스
+    varPoint: 8              # v0.7 변수 — 자기 자리 직접, selfintro 디자인 의도 정점
+  - id: B
+    label: AI에게 부탁한다
+    desc: AI에게 정보를 주고 자기소개 글을 받아 본다.
+    lesson: AI에 위임했다 — 자기소개를 AI에 시킬 일인지 따져봐야 한다.
+    delegation: '-'
+    knowledge: '-'
+    basePoint: 20
+    varPoint: 4              # v0.7 변수 — 위임 큰 방향, B3 살리는 갈래는 tier2에서 회복
+  - id: C
+    label: 다른 사람·기성 자료에 기댄다
+    desc: 친구 글이나 작년 내가 쓴 글에 기대서 풀어간다.
+    lesson: 다른 데서 가져왔다 — 적절히 골라 쓸 수도, 자기 자리를 비울 수도 있다.
+    delegation: '0'
+    knowledge: '0'
+    basePoint: 20
+    varPoint: 6              # v0.7 변수 — 양면 갈래, C1 살리는 자리
+  tier2:
+    A:
+    - id: A1
+      label: 추억과 관심사를 정리해 자기 말로 쓴다
+      delta:
+        afterA: { delegation: '++', knowledge: '++' }
+        afterB: { delegation: '+', knowledge: '+' }
+        afterC: { delegation: '+', knowledge: '+' }
+      lesson: 내 경험을 들여다봤다 — 자기 안에서 글이 나온다.
+      basePoint: 20            # v0.7 합산 모델 베이스
+      varPoint: 10             # v0.7 변수 — 자기 자리 정점, 직접 + 풍부
+    - id: A2
+      label: 자기 말로 쓰다가 한두 표현만 AI에 다듬어 달라 한다
+      delta:
+        afterA: { delegation: '+', knowledge: '+' }
+        afterB: { delegation: '+', knowledge: '+' }
+        afterC: { delegation: '+', knowledge: '+' }
+      lesson: 자기 글에 AI 손이 점만 닿았다 — 내용은 내 것이고 표현이 매끄러워졌다.
+      basePoint: 20
+      varPoint: 7              # v0.7 변수 — 자기 글 + AI 점만, 적절 자리
+    - id: A3
+      label: 떠오르는 대로 쓰고 바로 끝낸다
+      delta:
+        afterA: { delegation: '0', knowledge: '+' }
+        afterB: { delegation: '-', knowledge: '0' }
+        afterC: { delegation: '0', knowledge: '0' }
+      lesson: 떠오르는 대로 내보냈다 — 자기 안에서 끌어냈지만 정리 없이 나갔다.
+      basePoint: 20
+      varPoint: 3              # v0.7 변수 — 얕음 자리, 자기 안에서 나왔지만 정리 X
+    B:
+    - id: B1
+      label: AI에게 이름만 주고 만들어 달라고 한다
+      delta:
+        afterA: { delegation: '-', knowledge: '-' }
+        afterB: { delegation: '--', knowledge: '-' }
+        afterC: { delegation: '--', knowledge: '-' }
+      lesson: AI에 다 맡겼다 — 내 빈자리를 가짜로 메운다.
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 자기 자리 가짜로 채움
+    - id: B2
+      label: 내 정보를 자세히 주고 AI 글을 받아 다듬는다
+      delta:
+        afterA: { delegation: '0', knowledge: '0' }
+        afterB: { delegation: '0', knowledge: '0' }
+        afterC: { delegation: '0', knowledge: '0' }
+      lesson: 재료는 줬지만 글까지 맡겼다 — 말투가 내 것이 아니다.
+      basePoint: 20
+      varPoint: 5              # v0.7 변수 — 중립 자리, 재료는 자기 + 글은 위임
+    - id: B3
+      label: 내가 먼저 자기소개를 쓰고 AI에게 표현 두세 개만 보여 달라 한다 — 내 말투에 맞는 것만 골라 쓴다
+      delta:
+        afterA: { delegation: '++', knowledge: '++' }
+        afterB: { delegation: '++', knowledge: '++' }
+        afterC: { delegation: '++', knowledge: '++' }
+      lesson: 내 글이 중심이고 AI는 거들었다 — 표현만 받고 내 말투로 검수하면 글이 단단해진다.
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, AI 거들기 + 자기 검수
+    C:
+    - id: C1
+      label: 작년 자기소개를 다시 읽고 올해의 나를 처음부터 새로 쓴다
+      delta:
+        afterA: { delegation: '++', knowledge: '++' }
+        afterB: { delegation: '++', knowledge: '++' }
+        afterC: { delegation: '++', knowledge: '++' }
+      lesson: 작년의 글이 거름이 되어 올해의 나를 자기 말로 자라게 했다 — 자기 자료를 적극 활용했다.
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 작년 자기 자료 거름 삼아 다시
+    - id: C2
+      label: 친구 작년 자기소개를 가져와 이름만 바꿔 낸다
+      delta:
+        afterA: { delegation: '-', knowledge: '-' }
+        afterB: { delegation: '--', knowledge: '-' }
+        afterC: { delegation: '--', knowledge: '-' }
+      lesson: 친구의 글이 내 자리에 들어왔다 — 친구의 자기소개는 내 것이 아니다.
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 부정 자리, 친구 글 표절
+    - id: C3
+      label: 잘 부탁드립니다 한 줄만 적는다
+      delta:
+        afterA: { delegation: '--', knowledge: '-' }
+        afterB: { delegation: '--', knowledge: '-' }
+        afterC: { delegation: '--', knowledge: '-' }
+      lesson: 한 줄만 적었다 — 자기소개를 건너뛰었다.
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 한 줄로 건너뜀
+  results:
+    # v0.7 — results[t2].basePoint 폐기 (코드 미사용). text·summary·lesson 보존.
+    # deltaR2·deltaR3는 lookup 모델 잔재로 v0.7.x 정리 자리, 일단 검수 참고용 보존.
+    A1:
+      text: 초등학교 때 축구하다가 처음 골을 넣었던 일과 요즘 그림 그리는 걸 좋아한다는 말을 넣었다. 글은 조금 느리게 나왔지만 읽어 보니 내 얘기 같았다.
+      deltaR2: 3
+      deltaR3: 6
+      summary: 내 경험이 들어간 자기소개
+      lesson: 자기소개는 자기가 가장 잘 안다 — 위임할 일이 아니었다.
+    A2:
+      text: 직접 자기 말로 쓰다가 한두 표현이 어색해서 AI에게 다듬어 달라 했다. 내 말투는 그대로인데 한두 문장이 매끄러워졌다.
+      deltaR2: 5
+      deltaR3: 11
+      summary: 내 글에 AI 손이 점만 닿은 자기소개
+      lesson: AI는 자기 글의 표현을 점만 손볼 때 도구가 된다 — 내용은 내 일.
+    A3:
+      text: 생각나는 대로 쓰다 보니 문장이 길어졌다가 갑자기 끝났다. 농구 얘기도 있고 게임 얘기도 있는데 서로 잘 이어지지는 않았다.
+      deltaR2: 9
+      deltaR3: 17
+      summary: 흩어진 자기소개
+      lesson: 자기 안에서 끌어냈지만 정리 없이 흩어졌다 — 자기 글이라도 묶지 않으면 자기가 안 보인다.
+    B1:
+      text: AI가 내 이름을 넣어 반듯한 자기소개를 써 줬다. 그런데 글 안에는 내가 말한 적 없는 봉사활동과 독서 습관이 들어 있었다.
+      deltaR2: 13
+      deltaR3: 23
+      summary: 겉은 반듯하지만 내가 빠진 자기소개
+      lesson: AI에 자기소개를 시키면 내가 아닌 사람이 인사하게 된다.
+      hiddenIssues:
+      - 학생이 말한 적 없는 봉사활동을 좋아한다는 내용이 들어감
+      - 실제로 확인되지 않은 독서 습관이 들어감
+      - 문장은 자연스럽지만 주인공의 실제 경험이 약함
+    B2:
+      text: 내가 좋아하는 것, 방학 때 있었던 일, 올해 해 보고 싶은 일을 AI에게 자세히 적어 줬다. 글은 깔끔했지만 몇 문장은 내 말투보다 너무 얌전했다.
+      deltaR2: 8
+      deltaR3: 15
+      summary: 내 정보가 들어간 AI 자기소개
+      lesson: 내 정보를 줘도 말투까지 위임하면 글이 어색해진다.
+    B3:
+      text: 내가 먼저 자기소개를 쓰고 AI에게 어색한 표현 두세 개만 보여 달라 했다. 그중 내 말투에 맞는 것만 골라 썼더니, 내 얘기인데 더 매끄럽게 읽혔다.
+      deltaR2: 5
+      deltaR3: 12
+      summary: AI가 거들고 내가 잡은 자기소개
+      lesson: 자기 글을 먼저 쓰고 AI는 표현만 검수하면, 내용은 내 안에 있고 글은 단단해진다.
+    C1:
+      text: 작년에 썼던 자기소개를 다시 읽으니 지금은 안 하는 취미와 새로 좋아하게 된 것이 또렷이 보였다. 작년 글을 거름 삼아 올해의 나로 처음부터 다시 썼다.
+      deltaR2: 5
+      deltaR3: 12
+      summary: 작년의 나로부터 자란 올해의 자기소개
+      lesson: 자기 자료를 적극 활용하면 자기 변화가 글로 자라난다.
+    C2:
+      text: 친구가 작년에 쓴 자기소개를 그대로 가져와 이름만 바꿔 냈다. 친구가 좋아한다던 음악과 친구가 가고 싶다던 곳이 내 자리에 들어 있었다.
+      deltaR2: 10
+      deltaR3: 20
+      summary: 친구가 들어 있는 자기소개
+      lesson: 친구의 자기소개는 친구의 것이다 — 내 자리는 비어 있다.
+      hiddenIssues:
+      - 친구가 좋아한다던 음악과 가고 싶다던 곳이 내 자기소개에 들어가 있음
+      - 내 진짜 관심사와 기억은 글에 없음
+    C3:
+      text: 종이에 '안녕하세요. 잘 부탁드립니다.'라고만 적었다. 칸은 채웠지만 게시판에 붙으면 아무도 나를 알 수 없을 것 같았다.
+      deltaR2: 11
+      deltaR3: 20
+      summary: 비어 있는 자기소개
+      lesson: 선택을 건너뛴 자리에는 내가 없다.
+      hiddenIssues:
+      - 자기소개에 실제 정보가 거의 없음
+      - 반 게시판에서 나를 알 수 있는 단서가 없음
+  reviews:
+  - id: R1
+    label: 그대로 제출
+    desc: 검토 없이 그대로 낸다.
+    boostType: none
+    lesson: 검토를 건너뛰었다 — 검증할 기회를 놓쳤다.
+    points: 10               # v0.7 합산 모델 — 단순 분배 (R1=10·R2=20·R3=30)
+  - id: R2
+    label: 한 번 읽고 이상한 곳만 표시
+    desc: 명시적인 환각·오류만 발견.
+    boostType: explicit
+    lesson: 한 번 훑어 명백한 오류를 잡았다. 도메인지식 +1
+    points: 20               # v0.7 합산 모델
+  - id: R3
+    label: 처음부터 다시 읽고 내 얘기인지 확인
+    desc: 내용, 말투, 빠진 경험까지 확인.
+    boostType: all
+    lesson: 처음부터 다시 읽으니 빠진 것이 보였다. 도메인지식 +3
+    points: 30               # v0.7 합산 모델
+  # v0.7 합산 모델 — 학생 화면 메인 텍스트로 격상 (Cut5 review 패널·Cut6 결과 패널)
+  # 학생 톤 룰: 시스템 ID 노출 X, 점수 표기는 산식 자리에 따로, 이 자리는 narrative만
+  reviewSupplements:
+    A1R1: 떠올린 추억과 관심사를 자기 말로 묶어 그대로 냈다. 자기 자리가 글에 들어왔다.
+    A1R2: 한 번 읽으며 길어진 한 문장을 둘로 나눴다. 자기 글이 더 또렷해졌다.
+    A1R3: 처음부터 다시 읽고 올해 해 보고 싶은 일을 한 줄 더 넣었다. 자기 자리가 한 단계 깊어졌다.
+    A2R1: 자기 말로 쓰다가 어색한 한두 표현만 AI에 다듬어 받았다. 내용은 자기 안에서 나왔다.
+    A2R2: 한 번 읽으며 AI가 바꾼 한 표현이 자기 말투와 달라 원래 말로 되돌렸다.
+    A2R3: AI가 다듬은 문장과 처음 쓴 문장을 나란히 두고 자기 말투에 맞는 쪽을 골랐다.
+    A3R1: 떠오르는 대로 적고 그대로 냈다. 자기 안에서 나왔지만 묶이지 않은 채 흩어졌다.
+    A3R2: 한 번 읽으며 갑자기 끝나는 문장을 찾아 한 줄을 덧붙였다.
+    A3R3: 흩어진 얘기 중 가장 쓰고 싶은 하나를 골라 글의 중심을 다시 잡았다.
+    B1R1: 이름만 주고 받은 AI 글을 그대로 냈다. 자기 자리에 자기가 없는 글이 들어갔다.
+    B1R2: 한 번 읽으며 한 적 없는 봉사활동 얘기를 발견하고 표시했다.
+    B1R3: 자기가 말한 적 없는 내용을 모두 지우고 실제로 한 일만 남겼다.
+    B2R1: 자기 정보를 자세히 주고 받은 AI 글을 다듬어 그대로 냈다. 글은 깔끔했지만 말투가 자기 것이 아니었다.
+    B2R2: 한 번 읽으며 너무 어른스럽게 들리는 한 문장을 자기 말투로 고쳤다.
+    B2R3: AI가 정리한 글에 자기 말투와 실제 기억을 다시 넣었다.
+    B3R1: 자기가 먼저 쓰고 AI 표현 두세 개 중 자기 말투에 맞는 것만 골라 썼다. 글의 무게는 자기 안에 있었다.
+    B3R2: 한 번 읽으며 AI가 바꾼 한 표현이 자기 말 같지 않아 다시 자기 말로 되돌렸다.
+    B3R3: 처음 쓴 문장과 AI가 다듬은 문장을 비교해서 자기 말투에 맞는 것만 남겼다.
+    C1R1: 작년 글을 다시 읽고 올해의 자기로 처음부터 새로 썼다. 작년의 자기가 거름이 되었다.
+    C1R2: 한 번 읽으며 작년 글에서 가져온 한 문장이 지금의 자기와 어울리지 않아 빼냈다.
+    C1R3: 작년 글을 다시 비추며 지금의 자기가 새로 더하고 싶은 한 문장을 넣었다.
+    C2R1: 친구 자기소개를 가져와 이름만 바꿔 냈다. 자기 자리에 친구가 들어왔다.
+    C2R2: 한 번 읽으며 친구가 좋아한다던 음악이 그대로 남아 있는 자리를 찾아냈다.
+    C2R3: 친구의 자기소개를 거의 다 지우고 자기 얘기로 다시 채웠다.
+    C3R1: 한 줄만 적고 그대로 냈다. 자기소개를 건너뛴 자리에 자기가 없었다.
+    C3R2: 한 번 읽어 보니 자기를 알려 주는 말이 거의 없다는 것이 보였다.
+    C3R3: 짧게라도 좋아하는 것과 올해 해 보고 싶은 일을 한 줄씩 더 적었다.
+
+  # v0.7 신설 — 카드 매칭 룰 데이터 (selfintro 안 leaf별 친화 그룹 1~2개)
+  # 4그룹 (자기성찰 / 표현·소통 / 인식·해석 / 실천·설계). 학생 화면 노출 X, 데이터 단위.
+  # selfintro는 자기성찰 시나리오라 자기성찰 그룹과 강한 친화. A=자기성찰, B=인식·해석(검수), C=혼합.
+  # 카드 매칭 활성화 = 학생 보유 카드 라벨이 leaf의 친화 그룹에 속하면 bonus 항(+5).
+  matchGroups:
+    A1: [자기성찰]
+    A2: [자기성찰, 표현·소통]
+    A3: [자기성찰]
+    B1: [인식·해석]
+    B2: [인식·해석, 표현·소통]
+    B3: [인식·해석, 표현·소통]
+    C1: [자기성찰, 인식·해석]
+    C2: [자기성찰, 인식·해석]
+    C3: [자기성찰, 인식·해석]
+  # v0.7 — finals[leaf+review].score는 합산 모델 전환으로 코드 미사용.
+  # 검수 참고용 1주일 보존 (v0.7.x 정리 자리). grade·delegation·knowledge·awareness·item은 일부 자리에서 보조 표시 가능.
+  finals:
+    A1R1:
+      score: 92
+      grade: S
+      item: 처음의 나 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 내가 고른 기억이 글 안에 남았다.
+    A1R2:
+      score: 95
+      grade: S
+      item: 처음의 나 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 조금 고치니 내 말이 더 또렷해졌다.
+    A1R3:
+      score: 98
+      grade: S
+      item: 내 말 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 내가 직접 고른 말이라 게시판에 붙어도 괜찮았다.
+    A2R1:
+      score: 70
+      grade: A
+      item: 다듬은 자기소개 카드
+      delegation: +
+      knowledge: +
+      awareness: 내 말투는 그대로고 표현 두 군데가 매끄러워졌다.
+    A2R2:
+      score: 75
+      grade: A
+      item: AI 표현 검수 카드
+      delegation: +
+      knowledge: +
+      awareness: AI가 다듬은 표현 중 내 말투에 맞는 것만 남겼다.
+    A2R3:
+      score: 81
+      grade: A
+      item: 함께 다듬은 카드
+      delegation: +
+      knowledge: ++
+      awareness: AI는 표현을 밀어 줬고, 내용은 내가 붙잡았다.
+    A3R1:
+      score: 48
+      grade: C
+      item: 흩어진 자기소개
+      delegation: '0'
+      knowledge: '0'
+      awareness: 내 생각은 있었지만 한곳에 모이지 않았다.
+    A3R2:
+      score: 57
+      grade: B
+      item: 다시 묶은 카드
+      delegation: '0'
+      knowledge: '0'
+      awareness: 읽어 보니 어디가 이상한지 조금 보였다.
+    A3R3:
+      score: 65
+      grade: B
+      item: 고쳐 잡은 나 카드
+      delegation: '0'
+      knowledge: +
+      awareness: 흩어진 말 중에서 진짜 쓰고 싶은 말을 골랐다.
+    B1R1:
+      score: 15
+      grade: D
+      item: null
+      delegation: --
+      knowledge: --
+      awareness: 내가 안 적은 자기소개에는 내가 거의 없었다.
+    B1R2:
+      score: 28
+      grade: D
+      item: 타인의 말 경고 카드
+      delegation: --
+      knowledge: '-'
+      awareness: 내가 한 적 없는 일이 내 소개처럼 적혀 있었다.
+    B1R3:
+      score: 38
+      grade: C
+      item: 빈자리 발견 카드
+      delegation: --
+      knowledge: '0'
+      awareness: AI가 채운 말 사이에서 내 빈자리가 보였다.
+    B2R1:
+      score: 57
+      grade: B
+      item: 빌린 문장 카드
+      delegation: '0'
+      knowledge: '0'
+      awareness: 내 정보는 있었지만 말투는 조금 멀었다.
+    B2R2:
+      score: 65
+      grade: B
+      item: 말투 점검 카드
+      delegation: '0'
+      knowledge: +
+      awareness: 내 정보와 내 말투는 같은 게 아니었다.
+    B2R3:
+      score: 72
+      grade: A
+      item: 다시 내 말 카드
+      delegation: '0'
+      knowledge: +
+      awareness: AI가 정리한 글에 내 말을 다시 넣었다.
+    B3R1:
+      score: 88
+      grade: S
+      item: 내가 잡은 자기소개 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 내가 먼저 쓴 문장이 글의 중심을 잡았고 AI는 표현만 거들었다.
+    B3R2:
+      score: 93
+      grade: S
+      item: 검수 자기소개 카드
+      delegation: ++
+      knowledge: ++
+      awareness: AI가 고친 표현 중 내 말투에 맞는 것만 골랐더니 내 글이 더 단단해졌다.
+    B3R3:
+      score: 100
+      grade: S
+      item: 함께 다듬은 카드
+      delegation: ++
+      knowledge: ++
+      awareness: AI는 거들었고 글의 무게는 내 안에 있었다 — 처음부터 끝까지 내가 잡았다.
+    C1R1:
+      score: 88
+      grade: S
+      item: 자기 자료 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 작년의 글이 거름이 되어 올해의 내가 또렷이 자랐다.
+    C1R2:
+      score: 93
+      grade: S
+      item: 자기 비교 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 한 번 더 읽으니 작년과 올해 사이의 변화가 글에 살아났다.
+    C1R3:
+      score: 100
+      grade: S
+      item: 지금의 나 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 작년 글을 거름 삼아 올해의 내가 처음부터 다시 자랐다.
+    C2R1:
+      score: 22
+      grade: D
+      item: 친구 자기소개 카드
+      delegation: --
+      knowledge: '-'
+      awareness: 내 글에 친구의 자기소개가 들어와 있었다.
+    C2R2:
+      score: 32
+      grade: D
+      item: 친구 그림자 경고 카드
+      delegation: --
+      knowledge: '0'
+      awareness: 한 번 읽으니 친구의 글에서 어색한 자리가 보였다.
+    C2R3:
+      score: 42
+      grade: C
+      item: 내 자리 회수 카드
+      delegation: --
+      knowledge: +
+      awareness: 친구의 글을 거의 다 지우고 내 얘기로 채웠다.
+    C3R1:
+      score: 10
+      grade: D
+      item: null
+      delegation: --
+      knowledge: --
+      awareness: 한 줄을 냈더니 나도 거의 보이지 않았다.
+    C3R2:
+      score: 21
+      grade: D
+      item: null
+      delegation: --
+      knowledge: '-'
+      awareness: 읽어 봐도 나를 알려 주는 말이 없었다.
+    C3R3:
+      score: 30
+      grade: D
+      item: 빈칸 경고 카드
+      delegation: --
+      knowledge: '0'
+      awareness: 늦게라도 한 가지를 적으니 빈칸이 조금 줄었다.
+  # v0.7 재정의 — 카드 매칭 룰 데이터 (SPEC §1.4 / §7.8.2 직접 매칭)
+  # leaf 진입 시 학생 보유 카드(19종 풀)와 requireCard 라벨 정확 일치하면 bonus 항(+5).
+  # boostCard 22종 라벨은 폐기, 학습 메시지는 reviewSupplements narrative로 흡수됨.
+  # matchGroups(친화 그룹 매칭)와 별도 — 직접 매칭은 leaf별 핵심 카드 1장 강조 자리.
+  axisDelta:
+    - leafId: A1R3
+      requireCard: 자기지식
+      bonusPoint: 5
+      note: 자기 경험을 직접 고르고 끝까지 확인하는 자리 — 자기지식 카드와 강한 매칭
+    - leafId: A3R3
+      requireCard: 자기성찰
+      bonusPoint: 5
+      note: 흩어진 생각을 다시 묶어 보는 자리 — 자기성찰 카드와 강한 매칭
+    - leafId: B1R2
+      requireCard: 비판적 사고
+      bonusPoint: 5
+      note: AI가 만든 거짓 자기소개를 눈으로 발견하는 자리 — 비판적 사고 카드와 강한 매칭
+    - leafId: B2R3
+      requireCard: 표현력
+      bonusPoint: 5
+      note: AI 문장을 자기 말투로 다시 바꾸는 검토 자리 — 표현력 카드와 강한 매칭
+    - leafId: B3R2
+      requireCard: 검수능력
+      bonusPoint: 5
+      note: AI를 표현 보조로 쓰고 바뀐 문장을 확인하는 자리 — 검수능력 카드와 강한 매칭
+    - leafId: C1R3
+      requireCard: 자기검증
+      bonusPoint: 5
+      note: 작년 글을 그대로 쓰지 않고 지금의 자기와 비교하는 자리 — 자기검증 카드와 강한 매칭
+  resourceCosts:
+    # v0.7 §3.5 — B시간 < C시간 < A시간 / leaf별 시간·에너지 패턴 / R2=+5t/+4e, R3=+15t/+11e
+    # 5/4 세션289 — t2/review stage floor 시간 2 / 에너지 1 (formula 적용, yaml 미수정).
+    # 가장 싼 t2 (A3·B1·C3) 와 R1 그대로 제출이 0으로 도착하던 자리에 최소 비용 박음.
+    A1R1:
+      time: 32
+      energy: 26
+    A1R2:
+      time: 37
+      energy: 30
+    A1R3:
+      time: 47
+      energy: 37
+    A2R1:
+      time: 26
+      energy: 22
+    A2R2:
+      time: 31
+      energy: 26
+    A2R3:
+      time: 41
+      energy: 33
+    A3R1:
+      time: 20
+      energy: 16
+    A3R2:
+      time: 25
+      energy: 20
+    A3R3:
+      time: 35
+      energy: 27
+    B1R1:
+      time: 10
+      energy: 8
+    B1R2:
+      time: 15
+      energy: 12
+    B1R3:
+      time: 25
+      energy: 19
+    B2R1:
+      time: 14
+      energy: 16
+    B2R2:
+      time: 19
+      energy: 20
+    B2R3:
+      time: 29
+      energy: 27
+    B3R1:
+      time: 16
+      energy: 24
+    B3R2:
+      time: 21
+      energy: 28
+    B3R3:
+      time: 31
+      energy: 35
+    C1R1:
+      time: 20
+      energy: 24
+    C1R2:
+      time: 25
+      energy: 28
+    C1R3:
+      time: 35
+      energy: 35
+    C2R1:
+      time: 18
+      energy: 18
+    C2R2:
+      time: 23
+      energy: 22
+    C2R3:
+      time: 33
+      energy: 29
+    C3R1:
+      time: 16
+      energy: 12
+    C3R2:
+      time: 21
+      energy: 16
+    C3R3:
+      time: 31
+      energy: 23
+  expRewards:
+    A1R1: 25
+    A1R2: 27
+    A1R3: 30
+    A2R1: 18
+    A2R2: 20
+    A2R3: 23
+    A3R1: 12
+    A3R2: 14
+    A3R3: 17
+    B1R1: 8
+    B1R2: 10
+    B1R3: 12
+    B2R1: 7
+    B2R2: 9
+    B2R3: 12
+    B3R1: 10
+    B3R2: 12
+    B3R3: 14
+    C1R1: 5
+    C1R2: 7
+    C1R3: 10
+    C2R1: 3
+    C2R2: 5
+    C2R3: 8
+    C3R1: 1
+    C3R2: 2
+    C3R3: 4
+  competencyCards:
+    A1R1: [자기지식, 정리력]
+    A1R2: [자기지식, 정리력, 검수능력]
+    A1R3: [자기지식, 정리력, 표현력, 자기검증]
+    A2R1: [자기지식, 표현력]
+    A2R2: [자기지식, 표현력, 검수능력]
+    A2R3: [자기지식, 표현력, 검수능력, 자기검증]
+    A3R1: [자기지식]
+    A3R2: [자기지식, 정리력]
+    A3R3: [자기지식, 정리력, 자기성찰, 검수능력]
+    B1R1: []
+    B1R2: []
+    B1R3: []
+    B2R1: [자기지식]
+    B2R2: [자기지식, 표현력, 검수능력]
+    B2R3: [자기지식, 표현력, 검수능력, 자기검증]
+    B3R1: [자기지식, 표현력, 검수능력]
+    B3R2: [자기지식, 표현력, 검수능력, 비판적 사고]
+    B3R3: [자기지식, 표현력, 정리력, 검수능력, 자기검증]
+    C1R1: [자기지식, 정리력, 자기성찰]
+    C1R2: [자기지식, 정리력, 자기성찰, 비판적 사고]
+    C1R3: [자기지식, 정리력, 표현력, 자기성찰, 자기검증]
+    C2R1: []
+    C2R2: [비판적 사고]
+    C2R3: [자기지식, 정리력, 자기성찰, 자기검증]
+    C3R1: []
+    C3R2: []
+    C3R3: []
+groupwork:
+  id: groupwork
+  category: 2
+  categoryName: 모둠 활동
+  title: 모둠 발표 자료
+  version: v1
+  learningMessage: 혼자 빨리 끝낸 발표 자료는 모둠 안에서 아직 맞춰진 자료가 아니다.
+  aiSuitability: mid
+  timeBudgetSec: 720
+  domainPool: [협업능력, 소통능력, 발표력, 검수능력, 자기검증, 자기성찰, 비판적 사고]
+  domainLabel: 협업능력
+  situation:
+    text: 학기 초 모둠 발표가 다음 주로 잡혔다. 우리 모둠은 4명이 각자 파트를 맡았고, 내가 맡은 일은 자료 조사와 슬라이드 3장 만들기였다. 다른 애들이 어떤 흐름으로 준비하는지 아직 잘 모르는데, 숙제도 있고 학원도 있어서 시간이 많지는 않았다.
+    image: ../images/s02_ch1.webp
+  tier1:
+  - id: A
+    label: 직접 조사해서 만든다
+    desc: 내가 자료를 찾고 모둠 발표에 맞게 슬라이드를 만든다.
+    lesson: 내 손으로 직접 했다 — 모둠 발표는 내가 이해해야 내 파트가 된다.
+    delegation: +
+    knowledge: +
+    basePoint: 20            # v0.7 합산 모델 베이스
+    varPoint: 8              # v0.7 변수 — 자기 자리 직접, groupwork 디자인 의도 정점 (모둠 안 자기 파트)
+  - id: B
+    label: AI에게 맡긴다
+    desc: AI에게 슬라이드 초안이나 정리를 부탁한다.
+    lesson: AI에 위임했다 — 모둠 자료에 AI를 어디까지 쓸지 따져봐야 한다.
+    delegation: '-'
+    knowledge: '-'
+    basePoint: 20
+    varPoint: 4              # v0.7 변수 — 위임 큰 방향, B3 살리는 갈래는 tier2에서 회복
+  - id: C
+    label: 다른 모둠·기성 자료에 기댄다
+    desc: 모둠원·작년 발표·다른 학년 자료에 기대서 풀어간다.
+    lesson: 다른 데서 가져왔다 — 적절히 골라 쓸 수도, 내 파트를 비울 수도 있다.
+    delegation: '0'
+    knowledge: '0'
+    basePoint: 20
+    varPoint: 6              # v0.7 변수 — 양면 갈래, C1 살리는 자리
+  tier2:
+    A:
+    - id: A1
+      label: 자료를 찾고 모둠원과 공유한 뒤 슬라이드를 만든다
+      delta:
+        afterA: { delegation: '++', knowledge: '++' }
+        afterB: { delegation: '+', knowledge: '+' }
+        afterC: { delegation: '+', knowledge: '+' }
+      lesson: 조사하고 모둠과 맞췄다 — 내 파트가 모둠 흐름 안에 자리 잡는다.
+      basePoint: 20            # v0.7 합산 모델 베이스
+      varPoint: 10             # v0.7 변수 — 정점 자리, 조사 + 모둠 공유 둘 다
+    - id: A2
+      label: 직접 자료를 찾아 슬라이드를 만들고 한 장 제목·표현만 AI에 다듬어 달라 한다
+      delta:
+        afterA: { delegation: '+', knowledge: '+' }
+        afterB: { delegation: '+', knowledge: '+' }
+        afterC: { delegation: '+', knowledge: '+' }
+      lesson: 자기 슬라이드에 AI 손이 점만 닿았다 — 자료와 흐름은 내 것이고 표현이 매끄러워졌다.
+      basePoint: 20
+      varPoint: 7              # v0.7 변수 — 자기 자료 + AI 점만, 적절 자리
+    - id: A3
+      label: 자료를 살짝 보고 슬라이드를 만든다
+      delta:
+        afterA: { delegation: '0', knowledge: '+' }
+        afterB: { delegation: '-', knowledge: '0' }
+        afterC: { delegation: '0', knowledge: '0' }
+      lesson: 얕게 보고 만들었다 — 슬라이드는 있지만 설명할 깊이가 없다.
+      basePoint: 20
+      varPoint: 3              # v0.7 변수 — 얕음 자리, 자기 손이지만 깊이 X
+    B:
+    - id: B1
+      label: AI에게 주제만 주고 슬라이드 3장을 만들어 달라고 한다
+      delta:
+        afterA: { delegation: '-', knowledge: '-' }
+        afterB: { delegation: '--', knowledge: '-' }
+        afterC: { delegation: '--', knowledge: '-' }
+      lesson: AI에 다 맡겼다 — 출처 없는 자료가 내 발표가 된다.
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 출처 없는 AI 산출물 그대로
+    - id: B2
+      label: 내가 찾은 자료를 AI에게 주고 슬라이드 문장을 받아 다듬는다
+      delta:
+        afterA: { delegation: '0', knowledge: '0' }
+        afterB: { delegation: '0', knowledge: '0' }
+        afterC: { delegation: '0', knowledge: '0' }
+      lesson: 재료는 줬지만 정리까지 맡겼다 — 모둠 흐름이 빠진 자료가 나온다.
+      basePoint: 20
+      varPoint: 5              # v0.7 변수 — 중립 자리, 재료는 자기 + 정리는 위임
+    - id: B3
+      label: 내가 조사하고 출처를 적은 뒤 AI에게 정리만 부탁하고 끝까지 검수한다
+      delta:
+        afterA: { delegation: '++', knowledge: '++' }
+        afterB: { delegation: '++', knowledge: '++' }
+        afterC: { delegation: '++', knowledge: '++' }
+      lesson: 자료와 출처는 내가 잡고 AI는 정리만 도왔다 — 자기 조사 위에 적절한 결합이 얹혔다.
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 자기 조사 위 AI 정리 + 검수
+    C:
+    - id: C1
+      label: 다른 학년의 같은 단원 발표 자료에서 흐름을 빌려 보고 우리 모둠 주제로 직접 다시 채운다
+      delta:
+        afterA: { delegation: '++', knowledge: '++' }
+        afterB: { delegation: '++', knowledge: '++' }
+        afterC: { delegation: '++', knowledge: '++' }
+      lesson: 기성 자료를 거름으로 삼아 우리 주제로 다시 채웠다 — 빌리되 내 자리는 내가 채웠다.
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 기성 자료 거름 + 우리 주제 직접
+    - id: C2
+      label: 다른 모둠 작년 발표 슬라이드를 그대로 가져와 제목만 바꿔 낸다
+      delta:
+        afterA: { delegation: '-', knowledge: '-' }
+        afterB: { delegation: '--', knowledge: '-' }
+        afterC: { delegation: '--', knowledge: '-' }
+      lesson: 다른 모둠 슬라이드가 내 자리에 들어왔다 — 다른 모둠의 자료는 내 것이 아니다.
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 부정 자리, 다른 모둠 슬라이드 베끼기
+    - id: C3
+      label: 모둠원에게 내 파트까지 좀 해 달라고 부탁한다
+      delta:
+        afterA: { delegation: '--', knowledge: '-' }
+        afterB: { delegation: '--', knowledge: '-' }
+        afterC: { delegation: '--', knowledge: '-' }
+      lesson: 내 파트를 떠넘겼다 — 발표 당일 내가 답할 수 없게 된다.
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 내 파트 떠넘김
+  results:
+    # v0.7 — results[t2].basePoint 폐기 (코드 미사용). text·summary·lesson 보존.
+    # deltaR2·deltaR3는 lookup 모델 잔재로 v0.7.x 정리 자리, 일단 검수 참고용 보존.
+    A1:
+      text: 자료 출처를 적어 두고, 모둠 채팅방에 내가 찾은 흐름을 먼저 공유했다. 슬라이드 3장은 조금 늦게 완성됐지만 다른 친구 파트와 이어지는 말이 생겼다.
+      basePoint: 93
+      deltaR2: 3
+      deltaR3: 6
+      summary: 모둠 흐름에 맞춘 발표 자료
+      lesson: 모둠 발표는 자료를 만드는 일이 아니라 흐름을 맞추는 일이다.
+    A2:
+      text: 자료는 직접 찾아 출처까지 적었고, 마지막에 한 장 제목과 어색한 한 문장만 AI에 다듬어 달라 했다. 슬라이드는 내 흐름 그대로였고 표현 두 군데가 매끄러워졌다.
+      basePoint: 70
+      deltaR2: 5
+      deltaR3: 11
+      summary: 내 자료에 AI 손이 점만 닿은 슬라이드
+      lesson: AI는 자기 슬라이드의 표현을 점만 손볼 때 도구가 된다 — 자료와 흐름은 내 일.
+    A3:
+      text: 검색해서 맨 위에 나온 글 몇 개를 보고 슬라이드를 만들었다. 제목과 그림은 들어갔지만 왜 이 자료를 골랐는지 설명하기가 애매했다.
+      basePoint: 49
+      deltaR2: 9
+      deltaR3: 17
+      summary: 겉모양은 있지만 얕은 자료
+      lesson: 자료를 얕게 보면 발표할 때 설명할 말이 없다.
+    B1:
+      text: AI가 바로 슬라이드 3장짜리 내용을 만들어 줬다. 통계 숫자와 멋진 문장이 들어 있었지만 출처가 없고, 책에 없는 말이 인용문처럼 적혀 있었다.
+      basePoint: 16
+      deltaR2: 13
+      deltaR3: 23
+      summary: 출처가 비어 있는 AI 슬라이드
+      lesson: AI에 통째로 맡기면 그럴듯한 거짓이 내 발표 자료가 된다.
+      hiddenIssues:
+      - 출처 없는 통계 숫자가 들어감
+      - 실제 책이나 자료에 없는 문장이 인용처럼 들어감
+      - 모둠의 발표 흐름과 연결되는 부분이 없음
+    B2:
+      text: 내가 찾은 자료를 AI에게 넣고 슬라이드 문장을 받았다. 내용은 크게 틀리지 않았지만 모둠 친구들이 쓰는 말투와 발표 흐름과는 조금 달랐다.
+      basePoint: 58
+      deltaR2: 8
+      deltaR3: 15
+      summary: 자료는 있지만 모둠 흐름이 약한 슬라이드
+      lesson: 재료를 줘도 정리까지 맡기면 모둠과 따로 노는 자료가 된다.
+    B3:
+      text: 자료를 직접 찾아 출처를 정리한 뒤, AI에게 슬라이드 문장을 짧게 정리해 달라고 했다. 받아 본 문장은 출처와 흐름을 다시 확인하고, 모둠 채팅방에 공유해서 친구 파트와 이어지게 맞췄다.
+      basePoint: 88
+      deltaR2: 5
+      deltaR3: 12
+      summary: 자기 조사 위에 AI 정리를 얹은 검수된 슬라이드
+      lesson: 자기 출발이 있으면 AI는 정리 자리에서 가장 잘 쓰인다 — 자료·출처·흐름은 내 일로 남는다.
+    C1:
+      text: 다른 학년이 같은 단원으로 발표했던 자료를 찾아 흐름과 순서를 살펴봤다. 어떤 흐름이 잘 풀렸는지 추려서, 우리 모둠 주제에 맞는 자료와 예시로 한 장씩 다시 채우고 출처를 적었다. 모둠 채팅방에 흐름을 공유해 친구 파트와 이어지는 자리를 맞췄다.
+      basePoint: 88
+      deltaR2: 5
+      deltaR3: 12
+      summary: 기성 자료의 흐름 위에 우리 주제를 직접 채운 슬라이드
+      lesson: 기성 자료는 거름이다 — 흐름은 빌리고 내용은 내 손으로 채울 때 내 자리가 생긴다.
+    C2:
+      text: 다른 모둠이 작년에 만든 발표 슬라이드를 그대로 가져와 제목만 우리 주제로 바꿔 냈다. 그 모둠이 들었던 예시와 흐름이 내 자리에 그대로 남아 있었다.
+      basePoint: 22
+      deltaR2: 10
+      deltaR3: 20
+      summary: 다른 모둠이 들어 있는 슬라이드
+      lesson: 다른 모둠 슬라이드는 다른 모둠의 흐름이다 — 내 자리는 비어 있다.
+      hiddenIssues:
+      - 다른 모둠이 들었던 예시가 그대로 남아 있음
+      - 우리 모둠 주제와 연결되지 않는 문장이 섞여 있음
+      - 출처와 만든 사람의 흔적이 섞여 있음
+    C3:
+      text: 모둠원에게 내 파트까지 좀 해 달라고 보냈다. 친구가 몇 줄을 도와주긴 했지만 발표 연습 때 내가 내 슬라이드를 잘 설명하지 못했다.
+      basePoint: 11
+      deltaR2: 11
+      deltaR3: 20
+      summary: 내가 설명하지 못한 내 파트
+      lesson: 내 파트를 떠넘기면 발표 당일 내가 답할 수 없다.
+      hiddenIssues:
+      - 내가 맡은 파트의 내용을 직접 이해하지 못함
+      - 친구에게 부담이 넘어감
+      - 발표 당일 질문에 답하기 어려움
+  reviews:
+  - id: R1
+    label: 그대로 제출
+    desc: 검토 없이 그대로 낸다.
+    boostType: none
+    lesson: 검토를 건너뛰었다 — 검증할 기회를 놓쳤다.
+    points: 10               # v0.7 합산 모델 — 단순 분배 (R1=10·R2=20·R3=30)
+  - id: R2
+    label: 한 번 읽고 이상한 곳만 표시
+    desc: 명시적인 환각·오류만 발견.
+    boostType: explicit
+    lesson: 한 번 훑어 명백한 오류를 잡았다. 도메인지식 +1
+    points: 20               # v0.7 합산 모델
+  - id: R3
+    label: 출처 확인 + 모둠 흐름 맞추기
+    desc: 자료의 근거와 다른 파트와의 연결까지 확인.
+    boostType: all
+    lesson: 출처와 모둠 흐름을 다시 보니 빠진 것이 보였다. 도메인지식 +3
+    points: 30               # v0.7 합산 모델
+  # v0.7 합산 모델 — 학생 화면 메인 텍스트로 격상 (Cut5 review 패널·Cut6 결과 패널)
+  # 학생 톤 룰: 시스템 ID 노출 X, 점수 표기는 산식 자리에 따로, 이 자리는 narrative만
+  reviewSupplements:
+    A1R1: 자료를 찾아 출처를 적고 모둠 채팅방에 흐름을 먼저 공유한 뒤 슬라이드를 만들어 그대로 냈다. 내 파트가 모둠 흐름 안에 자리 잡았다.
+    A1R2: 한 번 읽으며 한 장 제목이 친구 파트와 겹친 자리를 찾아 다른 말로 바꿨다. 모둠 흐름이 더 또렷해졌다.
+    A1R3: 출처와 발표 순서를 다시 확인하고 친구 파트로 넘어가는 한 줄을 넣었다. 모둠 안에서 내 파트가 한 단계 깊이 자리 잡았다.
+    A2R1: 자료는 직접 찾아 출처까지 적고 한 장 제목과 어색한 한 문장만 AI에 다듬어 받아 그대로 냈다. 자료와 흐름은 자기 안에서 나왔다.
+    A2R2: 한 번 읽으며 AI가 다듬은 한 표현이 자기 발표 말투와 달라 원래 말로 되돌렸다.
+    A2R3: AI가 다듬은 문장과 처음 쓴 문장을 나란히 두고 자기 발표 말투에 맞는 쪽을 골랐다.
+    A3R1: 검색해서 맨 위에 나온 글 몇 개만 보고 슬라이드를 만들어 그대로 냈다. 겉모양은 갖췄지만 설명할 깊이가 없었다.
+    A3R2: 한 번 읽으며 사진만 있고 설명이 없는 한 장을 찾아 한 줄을 덧붙였다.
+    A3R3: 자료 출처를 다시 찾고 왜 이 예시를 골랐는지 한 문장을 더해 발표 때 답할 수 있는 슬라이드로 다시 잡았다.
+    B1R1: AI에게 주제만 주고 받은 슬라이드 3장을 그대로 냈다. 통계 숫자와 멋진 문장이 있었지만 출처가 빈 자리였다.
+    B1R2: 한 번 읽으며 출처 없는 통계 숫자가 있는 자리를 발견하고 표시했다.
+    B1R3: 통계와 인용을 다시 찾아 보고 책에 없는 문장과 모둠 주제와 안 맞는 자리를 지웠다.
+    B2R1: 자기가 찾은 자료를 AI에 주고 받은 슬라이드 문장을 다듬어 그대로 냈다. 내용은 크게 틀리지 않았지만 모둠 발표 흐름과 따로 놀았다.
+    B2R2: 한 번 읽으며 발표 말투와 너무 다른 한 문장을 자기 말투로 고쳤다.
+    B2R3: AI가 정리한 문장에 자료 출처를 다시 붙이고 친구 파트와 이어지는 순서로 다시 잡았다.
+    B3R1: 자료를 직접 찾아 출처를 정리한 뒤 AI에게 슬라이드 문장을 짧게 정리해 받아 그대로 냈다. 자기 조사 위에 AI 정리가 얹혔다.
+    B3R2: 한 번 읽으며 AI가 줄인 문장에서 중요한 조건 하나가 빠진 자리를 찾아 다시 채웠다.
+    B3R3: 출처와 숫자, 발표 흐름을 끝까지 확인하고 모둠 채팅방에 공유해 친구 파트와 이어지게 맞췄다.
+    C1R1: 다른 학년의 같은 단원 발표 흐름을 살펴보고 우리 모둠 주제에 맞는 자료와 예시로 한 장씩 다시 채워 냈다. 빌린 흐름 안에 우리 자리가 섰다.
+    C1R2: 한 번 읽으며 빌려 온 흐름 한 장에 다른 학년 예시가 그대로 남아 있는 자리를 찾아 빼냈다.
+    C1R3: 빌린 흐름을 다시 보며 우리 모둠 주제에 맞는 새 예시를 한 장 더 넣고 친구 파트와 이어지는 순서로 맞췄다.
+    C2R1: 다른 모둠 작년 슬라이드를 그대로 가져와 제목만 바꿔 냈다. 자기 자리에 다른 모둠의 흐름이 들어왔다.
+    C2R2: 한 번 읽으며 다른 모둠이 들었던 예시가 그대로 남아 있는 자리를 찾아냈다.
+    C2R3: 베껴 온 슬라이드를 거의 다 지우고 우리 모둠 주제에 맞는 자료와 예시로 다시 채웠다.
+    C3R1: 모둠원에게 내 파트까지 좀 해 달라고 부탁해 친구가 써 준 몇 줄을 그대로 냈다. 내 파트가 내 안에 들어와 있지 않았다.
+    C3R2: 한 번 읽어 보니 친구가 써 준 문장 중 발표 때 자기가 설명할 수 없는 자리가 보였다.
+    C3R3: 친구가 써 준 부분을 다시 읽고 자기가 말할 수 있는 문장으로 고쳐 발표 때 답할 수 있게 잡았다.
+
+  # v0.7 신설 — 카드 매칭 룰 데이터 (groupwork 안 leaf별 친화 그룹 1~2개)
+  # 4그룹 (자기성찰 / 표현·소통 / 인식·해석 / 실천·설계). 학생 화면 노출 X, 데이터 단위.
+  # groupwork는 모둠 활동 시나리오라 표현·소통 그룹과 강한 친화. A=표현·소통(모둠 공유), B=인식·해석(검수), C=혼합.
+  # 카드 매칭 활성화 = 학생 보유 카드 라벨이 leaf의 친화 그룹에 속하면 bonus 항(+5).
+  matchGroups:
+    A1: [표현·소통]
+    A2: [표현·소통]
+    A3: [표현·소통, 자기성찰]
+    B1: [인식·해석]
+    B2: [인식·해석, 표현·소통]
+    B3: [인식·해석, 표현·소통]
+    C1: [표현·소통, 인식·해석]
+    C2: [표현·소통, 인식·해석]
+    C3: [표현·소통, 자기성찰]
+  # v0.7 — finals[leaf+review].score는 합산 모델 전환으로 코드 미사용.
+  # 검수 참고용 1주일 보존 (v0.7.x 정리 자리). grade·delegation·knowledge·awareness·item은 일부 자리에서 보조 표시 가능.
+  finals:
+    A1R1:
+      score: 93
+      grade: S
+      item: 모둠 공유 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 내 자료가 친구들 파트와 이어졌다.
+    A1R2:
+      score: 96
+      grade: S
+      item: 모둠 공유 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 겹친 부분을 고치니 발표 순서가 더 자연스러웠다.
+    A1R3:
+      score: 99
+      grade: S
+      item: 같이 맞춘 발표 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 내 파트가 모둠 발표 안에서 자리를 잡았다.
+    A2R1:
+      score: 70
+      grade: A
+      item: 다듬은 슬라이드 카드
+      delegation: +
+      knowledge: +
+      awareness: 자료는 내 것이고 표현 두 군데가 매끄러워졌다.
+    A2R2:
+      score: 75
+      grade: A
+      item: AI 표현 검수 카드
+      delegation: +
+      knowledge: +
+      awareness: AI가 다듬은 표현 중 내 말투에 맞는 것만 남겼다.
+    A2R3:
+      score: 81
+      grade: A
+      item: 함께 다듬은 카드
+      delegation: +
+      knowledge: ++
+      awareness: AI는 표현을 밀어 줬고, 자료와 흐름은 내가 붙잡았다.
+    A3R1:
+      score: 49
+      grade: C
+      item: 얕은 자료 경고 카드
+      delegation: '0'
+      knowledge: +
+      awareness: 슬라이드는 있었지만 내가 설명할 말이 부족했다.
+    A3R2:
+      score: 58
+      grade: B
+      item: 빈칸 발견 카드
+      delegation: '0'
+      knowledge: +
+      awareness: 읽어 보니 사진 밑에 내 설명이 없었다.
+    A3R3:
+      score: 66
+      grade: B
+      item: 자료 출처 확인 카드
+      delegation: '0'
+      knowledge: ++
+      awareness: 출처를 다시 찾으니 내가 왜 이 자료를 썼는지 말할 수 있었다.
+    B1R1:
+      score: 16
+      grade: D
+      item: null
+      delegation: --
+      knowledge: '-'
+      awareness: 슬라이드는 나왔지만 내가 믿을 수 있는 자료는 아니었다.
+    B1R2:
+      score: 29
+      grade: D
+      item: AI 슬라이드 경고 카드
+      delegation: --
+      knowledge: '0'
+      awareness: 그럴듯한 숫자 옆에 출처가 없었다.
+    B1R3:
+      score: 39
+      grade: C
+      item: 맥락 빠진 발표
+      delegation: --
+      knowledge: +
+      awareness: AI 슬라이드는 있었지만 우리 모둠 발표와 따로 놀았다.
+    B2R1:
+      score: 58
+      grade: B
+      item: AI 정리 자료
+      delegation: '0'
+      knowledge: '0'
+      awareness: 자료는 내 것이었지만 발표 흐름은 아직 맞지 않았다.
+    B2R2:
+      score: 66
+      grade: B
+      item: 말투 수정 카드
+      delegation: '0'
+      knowledge: +
+      awareness: AI가 쓴 문장을 내가 말할 수 있게 바꿨다.
+    B2R3:
+      score: 73
+      grade: A
+      item: AI 슬라이드 검수 카드
+      delegation: '0'
+      knowledge: +
+      awareness: AI가 정리한 자료도 모둠 흐름에 다시 맞춰야 했다.
+    B3R1:
+      score: 88
+      grade: S
+      item: 자기 조사 + AI 정리 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 내가 찾은 자료 위에 AI 정리가 얹혀서 발표할 때 흔들리지 않았다.
+    B3R2:
+      score: 93
+      grade: S
+      item: AI 슬라이드 검수 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: AI가 줄인 문장에서 빠진 조건을 다시 채웠다.
+    B3R3:
+      score: 100
+      grade: S
+      item: 모둠 공유 검수 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 출처·숫자·흐름을 끝까지 확인하고 모둠과 맞췄다 — 자기 조사 위에 AI 정리가 자리를 잡았다.
+    C1R1:
+      score: 88
+      grade: S
+      item: 기성 자료 활용 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 빌려 온 흐름 안에 우리 주제가 자리 잡았다.
+    C1R2:
+      score: 93
+      grade: S
+      item: 기성 자료 검수 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 빌려 온 흐름에서 우리 주제와 안 맞는 한 장을 찾아 고쳤다.
+    C1R3:
+      score: 100
+      grade: S
+      item: 우리 주제 채우기 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 흐름은 빌리고 내용은 내 손으로 채웠다 — 기성 자료가 거름이 되고 우리 자리가 섰다.
+    C2R1:
+      score: 22
+      grade: D
+      item: 다른 모둠 슬라이드 카드
+      delegation: --
+      knowledge: '-'
+      awareness: 내 자리에 다른 모둠의 흐름이 들어와 있었다.
+    C2R2:
+      score: 32
+      grade: D
+      item: 낡은 예시 경고 카드
+      delegation: --
+      knowledge: '0'
+      awareness: 한 번 읽으니 다른 모둠 예시가 어디 있는지 보였다.
+    C2R3:
+      score: 42
+      grade: C
+      item: 내 자리 회수 카드
+      delegation: --
+      knowledge: +
+      awareness: 베껴 온 슬라이드를 지우고 우리 주제로 다시 채웠다.
+    C3R1:
+      score: 11
+      grade: D
+      item: null
+      delegation: --
+      knowledge: '-'
+      awareness: 내 파트인데 내가 설명하지 못했다.
+    C3R2:
+      score: 22
+      grade: D
+      item: null
+      delegation: --
+      knowledge: '0'
+      awareness: 친구가 써 준 문장을 읽어도 내 말처럼 나오지 않았다.
+    C3R3:
+      score: 31
+      grade: D
+      item: 떠넘긴 발표 경고 카드
+      delegation: --
+      knowledge: +
+      awareness: 늦게 다시 읽었지만 처음부터 내 파트로 잡은 느낌은 약했다.
+  # v0.7 재정의 — 카드 매칭 룰 데이터 (SPEC §1.4 / §7.8.2 직접 매칭)
+  # leaf 진입 시 학생 보유 카드(19종 풀)와 requireCard 라벨 정확 일치하면 bonus 항(+5).
+  # boostCard 22종 라벨은 폐기, 학습 메시지는 reviewSupplements narrative로 흡수됨.
+  # matchGroups(친화 그룹 매칭)와 별도 — 직접 매칭은 leaf별 핵심 카드 1장 강조 자리.
+  axisDelta:
+    - leafId: A1R3
+      requireCard: 협업능력
+      bonusPoint: 5
+      note: 모둠 채팅방 공유와 친구 파트 이어주는 자리 — 협업능력 카드와 강한 매칭
+    - leafId: A3R3
+      requireCard: 검수능력
+      bonusPoint: 5
+      note: 얕은 자료를 다시 확인하고 출처를 붙이는 자리 — 검수능력 카드와 강한 매칭
+    - leafId: B1R2
+      requireCard: 비판적 사고
+      bonusPoint: 5
+      note: AI가 만든 출처 없는 통계를 눈으로 발견하는 자리 — 비판적 사고 카드와 강한 매칭
+    - leafId: B3R3
+      requireCard: 검수능력
+      bonusPoint: 5
+      note: AI 정리 위 출처와 흐름을 끝까지 확인하는 자리 — 검수능력 카드와 강한 매칭
+    - leafId: C1R3
+      requireCard: 발표력
+      bonusPoint: 5
+      note: 빌린 흐름 위에 우리 주제로 친구 파트 이어주는 자리 — 발표력 카드와 강한 매칭
+    - leafId: C3R3
+      requireCard: 소통능력
+      bonusPoint: 5
+      note: 친구가 써 준 부분을 자기 말로 다시 잡아 발표하는 자리 — 소통능력 카드와 강한 매칭
+  resourceCosts:
+    # v0.7 §3.5 — B시간 < C시간 < A시간 / leaf별 시간·에너지 패턴 / R2=+5t/+4e, R3=+15t/+11e
+    # 5/4 세션289 — t2/review stage floor 시간 2 / 에너지 1 (formula 적용, yaml 미수정).
+    # 가장 싼 t2 (A3·B1·C3) 와 R1 그대로 제출이 0으로 도착하던 자리에 최소 비용 박음.
+    A1R1:
+      time: 32
+      energy: 26
+    A1R2:
+      time: 37
+      energy: 30
+    A1R3:
+      time: 47
+      energy: 37
+    A2R1:
+      time: 26
+      energy: 22
+    A2R2:
+      time: 31
+      energy: 26
+    A2R3:
+      time: 41
+      energy: 33
+    A3R1:
+      time: 20
+      energy: 16
+    A3R2:
+      time: 25
+      energy: 20
+    A3R3:
+      time: 35
+      energy: 27
+    B1R1:
+      time: 10
+      energy: 8
+    B1R2:
+      time: 15
+      energy: 12
+    B1R3:
+      time: 25
+      energy: 19
+    B2R1:
+      time: 14
+      energy: 16
+    B2R2:
+      time: 19
+      energy: 20
+    B2R3:
+      time: 29
+      energy: 27
+    B3R1:
+      time: 16
+      energy: 24
+    B3R2:
+      time: 21
+      energy: 28
+    B3R3:
+      time: 31
+      energy: 35
+    C1R1:
+      time: 20
+      energy: 24
+    C1R2:
+      time: 25
+      energy: 28
+    C1R3:
+      time: 35
+      energy: 35
+    C2R1:
+      time: 18
+      energy: 18
+    C2R2:
+      time: 23
+      energy: 22
+    C2R3:
+      time: 33
+      energy: 29
+    C3R1:
+      time: 16
+      energy: 12
+    C3R2:
+      time: 21
+      energy: 16
+    C3R3:
+      time: 31
+      energy: 23
+  expRewards:
+    A1R1: 25
+    A1R2: 27
+    A1R3: 30
+    A2R1: 18
+    A2R2: 20
+    A2R3: 23
+    A3R1: 12
+    A3R2: 14
+    A3R3: 17
+    B1R1: 8
+    B1R2: 10
+    B1R3: 12
+    B2R1: 7
+    B2R2: 9
+    B2R3: 12
+    B3R1: 10
+    B3R2: 12
+    B3R3: 14
+    C1R1: 5
+    C1R2: 7
+    C1R3: 10
+    C2R1: 3
+    C2R2: 5
+    C2R3: 8
+    C3R1: 1
+    C3R2: 2
+    C3R3: 4
+  competencyCards:
+    A1R1: [협업능력, 소통능력, 자기검증]
+    A1R2: [협업능력, 소통능력, 자기검증, 비판적 사고]
+    A1R3: [협업능력, 소통능력, 발표력, 자기검증, 자기성찰]
+    A2R1: [협업능력, 발표력]
+    A2R2: [협업능력, 발표력, 검수능력]
+    A2R3: [협업능력, 발표력, 검수능력, 자기검증]
+    A3R1: [발표력]
+    A3R2: [발표력, 검수능력]
+    A3R3: [발표력, 검수능력, 자기성찰, 비판적 사고]
+    B1R1: []
+    B1R2: []
+    B1R3: []
+    B2R1: [소통능력]
+    B2R2: [소통능력, 검수능력, 비판적 사고]
+    B2R3: [소통능력, 검수능력, 자기검증, 자기성찰]
+    B3R1: [협업능력, 소통능력, 검수능력]
+    B3R2: [협업능력, 소통능력, 검수능력, 비판적 사고]
+    B3R3: [협업능력, 소통능력, 검수능력, 자기검증, 자기성찰]
+    C1R1: [협업능력, 발표력, 비판적 사고]
+    C1R2: [협업능력, 발표력, 비판적 사고, 검수능력]
+    C1R3: [협업능력, 소통능력, 발표력, 비판적 사고, 자기검증]
+    C2R1: []
+    C2R2: [비판적 사고]
+    C2R3: [비판적 사고, 검수능력, 자기성찰, 자기검증]
+    C3R1: []
+    C3R2: []
+    C3R3: []
+eorinwangja:
+  id: eorinwangja
+  category: 3
+  categoryName: 본인 경험 기반
+  title: 어린왕자 독후감
+  version: v1
+  learningMessage: 경험은 위임 불가. 본인이 안 한 일은 AI도, 인터넷도, 친구도 대신해 줄 수 없다.
+  aiSuitability: low
+  timeBudgetSec: 720
+  domainPool: [문해력, 공감력, 해석능력, 검수능력, 자기검증, 자기성찰, 비판적 사고]
+  domainLabel: 문해력
+  situation:
+    text: 어린왕자 독후감을 100자로 써야 하는데 책을 안 읽었습니다.
+    image: ../images/s01_ch1.webp
+  tier1:
+  - id: A
+    label: 책을 직접 읽고 쓴다
+    desc: 어린왕자 책을 펴서 내가 읽고 그 감상으로 쓴다.
+    lesson: 내가 읽었다 — 책 안에서 내 감상이 나온다.
+    delegation: +
+    knowledge: +
+    basePoint: 20            # v0.7 합산 모델 베이스
+    varPoint: 8              # v0.7 변수 — 책 통과 직접, eorinwangja 디자인 의도 정점
+  - id: B
+    label: AI에게 부탁한다
+    desc: AI에게 책 내용과 감상을 받아 본다.
+    lesson: AI에 위임했다 — 안 읽은 책을 AI가 대신 읽어 줄 수는 없다.
+    delegation: '-'
+    knowledge: '-'
+    basePoint: 20
+    varPoint: 4              # v0.7 변수 — 위임 큰 방향, B3 살리는 갈래는 tier2에서 회복
+  - id: C
+    label: 다른 자료·사람에게 기댄다
+    desc: 전에 본 영화나 친구 줄거리, 흔한 인상에 기대 풀어간다.
+    lesson: 다른 데서 가져왔다 — 적절히 골라 쓸 수도, 책 자리를 비울 수도 있다.
+    delegation: '0'
+    knowledge: '0'
+    basePoint: 20
+    varPoint: 6              # v0.7 변수 — 양면 갈래, C1 살리는 자리
+  tier2:
+    A:
+    - id: A1
+      label: 책을 끝까지 읽고 인상에 남은 장면으로 본인 감상을 쓴다
+      delta:
+        afterA: { delegation: '++', knowledge: '++' }
+        afterB: { delegation: '+', knowledge: '+' }
+        afterC: { delegation: '+', knowledge: '+' }
+      lesson: 끝까지 읽고 한 장면에 머물렀다 — 책이 내 안에 자리 잡는다.
+      basePoint: 20            # v0.7 합산 모델 베이스
+      varPoint: 10             # v0.7 변수 — 자기 통과 정점, 끝까지 읽고 한 장면 머묾
+    - id: A2
+      label: 책을 읽고 본인 감상을 쓰다가 한두 표현만 AI에 다듬어 달라 한다
+      delta:
+        afterA: { delegation: '+', knowledge: '+' }
+        afterB: { delegation: '+', knowledge: '+' }
+        afterC: { delegation: '+', knowledge: '+' }
+      lesson: 자기 감상에 AI 손이 점만 닿았다 — 내용은 내 것이고 표현이 매끄러워졌다.
+      basePoint: 20
+      varPoint: 7              # v0.7 변수 — 책 통과 + AI 점만, 적절 자리
+    - id: A3
+      label: 책을 펴서 처음 몇 쪽만 읽고 떠오르는 대로 쓴다
+      delta:
+        afterA: { delegation: '0', knowledge: '+' }
+        afterB: { delegation: '-', knowledge: '0' }
+        afterC: { delegation: '0', knowledge: '0' }
+      lesson: 책 일부만 통과해 감상을 끌어냈다 — 자기 안에서 나왔지만 책이 얕게 들어왔다.
+      basePoint: 20
+      varPoint: 3              # v0.7 변수 — 얕음 자리, 일부만 읽음
+    B:
+    - id: B1
+      label: AI에게 책 제목만 주고 독후감을 통째로 받아 낸다
+      delta:
+        afterA: { delegation: '-', knowledge: '-' }
+        afterB: { delegation: '--', knowledge: '-' }
+        afterC: { delegation: '--', knowledge: '-' }
+      lesson: AI에 다 맡겼다 — 안 읽은 책을 AI가 환각으로 새로 쓴다.
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 환각 통째 위임
+    - id: B2
+      label: AI에게 책 줄거리와 인용을 받아 본인이 정리해 쓴다
+      delta:
+        afterA: { delegation: '0', knowledge: '0' }
+        afterB: { delegation: '0', knowledge: '0' }
+        afterC: { delegation: '0', knowledge: '0' }
+      lesson: 재료는 받았지만 책은 통과하지 않았다 — 인용이 내 것이 아니라 검증이 필요하다.
+      basePoint: 20
+      varPoint: 5              # v0.7 변수 — 중립 자리, 재료는 받음 + 책은 통과 X
+    - id: B3
+      label: 본인이 먼저 감상을 끝까지 써 보고 AI에게 표현만 다듬어 달라 한다
+      delta:
+        afterA: { delegation: '++', knowledge: '++' }
+        afterB: { delegation: '++', knowledge: '++' }
+        afterC: { delegation: '++', knowledge: '++' }
+      lesson: 감상은 내가 끝까지 통과했고 AI는 표현만 다듬었다 — 내 책, 내 말.
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 자기 감상 + AI 거들기
+    C:
+    - id: C1
+      label: 전에 본 어린왕자 영화·애니메이션 기억을 끝까지 끌어내어 본인 감상으로 다시 쓰고 책 자리와 분리해 표시한다
+      delta:
+        afterA: { delegation: '++', knowledge: '++' }
+        afterB: { delegation: '++', knowledge: '++' }
+        afterC: { delegation: '++', knowledge: '++' }
+      lesson: 다른 매체로 통과한 어린왕자를 자기 감상으로 다시 썼고, 책 자리와 매체 자리를 분리했다 — 자기 자료를 적극적으로, 정직하게 가져왔다.
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 다른 매체 통과 + 정직 분리
+    - id: C2
+      label: 책을 읽은 친구에게 줄거리를 듣고 그대로 옮겨 쓴다
+      delta:
+        afterA: { delegation: '-', knowledge: '-' }
+        afterB: { delegation: '--', knowledge: '-' }
+        afterC: { delegation: '--', knowledge: '-' }
+      lesson: 친구가 읽은 책이 내 자리에 들어왔다 — 친구의 책은 내 것이 아니다.
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 부정 자리, 친구 줄거리 옮겨 쓰기
+    - id: C3
+      label: '"꿈을 잃지 말자" 같은 일반론 한 줄로 칸만 채운다'
+      delta:
+        afterA: { delegation: '--', knowledge: '-' }
+        afterB: { delegation: '--', knowledge: '-' }
+        afterC: { delegation: '--', knowledge: '-' }
+      lesson: 한 줄만 적었다 — 책도 자기도 통과하지 않았다.
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 일반론 한 줄
+  results:
+    # v0.7 — results[t2].basePoint 폐기 (코드 미사용). text·summary·lesson 보존.
+    # deltaR2·deltaR3는 lookup 모델 잔재로 v0.7.x 정리 자리, 일단 검수 참고용 보존.
+    A1:
+      text: 어린왕자가 여우에게 "네가 길들인 것에 너는 영원히 책임이 있다"는 말을 듣는 장면이 가장 오래 남았다. 나도 키우는 강아지가 떠올라서 그 한 문장에서 한참 멈췄다.
+      basePoint: 92
+      deltaR2: 3
+      deltaR3: 6
+      summary: 한 장면에 머문 독후감
+      lesson: 책의 한 문장에 머무르면 독후감이 내 말로 나온다 — 위임할 수 없는 자리.
+    A2:
+      text: 책을 다 읽고 여우 장면 감상을 직접 썼는데, 한 문장이 어색해서 AI에 다듬어 달라 했다. 내 감상은 그대로 남고 한 표현만 매끄러워졌다.
+      basePoint: 70
+      deltaR2: 5
+      deltaR3: 11
+      summary: 내 감상에 AI 손이 점만 닿은 독후감
+      lesson: AI는 내가 통과한 책의 표현만 손볼 때 도구가 된다 — 감상은 내 일.
+    A3:
+      text: 첫 챕터에서 코끼리 삼킨 보아뱀 그림 얘기가 나왔다. 어른들은 모자로만 본다는 부분이 재미있었고, 나머지는 잘 모르겠지만 어른과 아이의 차이가 중요한 것 같다.
+      basePoint: 55
+      deltaR2: 8
+      deltaR3: 15
+      summary: 일부만 읽은 독후감
+      lesson: 책 일부만 통과하면 그 부분은 살아 있지만 전체가 얕다.
+    B1:
+      text: 어린왕자는 사막에서 여우와 캥거루를 만나 모험을 한다. 그는 장미를 구하기 위해 여러 행성을 돌며 용기를 배우고, 마지막에는 친구들과 왕국을 세운다.
+      basePoint: 14
+      deltaR2: 12
+      deltaR3: 23
+      summary: 환각 섞인 AI 독후감
+      lesson: 안 읽은 책을 AI에 통째로 맡기면 캥거루까지 등장한다 — 검증할 기준이 내게 없다.
+      hiddenIssues:
+      - 캥거루가 등장 (책에 없음)
+      - 친구들과 왕국을 세운다는 결말 (책에 없음)
+      - 전체 줄거리 구조가 책과 어긋남
+    B2:
+      text: 어린왕자는 여러 별을 지나 지구에 와서 여우를 만난다. AI가 알려준 "가장 중요한 것은 마음으로 본다"는 말처럼 관계와 책임이 핵심이라고 생각했다.
+      basePoint: 50
+      deltaR2: 9
+      deltaR3: 18
+      summary: AI 재료로 정리한 독후감
+      lesson: AI가 준 인용은 그럴듯해 보여도 책을 통과하지 않은 정리는 위태롭다.
+      hiddenIssues:
+      - 인용 문장이 원전과 정확히 일치하는지 미확인
+      - 책의 어느 장면에서 그 말이 나왔는지 자기에게 없음
+    B3:
+      text: 여우가 어린왕자에게 길들임을 가르치는 장면이 좋다고 끝까지 내가 먼저 썼다. AI에게 어색한 표현만 다듬어 달라 했고, 다듬은 문장과 처음 문장을 비교해 내 말 같은 쪽을 골라 남겼다.
+      basePoint: 88
+      deltaR2: 5
+      deltaR3: 12
+      summary: 자기 감상을 끝까지 + AI는 다듬기만
+      lesson: 감상은 내가 끝까지 책을 통과해야 나오고, AI는 표현 다듬는 자리에서만 도구가 된다 — 위임할 수 없는 자리, 위임할 수 있는 자리.
+    C1:
+      text: 어렸을 때 본 어린왕자 애니메이션이 떠올랐다. 여우가 길들임을 말하는 장면이 그때도 인상 깊었는데, 지금 다시 생각하니 시간을 들인 관계가 특별해진다는 말로 들렸다. 책은 안 읽었으니 책 장면은 적지 않고 애니메이션에서 내가 통과한 부분만 자기 감상으로 다시 정리했다.
+      basePoint: 88
+      deltaR2: 5
+      deltaR3: 12
+      summary: 다른 매체로 통과한 자기 감상 + 책 자리 정직 분리
+      lesson: 자기가 통과한 다른 매체는 자기 자료가 된다 — 단, 책 자리와 분리해 정직하게 표시할 때 정점이 된다.
+    C2:
+      text: 친구가 어린왕자는 별에서 장미를 두고 와 후회하는 이야기라고 했다. 마지막에 별로 돌아간다고 들어서 이 책은 이별에 관한 이야기 같다.
+      basePoint: 28
+      deltaR2: 10
+      deltaR3: 20
+      summary: 친구가 들어간 독후감
+      lesson: 친구의 책은 친구의 것이다 — 전달 과정에서 책이 흐려진다.
+      hiddenIssues:
+      - 친구가 들려준 줄거리만 있고 책의 구체 장면이 없음
+      - 친구의 해석("이별에 관한 이야기")이 내 해석처럼 들어가 있음
+    C3:
+      text: 어린왕자는 어린아이의 순수한 마음을 가진 왕자가 세상을 여행하는 이야기다. 우리는 모두 꿈을 잃지 말고 친구를 소중히 해야 한다.
+      basePoint: 12
+      deltaR2: 11
+      deltaR3: 20
+      summary: 일반론으로 채운 독후감
+      lesson: 책도 자기도 통과하지 않은 자리에는 착한 말만 남는다.
+      hiddenIssues:
+      - 책의 구체 장면이 한 줄도 없음
+      - 어린왕자가 아니어도 통할 만한 일반 교훈만 적힘
+  reviews:
+  - id: R1
+    label: 그대로 제출
+    desc: 검토 없이 그대로 낸다.
+    boostType: none
+    lesson: 검토를 건너뛰었다 — 검증할 기회를 놓쳤다.
+    points: 10               # v0.7 합산 모델 — 단순 분배 (R1=10·R2=20·R3=30)
+  - id: R2
+    label: 한 번 읽고 이상한 곳만 표시
+    desc: 명시적인 환각·오류만 발견.
+    boostType: explicit
+    lesson: 한 번 훑어 명백한 오류를 잡았다. 도메인지식 +1
+    points: 20               # v0.7 합산 모델
+  - id: R3
+    label: 출처 확인 + 크로스체크
+    desc: 미세 오류까지 발견.
+    boostType: all
+    lesson: 출처와 대조하니 미세 오류까지 보였다. 도메인지식 +3
+    points: 30               # v0.7 합산 모델
+  # v0.7 합산 모델 — 학생 화면 메인 텍스트로 격상 (Cut5 review 패널·Cut6 결과 패널)
+  # 학생 톤 룰: 시스템 ID 노출 X, 점수 표기는 산식 자리에 따로, 이 자리는 narrative만
+  reviewSupplements:
+    A1R1: 끝까지 읽고 여우 장면 하나에 머물러 자기 말로 적어 그대로 냈다. 책이 자기 안에 자리 잡았다.
+    A1R2: 한 번 읽으며 길어진 문장 하나를 둘로 나눴다. 머문 장면이 더 또렷해졌다.
+    A1R3: 처음부터 다시 읽고 여우 장면이 왜 자기에게 남았는지 한 문장 더 넣었다. 책의 깊이가 한 단계 더 들어왔다.
+    A2R1: 책을 다 읽고 자기 감상을 쓰다가 어색한 한 표현만 AI에 다듬어 받았다. 감상은 자기 안에서 나왔다.
+    A2R2: 한 번 읽으며 AI가 바꾼 한 표현이 자기 말투와 달라 원래 말로 되돌렸다.
+    A2R3: AI가 다듬은 문장과 처음 쓴 문장을 나란히 두고 자기 말투에 맞는 쪽을 골랐다.
+    A3R1: 첫 챕터만 읽고 떠오르는 대로 적어 그대로 냈다. 읽은 부분 감상은 살았지만 나머지는 비었다.
+    A3R2: 한 번 읽으며 "잘 모르겠지만"이 두 번 나오는 자리를 표시했다.
+    A3R3: 안 읽은 부분 추측을 빼고 읽은 부분 감상만 남겼다. 솔직함이 자리를 잡았다.
+    B1R1: 책 제목만 주고 받은 AI 독후감을 그대로 냈다. 안 읽은 책 자리에 환각이 들어왔다.
+    B1R2: 한 번 읽으며 책에 없는 캥거루와 왕국 설정을 발견하고 표시했다.
+    B1R3: 환각뿐 아니라 전체 줄거리 구조가 책과 어긋남을 확인했다. 검증할 기준이 자기에게 없다는 것을 보았다.
+    B2R1: AI에서 받은 줄거리와 인용을 다듬어 그대로 냈다. 글은 정돈됐지만 책은 자기에게 통과하지 않았다.
+    B2R2: 한 번 읽으며 AI가 준 인용이 책 어디에서 나온 건지 알 수 없다는 것이 보였다.
+    B2R3: 책 원전과 대조하니 인용이 다듬어진 표현이라 직접 인용을 다시 찾았다.
+    B3R1: 자기 감상을 끝까지 먼저 쓰고 AI에는 표현만 다듬어 받았다. 감상의 무게는 자기 안에 있었다.
+    B3R2: 한 번 읽으며 AI가 바꾼 표현 하나가 자기 감상 같지 않아 처음 쓴 문장으로 되돌렸다.
+    B3R3: 처음 쓴 문장과 AI가 다듬은 문장을 한 줄씩 비교해 자기 말에 맞는 쪽만 남겼다.
+    C1R1: 어렸을 때 본 애니메이션 기억으로 자기 감상을 다시 썼고 책 자리는 비웠다. 통과한 매체를 자기 자료로 가져왔다.
+    C1R2: 한 번 읽으며 애니메이션 장면을 책 장면처럼 적은 한 줄을 발견하고 매체 출처를 명시했다.
+    C1R3: 다른 매체에서 본 부분과 지금 자기 감상을 한 단락씩 분리해 다시 정리했다.
+    C2R1: 친구가 들려준 줄거리를 그대로 옮겨 적어 냈다. 친구가 읽은 책이 자기 자리에 들어왔다.
+    C2R2: 한 번 읽으며 친구의 해석("이별에 관한 이야기")이 자기 결론처럼 들어가 있는 자리를 찾아냈다.
+    C2R3: 친구가 들려준 부분을 줄이고 모르는 부분은 모른다고 적었다.
+    C3R1: 일반론 한 줄로 칸을 채워 그대로 냈다. 책도 자기도 통과하지 않은 자리에 착한 말만 남았다.
+    C3R2: 한 번 읽으며 어린왕자가 아니어도 통할 만한 일반 교훈만 있다는 것이 보였다.
+    C3R3: 짧게라도 책의 한 장면을 더하려 했지만 책을 안 읽어 채울 재료가 없다는 것을 확인했다.
+
+  # v0.7 신설 — 카드 매칭 룰 데이터 (selfintro 안 leaf별 친화 그룹 1~2개)
+  # 4그룹 (자기성찰 / 표현·소통 / 인식·해석 / 실천·설계). 학생 화면 노출 X, 데이터 단위.
+  # eorinwangja는 어린왕자 해석 시나리오라 인식·해석 그룹과 강한 친화. A=인식·해석(직접 읽기), B=인식·해석(검수 필요), C=자기성찰+인식·해석(자기 매체 통과·검증).
+  # 카드 매칭 활성화 = 학생 보유 카드 라벨이 leaf의 친화 그룹에 속하면 bonus 항(+5).
+  matchGroups:
+    A1: [인식·해석, 자기성찰]
+    A2: [인식·해석, 표현·소통]
+    A3: [인식·해석]
+    B1: [인식·해석]
+    B2: [인식·해석]
+    B3: [인식·해석, 표현·소통]
+    C1: [자기성찰, 인식·해석]
+    C2: [인식·해석]
+    C3: [인식·해석]
+  # v0.7 — finals[leaf+review].score는 합산 모델 전환으로 코드 미사용.
+  # 검수 참고용 1주일 보존 (v0.7.x 정리 자리). grade·delegation·knowledge·awareness·item은 일부 자리에서 보조 표시 가능.
+  finals:
+    A1R1:
+      score: 92
+      grade: S
+      item: 깊은 독서가 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 한 장면에 머무르니 독후감이 내 말처럼 나왔다.
+    A1R2:
+      score: 95
+      grade: S
+      item: 깊은 독서가 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 한 번 읽으니 문장이 더 정리됐다.
+    A1R3:
+      score: 98
+      grade: S
+      item: 머무른 독서가 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 왜 그 장면이 남았는지까지 적으니 독후감이 또렷해졌다.
+    A2R1:
+      score: 70
+      grade: A
+      item: 다듬은 감상 카드
+      delegation: +
+      knowledge: +
+      awareness: 내 감상은 그대로고 표현만 매끄러워졌다.
+    A2R2:
+      score: 75
+      grade: A
+      item: 다듬은 감상 카드
+      delegation: +
+      knowledge: +
+      awareness: AI가 바꾼 표현 중 내 말 같은 것만 남겼다.
+    A2R3:
+      score: 81
+      grade: A
+      item: 함께 다듬은 카드
+      delegation: +
+      knowledge: ++
+      awareness: AI는 표현을 밀어 줬고, 나는 내 감상을 붙잡았다.
+    A3R1:
+      score: 55
+      grade: B
+      item: 반쪽 독후감 카드
+      delegation: '0'
+      knowledge: +
+      awareness: 읽은 부분 감상은 살아 있지만 나머지가 비었다.
+    A3R2:
+      score: 63
+      grade: B
+      item: 반쪽 독후감 카드
+      delegation: '0'
+      knowledge: +
+      awareness: 한 번 읽으니 어디가 추측인지 보였다.
+    A3R3:
+      score: 70
+      grade: A
+      item: 솔직한 감상 카드
+      delegation: '0'
+      knowledge: ++
+      awareness: 추측을 빼고 읽은 부분만 남겼더니 솔직해졌다.
+    B1R1:
+      score: 14
+      grade: D
+      item: null
+      delegation: --
+      knowledge: '-'
+      awareness: 책도 안 읽고 맡기니 캥거루까지 나왔다.
+    B1R2:
+      score: 26
+      grade: D
+      item: 환각 발견 카드
+      delegation: --
+      knowledge: '0'
+      awareness: 한 번 읽으니 큰 오류는 보였다.
+    B1R3:
+      score: 37
+      grade: C
+      item: 위태로운 위임 카드
+      delegation: --
+      knowledge: +
+      awareness: 검토하니까 거의 새로 써야 하는 글이었다.
+    B2R1:
+      score: 50
+      grade: C
+      item: 검증되지 않은 인용 카드
+      delegation: '0'
+      knowledge: '0'
+      awareness: AI 도움을 받았지만 인용은 확인하지 않았다.
+    B2R2:
+      score: 59
+      grade: B
+      item: 인용 점검 카드
+      delegation: '0'
+      knowledge: +
+      awareness: 그럴듯한 인용도 그냥 믿으면 위험했다.
+    B2R3:
+      score: 68
+      grade: B
+      item: 검증의 눈 카드
+      delegation: '0'
+      knowledge: ++
+      awareness: AI는 도구고, 책 원전은 내가 펼쳐야 했다.
+    B3R1:
+      score: 88
+      grade: S
+      item: 자기 주도 + 다듬기 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 감상은 내가 끝까지 통과했고 AI는 표현만 다듬었다.
+    B3R2:
+      score: 93
+      grade: S
+      item: 검수한 다듬기 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: AI가 바꾼 표현 중 내 말 같지 않은 것은 되돌렸다.
+    B3R3:
+      score: 100
+      grade: S
+      item: 머무른 감상 + 다듬기 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 처음 쓴 문장과 다듬은 문장을 비교해 내 말로 골랐다 — AI는 도구, 감상은 내 일.
+    C1R1:
+      score: 88
+      grade: S
+      item: 자기 매체 통과 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 다른 매체로 통과한 어린왕자를 자기 감상으로 다시 썼다.
+    C1R2:
+      score: 93
+      grade: S
+      item: 매체 분리 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 애니메이션 장면을 책 장면처럼 적은 자리를 발견해 출처를 명시했다.
+    C1R3:
+      score: 100
+      grade: S
+      item: 매체 비교 + 자기 감상 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 다른 매체에서 통과한 부분과 지금 내 감상을 분리해 정리했다 — 자기 자료를 정직하게 가져왔다.
+    C2R1:
+      score: 28
+      grade: D
+      item: 친구 그림자 카드
+      delegation: --
+      knowledge: '-'
+      awareness: 친구의 책이 내 자리에 들어와 있었다.
+    C2R2:
+      score: 38
+      grade: C
+      item: 친구 그림자 경고 카드
+      delegation: --
+      knowledge: '0'
+      awareness: 친구의 해석이 내 결론처럼 들어가 있었다.
+    C2R3:
+      score: 48
+      grade: C
+      item: 내 자리 회수 카드
+      delegation: --
+      knowledge: +
+      awareness: 친구가 들려준 부분을 줄이고 모르는 건 모른다고 적었다.
+    C3R1:
+      score: 12
+      grade: D
+      item: null
+      delegation: --
+      knowledge: '-'
+      awareness: 책도 자기도 통과하지 않으니 일반론만 남았다.
+    C3R2:
+      score: 23
+      grade: D
+      item: null
+      delegation: --
+      knowledge: '0'
+      awareness: 어린왕자가 아니어도 통할 글이었다.
+    C3R3:
+      score: 32
+      grade: D
+      item: 빈칸 경고 카드
+      delegation: --
+      knowledge: +
+      awareness: 책을 안 읽어서 채울 재료가 없다는 걸 확인했다.
+  # v0.7 재정의 — 카드 매칭 룰 데이터 (SPEC §1.4 / §7.8.2 직접 매칭)
+  # leaf 진입 시 학생 보유 카드(19종 풀)와 requireCard 라벨 정확 일치하면 bonus 항(+5).
+  # boostCard 라벨은 폐기, 학습 메시지는 reviewSupplements narrative로 흡수됨.
+  # matchGroups(친화 그룹 매칭)와 별도 — 직접 매칭은 leaf별 핵심 카드 1장 강조 자리.
+  axisDelta:
+    - leafId: A1R3
+      requireCard: 문해력
+      bonusPoint: 5
+      note: 책을 끝까지 읽고 한 장면에 머물러 깊이까지 들어가는 자리 — 문해력 카드와 강한 매칭
+    - leafId: A3R3
+      requireCard: 자기성찰
+      bonusPoint: 5
+      note: 얕게 읽었음을 인정하고 추측을 빼는 자리 — 자기성찰 카드와 강한 매칭
+    - leafId: B1R2
+      requireCard: 비판적 사고
+      bonusPoint: 5
+      note: AI가 만든 캥거루 환각을 눈으로 발견하는 자리 — 비판적 사고 카드와 강한 매칭
+    - leafId: B2R3
+      requireCard: 검수능력
+      bonusPoint: 5
+      note: AI가 준 인용을 책 원전과 대조하는 자리 — 검수능력 카드와 강한 매칭
+    - leafId: B3R2
+      requireCard: 검수능력
+      bonusPoint: 5
+      note: AI가 다듬은 표현을 자기 말투에 맞춰 검수하는 자리 — 검수능력 카드와 강한 매칭
+    - leafId: C1R3
+      requireCard: 해석능력
+      bonusPoint: 5
+      note: 다른 매체로 통과한 부분과 지금 자기 감상을 분리해 다시 정리하는 자리 — 해석능력 카드와 강한 매칭
+  resourceCosts:
+    # v0.7 §3.5 — B시간 < C시간 < A시간 / leaf별 시간·에너지 패턴 / R2=+5t/+4e, R3=+15t/+11e
+    # 5/4 세션289 — t2/review stage floor 시간 2 / 에너지 1 (formula 적용, yaml 미수정).
+    # 가장 싼 t2 (A3·B1·C3) 와 R1 그대로 제출이 0으로 도착하던 자리에 최소 비용 박음.
+    A1R1:
+      time: 32
+      energy: 26
+    A1R2:
+      time: 37
+      energy: 30
+    A1R3:
+      time: 47
+      energy: 37
+    A2R1:
+      time: 26
+      energy: 22
+    A2R2:
+      time: 31
+      energy: 26
+    A2R3:
+      time: 41
+      energy: 33
+    A3R1:
+      time: 20
+      energy: 16
+    A3R2:
+      time: 25
+      energy: 20
+    A3R3:
+      time: 35
+      energy: 27
+    B1R1:
+      time: 10
+      energy: 8
+    B1R2:
+      time: 15
+      energy: 12
+    B1R3:
+      time: 25
+      energy: 19
+    B2R1:
+      time: 14
+      energy: 16
+    B2R2:
+      time: 19
+      energy: 20
+    B2R3:
+      time: 29
+      energy: 27
+    B3R1:
+      time: 16
+      energy: 24
+    B3R2:
+      time: 21
+      energy: 28
+    B3R3:
+      time: 31
+      energy: 35
+    C1R1:
+      time: 20
+      energy: 24
+    C1R2:
+      time: 25
+      energy: 28
+    C1R3:
+      time: 35
+      energy: 35
+    C2R1:
+      time: 18
+      energy: 18
+    C2R2:
+      time: 23
+      energy: 22
+    C2R3:
+      time: 33
+      energy: 29
+    C3R1:
+      time: 16
+      energy: 12
+    C3R2:
+      time: 21
+      energy: 16
+    C3R3:
+      time: 31
+      energy: 23
+  expRewards:
+    A1R1: 25
+    A1R2: 25
+    A1R3: 25
+    A2R1: 18
+    A2R2: 18
+    A2R3: 18
+    A3R1: 12
+    A3R2: 12
+    A3R3: 12
+    B1R1: 8
+    B1R2: 10
+    B1R3: 14
+    B2R1: 6
+    B2R2: 8
+    B2R3: 12
+    B3R1: 3
+    B3R2: 5
+    B3R3: 10
+    C1R1: 5
+    C1R2: 7
+    C1R3: 9
+    C2R1: 3
+    C2R2: 5
+    C2R3: 7
+    C3R1: 1
+    C3R2: 2
+    C3R3: 4
+  cuts:
+    '1': 상황 제시
+    '2': 1차 선택지 (A·B·C)
+    '3': 2차 선택지 (선택된 1차의 3개)
+    '4': 결과 (raw 결과물)
+    '5': 검토 선택 (R1·R2·R3) — 인과 자각의 핵심
+    '6': 최종 점수 + 획득 아이템
+  competencyCards:
+    A1R1: [문해력, 공감력, 해석능력]
+    A1R2: [문해력, 공감력, 해석능력, 검수능력]
+    A1R3: [문해력, 공감력, 해석능력, 자기검증, 자기성찰]
+    A2R1: [문해력, 해석능력]
+    A2R2: [문해력, 해석능력, 검수능력]
+    A2R3: [문해력, 해석능력, 검수능력, 자기검증]
+    A3R1: [문해력]
+    A3R2: [문해력, 해석능력]
+    A3R3: [문해력, 해석능력, 자기성찰, 검수능력]
+    B1R1: []
+    B1R2: []
+    B1R3: []
+    B2R1: [해석능력]
+    B2R2: [해석능력, 검수능력, 비판적 사고]
+    B2R3: [해석능력, 검수능력, 자기검증, 비판적 사고]
+    B3R1: [문해력, 공감력, 검수능력]
+    B3R2: [문해력, 공감력, 검수능력, 비판적 사고]
+    B3R3: [문해력, 공감력, 해석능력, 검수능력, 자기검증]
+    C1R1: [공감력, 해석능력, 자기성찰]
+    C1R2: [공감력, 해석능력, 자기성찰, 비판적 사고]
+    C1R3: [공감력, 해석능력, 문해력, 자기성찰, 자기검증]
+    C2R1: []
+    C2R2: [비판적 사고]
+    C2R3: [해석능력, 자기성찰, 자기검증, 비판적 사고]
+    C3R1: []
+    C3R2: []
+    C3R3: []
+career:
+  id: career
+  category: 4
+  categoryName: 진로
+  title: AI 시대에 내 진로는?
+  version: v1
+  learningMessage: 미래가 불안해도 마지막 판단은 내가 해야 한다.
+  aiSuitability: mid
+  timeBudgetSec: 720
+  domainPool: [진로탐색, 정보분석, 직업이해, 검수능력, 자기검증, 자기성찰, 비판적 사고]
+  situation:
+    text: 학기 말 진로 상담을 앞두고 머릿속이 복잡해졌다. AI 때문에 일자리가 사라진다는 말도 들리고, 영어 공부도 실시간 번역이 되면 굳이 해야 하는지 헷갈린다. 어떤 직업이 살아남을지 모르겠고, AI를 안 쓰면 나만 뒤처지는 건 아닌지 걱정된다.
+    image: ../images/s04_ch1.webp
+  tier1:
+  - id: A
+    label: 내 경험에서 따져본다
+    desc: 내가 좋아한 일, 잘하는 일, 사라질 일과 남을 일을 직접 적어 본다.
+    lesson: 내 안에서 시작했다 — 진로 판단은 여기서 출발한다.
+    delegation: +
+    knowledge: +
+    basePoint: 20            # v0.7 합산 모델 베이스
+    varPoint: 8              # v0.7 변수 — 자기 경험에서 직접, career 디자인 의도 정점
+  - id: B
+    label: AI에게 미래 직업을 묻는다
+    desc: 사라질 직업과 유망한 직업을 AI에게 물어본다.
+    lesson: AI에 위임했다 — 답은 받았지만 내 이유가 함께 오지는 않는다.
+    delegation: '-'
+    knowledge: '-'
+    basePoint: 20
+    varPoint: 4              # v0.7 변수 — 위임 큰 방향, B3 살리는 갈래는 tier2에서 회복
+  - id: C
+    label: 다른 사람·기성 정보에 기댄다
+    desc: 친구 말, 부모님 말, 선배 사례, 인터넷 글에 기대서 풀어간다.
+    lesson: 다른 데서 가져왔다 — 적절히 골라 쓸 수도, 자기 자리를 비울 수도 있다.
+    delegation: '0'
+    knowledge: '0'
+    basePoint: 20
+    varPoint: 6              # v0.7 변수 — 양면 갈래, C1 살리는 자리
+  tier2:
+    A:
+    - id: A1
+      label: 좋아한 일·잘하는 일·사라질 일·남을 일을 나눠 적는다
+      delegation: ++
+      knowledge: ++
+      lesson: 내 경험을 나눠 봤다 — 자기 안에서 진로 단서가 나온다.
+      basePoint: 20            # v0.7 합산 모델 베이스
+      varPoint: 10             # v0.7 변수 — 자기 자리 정점, 네 칸으로 진로 단서 직접 도출
+    - id: A2
+      label: 내 후보를 먼저 적고 AI에는 직업 정보만 묻는다
+      delegation: +
+      knowledge: +
+      lesson: 내 출발에 AI 자료가 점만 닿았다 — 고르는 쪽은 내 자리에 남는다.
+      basePoint: 20
+      varPoint: 7              # v0.7 변수 — 자기 후보 + AI 자료 점만, 적절 자리
+    - id: A3
+      label: 불안한 질문 하나만 적고 멈춘다
+      delegation: '0'
+      knowledge: +
+      lesson: 자기 질문을 끌어냈지만 다음으로 이어지지 않았다.
+      basePoint: 20
+      varPoint: 3              # v0.7 변수 — 얕음 자리, 자기 안에서 끌어냈지만 멈춤
+    B:
+    - id: B1
+      label: AI가 뽑은 유망 직업을 그대로 적는다
+      delegation: --
+      knowledge: '-'
+      lesson: AI 답을 그대로 받았다 — 내 이유가 빠진 직업 이름만 남는다.
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, AI 답 그대로 받음
+    - id: B2
+      label: AI에게 자세히 묻고 받은 답을 다듬어 낸다
+      delegation: '0'
+      knowledge: '0'
+      lesson: 재료는 줬지만 판단까지 맡겼다 — 답은 받았는데 내 기준은 흐리다.
+      basePoint: 20
+      varPoint: 5              # v0.7 변수 — 중립 자리, 정보 자세히 줬지만 판단 위임
+    - id: B3
+      label: 내가 먼저 후보를 정하고 AI에는 자료만 묻는다 — 답을 받아도 비교는 내 자리에 둔다
+      delegation: '++'
+      knowledge: '++'
+      lesson: 질문을 내가 세웠다 — AI 답은 결정이 아니라 비교 재료가 되었다.
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 자기 질문 + AI 자료 + 비교 자기 자리
+    C:
+    - id: C1
+      label: 부모·선배의 실제 일과를 듣고 내 기준으로 비교한다 — 사례를 거름 삼아 내 자리에서 다시 본다
+      delegation: '++'
+      knowledge: '++'
+      lesson: 다른 사람의 진로를 거름으로 썼다 — 사례를 듣고 내 자리에서 다시 보면 자기 기준이 자라난다.
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 사례 거름 삼아 자기 기준
+    - id: C2
+      label: 친구가 적은 진로를 비슷하게 따라 적는다
+      delegation: --
+      knowledge: '-'
+      lesson: 친구의 선택이 내 자리에 들어왔다 — 친구의 진로는 내 것이 아니다.
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 부정 자리, 친구 선택 따라감
+    - id: C3
+      label: 아직 모르겠다고 비워 둔다
+      delegation: --
+      knowledge: '-'
+      lesson: 한 줄도 적지 않았다 — 진로 사고를 건너뛰었다.
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 비워 둠
+  results:
+    # v0.7 — results[t2].basePoint 폐기 (코드 미사용). text·summary·lesson 보존.
+    # deltaR2·deltaR3는 lookup 모델 잔재로 v0.7.x 정리 자리, 일단 검수 참고용 보존.
+    A1:
+      text: 좋아한 일, 잘하는 일, AI 때문에 사라질 수 있는 일, 사람이 남아야 할 일을 네 칸으로 나눠 적었다. 직업 이름 하나로 정해지진 않았지만, 내가 따져볼 자리가 또렷해졌다.
+      deltaR2: 3
+      deltaR3: 6
+      summary: 내 경험으로 나눠 본 진로 사고
+      lesson: 진로는 자기 경험을 나눠 보는 데서 시작한다.
+    A2:
+      text: 내가 끌리는 후보 두세 개를 먼저 적고, AI에게는 그 직업이 어떤 일을 하는지·앞으로 어떻게 바뀔지만 물었다. 답은 정보로 들어왔고, 고르는 일은 내 자리에 남았다.
+      deltaR2: 6
+      deltaR3: 11
+      summary: 내 후보에 AI 자료를 더한 선택
+      lesson: AI는 자료 자리에서 가장 잘 쓰인다 — 후보는 내 일.
+    A3:
+      text: "“AI가 다 하면 내가 뭘 해야 하지?”라는 질문 하나를 적었다. 솔직한 질문이었지만, 그다음에 무엇을 알아볼지는 아직 정하지 못했다."
+      deltaR2: 9
+      deltaR3: 17
+      summary: 질문을 적고 멈춘 선택
+      lesson: 자기 안에서 끌어냈지만 다음 행동이 붙지 않았다.
+    B1:
+      text: AI가 앞으로 유망하다는 직업 몇 개를 빠르게 골라 주었다. 왜 나에게 맞는지보다, 요즘 뜬다는 말이 더 크게 보였다.
+      deltaR2: 13
+      deltaR3: 23
+      summary: 유망 직업을 그대로 받은 선택
+      lesson: AI 답에 내 이유가 빠지면 남의 직업 이름만 남는다.
+      hiddenIssues:
+      - 유망하다는 말이 내 기준을 대신함
+      - 내가 해 본 일과 이어지지 않음
+      - 불안해서 빠른 답을 정답처럼 받아들임
+    B2:
+      text: AI에게 내 상황을 자세히 적어 주고 받은 답을 그대로 다듬어 냈다. 글은 깔끔했지만, 직업 이름이 왜 그쪽인지는 내 안에 남아 있지 않았다.
+      deltaR2: 8
+      deltaR3: 15
+      summary: AI 답을 다듬어 낸 선택
+      lesson: 재료를 자세히 줘도 판단까지 맡기면 내 기준이 흐려진다.
+    B3:
+      text: 먼저 내 후보를 적었다. "영어를 계속 배워야 할까?", "게임 만드는 일은 어떻게 바뀔까?" 같은 질문을 만든 뒤 AI에게 자료를 물었다. 답은 결정이 아니라 비교할 재료가 되었고, 고르는 자리는 내 안에 남았다.
+      deltaR2: 5
+      deltaR3: 12
+      summary: 내 질문으로 자료를 모은 선택
+      lesson: 질문을 내가 세우면 AI 답은 재료 자리에 머문다 — 판단은 내 자리에 남는다.
+    C1:
+      text: 친척 선배에게 실제 하루 일과와 힘든 점을 들었다. 듣고 보니 직업 이름만 봤을 때와 다른 모양이 보였고, 내 강점·걱정과 나란히 놓으니 내가 끌리는 자리와 그렇지 않은 자리가 또렷이 갈렸다.
+      deltaR2: 5
+      deltaR3: 12
+      summary: 사례를 거름 삼아 내 자리에서 다시 본 선택
+      lesson: 자기 자료(사례)를 적극 활용하면 내 진로 기준이 자라난다.
+    C2:
+      text: 친구가 데이터나 AI 관련 직업이 안전할 것 같다고 해서 나도 비슷하게 적었다. 상담 때 왜 그쪽인지 묻자, 내 경험보다 친구가 한 말이 먼저 떠올랐다.
+      deltaR2: 10
+      deltaR3: 20
+      summary: 친구 선택을 따라간 선택
+      lesson: 친구의 진로는 친구의 것이다 — 내 자리는 비어 있다.
+      hiddenIssues:
+      - 친구가 골랐다는 이유가 내 기준 자리에 들어가 있음
+      - 내가 해 본 일과 끌리는 부분은 글에 없음
+    C3:
+      text: 상담 카드에 “아직 잘 모르겠습니다”라고만 적었다. 거짓말은 아니었지만, 걱정되는 일과 궁금한 일까지 함께 적지는 않았다.
+      deltaR2: 11
+      deltaR3: 20
+      summary: 비워 둔 선택
+      lesson: 한 줄도 적지 않으면 다음 판단으로 이어지지 않는다.
+      hiddenIssues:
+      - 모른다는 말만 있고 불안의 내용이 없음
+      - 상담 때 이야기할 단서가 부족함
+      - 다음에 알아볼 행동이 정해지지 않음
+  reviews:
+  - id: R1
+    label: 그대로 제출
+    desc: 검토 없이 그대로 낸다.
+    boostType: none
+    lesson: 검토를 건너뛰면 불안도 그대로 남는다.
+    points: 10               # v0.7 합산 모델 — 단순 분배 (R1=10·R2=20·R3=30)
+  - id: R2
+    label: 한 번 읽고 이상한 곳만 표시
+    desc: 명백히 이상하거나 내 경험과 안 맞는 부분만 표시한다.
+    boostType: explicit
+    lesson: 이상한 부분을 잡았다. 도메인지식 +1
+    points: 20               # v0.7 합산 모델
+  - id: R3
+    label: 내 질문과 경험에 비춰 다시 확인
+    desc: AI 답, 남의 의견, 내 생각이 실제 경험과 이어지는지 확인한다.
+    boostType: all
+    lesson: 내 기준으로 다시 봤다. 도메인지식 +3
+    points: 30               # v0.7 합산 모델
+  # v0.7 합산 모델 — 학생 화면 메인 텍스트로 격상 (Cut5 review 패널·Cut6 결과 패널)
+  # 학생 톤 룰: 시스템 ID 노출 X, 점수 표기는 산식 자리에 따로, 이 자리는 narrative만
+  reviewSupplements:
+    A1R1: 좋아한 일·잘하는 일·사라질 일·남을 일을 네 칸으로 나눠 적고 그대로 냈다. 자기 경험에서 진로 단서가 또렷해졌다.
+    A1R2: 한 번 읽어 보니 사라질 일과 남을 일을 너무 크게만 나눴다. 칸 안에 구체 활동을 한두 개 더 적었다.
+    A1R3: 내가 해 본 활동과 앞으로 해 볼 일을 칸마다 붙여 적으니 진로 단서가 구체로 자랐다.
+    A2R1: 내가 끌리는 후보 두세 개를 먼저 적고 AI에는 직업 정보만 물어 옆에 놨다. 고르는 자리는 내 안에 남았다.
+    A2R2: 한 번 읽어 보니 AI가 준 정보 중 한 부분이 내 후보와 어긋나 따로 표시했다.
+    A2R3: 내가 먼저 적은 후보와 AI 자료를 나란히 놓고 더 끌리는 쪽을 다시 골랐다.
+    A3R1: 불안한 질문 하나만 적고 그대로 냈다. 자기 안에서 나왔지만 다음 행동은 붙지 않았다.
+    A3R2: 한 번 읽어 보니 질문은 있지만 다음에 알아볼 일이 비어 있다는 것이 보였다.
+    A3R3: 질문 옆에 내가 해 볼 작은 행동 하나를 붙여 다음 자리로 이었다.
+    B1R1: AI가 뽑은 유망 직업을 그대로 적어 냈다. 직업 이름은 있지만 내 이유는 함께 오지 않았다.
+    B1R2: 한 번 읽어 보니 유망하다는 말만 있고 내가 해 본 일과 이어지는 자리가 없었다.
+    B1R3: AI 추천을 내 경험과 하나씩 비교하고, 근거 없는 직업 이름을 지웠다.
+    B2R1: AI에게 내 상황을 자세히 주고 받은 답을 다듬어 냈다. 글은 깔끔했지만 내 기준은 흐렸다.
+    B2R2: 한 번 읽어 보니 멋있는 직업 이름과 내가 버틸 수 있는 일이 따로 놀았다.
+    B2R3: AI가 말한 직업을 내가 좋아한 활동·힘들었던 활동과 나란히 놓고 다시 골랐다.
+    B3R1: 내가 먼저 후보와 질문을 세우고 AI에는 자료만 물었다. 답은 결정이 아니라 비교 재료가 되었다.
+    B3R2: 한 번 읽어 보니 AI 설명 중 판단하기 어려운 말이 있어 따로 표시했다.
+    B3R3: AI가 준 자료를 다시 찾아보고 내 질문에 도움이 되는 부분과 아닌 부분을 갈라 놨다.
+    C1R1: 부모·선배의 실제 일과와 힘든 점을 듣고 내 강점·걱정과 나란히 놨다. 사례가 자기 기준의 거름이 되었다.
+    C1R2: 한 번 읽어 보니 사례에서 끌린 부분이 한 가지 더 있어 옆에 적어 두었다.
+    C1R3: 선배의 일과 옆에 내 강점과 걱정을 따로 적으니 끌리는 자리가 또렷해졌다.
+    C2R1: 친구가 적은 진로를 비슷하게 따라 적어 냈다. 자기 자리에 친구의 선택이 들어왔다.
+    C2R2: 한 번 읽어 보니 친구가 말한 이유와 내 이유가 거의 같다는 것이 보였다.
+    C2R3: 친구의 말과 내 경험을 갈라 놓고 내가 직접 궁금한 일을 다시 적었다.
+    C3R1: 아직 모르겠다고 한 줄만 적었다. 진로 사고를 건너뛴 자리에 단서가 없었다.
+    C3R2: 한 번 읽어 보니 모르겠다는 말만 있고 상담할 단서가 없다는 것이 보였다.
+    C3R3: 아직 모른다는 말 옆에 걱정되는 것·해 본 것·더 알아볼 것을 한 줄씩 적었다.
+
+  # v0.7 신설 — 카드 매칭 룰 데이터 (career 안 leaf별 친화 그룹 1~2개)
+  # 4그룹 (자기성찰 / 표현·소통 / 인식·해석 / 실천·설계). 학생 화면 노출 X, 데이터 단위.
+  # career는 진로 탐색 시나리오라 실천·설계 그룹과 강한 친화. A=실천·설계+자기성찰, B=인식·해석(검수), C=실천·설계+인식·해석.
+  # 카드 매칭 활성화 = 학생 보유 카드 라벨이 leaf의 친화 그룹에 속하면 bonus 항(+5).
+  matchGroups:
+    A1: [실천·설계, 자기성찰]
+    A2: [실천·설계, 인식·해석]
+    A3: [자기성찰]
+    B1: [인식·해석]
+    B2: [인식·해석, 실천·설계]
+    B3: [인식·해석, 실천·설계]
+    C1: [실천·설계, 자기성찰]
+    C2: [인식·해석, 자기성찰]
+    C3: [자기성찰, 인식·해석]
+  # v0.7 — finals[leaf+review].score는 합산 모델 전환으로 코드 미사용.
+  # 검수 참고용 1주일 보존 (v0.7.x 정리 자리). grade·delegation·knowledge·awareness·item은 일부 자리에서 보조 표시 가능.
+  finals:
+    A1R1:
+      score: 92
+      grade: S
+      item: AI 시대 질문 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 내가 나눈 칸들 안에 따져볼 단서가 보였다.
+    A1R2:
+      score: 95
+      grade: S
+      item: AI 시대 질문 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 한 번 더 읽으니 너무 크게 나눈 자리가 보였다.
+    A1R3:
+      score: 98
+      grade: S
+      item: 내 판단의 단서 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 미래는 모르지만 내가 따져볼 기준은 만들 수 있었다.
+    A2R1:
+      score: 72
+      grade: A
+      item: 내 후보 카드
+      delegation: +
+      knowledge: +
+      awareness: 내 후보를 먼저 적고 AI 자료를 옆에 놨다.
+    A2R2:
+      score: 78
+      grade: A
+      item: AI 자료 점검 카드
+      delegation: +
+      knowledge: +
+      awareness: AI가 준 정보 중 어긋난 부분이 보였다.
+    A2R3:
+      score: 83
+      grade: A
+      item: 내 후보 + AI 자료 카드
+      delegation: +
+      knowledge: ++
+      awareness: 내 후보와 AI 자료를 나란히 놓으니 고르는 자리가 또렷해졌다.
+    A3R1:
+      score: 48
+      grade: C
+      item: 불안 질문 카드
+      delegation: '0'
+      knowledge: '0'
+      awareness: 질문 하나는 적었지만 다음 행동은 비어 있었다.
+    A3R2:
+      score: 57
+      grade: B
+      item: 질문 점검 카드
+      delegation: '0'
+      knowledge: '0'
+      awareness: 불안한 질문 뒤에 알아볼 일을 붙여야 했다.
+    A3R3:
+      score: 65
+      grade: B
+      item: 첫 행동 카드
+      delegation: '0'
+      knowledge: +
+      awareness: 작은 질문도 다시 보면 다음에 해 볼 일이 됐다.
+    B1R1:
+      score: 17
+      grade: D
+      item: null
+      delegation: --
+      knowledge: '-'
+      awareness: AI가 고른 유망 직업은 빠르게 보였지만 내 이유는 없었다.
+    B1R2:
+      score: 30
+      grade: D
+      item: 타인의 답 경고 카드
+      delegation: --
+      knowledge: '-'
+      awareness: 유망하다는 말 속에 내가 해 본 일은 거의 없었다.
+    B1R3:
+      score: 40
+      grade: C
+      item: 유망 직업 경고 카드
+      delegation: --
+      knowledge: '0'
+      awareness: AI 추천을 지우고 보니 남는 것은 내 경험을 묻는 질문이었다.
+    B2R1:
+      score: 57
+      grade: B
+      item: 빌린 답 카드
+      delegation: '0'
+      knowledge: '0'
+      awareness: 답은 받았지만 직업 이름이 왜 그쪽인지는 흐렸다.
+    B2R2:
+      score: 65
+      grade: B
+      item: AI 답 점검 카드
+      delegation: '0'
+      knowledge: +
+      awareness: 멋있는 직업과 내가 버틸 수 있는 일은 달랐다.
+    B2R3:
+      score: 72
+      grade: A
+      item: AI 답 검수 카드
+      delegation: '0'
+      knowledge: +
+      awareness: AI 답을 내 경험 옆에 놓으니 맞는 것과 아닌 것이 갈렸다.
+    B3R1:
+      score: 88
+      grade: S
+      item: AI 자료 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 내 질문이 먼저 있으니 AI 답이 결정이 아니라 재료처럼 보였다.
+    B3R2:
+      score: 93
+      grade: S
+      item: 낯선 말 확인 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 모르는 말을 다시 찾으니 직업 이름이 조금 현실처럼 보였다.
+    B3R3:
+      score: 100
+      grade: S
+      item: 진로 자기 판단 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: AI는 자료를 줬고, 고르는 쪽은 내 판단에 끝까지 남아 있었다.
+    C1R1:
+      score: 88
+      grade: S
+      item: 사례 듣기 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 선배의 일과를 들으니 직업 이름과 다른 모양이 보였다.
+    C1R2:
+      score: 93
+      grade: S
+      item: 사례 비교 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 한 번 더 보니 끌린 부분이 한 가지 더 있었다.
+    C1R3:
+      score: 100
+      grade: S
+      item: 진로 사례 활용 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 사례 옆에 내 강점·걱정을 따로 놓으니 진로 기준이 또렷해졌다.
+    C2R1:
+      score: 22
+      grade: D
+      item: 친구 따라간 길 카드
+      delegation: --
+      knowledge: '-'
+      awareness: 친구의 말을 따라 쓰니 내 질문은 떠오르지 않았다.
+    C2R2:
+      score: 32
+      grade: D
+      item: 또래 그림자 경고 카드
+      delegation: --
+      knowledge: '0'
+      awareness: 한 번 읽으니 친구의 이유가 내 자리에 있었다.
+    C2R3:
+      score: 42
+      grade: C
+      item: 내 자리 회수 카드
+      delegation: --
+      knowledge: +
+      awareness: 친구의 말과 내 경험을 갈라 놓으니 다른 모양이 보였다.
+    C3R1:
+      score: 10
+      grade: D
+      item: null
+      delegation: --
+      knowledge: '-'
+      awareness: 모른다는 말만 쓰니 상담 카드도 같이 멈췄다.
+    C3R2:
+      score: 21
+      grade: D
+      item: null
+      delegation: --
+      knowledge: '-'
+      awareness: 모르는 건 사실이었지만 내가 걱정한 것까지 사라졌다.
+    C3R3:
+      score: 30
+      grade: D
+      item: 빈 진로 경고 카드
+      delegation: --
+      knowledge: '0'
+      awareness: 늦게라도 한 가지를 적으니 빈칸이 조금 줄었다.
+  # v0.7 재정의 — 카드 매칭 룰 데이터 (SPEC §1.4 / §7.8.2 직접 매칭)
+  # leaf 진입 시 학생 보유 카드(19종 풀)와 requireCard 라벨 정확 일치하면 bonus 항(+5).
+  # boostCard 22종 라벨은 폐기, 학습 메시지는 reviewSupplements narrative로 흡수됨.
+  # matchGroups(친화 그룹 매칭)와 별도 — 직접 매칭은 leaf별 핵심 카드 1장 강조 자리.
+  axisDelta:
+    - leafId: A1R3
+      requireCard: 진로탐색
+      bonusPoint: 5
+      note: 자기 경험을 네 칸으로 나눠 진로 단서를 끝까지 도출하는 자리 — 진로탐색 카드와 강한 매칭
+    - leafId: A2R3
+      requireCard: 직업이해
+      bonusPoint: 5
+      note: 후보 직업 자료를 자기 경험과 나란히 놓고 다시 고르는 자리 — 직업이해 카드와 강한 매칭
+    - leafId: A3R3
+      requireCard: 자기성찰
+      bonusPoint: 5
+      note: 불안한 질문 옆에 작은 행동 하나를 붙여 다음 자리로 잇는 자리 — 자기성찰 카드와 강한 매칭
+    - leafId: B1R2
+      requireCard: 비판적 사고
+      bonusPoint: 5
+      note: AI가 뽑은 유망 직업 안의 근거 없는 자리를 눈으로 발견하는 자리 — 비판적 사고 카드와 강한 매칭
+    - leafId: B2R3
+      requireCard: 정보분석
+      bonusPoint: 5
+      note: AI 답을 자기 경험과 갈라 놓고 맞는 것·아닌 것을 분석하는 자리 — 정보분석 카드와 강한 매칭
+    - leafId: B3R3
+      requireCard: 검수능력
+      bonusPoint: 5
+      note: 자기 질문 위에 AI 자료를 비교 재료로 두고 검수하는 자리 — 검수능력 카드와 강한 매칭
+    - leafId: C1R3
+      requireCard: 진로탐색
+      bonusPoint: 5
+      note: 사례를 거름 삼아 자기 강점·걱정과 비교해 진로 기준을 세우는 자리 — 진로탐색 카드와 강한 매칭
+    - leafId: C2R3
+      requireCard: 자기검증
+      bonusPoint: 5
+      note: 친구 말과 자기 경험을 갈라 놓고 자기 자리를 회수하는 자리 — 자기검증 카드와 강한 매칭
+  resourceCosts:
+    # v0.7 §3.5 — B시간 < C시간 < A시간 / leaf별 시간·에너지 패턴 / R2=+5t/+4e, R3=+15t/+11e
+    # 5/4 세션289 — t2/review stage floor 시간 2 / 에너지 1 (formula 적용, yaml 미수정).
+    # 가장 싼 t2 (A3·B1·C3) 와 R1 그대로 제출이 0으로 도착하던 자리에 최소 비용 박음.
+    A1R1:
+      time: 32
+      energy: 26
+    A1R2:
+      time: 37
+      energy: 30
+    A1R3:
+      time: 47
+      energy: 37
+    A2R1:
+      time: 26
+      energy: 22
+    A2R2:
+      time: 31
+      energy: 26
+    A2R3:
+      time: 41
+      energy: 33
+    A3R1:
+      time: 20
+      energy: 16
+    A3R2:
+      time: 25
+      energy: 20
+    A3R3:
+      time: 35
+      energy: 27
+    B1R1:
+      time: 10
+      energy: 8
+    B1R2:
+      time: 15
+      energy: 12
+    B1R3:
+      time: 25
+      energy: 19
+    B2R1:
+      time: 14
+      energy: 16
+    B2R2:
+      time: 19
+      energy: 20
+    B2R3:
+      time: 29
+      energy: 27
+    B3R1:
+      time: 16
+      energy: 24
+    B3R2:
+      time: 21
+      energy: 28
+    B3R3:
+      time: 31
+      energy: 35
+    C1R1:
+      time: 20
+      energy: 24
+    C1R2:
+      time: 25
+      energy: 28
+    C1R3:
+      time: 35
+      energy: 35
+    C2R1:
+      time: 18
+      energy: 18
+    C2R2:
+      time: 23
+      energy: 22
+    C2R3:
+      time: 33
+      energy: 29
+    C3R1:
+      time: 16
+      energy: 12
+    C3R2:
+      time: 21
+      energy: 16
+    C3R3:
+      time: 31
+      energy: 23
+  expRewards:
+    A1R1: 25
+    A1R2: 27
+    A1R3: 30
+    A2R1: 18
+    A2R2: 20
+    A2R3: 23
+    A3R1: 12
+    A3R2: 14
+    A3R3: 17
+    B1R1: 8
+    B1R2: 10
+    B1R3: 12
+    B2R1: 7
+    B2R2: 9
+    B2R3: 12
+    B3R1: 10
+    B3R2: 12
+    B3R3: 14
+    C1R1: 5
+    C1R2: 7
+    C1R3: 10
+    C2R1: 5
+    C2R2: 7
+    C2R3: 10
+    C3R1: 1
+    C3R2: 2
+    C3R3: 4
+  competencyCards:
+    A1R1: [진로탐색, 정보분석]
+    A1R2: [진로탐색, 정보분석, 검수능력]
+    A1R3: [진로탐색, 정보분석, 직업이해, 자기검증]
+    A2R1: [진로탐색, 직업이해]
+    A2R2: [진로탐색, 직업이해, 검수능력]
+    A2R3: [진로탐색, 직업이해, 검수능력, 자기검증]
+    A3R1: [진로탐색]
+    A3R2: [진로탐색, 자기성찰]
+    A3R3: [진로탐색, 자기성찰, 비판적 사고, 검수능력]
+    B1R1: []
+    B1R2: []
+    B1R3: []
+    B2R1: [직업이해]
+    B2R2: [직업이해, 정보분석, 검수능력]
+    B2R3: [직업이해, 정보분석, 검수능력, 자기검증]
+    B3R1: [진로탐색, 정보분석, 검수능력]
+    B3R2: [진로탐색, 정보분석, 검수능력, 비판적 사고]
+    B3R3: [진로탐색, 정보분석, 직업이해, 검수능력, 자기검증]
+    C1R1: [직업이해, 진로탐색, 자기성찰]
+    C1R2: [직업이해, 진로탐색, 자기성찰, 비판적 사고]
+    C1R3: [직업이해, 진로탐색, 정보분석, 자기성찰, 자기검증]
+    C2R1: []
+    C2R2: [비판적 사고]
+    C2R3: [진로탐색, 자기성찰, 자기검증, 비판적 사고]
+    C3R1: []
+    C3R2: []
+    C3R3: []
+studyplan:
+  id: studyplan
+  category: 5
+  categoryName: 시험 공부
+  title: 시험 2주 전 — 공부를 어떻게
+  version: v1
+  learningMessage: 내가 뭘 모르는지 알아차리는 순간부터 공부 계획은 내 것이 된다.
+  aiSuitability: mid
+  timeBudgetSec: 720
+  domainPool: [학습설계, 시간관리, 학습전략, 검수능력, 자기검증, 자기성찰, 비판적 사고]
+  domainLabel: 학습설계
+  situation:
+    text: 학기 말 중간고사가 2주 앞으로 다가왔다. 5과목 중 자신 있는 과목은 2개 정도이고, 나머지 3개는 어디부터 해야 할지 잘 모르겠다. 책상 위에는 시험 범위표와 문제집이 펼쳐져 있고, 오늘은 어떻게 공부할지부터 정해야 했다.
+    image: ../images/s05_ch1.webp
+  tier1:
+  - id: A
+    label: 직접 계획을 세우고 공부한다
+    desc: 문제를 조금 풀어 보고 내가 약한 단원부터 시간을 나눈다.
+    lesson: 내 손으로 약점부터 봤다 — 내 시험은 내가 가장 잘 안다.
+    delegation: +
+    knowledge: +
+    basePoint: 20            # v0.7 합산 모델 베이스
+    varPoint: 8              # v0.7 변수 — 자기 약점 직접 진단, studyplan 디자인 의도 정점
+  - id: B
+    label: AI에게 공부법을 받는다
+    desc: AI에게 시험 공부 방법이나 약점별 공부 순서를 물어본다.
+    lesson: AI에 공부법을 맡겼다 — 내 약점을 누가 알아야 하는지 따져봐야 한다.
+    delegation: '-'
+    knowledge: '-'
+    basePoint: 20
+    varPoint: 4              # v0.7 변수 — 위임 큰 방향, B3 살리는 갈래는 tier2에서 회복
+  - id: C
+    label: 다른 사람·기성 자료에 기댄다
+    desc: 친구 계획·학원 시간표·작년 시험지에 기대서 공부 방향을 잡는다.
+    lesson: 다른 데서 가져왔다 — 적절히 골라 쓸 수도, 자기 약점을 못 볼 수도 있다.
+    delegation: '0'
+    knowledge: '0'
+    basePoint: 20
+    varPoint: 6              # v0.7 변수 — 양면 갈래, C1 살리는 자리
+  tier2:
+    A:
+    - id: A1
+      label: 지난 단원 문제를 풀어 약점을 찾고 약한 과목에 시간을 더 둔다
+      delegation: ++
+      knowledge: ++
+      lesson: 내가 뭘 모르는지부터 봤다 — 약점이 보이는 자리에서 공부 순서가 생긴다.
+      basePoint: 20            # v0.7 합산 모델 베이스
+      varPoint: 10             # v0.7 변수 — 자기 약점 진단 정점, 직접 + 약점 보고 시간 배치
+    - id: A2
+      label: 약점을 직접 짚은 뒤 막힌 한 단원만 AI에게 어디부터 다시 봐야 하는지 묻는다
+      delegation: +
+      knowledge: +
+      lesson: 내가 길을 안 다음에 AI 손이 점만 닿았다 — 출발은 내 오답이고 도구는 AI다.
+      basePoint: 20
+      varPoint: 7              # v0.7 변수 — 자기 약점 + AI 점만, 적절 자리
+    - id: A3
+      label: 모든 과목을 똑같이 나눠서 공부한다
+      delegation: '0'
+      knowledge: +
+      lesson: 시간을 공평하게 나눴다 — 깔끔하지만 약점 단원이 같은 칸에 묻힌다.
+      basePoint: 20
+      varPoint: 3              # v0.7 변수 — 얕음 자리, 자기 손이지만 약점이 묻힘
+    B:
+    - id: B1
+      label: AI에게 중2 시험 공부법을 한 줄로 묻고 그대로 따른다
+      delegation: --
+      knowledge: '-'
+      lesson: 한 줄로 묻고 따랐다 — AI는 내 약점을 모른 채 일반론을 준다.
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 자기 약점 정보 없이 일반론
+    - id: B2
+      label: 내 약점을 말하고 AI 공부 순서를 받아 그대로 쓴다
+      delegation: '0'
+      knowledge: '0'
+      lesson: 약점을 말하고 답을 받았다 — 내 정보만큼만 답이 좁아진다.
+      basePoint: 20
+      varPoint: 5              # v0.7 변수 — 중립 자리, 약점 정보는 줌 + 순서는 위임
+    - id: B3
+      label: 내가 먼저 오답을 분석하고 약점을 짚은 뒤, AI에게 단원별로 구체적으로 묻고 답을 내 오답 옆에서 검수한다
+      delegation: '++'
+      knowledge: '++'
+      lesson: 내 약점이 먼저 보이고 나서 AI가 도구가 됐다 — 출발은 내 오답이고 AI 답은 내 검수를 거친다.
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 자기 분석 + AI 도구 + 검수
+    C:
+    - id: C1
+      label: 작년 기말 시험지와 오답노트를 다시 꺼내 약했던 단원을 짚고, 올해 문제집과 비교해 시간을 다시 배치한다
+      delegation: '++'
+      knowledge: '++'
+      lesson: 작년의 내가 거름이 되어 올해 약점 자리에 시간이 옮겨졌다 — 자기 자료를 적극 활용하면 자기 약점이 또렷해진다.
+      basePoint: 20
+      varPoint: 10             # v0.7 변수 — 정점 자리, 작년 자기 자료 거름 + 올해 약점 비교
+    - id: C2
+      label: 잘하는 친구의 공부 계획표를 받아 그대로 따라 한다
+      delegation: --
+      knowledge: '-'
+      lesson: 친구 계획이 내 자리에 들어왔다 — 친구의 약점은 내 약점이 아니다.
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 부정 자리, 친구 약점 자리에 내 시간
+    - id: C3
+      label: 어차피 안 된다고 생각하고 게임을 한다
+      delegation: --
+      knowledge: '-'
+      lesson: 선택을 미뤘다 — 시간은 흘러도 시험 범위는 그대로다.
+      basePoint: 20
+      varPoint: 1              # v0.7 변수 — 회피 자리, 미룸
+  results:
+    # v0.7 — results[t2].basePoint 폐기 (코드 미사용). text·summary·lesson 보존.
+    # deltaR2·deltaR3는 lookup 모델 잔재로 v0.7.x 정리 자리, 일단 검수 참고용 보존.
+    A1:
+      text: 지난 단원 문제를 조금 풀어 보니 수학 도형과 과학 전기 단원에서 많이 막혔다. 자신 있는 과목은 짧게 확인하고, 막힌 과목에 시간을 더 넣은 계획표를 만들었다.
+      basePoint: 92
+      deltaR2: 3
+      deltaR3: 6
+      summary: 약점을 보고 세운 공부 계획
+      lesson: 약점이 보인 자리에서 진짜 공부가 시작된다 — 자기 점검에서 출발한 계획.
+    A2:
+      text: 먼저 문제를 풀어 보니 수학 도형 단원이 가장 막혔다. 그 한 단원만 AI에게 어디부터 다시 봐야 하는지 물어보고, 답 중 시험 범위에 맞는 부분만 내 오답 옆에 적었다.
+      basePoint: 75
+      deltaR2: 5
+      deltaR3: 11
+      summary: 자기 약점 위에 AI 손이 점만 닿은 계획
+      lesson: AI는 내가 길을 안 다음에 가장 잘 쓰이는 도구다 — 출발점은 내 오답.
+    A3:
+      text: 5과목을 똑같이 나눠서 하루에 조금씩 보기로 했다. 계획표는 깔끔했지만, 이미 아는 과목과 모르는 과목이 같은 칸을 차지했다.
+      basePoint: 55
+      deltaR2: 8
+      deltaR3: 15
+      summary: 균등하지만 약점이 흐린 계획
+      lesson: 공평한 시간은 공평한 공부가 아니다 — 모르는 자리에 시간이 더 필요하다.
+    B1:
+      text: AI는 예습, 복습, 기출 문제, 오답 정리 같은 공부법을 차례로 알려 줬다. 말은 다 맞아 보였지만 내가 수학 도형을 모르는지, 과학 전기를 모르는지는 알지 못했다.
+      basePoint: 16
+      deltaR2: 13
+      deltaR3: 23
+      summary: 일반적인 AI 공부법
+      lesson: AI에 시험 공부를 시키면 내 약점을 모른 채 일반론이 돌아온다.
+      hiddenIssues:
+      - 학생의 실제 약한 단원을 알지 못함
+      - 모든 과목에 통하는 일반론만 제시됨
+      - 내가 뭘 모르는지 확인하는 과정이 빠져 있음
+    B2:
+      text: AI에게 수학 도형이 약하고 영어 단어가 밀렸다고 말하자, 공부 순서를 나눠 줬다. 도움이 됐지만 내가 정말 어디에서 틀리는지는 문제를 풀어 봐야 알 수 있었다.
+      basePoint: 57
+      deltaR2: 8
+      deltaR3: 15
+      summary: 약점을 말하고 받은 공부법
+      lesson: 내가 준 정보만큼만 AI가 답한다 — 약점을 좁게 말해야 답도 좁아진다.
+    B3:
+      text: 먼저 문제를 풀어 보고 틀린 단원을 표시한 다음, AI에게 수학 도형은 어디부터 다시 봐야 하는지 물었다. AI 답을 그대로 쓰지 않고 내 오답 옆에 필요한 부분만 적었다.
+      basePoint: 88
+      deltaR2: 5
+      deltaR3: 12
+      summary: 자기 약점 분석 위에 검수된 AI 학습 도구
+      lesson: 약점이 먼저 보일 때 AI가 도구가 된다 — 출발은 내 오답, 마지막 검수도 내 손.
+    C1:
+      text: 작년 기말 시험지와 오답노트를 다시 꺼내 어디서 많이 틀렸는지 짚고, 올해 문제집과 비교해 작년 약점이 그대로 남았는지 확인했다. 그 자리에 시간을 더 넣고 이미 잡힌 단원은 줄였다.
+      basePoint: 88
+      deltaR2: 5
+      deltaR3: 12
+      summary: 자기 자료에서 올해 약점까지 옮겨 온 계획
+      lesson: 작년의 내가 거름이 되어 올해 약점 자리에 시간이 자랐다 — 자기 자료는 가장 정확한 학습 데이터다.
+    C2:
+      text: 잘하는 친구가 만든 계획표를 그대로 받아 따라 했다. 친구는 영어를 길게 잡았지만, 나는 수학 도형이 더 급했다. 친구 약점 자리에 내 시간이 들어가 있었다.
+      basePoint: 25
+      deltaR2: 10
+      deltaR3: 20
+      summary: 친구에게 맞춰진 공부 계획
+      lesson: 친구의 시험지는 내 시험지가 아니다 — 약점 분포는 사람마다 다르다.
+      hiddenIssues:
+      - 친구의 약한 단원에 내 공부 시간이 들어가 있음
+      - 내가 정말 막히는 단원에는 시간이 부족함
+      - 내 오답을 직접 본 적이 없음
+    C3:
+      text: 책상에 앉았다가 어차피 늦었다는 생각이 들어 게임을 켰다. 잠깐만 하려고 했는데 시험 범위표는 그대로 접힌 채 남았다.
+      basePoint: 10
+      deltaR2: 11
+      deltaR3: 20
+      summary: 미뤄 둔 시험 공부
+      lesson: 선택을 미룬 자리에는 공부가 없다 — 시간은 그래도 흐른다.
+      hiddenIssues:
+      - 시험 범위를 확인하지 않음
+      - 모르는 과목을 그대로 둠
+      - 공부 계획 없이 시간이 지나감
+  reviews:
+  - id: R1
+    label: 그대로 진행
+    desc: 검토 없이 그대로 공부를 시작한다.
+    boostType: none
+    lesson: 검토를 건너뛰었다 — 내 계획을 다시 볼 기회를 놓쳤다.
+    points: 10               # v0.7 합산 모델 — 단순 분배 (R1=10·R2=20·R3=30)
+  - id: R2
+    label: 한 번 보고 빠진 과목만 표시
+    desc: 명시적으로 빠진 과목이나 단원을 발견.
+    boostType: explicit
+    lesson: 한 번 훑어 빠진 단원을 잡았다. 도메인지식 +1
+    points: 20               # v0.7 합산 모델
+  - id: R3
+    label: 오답 확인 + 약점 다시 배치
+    desc: 내가 모르는 단원과 공부 시간을 다시 맞춘다.
+    boostType: all
+    lesson: 오답을 다시 보고 약점에 시간을 옮겼다. 도메인지식 +3
+    points: 30               # v0.7 합산 모델
+  # v0.7 합산 모델 — 학생 화면 메인 텍스트로 격상 (Cut5 review 패널·Cut6 결과 패널)
+  # 학생 톤 룰: 시스템 ID 노출 X, 점수 표기는 산식 자리에 따로, 이 자리는 narrative만
+  reviewSupplements:
+    A1R1: 지난 단원 문제를 풀어 약한 과목을 찾고 그 자리에 시간을 더 둔 계획을 그대로 시작했다. 자기 약점이 시간표 안에 들어왔다.
+    A1R2: 한 번 훑으니 과학 전기 단원에 둔 시간이 조금 부족했다. 그 칸을 늘리고 자신 있는 과목 시간을 줄였다.
+    A1R3: 틀린 문제를 다시 풀어 보고 막힌 단원을 두 개 더 찾았다. 약한 자리에 시간을 더 옮겨 시험 쪽으로 계획이 가까워졌다.
+    A2R1: 자기 약점을 직접 짚은 뒤 막힌 한 단원만 AI에게 물어 받은 답을 자기 오답 옆에 적고 시작했다. 출발은 자기 오답이었다.
+    A2R2: 한 번 보니 AI가 알려 준 단계 중 시험 범위 밖 내용이 하나 있었다. 그 줄을 빼고 범위 안만 남겼다.
+    A2R3: 자기 오답 옆에 AI 답을 나란히 두고 비교하며 정말 필요한 부분만 골라 다시 적었다. AI는 도구로 자리잡았다.
+    A3R1: 5과목을 똑같이 나눈 깔끔한 계획표를 그대로 시작했다. 약점 단원이 같은 칸에 묻힌 채로.
+    A3R2: 한 번 보니 이미 아는 과목에도 시간이 너무 많이 들어가 있었다. 그 칸을 줄여 약한 쪽으로 옮겼다.
+    A3R3: 간단한 문제를 풀어 보고 약한 과목 쪽으로 시간을 다시 옮겼다. 균등 계획 안에서 자기 약점이 보이기 시작했다.
+    B1R1: AI에게 시험 공부법을 한 줄로 묻고 받은 일반 공부법을 그대로 따랐다. 자기 약한 단원이 어디인지 모른 채로.
+    B1R2: 한 번 읽어 보니 AI 공부법에 자기가 약한 단원 이름이 하나도 없었다. 그 자리에 자기 시험 약점을 표시했다.
+    B1R3: 먼저 문제를 풀어 보고 AI 답을 자기 약점에 맞게 다시 골랐다. AI 일반론 위에 자기 시험 약점을 다시 얹었다.
+    B2R1: 자기 약점을 말하고 받은 AI 공부 순서를 그대로 썼다. 정보는 자기 것이었지만 순서는 AI가 잡았다.
+    B2R2: 한 번 보니 자기가 말한 약점이 너무 넓어서 공부 순서가 흐렸다. 약점을 더 좁게 다시 적었다.
+    B2R3: 오답을 보고 약점을 더 작게 나눈 뒤 필요한 공부법만 남겼다. 자기 오답을 지나간 답이 살아남았다.
+    B3R1: 자기가 먼저 오답을 분석하고 약점을 짚은 뒤 AI에게 단원별로 구체적으로 물어 답을 자기 오답 옆에서 검수했다. 출발은 자기 오답이었다.
+    B3R2: 한 번 보니 AI가 추천한 순서 중 시험 범위 밖 내용이 조금 있었다. 그 부분을 빼고 자기 계획만 남겼다.
+    B3R3: 시험 범위표와 오답을 다시 맞춰 보고 AI 답에서 자기 약점에 필요한 부분만 골라 계획에 넣었다. 출발과 검수가 모두 자기 손에 있었다.
+    C1R1: 작년 기말 시험지와 오답노트를 다시 꺼내 약했던 단원을 짚고 올해 문제집과 비교해 시간을 다시 배치한 계획을 그대로 시작했다. 작년의 자기가 거름이 되었다.
+    C1R2: 한 번 보니 작년에 약했던 단원 중 올해는 이미 잡힌 부분이 있었다. 그 칸을 줄이고 아직 약한 자리에 시간을 더 옮겼다.
+    C1R3: 작년 오답노트와 올해 문제집을 비교해서 지금 더 급한 단원에 시간을 다시 옮겼다. 자기 변화가 시간표 안에 살아났다.
+    C2R1: 잘하는 친구의 공부 계획표를 받아 그대로 따라 했다. 친구 약점 자리에 자기 시간이 들어가 있었다.
+    C2R2: 한 번 보니 친구 계획에는 자기가 약한 수학 도형 시간이 부족했다. 그 칸을 늘리고 친구만 길게 잡힌 자리는 줄였다.
+    C2R3: 친구 계획을 지우고 자기 오답에 맞게 시간을 다시 나눴다. 친구 자리에서 자기 시험 자리로 돌아왔다.
+    C3R1: 어차피 안 된다고 생각하고 게임을 켰다. 시험 범위표는 그대로 접힌 채 남았다.
+    C3R2: 한 번 보니 시험 범위표도 제대로 확인하지 않았다. 늦었다는 말 뒤에 자기가 모르는 단원이 숨어 있었다.
+    C3R3: 게임을 끄고 시험 범위와 모르는 단원 세 개만 먼저 적었다. 전부는 못 해도 시작 자리는 만들었다.
+
+  # v0.7 신설 — 카드 매칭 룰 데이터 (studyplan 안 leaf별 친화 그룹 1~2개)
+  # 4그룹 (자기성찰 / 표현·소통 / 인식·해석 / 실천·설계). 학생 화면 노출 X, 데이터 단위.
+  # studyplan은 학습 계획 시나리오라 실천·설계 그룹과 강한 친화 + 자기 약점 인식 자리는 자기성찰. A=실천·설계+자기성찰, B=인식·해석(검수), C=실천·설계+자기성찰.
+  # 카드 매칭 활성화 = 학생 보유 카드 라벨이 leaf의 친화 그룹에 속하면 bonus 항(+5).
+  matchGroups:
+    A1: [실천·설계, 자기성찰]
+    A2: [실천·설계, 인식·해석]
+    A3: [실천·설계]
+    B1: [인식·해석]
+    B2: [인식·해석, 실천·설계]
+    B3: [인식·해석, 자기성찰]
+    C1: [실천·설계, 자기성찰]
+    C2: [실천·설계, 인식·해석]
+    C3: [자기성찰]
+  # v0.7 — finals[leaf+review].score는 합산 모델 전환으로 코드 미사용.
+  # 검수 참고용 1주일 보존 (v0.7.x 정리 자리). grade·delegation·knowledge·awareness·item은 일부 자리에서 보조 표시 가능.
+  finals:
+    A1R1:
+      score: 92
+      grade: S
+      item: 약점 자가 점검 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 내가 뭘 모르는지 보이자 공부할 순서가 생겼다.
+    A1R2:
+      score: 95
+      grade: S
+      item: 약점 자가 점검 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 빠진 단원을 보태니 계획표가 내 시험 쪽으로 더 가까워졌다.
+    A1R3:
+      score: 98
+      grade: S
+      item: 메타 공부 카드
+      delegation: ++
+      knowledge: ++
+      awareness: 내가 모르는 것을 알게 된 것만으로 한 단계였다.
+    A2R1:
+      score: 75
+      grade: A
+      item: 약점 + AI 점만 닿기 카드
+      delegation: +
+      knowledge: +
+      awareness: 내 오답이 출발이었고 AI는 한 단원만 짚어 줬다.
+    A2R2:
+      score: 80
+      grade: A
+      item: AI 학습 도구 활용 카드
+      delegation: +
+      knowledge: +
+      awareness: 시험 범위 밖을 빼니 AI 답이 내 쪽으로 좁아졌다.
+    A2R3:
+      score: 86
+      grade: S
+      item: 메타 공부 카드
+      delegation: +
+      knowledge: ++
+      awareness: 내 오답 옆에 놓고 비교하니 AI 답이 도구가 됐다.
+    A3R1:
+      score: 55
+      grade: B
+      item: 고른 시간표 카드
+      delegation: '0'
+      knowledge: +
+      awareness: 모든 과목을 똑같이 보니 내 약점도 똑같이 작아 보였다.
+    A3R2:
+      score: 63
+      grade: B
+      item: 시간 다시 나눔 카드
+      delegation: '0'
+      knowledge: +
+      awareness: 아는 과목과 모르는 과목은 같은 시간이 아니었다.
+    A3R3:
+      score: 70
+      grade: A
+      item: 약점 다시 보기 카드
+      delegation: '0'
+      knowledge: ++
+      awareness: 문제를 풀어 보니 시간표가 다시 움직였다.
+    B1R1:
+      score: 16
+      grade: D
+      item: null
+      delegation: --
+      knowledge: '-'
+      awareness: AI 공부법은 좋았지만 내 시험은 아니었다.
+    B1R2:
+      score: 29
+      grade: D
+      item: null
+      delegation: --
+      knowledge: '0'
+      awareness: 그 계획에는 내가 틀리는 단원이 없었다.
+    B1R3:
+      score: 39
+      grade: C
+      item: 남의 공부법 경고 카드
+      delegation: --
+      knowledge: +
+      awareness: AI 답을 내 오답 옆에 놓으니 맞는 것만 조금 남았다.
+    B2R1:
+      score: 57
+      grade: B
+      item: AI 공부법 카드
+      delegation: '0'
+      knowledge: '0'
+      awareness: 내 약점을 말하니 공부법이 조금 내 쪽으로 왔다.
+    B2R2:
+      score: 65
+      grade: B
+      item: 약점 말하기 카드
+      delegation: '0'
+      knowledge: +
+      awareness: 약점을 넓게 말하면 답도 넓게 돌아왔다.
+    B2R3:
+      score: 72
+      grade: A
+      item: AI 학습 도구 활용 카드
+      delegation: '0'
+      knowledge: ++
+      awareness: AI가 준 방법은 내 오답을 지나가야 쓸모가 생겼다.
+    B3R1:
+      score: 88
+      grade: S
+      item: 약점 자가 점검 + AI 도구 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 내가 먼저 약점을 짚었더니 AI 질문이 구체적으로 나왔다.
+    B3R2:
+      score: 93
+      grade: S
+      item: AI 답 검수 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: AI 답에서 시험 범위 밖을 빼니 내 계획만 남았다.
+    B3R3:
+      score: 100
+      grade: S
+      item: 메타 공부 + AI 검수 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 출발은 내 오답이었고 AI 답은 내 손에서 다시 걸러졌다.
+    C1R1:
+      score: 88
+      grade: S
+      item: 자기 자료 활용 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 작년의 내가 올해 약점을 가리키고 있었다.
+    C1R2:
+      score: 93
+      grade: S
+      item: 자기 비교 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 작년과 올해를 같이 놓으니 시간이 옮겨야 할 자리가 보였다.
+    C1R3:
+      score: 100
+      grade: S
+      item: 메타 공부 + 자기 자료 카드
+      delegation: '++'
+      knowledge: '++'
+      awareness: 작년 오답이 올해 시간표를 다시 짜는 출발점이 됐다.
+    C2R1:
+      score: 25
+      grade: D
+      item: 친구 따라 공부 카드
+      delegation: --
+      knowledge: '-'
+      awareness: 친구 계획을 따라가도 내 시험지는 따로 나왔다.
+    C2R2:
+      score: 35
+      grade: D
+      item: 친구 의존 경고 카드
+      delegation: --
+      knowledge: '0'
+      awareness: 친구가 어려운 과목과 내가 어려운 과목은 달랐다.
+    C2R3:
+      score: 45
+      grade: C
+      item: 친구 의존 분리 카드
+      delegation: --
+      knowledge: +
+      awareness: 친구 계획을 지우고 나니 내 약점 칸이 보였다.
+    C3R1:
+      score: 10
+      grade: D
+      item: null
+      delegation: --
+      knowledge: --
+      awareness: 게임 화면은 넘어갔지만 시험 범위는 그대로였다.
+    C3R2:
+      score: 21
+      grade: D
+      item: null
+      delegation: --
+      knowledge: '-'
+      awareness: 늦었다는 말 뒤에 내가 모르는 단원이 숨어 있었다.
+    C3R3:
+      score: 30
+      grade: D
+      item: 마지막 범위표 카드
+      delegation: --
+      knowledge: '0'
+      awareness: 전부는 못 해도 모르는 단원 세 개는 적을 수 있었다.
+  # v0.7 재정의 — 카드 매칭 룰 데이터 (SPEC §1.4 / §7.8.2 직접 매칭)
+  # leaf 진입 시 학생 보유 카드(19종 풀)와 requireCard 라벨 정확 일치하면 bonus 항(+5).
+  # boostCard 22종 라벨은 폐기, 학습 메시지는 reviewSupplements narrative로 흡수됨.
+  # matchGroups(친화 그룹 매칭)와 별도 — 직접 매칭은 leaf별 핵심 카드 1장 강조 자리.
+  axisDelta:
+    - leafId: A1R3
+      requireCard: 자기검증
+      bonusPoint: 5
+      note: 자기 약점을 직접 짚고 끝까지 확인하는 자리 — 자기검증 카드와 강한 매칭
+    - leafId: A3R3
+      requireCard: 자기성찰
+      bonusPoint: 5
+      note: 균등 계획 안에서 자기 약점이 어디인지 다시 묶어 보는 자리 — 자기성찰 카드와 강한 매칭
+    - leafId: B1R2
+      requireCard: 비판적 사고
+      bonusPoint: 5
+      note: AI 일반 공부법에 자기 약점이 없다는 것을 발견하는 자리 — 비판적 사고 카드와 강한 매칭
+    - leafId: B2R3
+      requireCard: 검수능력
+      bonusPoint: 5
+      note: AI 공부 순서를 자기 오답과 비교해 다듬는 검토 자리 — 검수능력 카드와 강한 매칭
+    - leafId: B3R2
+      requireCard: 학습전략
+      bonusPoint: 5
+      note: 자기 약점 분석 위에 AI를 도구로 쓰고 답을 검수하는 자리 — 학습전략 카드와 강한 매칭
+    - leafId: C1R3
+      requireCard: 학습설계
+      bonusPoint: 5
+      note: 작년 자기 자료에서 올해 약점을 짚어 시간을 다시 배치하는 자리 — 학습설계 카드와 강한 매칭
+  resourceCosts:
+    # v0.7 §3.5 — B시간 < C시간 < A시간 / leaf별 시간·에너지 패턴 / R2=+5t/+4e, R3=+15t/+11e
+    # 5/4 세션289 — t2/review stage floor 시간 2 / 에너지 1 (formula 적용, yaml 미수정).
+    # 가장 싼 t2 (A3·B1·C3) 와 R1 그대로 제출이 0으로 도착하던 자리에 최소 비용 박음.
+    A1R1:
+      time: 32
+      energy: 26
+    A1R2:
+      time: 37
+      energy: 30
+    A1R3:
+      time: 47
+      energy: 37
+    A2R1:
+      time: 26
+      energy: 22
+    A2R2:
+      time: 31
+      energy: 26
+    A2R3:
+      time: 41
+      energy: 33
+    A3R1:
+      time: 20
+      energy: 16
+    A3R2:
+      time: 25
+      energy: 20
+    A3R3:
+      time: 35
+      energy: 27
+    B1R1:
+      time: 10
+      energy: 8
+    B1R2:
+      time: 15
+      energy: 12
+    B1R3:
+      time: 25
+      energy: 19
+    B2R1:
+      time: 14
+      energy: 16
+    B2R2:
+      time: 19
+      energy: 20
+    B2R3:
+      time: 29
+      energy: 27
+    B3R1:
+      time: 16
+      energy: 24
+    B3R2:
+      time: 21
+      energy: 28
+    B3R3:
+      time: 31
+      energy: 35
+    C1R1:
+      time: 20
+      energy: 24
+    C1R2:
+      time: 25
+      energy: 28
+    C1R3:
+      time: 35
+      energy: 35
+    C2R1:
+      time: 18
+      energy: 18
+    C2R2:
+      time: 23
+      energy: 22
+    C2R3:
+      time: 33
+      energy: 29
+    C3R1:
+      time: 16
+      energy: 12
+    C3R2:
+      time: 21
+      energy: 16
+    C3R3:
+      time: 31
+      energy: 23
+  expRewards:
+    A1R1: 25
+    A1R2: 27
+    A1R3: 30
+    A2R1: 18
+    A2R2: 20
+    A2R3: 23
+    A3R1: 12
+    A3R2: 14
+    A3R3: 17
+    B1R1: 8
+    B1R2: 10
+    B1R3: 12
+    B2R1: 7
+    B2R2: 9
+    B2R3: 12
+    B3R1: 10
+    B3R2: 12
+    B3R3: 14
+    C1R1: 5
+    C1R2: 7
+    C1R3: 10
+    C2R1: 5
+    C2R2: 7
+    C2R3: 10
+    C3R1: 1
+    C3R2: 2
+    C3R3: 4
+  competencyCards:
+    A1R1: [학습설계, 시간관리]
+    A1R2: [학습설계, 시간관리, 검수능력]
+    A1R3: [학습설계, 시간관리, 학습전략, 자기검증]
+    A2R1: [학습설계, 학습전략]
+    A2R2: [학습설계, 학습전략, 검수능력]
+    A2R3: [학습설계, 학습전략, 검수능력, 자기검증]
+    A3R1: [학습설계]
+    A3R2: [학습설계, 시간관리]
+    A3R3: [학습설계, 시간관리, 자기성찰, 검수능력]
+    B1R1: []
+    B1R2: []
+    B1R3: []
+    B2R1: [학습설계]
+    B2R2: [학습설계, 학습전략, 검수능력]
+    B2R3: [학습설계, 학습전략, 검수능력, 자기검증]
+    B3R1: [학습설계, 학습전략, 검수능력]
+    B3R2: [학습설계, 학습전략, 검수능력, 비판적 사고]
+    B3R3: [학습설계, 학습전략, 시간관리, 검수능력, 자기검증]
+    C1R1: [학습설계, 시간관리, 자기성찰]
+    C1R2: [학습설계, 시간관리, 자기성찰, 비판적 사고]
+    C1R3: [학습설계, 시간관리, 학습전략, 자기성찰, 자기검증]
+    C2R1: []
+    C2R2: [비판적 사고]
+    C2R3: [학습설계, 시간관리, 자기성찰, 자기검증]
+    C3R1: []
+    C3R2: []
+    C3R3: []
+  semesterClosing:
+    text: 이 학기에 나는 자기소개를 쓰고, 모둠 발표를 맞추고, 자료를 확인하고, 진로를 말하고, 시험 공부를 정했다. 다섯 번의 선택은 모두 달랐지만, 결국 내가 직접 봐야 보이는 것들이 있었다.
+    image: ../images/s05_ch6.webp
