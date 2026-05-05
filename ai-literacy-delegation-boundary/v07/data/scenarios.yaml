@@ -75,7 +75,7 @@ selfintro:
           afterC: {delegation: '--', knowledge: '-'}
         lesson: AI 질문에 답하며 글이 시작됐다 — 답이 짧거나 경험이 없으면 글이 일반적으로 흐를 수 있다.
         basePoint: 10
-        varPoint: -10            # v0.7 변수 — 회피 자리, 자기 자리 가짜로 채움
+        varPoint: 0              # v0.7 변수 — 회피 자리, 자기 자리 가짜로 채움
       - id: B2
         label: AI에게 글의 순서를 받고 내 이야기에 맞게 바꾼다
         delta:
@@ -1401,7 +1401,7 @@ eorinwangja:
           afterC: {delegation: '--', knowledge: '-'}
         lesson: 전체를 읽지는 않았지만 한 장면은 직접 확인했다 — 요약과 책 사이의 빈틈이 남는다.
         basePoint: 10
-        varPoint: -10            # v0.7 변수 — 회피 자리, 요약 의존 + 부분 확인
+        varPoint: 0              # v0.7 변수 — 회피 자리, 요약 의존 + 부분 확인
       - id: B2
         label: 유명한 문장이 나오는 앞뒤 장면을 읽고 쓴다
         delta:
