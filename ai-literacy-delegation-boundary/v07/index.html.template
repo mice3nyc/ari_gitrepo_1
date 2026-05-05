@@ -2105,7 +2105,7 @@ function goCut2(){
     if(afford)card.onclick=function(){onTier1(c.id);};
     var costHTML=buildCostHTML(costs[i],maxT,maxE);
     var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
-    card.innerHTML='<div class="choice-num">'+c.id+'</div><div class="choice-body"><div class="choice-text">'+c.label+tag+'</div><div class="choice-desc">'+c.desc+'</div>'+costHTML+'</div>';
+    card.innerHTML='<div class="choice-num">'+c.id+'</div><div class="choice-body"><div class="choice-text">'+c.label+tag+'</div>'+costHTML+'</div>';
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
@@ -2203,7 +2203,9 @@ function goCut5(){
     var supText=supplements[leafKey]||'';
     // v0.7 — supplements를 메인 텍스트로. r.desc 회색 중복 자리 폐기.
     var mainText=supText?'<div class="choice-narrative">'+supText+'</div>':'';
-    card.innerHTML='<div class="choice-num">'+r.id+'</div><div class="choice-body"><div class="choice-text">'+r.label+tag+'</div>'+mainText+costHTML+'</div>';
+    // v0.7 5/5 — leaf별 V1/V2/V3 라벨이 reviewLabels에 있으면 그것 사용 (5 시나리오 다른 검토 행동)
+    var leafLabel=(sc.reviewLabels&&sc.reviewLabels[leafKey])||r.label;
+    card.innerHTML='<div class="choice-num">'+r.id+'</div><div class="choice-body"><div class="choice-text">'+leafLabel+tag+'</div>'+mainText+costHTML+'</div>';
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
@@ -2219,7 +2221,9 @@ function goCut6(){
   var c5body=currentRow.querySelector('[data-cut="5"] .panel-body');
   var rvObj=sc.reviews.find(function(x){return x.id===gameState.selectedReview;});
   var supplement=sc.reviewSupplements[leaf]||'';
-  c5body.innerHTML='<div class="chosen-summary"><div class="chosen-label">검토 선택</div><div class="chosen-title">'+rvObj.id+'. '+rvObj.label+'</div>'+(supplement?'<div class="chosen-way">'+supplement+'</div>':'')+'</div>';
+  // v0.7 5/5 — leaf별 V 라벨 우선
+  var rvLabelLeaf=(sc.reviewLabels&&sc.reviewLabels[leaf])||rvObj.label;
+  c5body.innerHTML='<div class="chosen-summary"><div class="chosen-label">검토 선택</div><div class="chosen-title">'+rvObj.id+'. '+rvLabelLeaf+'</div>'+(supplement?'<div class="chosen-way">'+supplement+'</div>':'')+'</div>';
   setPanelImage(5,'검토');
   setPanelImage(6,'최종');
   var panel=activatePanel(6);
