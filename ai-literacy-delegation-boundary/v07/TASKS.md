@@ -15,14 +15,14 @@
 - [x] 1.2 TASKS.md 재작성 — Phase v0.7 체크리스트 신설 (5/4 세션287, 이 노트)
 - [x] 1.3 SPEC.md 갱신 — §0 v0.7 변경 요약 신설 + §2 합산 모델 + §3 공식형 박스 + §7 카드 매칭 + §11 타이틀 정정 (5/4 세션287)
 
-##### Phase v0.7 — 단계 2 yaml 재설계 (백도 5개 병렬)
-- [ ] 2.1 selfintro yaml — 단계별 점수 + supplements 27 자리 + 카드 매칭 룰
-- [ ] 2.2 groupwork yaml — 동일 패턴
-- [ ] 2.3 eorinwangja yaml — 동일 패턴
-- [ ] 2.4 career yaml — 동일 패턴
-- [ ] 2.5 studyplan yaml — 동일 패턴
-- [ ] 2.6 results.basePoint·finals.score 폐기 (또는 검수 보존)
-- [ ] 2.7 reviewSupplements 학생 톤 narrative 메인 격상
+##### Phase v0.7 — 단계 2 yaml 재설계 + 시나리오 수정본 통합 (5/5 세션298)
+- [x] 2.1 selfintro yaml — pilot 백도 텍스트 갱신 + C tier 자리 재배치
+- [x] 2.2 groupwork yaml — 메인 직접 144자리 (텍스트 + C tier + finals + 이탈점 tier2 헤더 균질화)
+- [x] 2.3 eorinwangja yaml — 백도 + 메인 정정 (텍스트 + C tier + 이탈점 C1-V3 정정)
+- [x] 2.4 career yaml — 메인 직접 144자리 (단일 delegation/knowledge 구조)
+- [x] 2.5 studyplan yaml — 메인 직접 144자리 (이탈점 C2-V3 의도적 부정 표지)
+- [x] 2.6 supplements 27 자리 × 5 = 135 자리 새 텍스트 갱신
+- [x] 2.7 빌드 검증 (index.html 371,959 bytes) + 분포 sweep (S37·A21·B22·C17·D38)
 
 ##### Phase v0.7 — 단계 3 코드 재작성 (메인 직도)
 - [ ] 3.1 calculateFinalScore 합산 함수 재작성
