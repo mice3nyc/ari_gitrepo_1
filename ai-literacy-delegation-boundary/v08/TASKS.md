@@ -122,9 +122,9 @@ v12 요청: Cut6는 등급+점수+awareness+하단메시지만. 선택경로/카
 
 - [x] 8.1 build.py 빌드 → 472,017 bytes (v0.7 384,949 → +87K)
 - [x] 8.2 종합 자체 검수 QC-1~QC-11 전항목 통과 ✅
-- [ ] 8.3 git tag `v0.8-pre-test`
-- [ ] 8.4 git 커밋 + push
-- [ ] 8.5 GitHub Pages 배포 확인
+- [x] 8.3 git tag `v0.8-pre-test` ✅
+- [x] 8.4 git 커밋 `439446d` + push ✅
+- [x] 8.5 GitHub Pages 배포 진행 중 (https://mice3nyc.github.io/ari_gitrepo_1/ai-literacy-delegation-boundary/v08/)
 
 ---
 

@@ -7406,7 +7406,6 @@ function applyReview(rid){
   var reviewObj=null;
   for(var ri=0;ri<sc2.reviews.length;ri++){if(sc2.reviews[ri].id===rid){reviewObj=sc2.reviews[ri];break;}}
   gameState.score=calculateFinalScore(leaf,rid);
-  gameState.totalScore+=gameState.score;
   if(fin&&fin.item)gameState.itemsCollected.push(fin.item);
   // v0.8 — 3트랙 카드 지급 (finals에서 직접 읽음)
   if(fin&&fin.cardEarned){
@@ -8332,9 +8331,9 @@ function showTitleScreen(){
   // 튜토리얼 4문장 (학생 톤 §11.5)
   h+='<ol class="tutorial-list">';
   h+='<li>시나리오마다 선택지를 고른다. 각 선택은 <span class="kw-time">시간</span>과 <span class="kw-energy">에너지</span>를 쓴다.</li>';
-  h+='<li>어떤 선택을 하느냐에 따라 결과물의 점수가 달라지고, <span class="kw-delegation">위임판단력</span>과 <span class="kw-knowledge">도메인지식</span>이 자란다.</li>';
+  h+='<li>어떤 선택을 하느냐에 따라 결과물의 점수가 달라지고, 내가 어떤 힘을 썼는지 역량 카드로 확인할 수 있다.</li>';
   h+='<li>결과물 점수에 따라 등급이 매겨지고, 다음 시나리오의 <span class="kw-time">시간</span>·<span class="kw-energy">에너지</span>가 충전된다.</li>';
-  h+='<li>쌓인 <span class="kw-delegation">위임판단력</span>·<span class="kw-knowledge">도메인지식</span>은 다음 선택의 <span class="kw-time">시간</span>·<span class="kw-energy">에너지</span> 비용을 깎아준다. (할인 효과)</li>';
+  h+='<li>경험이 쌓이면 다음 선택의 <span class="kw-time">시간</span>·<span class="kw-energy">에너지</span> 비용이 줄어든다.</li>';
   h+='</ol>';
   // 버튼 두 개: 게임 시작 / 튜토리얼 다시 보기
   h+='<div class="title-actions">';
@@ -9295,6 +9294,7 @@ function getCutCaptionFor(scenarioId, leaf, cutNum){
   var rv=leaf?leaf.substr(2):null;
   function _first(text){ if(!text) return ''; var m=text.match(/^[^.!?]+[.!?]/); return m?m[0].trim():text; }
   function _esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function _stripInternal(s){return (s||'').replace(/\s*(위임판단력|도메인지식|위임|도메인|지식|판단력)\s*[+\-]\s*\d+/g,'').trim();}
 
   if(cutNum===1){
     var intro=_first(sc.situation && sc.situation.text);
@@ -9304,7 +9304,7 @@ function getCutCaptionFor(scenarioId, leaf, cutNum){
     var t1arr=sc.tier1||[];
     for(var i=0;i<t1arr.length;i++){
       if(t1arr[i].id===t1){
-        if(t1arr[i].lesson) return '<b>'+_esc(t1arr[i].lesson)+'</b>';
+        if(t1arr[i].lesson) return '<b>'+_esc(_stripInternal(t1arr[i].lesson))+'</b>';
         return '<b>'+_esc(t1arr[i].label||'')+'</b>'+_esc(t1arr[i].desc||'');
       }
     }
@@ -9314,7 +9314,7 @@ function getCutCaptionFor(scenarioId, leaf, cutNum){
     var t2arr=(sc.tier2||{})[t1]||[];
     for(var j=0;j<t2arr.length;j++){
       if(t2arr[j].id===t2){
-        if(t2arr[j].lesson) return '<b>'+_esc(t2arr[j].lesson)+'</b>';
+        if(t2arr[j].lesson) return '<b>'+_esc(_stripInternal(t2arr[j].lesson))+'</b>';
         return '<b>'+_esc(t2arr[j].label||'')+'</b>';
       }
     }
@@ -9324,7 +9324,7 @@ function getCutCaptionFor(scenarioId, leaf, cutNum){
     var rs=(sc.results||{})[t2];
     if(!rs) return '';
     var summary=rs.summary||'';
-    if(rs.lesson) return (summary?'<b>'+_esc(summary)+'</b>':'')+_esc(rs.lesson);
+    if(rs.lesson) return (summary?'<b>'+_esc(summary)+'</b>':'')+_esc(_stripInternal(rs.lesson));
     var firstLine=_first(rs.text||'');
     return (summary?'<b>'+_esc(summary)+'</b>':'')+_esc(firstLine);
   }
@@ -9333,7 +9333,7 @@ function getCutCaptionFor(scenarioId, leaf, cutNum){
     var rvObj=null;
     for(var k=0;k<rvArr.length;k++){ if(rvArr[k].id===rv){ rvObj=rvArr[k]; break; } }
     var supp=(sc.reviewSupplements||{})[leaf];
-    if(rvObj && rvObj.lesson) return '<b>'+_esc(rvObj.lesson)+'</b>'+(supp?_esc(supp):'');
+    if(rvObj && rvObj.lesson) return '<b>'+_esc(_stripInternal(rvObj.lesson))+'</b>'+(supp?_esc(supp):'');
     if(supp) return (rvObj?'<b>'+_esc(rvObj.label||'')+'</b>':'')+_esc(supp);
     return rvObj ? '<b>'+_esc(rvObj.label||'')+'</b>'+_esc(rvObj.desc||'') : '';
   }
@@ -9585,7 +9585,7 @@ function showFinalReport(){
   hideStats();
   trackEvent('semester_report_viewed',{totalScore:gameState.totalScore,history:gameState.scenarioHistory,level:gameState.exp.level,cards:_reportAllCards().map(function(c){return c.label;}),items:gameState.itemsCollected});
   var hist=gameState.scenarioHistory||[];
-  var totalScore=gameState.totalScore||0;
+  var totalScore=hist.reduce(function(s,r){return s+(r.finalScore||0);},0);
   var lv=gameState.exp.level;
   var dv=gameState.competencies.delegationChoice.value;
   var kv=gameState.competencies.knowledge.value;
@@ -10133,10 +10133,10 @@ function playCardRewardSequential(cards,note){
     var remaining=cards.length;
     function finishAll(){
       overlay.classList.add('hidden');overlay.innerHTML='';
-      // 모든 카드 획득 시점에 인벤토리 badge 노출
       var panel=document.getElementById('inv-panel');
       var badge=document.getElementById('inv-tab-badge');
       if(badge&&panel&&!panel.classList.contains('open'))badge.classList.remove('hidden');
+      renderInventory();
       resolve();
     }
     function travelCard(card){
