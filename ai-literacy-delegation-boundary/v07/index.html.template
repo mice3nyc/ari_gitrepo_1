@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 리터러시: 위임의 경계 v0.3</title>
+<title>AI 리터러시: 위임의 경계 v0.7</title>
 <style>
 @import url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css');
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -617,7 +617,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 <div class="card-reward-overlay hidden" id="card-reward-overlay"></div>
 <button class="debug-toggle" onclick="toggleDebug()">DEBUG</button>
 <div class="debug-panel" id="debug-panel"></div>
-<div class="version">v0.6 — 점수 framework 재설계 (개발 중)</div>
+<div class="version">v0.7</div>
 
 <!-- Phase 8.10b — 레벨업 이벤트 팝업 (DECISIONS §10.11) -->
 <div id="levelup-modal" class="modal-overlay hidden">
@@ -830,7 +830,9 @@ function createInitialState(){
     // v0.6 Phase 6 (5/3 세션278) — 타이틀+튜토리얼 1회 노출 플래그
     tutorialSeen:false,
     // v0.6 §12 (5/3 세션278) — pending 점수 (시나리오 끝에 누적 흡수)
-    pending:{delegation:0,knowledge:0}
+    pending:{delegation:0,knowledge:0},
+    // v0.7 — 역량 카드 인벤토리
+    inventory:{competencyCards:[]}
   };
 }
 
@@ -1581,7 +1583,7 @@ function stateSnap(){
 
 function trackEvent(t,p){
   var e={type:t,sid:getSid(),at:new Date().toISOString(),scenarioId:gameState?gameState.currentScenarioId:null,snap:stateSnap(),payload:p||{}};
-  console.log('[AI Literacy v0.5]',e);
+  console.log('[AI Literacy v0.7]',e);
   try{
     var l=JSON.parse(localStorage.getItem(CONFIG.eventLogKey)||'[]');
     l.push(e);
@@ -1884,7 +1886,7 @@ function showStartScreen(){
   var h='<div class="semester-frame">';
   h+='<h1>AI 리터러시: 위임의 경계</h1>';
   h+='<div class="subtitle">이건 AI한테 맡겨도 돼?</div>';
-  h+='<div class="vtag">v0.5 — 한 학생의 한 학기</div>';
+  h+='<div class="vtag">v0.7 — 한 학생의 한 학기</div>';
   h+='<div class="progress-wrap">';
   h+='<div class="progress-head"><span class="progress-label">학기 진행</span><span class="progress-count">'+cleared.length+' / '+order.length+'</span></div>';
   h+='<div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div>';
@@ -2165,7 +2167,7 @@ function goCut4(){
   // v0.7 — results.basePoint 폐기. 합산 모델은 tier2 단계에서 점수가 박힘 (basePoint+varPoint).
   var t2Pts=getTier2Points(sc,t2);
   panel.querySelector('.panel-body').innerHTML=
-    '<p class="highlight">결과 — 100자 독후감</p>'+
+    '<p class="highlight">결과 — '+sc.title+'</p>'+
     '<div class="result-text">'+result.text+'</div>'+
     '<div class="result-meta">'+result.summary+' (이 행동의 점수 '+t2Pts.points+'점)</div>'+
     '<div class="advance-wrap"><button class="advance-btn" onclick="goCut5()">검토할까? &#8594;</button></div>';
@@ -2515,6 +2517,8 @@ function continueGame(){
   if(!gameState.pending||typeof gameState.pending!=='object')gameState.pending={delegation:0,knowledge:0};
   if(typeof gameState.pending.delegation!=='number')gameState.pending.delegation=0;
   if(typeof gameState.pending.knowledge!=='number')gameState.pending.knowledge=0;
+  // v0.7 guard: 역량 카드 인벤토리
+  if(!gameState.inventory||!Array.isArray(gameState.inventory.competencyCards))gameState.inventory={competencyCards:(gameState.inventory&&gameState.inventory.competencyCards)||[]};
   // 시나리오 미선택 상태면 시작 화면
   if(!gameState.currentScenarioId){showStartScreen();return;}
   trackEvent('session_continued',{version:CONFIG.version});
