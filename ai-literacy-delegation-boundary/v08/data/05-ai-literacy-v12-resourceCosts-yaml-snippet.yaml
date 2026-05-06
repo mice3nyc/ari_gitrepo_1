@@ -1,0 +1,152 @@
+# v11 resourceCosts replacement snippet
+# Copy each scenario block into data/scenarios.yaml under the same scenario ID.
+
+selfintro:
+  resourceCosts:
+    A1R1: {time: 30, energy: 24}
+    A1R2: {time: 33, energy: 27}
+    A1R3: {time: 38, energy: 31}
+    A2R1: {time: 28, energy: 23}
+    A2R2: {time: 31, energy: 26}
+    A2R3: {time: 36, energy: 30}
+    A3R1: {time: 24, energy: 20}
+    A3R2: {time: 27, energy: 23}
+    A3R3: {time: 32, energy: 27}
+    B1R1: {time: 13, energy: 10}
+    B1R2: {time: 16, energy: 13}
+    B1R3: {time: 21, energy: 17}
+    B2R1: {time: 15, energy: 12}
+    B2R2: {time: 18, energy: 15}
+    B2R3: {time: 23, energy: 19}
+    B3R1: {time: 17, energy: 14}
+    B3R2: {time: 20, energy: 17}
+    B3R3: {time: 25, energy: 21}
+    C1R1: {time: 7, energy: 6}
+    C1R2: {time: 10, energy: 9}
+    C1R3: {time: 15, energy: 13}
+    C2R1: {time: 9, energy: 7}
+    C2R2: {time: 12, energy: 10}
+    C2R3: {time: 17, energy: 14}
+    C3R1: {time: 15, energy: 12}
+    C3R2: {time: 18, energy: 15}
+    C3R3: {time: 23, energy: 19}
+
+groupwork:
+  resourceCosts:
+    A1R1: {time: 26, energy: 21}
+    A1R2: {time: 30, energy: 25}
+    A1R3: {time: 37, energy: 31}
+    A2R1: {time: 24, energy: 20}
+    A2R2: {time: 28, energy: 24}
+    A2R3: {time: 35, energy: 30}
+    A3R1: {time: 25, energy: 20}
+    A3R2: {time: 29, energy: 24}
+    A3R3: {time: 36, energy: 30}
+    B1R1: {time: 13, energy: 10}
+    B1R2: {time: 17, energy: 14}
+    B1R3: {time: 24, energy: 20}
+    B2R1: {time: 13, energy: 11}
+    B2R2: {time: 17, energy: 15}
+    B2R3: {time: 24, energy: 21}
+    B3R1: {time: 12, energy: 10}
+    B3R2: {time: 16, energy: 14}
+    B3R3: {time: 23, energy: 20}
+    C1R1: {time: 13, energy: 10}
+    C1R2: {time: 17, energy: 14}
+    C1R3: {time: 24, energy: 20}
+    C2R1: {time: 10, energy: 7}
+    C2R2: {time: 14, energy: 11}
+    C2R3: {time: 21, energy: 17}
+    C3R1: {time: 12, energy: 9}
+    C3R2: {time: 16, energy: 13}
+    C3R3: {time: 23, energy: 19}
+
+eorinwangja:
+  resourceCosts:
+    A1R1: {time: 38, energy: 30}
+    A1R2: {time: 42, energy: 34}
+    A1R3: {time: 50, energy: 40}
+    A2R1: {time: 34, energy: 27}
+    A2R2: {time: 38, energy: 31}
+    A2R3: {time: 46, energy: 37}
+    A3R1: {time: 33, energy: 27}
+    A3R2: {time: 37, energy: 31}
+    A3R3: {time: 45, energy: 37}
+    B1R1: {time: 16, energy: 12}
+    B1R2: {time: 20, energy: 16}
+    B1R3: {time: 28, energy: 22}
+    B2R1: {time: 17, energy: 13}
+    B2R2: {time: 21, energy: 17}
+    B2R3: {time: 29, energy: 23}
+    B3R1: {time: 15, energy: 12}
+    B3R2: {time: 19, energy: 16}
+    B3R3: {time: 27, energy: 22}
+    C1R1: {time: 7, energy: 5}
+    C1R2: {time: 11, energy: 9}
+    C1R3: {time: 19, energy: 15}
+    C2R1: {time: 9, energy: 6}
+    C2R2: {time: 13, energy: 10}
+    C2R3: {time: 21, energy: 16}
+    C3R1: {time: 8, energy: 6}
+    C3R2: {time: 12, energy: 10}
+    C3R3: {time: 20, energy: 16}
+
+career:
+  resourceCosts:
+    A1R1: {time: 24, energy: 19}
+    A1R2: {time: 28, energy: 23}
+    A1R3: {time: 34, energy: 28}
+    A2R1: {time: 24, energy: 19}
+    A2R2: {time: 28, energy: 23}
+    A2R3: {time: 34, energy: 28}
+    A3R1: {time: 26, energy: 21}
+    A3R2: {time: 30, energy: 25}
+    A3R3: {time: 36, energy: 30}
+    B1R1: {time: 14, energy: 11}
+    B1R2: {time: 18, energy: 15}
+    B1R3: {time: 24, energy: 20}
+    B2R1: {time: 17, energy: 13}
+    B2R2: {time: 21, energy: 17}
+    B2R3: {time: 27, energy: 22}
+    B3R1: {time: 19, energy: 15}
+    B3R2: {time: 23, energy: 19}
+    B3R3: {time: 29, energy: 24}
+    C1R1: {time: 14, energy: 10}
+    C1R2: {time: 18, energy: 14}
+    C1R3: {time: 24, energy: 19}
+    C2R1: {time: 12, energy: 9}
+    C2R2: {time: 16, energy: 13}
+    C2R3: {time: 22, energy: 18}
+    C3R1: {time: 13, energy: 10}
+    C3R2: {time: 17, energy: 14}
+    C3R3: {time: 23, energy: 19}
+
+studyplan:
+  resourceCosts:
+    A1R1: {time: 26, energy: 21}
+    A1R2: {time: 29, energy: 24}
+    A1R3: {time: 36, energy: 30}
+    A2R1: {time: 24, energy: 19}
+    A2R2: {time: 27, energy: 22}
+    A2R3: {time: 34, energy: 28}
+    A3R1: {time: 25, energy: 20}
+    A3R2: {time: 28, energy: 23}
+    A3R3: {time: 35, energy: 29}
+    B1R1: {time: 12, energy: 9}
+    B1R2: {time: 15, energy: 12}
+    B1R3: {time: 22, energy: 18}
+    B2R1: {time: 15, energy: 11}
+    B2R2: {time: 18, energy: 14}
+    B2R3: {time: 25, energy: 20}
+    B3R1: {time: 15, energy: 12}
+    B3R2: {time: 18, energy: 15}
+    B3R3: {time: 25, energy: 21}
+    C1R1: {time: 11, energy: 8}
+    C1R2: {time: 14, energy: 11}
+    C1R3: {time: 21, energy: 17}
+    C2R1: {time: 13, energy: 9}
+    C2R2: {time: 16, energy: 12}
+    C2R3: {time: 23, energy: 18}
+    C3R1: {time: 8, energy: 6}
+    C3R2: {time: 11, energy: 9}
+    C3R3: {time: 18, energy: 15}
