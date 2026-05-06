@@ -723,6 +723,7 @@ var CONFIG={
   version:'v0.8',
   scenarios:['selfintro','groupwork','eorinwangja','career','studyplan'],
   pointThresholds:{S:95,A:85,B:75,C:60,D:0},
+  minResourceCost:1,
   cardBoost:20,
   detectedIssueBoost:10,
   // v0.4 신규 (SPEC §12) — Phase 3 이후 사용
@@ -1135,10 +1136,12 @@ function _applyDiscount(c){
   var mNeg=(typeof CONFIG.competencyDiscountMultNeg==='number')?CONFIG.competencyDiscountMultNeg:1;
   var dlgEffect=dlg>=0?dlg*mPos:dlg*mNeg;
   var knlEffect=knl>=0?knl*mPos:knl*mNeg;
+  var floor=(typeof CONFIG.minResourceCost==='number')?CONFIG.minResourceCost:0;
+  var rawT=c.time,rawE=c.energy;
   return {
-    time:Math.max(0,c.time-dlgEffect),
-    energy:Math.max(0,c.energy-knlEffect),
-    _discount:{dlg:dlg,knl:knl,dlgEffect:dlgEffect,knlEffect:knlEffect,mPos:mPos,mNeg:mNeg,rawTime:c.time,rawEnergy:c.energy}
+    time:(rawT>0)?Math.max(floor,rawT-dlgEffect):0,
+    energy:(rawE>0)?Math.max(floor,rawE-knlEffect):0,
+    _discount:{dlg:dlg,knl:knl,dlgEffect:dlgEffect,knlEffect:knlEffect,mPos:mPos,mNeg:mNeg,rawTime:rawT,rawEnergy:rawE}
   };
 }
 function getTier1Cost(t1){return _applyDiscount(_applyMult(_rawTier1Cost(t1)));}
