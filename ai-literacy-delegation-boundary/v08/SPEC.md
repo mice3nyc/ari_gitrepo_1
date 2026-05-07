@@ -1359,23 +1359,26 @@ finals:
 
 ##### 17.1 리포트 구조
 
+카툰 돌아보기 **위에** 배치. 학생이 가장 먼저 읽는 섹션. 도입 문장 없이 바로 패턴 요약으로 진입.
+
 ```
 AI리터러시 성장 리포트
 
-{도입 문장}
-{패턴별 성장 요약}
+{패턴별 성장 요약}  ← border-left 강조, 가장 눈에 띄게
 
-내가 잘 붙잡은 과정
-{강점 2~3개}
+내가 키운 역량
+[축] 태그명 — {카드 short 설명}  ← 획득 카드별, 최대 5개
+...
 
 더 연습할 과정
-{보완 1~2개}
+· {improvements 매칭 문장}
+{C/D 시나리오 제목 — reportReflection}  ← 부족 시 보충
 
-다음 AI 사용 약속
-{약속 1~3개}
+다음에 이렇게 해볼 수 있다
+1. {약속 문장}  ← 번호 매기기
+...
 
 [교사용 관찰 포인트]  ← 접기 영역
-{교사용 코멘트}
 ```
 
 ##### 17.2 5패턴 판정 로직
@@ -1409,33 +1412,22 @@ growthReport:
     recoveryNeeded: "몇몇 장면에서는 결과를 빠르게 얻었지만, 배움에 필요한 과정이 비어 있었다. ..."
 ```
 
-##### 17.4 강점/보완 문장 선택
+##### 17.4 강점: 카드명 기반 직접 매핑
 
-reportStrengthTags/reportGrowthTags를 5시나리오분 수집 → 빈도 상위로 문장 매핑.
+reportStrengthTags 대신 **획득한 카드의 texts.yaml short 설명을 직접 사용**. 빈도 매칭 없이, 학생이 실제로 얻은 카드 하나하나의 의미를 보여준다.
 
-```yaml
-growthReport:
-  strengths:
-    - tag: "검토"
-      text: "AI 결과를 그대로 쓰지 않고 다시 확인했다."
-    - tag: "자기자료"
-      text: "내 자료나 약점을 먼저 넣고 AI를 활용했다."
-    - tag: "설명가능"
-      text: "내가 설명할 수 있는 내용인지 확인하려 했다."
-    - tag: "근거"
-      text: "직접 읽거나 풀어본 근거를 남기려 했다."
-    - tag: "소통"
-      text: "모둠 흐름이나 상대가 이해할 수 있는지를 함께 살폈다."
-  improvements:
-    - tag: "검토 필요"
-      text: "빠르게 만든 결과를 그대로 제출하기 전에 한 번 더 확인하기가 필요하다."
-    - tag: "위임 구분"
-      text: "AI가 만든 부분과 내가 판단한 부분을 나누는 연습이 필요하다."
-    - tag: "근거 부족"
-      text: "내가 직접 읽고 경험한 근거를 하나 이상 남기는 연습이 필요하다."
-    - tag: "설명 불가"
-      text: "그럴듯한 결과보다 내가 설명할 수 있는 결과를 만드는 연습이 필요하다."
+강점 데이터 흐름:
 ```
+finals[leaf].humanCentricAxis + humanCentricTag
+  → TEXTS.humanCentricCards[axis].tags[tag].short
+  → "명확한 목표와 기준을 가지고 AI 활용을 주도하며 결과에 책임지는 힘"
+
+finals[leaf].domainCards[i]
+  → TEXTS.domainCards[name].short
+  → "결과를 다시 확인하고 고치는 힘"
+```
+
+보완은 기존 reportGrowthTags → improvements 풀 매칭 유지 + C/D 시나리오의 reportReflection을 보충 표시.
 
 ##### 17.5 다음 AI 사용 약속
 

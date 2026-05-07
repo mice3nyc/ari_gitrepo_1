@@ -165,13 +165,13 @@ v14-slim CSV가 새 단일 진실. v11 CSV를 대체한다.
 
 학기 종합 리포트에 성장 리포트 섹션 추가.
 
-- [x] 12.1 패턴 판정 로직 — tier1(A/B/C) + review(R1/R2/R3) + grade(S~D) 비율로 5패턴 판정. 우선순위: recovery>reviewWeak>aiHeavy>reviewStrong>selfStart
-- [x] 12.2 패턴별 성장 요약 문장 표시 (texts.yaml growthReport.patterns)
-- [x] 12.3 "내가 잘 붙잡은 과정" — reportStrengthTags 빈도 상위 3개 → strengths 풀 매칭
-- [x] 12.4 "더 연습할 과정" — reportGrowthTags 빈도 상위 2개 → improvements 풀 매칭
-- [x] 12.5 "다음 AI 사용 약속" — growthTags 기반 pledges 1~3개 선택
+- [x] 12.1 패턴 판정 로직 — tier1(A/B/C) + review(R1/R2/R3) + grade(S~D) 비율로 5패턴 판정
+- [x] 12.2 패턴별 성장 요약 — border-left 강조, 도입 문장 삭제
+- [x] 12.3 "내가 키운 역량" — 카드명→texts.yaml short 설명 직접 참조 (최대 5개, 색상 표시)
+- [x] 12.4 "더 연습할 과정" — reportGrowthTags→improvements 매칭 + C/D 시나리오 reportReflection 보충
+- [x] 12.5 "다음에 이렇게 해볼 수 있다" — pledges 번호 매기기, growthTags 기반
 - [x] 12.6 교사용 관찰 포인트 — `<details>` 접기 영역
-- [x] 12.7 리포트 어투 — texts.yaml 원문 그대로 (~이다/~했다 어투)
+- [x] 12.7 위치 이동 — 카드 섹션 바로 아래, 카툰 위에 배치 (학생이 먼저 읽도록)
 - [ ] **검수 12-A**: 5시나리오 전체 완주 후 성장 리포트 정상 렌더링 (브라우저 플테 필요)
 - [ ] **검수 12-B**: D 경로 포함 완주 → 회복/재도전 패턴 정상 판정 (브라우저 플테 필요)
 

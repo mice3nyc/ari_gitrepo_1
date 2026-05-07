@@ -3182,7 +3182,10 @@ function showFinalReport(){
   }
   h+='</div>';
 
-  // 회기별 카드 그룹 (시상 panel mood + scene summary 양쪽에서 사용)
+  // v14: AI리터러시 성장 리포트 — 카툰 위에 배치
+  h+=_renderGrowthReport(hist);
+
+  // 회기별 카드 그룹
   var cardsByScene=_reportCardsByScenario();
 
   // 하단: 시나리오별 카툰 6컷 시리얼 (위→아래)
@@ -3224,9 +3227,6 @@ function showFinalReport(){
   });
   h+='</div>';
 
-  // v14: AI리터러시 성장 리포트
-  h+=_renderGrowthReport(hist);
-
   h+='<button class="start-btn" onclick="resetGame()">'+_esc(R.btn_restart||'학기 처음부터')+'</button>';
   h+='</div></div>';
   container.innerHTML=h;
@@ -3234,10 +3234,12 @@ function showFinalReport(){
 
 function _renderGrowthReport(hist){
   var GR=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthReport)||{};
-  if(!GR.intro)return '';
+  if(!GR.patterns)return '';
+  var HC=TEXTS.humanCentricCards||{};
+  var DC=TEXTS.domainCards||{};
   function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-  // 패턴 판정: 5시나리오 tier1/review/grade 수집
+  // 패턴 판정
   var t1Counts={A:0,B:0,C:0},rvCounts={R1:0,R2:0,R3:0},grCounts={S:0,A:0,B:0,C:0,D:0};
   var total=hist.length||1;
   for(var i=0;i<hist.length;i++){
@@ -3245,92 +3247,140 @@ function _renderGrowthReport(hist){
     var rv=hist[i].review||'';if(rv&&rvCounts.hasOwnProperty(rv))rvCounts[rv]++;
     var gr=hist[i].grade||'D';if(grCounts.hasOwnProperty(gr))grCounts[gr]++;
   }
-  var bcRate=(t1Counts.B+t1Counts.C)/total;
-  var aRate=t1Counts.A/total;
-  var r23Rate=(rvCounts.R2+rvCounts.R3)/total;
-  var r1Rate=rvCounts.R1/total;
-  var cdRate=(grCounts.C+grCounts.D)/total;
-
   var pattern='selfStart';
-  if(cdRate>0.6)pattern='recoveryNeeded';
-  else if(r1Rate>0.6)pattern='reviewWeak';
-  else if(bcRate>0.6)pattern='aiHeavy';
-  else if(r23Rate>0.6)pattern='reviewStrong';
-  else if(aRate>0.6)pattern='selfStart';
+  if((grCounts.C+grCounts.D)/total>0.6)pattern='recoveryNeeded';
+  else if(rvCounts.R1/total>0.6)pattern='reviewWeak';
+  else if((t1Counts.B+t1Counts.C)/total>0.6)pattern='aiHeavy';
+  else if((rvCounts.R2+rvCounts.R3)/total>0.6)pattern='reviewStrong';
+  else if(t1Counts.A/total>0.6)pattern='selfStart';
 
-  // 강점/보완 태그 수집
-  var strengthMap={},growthMap={};
+  // 카드명 기반 강점 수집: 획득한 카드의 short 설명을 직접 사용
+  var strengthItems=[];
+  var seenStrength={};
+  var weakScenarios=[];
   for(var j=0;j<hist.length;j++){
     var sc=SCENARIOS[hist[j].scenarioId];
     var fin=(sc&&sc.finals)?sc.finals[hist[j].leaf]:null;
     if(!fin)continue;
-    var sTags=fin.reportStrengthTags;
-    if(sTags&&sTags.length){for(var si=0;si<sTags.length;si++){var st=sTags[si].trim();if(st)strengthMap[st]=(strengthMap[st]||0)+1;}}
-    var gTag=(fin.reportGrowthTags||'').trim();
-    if(gTag)growthMap[gTag]=(growthMap[gTag]||0)+1;
-  }
-
-  // 문장 매핑
-  var strengths=GR.strengths||[];
-  var improvements=GR.improvements||[];
-  var pledges=GR.pledges||[];
-  function matchSentences(tagMap,pool,maxN){
-    var sorted=Object.keys(tagMap).sort(function(a,b){return tagMap[b]-tagMap[a];});
-    var matched=[];
-    for(var mi=0;mi<sorted.length&&matched.length<maxN;mi++){
-      var tag=sorted[mi];
-      for(var pi=0;pi<pool.length;pi++){
-        if(tag.indexOf(pool[pi].tag)>=0||pool[pi].tag.indexOf(tag)>=0){
-          if(matched.indexOf(pool[pi].text)<0)matched.push(pool[pi].text);
-          break;
+    var scTitle=(sc&&sc.title)||hist[j].scenarioId;
+    // 강점: humanCentric tag
+    if(fin.humanCentricTag&&fin.humanCentricAxis){
+      var axData=HC[fin.humanCentricAxis];
+      var tagData=(axData&&axData.tags)?axData.tags[fin.humanCentricTag]:null;
+      if(tagData&&tagData.short&&!seenStrength[fin.humanCentricTag]){
+        seenStrength[fin.humanCentricTag]=1;
+        strengthItems.push({label:'['+fin.humanCentricAxis+'] '+fin.humanCentricTag,desc:tagData.short,color:(axData&&axData.color)||'#111'});
+      }
+    }
+    // 강점: domain cards
+    if(fin.domainCards){
+      for(var di=0;di<fin.domainCards.length;di++){
+        var dc=fin.domainCards[di];
+        var dd=DC[dc];
+        if(dd&&dd.short&&!seenStrength[dc]){
+          seenStrength[dc]=1;
+          strengthItems.push({label:dc,desc:dd.short,color:(dd&&dd.color)||'#555'});
         }
       }
     }
-    return matched;
+    // C/D 시나리오 수집 → 보완 대상
+    if(fin.grade==='C'||fin.grade==='D'){
+      weakScenarios.push({title:scTitle,reflection:fin.reportReflection||''});
+    }
   }
-  var sLines=matchSentences(strengthMap,strengths,3);
-  var iLines=matchSentences(growthMap,improvements,2);
 
-  // 약속 문장: 보완 태그 기반 1~3개
+  // 보완: reportGrowthTags + GR.improvements 매칭 + C/D 시나리오 돌아보기
+  var growthMap={};
+  for(var k=0;k<hist.length;k++){
+    var sc2=SCENARIOS[hist[k].scenarioId];
+    var fin2=(sc2&&sc2.finals)?sc2.finals[hist[k].leaf]:null;
+    if(fin2){var gTag=(fin2.reportGrowthTags||'').trim();if(gTag)growthMap[gTag]=(growthMap[gTag]||0)+1;}
+  }
+  var improvements=GR.improvements||[];
+  var iLines=[];
+  var gSorted=Object.keys(growthMap).sort(function(a,b){return growthMap[b]-growthMap[a];});
+  for(var gi=0;gi<gSorted.length&&iLines.length<3;gi++){
+    var gt=gSorted[gi];
+    for(var ii=0;ii<improvements.length;ii++){
+      if(gt.indexOf(improvements[ii].tag)>=0||improvements[ii].tag.indexOf(gt)>=0){
+        if(iLines.indexOf(improvements[ii].text)<0)iLines.push(improvements[ii].text);
+        break;
+      }
+    }
+  }
+
+  // 약속: 보완 맥락 기반
+  var pledges=GR.pledges||[];
   var pLines=[];
   if(pledges.length){
-    if(growthMap['검토 필요']&&pledges[1])pLines.push(pledges[1]);
+    if(growthMap['검토 필요'])pLines.push(pledges[1]||pledges[0]);
     if(growthMap['위임 구분']&&pledges[3])pLines.push(pledges[3]);
     if(growthMap['근거 부족']&&pledges[4])pLines.push(pledges[4]);
     if(pLines.length===0)pLines.push(pledges[0]);
-    if(pLines.length<2&&pledges[2])pLines.push(pledges[2]);
+    if(pLines.length<2&&pledges[2]&&pLines.indexOf(pledges[2])<0)pLines.push(pledges[2]);
+    if(pLines.length<3&&pledges[1]&&pLines.indexOf(pledges[1])<0)pLines.push(pledges[1]);
   }
 
-  var h='<div class="report-growth" style="margin:24px 0;padding:16px;background:#fafafa;border:1px solid #e8e8e8;border-radius:8px;">';
-  h+='<div style="font-size:16px;font-weight:700;margin-bottom:12px;">'+_esc(GR.title||'AI리터러시 성장 리포트')+'</div>';
-  h+='<div style="font-size:13px;line-height:1.7;color:#444;margin-bottom:14px;">'+_esc(GR.intro)+'</div>';
+  // === 렌더링 ===
+  var h='<div class="report-growth" style="margin:28px 0 20px;padding:20px 18px;background:#fff;border:2px solid #111;border-radius:10px;box-shadow:0 2px 0 #111;">';
+  h+='<div style="font-size:18px;font-weight:800;margin-bottom:16px;letter-spacing:0.5px;">'+_esc(GR.title||'AI리터러시 성장 리포트')+'</div>';
 
+  // 패턴 요약 — 가장 눈에 띄게
   var patText=(GR.patterns||{})[pattern]||'';
   if(patText){
-    h+='<div style="font-size:13px;line-height:1.7;color:#333;margin-bottom:14px;padding:10px;background:#fff;border-radius:6px;">'+_esc(patText)+'</div>';
+    h+='<div style="font-size:14px;line-height:1.8;color:#111;margin-bottom:18px;padding:14px 16px;background:#f8f8f8;border-left:4px solid #111;border-radius:0 6px 6px 0;">'+_esc(patText)+'</div>';
   }
 
-  if(sLines.length){
-    h+='<div style="margin-bottom:12px;"><div style="font-size:13px;font-weight:700;margin-bottom:4px;">내가 잘 붙잡은 과정</div>';
-    for(var s2=0;s2<sLines.length;s2++)h+='<div style="font-size:13px;color:#333;line-height:1.6;padding-left:8px;">· '+_esc(sLines[s2])+'</div>';
+  // 내가 키운 역량 — 카드명 + short 설명
+  if(strengthItems.length){
+    h+='<div style="margin-bottom:18px;">';
+    h+='<div style="font-size:15px;font-weight:700;margin-bottom:10px;">내가 키운 역량</div>';
+    var maxShow=Math.min(strengthItems.length,5);
+    for(var s2=0;s2<maxShow;s2++){
+      var si=strengthItems[s2];
+      h+='<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;font-size:13px;line-height:1.6;">';
+      h+='<span style="flex-shrink:0;font-weight:700;color:'+si.color+';">'+_esc(si.label)+'</span>';
+      h+='<span style="color:#333;">'+_esc(si.desc)+'</span>';
+      h+='</div>';
+    }
+    if(strengthItems.length>5){
+      h+='<div style="font-size:12px;color:#888;margin-top:4px;">외 '+(strengthItems.length-5)+'개 역량</div>';
+    }
     h+='</div>';
   }
-  if(iLines.length){
-    h+='<div style="margin-bottom:12px;"><div style="font-size:13px;font-weight:700;margin-bottom:4px;">더 연습할 과정</div>';
-    for(var i2=0;i2<iLines.length;i2++)h+='<div style="font-size:13px;color:#333;line-height:1.6;padding-left:8px;">· '+_esc(iLines[i2])+'</div>';
+
+  // 더 연습할 과정
+  if(iLines.length||weakScenarios.length){
+    h+='<div style="margin-bottom:18px;">';
+    h+='<div style="font-size:15px;font-weight:700;margin-bottom:10px;">더 연습할 과정</div>';
+    for(var i2=0;i2<iLines.length;i2++){
+      h+='<div style="font-size:13px;color:#333;line-height:1.7;padding-left:10px;margin-bottom:4px;">· '+_esc(iLines[i2])+'</div>';
+    }
+    if(weakScenarios.length&&iLines.length<2){
+      for(var wi=0;wi<weakScenarios.length&&wi<2;wi++){
+        h+='<div style="font-size:12px;color:#666;line-height:1.6;padding-left:10px;margin-top:4px;">';
+        h+=_esc(weakScenarios[wi].title)+' — '+_esc(weakScenarios[wi].reflection);
+        h+='</div>';
+      }
+    }
     h+='</div>';
   }
+
+  // 다음 AI 사용 약속
   if(pLines.length){
-    h+='<div style="margin-bottom:12px;"><div style="font-size:13px;font-weight:700;margin-bottom:4px;">다음 AI 사용 약속</div>';
-    for(var p2=0;p2<pLines.length;p2++)h+='<div style="font-size:13px;color:#333;line-height:1.6;padding-left:8px;">· '+_esc(pLines[p2])+'</div>';
+    h+='<div style="margin-bottom:14px;padding:12px 14px;background:#f5f5f5;border-radius:6px;">';
+    h+='<div style="font-size:15px;font-weight:700;margin-bottom:8px;">다음에 이렇게 해볼 수 있다</div>';
+    for(var p2=0;p2<pLines.length;p2++){
+      h+='<div style="font-size:13px;color:#222;line-height:1.7;padding-left:10px;margin-bottom:3px;"><b>'+(p2+1)+'.</b> '+_esc(pLines[p2])+'</div>';
+    }
     h+='</div>';
   }
 
-  // 교사용 관찰 포인트 — 접기
+  // 교사용 관찰 포인트
   var teacherNote=(GR.teacherNotes||{})[pattern]||'';
   if(teacherNote){
-    h+='<details style="margin-top:8px;"><summary style="font-size:12px;color:#888;cursor:pointer;">교사용 관찰 포인트</summary>';
-    h+='<div style="font-size:12px;color:#666;line-height:1.6;margin-top:6px;padding:8px;background:#fff;border-radius:4px;">'+_esc(teacherNote)+'</div>';
+    h+='<details style="margin-top:10px;"><summary style="font-size:12px;color:#999;cursor:pointer;letter-spacing:0.5px;">교사용 관찰 포인트</summary>';
+    h+='<div style="font-size:12px;color:#555;line-height:1.7;margin-top:8px;padding:10px 12px;background:#fafafa;border-radius:4px;">'+_esc(teacherNote)+'</div>';
     h+='</details>';
   }
   h+='</div>';
