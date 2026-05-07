@@ -3969,7 +3969,7 @@ var SCENARIOS = {
     ],
     "domainLabel": "문해력",
     "situation": {
-      "text": "어린왕자 독후감을 100자로 써야 하는데 책을 안 읽었습니다.",
+      "text": "국어 시간에 어린왕자 독후감을 100자로 써 오라는 숙제가 나왔다. 책은 빌려 두었지만 아직 끝까지 읽지 못했고, 제출일은 내일이다. 줄거리는 어렴풋이 들어 본 것 같지만, 내가 직접 기억하는 장면은 많지 않다.",
       "image": "../images/s01_ch1.webp"
     },
     "tier1": [
@@ -10199,7 +10199,7 @@ function buildEffectCell(label,value){
 // 한 줄: 비용 [N] − 할인 [N] = 최종 [N] (학생 톤, 최종 볼드)
 function _buildCostLine(costLabel,rawVal,discountLabel,discountVal,finalLabel){
   // discountVal: 양수 = 할인, 0 = 표시 안함, 음수 = 페널티(부호 뒤집어 +로 표시)
-  var finalVal=Math.max(0,rawVal-discountVal);
+  var finalVal=(rawVal>0)?Math.max(CONFIG.minResourceCost||1,rawVal-discountVal):0;
   var opSym='−',discText=String(Math.abs(discountVal));
   var discCls='cost-formula-discount';
   if(discountVal===0){discCls+=' zero';}
@@ -10494,8 +10494,12 @@ function goCut6(){
 
   // v0.8 — 리플레이 자원 스냅샷 저장 (시나리오 시작 전 상태, 첫 플레이 시만)
   if(!gameState.replay)gameState.replay={};
-  if(!gameState.replay[scid]){
-    gameState.replay[scid]={played:false,improved:false,bestScore:gameState.score,bestGrade:grade};
+  if(!gameState.replay[scid]||!gameState.replay[scid].played){
+    // 첫 플레이 완료 — bestScore 기록
+    if(!gameState.replay[scid])gameState.replay[scid]={played:false,improved:false,bestScore:0,bestGrade:''};
+    gameState.replay[scid].played=true;
+    gameState.replay[scid].bestScore=gameState.score;
+    gameState.replay[scid].bestGrade=grade;
   } else {
     // 리플레이 완료 — best score 갱신 + 도전력 판정
     var prev=gameState.replay[scid];
@@ -10509,7 +10513,6 @@ function goCut6(){
         gameState.inventory.growthCards.push({label:'도전력',scenario:scid,leaf:leaf});
       }
     }
-    prev.played=true;
   }
 
   // v0.5: 컷6 결과로 충분 → 활동 리포트 거치지 않고 바로 다음 시나리오/종합 리포트
@@ -12069,6 +12072,8 @@ function playCardRewardSequential(cards,note){
         btn.disabled=true;
         travelCard(card);
       };
+      // 자동 확보 — 등장 후 0.8초 뒤 자동 travel (클릭 안 해도 진행)
+      setTimeout(function(){if(!btn.disabled){btn.disabled=true;travelCard(card);}},idx*180+800);
     }
     for(var i=0;i<cards.length;i++)makeCard(i);
   });
