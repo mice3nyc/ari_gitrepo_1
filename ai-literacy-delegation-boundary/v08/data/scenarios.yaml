@@ -1207,86 +1207,86 @@ selfintro:
     note: AI가 만든 글 중 내가 책임지기 어려운 문장을 찾아내고 내 말로 바꾸는 자리 — 자기검증 카드와 강한 매칭
   resourceCosts:
     A1R1:
-      time: 50
-      energy: 44
+      time: 48
+      energy: 42
     A1R2:
-      time: 55
-      energy: 48
+      time: 54
+      energy: 47
     A1R3:
       time: 62
-      energy: 53
+      energy: 55
     A2R1:
-      time: 48
-      energy: 41
+      time: 47
+      energy: 42
     A2R2:
       time: 53
-      energy: 45
+      energy: 47
     A2R3:
-      time: 60
-      energy: 50
+      time: 61
+      energy: 55
     A3R1:
-      time: 50
-      energy: 41
+      time: 43
+      energy: 38
     A3R2:
-      time: 55
-      energy: 45
+      time: 49
+      energy: 43
     A3R3:
-      time: 62
-      energy: 50
+      time: 57
+      energy: 51
     B1R1:
-      time: 43
-      energy: 36
+      time: 27
+      energy: 23
     B1R2:
-      time: 48
-      energy: 40
+      time: 33
+      energy: 28
     B1R3:
-      time: 55
-      energy: 45
-    B2R1:
-      time: 46
-      energy: 38
-    B2R2:
-      time: 51
-      energy: 42
-    B2R3:
-      time: 58
-      energy: 47
-    B3R1:
-      time: 48
-      energy: 38
-    B3R2:
-      time: 53
-      energy: 42
-    B3R3:
-      time: 60
-      energy: 47
-    C1R1:
-      time: 40
-      energy: 34
-    C1R2:
-      time: 45
-      energy: 38
-    C1R3:
-      time: 52
-      energy: 43
-    C2R1:
-      time: 43
+      time: 41
       energy: 36
+    B2R1:
+      time: 28
+      energy: 24
+    B2R2:
+      time: 34
+      energy: 29
+    B2R3:
+      time: 42
+      energy: 37
+    B3R1:
+      time: 30
+      energy: 25
+    B3R2:
+      time: 36
+      energy: 30
+    B3R3:
+      time: 44
+      energy: 38
+    C1R1:
+      time: 16
+      energy: 13
+    C1R2:
+      time: 22
+      energy: 18
+    C1R3:
+      time: 30
+      energy: 26
+    C2R1:
+      time: 18
+      energy: 15
     C2R2:
-      time: 48
-      energy: 40
+      time: 24
+      energy: 20
     C2R3:
-      time: 55
-      energy: 45
+      time: 32
+      energy: 28
     C3R1:
-      time: 48
-      energy: 39
+      time: 27
+      energy: 23
     C3R2:
-      time: 53
-      energy: 43
+      time: 33
+      energy: 28
     C3R3:
-      time: 60
-      energy: 48
+      time: 41
+      energy: 36
   expRewards:
     A1R1: 25
     A1R2: 27
@@ -1436,52 +1436,52 @@ selfintro:
   stageCosts:
     tier1:
       A:
-        time: 19
-        energy: 17
+        time: 20
+        energy: 18
       B:
-        time: 17
-        energy: 14
+        time: 10
+        energy: 8
       C:
-        time: 14
-        energy: 12
+        time: 6
+        energy: 5
     tier2:
       A1:
-        time: 19
-        energy: 17
+        time: 23
+        energy: 20
       A2:
-        time: 17
-        energy: 14
-      A3:
-        time: 19
-        energy: 14
-      B1:
-        time: 14
-        energy: 12
-      B2:
-        time: 17
-        energy: 14
-      B3:
-        time: 19
-        energy: 14
-      C1:
-        time: 14
-        energy: 12
-      C2:
-        time: 17
-        energy: 14
-      C3:
         time: 22
-        energy: 17
+        energy: 20
+      A3:
+        time: 18
+        energy: 16
+      B1:
+        time: 12
+        energy: 11
+      B2:
+        time: 13
+        energy: 12
+      B3:
+        time: 15
+        energy: 13
+      C1:
+        time: 5
+        energy: 4
+      C2:
+        time: 7
+        energy: 6
+      C3:
+        time: 16
+        energy: 14
     review:
       R1:
-        time: 12
-        energy: 10
+        time: 5
+        energy: 4
       R2:
-        time: 17
-        energy: 14
+        time: 11
+        energy: 9
       R3:
-        time: 24
-        energy: 19
+        time: 19
+        energy: 17
   reportData:
     A1R1:
       pathSummary: 내 이야기 찾기 → 내 단어로 쓰기 → 그대로 진행하기
@@ -2985,86 +2985,86 @@ groupwork:
     note: 친구가 써 준 부분을 자기 말로 다시 잡아 발표하는 자리 — 소통능력 카드와 강한 매칭
   resourceCosts:
     A1R1:
-      time: 53
-      energy: 44
+      time: 47
+      energy: 43
     A1R2:
-      time: 58
+      time: 53
       energy: 48
     A1R3:
-      time: 65
-      energy: 53
+      time: 64
+      energy: 59
     A2R1:
-      time: 51
-      energy: 41
+      time: 46
+      energy: 42
     A2R2:
-      time: 56
-      energy: 45
+      time: 52
+      energy: 47
     A2R3:
       time: 63
-      energy: 50
+      energy: 58
     A3R1:
-      time: 53
+      time: 48
       energy: 44
     A3R2:
-      time: 58
-      energy: 48
+      time: 54
+      energy: 49
     A3R3:
       time: 65
-      energy: 53
+      energy: 60
     B1R1:
-      time: 43
-      energy: 36
+      time: 25
+      energy: 20
     B1R2:
-      time: 48
-      energy: 40
+      time: 31
+      energy: 25
     B1R3:
-      time: 55
-      energy: 45
+      time: 42
+      energy: 36
     B2R1:
-      time: 46
-      energy: 38
+      time: 24
+      energy: 19
     B2R2:
-      time: 51
-      energy: 42
+      time: 30
+      energy: 24
     B2R3:
-      time: 58
-      energy: 47
+      time: 41
+      energy: 35
     B3R1:
-      time: 48
-      energy: 38
+      time: 30
+      energy: 26
     B3R2:
-      time: 53
-      energy: 42
+      time: 36
+      energy: 31
     B3R3:
-      time: 60
-      energy: 47
+      time: 47
+      energy: 42
     C1R1:
-      time: 40
-      energy: 34
+      time: 38
+      energy: 33
     C1R2:
-      time: 45
+      time: 44
       energy: 38
     C1R3:
-      time: 52
-      energy: 43
-    C2R1:
-      time: 43
-      energy: 36
-    C2R2:
-      time: 48
-      energy: 40
-    C2R3:
       time: 55
-      energy: 45
-    C3R1:
-      time: 48
+      energy: 49
+    C2R1:
+      time: 27
+      energy: 23
+    C2R2:
+      time: 33
+      energy: 28
+    C2R3:
+      time: 44
       energy: 39
+    C3R1:
+      time: 36
+      energy: 31
     C3R2:
-      time: 53
-      energy: 43
+      time: 42
+      energy: 36
     C3R3:
-      time: 60
-      energy: 48
+      time: 53
+      energy: 47
   expRewards:
     A1R1: 25
     A1R2: 27
@@ -3218,51 +3218,51 @@ groupwork:
     tier1:
       A:
         time: 22
-        energy: 17
+        energy: 20
       B:
-        time: 17
-        energy: 14
+        time: 11
+        energy: 9
       C:
-        time: 14
-        energy: 12
+        time: 15
+        energy: 13
     tier2:
       A1:
-        time: 19
-        energy: 17
+        time: 20
+        energy: 19
       A2:
-        time: 17
-        energy: 14
+        time: 19
+        energy: 18
       A3:
-        time: 19
-        energy: 17
+        time: 21
+        energy: 20
       B1:
-        time: 14
-        energy: 12
+        time: 9
+        energy: 7
       B2:
-        time: 17
-        energy: 14
+        time: 8
+        energy: 6
       B3:
-        time: 19
-        energy: 14
-      C1:
         time: 14
-        energy: 12
+        energy: 13
+      C1:
+        time: 18
+        energy: 16
       C2:
-        time: 17
-        energy: 14
+        time: 7
+        energy: 6
       C3:
-        time: 22
-        energy: 17
+        time: 16
+        energy: 14
     review:
       R1:
-        time: 12
-        energy: 10
+        time: 5
+        energy: 4
       R2:
-        time: 17
-        energy: 14
+        time: 11
+        energy: 9
       R3:
-        time: 24
-        energy: 19
+        time: 22
+        energy: 20
   reportData:
     A1R1:
       pathSummary: 모둠 방향 맞추기 → 발표 질문 정하기 → 그대로 진행하기
@@ -4764,86 +4764,86 @@ eorinwangja:
     note: 다른 매체로 통과한 부분과 지금 자기 감상을 분리해 다시 정리하는 자리 — 해석능력 카드와 강한 매칭
   resourceCosts:
     A1R1:
-      time: 60
-      energy: 48
-    A1R2:
-      time: 67
-      energy: 55
-    A1R3:
-      time: 74
-      energy: 60
-    A2R1:
       time: 55
-      energy: 46
+      energy: 49
+    A1R2:
+      time: 61
+      energy: 54
+    A1R3:
+      time: 72
+      energy: 65
+    A2R1:
+      time: 52
+      energy: 47
     A2R2:
-      time: 62
-      energy: 53
+      time: 58
+      energy: 52
     A2R3:
       time: 69
-      energy: 58
+      energy: 63
     A3R1:
-      time: 58
-      energy: 46
+      time: 54
+      energy: 49
     A3R2:
-      time: 65
-      energy: 53
+      time: 60
+      energy: 54
     A3R3:
-      time: 72
-      energy: 58
+      time: 71
+      energy: 65
     B1R1:
-      time: 48
-      energy: 36
+      time: 27
+      energy: 22
     B1R2:
-      time: 55
-      energy: 43
+      time: 33
+      energy: 27
     B1R3:
-      time: 62
-      energy: 48
-    B2R1:
-      time: 50
-      energy: 41
-    B2R2:
-      time: 57
-      energy: 48
-    B2R3:
-      time: 64
-      energy: 53
-    B3R1:
-      time: 53
-      energy: 41
-    B3R2:
-      time: 60
-      energy: 48
-    B3R3:
-      time: 67
-      energy: 53
-    C1R1:
-      time: 46
-      energy: 36
-    C1R2:
-      time: 53
-      energy: 43
-    C1R3:
-      time: 60
-      energy: 48
-    C2R1:
-      time: 48
+      time: 44
       energy: 38
+    B2R1:
+      time: 29
+      energy: 24
+    B2R2:
+      time: 35
+      energy: 29
+    B2R3:
+      time: 46
+      energy: 40
+    B3R1:
+      time: 26
+      energy: 21
+    B3R2:
+      time: 32
+      energy: 26
+    B3R3:
+      time: 43
+      energy: 37
+    C1R1:
+      time: 16
+      energy: 12
+    C1R2:
+      time: 22
+      energy: 17
+    C1R3:
+      time: 33
+      energy: 28
+    C2R1:
+      time: 18
+      energy: 14
     C2R2:
-      time: 55
-      energy: 45
+      time: 24
+      energy: 19
     C2R3:
-      time: 62
-      energy: 50
+      time: 35
+      energy: 30
     C3R1:
-      time: 53
-      energy: 43
+      time: 17
+      energy: 13
     C3R2:
-      time: 60
-      energy: 50
+      time: 23
+      energy: 18
     C3R3:
-      time: 67
-      energy: 55
+      time: 34
+      energy: 29
   expRewards:
     A1R1: 25
     A1R2: 25
@@ -5004,51 +5004,51 @@ eorinwangja:
     tier1:
       A:
         time: 24
-        energy: 19
+        energy: 22
       B:
-        time: 19
-        energy: 14
+        time: 9
+        energy: 7
       C:
-        time: 17
-        energy: 14
+        time: 5
+        energy: 4
     tier2:
       A1:
-        time: 24
-        energy: 19
+        time: 26
+        energy: 23
       A2:
-        time: 19
-        energy: 17
+        time: 23
+        energy: 21
       A3:
-        time: 22
-        energy: 17
+        time: 25
+        energy: 23
       B1:
-        time: 17
-        energy: 12
+        time: 13
+        energy: 11
       B2:
-        time: 19
-        energy: 17
+        time: 15
+        energy: 13
       B3:
-        time: 22
-        energy: 17
-      C1:
-        time: 17
-        energy: 12
-      C2:
-        time: 19
-        energy: 14
-      C3:
-        time: 24
-        energy: 19
-    review:
-      R1:
         time: 12
         energy: 10
+      C1:
+        time: 6
+        energy: 4
+      C2:
+        time: 8
+        energy: 6
+      C3:
+        time: 7
+        energy: 5
+    review:
+      R1:
+        time: 5
+        energy: 4
       R2:
-        time: 19
-        energy: 17
+        time: 11
+        energy: 9
       R3:
-        time: 26
-        energy: 22
+        time: 22
+        energy: 20
   reportData:
     A1R1:
       pathSummary: 책 직접 읽기 → 처음부터 읽기 → 그대로 진행하기
@@ -6483,86 +6483,86 @@ career:
     note: 친구 말과 자기 경험을 갈라 놓고 자기 자리를 회수하는 자리 — 자기검증 카드와 강한 매칭
   resourceCosts:
     A1R1:
-      time: 56
-      energy: 44
-    A1R2:
-      time: 63
-      energy: 48
-    A1R3:
-      time: 68
-      energy: 53
-    A2R1:
-      time: 53
-      energy: 41
-    A2R2:
-      time: 60
-      energy: 45
-    A2R3:
-      time: 65
-      energy: 50
-    A3R1:
-      time: 53
-      energy: 44
-    A3R2:
-      time: 60
-      energy: 48
-    A3R3:
-      time: 65
-      energy: 53
-    B1R1:
       time: 43
-      energy: 36
-    B1R2:
-      time: 50
-      energy: 40
-    B1R3:
-      time: 55
-      energy: 45
-    B2R1:
-      time: 48
       energy: 38
-    B2R2:
-      time: 55
-      energy: 42
-    B2R3:
-      time: 60
-      energy: 47
-    B3R1:
+    A1R2:
+      time: 49
+      energy: 43
+    A1R3:
+      time: 58
+      energy: 52
+    A2R1:
+      time: 42
+      energy: 38
+    A2R2:
       time: 48
-      energy: 41
-    B3R2:
-      time: 55
-      energy: 45
-    B3R3:
-      time: 60
-      energy: 50
-    C1R1:
+      energy: 43
+    A2R3:
+      time: 57
+      energy: 52
+    A3R1:
+      time: 47
+      energy: 42
+    A3R2:
+      time: 53
+      energy: 47
+    A3R3:
+      time: 62
+      energy: 56
+    B1R1:
+      time: 25
+      energy: 20
+    B1R2:
+      time: 31
+      energy: 25
+    B1R3:
       time: 40
       energy: 34
-    C1R2:
-      time: 47
+    B2R1:
+      time: 29
+      energy: 24
+    B2R2:
+      time: 35
+      energy: 29
+    B2R3:
+      time: 44
       energy: 38
-    C1R3:
-      time: 52
-      energy: 43
-    C2R1:
-      time: 43
-      energy: 36
-    C2R2:
-      time: 50
-      energy: 40
-    C2R3:
-      time: 55
-      energy: 45
-    C3R1:
-      time: 48
+    B3R1:
+      time: 32
+      energy: 27
+    B3R2:
+      time: 38
+      energy: 32
+    B3R3:
+      time: 47
       energy: 41
+    C1R1:
+      time: 30
+      energy: 24
+    C1R2:
+      time: 36
+      energy: 29
+    C1R3:
+      time: 45
+      energy: 38
+    C2R1:
+      time: 25
+      energy: 21
+    C2R2:
+      time: 31
+      energy: 26
+    C2R3:
+      time: 40
+      energy: 35
+    C3R1:
+      time: 29
+      energy: 23
     C3R2:
-      time: 55
-      energy: 45
+      time: 35
+      energy: 28
     C3R3:
-      time: 60
-      energy: 50
+      time: 44
+      energy: 37
   expRewards:
     A1R1: 25
     A1R2: 27
@@ -6712,52 +6712,52 @@ career:
   stageCosts:
     tier1:
       A:
-        time: 22
-        energy: 17
+        time: 20
+        energy: 18
       B:
-        time: 17
-        energy: 14
-      C:
-        time: 14
-        energy: 12
-    tier2:
-      A1:
-        time: 22
-        energy: 17
-      A2:
-        time: 19
-        energy: 14
-      A3:
-        time: 19
-        energy: 17
-      B1:
-        time: 14
-        energy: 12
-      B2:
-        time: 19
-        energy: 14
-      B3:
-        time: 19
-        energy: 17
-      C1:
-        time: 14
-        energy: 12
-      C2:
-        time: 17
-        energy: 14
-      C3:
-        time: 22
-        energy: 19
-    review:
-      R1:
         time: 12
         energy: 10
+      C:
+        time: 12
+        energy: 10
+    tier2:
+      A1:
+        time: 18
+        energy: 16
+      A2:
+        time: 17
+        energy: 16
+      A3:
+        time: 22
+        energy: 20
+      B1:
+        time: 8
+        energy: 6
+      B2:
+        time: 12
+        energy: 10
+      B3:
+        time: 15
+        energy: 13
+      C1:
+        time: 13
+        energy: 10
+      C2:
+        time: 8
+        energy: 7
+      C3:
+        time: 12
+        energy: 9
+    review:
+      R1:
+        time: 5
+        energy: 4
       R2:
-        time: 19
-        energy: 14
+        time: 11
+        energy: 9
       R3:
-        time: 24
-        energy: 19
+        time: 20
+        energy: 18
   reportData:
     A1R1:
       pathSummary: 내 관심에서 시작하기 → 좋아하는 것 적기 → 그대로 진행하기
@@ -8189,86 +8189,86 @@ studyplan:
     note: 작년 자기 자료에서 올해 약점을 짚어 시간을 다시 배치하는 자리 — 학습설계 카드와 강한 매칭
   resourceCosts:
     A1R1:
-      time: 50
-      energy: 44
+      time: 52
+      energy: 47
     A1R2:
-      time: 55
-      energy: 48
+      time: 58
+      energy: 52
     A1R3:
-      time: 60
-      energy: 53
+      time: 69
+      energy: 63
     A2R1:
-      time: 48
-      energy: 41
+      time: 47
+      energy: 42
     A2R2:
       time: 53
-      energy: 45
+      energy: 47
     A2R3:
-      time: 58
-      energy: 50
+      time: 64
+      energy: 58
     A3R1:
-      time: 50
-      energy: 41
-    A3R2:
-      time: 55
-      energy: 45
-    A3R3:
-      time: 60
-      energy: 50
-    B1R1:
-      time: 43
-      energy: 34
-    B1R2:
-      time: 48
-      energy: 38
-    B1R3:
-      time: 53
-      energy: 43
-    B2R1:
-      time: 46
-      energy: 36
-    B2R2:
       time: 51
-      energy: 40
+      energy: 46
+    A3R2:
+      time: 57
+      energy: 51
+    A3R3:
+      time: 68
+      energy: 62
+    B1R1:
+      time: 25
+      energy: 20
+    B1R2:
+      time: 31
+      energy: 25
+    B1R3:
+      time: 42
+      energy: 36
+    B2R1:
+      time: 27
+      energy: 22
+    B2R2:
+      time: 33
+      energy: 27
     B2R3:
-      time: 56
-      energy: 45
-    B3R1:
-      time: 48
-      energy: 36
-    B3R2:
-      time: 53
-      energy: 40
-    B3R3:
-      time: 58
-      energy: 45
-    C1R1:
-      time: 38
-      energy: 32
-    C1R2:
-      time: 43
-      energy: 36
-    C1R3:
-      time: 48
-      energy: 41
-    C2R1:
-      time: 43
-      energy: 34
-    C2R2:
-      time: 48
+      time: 44
       energy: 38
-    C2R3:
-      time: 53
-      energy: 43
-    C3R1:
+    B3R1:
+      time: 31
+      energy: 27
+    B3R2:
+      time: 37
+      energy: 32
+    B3R3:
       time: 48
-      energy: 39
-    C3R2:
-      time: 53
       energy: 43
+    C1R1:
+      time: 24
+      energy: 19
+    C1R2:
+      time: 30
+      energy: 24
+    C1R3:
+      time: 41
+      energy: 35
+    C2R1:
+      time: 28
+      energy: 23
+    C2R2:
+      time: 34
+      energy: 28
+    C2R3:
+      time: 45
+      energy: 39
+    C3R1:
+      time: 21
+      energy: 17
+    C3R2:
+      time: 27
+      energy: 22
     C3R3:
-      time: 58
-      energy: 48
+      time: 38
+      energy: 33
   expRewards:
     A1R1: 25
     A1R2: 27
@@ -8421,52 +8421,52 @@ studyplan:
   stageCosts:
     tier1:
       A:
-        time: 19
-        energy: 17
+        time: 22
+        energy: 20
       B:
-        time: 17
-        energy: 12
+        time: 11
+        energy: 9
       C:
-        time: 14
-        energy: 12
+        time: 10
+        energy: 8
     tier2:
       A1:
+        time: 24
+        energy: 22
+      A2:
         time: 19
         energy: 17
-      A2:
-        time: 17
-        energy: 14
       A3:
-        time: 19
-        energy: 14
+        time: 23
+        energy: 21
       B1:
-        time: 14
-        energy: 12
+        time: 8
+        energy: 6
       B2:
-        time: 17
-        energy: 14
+        time: 10
+        energy: 8
       B3:
-        time: 19
-        energy: 14
+        time: 14
+        energy: 13
       C1:
+        time: 8
+        energy: 6
+      C2:
         time: 12
         energy: 10
-      C2:
-        time: 17
-        energy: 12
       C3:
-        time: 22
-        energy: 17
+        time: 5
+        energy: 4
     review:
       R1:
+        time: 6
+        energy: 5
+      R2:
         time: 12
         energy: 10
-      R2:
-        time: 17
-        energy: 14
       R3:
-        time: 22
-        energy: 19
+        time: 23
+        energy: 21
   reportData:
     A1R1:
       pathSummary: 내 실력 확인하기 → 약한 단원 찾기 → 그대로 진행하기
