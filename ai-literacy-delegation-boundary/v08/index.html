@@ -11254,29 +11254,39 @@ function showFinalReport(){
       var stitle=(scObj&&scObj.title)||cc.scenarioTitle||cc.scenario||'';
       cardGroups[cc.label].sources.push(stitle);
     }
-    h+='<div class="report-cards-grid">';
-    Object.keys(cardGroups).sort(function(a,b){
+    // 정렬: 인간중심 → 도메인 → 성장 (각 그룹 내 count desc)
+    var sortedLabels=Object.keys(cardGroups).sort(function(a,b){
+      var ta=a.match(/^\[/)?0:((typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthCards&&TEXTS.growthCards[a])?2:1);
+      var tb=b.match(/^\[/)?0:((typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthCards&&TEXTS.growthCards[b])?2:1);
+      if(ta!==tb)return ta-tb;
       return cardGroups[b].count - cardGroups[a].count || a.localeCompare(b,'ko');
-    }).forEach(function(label){
+    });
+    h+='<div class="report-cards-grid">';
+    sortedLabels.forEach(function(label){
       var g=cardGroups[label];
       var color=_cardColor(label);
-      var bg=_cardBg(label);
       var seen={},uniqSrc=[];
       for(var si=0;si<g.sources.length;si++){var s=g.sources[si];if(!seen[s]){seen[s]=1;uniqSrc.push(s);}}
       var axisMatch=label.match(/^\[(.+?)\]\s*(.+)/);
-      var rowBg=bg?'background:'+bg+';':'';
-      var rowBorder=bg?'border:1.5px solid rgba(0,0,0,0.06);':'';
-      h+='<div class="report-card-row" style="'+rowBg+rowBorder+'">';
-      h+='<div class="report-card-row-head">';
-      h+='<span class="report-card-count" style="background:'+color+'">x'+g.count+'</span>';
       if(axisMatch){
-        h+='<span class="report-card-label"><span style="font-size:10px;color:'+(_axisMeta(axisMatch[1]).color||'#888')+';font-weight:700;display:block;margin-bottom:1px;">'+_esc(axisMatch[1])+'</span>'+_esc(axisMatch[2])+'</span>';
+        // 인간중심: 풀 배경색 + 흰 글씨 (카드 수집 시와 동일)
+        var am=_axisMeta(axisMatch[1]);
+        h+='<div class="report-card-row" style="background:'+am.color+';border:1.5px solid '+am.color+';border-radius:6px;">';
+        h+='<div class="report-card-row-head">';
+        h+='<span class="report-card-count" style="background:rgba(255,255,255,0.25);color:#fff;">x'+g.count+'</span>';
+        h+='<span class="report-card-label" style="color:#fff;"><span style="font-size:15px;font-weight:800;display:block;margin-bottom:2px;">'+_esc(axisMatch[1])+'</span><span style="font-size:11px;font-weight:400;opacity:0.8;">'+_esc(axisMatch[2])+'</span></span>';
+        h+='</div>';
+        h+='<div class="report-card-source" style="background:rgba(0,0,0,0.08);border-top:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.85);">'+_esc(uniqSrc.join(', '))+'</div>';
+        h+='</div>';
       }else{
+        h+='<div class="report-card-row">';
+        h+='<div class="report-card-row-head">';
+        h+='<span class="report-card-count" style="background:'+color+'">x'+g.count+'</span>';
         h+='<span class="report-card-label">'+_esc(label)+'</span>';
+        h+='</div>';
+        h+='<div class="report-card-source">'+_esc(uniqSrc.join(', '))+'</div>';
+        h+='</div>';
       }
-      h+='</div>';
-      h+='<div class="report-card-source">'+_esc(uniqSrc.join(', '))+'</div>';
-      h+='</div>';
     });
     h+='</div>';
   }
