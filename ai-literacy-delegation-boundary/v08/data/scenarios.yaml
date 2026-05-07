@@ -1234,32 +1234,32 @@ selfintro:
       time: 57
       energy: 51
     B1R1:
-      time: 27
-      energy: 23
+      time: 16
+      energy: 15
     B1R2:
-      time: 33
-      energy: 28
+      time: 22
+      energy: 20
     B1R3:
-      time: 41
-      energy: 36
-    B2R1:
-      time: 28
-      energy: 24
-    B2R2:
-      time: 34
-      energy: 29
-    B2R3:
-      time: 42
-      energy: 37
-    B3R1:
       time: 30
-      energy: 25
+      energy: 28
+    B2R1:
+      time: 17
+      energy: 16
+    B2R2:
+      time: 23
+      energy: 21
+    B2R3:
+      time: 31
+      energy: 29
+    B3R1:
+      time: 19
+      energy: 17
     B3R2:
-      time: 36
-      energy: 30
+      time: 25
+      energy: 22
     B3R3:
-      time: 44
-      energy: 38
+      time: 33
+      energy: 30
     C1R1:
       time: 16
       energy: 13
@@ -1439,8 +1439,8 @@ selfintro:
         time: 20
         energy: 18
       B:
-        time: 10
-        energy: 8
+        time: 5
+        energy: 5
       C:
         time: 6
         energy: 5
@@ -1455,14 +1455,14 @@ selfintro:
         time: 18
         energy: 16
       B1:
-        time: 12
-        energy: 11
+        time: 6
+        energy: 6
       B2:
-        time: 13
-        energy: 12
+        time: 7
+        energy: 7
       B3:
-        time: 15
-        energy: 13
+        time: 9
+        energy: 8
       C1:
         time: 5
         energy: 4
@@ -3012,32 +3012,32 @@ groupwork:
       time: 65
       energy: 60
     B1R1:
-      time: 25
-      energy: 20
+      time: 14
+      energy: 13
     B1R2:
-      time: 31
-      energy: 25
+      time: 20
+      energy: 18
     B1R3:
-      time: 42
-      energy: 36
+      time: 31
+      energy: 29
     B2R1:
-      time: 24
-      energy: 19
+      time: 14
+      energy: 13
     B2R2:
-      time: 30
-      energy: 24
+      time: 20
+      energy: 18
     B2R3:
-      time: 41
-      energy: 35
+      time: 31
+      energy: 29
     B3R1:
-      time: 30
-      energy: 26
+      time: 19
+      energy: 18
     B3R2:
-      time: 36
-      energy: 31
+      time: 25
+      energy: 23
     B3R3:
-      time: 47
-      energy: 42
+      time: 36
+      energy: 34
     C1R1:
       time: 38
       energy: 33
@@ -3220,8 +3220,8 @@ groupwork:
         time: 22
         energy: 20
       B:
-        time: 11
-        energy: 9
+        time: 5
+        energy: 5
       C:
         time: 15
         energy: 13
@@ -3236,14 +3236,14 @@ groupwork:
         time: 21
         energy: 20
       B1:
-        time: 9
-        energy: 7
+        time: 4
+        energy: 4
       B2:
-        time: 8
-        energy: 6
+        time: 4
+        energy: 4
       B3:
-        time: 14
-        energy: 13
+        time: 9
+        energy: 9
       C1:
         time: 18
         energy: 16
@@ -4791,32 +4791,32 @@ eorinwangja:
       time: 71
       energy: 65
     B1R1:
-      time: 27
-      energy: 22
+      time: 15
+      energy: 13
     B1R2:
-      time: 33
-      energy: 27
+      time: 21
+      energy: 18
     B1R3:
-      time: 44
-      energy: 38
-    B2R1:
-      time: 29
-      energy: 24
-    B2R2:
-      time: 35
-      energy: 29
-    B2R3:
-      time: 46
-      energy: 40
-    B3R1:
-      time: 26
-      energy: 21
-    B3R2:
       time: 32
-      energy: 26
+      energy: 29
+    B2R1:
+      time: 16
+      energy: 15
+    B2R2:
+      time: 22
+      energy: 20
+    B2R3:
+      time: 33
+      energy: 31
+    B3R1:
+      time: 14
+      energy: 13
+    B3R2:
+      time: 20
+      energy: 18
     B3R3:
-      time: 43
-      energy: 37
+      time: 31
+      energy: 29
     C1R1:
       time: 16
       energy: 12
@@ -5006,8 +5006,8 @@ eorinwangja:
         time: 24
         energy: 22
       B:
-        time: 9
-        energy: 7
+        time: 4
+        energy: 4
       C:
         time: 5
         energy: 4
@@ -5022,14 +5022,14 @@ eorinwangja:
         time: 25
         energy: 23
       B1:
-        time: 13
-        energy: 11
+        time: 6
+        energy: 5
       B2:
-        time: 15
-        energy: 13
+        time: 7
+        energy: 7
       B3:
-        time: 12
-        energy: 10
+        time: 5
+        energy: 5
       C1:
         time: 6
         energy: 4
@@ -6510,32 +6510,32 @@ career:
       time: 62
       energy: 56
     B1R1:
-      time: 25
-      energy: 20
+      time: 15
+      energy: 14
     B1R2:
-      time: 31
-      energy: 25
+      time: 21
+      energy: 19
     B1R3:
-      time: 40
-      energy: 34
+      time: 30
+      energy: 28
     B2R1:
-      time: 29
-      energy: 24
+      time: 19
+      energy: 17
     B2R2:
-      time: 35
-      energy: 29
+      time: 25
+      energy: 22
     B2R3:
-      time: 44
-      energy: 38
+      time: 34
+      energy: 31
     B3R1:
-      time: 32
-      energy: 27
+      time: 20
+      energy: 18
     B3R2:
-      time: 38
-      energy: 32
+      time: 26
+      energy: 23
     B3R3:
-      time: 47
-      energy: 41
+      time: 35
+      energy: 32
     C1R1:
       time: 30
       energy: 24
@@ -6715,8 +6715,8 @@ career:
         time: 20
         energy: 18
       B:
-        time: 12
-        energy: 10
+        time: 6
+        energy: 6
       C:
         time: 12
         energy: 10
@@ -6731,14 +6731,14 @@ career:
         time: 22
         energy: 20
       B1:
-        time: 8
-        energy: 6
+        time: 4
+        energy: 4
       B2:
-        time: 12
-        energy: 10
+        time: 8
+        energy: 7
       B3:
-        time: 15
-        energy: 13
+        time: 9
+        energy: 8
       C1:
         time: 13
         energy: 10
@@ -8216,32 +8216,32 @@ studyplan:
       time: 68
       energy: 62
     B1R1:
-      time: 25
-      energy: 20
+      time: 15
+      energy: 14
     B1R2:
-      time: 31
-      energy: 25
+      time: 21
+      energy: 19
     B1R3:
-      time: 42
-      energy: 36
+      time: 32
+      energy: 30
     B2R1:
-      time: 27
-      energy: 22
+      time: 18
+      energy: 17
     B2R2:
-      time: 33
-      energy: 27
+      time: 24
+      energy: 22
     B2R3:
-      time: 44
-      energy: 38
+      time: 35
+      energy: 33
     B3R1:
-      time: 31
-      energy: 27
+      time: 21
+      energy: 19
     B3R2:
-      time: 37
-      energy: 32
+      time: 27
+      energy: 24
     B3R3:
-      time: 48
-      energy: 43
+      time: 38
+      energy: 35
     C1R1:
       time: 24
       energy: 19
@@ -8424,8 +8424,8 @@ studyplan:
         time: 22
         energy: 20
       B:
-        time: 11
-        energy: 9
+        time: 5
+        energy: 5
       C:
         time: 10
         energy: 8
@@ -8440,14 +8440,14 @@ studyplan:
         time: 23
         energy: 21
       B1:
-        time: 8
-        energy: 6
+        time: 4
+        energy: 4
       B2:
-        time: 10
-        energy: 8
+        time: 7
+        energy: 7
       B3:
-        time: 14
-        energy: 13
+        time: 10
+        energy: 9
       C1:
         time: 8
         energy: 6
