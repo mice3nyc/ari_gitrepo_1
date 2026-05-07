@@ -338,6 +338,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: 내 이야기 찾기 → 내 단어로 쓰기 → 그대로 진행하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI보다 먼저 내 이야기를 떠올렸다.
+      cartoonCaption3: 내가 고른 단어에서 글을 시작했다.
+      cartoonCaption4: 내가 고른 단어로 시작한 자기소개
+      cartoonCaption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reportReflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      reportCardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력'
+      reportStrengthTags:
+      - 주체성
+      - 자기이해, 표현력
+      reportGrowthTags: 검토 필요
     A1R2:
       score: 95
       grade: S
@@ -357,6 +369,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: 내 이야기 찾기 → 내 단어로 쓰기 → 한 번 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI보다 먼저 내 이야기를 떠올렸다.
+      cartoonCaption3: 내가 고른 단어에서 글을 시작했다.
+      cartoonCaption4: 내가 고른 단어로 시작한 자기소개
+      cartoonCaption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reportReflection: 내 이야기를 먼저 세우고, 마지막에 책임질 수 있는 말만 남겼다.
+      reportCardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력 · 검토력'
+      reportStrengthTags:
+      - 주체성
+      - 자기이해, 표현력, 검토력
+      reportGrowthTags: 확장 가능
     A1R3:
       score: 98
       grade: S
@@ -376,6 +400,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: 내 이야기 찾기 → 내 단어로 쓰기 → 깊게 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI보다 먼저 내 이야기를 떠올렸다.
+      cartoonCaption3: 내가 고른 단어에서 글을 시작했다.
+      cartoonCaption4: 내가 고른 단어로 시작한 자기소개
+      cartoonCaption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reportReflection: 내 이야기를 먼저 세우고, 마지막에 책임질 수 있는 말만 남겼다.
+      reportCardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력 · 검토력'
+      reportStrengthTags:
+      - 주체성
+      - 자기이해, 표현력, 검토력
+      reportGrowthTags: 확장 가능
     A2R1:
       score: 70
       grade: C
@@ -394,6 +430,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: 내 이야기 찾기 → 내 경험으로 쓰기 → 그대로 진행하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI보다 먼저 내 이야기를 떠올렸다.
+      cartoonCaption3: 내 경험을 짧은 이야기로 옮겼다.
+      cartoonCaption4: 실제 경험이 들어간 자기소개
+      cartoonCaption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reportReflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      reportCardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력'
+      reportStrengthTags:
+      - 주체성
+      - 자기이해, 표현력
+      reportGrowthTags: 검토 필요
     A2R2:
       score: 75
       grade: B
@@ -412,6 +460,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: 내 이야기 찾기 → 내 경험으로 쓰기 → 한 번 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI보다 먼저 내 이야기를 떠올렸다.
+      cartoonCaption3: 내 경험을 짧은 이야기로 옮겼다.
+      cartoonCaption4: 실제 경험이 들어간 자기소개
+      cartoonCaption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reportReflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      reportCardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력'
+      reportStrengthTags:
+      - 주체성
+      - 자기이해, 표현력
+      reportGrowthTags: 확장 가능
     A2R3:
       score: 81
       grade: B
@@ -430,6 +490,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: 내 이야기 찾기 → 내 경험으로 쓰기 → 깊게 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI보다 먼저 내 이야기를 떠올렸다.
+      cartoonCaption3: 내 경험을 짧은 이야기로 옮겼다.
+      cartoonCaption4: 실제 경험이 들어간 자기소개
+      cartoonCaption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reportReflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      reportCardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력'
+      reportStrengthTags:
+      - 주체성
+      - 자기이해, 표현력
+      reportGrowthTags: 확장 가능
     A3R1:
       score: 48
       grade: D
@@ -446,6 +518,16 @@ selfintro:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 내 이야기 찾기 → 먼저 초안 쓰기 → 그대로 진행하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI보다 먼저 내 이야기를 떠올렸다.
+      cartoonCaption3: 서툴어도 먼저 내 초안을 만들었다.
+      cartoonCaption4: 내 말투가 살아 있는 초안
+      cartoonCaption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reportReflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     A3R2:
       score: 65
       grade: C
@@ -464,6 +546,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: 내 이야기 찾기 → 먼저 초안 쓰기 → 한 번 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI보다 먼저 내 이야기를 떠올렸다.
+      cartoonCaption3: 서툴어도 먼저 내 초안을 만들었다.
+      cartoonCaption4: 내 말투가 살아 있는 초안
+      cartoonCaption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reportReflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      reportCardSummary: '[성찰하기] 성찰적 사고 · 표현력 · 자기이해'
+      reportStrengthTags:
+      - 성찰적 사고
+      - 표현력, 자기이해
+      reportGrowthTags: 직접 근거 보강
     A3R3:
       score: 75
       grade: B
@@ -482,6 +576,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: 내 이야기 찾기 → 먼저 초안 쓰기 → 깊게 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI보다 먼저 내 이야기를 떠올렸다.
+      cartoonCaption3: 서툴어도 먼저 내 초안을 만들었다.
+      cartoonCaption4: 내 말투가 살아 있는 초안
+      cartoonCaption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reportReflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      reportCardSummary: '[성찰하기] 성찰적 사고 · 표현력 · 자기이해'
+      reportStrengthTags:
+      - 성찰적 사고
+      - 표현력, 자기이해
+      reportGrowthTags: 확장 가능
     B1R1:
       score: 15
       grade: D
@@ -498,6 +604,16 @@ selfintro:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 시작 열기 → AI 질문에 답하기 → 그대로 진행하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI의 도움으로 글의 시작을 열었다.
+      cartoonCaption3: AI 질문에 답하며 글감을 만들었다.
+      cartoonCaption4: AI 질문에서 시작한 자기소개
+      cartoonCaption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reportReflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     B1R2:
       score: 28
       grade: D
@@ -514,6 +630,16 @@ selfintro:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 시작 열기 → AI 질문에 답하기 → 한 번 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI의 도움으로 글의 시작을 열었다.
+      cartoonCaption3: AI 질문에 답하며 글감을 만들었다.
+      cartoonCaption4: AI 질문에서 시작한 자기소개
+      cartoonCaption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reportReflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     B1R3:
       score: 38
       grade: D
@@ -530,6 +656,16 @@ selfintro:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 시작 열기 → AI 질문에 답하기 → 깊게 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI의 도움으로 글의 시작을 열었다.
+      cartoonCaption3: AI 질문에 답하며 글감을 만들었다.
+      cartoonCaption4: AI 질문에서 시작한 자기소개
+      cartoonCaption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reportReflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     B2R1:
       score: 57
       grade: D
@@ -546,6 +682,16 @@ selfintro:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 시작 열기 → AI 순서 바꾸기 → 그대로 진행하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI의 도움으로 글의 시작을 열었다.
+      cartoonCaption3: AI가 준 순서에 내 이야기를 채웠다.
+      cartoonCaption4: AI 구조에 내 이야기를 채운 자기소개
+      cartoonCaption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reportReflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     B2R2:
       score: 75
       grade: B
@@ -564,6 +710,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: AI로 시작 열기 → AI 순서 바꾸기 → 한 번 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI의 도움으로 글의 시작을 열었다.
+      cartoonCaption3: AI가 준 순서에 내 이야기를 채웠다.
+      cartoonCaption4: AI 구조에 내 이야기를 채운 자기소개
+      cartoonCaption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reportReflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      reportCardSummary: '[융합하기] 맥락적 사고 · 표현력 · 자기이해'
+      reportStrengthTags:
+      - 맥락적 사고
+      - 표현력, 자기이해
+      reportGrowthTags: 확장 가능
     B2R3:
       score: 85
       grade: A
@@ -583,6 +741,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI로 시작 열기 → AI 순서 바꾸기 → 깊게 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI의 도움으로 글의 시작을 열었다.
+      cartoonCaption3: AI가 준 순서에 내 이야기를 채웠다.
+      cartoonCaption4: AI 구조에 내 이야기를 채운 자기소개
+      cartoonCaption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reportReflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      reportCardSummary: '[융합하기] 맥락적 사고 · 표현력 · 자기이해 · 검토력'
+      reportStrengthTags:
+      - 맥락적 사고
+      - 표현력, 자기이해, 검토력
+      reportGrowthTags: 확장 가능
     B3R1:
       score: 88
       grade: A
@@ -601,6 +771,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI로 시작 열기 → AI 문장과 내 메모 섞기 → 그대로 진행하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI의 도움으로 글의 시작을 열었다.
+      cartoonCaption3: AI 문장과 내 메모를 함께 놓고 골랐다.
+      cartoonCaption4: AI 문장과 내 메모가 섞인 자기소개
+      cartoonCaption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reportReflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      reportCardSummary: '[융합하기] 통합적 사고 · 표현력 · 자기이해'
+      reportStrengthTags:
+      - 통합적 사고
+      - 표현력, 자기이해
+      reportGrowthTags: 검토 필요
     B3R2:
       score: 93
       grade: A
@@ -620,6 +802,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI로 시작 열기 → AI 문장과 내 메모 섞기 → 한 번 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI의 도움으로 글의 시작을 열었다.
+      cartoonCaption3: AI 문장과 내 메모를 함께 놓고 골랐다.
+      cartoonCaption4: AI 문장과 내 메모가 섞인 자기소개
+      cartoonCaption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reportReflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      reportCardSummary: '[융합하기] 통합적 사고 · 표현력 · 자기이해 · 검토력'
+      reportStrengthTags:
+      - 통합적 사고
+      - 표현력, 자기이해, 검토력
+      reportGrowthTags: 확장 가능
     B3R3:
       score: 100
       grade: S
@@ -639,6 +833,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: AI로 시작 열기 → AI 문장과 내 메모 섞기 → 깊게 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: AI의 도움으로 글의 시작을 열었다.
+      cartoonCaption3: AI 문장과 내 메모를 함께 놓고 골랐다.
+      cartoonCaption4: AI 문장과 내 메모가 섞인 자기소개
+      cartoonCaption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reportReflection: 내 이야기를 먼저 세우고, 마지막에 책임질 수 있는 말만 남겼다.
+      reportCardSummary: '[융합하기] 통합적 사고 · 표현력 · 자기이해 · 검토력'
+      reportStrengthTags:
+      - 통합적 사고
+      - 표현력, 자기이해, 검토력
+      reportGrowthTags: 확장 가능
     C1R1:
       score: 15
       grade: D
@@ -655,6 +861,16 @@ selfintro:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI에게 맡기기 → 정보 없이 AI 초안 받기 → 그대로 진행하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      cartoonCaption3: 내 정보 없이 AI가 글을 만들게 했다.
+      cartoonCaption4: AI가 상상한 학생의 자기소개
+      cartoonCaption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reportReflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     C1R2:
       score: 28
       grade: D
@@ -671,6 +887,16 @@ selfintro:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI에게 맡기기 → 정보 없이 AI 초안 받기 → 한 번 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      cartoonCaption3: 내 정보 없이 AI가 글을 만들게 했다.
+      cartoonCaption4: AI가 상상한 학생의 자기소개
+      cartoonCaption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reportReflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C1R3:
       score: 38
       grade: D
@@ -687,6 +913,16 @@ selfintro:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI에게 맡기기 → 정보 없이 AI 초안 받기 → 깊게 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      cartoonCaption3: 내 정보 없이 AI가 글을 만들게 했다.
+      cartoonCaption4: AI가 상상한 학생의 자기소개
+      cartoonCaption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reportReflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C2R1:
       score: 57
       grade: D
@@ -703,6 +939,16 @@ selfintro:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI에게 맡기기 → 기본 정보로 AI 초안 받기 → 그대로 진행하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      cartoonCaption3: 몇 가지 정보만 넣고 AI 초안을 받았다.
+      cartoonCaption4: 내 정보가 들어간 AI 자기소개
+      cartoonCaption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reportReflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     C2R2:
       score: 65
       grade: C
@@ -721,6 +967,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: AI에게 맡기기 → 기본 정보로 AI 초안 받기 → 한 번 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      cartoonCaption3: 몇 가지 정보만 넣고 AI 초안을 받았다.
+      cartoonCaption4: 내 정보가 들어간 AI 자기소개
+      cartoonCaption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reportReflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      reportCardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력'
+      reportStrengthTags:
+      - 주체성
+      - 자기이해, 표현력
+      reportGrowthTags: 직접 근거 보강
     C2R3:
       score: 72
       grade: C
@@ -739,6 +997,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: AI에게 맡기기 → 기본 정보로 AI 초안 받기 → 깊게 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      cartoonCaption3: 몇 가지 정보만 넣고 AI 초안을 받았다.
+      cartoonCaption4: 내 정보가 들어간 AI 자기소개
+      cartoonCaption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reportReflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      reportCardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력'
+      reportStrengthTags:
+      - 주체성
+      - 자기이해, 표현력
+      reportGrowthTags: 직접 근거 보강
     C3R1:
       score: 88
       grade: A
@@ -757,6 +1027,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI에게 맡기기 → AI 글을 다시 쓰기 → 그대로 진행하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      cartoonCaption3: AI 글을 참고해 다시 내 글로 고쳤다.
+      cartoonCaption4: AI 흐름을 참고해 다시 쓴 자기소개
+      cartoonCaption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reportReflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      reportCardSummary: '[융합하기] 통합적 사고 · 표현력 · 검토력'
+      reportStrengthTags:
+      - 통합적 사고
+      - 표현력, 검토력
+      reportGrowthTags: 검토 필요
     C3R2:
       score: 93
       grade: A
@@ -775,6 +1057,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI에게 맡기기 → AI 글을 다시 쓰기 → 한 번 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      cartoonCaption3: AI 글을 참고해 다시 내 글로 고쳤다.
+      cartoonCaption4: AI 흐름을 참고해 다시 쓴 자기소개
+      cartoonCaption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reportReflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      reportCardSummary: '[융합하기] 통합적 사고 · 표현력 · 검토력'
+      reportStrengthTags:
+      - 통합적 사고
+      - 표현력, 검토력
+      reportGrowthTags: 확장 가능
     C3R3:
       score: 100
       grade: S
@@ -793,6 +1087,18 @@ selfintro:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: AI에게 맡기기 → AI 글을 다시 쓰기 → 깊게 확인하기
+      cartoonCaption1: 자기소개를 써야 하는 상황이 생겼다.
+      cartoonCaption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      cartoonCaption3: AI 글을 참고해 다시 내 글로 고쳤다.
+      cartoonCaption4: AI 흐름을 참고해 다시 쓴 자기소개
+      cartoonCaption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reportReflection: 내 이야기를 먼저 세우고, 마지막에 책임질 수 있는 말만 남겼다.
+      reportCardSummary: '[융합하기] 통합적 사고 · 표현력 · 검토력'
+      reportStrengthTags:
+      - 통합적 사고
+      - 표현력, 검토력
+      reportGrowthTags: 확장 가능
   axisDelta:
   - leafId: A1R3
     requireCard: 자기지식
@@ -1343,6 +1649,18 @@ groupwork:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: 모둠 방향 맞추기 → 발표 질문 정하기 → 그대로 진행하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 모둠과 발표 방향을 먼저 맞췄다.
+      cartoonCaption3: 발표에서 답할 질문을 먼저 정했다.
+      cartoonCaption4: 모둠 질문 중심의 발표 준비
+      cartoonCaption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reportReflection: AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.
+      reportCardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 소통력'
+      reportStrengthTags:
+      - 사회·관계적 사고
+      - 협업력, 소통력
+      reportGrowthTags: 검토 필요
     A1R2:
       score: 96
       grade: S
@@ -1362,6 +1680,18 @@ groupwork:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: 모둠 방향 맞추기 → 발표 질문 정하기 → 한 번 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 모둠과 발표 방향을 먼저 맞췄다.
+      cartoonCaption3: 발표에서 답할 질문을 먼저 정했다.
+      cartoonCaption4: 모둠 질문 중심의 발표 준비
+      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      reportReflection: AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.
+      reportCardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 소통력 · 검토력'
+      reportStrengthTags:
+      - 사회·관계적 사고
+      - 협업력, 소통력, 검토력
+      reportGrowthTags: 확장 가능
     A1R3:
       score: 99
       grade: S
@@ -1381,6 +1711,18 @@ groupwork:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: 모둠 방향 맞추기 → 발표 질문 정하기 → 깊게 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 모둠과 발표 방향을 먼저 맞췄다.
+      cartoonCaption3: 발표에서 답할 질문을 먼저 정했다.
+      cartoonCaption4: 모둠 질문 중심의 발표 준비
+      cartoonCaption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reportReflection: AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.
+      reportCardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 소통력 · 검토력'
+      reportStrengthTags:
+      - 사회·관계적 사고
+      - 협업력, 소통력, 검토력
+      reportGrowthTags: 확장 가능
     A2R1:
       score: 70
       grade: C
@@ -1399,6 +1741,18 @@ groupwork:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: 모둠 방향 맞추기 → 역할 나누기 → 그대로 진행하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 모둠과 발표 방향을 먼저 맞췄다.
+      cartoonCaption3: 모둠 안에서 역할과 흐름을 나눴다.
+      cartoonCaption4: 역할 분담 + 흐름 정합 발표 준비
+      cartoonCaption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reportReflection: 발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.
+      reportCardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 학습력'
+      reportStrengthTags:
+      - 사회·관계적 사고
+      - 협업력, 학습력
+      reportGrowthTags: 검토 필요
     A2R2:
       score: 75
       grade: B
@@ -1417,6 +1771,18 @@ groupwork:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: 모둠 방향 맞추기 → 역할 나누기 → 한 번 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 모둠과 발표 방향을 먼저 맞췄다.
+      cartoonCaption3: 모둠 안에서 역할과 흐름을 나눴다.
+      cartoonCaption4: 역할 분담 + 흐름 정합 발표 준비
+      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      reportCardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 학습력'
+      reportStrengthTags:
+      - 사회·관계적 사고
+      - 협업력, 학습력
+      reportGrowthTags: 확장 가능
     A2R3:
       score: 81
       grade: B
@@ -1435,6 +1801,18 @@ groupwork:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: 모둠 방향 맞추기 → 역할 나누기 → 깊게 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 모둠과 발표 방향을 먼저 맞췄다.
+      cartoonCaption3: 모둠 안에서 역할과 흐름을 나눴다.
+      cartoonCaption4: 역할 분담 + 흐름 정합 발표 준비
+      cartoonCaption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      reportCardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 학습력'
+      reportStrengthTags:
+      - 사회·관계적 사고
+      - 협업력, 학습력
+      reportGrowthTags: 확장 가능
     A3R1:
       score: 49
       grade: D
@@ -1451,6 +1829,16 @@ groupwork:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 모둠 방향 맞추기 → 내 파트 이해하기 → 그대로 진행하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 모둠과 발표 방향을 먼저 맞췄다.
+      cartoonCaption3: 내가 맡은 내용을 먼저 이해했다.
+      cartoonCaption4: 내 파트 이해 + 말로 설명 가능한 준비
+      cartoonCaption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reportReflection: 발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     A3R2:
       score: 65
       grade: C
@@ -1469,6 +1857,18 @@ groupwork:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: 모둠 방향 맞추기 → 내 파트 이해하기 → 한 번 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 모둠과 발표 방향을 먼저 맞췄다.
+      cartoonCaption3: 내가 맡은 내용을 먼저 이해했다.
+      cartoonCaption4: 내 파트 이해 + 말로 설명 가능한 준비
+      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      reportCardSummary: '[중심잡기] 주체성 · 표현력 · 협업력'
+      reportStrengthTags:
+      - 주체성
+      - 표현력, 협업력
+      reportGrowthTags: 직접 근거 보강
     A3R3:
       score: 75
       grade: B
@@ -1487,6 +1887,18 @@ groupwork:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: 모둠 방향 맞추기 → 내 파트 이해하기 → 깊게 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 모둠과 발표 방향을 먼저 맞췄다.
+      cartoonCaption3: 내가 맡은 내용을 먼저 이해했다.
+      cartoonCaption4: 내 파트 이해 + 말로 설명 가능한 준비
+      cartoonCaption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      reportCardSummary: '[중심잡기] 주체성 · 표현력 · 협업력'
+      reportStrengthTags:
+      - 주체성
+      - 표현력, 협업력
+      reportGrowthTags: 확장 가능
     B1R1:
       score: 16
       grade: D
@@ -1503,6 +1915,16 @@ groupwork:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 빠르게 준비하기 → AI 개요 받기 → 그대로 진행하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 발표 준비를 빠르게 시작했다.
+      cartoonCaption3: AI에게 발표 개요를 부탁했다.
+      cartoonCaption4: AI 개요 + 우리 동네 정합 검토 준비
+      cartoonCaption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reportReflection: 발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     B1R2:
       score: 29
       grade: D
@@ -1519,6 +1941,16 @@ groupwork:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 빠르게 준비하기 → AI 개요 받기 → 한 번 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 발표 준비를 빠르게 시작했다.
+      cartoonCaption3: AI에게 발표 개요를 부탁했다.
+      cartoonCaption4: AI 개요 + 우리 동네 정합 검토 준비
+      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     B1R3:
       score: 39
       grade: D
@@ -1535,6 +1967,16 @@ groupwork:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 빠르게 준비하기 → AI 개요 받기 → 깊게 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 발표 준비를 빠르게 시작했다.
+      cartoonCaption3: AI에게 발표 개요를 부탁했다.
+      cartoonCaption4: AI 개요 + 우리 동네 정합 검토 준비
+      cartoonCaption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     B2R1:
       score: 58
       grade: D
@@ -1551,6 +1993,16 @@ groupwork:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 빠르게 준비하기 → AI 슬라이드 문구 받기 → 그대로 진행하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 발표 준비를 빠르게 시작했다.
+      cartoonCaption3: AI가 만든 슬라이드 문구를 받았다.
+      cartoonCaption4: AI 슬라이드 + 설명 가능 검수 준비
+      cartoonCaption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reportReflection: 발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     B2R2:
       score: 75
       grade: B
@@ -1569,6 +2021,18 @@ groupwork:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: AI로 빠르게 준비하기 → AI 슬라이드 문구 받기 → 한 번 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 발표 준비를 빠르게 시작했다.
+      cartoonCaption3: AI가 만든 슬라이드 문구를 받았다.
+      cartoonCaption4: AI 슬라이드 + 설명 가능 검수 준비
+      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      reportCardSummary: '[융합하기] 맥락적 사고 · 표현력 · 검토력'
+      reportStrengthTags:
+      - 맥락적 사고
+      - 표현력, 검토력
+      reportGrowthTags: 확장 가능
     B2R3:
       score: 85
       grade: A
@@ -1587,6 +2051,18 @@ groupwork:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI로 빠르게 준비하기 → AI 슬라이드 문구 받기 → 깊게 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 발표 준비를 빠르게 시작했다.
+      cartoonCaption3: AI가 만든 슬라이드 문구를 받았다.
+      cartoonCaption4: AI 슬라이드 + 설명 가능 검수 준비
+      cartoonCaption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reportReflection: AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.
+      reportCardSummary: '[융합하기] 맥락적 사고 · 표현력 · 검토력'
+      reportStrengthTags:
+      - 맥락적 사고
+      - 표현력, 검토력
+      reportGrowthTags: 확장 가능
     B3R1:
       score: 72
       grade: C
@@ -1604,6 +2080,17 @@ groupwork:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI로 빠르게 준비하기 → 내 자료로 AI 대본 받기 → 그대로 진행하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 발표 준비를 빠르게 시작했다.
+      cartoonCaption3: 내 자료를 바탕으로 AI 대본을 받았다.
+      cartoonCaption4: AI 대본은 빠르게 만들어졌다.
+      cartoonCaption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reportReflection: AI 대본은 발표를 빠르게 만들었지만, 그대로 읽으면 내가 설명할 수 있는지 확인하기 어렵다.
+      reportCardSummary: 표현력
+      reportStrengthTags:
+      - 표현력
+      reportGrowthTags: 검토 필요
     B3R2:
       score: 93
       grade: A
@@ -1623,6 +2110,18 @@ groupwork:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI로 빠르게 준비하기 → 내 자료로 AI 대본 받기 → 한 번 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 발표 준비를 빠르게 시작했다.
+      cartoonCaption3: 내 자료를 바탕으로 AI 대본을 받았다.
+      cartoonCaption4: AI 대본은 빠르게 만들어졌다.
+      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      reportReflection: AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.
+      reportCardSummary: '[융합하기] 통합적 사고 · 자료판단력 · 표현력 · 검토력'
+      reportStrengthTags:
+      - 통합적 사고
+      - 자료판단력, 표현력, 검토력
+      reportGrowthTags: 확장 가능
     B3R3:
       score: 100
       grade: S
@@ -1642,6 +2141,18 @@ groupwork:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: AI로 빠르게 준비하기 → 내 자료로 AI 대본 받기 → 깊게 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 발표 준비를 빠르게 시작했다.
+      cartoonCaption3: 내 자료를 바탕으로 AI 대본을 받았다.
+      cartoonCaption4: AI 대본은 빠르게 만들어졌다.
+      cartoonCaption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reportReflection: AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.
+      reportCardSummary: '[융합하기] 통합적 사고 · 자료판단력 · 표현력 · 검토력'
+      reportStrengthTags:
+      - 통합적 사고
+      - 자료판단력, 표현력, 검토력
+      reportGrowthTags: 확장 가능
     C1R1:
       score: 18
       grade: D
@@ -1658,6 +2169,16 @@ groupwork:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 각자 준비하기 → 각자 자료 합치기 → 그대로 진행하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      cartoonCaption3: 회의 없이 각자 찾은 자료를 합쳤다.
+      cartoonCaption4: 각자 자료 모음 → 흐름 정합 자리
+      cartoonCaption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reportReflection: 발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     C1R2:
       score: 35
       grade: D
@@ -1674,6 +2195,16 @@ groupwork:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 각자 준비하기 → 각자 자료 합치기 → 한 번 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      cartoonCaption3: 회의 없이 각자 찾은 자료를 합쳤다.
+      cartoonCaption4: 각자 자료 모음 → 흐름 정합 자리
+      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C1R3:
       score: 55
       grade: D
@@ -1690,6 +2221,16 @@ groupwork:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 각자 준비하기 → 각자 자료 합치기 → 깊게 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      cartoonCaption3: 회의 없이 각자 찾은 자료를 합쳤다.
+      cartoonCaption4: 각자 자료 모음 → 흐름 정합 자리
+      cartoonCaption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C2R1:
       score: 28
       grade: D
@@ -1706,6 +2247,16 @@ groupwork:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 각자 준비하기 → 한 사람에게 맡기기 → 그대로 진행하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      cartoonCaption3: 발표를 잘하는 한 사람에게 많이 맡겼다.
+      cartoonCaption4: 한 사람 주도 → 각자 이해 점검 자리
+      cartoonCaption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reportReflection: 발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     C2R2:
       score: 48
       grade: D
@@ -1722,6 +2273,16 @@ groupwork:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 각자 준비하기 → 한 사람에게 맡기기 → 한 번 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      cartoonCaption3: 발표를 잘하는 한 사람에게 많이 맡겼다.
+      cartoonCaption4: 한 사람 주도 → 각자 이해 점검 자리
+      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C2R3:
       score: 65
       grade: C
@@ -1740,6 +2301,18 @@ groupwork:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: 각자 준비하기 → 한 사람에게 맡기기 → 깊게 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      cartoonCaption3: 발표를 잘하는 한 사람에게 많이 맡겼다.
+      cartoonCaption4: 한 사람 주도 → 각자 이해 점검 자리
+      cartoonCaption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      reportCardSummary: '[성찰하기] 사회·관계적 사고 · 소통력 · 검토력'
+      reportStrengthTags:
+      - 사회·관계적 사고
+      - 소통력, 검토력
+      reportGrowthTags: 직접 근거 보강
     C3R1:
       score: 22
       grade: D
@@ -1756,6 +2329,16 @@ groupwork:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 각자 준비하기 → 발표 모양 먼저 만들기 → 그대로 진행하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      cartoonCaption3: 자료보다 발표 모양을 먼저 만들었다.
+      cartoonCaption4: 모양 우선 → 빈 부분 보충 자리
+      cartoonCaption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reportReflection: 발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     C3R2:
       score: 42
       grade: D
@@ -1772,6 +2355,16 @@ groupwork:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 각자 준비하기 → 발표 모양 먼저 만들기 → 한 번 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      cartoonCaption3: 자료보다 발표 모양을 먼저 만들었다.
+      cartoonCaption4: 모양 우선 → 빈 부분 보충 자리
+      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C3R3:
       score: 60
       grade: C
@@ -1790,6 +2383,18 @@ groupwork:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: 각자 준비하기 → 발표 모양 먼저 만들기 → 깊게 확인하기
+      cartoonCaption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      cartoonCaption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      cartoonCaption3: 자료보다 발표 모양을 먼저 만들었다.
+      cartoonCaption4: 모양 우선 → 빈 부분 보충 자리
+      cartoonCaption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      reportCardSummary: '[성찰하기] 비판적 사고 · 자료판단력 · 검토력'
+      reportStrengthTags:
+      - 비판적 사고
+      - 자료판단력, 검토력
+      reportGrowthTags: 직접 근거 보강
   axisDelta:
   - leafId: A1R3
     requireCard: 협업능력
@@ -2343,6 +2948,18 @@ eorinwangja:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: 책 직접 읽기 → 처음부터 읽기 → 그대로 진행하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책을 직접 읽는 쪽에서 시작했다.
+      cartoonCaption3: 처음부터 읽고 짧게라도 직접 썼다.
+      cartoonCaption4: 직접 읽은 흔적이 있는 독후감
+      cartoonCaption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reportReflection: 책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.
+      reportCardSummary: '[중심잡기] 주체성 · 문해력 · 표현력'
+      reportStrengthTags:
+      - 주체성
+      - 문해력, 표현력
+      reportGrowthTags: 검토 필요
     A1R2:
       score: 95
       grade: S
@@ -2362,6 +2979,18 @@ eorinwangja:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: 책 직접 읽기 → 처음부터 읽기 → 한 번 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책을 직접 읽는 쪽에서 시작했다.
+      cartoonCaption3: 처음부터 읽고 짧게라도 직접 썼다.
+      cartoonCaption4: 직접 읽은 흔적이 있는 독후감
+      cartoonCaption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reportReflection: 책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.
+      reportCardSummary: '[중심잡기] 주체성 · 문해력 · 표현력 · 검토력'
+      reportStrengthTags:
+      - 주체성
+      - 문해력, 표현력, 검토력
+      reportGrowthTags: 확장 가능
     A1R3:
       score: 98
       grade: S
@@ -2381,6 +3010,18 @@ eorinwangja:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: 책 직접 읽기 → 처음부터 읽기 → 깊게 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책을 직접 읽는 쪽에서 시작했다.
+      cartoonCaption3: 처음부터 읽고 짧게라도 직접 썼다.
+      cartoonCaption4: 직접 읽은 흔적이 있는 독후감
+      cartoonCaption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reportReflection: 책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.
+      reportCardSummary: '[중심잡기] 주체성 · 문해력 · 표현력 · 검토력'
+      reportStrengthTags:
+      - 주체성
+      - 문해력, 표현력, 검토력
+      reportGrowthTags: 확장 가능
     A2R1:
       score: 70
       grade: C
@@ -2399,6 +3040,18 @@ eorinwangja:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: 책 직접 읽기 → 밑줄 장면으로 쓰기 → 그대로 진행하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책을 직접 읽는 쪽에서 시작했다.
+      cartoonCaption3: 밑줄 친 장면에서 내 감상을 시작했다.
+      cartoonCaption4: 멈춘 문장 중심의 독후감
+      cartoonCaption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: '[중심잡기] 주체성 · 문해력 · 표현력'
+      reportStrengthTags:
+      - 주체성
+      - 문해력, 표현력
+      reportGrowthTags: 검토 필요
     A2R2:
       score: 75
       grade: B
@@ -2417,6 +3070,18 @@ eorinwangja:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: 책 직접 읽기 → 밑줄 장면으로 쓰기 → 한 번 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책을 직접 읽는 쪽에서 시작했다.
+      cartoonCaption3: 밑줄 친 장면에서 내 감상을 시작했다.
+      cartoonCaption4: 멈춘 문장 중심의 독후감
+      cartoonCaption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: '[중심잡기] 주체성 · 문해력 · 표현력'
+      reportStrengthTags:
+      - 주체성
+      - 문해력, 표현력
+      reportGrowthTags: 확장 가능
     A2R3:
       score: 81
       grade: B
@@ -2435,6 +3100,18 @@ eorinwangja:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: 책 직접 읽기 → 밑줄 장면으로 쓰기 → 깊게 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책을 직접 읽는 쪽에서 시작했다.
+      cartoonCaption3: 밑줄 친 장면에서 내 감상을 시작했다.
+      cartoonCaption4: 멈춘 문장 중심의 독후감
+      cartoonCaption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: '[중심잡기] 주체성 · 문해력 · 표현력'
+      reportStrengthTags:
+      - 주체성
+      - 문해력, 표현력
+      reportGrowthTags: 확장 가능
     A3R1:
       score: 55
       grade: D
@@ -2451,6 +3128,16 @@ eorinwangja:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 책 직접 읽기 → 이해 안 된 부분 붙잡기 → 그대로 진행하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책을 직접 읽는 쪽에서 시작했다.
+      cartoonCaption3: 이해되지 않는 부분을 붙잡고 썼다.
+      cartoonCaption4: 이해 안 되는 부분을 솔직하게 담은 독후감
+      cartoonCaption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     A3R2:
       score: 65
       grade: C
@@ -2469,6 +3156,18 @@ eorinwangja:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: 책 직접 읽기 → 이해 안 된 부분 붙잡기 → 한 번 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책을 직접 읽는 쪽에서 시작했다.
+      cartoonCaption3: 이해되지 않는 부분을 붙잡고 썼다.
+      cartoonCaption4: 이해 안 되는 부분을 솔직하게 담은 독후감
+      cartoonCaption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: '[중심잡기] 호기심 · 문해력 · 분석력'
+      reportStrengthTags:
+      - 호기심
+      - 문해력, 분석력
+      reportGrowthTags: 직접 근거 보강
     A3R3:
       score: 75
       grade: B
@@ -2487,6 +3186,18 @@ eorinwangja:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: 책 직접 읽기 → 이해 안 된 부분 붙잡기 → 깊게 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책을 직접 읽는 쪽에서 시작했다.
+      cartoonCaption3: 이해되지 않는 부분을 붙잡고 썼다.
+      cartoonCaption4: 이해 안 되는 부분을 솔직하게 담은 독후감
+      cartoonCaption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: '[중심잡기] 호기심 · 문해력 · 분석력'
+      reportStrengthTags:
+      - 호기심
+      - 문해력, 분석력
+      reportGrowthTags: 확장 가능
     B1R1:
       score: 14
       grade: D
@@ -2503,6 +3214,16 @@ eorinwangja:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 읽기 돕기 → 요약 보고 책 확인하기 → 그대로 진행하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: AI 도움으로 책에 접근할 길을 찾았다.
+      cartoonCaption3: AI 요약을 보고 책에서 장면을 찾아 읽었다.
+      cartoonCaption4: 요약 + 한 장면 직접 확인한 독후감
+      cartoonCaption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     B1R2:
       score: 26
       grade: D
@@ -2519,6 +3240,16 @@ eorinwangja:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 읽기 돕기 → 요약 보고 책 확인하기 → 한 번 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: AI 도움으로 책에 접근할 길을 찾았다.
+      cartoonCaption3: AI 요약을 보고 책에서 장면을 찾아 읽었다.
+      cartoonCaption4: 요약 + 한 장면 직접 확인한 독후감
+      cartoonCaption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     B1R3:
       score: 37
       grade: D
@@ -2535,6 +3266,16 @@ eorinwangja:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 읽기 돕기 → 요약 보고 책 확인하기 → 깊게 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: AI 도움으로 책에 접근할 길을 찾았다.
+      cartoonCaption3: AI 요약을 보고 책에서 장면을 찾아 읽었다.
+      cartoonCaption4: 요약 + 한 장면 직접 확인한 독후감
+      cartoonCaption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     B2R1:
       score: 50
       grade: D
@@ -2551,6 +3292,16 @@ eorinwangja:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 읽기 돕기 → 유명 문장 앞뒤 읽기 → 그대로 진행하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: AI 도움으로 책에 접근할 길을 찾았다.
+      cartoonCaption3: 유명한 문장 앞뒤를 직접 확인했다.
+      cartoonCaption4: 유명한 문장 앞뒤 맥락을 확인한 독후감
+      cartoonCaption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     B2R2:
       score: 75
       grade: B
@@ -2569,6 +3320,18 @@ eorinwangja:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: AI로 읽기 돕기 → 유명 문장 앞뒤 읽기 → 한 번 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: AI 도움으로 책에 접근할 길을 찾았다.
+      cartoonCaption3: 유명한 문장 앞뒤를 직접 확인했다.
+      cartoonCaption4: 유명한 문장 앞뒤 맥락을 확인한 독후감
+      cartoonCaption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: '[융합하기] 맥락적 사고 · 문해력 · 자료판단력'
+      reportStrengthTags:
+      - 맥락적 사고
+      - 문해력, 자료판단력
+      reportGrowthTags: 확장 가능
     B2R3:
       score: 85
       grade: A
@@ -2588,6 +3351,18 @@ eorinwangja:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI로 읽기 돕기 → 유명 문장 앞뒤 읽기 → 깊게 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: AI 도움으로 책에 접근할 길을 찾았다.
+      cartoonCaption3: 유명한 문장 앞뒤를 직접 확인했다.
+      cartoonCaption4: 유명한 문장 앞뒤 맥락을 확인한 독후감
+      cartoonCaption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reportReflection: 책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.
+      reportCardSummary: '[융합하기] 맥락적 사고 · 문해력 · 자료판단력 · 검토력'
+      reportStrengthTags:
+      - 맥락적 사고
+      - 문해력, 자료판단력, 검토력
+      reportGrowthTags: 확장 가능
     B3R1:
       score: 88
       grade: A
@@ -2606,6 +3381,18 @@ eorinwangja:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI로 읽기 돕기 → 궁금한 장면 찾아 읽기 → 그대로 진행하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: AI 도움으로 책에 접근할 길을 찾았다.
+      cartoonCaption3: 소개된 장면 중 궁금한 부분을 찾아 읽었다.
+      cartoonCaption4: 외부 단서에서 시작해 직접 확인한 독후감
+      cartoonCaption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reportReflection: 책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.
+      reportCardSummary: '[중심잡기] 호기심 · 문해력 · 표현력'
+      reportStrengthTags:
+      - 호기심
+      - 문해력, 표현력
+      reportGrowthTags: 검토 필요
     B3R2:
       score: 93
       grade: A
@@ -2625,6 +3412,18 @@ eorinwangja:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI로 읽기 돕기 → 궁금한 장면 찾아 읽기 → 한 번 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: AI 도움으로 책에 접근할 길을 찾았다.
+      cartoonCaption3: 소개된 장면 중 궁금한 부분을 찾아 읽었다.
+      cartoonCaption4: 외부 단서에서 시작해 직접 확인한 독후감
+      cartoonCaption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reportReflection: 책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.
+      reportCardSummary: '[중심잡기] 호기심 · 문해력 · 표현력 · 검토력'
+      reportStrengthTags:
+      - 호기심
+      - 문해력, 표현력, 검토력
+      reportGrowthTags: 확장 가능
     B3R3:
       score: 100
       grade: S
@@ -2644,6 +3443,18 @@ eorinwangja:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: AI로 읽기 돕기 → 궁금한 장면 찾아 읽기 → 깊게 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: AI 도움으로 책에 접근할 길을 찾았다.
+      cartoonCaption3: 소개된 장면 중 궁금한 부분을 찾아 읽었다.
+      cartoonCaption4: 외부 단서에서 시작해 직접 확인한 독후감
+      cartoonCaption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reportReflection: 책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.
+      reportCardSummary: '[중심잡기] 호기심 · 문해력 · 표현력 · 검토력'
+      reportStrengthTags:
+      - 호기심
+      - 문해력, 표현력, 검토력
+      reportGrowthTags: 확장 가능
     C1R1:
       score: 25
       grade: D
@@ -2660,6 +3471,16 @@ eorinwangja:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 책 읽기 건너뛰기 → AI 초안 바로 받기 → 그대로 진행하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      cartoonCaption3: AI가 줄거리와 독후감 초안을 만들었다.
+      cartoonCaption4: AI 초안은 빠르게 만들어졌다.
+      cartoonCaption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reportReflection: 빠른 글은 생겼지만, 내가 읽고 생각한 과정이 거의 남지 않았다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     C1R2:
       score: 45
       grade: D
@@ -2676,6 +3497,16 @@ eorinwangja:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 책 읽기 건너뛰기 → AI 초안 바로 받기 → 한 번 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      cartoonCaption3: AI가 줄거리와 독후감 초안을 만들었다.
+      cartoonCaption4: AI 초안은 빠르게 만들어졌다.
+      cartoonCaption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reportReflection: AI 초안을 걷어내며 책임질 수 있는 문장을 찾았지만, 직접 읽은 감상은 더 필요하다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C1R3:
       score: 65
       grade: C
@@ -2693,6 +3524,18 @@ eorinwangja:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: 책 읽기 건너뛰기 → AI 초안 바로 받기 → 깊게 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      cartoonCaption3: AI가 줄거리와 독후감 초안을 만들었다.
+      cartoonCaption4: AI 초안은 빠르게 만들어졌다.
+      cartoonCaption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reportReflection: AI 초안을 걷어내며 책임질 수 있는 문장을 찾았지만, 직접 읽은 감상은 더 필요하다.
+      reportCardSummary: '[성찰하기] 윤리적 사고 · 검토력'
+      reportStrengthTags:
+      - 윤리적 사고
+      - 검토력
+      reportGrowthTags: 직접 근거 보강
     C2R1:
       score: 28
       grade: D
@@ -2709,6 +3552,16 @@ eorinwangja:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 책 읽기 건너뛰기 → 줄거리·영상만 보기 → 그대로 진행하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      cartoonCaption3: 줄거리나 영상 소개만 보고 글을 썼다.
+      cartoonCaption4: 친구가 들어간 독후감
+      cartoonCaption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     C2R2:
       score: 38
       grade: D
@@ -2725,6 +3578,16 @@ eorinwangja:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 책 읽기 건너뛰기 → 줄거리·영상만 보기 → 한 번 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      cartoonCaption3: 줄거리나 영상 소개만 보고 글을 썼다.
+      cartoonCaption4: 친구가 들어간 독후감
+      cartoonCaption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C2R3:
       score: 48
       grade: D
@@ -2741,6 +3604,16 @@ eorinwangja:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 책 읽기 건너뛰기 → 줄거리·영상만 보기 → 깊게 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      cartoonCaption3: 줄거리나 영상 소개만 보고 글을 썼다.
+      cartoonCaption4: 친구가 들어간 독후감
+      cartoonCaption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C3R1:
       score: 12
       grade: D
@@ -2757,6 +3630,16 @@ eorinwangja:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 책 읽기 건너뛰기 → 문장·분위기로 쓰기 → 그대로 진행하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      cartoonCaption3: 유명한 문장과 분위기만으로 글을 만들었다.
+      cartoonCaption4: 일반론으로 채운 독후감
+      cartoonCaption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     C3R2:
       score: 23
       grade: D
@@ -2773,6 +3656,16 @@ eorinwangja:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 책 읽기 건너뛰기 → 문장·분위기로 쓰기 → 한 번 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      cartoonCaption3: 유명한 문장과 분위기만으로 글을 만들었다.
+      cartoonCaption4: 일반론으로 채운 독후감
+      cartoonCaption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C3R3:
       score: 32
       grade: D
@@ -2789,6 +3682,16 @@ eorinwangja:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 책 읽기 건너뛰기 → 문장·분위기로 쓰기 → 깊게 확인하기
+      cartoonCaption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      cartoonCaption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      cartoonCaption3: 유명한 문장과 분위기만으로 글을 만들었다.
+      cartoonCaption4: 일반론으로 채운 독후감
+      cartoonCaption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reportReflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
   axisDelta:
   - leafId: A1R3
     requireCard: 문해력
@@ -3267,6 +4170,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: 내 관심에서 시작하기 → 좋아하는 것 적기 → 그대로 진행하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      cartoonCaption3: 내가 자주 보는 것과 좋아하는 것을 적었다.
+      cartoonCaption4: 관심 목록 — 마음이 쓰이는 자리
+      cartoonCaption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reportReflection: AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.
+      reportCardSummary: '[중심잡기] 주체성 · 자기이해 · 탐색력'
+      reportStrengthTags:
+      - 주체성
+      - 자기이해, 탐색력
+      reportGrowthTags: 검토 필요
     A1R2:
       score: 95
       grade: S
@@ -3286,6 +4201,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: 내 관심에서 시작하기 → 좋아하는 것 적기 → 한 번 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      cartoonCaption3: 내가 자주 보는 것과 좋아하는 것을 적었다.
+      cartoonCaption4: 관심 목록 — 마음이 쓰이는 자리
+      cartoonCaption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reportReflection: AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.
+      reportCardSummary: '[중심잡기] 주체성 · 자기이해 · 탐색력 · 검토력'
+      reportStrengthTags:
+      - 주체성
+      - 자기이해, 탐색력, 검토력
+      reportGrowthTags: 확장 가능
     A1R3:
       score: 98
       grade: S
@@ -3305,6 +4232,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: 내 관심에서 시작하기 → 좋아하는 것 적기 → 깊게 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      cartoonCaption3: 내가 자주 보는 것과 좋아하는 것을 적었다.
+      cartoonCaption4: 관심 목록 — 마음이 쓰이는 자리
+      cartoonCaption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reportReflection: AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.
+      reportCardSummary: '[중심잡기] 주체성 · 자기이해 · 탐색력 · 검토력'
+      reportStrengthTags:
+      - 주체성
+      - 자기이해, 탐색력, 검토력
+      reportGrowthTags: 확장 가능
     A2R1:
       score: 72
       grade: C
@@ -3323,6 +4262,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: 내 관심에서 시작하기 → 걱정 적기 → 그대로 진행하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      cartoonCaption3: AI 시대에 대한 내 걱정을 문장으로 적었다.
+      cartoonCaption4: 걱정 메모 — 불안을 확인할 질문으로
+      cartoonCaption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reportReflection: 추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.
+      reportCardSummary: '[중심잡기] 주체성 · 자기이해 · 분석력'
+      reportStrengthTags:
+      - 주체성
+      - 자기이해, 분석력
+      reportGrowthTags: 검토 필요
     A2R2:
       score: 78
       grade: B
@@ -3341,6 +4292,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: 내 관심에서 시작하기 → 걱정 적기 → 한 번 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      cartoonCaption3: AI 시대에 대한 내 걱정을 문장으로 적었다.
+      cartoonCaption4: 걱정 메모 — 불안을 확인할 질문으로
+      cartoonCaption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reportReflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      reportCardSummary: '[중심잡기] 주체성 · 자기이해 · 분석력'
+      reportStrengthTags:
+      - 주체성
+      - 자기이해, 분석력
+      reportGrowthTags: 확장 가능
     A2R3:
       score: 83
       grade: B
@@ -3359,6 +4322,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: 내 관심에서 시작하기 → 걱정 적기 → 깊게 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      cartoonCaption3: AI 시대에 대한 내 걱정을 문장으로 적었다.
+      cartoonCaption4: 걱정 메모 — 불안을 확인할 질문으로
+      cartoonCaption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reportReflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      reportCardSummary: '[중심잡기] 주체성 · 자기이해 · 분석력'
+      reportStrengthTags:
+      - 주체성
+      - 자기이해, 분석력
+      reportGrowthTags: 확장 가능
     A3R1:
       score: 48
       grade: D
@@ -3375,6 +4350,16 @@ career:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 내 관심에서 시작하기 → 작은 실험 만들기 → 그대로 진행하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      cartoonCaption3: 관심을 작은 실험으로 바꿔 보았다.
+      cartoonCaption4: 작은 실험 — 해볼 수 있는 첫 단계
+      cartoonCaption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reportReflection: 추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     A3R2:
       score: 65
       grade: C
@@ -3393,6 +4378,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: 내 관심에서 시작하기 → 작은 실험 만들기 → 한 번 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      cartoonCaption3: 관심을 작은 실험으로 바꿔 보았다.
+      cartoonCaption4: 작은 실험 — 해볼 수 있는 첫 단계
+      cartoonCaption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reportReflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      reportCardSummary: '[융합하기] 창의적 사고 · 탐색력 · 학습력'
+      reportStrengthTags:
+      - 창의적 사고
+      - 탐색력, 학습력
+      reportGrowthTags: 직접 근거 보강
     A3R3:
       score: 75
       grade: B
@@ -3411,6 +4408,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: 내 관심에서 시작하기 → 작은 실험 만들기 → 깊게 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      cartoonCaption3: 관심을 작은 실험으로 바꿔 보았다.
+      cartoonCaption4: 작은 실험 — 해볼 수 있는 첫 단계
+      cartoonCaption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reportReflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      reportCardSummary: '[융합하기] 창의적 사고 · 탐색력 · 학습력'
+      reportStrengthTags:
+      - 창의적 사고
+      - 탐색력, 학습력
+      reportGrowthTags: 확장 가능
     B1R1:
       score: 17
       grade: D
@@ -3427,6 +4436,16 @@ career:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 가능성 넓히기 → 유망 직업 추천받기 → 그대로 진행하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 진로 가능성을 넓혀 보았다.
+      cartoonCaption3: AI에게 유망한 일을 추천받았다.
+      cartoonCaption4: AI 유망 추천 + 근거 점검
+      cartoonCaption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reportReflection: 추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     B1R2:
       score: 30
       grade: D
@@ -3443,6 +4462,16 @@ career:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 가능성 넓히기 → 유망 직업 추천받기 → 한 번 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 진로 가능성을 넓혀 보았다.
+      cartoonCaption3: AI에게 유망한 일을 추천받았다.
+      cartoonCaption4: AI 유망 추천 + 근거 점검
+      cartoonCaption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reportReflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     B1R3:
       score: 40
       grade: D
@@ -3459,6 +4488,16 @@ career:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 가능성 넓히기 → 유망 직업 추천받기 → 깊게 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 진로 가능성을 넓혀 보았다.
+      cartoonCaption3: AI에게 유망한 일을 추천받았다.
+      cartoonCaption4: AI 유망 추천 + 근거 점검
+      cartoonCaption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reportReflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     B2R1:
       score: 57
       grade: D
@@ -3475,6 +4514,16 @@ career:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 가능성 넓히기 → 새 일 제안받기 → 그대로 진행하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 진로 가능성을 넓혀 보았다.
+      cartoonCaption3: 내 관심으로 만들 수 있는 일을 제안받았다.
+      cartoonCaption4: AI 새 조합 + 진짜 끌림 점검
+      cartoonCaption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reportReflection: 추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     B2R2:
       score: 75
       grade: B
@@ -3493,6 +4542,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: AI로 가능성 넓히기 → 새 일 제안받기 → 한 번 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 진로 가능성을 넓혀 보았다.
+      cartoonCaption3: 내 관심으로 만들 수 있는 일을 제안받았다.
+      cartoonCaption4: AI 새 조합 + 진짜 끌림 점검
+      cartoonCaption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reportReflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      reportCardSummary: '[융합하기] 맥락적 사고 · 탐색력 · 분석력'
+      reportStrengthTags:
+      - 맥락적 사고
+      - 탐색력, 분석력
+      reportGrowthTags: 확장 가능
     B2R3:
       score: 85
       grade: A
@@ -3512,6 +4573,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI로 가능성 넓히기 → 새 일 제안받기 → 깊게 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 진로 가능성을 넓혀 보았다.
+      cartoonCaption3: 내 관심으로 만들 수 있는 일을 제안받았다.
+      cartoonCaption4: AI 새 조합 + 진짜 끌림 점검
+      cartoonCaption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reportReflection: AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.
+      reportCardSummary: '[융합하기] 맥락적 사고 · 탐색력 · 분석력 · 검토력'
+      reportStrengthTags:
+      - 맥락적 사고
+      - 탐색력, 분석력, 검토력
+      reportGrowthTags: 확장 가능
     B3R1:
       score: 88
       grade: A
@@ -3530,6 +4603,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI로 가능성 넓히기 → AI 결과물로 탐색하기 → 그대로 진행하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 진로 가능성을 넓혀 보았다.
+      cartoonCaption3: AI로 작은 결과물을 만들어 가능성을 보았다.
+      cartoonCaption4: AI 결과물로 가능성을 맛보았다.
+      cartoonCaption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reportReflection: AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.
+      reportCardSummary: '[융합하기] 창의적 사고 · 탐색력 · 검토력'
+      reportStrengthTags:
+      - 창의적 사고
+      - 탐색력, 검토력
+      reportGrowthTags: 검토 필요
     B3R2:
       score: 93
       grade: A
@@ -3548,6 +4633,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI로 가능성 넓히기 → AI 결과물로 탐색하기 → 한 번 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 진로 가능성을 넓혀 보았다.
+      cartoonCaption3: AI로 작은 결과물을 만들어 가능성을 보았다.
+      cartoonCaption4: AI 결과물로 가능성을 맛보았다.
+      cartoonCaption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reportReflection: AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.
+      reportCardSummary: '[융합하기] 창의적 사고 · 탐색력 · 검토력'
+      reportStrengthTags:
+      - 창의적 사고
+      - 탐색력, 검토력
+      reportGrowthTags: 확장 가능
     B3R3:
       score: 100
       grade: S
@@ -3566,6 +4663,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: AI로 가능성 넓히기 → AI 결과물로 탐색하기 → 깊게 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: AI로 진로 가능성을 넓혀 보았다.
+      cartoonCaption3: AI로 작은 결과물을 만들어 가능성을 보았다.
+      cartoonCaption4: AI 결과물로 가능성을 맛보았다.
+      cartoonCaption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reportReflection: AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.
+      reportCardSummary: '[융합하기] 창의적 사고 · 탐색력 · 검토력'
+      reportStrengthTags:
+      - 창의적 사고
+      - 탐색력, 검토력
+      reportGrowthTags: 확장 가능
     C1R1:
       score: 18
       grade: D
@@ -3582,6 +4691,16 @@ career:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 안전한 길 먼저 보기 → 뉴스·영상 길 찾기 → 그대로 진행하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      cartoonCaption3: 뉴스와 영상에서 본 유망한 길을 찾았다.
+      cartoonCaption4: 미디어 정보 + 빈틈 점검
+      cartoonCaption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reportReflection: 추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     C1R2:
       score: 38
       grade: D
@@ -3598,6 +4717,16 @@ career:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 안전한 길 먼저 보기 → 뉴스·영상 길 찾기 → 한 번 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      cartoonCaption3: 뉴스와 영상에서 본 유망한 길을 찾았다.
+      cartoonCaption4: 미디어 정보 + 빈틈 점검
+      cartoonCaption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reportReflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C1R3:
       score: 60
       grade: C
@@ -3616,6 +4745,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: 안전한 길 먼저 보기 → 뉴스·영상 길 찾기 → 깊게 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      cartoonCaption3: 뉴스와 영상에서 본 유망한 길을 찾았다.
+      cartoonCaption4: 미디어 정보 + 빈틈 점검
+      cartoonCaption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reportReflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      reportCardSummary: '[성찰하기] 비판적 사고 · 자료판단력 · 검토력'
+      reportStrengthTags:
+      - 비판적 사고
+      - 자료판단력, 검토력
+      reportGrowthTags: 직접 근거 보강
     C2R1:
       score: 28
       grade: D
@@ -3632,6 +4773,16 @@ career:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 안전한 길 먼저 보기 → 주변 추천 따라가기 → 그대로 진행하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      cartoonCaption3: 주변 사람이 좋다고 한 길을 따라보았다.
+      cartoonCaption4: 주변 추천 + 경험 정합
+      cartoonCaption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reportReflection: 추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     C2R2:
       score: 48
       grade: D
@@ -3648,6 +4799,16 @@ career:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 안전한 길 먼저 보기 → 주변 추천 따라가기 → 한 번 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      cartoonCaption3: 주변 사람이 좋다고 한 길을 따라보았다.
+      cartoonCaption4: 주변 추천 + 경험 정합
+      cartoonCaption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reportReflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C2R3:
       score: 65
       grade: C
@@ -3666,6 +4827,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: 안전한 길 먼저 보기 → 주변 추천 따라가기 → 깊게 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      cartoonCaption3: 주변 사람이 좋다고 한 길을 따라보았다.
+      cartoonCaption4: 주변 추천 + 경험 정합
+      cartoonCaption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reportReflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      reportCardSummary: '[성찰하기] 사회·관계적 사고 · 자기이해 · 소통력'
+      reportStrengthTags:
+      - 사회·관계적 사고
+      - 자기이해, 소통력
+      reportGrowthTags: 직접 근거 보강
     C3R1:
       score: 22
       grade: D
@@ -3682,6 +4855,16 @@ career:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 안전한 길 먼저 보기 → 인기·안정 길 보기 → 그대로 진행하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      cartoonCaption3: 인기 학과나 안정적인 길을 먼저 보았다.
+      cartoonCaption4: 안전한 길 + 실제 내용 확인
+      cartoonCaption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reportReflection: 추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     C3R2:
       score: 42
       grade: D
@@ -3698,6 +4881,16 @@ career:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 안전한 길 먼저 보기 → 인기·안정 길 보기 → 한 번 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      cartoonCaption3: 인기 학과나 안정적인 길을 먼저 보았다.
+      cartoonCaption4: 안전한 길 + 실제 내용 확인
+      cartoonCaption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reportReflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C3R3:
       score: 60
       grade: C
@@ -3716,6 +4909,18 @@ career:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: 안전한 길 먼저 보기 → 인기·안정 길 보기 → 깊게 확인하기
+      cartoonCaption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      cartoonCaption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      cartoonCaption3: 인기 학과나 안정적인 길을 먼저 보았다.
+      cartoonCaption4: 안전한 길 + 실제 내용 확인
+      cartoonCaption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reportReflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      reportCardSummary: '[성찰하기] 비판적 사고 · 분석력 · 탐색력'
+      reportStrengthTags:
+      - 비판적 사고
+      - 분석력, 탐색력
+      reportGrowthTags: 직접 근거 보강
   axisDelta:
   - leafId: A1R3
     requireCard: 진로탐색
@@ -4202,6 +5407,18 @@ studyplan:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: 내 실력 확인하기 → 약한 단원 찾기 → 그대로 진행하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      cartoonCaption3: 문제를 풀어 약한 단원을 찾았다.
+      cartoonCaption4: 약한 단원 목록 — 문제로 확인한 자리
+      cartoonCaption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reportReflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      reportCardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 분석력'
+      reportStrengthTags:
+      - 문제해결적 사고
+      - 학습력, 분석력
+      reportGrowthTags: 검토 필요
     A1R2:
       score: 95
       grade: S
@@ -4221,6 +5438,18 @@ studyplan:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: 내 실력 확인하기 → 약한 단원 찾기 → 한 번 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      cartoonCaption3: 문제를 풀어 약한 단원을 찾았다.
+      cartoonCaption4: 약한 단원 목록 — 문제로 확인한 자리
+      cartoonCaption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reportReflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      reportCardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 분석력 · 검토력'
+      reportStrengthTags:
+      - 문제해결적 사고
+      - 학습력, 분석력, 검토력
+      reportGrowthTags: 확장 가능
     A1R3:
       score: 98
       grade: S
@@ -4240,6 +5469,18 @@ studyplan:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: 내 실력 확인하기 → 약한 단원 찾기 → 깊게 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      cartoonCaption3: 문제를 풀어 약한 단원을 찾았다.
+      cartoonCaption4: 약한 단원 목록 — 문제로 확인한 자리
+      cartoonCaption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reportReflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      reportCardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 분석력 · 검토력'
+      reportStrengthTags:
+      - 문제해결적 사고
+      - 학습력, 분석력, 검토력
+      reportGrowthTags: 확장 가능
     A2R1:
       score: 75
       grade: B
@@ -4258,6 +5499,18 @@ studyplan:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: 내 실력 확인하기 → 아는 것 나누기 → 그대로 진행하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      cartoonCaption3: 시험 범위에서 아는 것과 모르는 것을 나눴다.
+      cartoonCaption4: 범위표 분류 — 한눈에 본 시험 범위
+      cartoonCaption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reportReflection: 계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.
+      reportCardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자료판단력'
+      reportStrengthTags:
+      - 문제해결적 사고
+      - 학습력, 자료판단력
+      reportGrowthTags: 검토 필요
     A2R2:
       score: 80
       grade: B
@@ -4276,6 +5529,18 @@ studyplan:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: 내 실력 확인하기 → 아는 것 나누기 → 한 번 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      cartoonCaption3: 시험 범위에서 아는 것과 모르는 것을 나눴다.
+      cartoonCaption4: 범위표 분류 — 한눈에 본 시험 범위
+      cartoonCaption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reportReflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      reportCardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자료판단력'
+      reportStrengthTags:
+      - 문제해결적 사고
+      - 학습력, 자료판단력
+      reportGrowthTags: 확장 가능
     A2R3:
       score: 86
       grade: A
@@ -4295,6 +5560,18 @@ studyplan:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: 내 실력 확인하기 → 아는 것 나누기 → 깊게 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      cartoonCaption3: 시험 범위에서 아는 것과 모르는 것을 나눴다.
+      cartoonCaption4: 범위표 분류 — 한눈에 본 시험 범위
+      cartoonCaption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reportReflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      reportCardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자료판단력 · 검토력'
+      reportStrengthTags:
+      - 문제해결적 사고
+      - 학습력, 자료판단력, 검토력
+      reportGrowthTags: 확장 가능
     A3R1:
       score: 55
       grade: D
@@ -4311,6 +5588,16 @@ studyplan:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 내 실력 확인하기 → 자신감과 풀이 비교하기 → 그대로 진행하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      cartoonCaption3: 자신감과 실제 문제 풀이를 비교했다.
+      cartoonCaption4: 자신감 vs 실제 — 감의 어긋남 점검
+      cartoonCaption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reportReflection: 계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     A3R2:
       score: 65
       grade: C
@@ -4329,6 +5616,18 @@ studyplan:
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
+      reportPathSummary: 내 실력 확인하기 → 자신감과 풀이 비교하기 → 한 번 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      cartoonCaption3: 자신감과 실제 문제 풀이를 비교했다.
+      cartoonCaption4: 자신감 vs 실제 — 감의 어긋남 점검
+      cartoonCaption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reportReflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      reportCardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자기이해'
+      reportStrengthTags:
+      - 문제해결적 사고
+      - 학습력, 자기이해
+      reportGrowthTags: 직접 근거 보강
     A3R3:
       score: 75
       grade: B
@@ -4347,6 +5646,18 @@ studyplan:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: 내 실력 확인하기 → 자신감과 풀이 비교하기 → 깊게 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      cartoonCaption3: 자신감과 실제 문제 풀이를 비교했다.
+      cartoonCaption4: 자신감 vs 실제 — 감의 어긋남 점검
+      cartoonCaption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reportReflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      reportCardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자기이해'
+      reportStrengthTags:
+      - 문제해결적 사고
+      - 학습력, 자기이해
+      reportGrowthTags: 확장 가능
     B1R1:
       score: 16
       grade: D
@@ -4363,6 +5674,16 @@ studyplan:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 공부 돕기 → AI 계획표 받기 → 그대로 진행하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: AI의 도움으로 공부 준비를 시작했다.
+      cartoonCaption3: AI에게 2주 공부 계획표를 받았다.
+      cartoonCaption4: AI 계획표 + 내 범위·시간 정합
+      cartoonCaption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reportReflection: 계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     B1R2:
       score: 29
       grade: D
@@ -4379,6 +5700,16 @@ studyplan:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 공부 돕기 → AI 계획표 받기 → 한 번 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: AI의 도움으로 공부 준비를 시작했다.
+      cartoonCaption3: AI에게 2주 공부 계획표를 받았다.
+      cartoonCaption4: AI 계획표 + 내 범위·시간 정합
+      cartoonCaption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reportReflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     B1R3:
       score: 39
       grade: D
@@ -4395,6 +5726,16 @@ studyplan:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 공부 돕기 → AI 계획표 받기 → 깊게 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: AI의 도움으로 공부 준비를 시작했다.
+      cartoonCaption3: AI에게 2주 공부 계획표를 받았다.
+      cartoonCaption4: AI 계획표 + 내 범위·시간 정합
+      cartoonCaption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reportReflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     B2R1:
       score: 57
       grade: D
@@ -4411,6 +5752,16 @@ studyplan:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: AI로 공부 돕기 → 약점으로 순서 받기 → 그대로 진행하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: AI의 도움으로 공부 준비를 시작했다.
+      cartoonCaption3: 내 약점을 말하고 공부 순서를 받았다.
+      cartoonCaption4: AI 공부 순서 + 오답 확인
+      cartoonCaption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reportReflection: 계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     B2R2:
       score: 75
       grade: B
@@ -4429,6 +5780,18 @@ studyplan:
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
+      reportPathSummary: AI로 공부 돕기 → 약점으로 순서 받기 → 한 번 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: AI의 도움으로 공부 준비를 시작했다.
+      cartoonCaption3: 내 약점을 말하고 공부 순서를 받았다.
+      cartoonCaption4: AI 공부 순서 + 오답 확인
+      cartoonCaption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reportReflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      reportCardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 검토력'
+      reportStrengthTags:
+      - 문제해결적 사고
+      - 학습력, 검토력
+      reportGrowthTags: 확장 가능
     B2R3:
       score: 85
       grade: A
@@ -4447,6 +5810,18 @@ studyplan:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI로 공부 돕기 → 약점으로 순서 받기 → 깊게 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: AI의 도움으로 공부 준비를 시작했다.
+      cartoonCaption3: 내 약점을 말하고 공부 순서를 받았다.
+      cartoonCaption4: AI 공부 순서 + 오답 확인
+      cartoonCaption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reportReflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      reportCardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 검토력'
+      reportStrengthTags:
+      - 문제해결적 사고
+      - 학습력, 검토력
+      reportGrowthTags: 확장 가능
     B3R1:
       score: 88
       grade: A
@@ -4465,6 +5840,18 @@ studyplan:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI로 공부 돕기 → 약점·범위로 AI 자료 받기 → 그대로 진행하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: AI의 도움으로 공부 준비를 시작했다.
+      cartoonCaption3: 내 약점과 범위를 넣어 AI 자료를 받았다.
+      cartoonCaption4: AI 공부 자료가 빠르게 생겼다.
+      cartoonCaption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reportReflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      reportCardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자료판단력'
+      reportStrengthTags:
+      - 문제해결적 사고
+      - 학습력, 자료판단력
+      reportGrowthTags: 검토 필요
     B3R2:
       score: 93
       grade: A
@@ -4484,6 +5871,18 @@ studyplan:
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
+      reportPathSummary: AI로 공부 돕기 → 약점·범위로 AI 자료 받기 → 한 번 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: AI의 도움으로 공부 준비를 시작했다.
+      cartoonCaption3: 내 약점과 범위를 넣어 AI 자료를 받았다.
+      cartoonCaption4: AI 공부 자료가 빠르게 생겼다.
+      cartoonCaption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reportReflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      reportCardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자료판단력 · 검토력'
+      reportStrengthTags:
+      - 문제해결적 사고
+      - 학습력, 자료판단력, 검토력
+      reportGrowthTags: 확장 가능
     B3R3:
       score: 100
       grade: S
@@ -4503,6 +5902,18 @@ studyplan:
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
+      reportPathSummary: AI로 공부 돕기 → 약점·범위로 AI 자료 받기 → 깊게 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: AI의 도움으로 공부 준비를 시작했다.
+      cartoonCaption3: 내 약점과 범위를 넣어 AI 자료를 받았다.
+      cartoonCaption4: AI 공부 자료가 빠르게 생겼다.
+      cartoonCaption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reportReflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      reportCardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자료판단력 · 검토력'
+      reportStrengthTags:
+      - 문제해결적 사고
+      - 학습력, 자료판단력, 검토력
+      reportGrowthTags: 확장 가능
     C1R1:
       score: 18
       grade: D
@@ -4519,6 +5930,16 @@ studyplan:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 다른 방법에 기대기 → 친구·학원 계획 따르기 → 그대로 진행하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 다른 자료나 쉬운 방법에서 시작했다.
+      cartoonCaption3: 친구나 학원 계획표를 따라갔다.
+      cartoonCaption4: 친구·학원 계획 + 내 약점 정합
+      cartoonCaption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reportReflection: 계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     C1R2:
       score: 38
       grade: D
@@ -4535,6 +5956,16 @@ studyplan:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 다른 방법에 기대기 → 친구·학원 계획 따르기 → 한 번 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 다른 자료나 쉬운 방법에서 시작했다.
+      cartoonCaption3: 친구나 학원 계획표를 따라갔다.
+      cartoonCaption4: 친구·학원 계획 + 내 약점 정합
+      cartoonCaption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reportReflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C1R3:
       score: 50
       grade: D
@@ -4551,6 +5982,16 @@ studyplan:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 다른 방법에 기대기 → 친구·학원 계획 따르기 → 깊게 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 다른 자료나 쉬운 방법에서 시작했다.
+      cartoonCaption3: 친구나 학원 계획표를 따라갔다.
+      cartoonCaption4: 친구·학원 계획 + 내 약점 정합
+      cartoonCaption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reportReflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C2R1:
       score: 22
       grade: D
@@ -4567,6 +6008,16 @@ studyplan:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 다른 방법에 기대기 → 작년·인터넷 자료 보기 → 그대로 진행하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 다른 자료나 쉬운 방법에서 시작했다.
+      cartoonCaption3: 작년 자료와 인터넷 요약에 기대었다.
+      cartoonCaption4: 작년·인터넷 자료 + 올해 범위 거리
+      cartoonCaption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reportReflection: 계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     C2R2:
       score: 42
       grade: D
@@ -4583,6 +6034,16 @@ studyplan:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 다른 방법에 기대기 → 작년·인터넷 자료 보기 → 한 번 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 다른 자료나 쉬운 방법에서 시작했다.
+      cartoonCaption3: 작년 자료와 인터넷 요약에 기대었다.
+      cartoonCaption4: 작년·인터넷 자료 + 올해 범위 거리
+      cartoonCaption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reportReflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C2R3:
       score: 35
       grade: D
@@ -4599,6 +6060,16 @@ studyplan:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 다른 방법에 기대기 → 작년·인터넷 자료 보기 → 깊게 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 다른 자료나 쉬운 방법에서 시작했다.
+      cartoonCaption3: 작년 자료와 인터넷 요약에 기대었다.
+      cartoonCaption4: 작년·인터넷 자료 + 올해 범위 거리
+      cartoonCaption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reportReflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C3R1:
       score: 12
       grade: D
@@ -4615,6 +6086,16 @@ studyplan:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 다른 방법에 기대기 → 미루거나 쉬운 일 하기 → 그대로 진행하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 다른 자료나 쉬운 방법에서 시작했다.
+      cartoonCaption3: 공부를 미루거나 쉬운 일만 했다.
+      cartoonCaption4: 미루기 → 작은 행동 하나로 전환
+      cartoonCaption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reportReflection: 계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 검토 필요
     C3R2:
       score: 35
       grade: D
@@ -4631,6 +6112,16 @@ studyplan:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 다른 방법에 기대기 → 미루거나 쉬운 일 하기 → 한 번 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 다른 자료나 쉬운 방법에서 시작했다.
+      cartoonCaption3: 공부를 미루거나 쉬운 일만 했다.
+      cartoonCaption4: 미루기 → 작은 행동 하나로 전환
+      cartoonCaption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reportReflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
     C3R3:
       score: 50
       grade: D
@@ -4647,6 +6138,16 @@ studyplan:
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
+      reportPathSummary: 다른 방법에 기대기 → 미루거나 쉬운 일 하기 → 깊게 확인하기
+      cartoonCaption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      cartoonCaption2: 다른 자료나 쉬운 방법에서 시작했다.
+      cartoonCaption3: 공부를 미루거나 쉬운 일만 했다.
+      cartoonCaption4: 미루기 → 작은 행동 하나로 전환
+      cartoonCaption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reportReflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      reportCardSummary: 회복력
+      reportStrengthTags: []
+      reportGrowthTags: 직접 근거 보강
   axisDelta:
   - leafId: A1R3
     requireCard: 자기검증

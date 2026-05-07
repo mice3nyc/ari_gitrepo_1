@@ -1,8 +1,9 @@
 ## SPEC — v0.8
 
-**최종 업데이트**: 2026-05-07 세션304 (v0.8 분기 — v11 데이터 패키지 통합: 최종점수/최종등급 전환 + 카드 3트랙 + 성장카드 + 리플레이)
-**PLAN**: [[PLAN|PLAN.md]] / **TASKS**: [[TASKS|TASKS.md]]
-**v11 핸드오프**: `Assets/incoming/AI리터러시/codex/ari-final-delivery/`
+**최종 업데이트**: 2026-05-07 세션308 (v14-slim 반영 — §16 리포트 카툰 + §17 성장 리포트 + §3.6 자원 바닥값)
+**PLAN**: [[PLAN|PLAN.md]] / **TASKS**: [[TASKS|TASKS.md]] / **DESIGN**: [[DESIGN-REGISTRY|DESIGN-REGISTRY.md]]
+**v14-slim**: `Assets/incoming/AI리터러시/codex/ari-final-delivery-v14-slim/`
+**v14 리포트**: `Assets/incoming/AI리터러시/codex/ari-report-text-v14/`
 
 > 에이전트 전달용 기술 상세. 코드와 동기화. 변경 시 build.py / extract_balance.js / index.html 영향 점검.
 
@@ -395,6 +396,20 @@ leaf마다 디자인 의도에 따라 시간/에너지 비율이 다르다.
 **적용 범위**: 5 시나리오 × 27 자리(leaf+review) × 시간/에너지 = 270 자리 일괄 sweep. 시나리오 narrative와 leaf 디자인 의도 정합 검증.
 
 **검수 자리**: 비용 sweep 완료 후 csv 리젠 → 피터공이 leaf 단위 검수.
+
+##### 3.6 자원 비용 바닥값 (v14-slim 세션308)
+
+후반 시나리오에서 역량이 높아지더라도 할인 후 비용이 0이 되면 선택의 무게가 사라진다.
+
+```
+displayed_cost = max(floor, raw_cost - effect)
+floor = (raw_cost == 0) ? 0 : 1
+```
+
+- 원래 비용이 0인 선택지: 0 유지
+- 원래 비용이 1 이상인 선택지: 할인 후 최소 1
+
+코드: `_applyDiscount` 함수에서 `Math.max(1, discounted)` 적용. raw_cost 0 체크 선행.
 
 ---
 
@@ -1261,3 +1276,195 @@ function safeClick(btn, handler) {
 ##### 15.4 결과 카드와 리포트 일관성
 
 결과 화면에서 보여준 카드와 최종 리포트의 카드 인벤토리는 같은 데이터 소스(gameState)를 참조. 결과 화면에서 카드를 gameState에 추가 → 리포트에서 gameState를 읽어 표시. 불일치 발생 시 gameState가 진실.
+
+---
+
+#### §16. 리포트 카툰 돌아보기 v14 재작성 (세션308)
+
+v14-slim `03-report-cartoon-text-135.csv`의 텍스트로 기존 리포트 카툰 영역을 전면 교체.
+
+##### 16.1 데이터 구조
+
+yaml `finals` 블록에 리포트 필드 6종 추가:
+
+```yaml
+finals:
+  A1R1:
+    score: 89
+    grade: A
+    # ... 기존 필드 ...
+    reportPathSummary: "내 이야기 찾기 → 내 단어로 쓰기 → 그대로 진행하기"
+    cartoonCaption1: "자기소개를 써야 하는 상황이 생겼다."
+    cartoonCaption2: "AI보다 먼저 내 이야기를 떠올렸다."
+    cartoonCaption3: "내가 고른 단어에서 글을 시작했다."
+    cartoonCaption4: "내가 고른 단어로 시작한 자기소개"
+    cartoonCaption5: "그대로 내며 마지막 확인을 건너뛰었다."
+    reportReflection: "내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다."
+    reportCardSummary: "[중심잡기] 주체성 · 자기이해 · 표현력"
+    reportStrengthTags:
+    - 주체성
+    - 자기이해
+    - 표현력
+    reportGrowthTags: "검토 필요"
+```
+
+##### 16.2 시나리오별 카툰 블록 구조
+
+리포트에서 각 시나리오는 다음 순서로 표시:
+
+```
+1. {시나리오 타이틀}  {최종점수}점 · {최종등급}등급
+
+{reportPathSummary}
+
+[컷1] {cartoonCaption1}
+[컷2] {cartoonCaption2}
+[컷3] {cartoonCaption3}
+[컷4] {cartoonCaption4}
+[컷5] {cartoonCaption5}
+
+핵심 돌아보기
+{reportReflection}
+
+카드
+{reportCardSummary}
+```
+
+##### 16.3 표시 규칙
+
+**표시하지 않는 것** (학생 화면에서 제거):
+- `도메인지식 +3`, `위 +2 / 도 +3` 등 내부 수치
+- `basePoint`, `varPoint`, `correction`, `resourceCosts`
+- `이번 회기에 ... 카드를 얻었다` 식 시스템 문장
+- 기존 `reviewSupplements`의 긴 설명 텍스트
+
+**표시하는 것**:
+- 카드 이름 (reportCardSummary 형식: `[축] 태그1 · 태그2`)
+- 선택 경로 (reportPathSummary: 화살표로 연결된 한 줄)
+- 핵심 돌아보기 (reportReflection: 강조 표시)
+- 컷별 캡션 (cartoonCaption1~5: 각 1문장)
+
+##### 16.4 코드 자리
+
+- `_reportScenarioBlock(scenarioId, leafKey)` — 기존 함수 수정
+- `finals[leafKey].reportPathSummary` 등 직접 참조
+- 기존 `reviewSupplements` 참조 코드 → 새 필드로 전환
+- 카드 없는 경우 reportCardSummary = `"없음"`
+
+---
+
+#### §17. AI리터러시 성장 리포트 (세션308)
+
+학기 종합 리포트의 새 섹션. 단순 점수표가 아니라 "내가 어떤 과정을 선택했고, 무엇이 강했고, 무엇이 비었는가"를 보여준다.
+
+##### 17.1 리포트 구조
+
+```
+AI리터러시 성장 리포트
+
+{도입 문장}
+{패턴별 성장 요약}
+
+내가 잘 붙잡은 과정
+{강점 2~3개}
+
+더 연습할 과정
+{보완 1~2개}
+
+다음 AI 사용 약속
+{약속 1~3개}
+
+[교사용 관찰 포인트]  ← 접기 영역
+{교사용 코멘트}
+```
+
+##### 17.2 5패턴 판정 로직
+
+5개 시나리오의 결과를 종합하여 해당 패턴을 판정한다.
+
+| 패턴 | 판정 기준 |
+|---|---|
+| AI 활용 우세형 | B/C 1차 선택 비율 > 60% |
+| 직접 시작 우세형 | A 1차 선택 비율 > 60% |
+| 검토 강점형 | R2/R3 선택 비율 > 60% |
+| 검토 부족형 | R1 선택 비율 > 60% |
+| 회복/재도전 필요형 | D/C 결과 비율 > 60% |
+
+복수 패턴 해당 시 우선순위: 회복/재도전 > 검토 부족 > AI 활용 우세 > 검토 강점 > 직접 시작 우세.
+
+판정 데이터 소스: `gameState.completedScenarios`에서 각 시나리오의 tier1 선택(A/B/C), review 선택(R1/R2/R3), 최종등급(S/A/B/C/D) 추출.
+
+##### 17.3 패턴별 성장 요약 문장
+
+texts.yaml `growthReport.patterns`에 5패턴 문장 저장:
+
+```yaml
+growthReport:
+  intro: "이 리포트는 다섯 개의 선택 장면을 바탕으로, 학생이 AI를 어떤 방식으로 활용했는지 돌아보는 기록이다. 점수보다 중요한 것은 어떤 과정을 AI에게 맡겼고, 어떤 과정을 직접 붙잡았는지 확인하는 것이다."
+  patterns:
+    aiHeavy: "AI를 활용해 가능성을 넓히는 선택이 많았다. ..."
+    selfStart: "먼저 직접 생각하고 자료를 붙잡는 선택이 많았다. ..."
+    reviewStrong: "결과를 그대로 넘기지 않고 다시 확인하는 선택이 많았다. ..."
+    reviewWeak: "빠르게 결과를 얻는 선택이 많았지만, 마지막 확인이 부족한 장면도 있었다. ..."
+    recoveryNeeded: "몇몇 장면에서는 결과를 빠르게 얻었지만, 배움에 필요한 과정이 비어 있었다. ..."
+```
+
+##### 17.4 강점/보완 문장 선택
+
+reportStrengthTags/reportGrowthTags를 5시나리오분 수집 → 빈도 상위로 문장 매핑.
+
+```yaml
+growthReport:
+  strengths:
+    - tag: "검토"
+      text: "AI 결과를 그대로 쓰지 않고 다시 확인했다."
+    - tag: "자기자료"
+      text: "내 자료나 약점을 먼저 넣고 AI를 활용했다."
+    - tag: "설명가능"
+      text: "내가 설명할 수 있는 내용인지 확인하려 했다."
+    - tag: "근거"
+      text: "직접 읽거나 풀어본 근거를 남기려 했다."
+    - tag: "소통"
+      text: "모둠 흐름이나 상대가 이해할 수 있는지를 함께 살폈다."
+  improvements:
+    - tag: "검토 필요"
+      text: "빠르게 만든 결과를 그대로 제출하기 전에 한 번 더 확인하기가 필요하다."
+    - tag: "위임 구분"
+      text: "AI가 만든 부분과 내가 판단한 부분을 나누는 연습이 필요하다."
+    - tag: "근거 부족"
+      text: "내가 직접 읽고 경험한 근거를 하나 이상 남기는 연습이 필요하다."
+    - tag: "설명 불가"
+      text: "그럴듯한 결과보다 내가 설명할 수 있는 결과를 만드는 연습이 필요하다."
+```
+
+##### 17.5 다음 AI 사용 약속
+
+reportStrengthTags/reportGrowthTags 조합에 따라 1~3개 선택:
+
+```yaml
+growthReport:
+  pledges:
+    - "AI가 만든 답을 그대로 제출하지 않는다."
+    - "내가 설명할 수 있는 내용인지 확인한다."
+    - "내 경험이나 자료를 먼저 넣고 도움을 받는다."
+    - "AI가 한 부분과 내가 판단한 부분을 나눈다."
+    - "빠른 결과보다 직접 확인한 근거를 하나 남긴다."
+```
+
+##### 17.6 교사용 관찰 포인트
+
+접기 영역(`<details>`)으로 표시. 패턴별 교사용 코멘트 1~2문장.
+
+```yaml
+growthReport:
+  teacherNotes:
+    aiHeavy: "이 학생은 AI 활용에 적극적이며, 빠른 초안 생성 경로를 자주 선택했다. 다만 좋은 결과가 나온 장면은 대부분 검토 단계가 포함된 경우였다. 다음 수업에서는 AI 결과를 설명 가능한 문장으로 바꾸는 활동을 연결하면 좋다."
+    selfStart: "이 학생은 직접 시작하는 선택이 많아 자기 기준을 세우는 힘이 보인다. 다음 단계에서는 AI를 활용해 생각을 확장하고 비교하는 활동을 연결하면 좋다."
+    reviewStrong: "이 학생은 검토 단계에서 성과가 크게 달라졌다. AI 결과를 그대로 쓰는 것과 자기 기준으로 고치는 것의 차이를 토론하게 하면 좋다."
+    reviewWeak: "이 학생은 빠르게 결과를 만들지만 마지막 확인 습관이 아직 약하다. AI 결과를 제출 전에 한 문장으로 요약하게 하는 연습을 연결하면 좋다."
+    recoveryNeeded: "이 학생은 결과를 빠르게 얻는 경향이 있다. 한 과제에서 AI 없이 먼저 해보고, AI로 보강하는 순서를 체험하게 하면 좋다."
+```
+
+##### 17.7 어투 규칙
+
+성장 리포트 전체 어투: `~이다`, `~했다`, `~할 수 있다`, `~가 필요하다`. 칭찬이나 훈계 말투 금지.

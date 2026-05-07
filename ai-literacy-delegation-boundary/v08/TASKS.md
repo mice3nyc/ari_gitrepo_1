@@ -1,15 +1,15 @@
 ## TASKS — v0.8
 
-**최종 업데이트**: 2026-05-07 세션306 (v12 마이그레이션 + Cut6 간소화 + 카드 UI + 리포트 3트랙)
+**최종 업데이트**: 2026-05-07 세션308 (v14-slim 반영 — 단계 10~13 신설)
 **PLAN**: [[PLAN|PLAN.md]] / **SPEC**: [[SPEC|SPEC.md]]
-**v12 핸드오프**: `Assets/incoming/AI리터러시/codex/ari-final-delivery-v12/01-v12-change-request-for-arigong.md`
-**v12 CSV**: `Assets/incoming/AI리터러시/codex/ari-final-delivery-v12/03-ai-literacy-v12-final-integrated-data.csv`
+**v14-slim**: `Assets/incoming/AI리터러시/codex/ari-final-delivery-v14-slim/`
+**v14 리포트**: `Assets/incoming/AI리터러시/codex/ari-report-text-v14/`
 
 > 매 작업 완료 시 즉시 체크. 에이전트 위임 시 이 노트 + SPEC만으로 자급자족 가능해야 함.
 
 ---
 
-#### 현재 단계: 종합 검수 → git push 대기 (단계 8)
+#### 현재 단계: v14-slim 데이터 재마이그레이션 (단계 10)
 
 ---
 
@@ -125,14 +125,72 @@ v12 요청: Cut6는 등급+점수+awareness+하단메시지만. 선택경로/카
 - [x] 8.3 git tag `v0.8-pre-test` ✅
 - [x] 8.4 git 커밋 `439446d` + push ✅
 - [x] 8.5 GitHub Pages 배포 진행 중 (https://mice3nyc.github.io/ari_gitrepo_1/ai-literacy-delegation-boundary/v08/)
+- [x] 8.6 DESIGN-REGISTRY.md 생성 — CSS 27개 섹션 확정 값 + z-index 스택 + 수정 프로토콜. 디자인 수정 시 롤백 방지용 (세션307)
 
 ---
 
-##### 단계 9 — 플테 + QA
+##### 단계 10 — v14-slim 데이터 재마이그레이션
 
-- [ ] 9.1 피터공 직접 플테
-- [ ] 9.2 동현공 플테 안내
-- [ ] 9.3 QA 피드백 수집 + 수정 사이클
+v14-slim CSV가 새 단일 진실. v11 CSV를 대체한다.
+
+- [x] 10.1 migrate_v14_slim.py 신설 — v14-slim CSV + 리포트 CSV + resourceCosts yaml 통합
+- [x] 10.2 v14-slim CSV → scenarios.yaml 재생성 — finals 블록에 리포트 필드 6종 추가 (216K → 307K)
+  - reportPathSummary, cartoonCaption1~5, reportReflection, reportCardSummary, reportStrengthTags, reportGrowthTags
+- [x] 10.3 resourceCosts yaml 교체 — v14-slim snippet으로 5시나리오 전면 교체 (135건)
+- [x] 10.4 growth report 템플릿 → texts.yaml growthReport 섹션 추가 (5패턴 + 강점/보완/약속 + 교사용)
+- [x] 10.5 자원 비용 바닥값 — 이미 구현됨 (CONFIG.minResourceCost:1 + _applyDiscount에서 rawT>0 → max(1,...))
+- [x] 10.6 eorinwangja C1R1 D등급 확인 + groupwork B3R1 C등급 확인
+- [x] **검수 10-A**: yaml 135행 ↔ v14-slim CSV 전수 대조 ✅
+- [x] **검수 10-B**: yaml 135행 ↔ v14-slim 리포트 CSV 전수 대조 ✅
+- [x] **검수 10-C**: resourceCosts 135건 ↔ v14-slim yaml snippet 전수 대조 ✅
+- [x] 빌드 확인: 594,004 bytes (이전 472K → +122K)
+
+---
+
+##### 단계 11 — 리포트 카툰 돌아보기 재작성
+
+기존 reviewSupplements 긴 설명 → v14 컷당 1문장 캡션으로 전환.
+
+- [x] 11.1 카툰 컷 캡션 → cartoonCaption1~5 전환 (getCutCaptionFor 재작성, fallback 보존)
+- [x] 11.2 선택 경로 → reportPathSummary 전환 (3줄 → 한 줄 화살표)
+- [x] 11.3 핵심 돌아보기 → reportReflection 강조 표시 (comic-scene-footer 블록)
+- [x] 11.4 카드 요약 → reportCardSummary 한 줄 표시 ("없음"이면 미표시)
+- [x] 11.5 내부 수치 제거 — 위/도 delta, scene-summary 위/도 세그먼트, _reportSceneMood 호출 제거
+- [x] **검수 11-A**: 리포트 렌더링 코드에서 dlgDelta/knlDelta/fmtD/sceneMood 참조 0건 ✅
+- [ ] **검수 11-B**: 5시나리오 완주 후 카툰 돌아보기 정상 렌더링 (브라우저 플테 필요)
+
+---
+
+##### 단계 12 — AI리터러시 성장 리포트 구현
+
+학기 종합 리포트에 성장 리포트 섹션 추가.
+
+- [x] 12.1 패턴 판정 로직 — tier1(A/B/C) + review(R1/R2/R3) + grade(S~D) 비율로 5패턴 판정. 우선순위: recovery>reviewWeak>aiHeavy>reviewStrong>selfStart
+- [x] 12.2 패턴별 성장 요약 문장 표시 (texts.yaml growthReport.patterns)
+- [x] 12.3 "내가 잘 붙잡은 과정" — reportStrengthTags 빈도 상위 3개 → strengths 풀 매칭
+- [x] 12.4 "더 연습할 과정" — reportGrowthTags 빈도 상위 2개 → improvements 풀 매칭
+- [x] 12.5 "다음 AI 사용 약속" — growthTags 기반 pledges 1~3개 선택
+- [x] 12.6 교사용 관찰 포인트 — `<details>` 접기 영역
+- [x] 12.7 리포트 어투 — texts.yaml 원문 그대로 (~이다/~했다 어투)
+- [ ] **검수 12-A**: 5시나리오 전체 완주 후 성장 리포트 정상 렌더링 (브라우저 플테 필요)
+- [ ] **검수 12-B**: D 경로 포함 완주 → 회복/재도전 패턴 정상 판정 (브라우저 플테 필요)
+
+---
+
+##### 단계 13 — 2차 빌드 + 종합 재검수
+
+- [ ] 13.1 build.py 빌드 → 바이트 변화 확인
+- [ ] 13.2 종합 자체 검수 QC-1~QC-11 + 신규 QC-12~14 전항목 통과
+- [ ] 13.3 git 커밋 + push
+- [ ] 13.4 GitHub Pages 배포 확인
+
+---
+
+##### 단계 14 — 플테 + QA
+
+- [ ] 14.1 피터공 직접 플테
+- [ ] 14.2 동현공 플테 안내
+- [ ] 14.3 QA 피드백 수집 + 수정 사이클
 
 ---
 
@@ -152,7 +210,10 @@ v12 요청: Cut6는 등급+점수+awareness+하단메시지만. 선택경로/카
 | QC-8 | D 경로 회복력 | D 결과 진입 → 회복력 표시 + 인벤토리 | 정상 작동 |
 | QC-9 | 리플레이 도전력 | 리플레이 완료 + 개선 → 도전력 1회 지급 | 중복 없음 |
 | QC-10 | 이중 클릭 방어 | 모든 진행 버튼 연타 테스트 | 중복 동작 없음 |
-| QC-11 | 135 leaf 전수 정합 | yaml 135행 ↔ v11 CSV 전수 대조 스크립트 | 전수 일치 |
+| QC-11 | 135 leaf 전수 정합 | yaml 135행 ↔ v14-slim CSV 전수 대조 스크립트 | 전수 일치 |
+| QC-12 | 리포트 카툰 캡션 정합 | yaml 135행 cartoonCaption1~5 ↔ v14-slim 리포트 CSV | 전수 일치 |
+| QC-13 | 리포트 내부 수치 제거 | 학생 화면에서 `도메인지식 +`, `위 +`, `도 +`, `basePoint`, `varPoint` 검색 | 0건 |
+| QC-14 | 성장 리포트 렌더링 | 5시나리오 완주 후 성장 리포트 섹션 표시 | 패턴·강점·보완 정상 |
 
 ---
 

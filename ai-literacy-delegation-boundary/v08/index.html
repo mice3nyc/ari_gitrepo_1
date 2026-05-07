@@ -505,7 +505,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .card-reward-overlay.hidden { display:none; }
 /* 5/3 — Pop In! 애니메이션 (fadein 폐기): scale + rotate 오버슛 + box-shadow pulse
    5/3 정정 — 카드 N장 동시 펼침 (5점 별/W 패턴 좌표). 각 카드마다 다른 (top,left) %로 배치. */
-.card-reward-card { position:fixed; width:220px; padding:18px 18px 14px 22px; border:2px solid #111; background:#fff; box-shadow:0 4px 0 #111; border-radius:12px; opacity:0; z-index:405; border-left-width:6px;
+.card-reward-card { position:fixed; width:220px; padding:18px 18px 14px 22px; border:2px solid #111; background:#fff; box-shadow:0 4px 0 #111; border-radius:12px; opacity:0; z-index:405; border-left-width:22px;
   /* 기본: 중앙 (1장 분기 / fallback). top/left는 JS에서 인라인으로 덮어씀
      5/3 정정 — 폭 280→220, 좌표 압축에 맞춰 카드도 작게 */
   top:50%; left:50%; transform:translate(-50%,-50%) scale(0.3) rotate(-5deg);
@@ -1232,7 +1232,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "내 이야기 찾기 → 내 단어로 쓰기 → 그대로 진행하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI보다 먼저 내 이야기를 떠올렸다.",
+        "cartoonCaption3": "내가 고른 단어에서 글을 시작했다.",
+        "cartoonCaption4": "내가 고른 단어로 시작한 자기소개",
+        "cartoonCaption5": "그대로 내며 마지막 확인을 건너뛰었다.",
+        "reportReflection": "내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 자기이해 · 표현력",
+        "reportStrengthTags": [
+          "주체성",
+          "자기이해, 표현력"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "A1R2": {
         "score": 95,
@@ -1253,7 +1266,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "내 이야기 찾기 → 내 단어로 쓰기 → 한 번 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI보다 먼저 내 이야기를 떠올렸다.",
+        "cartoonCaption3": "내가 고른 단어에서 글을 시작했다.",
+        "cartoonCaption4": "내가 고른 단어로 시작한 자기소개",
+        "cartoonCaption5": "이상한 표현과 흐름을 한 번 확인했다.",
+        "reportReflection": "내 이야기를 먼저 세우고, 마지막에 책임질 수 있는 말만 남겼다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 자기이해 · 표현력 · 검토력",
+        "reportStrengthTags": [
+          "주체성",
+          "자기이해, 표현력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A1R3": {
         "score": 98,
@@ -1274,7 +1300,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "내 이야기 찾기 → 내 단어로 쓰기 → 깊게 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI보다 먼저 내 이야기를 떠올렸다.",
+        "cartoonCaption3": "내가 고른 단어에서 글을 시작했다.",
+        "cartoonCaption4": "내가 고른 단어로 시작한 자기소개",
+        "cartoonCaption5": "다시 읽으며 내가 답할 수 있는 내용만 남겼다.",
+        "reportReflection": "내 이야기를 먼저 세우고, 마지막에 책임질 수 있는 말만 남겼다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 자기이해 · 표현력 · 검토력",
+        "reportStrengthTags": [
+          "주체성",
+          "자기이해, 표현력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A2R1": {
         "score": 70,
@@ -1294,7 +1333,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "내 이야기 찾기 → 내 경험으로 쓰기 → 그대로 진행하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI보다 먼저 내 이야기를 떠올렸다.",
+        "cartoonCaption3": "내 경험을 짧은 이야기로 옮겼다.",
+        "cartoonCaption4": "실제 경험이 들어간 자기소개",
+        "cartoonCaption5": "그대로 내며 마지막 확인을 건너뛰었다.",
+        "reportReflection": "내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 자기이해 · 표현력",
+        "reportStrengthTags": [
+          "주체성",
+          "자기이해, 표현력"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "A2R2": {
         "score": 75,
@@ -1314,7 +1366,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "내 이야기 찾기 → 내 경험으로 쓰기 → 한 번 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI보다 먼저 내 이야기를 떠올렸다.",
+        "cartoonCaption3": "내 경험을 짧은 이야기로 옮겼다.",
+        "cartoonCaption4": "실제 경험이 들어간 자기소개",
+        "cartoonCaption5": "이상한 표현과 흐름을 한 번 확인했다.",
+        "reportReflection": "내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 자기이해 · 표현력",
+        "reportStrengthTags": [
+          "주체성",
+          "자기이해, 표현력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A2R3": {
         "score": 81,
@@ -1334,7 +1399,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "내 이야기 찾기 → 내 경험으로 쓰기 → 깊게 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI보다 먼저 내 이야기를 떠올렸다.",
+        "cartoonCaption3": "내 경험을 짧은 이야기로 옮겼다.",
+        "cartoonCaption4": "실제 경험이 들어간 자기소개",
+        "cartoonCaption5": "다시 읽으며 내가 답할 수 있는 내용만 남겼다.",
+        "reportReflection": "내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 자기이해 · 표현력",
+        "reportStrengthTags": [
+          "주체성",
+          "자기이해, 표현력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A3R1": {
         "score": 48,
@@ -1351,7 +1429,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "내 이야기 찾기 → 먼저 초안 쓰기 → 그대로 진행하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI보다 먼저 내 이야기를 떠올렸다.",
+        "cartoonCaption3": "서툴어도 먼저 내 초안을 만들었다.",
+        "cartoonCaption4": "내 말투가 살아 있는 초안",
+        "cartoonCaption5": "그대로 내며 마지막 확인을 건너뛰었다.",
+        "reportReflection": "내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "A3R2": {
         "score": 65,
@@ -1371,7 +1459,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "내 이야기 찾기 → 먼저 초안 쓰기 → 한 번 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI보다 먼저 내 이야기를 떠올렸다.",
+        "cartoonCaption3": "서툴어도 먼저 내 초안을 만들었다.",
+        "cartoonCaption4": "내 말투가 살아 있는 초안",
+        "cartoonCaption5": "이상한 표현과 흐름을 한 번 확인했다.",
+        "reportReflection": "내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.",
+        "reportCardSummary": "[성찰하기] 성찰적 사고 · 표현력 · 자기이해",
+        "reportStrengthTags": [
+          "성찰적 사고",
+          "표현력, 자기이해"
+        ],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "A3R3": {
         "score": 75,
@@ -1391,7 +1492,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "내 이야기 찾기 → 먼저 초안 쓰기 → 깊게 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI보다 먼저 내 이야기를 떠올렸다.",
+        "cartoonCaption3": "서툴어도 먼저 내 초안을 만들었다.",
+        "cartoonCaption4": "내 말투가 살아 있는 초안",
+        "cartoonCaption5": "다시 읽으며 내가 답할 수 있는 내용만 남겼다.",
+        "reportReflection": "내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.",
+        "reportCardSummary": "[성찰하기] 성찰적 사고 · 표현력 · 자기이해",
+        "reportStrengthTags": [
+          "성찰적 사고",
+          "표현력, 자기이해"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B1R1": {
         "score": 15,
@@ -1408,7 +1522,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 시작 열기 → AI 질문에 답하기 → 그대로 진행하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI의 도움으로 글의 시작을 열었다.",
+        "cartoonCaption3": "AI 질문에 답하며 글감을 만들었다.",
+        "cartoonCaption4": "AI 질문에서 시작한 자기소개",
+        "cartoonCaption5": "그대로 내며 마지막 확인을 건너뛰었다.",
+        "reportReflection": "내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "B1R2": {
         "score": 28,
@@ -1425,7 +1549,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 시작 열기 → AI 질문에 답하기 → 한 번 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI의 도움으로 글의 시작을 열었다.",
+        "cartoonCaption3": "AI 질문에 답하며 글감을 만들었다.",
+        "cartoonCaption4": "AI 질문에서 시작한 자기소개",
+        "cartoonCaption5": "이상한 표현과 흐름을 한 번 확인했다.",
+        "reportReflection": "내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "B1R3": {
         "score": 38,
@@ -1442,7 +1576,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 시작 열기 → AI 질문에 답하기 → 깊게 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI의 도움으로 글의 시작을 열었다.",
+        "cartoonCaption3": "AI 질문에 답하며 글감을 만들었다.",
+        "cartoonCaption4": "AI 질문에서 시작한 자기소개",
+        "cartoonCaption5": "다시 읽으며 내가 답할 수 있는 내용만 남겼다.",
+        "reportReflection": "내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "B2R1": {
         "score": 57,
@@ -1459,7 +1603,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 시작 열기 → AI 순서 바꾸기 → 그대로 진행하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI의 도움으로 글의 시작을 열었다.",
+        "cartoonCaption3": "AI가 준 순서에 내 이야기를 채웠다.",
+        "cartoonCaption4": "AI 구조에 내 이야기를 채운 자기소개",
+        "cartoonCaption5": "그대로 내며 마지막 확인을 건너뛰었다.",
+        "reportReflection": "내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "B2R2": {
         "score": 75,
@@ -1479,7 +1633,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "AI로 시작 열기 → AI 순서 바꾸기 → 한 번 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI의 도움으로 글의 시작을 열었다.",
+        "cartoonCaption3": "AI가 준 순서에 내 이야기를 채웠다.",
+        "cartoonCaption4": "AI 구조에 내 이야기를 채운 자기소개",
+        "cartoonCaption5": "이상한 표현과 흐름을 한 번 확인했다.",
+        "reportReflection": "내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.",
+        "reportCardSummary": "[융합하기] 맥락적 사고 · 표현력 · 자기이해",
+        "reportStrengthTags": [
+          "맥락적 사고",
+          "표현력, 자기이해"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B2R3": {
         "score": 85,
@@ -1500,7 +1667,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI로 시작 열기 → AI 순서 바꾸기 → 깊게 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI의 도움으로 글의 시작을 열었다.",
+        "cartoonCaption3": "AI가 준 순서에 내 이야기를 채웠다.",
+        "cartoonCaption4": "AI 구조에 내 이야기를 채운 자기소개",
+        "cartoonCaption5": "다시 읽으며 내가 답할 수 있는 내용만 남겼다.",
+        "reportReflection": "내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.",
+        "reportCardSummary": "[융합하기] 맥락적 사고 · 표현력 · 자기이해 · 검토력",
+        "reportStrengthTags": [
+          "맥락적 사고",
+          "표현력, 자기이해, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B3R1": {
         "score": 88,
@@ -1520,7 +1700,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI로 시작 열기 → AI 문장과 내 메모 섞기 → 그대로 진행하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI의 도움으로 글의 시작을 열었다.",
+        "cartoonCaption3": "AI 문장과 내 메모를 함께 놓고 골랐다.",
+        "cartoonCaption4": "AI 문장과 내 메모가 섞인 자기소개",
+        "cartoonCaption5": "그대로 내며 마지막 확인을 건너뛰었다.",
+        "reportReflection": "내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.",
+        "reportCardSummary": "[융합하기] 통합적 사고 · 표현력 · 자기이해",
+        "reportStrengthTags": [
+          "통합적 사고",
+          "표현력, 자기이해"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "B3R2": {
         "score": 93,
@@ -1541,7 +1734,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI로 시작 열기 → AI 문장과 내 메모 섞기 → 한 번 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI의 도움으로 글의 시작을 열었다.",
+        "cartoonCaption3": "AI 문장과 내 메모를 함께 놓고 골랐다.",
+        "cartoonCaption4": "AI 문장과 내 메모가 섞인 자기소개",
+        "cartoonCaption5": "이상한 표현과 흐름을 한 번 확인했다.",
+        "reportReflection": "내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.",
+        "reportCardSummary": "[융합하기] 통합적 사고 · 표현력 · 자기이해 · 검토력",
+        "reportStrengthTags": [
+          "통합적 사고",
+          "표현력, 자기이해, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B3R3": {
         "score": 100,
@@ -1562,7 +1768,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "AI로 시작 열기 → AI 문장과 내 메모 섞기 → 깊게 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI의 도움으로 글의 시작을 열었다.",
+        "cartoonCaption3": "AI 문장과 내 메모를 함께 놓고 골랐다.",
+        "cartoonCaption4": "AI 문장과 내 메모가 섞인 자기소개",
+        "cartoonCaption5": "다시 읽으며 내가 답할 수 있는 내용만 남겼다.",
+        "reportReflection": "내 이야기를 먼저 세우고, 마지막에 책임질 수 있는 말만 남겼다.",
+        "reportCardSummary": "[융합하기] 통합적 사고 · 표현력 · 자기이해 · 검토력",
+        "reportStrengthTags": [
+          "통합적 사고",
+          "표현력, 자기이해, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "C1R1": {
         "score": 15,
@@ -1579,7 +1798,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI에게 맡기기 → 정보 없이 AI 초안 받기 → 그대로 진행하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "자기소개의 결과를 먼저 AI에게 맡겼다.",
+        "cartoonCaption3": "내 정보 없이 AI가 글을 만들게 했다.",
+        "cartoonCaption4": "AI가 상상한 학생의 자기소개",
+        "cartoonCaption5": "그대로 내며 마지막 확인을 건너뛰었다.",
+        "reportReflection": "내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "C1R2": {
         "score": 28,
@@ -1596,7 +1825,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI에게 맡기기 → 정보 없이 AI 초안 받기 → 한 번 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "자기소개의 결과를 먼저 AI에게 맡겼다.",
+        "cartoonCaption3": "내 정보 없이 AI가 글을 만들게 했다.",
+        "cartoonCaption4": "AI가 상상한 학생의 자기소개",
+        "cartoonCaption5": "이상한 표현과 흐름을 한 번 확인했다.",
+        "reportReflection": "내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C1R3": {
         "score": 38,
@@ -1613,7 +1852,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI에게 맡기기 → 정보 없이 AI 초안 받기 → 깊게 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "자기소개의 결과를 먼저 AI에게 맡겼다.",
+        "cartoonCaption3": "내 정보 없이 AI가 글을 만들게 했다.",
+        "cartoonCaption4": "AI가 상상한 학생의 자기소개",
+        "cartoonCaption5": "다시 읽으며 내가 답할 수 있는 내용만 남겼다.",
+        "reportReflection": "내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C2R1": {
         "score": 57,
@@ -1630,7 +1879,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI에게 맡기기 → 기본 정보로 AI 초안 받기 → 그대로 진행하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "자기소개의 결과를 먼저 AI에게 맡겼다.",
+        "cartoonCaption3": "몇 가지 정보만 넣고 AI 초안을 받았다.",
+        "cartoonCaption4": "내 정보가 들어간 AI 자기소개",
+        "cartoonCaption5": "그대로 내며 마지막 확인을 건너뛰었다.",
+        "reportReflection": "내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "C2R2": {
         "score": 65,
@@ -1650,7 +1909,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "AI에게 맡기기 → 기본 정보로 AI 초안 받기 → 한 번 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "자기소개의 결과를 먼저 AI에게 맡겼다.",
+        "cartoonCaption3": "몇 가지 정보만 넣고 AI 초안을 받았다.",
+        "cartoonCaption4": "내 정보가 들어간 AI 자기소개",
+        "cartoonCaption5": "이상한 표현과 흐름을 한 번 확인했다.",
+        "reportReflection": "내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 자기이해 · 표현력",
+        "reportStrengthTags": [
+          "주체성",
+          "자기이해, 표현력"
+        ],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C2R3": {
         "score": 72,
@@ -1670,7 +1942,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "AI에게 맡기기 → 기본 정보로 AI 초안 받기 → 깊게 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "자기소개의 결과를 먼저 AI에게 맡겼다.",
+        "cartoonCaption3": "몇 가지 정보만 넣고 AI 초안을 받았다.",
+        "cartoonCaption4": "내 정보가 들어간 AI 자기소개",
+        "cartoonCaption5": "다시 읽으며 내가 답할 수 있는 내용만 남겼다.",
+        "reportReflection": "내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 자기이해 · 표현력",
+        "reportStrengthTags": [
+          "주체성",
+          "자기이해, 표현력"
+        ],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C3R1": {
         "score": 88,
@@ -1690,7 +1975,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI에게 맡기기 → AI 글을 다시 쓰기 → 그대로 진행하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "자기소개의 결과를 먼저 AI에게 맡겼다.",
+        "cartoonCaption3": "AI 글을 참고해 다시 내 글로 고쳤다.",
+        "cartoonCaption4": "AI 흐름을 참고해 다시 쓴 자기소개",
+        "cartoonCaption5": "그대로 내며 마지막 확인을 건너뛰었다.",
+        "reportReflection": "내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.",
+        "reportCardSummary": "[융합하기] 통합적 사고 · 표현력 · 검토력",
+        "reportStrengthTags": [
+          "통합적 사고",
+          "표현력, 검토력"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "C3R2": {
         "score": 93,
@@ -1710,7 +2008,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI에게 맡기기 → AI 글을 다시 쓰기 → 한 번 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "자기소개의 결과를 먼저 AI에게 맡겼다.",
+        "cartoonCaption3": "AI 글을 참고해 다시 내 글로 고쳤다.",
+        "cartoonCaption4": "AI 흐름을 참고해 다시 쓴 자기소개",
+        "cartoonCaption5": "이상한 표현과 흐름을 한 번 확인했다.",
+        "reportReflection": "내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.",
+        "reportCardSummary": "[융합하기] 통합적 사고 · 표현력 · 검토력",
+        "reportStrengthTags": [
+          "통합적 사고",
+          "표현력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "C3R3": {
         "score": 100,
@@ -1730,7 +2041,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "AI에게 맡기기 → AI 글을 다시 쓰기 → 깊게 확인하기",
+        "cartoonCaption1": "자기소개를 써야 하는 상황이 생겼다.",
+        "cartoonCaption2": "자기소개의 결과를 먼저 AI에게 맡겼다.",
+        "cartoonCaption3": "AI 글을 참고해 다시 내 글로 고쳤다.",
+        "cartoonCaption4": "AI 흐름을 참고해 다시 쓴 자기소개",
+        "cartoonCaption5": "다시 읽으며 내가 답할 수 있는 내용만 남겼다.",
+        "reportReflection": "내 이야기를 먼저 세우고, 마지막에 책임질 수 있는 말만 남겼다.",
+        "reportCardSummary": "[융합하기] 통합적 사고 · 표현력 · 검토력",
+        "reportStrengthTags": [
+          "통합적 사고",
+          "표현력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       }
     },
     "axisDelta": [
@@ -2500,7 +2824,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "모둠 방향 맞추기 → 발표 질문 정하기 → 그대로 진행하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "모둠과 발표 방향을 먼저 맞췄다.",
+        "cartoonCaption3": "발표에서 답할 질문을 먼저 정했다.",
+        "cartoonCaption4": "모둠 질문 중심의 발표 준비",
+        "cartoonCaption5": "그대로 읽기로 하며 설명 가능성을 확인하지 못했다.",
+        "reportReflection": "AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.",
+        "reportCardSummary": "[성찰하기] 사회·관계적 사고 · 협업력 · 소통력",
+        "reportStrengthTags": [
+          "사회·관계적 사고",
+          "협업력, 소통력"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "A1R2": {
         "score": 96,
@@ -2521,7 +2858,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "모둠 방향 맞추기 → 발표 질문 정하기 → 한 번 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "모둠과 발표 방향을 먼저 맞췄다.",
+        "cartoonCaption3": "발표에서 답할 질문을 먼저 정했다.",
+        "cartoonCaption4": "모둠 질문 중심의 발표 준비",
+        "cartoonCaption5": "내가 이해하지 못한 내용은 지웠다.",
+        "reportReflection": "AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.",
+        "reportCardSummary": "[성찰하기] 사회·관계적 사고 · 협업력 · 소통력 · 검토력",
+        "reportStrengthTags": [
+          "사회·관계적 사고",
+          "협업력, 소통력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A1R3": {
         "score": 99,
@@ -2542,7 +2892,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "모둠 방향 맞추기 → 발표 질문 정하기 → 깊게 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "모둠과 발표 방향을 먼저 맞췄다.",
+        "cartoonCaption3": "발표에서 답할 질문을 먼저 정했다.",
+        "cartoonCaption4": "모둠 질문 중심의 발표 준비",
+        "cartoonCaption5": "질문을 예상하고 답하기 어려운 부분을 고쳤다.",
+        "reportReflection": "AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.",
+        "reportCardSummary": "[성찰하기] 사회·관계적 사고 · 협업력 · 소통력 · 검토력",
+        "reportStrengthTags": [
+          "사회·관계적 사고",
+          "협업력, 소통력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A2R1": {
         "score": 70,
@@ -2562,7 +2925,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "모둠 방향 맞추기 → 역할 나누기 → 그대로 진행하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "모둠과 발표 방향을 먼저 맞췄다.",
+        "cartoonCaption3": "모둠 안에서 역할과 흐름을 나눴다.",
+        "cartoonCaption4": "역할 분담 + 흐름 정합 발표 준비",
+        "cartoonCaption5": "그대로 읽기로 하며 설명 가능성을 확인하지 못했다.",
+        "reportReflection": "발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.",
+        "reportCardSummary": "[성찰하기] 사회·관계적 사고 · 협업력 · 학습력",
+        "reportStrengthTags": [
+          "사회·관계적 사고",
+          "협업력, 학습력"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "A2R2": {
         "score": 75,
@@ -2582,7 +2958,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "모둠 방향 맞추기 → 역할 나누기 → 한 번 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "모둠과 발표 방향을 먼저 맞췄다.",
+        "cartoonCaption3": "모둠 안에서 역할과 흐름을 나눴다.",
+        "cartoonCaption4": "역할 분담 + 흐름 정합 발표 준비",
+        "cartoonCaption5": "내가 이해하지 못한 내용은 지웠다.",
+        "reportReflection": "자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.",
+        "reportCardSummary": "[성찰하기] 사회·관계적 사고 · 협업력 · 학습력",
+        "reportStrengthTags": [
+          "사회·관계적 사고",
+          "협업력, 학습력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A2R3": {
         "score": 81,
@@ -2602,7 +2991,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "모둠 방향 맞추기 → 역할 나누기 → 깊게 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "모둠과 발표 방향을 먼저 맞췄다.",
+        "cartoonCaption3": "모둠 안에서 역할과 흐름을 나눴다.",
+        "cartoonCaption4": "역할 분담 + 흐름 정합 발표 준비",
+        "cartoonCaption5": "질문을 예상하고 답하기 어려운 부분을 고쳤다.",
+        "reportReflection": "자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.",
+        "reportCardSummary": "[성찰하기] 사회·관계적 사고 · 협업력 · 학습력",
+        "reportStrengthTags": [
+          "사회·관계적 사고",
+          "협업력, 학습력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A3R1": {
         "score": 49,
@@ -2619,7 +3021,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "모둠 방향 맞추기 → 내 파트 이해하기 → 그대로 진행하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "모둠과 발표 방향을 먼저 맞췄다.",
+        "cartoonCaption3": "내가 맡은 내용을 먼저 이해했다.",
+        "cartoonCaption4": "내 파트 이해 + 말로 설명 가능한 준비",
+        "cartoonCaption5": "그대로 읽기로 하며 설명 가능성을 확인하지 못했다.",
+        "reportReflection": "발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "A3R2": {
         "score": 65,
@@ -2639,7 +3051,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "모둠 방향 맞추기 → 내 파트 이해하기 → 한 번 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "모둠과 발표 방향을 먼저 맞췄다.",
+        "cartoonCaption3": "내가 맡은 내용을 먼저 이해했다.",
+        "cartoonCaption4": "내 파트 이해 + 말로 설명 가능한 준비",
+        "cartoonCaption5": "내가 이해하지 못한 내용은 지웠다.",
+        "reportReflection": "자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 표현력 · 협업력",
+        "reportStrengthTags": [
+          "주체성",
+          "표현력, 협업력"
+        ],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "A3R3": {
         "score": 75,
@@ -2659,7 +3084,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "모둠 방향 맞추기 → 내 파트 이해하기 → 깊게 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "모둠과 발표 방향을 먼저 맞췄다.",
+        "cartoonCaption3": "내가 맡은 내용을 먼저 이해했다.",
+        "cartoonCaption4": "내 파트 이해 + 말로 설명 가능한 준비",
+        "cartoonCaption5": "질문을 예상하고 답하기 어려운 부분을 고쳤다.",
+        "reportReflection": "자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 표현력 · 협업력",
+        "reportStrengthTags": [
+          "주체성",
+          "표현력, 협업력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B1R1": {
         "score": 16,
@@ -2676,7 +3114,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 빠르게 준비하기 → AI 개요 받기 → 그대로 진행하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 발표 준비를 빠르게 시작했다.",
+        "cartoonCaption3": "AI에게 발표 개요를 부탁했다.",
+        "cartoonCaption4": "AI 개요 + 우리 동네 정합 검토 준비",
+        "cartoonCaption5": "그대로 읽기로 하며 설명 가능성을 확인하지 못했다.",
+        "reportReflection": "발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "B1R2": {
         "score": 29,
@@ -2693,7 +3141,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 빠르게 준비하기 → AI 개요 받기 → 한 번 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 발표 준비를 빠르게 시작했다.",
+        "cartoonCaption3": "AI에게 발표 개요를 부탁했다.",
+        "cartoonCaption4": "AI 개요 + 우리 동네 정합 검토 준비",
+        "cartoonCaption5": "내가 이해하지 못한 내용은 지웠다.",
+        "reportReflection": "자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "B1R3": {
         "score": 39,
@@ -2710,7 +3168,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 빠르게 준비하기 → AI 개요 받기 → 깊게 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 발표 준비를 빠르게 시작했다.",
+        "cartoonCaption3": "AI에게 발표 개요를 부탁했다.",
+        "cartoonCaption4": "AI 개요 + 우리 동네 정합 검토 준비",
+        "cartoonCaption5": "질문을 예상하고 답하기 어려운 부분을 고쳤다.",
+        "reportReflection": "자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "B2R1": {
         "score": 58,
@@ -2727,7 +3195,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 빠르게 준비하기 → AI 슬라이드 문구 받기 → 그대로 진행하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 발표 준비를 빠르게 시작했다.",
+        "cartoonCaption3": "AI가 만든 슬라이드 문구를 받았다.",
+        "cartoonCaption4": "AI 슬라이드 + 설명 가능 검수 준비",
+        "cartoonCaption5": "그대로 읽기로 하며 설명 가능성을 확인하지 못했다.",
+        "reportReflection": "발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "B2R2": {
         "score": 75,
@@ -2747,7 +3225,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "AI로 빠르게 준비하기 → AI 슬라이드 문구 받기 → 한 번 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 발표 준비를 빠르게 시작했다.",
+        "cartoonCaption3": "AI가 만든 슬라이드 문구를 받았다.",
+        "cartoonCaption4": "AI 슬라이드 + 설명 가능 검수 준비",
+        "cartoonCaption5": "내가 이해하지 못한 내용은 지웠다.",
+        "reportReflection": "자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.",
+        "reportCardSummary": "[융합하기] 맥락적 사고 · 표현력 · 검토력",
+        "reportStrengthTags": [
+          "맥락적 사고",
+          "표현력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B2R3": {
         "score": 85,
@@ -2767,7 +3258,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI로 빠르게 준비하기 → AI 슬라이드 문구 받기 → 깊게 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 발표 준비를 빠르게 시작했다.",
+        "cartoonCaption3": "AI가 만든 슬라이드 문구를 받았다.",
+        "cartoonCaption4": "AI 슬라이드 + 설명 가능 검수 준비",
+        "cartoonCaption5": "질문을 예상하고 답하기 어려운 부분을 고쳤다.",
+        "reportReflection": "AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.",
+        "reportCardSummary": "[융합하기] 맥락적 사고 · 표현력 · 검토력",
+        "reportStrengthTags": [
+          "맥락적 사고",
+          "표현력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B3R1": {
         "score": 72,
@@ -2786,7 +3290,19 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI로 빠르게 준비하기 → 내 자료로 AI 대본 받기 → 그대로 진행하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 발표 준비를 빠르게 시작했다.",
+        "cartoonCaption3": "내 자료를 바탕으로 AI 대본을 받았다.",
+        "cartoonCaption4": "AI 대본은 빠르게 만들어졌다.",
+        "cartoonCaption5": "그대로 읽기로 하며 설명 가능성을 확인하지 못했다.",
+        "reportReflection": "AI 대본은 발표를 빠르게 만들었지만, 그대로 읽으면 내가 설명할 수 있는지 확인하기 어렵다.",
+        "reportCardSummary": "표현력",
+        "reportStrengthTags": [
+          "표현력"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "B3R2": {
         "score": 93,
@@ -2807,7 +3323,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI로 빠르게 준비하기 → 내 자료로 AI 대본 받기 → 한 번 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 발표 준비를 빠르게 시작했다.",
+        "cartoonCaption3": "내 자료를 바탕으로 AI 대본을 받았다.",
+        "cartoonCaption4": "AI 대본은 빠르게 만들어졌다.",
+        "cartoonCaption5": "내가 이해하지 못한 내용은 지웠다.",
+        "reportReflection": "AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.",
+        "reportCardSummary": "[융합하기] 통합적 사고 · 자료판단력 · 표현력 · 검토력",
+        "reportStrengthTags": [
+          "통합적 사고",
+          "자료판단력, 표현력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B3R3": {
         "score": 100,
@@ -2828,7 +3357,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "AI로 빠르게 준비하기 → 내 자료로 AI 대본 받기 → 깊게 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 발표 준비를 빠르게 시작했다.",
+        "cartoonCaption3": "내 자료를 바탕으로 AI 대본을 받았다.",
+        "cartoonCaption4": "AI 대본은 빠르게 만들어졌다.",
+        "cartoonCaption5": "질문을 예상하고 답하기 어려운 부분을 고쳤다.",
+        "reportReflection": "AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.",
+        "reportCardSummary": "[융합하기] 통합적 사고 · 자료판단력 · 표현력 · 검토력",
+        "reportStrengthTags": [
+          "통합적 사고",
+          "자료판단력, 표현력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "C1R1": {
         "score": 18,
@@ -2845,7 +3387,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "각자 준비하기 → 각자 자료 합치기 → 그대로 진행하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "함께 맞추기보다 각자 준비나 모양부터 보았다.",
+        "cartoonCaption3": "회의 없이 각자 찾은 자료를 합쳤다.",
+        "cartoonCaption4": "각자 자료 모음 → 흐름 정합 자리",
+        "cartoonCaption5": "그대로 읽기로 하며 설명 가능성을 확인하지 못했다.",
+        "reportReflection": "발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "C1R2": {
         "score": 35,
@@ -2862,7 +3414,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "각자 준비하기 → 각자 자료 합치기 → 한 번 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "함께 맞추기보다 각자 준비나 모양부터 보았다.",
+        "cartoonCaption3": "회의 없이 각자 찾은 자료를 합쳤다.",
+        "cartoonCaption4": "각자 자료 모음 → 흐름 정합 자리",
+        "cartoonCaption5": "내가 이해하지 못한 내용은 지웠다.",
+        "reportReflection": "자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C1R3": {
         "score": 55,
@@ -2879,7 +3441,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "각자 준비하기 → 각자 자료 합치기 → 깊게 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "함께 맞추기보다 각자 준비나 모양부터 보았다.",
+        "cartoonCaption3": "회의 없이 각자 찾은 자료를 합쳤다.",
+        "cartoonCaption4": "각자 자료 모음 → 흐름 정합 자리",
+        "cartoonCaption5": "질문을 예상하고 답하기 어려운 부분을 고쳤다.",
+        "reportReflection": "자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C2R1": {
         "score": 28,
@@ -2896,7 +3468,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "각자 준비하기 → 한 사람에게 맡기기 → 그대로 진행하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "함께 맞추기보다 각자 준비나 모양부터 보았다.",
+        "cartoonCaption3": "발표를 잘하는 한 사람에게 많이 맡겼다.",
+        "cartoonCaption4": "한 사람 주도 → 각자 이해 점검 자리",
+        "cartoonCaption5": "그대로 읽기로 하며 설명 가능성을 확인하지 못했다.",
+        "reportReflection": "발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "C2R2": {
         "score": 48,
@@ -2913,7 +3495,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "각자 준비하기 → 한 사람에게 맡기기 → 한 번 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "함께 맞추기보다 각자 준비나 모양부터 보았다.",
+        "cartoonCaption3": "발표를 잘하는 한 사람에게 많이 맡겼다.",
+        "cartoonCaption4": "한 사람 주도 → 각자 이해 점검 자리",
+        "cartoonCaption5": "내가 이해하지 못한 내용은 지웠다.",
+        "reportReflection": "자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C2R3": {
         "score": 65,
@@ -2933,7 +3525,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "각자 준비하기 → 한 사람에게 맡기기 → 깊게 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "함께 맞추기보다 각자 준비나 모양부터 보았다.",
+        "cartoonCaption3": "발표를 잘하는 한 사람에게 많이 맡겼다.",
+        "cartoonCaption4": "한 사람 주도 → 각자 이해 점검 자리",
+        "cartoonCaption5": "질문을 예상하고 답하기 어려운 부분을 고쳤다.",
+        "reportReflection": "자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.",
+        "reportCardSummary": "[성찰하기] 사회·관계적 사고 · 소통력 · 검토력",
+        "reportStrengthTags": [
+          "사회·관계적 사고",
+          "소통력, 검토력"
+        ],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C3R1": {
         "score": 22,
@@ -2950,7 +3555,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "각자 준비하기 → 발표 모양 먼저 만들기 → 그대로 진행하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "함께 맞추기보다 각자 준비나 모양부터 보았다.",
+        "cartoonCaption3": "자료보다 발표 모양을 먼저 만들었다.",
+        "cartoonCaption4": "모양 우선 → 빈 부분 보충 자리",
+        "cartoonCaption5": "그대로 읽기로 하며 설명 가능성을 확인하지 못했다.",
+        "reportReflection": "발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "C3R2": {
         "score": 42,
@@ -2967,7 +3582,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "각자 준비하기 → 발표 모양 먼저 만들기 → 한 번 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "함께 맞추기보다 각자 준비나 모양부터 보았다.",
+        "cartoonCaption3": "자료보다 발표 모양을 먼저 만들었다.",
+        "cartoonCaption4": "모양 우선 → 빈 부분 보충 자리",
+        "cartoonCaption5": "내가 이해하지 못한 내용은 지웠다.",
+        "reportReflection": "자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C3R3": {
         "score": 60,
@@ -2987,7 +3612,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "각자 준비하기 → 발표 모양 먼저 만들기 → 깊게 확인하기",
+        "cartoonCaption1": "모둠 발표를 준비해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "함께 맞추기보다 각자 준비나 모양부터 보았다.",
+        "cartoonCaption3": "자료보다 발표 모양을 먼저 만들었다.",
+        "cartoonCaption4": "모양 우선 → 빈 부분 보충 자리",
+        "cartoonCaption5": "질문을 예상하고 답하기 어려운 부분을 고쳤다.",
+        "reportReflection": "자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.",
+        "reportCardSummary": "[성찰하기] 비판적 사고 · 자료판단력 · 검토력",
+        "reportStrengthTags": [
+          "비판적 사고",
+          "자료판단력, 검토력"
+        ],
+        "reportGrowthTags": "직접 근거 보강"
       }
     },
     "axisDelta": [
@@ -3761,7 +4399,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "책 직접 읽기 → 처음부터 읽기 → 그대로 진행하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책을 직접 읽는 쪽에서 시작했다.",
+        "cartoonCaption3": "처음부터 읽고 짧게라도 직접 썼다.",
+        "cartoonCaption4": "직접 읽은 흔적이 있는 독후감",
+        "cartoonCaption5": "그대로 내며 직접 읽은 근거를 확인하지 못했다.",
+        "reportReflection": "책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 문해력 · 표현력",
+        "reportStrengthTags": [
+          "주체성",
+          "문해력, 표현력"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "A1R2": {
         "score": 95,
@@ -3782,7 +4433,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "책 직접 읽기 → 처음부터 읽기 → 한 번 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책을 직접 읽는 쪽에서 시작했다.",
+        "cartoonCaption3": "처음부터 읽고 짧게라도 직접 썼다.",
+        "cartoonCaption4": "직접 읽은 흔적이 있는 독후감",
+        "cartoonCaption5": "읽지 않은 장면과 설명하기 어려운 문장을 표시했다.",
+        "reportReflection": "책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 문해력 · 표현력 · 검토력",
+        "reportStrengthTags": [
+          "주체성",
+          "문해력, 표현력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A1R3": {
         "score": 98,
@@ -3803,7 +4467,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "책 직접 읽기 → 처음부터 읽기 → 깊게 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책을 직접 읽는 쪽에서 시작했다.",
+        "cartoonCaption3": "처음부터 읽고 짧게라도 직접 썼다.",
+        "cartoonCaption4": "직접 읽은 흔적이 있는 독후감",
+        "cartoonCaption5": "책에서 확인한 장면과 감상만 남기려 했다.",
+        "reportReflection": "책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 문해력 · 표현력 · 검토력",
+        "reportStrengthTags": [
+          "주체성",
+          "문해력, 표현력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A2R1": {
         "score": 70,
@@ -3823,7 +4500,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "책 직접 읽기 → 밑줄 장면으로 쓰기 → 그대로 진행하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책을 직접 읽는 쪽에서 시작했다.",
+        "cartoonCaption3": "밑줄 친 장면에서 내 감상을 시작했다.",
+        "cartoonCaption4": "멈춘 문장 중심의 독후감",
+        "cartoonCaption5": "그대로 내며 직접 읽은 근거를 확인하지 못했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 문해력 · 표현력",
+        "reportStrengthTags": [
+          "주체성",
+          "문해력, 표현력"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "A2R2": {
         "score": 75,
@@ -3843,7 +4533,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "책 직접 읽기 → 밑줄 장면으로 쓰기 → 한 번 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책을 직접 읽는 쪽에서 시작했다.",
+        "cartoonCaption3": "밑줄 친 장면에서 내 감상을 시작했다.",
+        "cartoonCaption4": "멈춘 문장 중심의 독후감",
+        "cartoonCaption5": "읽지 않은 장면과 설명하기 어려운 문장을 표시했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 문해력 · 표현력",
+        "reportStrengthTags": [
+          "주체성",
+          "문해력, 표현력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A2R3": {
         "score": 81,
@@ -3863,7 +4566,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "책 직접 읽기 → 밑줄 장면으로 쓰기 → 깊게 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책을 직접 읽는 쪽에서 시작했다.",
+        "cartoonCaption3": "밑줄 친 장면에서 내 감상을 시작했다.",
+        "cartoonCaption4": "멈춘 문장 중심의 독후감",
+        "cartoonCaption5": "책에서 확인한 장면과 감상만 남기려 했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 문해력 · 표현력",
+        "reportStrengthTags": [
+          "주체성",
+          "문해력, 표현력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A3R1": {
         "score": 55,
@@ -3880,7 +4596,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "책 직접 읽기 → 이해 안 된 부분 붙잡기 → 그대로 진행하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책을 직접 읽는 쪽에서 시작했다.",
+        "cartoonCaption3": "이해되지 않는 부분을 붙잡고 썼다.",
+        "cartoonCaption4": "이해 안 되는 부분을 솔직하게 담은 독후감",
+        "cartoonCaption5": "그대로 내며 직접 읽은 근거를 확인하지 못했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "A3R2": {
         "score": 65,
@@ -3900,7 +4626,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "책 직접 읽기 → 이해 안 된 부분 붙잡기 → 한 번 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책을 직접 읽는 쪽에서 시작했다.",
+        "cartoonCaption3": "이해되지 않는 부분을 붙잡고 썼다.",
+        "cartoonCaption4": "이해 안 되는 부분을 솔직하게 담은 독후감",
+        "cartoonCaption5": "읽지 않은 장면과 설명하기 어려운 문장을 표시했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "[중심잡기] 호기심 · 문해력 · 분석력",
+        "reportStrengthTags": [
+          "호기심",
+          "문해력, 분석력"
+        ],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "A3R3": {
         "score": 75,
@@ -3920,7 +4659,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "책 직접 읽기 → 이해 안 된 부분 붙잡기 → 깊게 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책을 직접 읽는 쪽에서 시작했다.",
+        "cartoonCaption3": "이해되지 않는 부분을 붙잡고 썼다.",
+        "cartoonCaption4": "이해 안 되는 부분을 솔직하게 담은 독후감",
+        "cartoonCaption5": "책에서 확인한 장면과 감상만 남기려 했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "[중심잡기] 호기심 · 문해력 · 분석력",
+        "reportStrengthTags": [
+          "호기심",
+          "문해력, 분석력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B1R1": {
         "score": 14,
@@ -3937,7 +4689,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 읽기 돕기 → 요약 보고 책 확인하기 → 그대로 진행하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "AI 도움으로 책에 접근할 길을 찾았다.",
+        "cartoonCaption3": "AI 요약을 보고 책에서 장면을 찾아 읽었다.",
+        "cartoonCaption4": "요약 + 한 장면 직접 확인한 독후감",
+        "cartoonCaption5": "그대로 내며 직접 읽은 근거를 확인하지 못했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "B1R2": {
         "score": 26,
@@ -3954,7 +4716,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 읽기 돕기 → 요약 보고 책 확인하기 → 한 번 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "AI 도움으로 책에 접근할 길을 찾았다.",
+        "cartoonCaption3": "AI 요약을 보고 책에서 장면을 찾아 읽었다.",
+        "cartoonCaption4": "요약 + 한 장면 직접 확인한 독후감",
+        "cartoonCaption5": "읽지 않은 장면과 설명하기 어려운 문장을 표시했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "B1R3": {
         "score": 37,
@@ -3971,7 +4743,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 읽기 돕기 → 요약 보고 책 확인하기 → 깊게 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "AI 도움으로 책에 접근할 길을 찾았다.",
+        "cartoonCaption3": "AI 요약을 보고 책에서 장면을 찾아 읽었다.",
+        "cartoonCaption4": "요약 + 한 장면 직접 확인한 독후감",
+        "cartoonCaption5": "책에서 확인한 장면과 감상만 남기려 했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "B2R1": {
         "score": 50,
@@ -3988,7 +4770,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 읽기 돕기 → 유명 문장 앞뒤 읽기 → 그대로 진행하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "AI 도움으로 책에 접근할 길을 찾았다.",
+        "cartoonCaption3": "유명한 문장 앞뒤를 직접 확인했다.",
+        "cartoonCaption4": "유명한 문장 앞뒤 맥락을 확인한 독후감",
+        "cartoonCaption5": "그대로 내며 직접 읽은 근거를 확인하지 못했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "B2R2": {
         "score": 75,
@@ -4008,7 +4800,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "AI로 읽기 돕기 → 유명 문장 앞뒤 읽기 → 한 번 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "AI 도움으로 책에 접근할 길을 찾았다.",
+        "cartoonCaption3": "유명한 문장 앞뒤를 직접 확인했다.",
+        "cartoonCaption4": "유명한 문장 앞뒤 맥락을 확인한 독후감",
+        "cartoonCaption5": "읽지 않은 장면과 설명하기 어려운 문장을 표시했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "[융합하기] 맥락적 사고 · 문해력 · 자료판단력",
+        "reportStrengthTags": [
+          "맥락적 사고",
+          "문해력, 자료판단력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B2R3": {
         "score": 85,
@@ -4029,7 +4834,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI로 읽기 돕기 → 유명 문장 앞뒤 읽기 → 깊게 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "AI 도움으로 책에 접근할 길을 찾았다.",
+        "cartoonCaption3": "유명한 문장 앞뒤를 직접 확인했다.",
+        "cartoonCaption4": "유명한 문장 앞뒤 맥락을 확인한 독후감",
+        "cartoonCaption5": "책에서 확인한 장면과 감상만 남기려 했다.",
+        "reportReflection": "책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.",
+        "reportCardSummary": "[융합하기] 맥락적 사고 · 문해력 · 자료판단력 · 검토력",
+        "reportStrengthTags": [
+          "맥락적 사고",
+          "문해력, 자료판단력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B3R1": {
         "score": 88,
@@ -4049,7 +4867,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI로 읽기 돕기 → 궁금한 장면 찾아 읽기 → 그대로 진행하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "AI 도움으로 책에 접근할 길을 찾았다.",
+        "cartoonCaption3": "소개된 장면 중 궁금한 부분을 찾아 읽었다.",
+        "cartoonCaption4": "외부 단서에서 시작해 직접 확인한 독후감",
+        "cartoonCaption5": "그대로 내며 직접 읽은 근거를 확인하지 못했다.",
+        "reportReflection": "책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.",
+        "reportCardSummary": "[중심잡기] 호기심 · 문해력 · 표현력",
+        "reportStrengthTags": [
+          "호기심",
+          "문해력, 표현력"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "B3R2": {
         "score": 93,
@@ -4070,7 +4901,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI로 읽기 돕기 → 궁금한 장면 찾아 읽기 → 한 번 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "AI 도움으로 책에 접근할 길을 찾았다.",
+        "cartoonCaption3": "소개된 장면 중 궁금한 부분을 찾아 읽었다.",
+        "cartoonCaption4": "외부 단서에서 시작해 직접 확인한 독후감",
+        "cartoonCaption5": "읽지 않은 장면과 설명하기 어려운 문장을 표시했다.",
+        "reportReflection": "책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.",
+        "reportCardSummary": "[중심잡기] 호기심 · 문해력 · 표현력 · 검토력",
+        "reportStrengthTags": [
+          "호기심",
+          "문해력, 표현력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B3R3": {
         "score": 100,
@@ -4091,7 +4935,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "AI로 읽기 돕기 → 궁금한 장면 찾아 읽기 → 깊게 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "AI 도움으로 책에 접근할 길을 찾았다.",
+        "cartoonCaption3": "소개된 장면 중 궁금한 부분을 찾아 읽었다.",
+        "cartoonCaption4": "외부 단서에서 시작해 직접 확인한 독후감",
+        "cartoonCaption5": "책에서 확인한 장면과 감상만 남기려 했다.",
+        "reportReflection": "책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.",
+        "reportCardSummary": "[중심잡기] 호기심 · 문해력 · 표현력 · 검토력",
+        "reportStrengthTags": [
+          "호기심",
+          "문해력, 표현력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "C1R1": {
         "score": 25,
@@ -4108,7 +4965,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "책 읽기 건너뛰기 → AI 초안 바로 받기 → 그대로 진행하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책 읽기를 건너뛰고 빠른 결과를 선택했다.",
+        "cartoonCaption3": "AI가 줄거리와 독후감 초안을 만들었다.",
+        "cartoonCaption4": "AI 초안은 빠르게 만들어졌다.",
+        "cartoonCaption5": "그대로 내며 직접 읽은 근거를 확인하지 못했다.",
+        "reportReflection": "빠른 글은 생겼지만, 내가 읽고 생각한 과정이 거의 남지 않았다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "C1R2": {
         "score": 45,
@@ -4125,7 +4992,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "책 읽기 건너뛰기 → AI 초안 바로 받기 → 한 번 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책 읽기를 건너뛰고 빠른 결과를 선택했다.",
+        "cartoonCaption3": "AI가 줄거리와 독후감 초안을 만들었다.",
+        "cartoonCaption4": "AI 초안은 빠르게 만들어졌다.",
+        "cartoonCaption5": "읽지 않은 장면과 설명하기 어려운 문장을 표시했다.",
+        "reportReflection": "AI 초안을 걷어내며 책임질 수 있는 문장을 찾았지만, 직접 읽은 감상은 더 필요하다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C1R3": {
         "score": 65,
@@ -4144,7 +5021,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "책 읽기 건너뛰기 → AI 초안 바로 받기 → 깊게 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책 읽기를 건너뛰고 빠른 결과를 선택했다.",
+        "cartoonCaption3": "AI가 줄거리와 독후감 초안을 만들었다.",
+        "cartoonCaption4": "AI 초안은 빠르게 만들어졌다.",
+        "cartoonCaption5": "책에서 확인한 장면과 감상만 남기려 했다.",
+        "reportReflection": "AI 초안을 걷어내며 책임질 수 있는 문장을 찾았지만, 직접 읽은 감상은 더 필요하다.",
+        "reportCardSummary": "[성찰하기] 윤리적 사고 · 검토력",
+        "reportStrengthTags": [
+          "윤리적 사고",
+          "검토력"
+        ],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C2R1": {
         "score": 28,
@@ -4161,7 +5051,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "책 읽기 건너뛰기 → 줄거리·영상만 보기 → 그대로 진행하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책 읽기를 건너뛰고 빠른 결과를 선택했다.",
+        "cartoonCaption3": "줄거리나 영상 소개만 보고 글을 썼다.",
+        "cartoonCaption4": "친구가 들어간 독후감",
+        "cartoonCaption5": "그대로 내며 직접 읽은 근거를 확인하지 못했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "C2R2": {
         "score": 38,
@@ -4178,7 +5078,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "책 읽기 건너뛰기 → 줄거리·영상만 보기 → 한 번 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책 읽기를 건너뛰고 빠른 결과를 선택했다.",
+        "cartoonCaption3": "줄거리나 영상 소개만 보고 글을 썼다.",
+        "cartoonCaption4": "친구가 들어간 독후감",
+        "cartoonCaption5": "읽지 않은 장면과 설명하기 어려운 문장을 표시했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C2R3": {
         "score": 48,
@@ -4195,7 +5105,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "책 읽기 건너뛰기 → 줄거리·영상만 보기 → 깊게 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책 읽기를 건너뛰고 빠른 결과를 선택했다.",
+        "cartoonCaption3": "줄거리나 영상 소개만 보고 글을 썼다.",
+        "cartoonCaption4": "친구가 들어간 독후감",
+        "cartoonCaption5": "책에서 확인한 장면과 감상만 남기려 했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C3R1": {
         "score": 12,
@@ -4212,7 +5132,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "책 읽기 건너뛰기 → 문장·분위기로 쓰기 → 그대로 진행하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책 읽기를 건너뛰고 빠른 결과를 선택했다.",
+        "cartoonCaption3": "유명한 문장과 분위기만으로 글을 만들었다.",
+        "cartoonCaption4": "일반론으로 채운 독후감",
+        "cartoonCaption5": "그대로 내며 직접 읽은 근거를 확인하지 못했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "C3R2": {
         "score": 23,
@@ -4229,7 +5159,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "책 읽기 건너뛰기 → 문장·분위기로 쓰기 → 한 번 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책 읽기를 건너뛰고 빠른 결과를 선택했다.",
+        "cartoonCaption3": "유명한 문장과 분위기만으로 글을 만들었다.",
+        "cartoonCaption4": "일반론으로 채운 독후감",
+        "cartoonCaption5": "읽지 않은 장면과 설명하기 어려운 문장을 표시했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C3R3": {
         "score": 32,
@@ -4246,7 +5186,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "책 읽기 건너뛰기 → 문장·분위기로 쓰기 → 깊게 확인하기",
+        "cartoonCaption1": "독후감을 써야 하지만 책을 충분히 읽지 못했다.",
+        "cartoonCaption2": "책 읽기를 건너뛰고 빠른 결과를 선택했다.",
+        "cartoonCaption3": "유명한 문장과 분위기만으로 글을 만들었다.",
+        "cartoonCaption4": "일반론으로 채운 독후감",
+        "cartoonCaption5": "책에서 확인한 장면과 감상만 남기려 했다.",
+        "reportReflection": "요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       }
     },
     "axisDelta": [
@@ -4909,7 +5859,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "내 관심에서 시작하기 → 좋아하는 것 적기 → 그대로 진행하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "내 관심과 걱정에서 진로 탐색을 시작했다.",
+        "cartoonCaption3": "내가 자주 보는 것과 좋아하는 것을 적었다.",
+        "cartoonCaption4": "관심 목록 — 마음이 쓰이는 자리",
+        "cartoonCaption5": "그럴듯한 결과를 곧 내 진로처럼 받아들였다.",
+        "reportReflection": "AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 자기이해 · 탐색력",
+        "reportStrengthTags": [
+          "주체성",
+          "자기이해, 탐색력"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "A1R2": {
         "score": 95,
@@ -4930,7 +5893,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "내 관심에서 시작하기 → 좋아하는 것 적기 → 한 번 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "내 관심과 걱정에서 진로 탐색을 시작했다.",
+        "cartoonCaption3": "내가 자주 보는 것과 좋아하는 것을 적었다.",
+        "cartoonCaption4": "관심 목록 — 마음이 쓰이는 자리",
+        "cartoonCaption5": "AI가 한 부분과 내가 판단한 부분을 나눴다.",
+        "reportReflection": "AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 자기이해 · 탐색력 · 검토력",
+        "reportStrengthTags": [
+          "주체성",
+          "자기이해, 탐색력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A1R3": {
         "score": 98,
@@ -4951,7 +5927,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "내 관심에서 시작하기 → 좋아하는 것 적기 → 깊게 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "내 관심과 걱정에서 진로 탐색을 시작했다.",
+        "cartoonCaption3": "내가 자주 보는 것과 좋아하는 것을 적었다.",
+        "cartoonCaption4": "관심 목록 — 마음이 쓰이는 자리",
+        "cartoonCaption5": "내가 더 배워야 할 부분을 하나 골랐다.",
+        "reportReflection": "AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 자기이해 · 탐색력 · 검토력",
+        "reportStrengthTags": [
+          "주체성",
+          "자기이해, 탐색력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A2R1": {
         "score": 72,
@@ -4971,7 +5960,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "내 관심에서 시작하기 → 걱정 적기 → 그대로 진행하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "내 관심과 걱정에서 진로 탐색을 시작했다.",
+        "cartoonCaption3": "AI 시대에 대한 내 걱정을 문장으로 적었다.",
+        "cartoonCaption4": "걱정 메모 — 불안을 확인할 질문으로",
+        "cartoonCaption5": "그럴듯한 결과를 곧 내 진로처럼 받아들였다.",
+        "reportReflection": "추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 자기이해 · 분석력",
+        "reportStrengthTags": [
+          "주체성",
+          "자기이해, 분석력"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "A2R2": {
         "score": 78,
@@ -4991,7 +5993,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "내 관심에서 시작하기 → 걱정 적기 → 한 번 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "내 관심과 걱정에서 진로 탐색을 시작했다.",
+        "cartoonCaption3": "AI 시대에 대한 내 걱정을 문장으로 적었다.",
+        "cartoonCaption4": "걱정 메모 — 불안을 확인할 질문으로",
+        "cartoonCaption5": "AI가 한 부분과 내가 판단한 부분을 나눴다.",
+        "reportReflection": "진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 자기이해 · 분석력",
+        "reportStrengthTags": [
+          "주체성",
+          "자기이해, 분석력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A2R3": {
         "score": 83,
@@ -5011,7 +6026,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "내 관심에서 시작하기 → 걱정 적기 → 깊게 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "내 관심과 걱정에서 진로 탐색을 시작했다.",
+        "cartoonCaption3": "AI 시대에 대한 내 걱정을 문장으로 적었다.",
+        "cartoonCaption4": "걱정 메모 — 불안을 확인할 질문으로",
+        "cartoonCaption5": "내가 더 배워야 할 부분을 하나 골랐다.",
+        "reportReflection": "진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.",
+        "reportCardSummary": "[중심잡기] 주체성 · 자기이해 · 분석력",
+        "reportStrengthTags": [
+          "주체성",
+          "자기이해, 분석력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A3R1": {
         "score": 48,
@@ -5028,7 +6056,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "내 관심에서 시작하기 → 작은 실험 만들기 → 그대로 진행하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "내 관심과 걱정에서 진로 탐색을 시작했다.",
+        "cartoonCaption3": "관심을 작은 실험으로 바꿔 보았다.",
+        "cartoonCaption4": "작은 실험 — 해볼 수 있는 첫 단계",
+        "cartoonCaption5": "그럴듯한 결과를 곧 내 진로처럼 받아들였다.",
+        "reportReflection": "추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "A3R2": {
         "score": 65,
@@ -5048,7 +6086,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "내 관심에서 시작하기 → 작은 실험 만들기 → 한 번 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "내 관심과 걱정에서 진로 탐색을 시작했다.",
+        "cartoonCaption3": "관심을 작은 실험으로 바꿔 보았다.",
+        "cartoonCaption4": "작은 실험 — 해볼 수 있는 첫 단계",
+        "cartoonCaption5": "AI가 한 부분과 내가 판단한 부분을 나눴다.",
+        "reportReflection": "진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.",
+        "reportCardSummary": "[융합하기] 창의적 사고 · 탐색력 · 학습력",
+        "reportStrengthTags": [
+          "창의적 사고",
+          "탐색력, 학습력"
+        ],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "A3R3": {
         "score": 75,
@@ -5068,7 +6119,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "내 관심에서 시작하기 → 작은 실험 만들기 → 깊게 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "내 관심과 걱정에서 진로 탐색을 시작했다.",
+        "cartoonCaption3": "관심을 작은 실험으로 바꿔 보았다.",
+        "cartoonCaption4": "작은 실험 — 해볼 수 있는 첫 단계",
+        "cartoonCaption5": "내가 더 배워야 할 부분을 하나 골랐다.",
+        "reportReflection": "진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.",
+        "reportCardSummary": "[융합하기] 창의적 사고 · 탐색력 · 학습력",
+        "reportStrengthTags": [
+          "창의적 사고",
+          "탐색력, 학습력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B1R1": {
         "score": 17,
@@ -5085,7 +6149,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 가능성 넓히기 → 유망 직업 추천받기 → 그대로 진행하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 진로 가능성을 넓혀 보았다.",
+        "cartoonCaption3": "AI에게 유망한 일을 추천받았다.",
+        "cartoonCaption4": "AI 유망 추천 + 근거 점검",
+        "cartoonCaption5": "그럴듯한 결과를 곧 내 진로처럼 받아들였다.",
+        "reportReflection": "추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "B1R2": {
         "score": 30,
@@ -5102,7 +6176,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 가능성 넓히기 → 유망 직업 추천받기 → 한 번 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 진로 가능성을 넓혀 보았다.",
+        "cartoonCaption3": "AI에게 유망한 일을 추천받았다.",
+        "cartoonCaption4": "AI 유망 추천 + 근거 점검",
+        "cartoonCaption5": "AI가 한 부분과 내가 판단한 부분을 나눴다.",
+        "reportReflection": "진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "B1R3": {
         "score": 40,
@@ -5119,7 +6203,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 가능성 넓히기 → 유망 직업 추천받기 → 깊게 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 진로 가능성을 넓혀 보았다.",
+        "cartoonCaption3": "AI에게 유망한 일을 추천받았다.",
+        "cartoonCaption4": "AI 유망 추천 + 근거 점검",
+        "cartoonCaption5": "내가 더 배워야 할 부분을 하나 골랐다.",
+        "reportReflection": "진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "B2R1": {
         "score": 57,
@@ -5136,7 +6230,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 가능성 넓히기 → 새 일 제안받기 → 그대로 진행하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 진로 가능성을 넓혀 보았다.",
+        "cartoonCaption3": "내 관심으로 만들 수 있는 일을 제안받았다.",
+        "cartoonCaption4": "AI 새 조합 + 진짜 끌림 점검",
+        "cartoonCaption5": "그럴듯한 결과를 곧 내 진로처럼 받아들였다.",
+        "reportReflection": "추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "B2R2": {
         "score": 75,
@@ -5156,7 +6260,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "AI로 가능성 넓히기 → 새 일 제안받기 → 한 번 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 진로 가능성을 넓혀 보았다.",
+        "cartoonCaption3": "내 관심으로 만들 수 있는 일을 제안받았다.",
+        "cartoonCaption4": "AI 새 조합 + 진짜 끌림 점검",
+        "cartoonCaption5": "AI가 한 부분과 내가 판단한 부분을 나눴다.",
+        "reportReflection": "진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.",
+        "reportCardSummary": "[융합하기] 맥락적 사고 · 탐색력 · 분석력",
+        "reportStrengthTags": [
+          "맥락적 사고",
+          "탐색력, 분석력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B2R3": {
         "score": 85,
@@ -5177,7 +6294,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI로 가능성 넓히기 → 새 일 제안받기 → 깊게 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 진로 가능성을 넓혀 보았다.",
+        "cartoonCaption3": "내 관심으로 만들 수 있는 일을 제안받았다.",
+        "cartoonCaption4": "AI 새 조합 + 진짜 끌림 점검",
+        "cartoonCaption5": "내가 더 배워야 할 부분을 하나 골랐다.",
+        "reportReflection": "AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.",
+        "reportCardSummary": "[융합하기] 맥락적 사고 · 탐색력 · 분석력 · 검토력",
+        "reportStrengthTags": [
+          "맥락적 사고",
+          "탐색력, 분석력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B3R1": {
         "score": 88,
@@ -5197,7 +6327,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI로 가능성 넓히기 → AI 결과물로 탐색하기 → 그대로 진행하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 진로 가능성을 넓혀 보았다.",
+        "cartoonCaption3": "AI로 작은 결과물을 만들어 가능성을 보았다.",
+        "cartoonCaption4": "AI 결과물로 가능성을 맛보았다.",
+        "cartoonCaption5": "그럴듯한 결과를 곧 내 진로처럼 받아들였다.",
+        "reportReflection": "AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.",
+        "reportCardSummary": "[융합하기] 창의적 사고 · 탐색력 · 검토력",
+        "reportStrengthTags": [
+          "창의적 사고",
+          "탐색력, 검토력"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "B3R2": {
         "score": 93,
@@ -5217,7 +6360,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI로 가능성 넓히기 → AI 결과물로 탐색하기 → 한 번 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 진로 가능성을 넓혀 보았다.",
+        "cartoonCaption3": "AI로 작은 결과물을 만들어 가능성을 보았다.",
+        "cartoonCaption4": "AI 결과물로 가능성을 맛보았다.",
+        "cartoonCaption5": "AI가 한 부분과 내가 판단한 부분을 나눴다.",
+        "reportReflection": "AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.",
+        "reportCardSummary": "[융합하기] 창의적 사고 · 탐색력 · 검토력",
+        "reportStrengthTags": [
+          "창의적 사고",
+          "탐색력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B3R3": {
         "score": 100,
@@ -5237,7 +6393,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "AI로 가능성 넓히기 → AI 결과물로 탐색하기 → 깊게 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "AI로 진로 가능성을 넓혀 보았다.",
+        "cartoonCaption3": "AI로 작은 결과물을 만들어 가능성을 보았다.",
+        "cartoonCaption4": "AI 결과물로 가능성을 맛보았다.",
+        "cartoonCaption5": "내가 더 배워야 할 부분을 하나 골랐다.",
+        "reportReflection": "AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.",
+        "reportCardSummary": "[융합하기] 창의적 사고 · 탐색력 · 검토력",
+        "reportStrengthTags": [
+          "창의적 사고",
+          "탐색력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "C1R1": {
         "score": 18,
@@ -5254,7 +6423,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "안전한 길 먼저 보기 → 뉴스·영상 길 찾기 → 그대로 진행하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "사람들이 안전하다고 말하는 길을 먼저 보았다.",
+        "cartoonCaption3": "뉴스와 영상에서 본 유망한 길을 찾았다.",
+        "cartoonCaption4": "미디어 정보 + 빈틈 점검",
+        "cartoonCaption5": "그럴듯한 결과를 곧 내 진로처럼 받아들였다.",
+        "reportReflection": "추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "C1R2": {
         "score": 38,
@@ -5271,7 +6450,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "안전한 길 먼저 보기 → 뉴스·영상 길 찾기 → 한 번 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "사람들이 안전하다고 말하는 길을 먼저 보았다.",
+        "cartoonCaption3": "뉴스와 영상에서 본 유망한 길을 찾았다.",
+        "cartoonCaption4": "미디어 정보 + 빈틈 점검",
+        "cartoonCaption5": "AI가 한 부분과 내가 판단한 부분을 나눴다.",
+        "reportReflection": "진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C1R3": {
         "score": 60,
@@ -5291,7 +6480,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "안전한 길 먼저 보기 → 뉴스·영상 길 찾기 → 깊게 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "사람들이 안전하다고 말하는 길을 먼저 보았다.",
+        "cartoonCaption3": "뉴스와 영상에서 본 유망한 길을 찾았다.",
+        "cartoonCaption4": "미디어 정보 + 빈틈 점검",
+        "cartoonCaption5": "내가 더 배워야 할 부분을 하나 골랐다.",
+        "reportReflection": "진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.",
+        "reportCardSummary": "[성찰하기] 비판적 사고 · 자료판단력 · 검토력",
+        "reportStrengthTags": [
+          "비판적 사고",
+          "자료판단력, 검토력"
+        ],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C2R1": {
         "score": 28,
@@ -5308,7 +6510,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "안전한 길 먼저 보기 → 주변 추천 따라가기 → 그대로 진행하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "사람들이 안전하다고 말하는 길을 먼저 보았다.",
+        "cartoonCaption3": "주변 사람이 좋다고 한 길을 따라보았다.",
+        "cartoonCaption4": "주변 추천 + 경험 정합",
+        "cartoonCaption5": "그럴듯한 결과를 곧 내 진로처럼 받아들였다.",
+        "reportReflection": "추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "C2R2": {
         "score": 48,
@@ -5325,7 +6537,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "안전한 길 먼저 보기 → 주변 추천 따라가기 → 한 번 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "사람들이 안전하다고 말하는 길을 먼저 보았다.",
+        "cartoonCaption3": "주변 사람이 좋다고 한 길을 따라보았다.",
+        "cartoonCaption4": "주변 추천 + 경험 정합",
+        "cartoonCaption5": "AI가 한 부분과 내가 판단한 부분을 나눴다.",
+        "reportReflection": "진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C2R3": {
         "score": 65,
@@ -5345,7 +6567,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "안전한 길 먼저 보기 → 주변 추천 따라가기 → 깊게 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "사람들이 안전하다고 말하는 길을 먼저 보았다.",
+        "cartoonCaption3": "주변 사람이 좋다고 한 길을 따라보았다.",
+        "cartoonCaption4": "주변 추천 + 경험 정합",
+        "cartoonCaption5": "내가 더 배워야 할 부분을 하나 골랐다.",
+        "reportReflection": "진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.",
+        "reportCardSummary": "[성찰하기] 사회·관계적 사고 · 자기이해 · 소통력",
+        "reportStrengthTags": [
+          "사회·관계적 사고",
+          "자기이해, 소통력"
+        ],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C3R1": {
         "score": 22,
@@ -5362,7 +6597,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "안전한 길 먼저 보기 → 인기·안정 길 보기 → 그대로 진행하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "사람들이 안전하다고 말하는 길을 먼저 보았다.",
+        "cartoonCaption3": "인기 학과나 안정적인 길을 먼저 보았다.",
+        "cartoonCaption4": "안전한 길 + 실제 내용 확인",
+        "cartoonCaption5": "그럴듯한 결과를 곧 내 진로처럼 받아들였다.",
+        "reportReflection": "추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "C3R2": {
         "score": 42,
@@ -5379,7 +6624,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "안전한 길 먼저 보기 → 인기·안정 길 보기 → 한 번 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "사람들이 안전하다고 말하는 길을 먼저 보았다.",
+        "cartoonCaption3": "인기 학과나 안정적인 길을 먼저 보았다.",
+        "cartoonCaption4": "안전한 길 + 실제 내용 확인",
+        "cartoonCaption5": "AI가 한 부분과 내가 판단한 부분을 나눴다.",
+        "reportReflection": "진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C3R3": {
         "score": 60,
@@ -5399,7 +6654,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "안전한 길 먼저 보기 → 인기·안정 길 보기 → 깊게 확인하기",
+        "cartoonCaption1": "AI 시대의 진로를 고민해야 하는 상황이 생겼다.",
+        "cartoonCaption2": "사람들이 안전하다고 말하는 길을 먼저 보았다.",
+        "cartoonCaption3": "인기 학과나 안정적인 길을 먼저 보았다.",
+        "cartoonCaption4": "안전한 길 + 실제 내용 확인",
+        "cartoonCaption5": "내가 더 배워야 할 부분을 하나 골랐다.",
+        "reportReflection": "진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.",
+        "reportCardSummary": "[성찰하기] 비판적 사고 · 분석력 · 탐색력",
+        "reportStrengthTags": [
+          "비판적 사고",
+          "분석력, 탐색력"
+        ],
+        "reportGrowthTags": "직접 근거 보강"
       }
     },
     "axisDelta": [
@@ -6073,7 +7341,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "내 실력 확인하기 → 약한 단원 찾기 → 그대로 진행하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "먼저 내가 아는 것과 모르는 것을 확인했다.",
+        "cartoonCaption3": "문제를 풀어 약한 단원을 찾았다.",
+        "cartoonCaption4": "약한 단원 목록 — 문제로 확인한 자리",
+        "cartoonCaption5": "깔끔한 계획이나 자료를 그대로 따르기로 했다.",
+        "reportReflection": "AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.",
+        "reportCardSummary": "[융합하기] 문제해결적 사고 · 학습력 · 분석력",
+        "reportStrengthTags": [
+          "문제해결적 사고",
+          "학습력, 분석력"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "A1R2": {
         "score": 95,
@@ -6094,7 +7375,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "내 실력 확인하기 → 약한 단원 찾기 → 한 번 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "먼저 내가 아는 것과 모르는 것을 확인했다.",
+        "cartoonCaption3": "문제를 풀어 약한 단원을 찾았다.",
+        "cartoonCaption4": "약한 단원 목록 — 문제로 확인한 자리",
+        "cartoonCaption5": "시험 범위와 문제집에 맞는지 직접 확인했다.",
+        "reportReflection": "AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.",
+        "reportCardSummary": "[융합하기] 문제해결적 사고 · 학습력 · 분석력 · 검토력",
+        "reportStrengthTags": [
+          "문제해결적 사고",
+          "학습력, 분석력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A1R3": {
         "score": 98,
@@ -6115,7 +7409,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "내 실력 확인하기 → 약한 단원 찾기 → 깊게 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "먼저 내가 아는 것과 모르는 것을 확인했다.",
+        "cartoonCaption3": "문제를 풀어 약한 단원을 찾았다.",
+        "cartoonCaption4": "약한 단원 목록 — 문제로 확인한 자리",
+        "cartoonCaption5": "직접 풀어보며 이해가 부족한 부분을 확인했다.",
+        "reportReflection": "AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.",
+        "reportCardSummary": "[융합하기] 문제해결적 사고 · 학습력 · 분석력 · 검토력",
+        "reportStrengthTags": [
+          "문제해결적 사고",
+          "학습력, 분석력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A2R1": {
         "score": 75,
@@ -6135,7 +7442,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "내 실력 확인하기 → 아는 것 나누기 → 그대로 진행하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "먼저 내가 아는 것과 모르는 것을 확인했다.",
+        "cartoonCaption3": "시험 범위에서 아는 것과 모르는 것을 나눴다.",
+        "cartoonCaption4": "범위표 분류 — 한눈에 본 시험 범위",
+        "cartoonCaption5": "깔끔한 계획이나 자료를 그대로 따르기로 했다.",
+        "reportReflection": "계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.",
+        "reportCardSummary": "[융합하기] 문제해결적 사고 · 학습력 · 자료판단력",
+        "reportStrengthTags": [
+          "문제해결적 사고",
+          "학습력, 자료판단력"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "A2R2": {
         "score": 80,
@@ -6155,7 +7475,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "내 실력 확인하기 → 아는 것 나누기 → 한 번 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "먼저 내가 아는 것과 모르는 것을 확인했다.",
+        "cartoonCaption3": "시험 범위에서 아는 것과 모르는 것을 나눴다.",
+        "cartoonCaption4": "범위표 분류 — 한눈에 본 시험 범위",
+        "cartoonCaption5": "시험 범위와 문제집에 맞는지 직접 확인했다.",
+        "reportReflection": "공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.",
+        "reportCardSummary": "[융합하기] 문제해결적 사고 · 학습력 · 자료판단력",
+        "reportStrengthTags": [
+          "문제해결적 사고",
+          "학습력, 자료판단력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A2R3": {
         "score": 86,
@@ -6176,7 +7509,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "내 실력 확인하기 → 아는 것 나누기 → 깊게 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "먼저 내가 아는 것과 모르는 것을 확인했다.",
+        "cartoonCaption3": "시험 범위에서 아는 것과 모르는 것을 나눴다.",
+        "cartoonCaption4": "범위표 분류 — 한눈에 본 시험 범위",
+        "cartoonCaption5": "직접 풀어보며 이해가 부족한 부분을 확인했다.",
+        "reportReflection": "AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.",
+        "reportCardSummary": "[융합하기] 문제해결적 사고 · 학습력 · 자료판단력 · 검토력",
+        "reportStrengthTags": [
+          "문제해결적 사고",
+          "학습력, 자료판단력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "A3R1": {
         "score": 55,
@@ -6193,7 +7539,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "내 실력 확인하기 → 자신감과 풀이 비교하기 → 그대로 진행하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "먼저 내가 아는 것과 모르는 것을 확인했다.",
+        "cartoonCaption3": "자신감과 실제 문제 풀이를 비교했다.",
+        "cartoonCaption4": "자신감 vs 실제 — 감의 어긋남 점검",
+        "cartoonCaption5": "깔끔한 계획이나 자료를 그대로 따르기로 했다.",
+        "reportReflection": "계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "A3R2": {
         "score": 65,
@@ -6213,7 +7569,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 16
+        "expReward": 16,
+        "reportPathSummary": "내 실력 확인하기 → 자신감과 풀이 비교하기 → 한 번 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "먼저 내가 아는 것과 모르는 것을 확인했다.",
+        "cartoonCaption3": "자신감과 실제 문제 풀이를 비교했다.",
+        "cartoonCaption4": "자신감 vs 실제 — 감의 어긋남 점검",
+        "cartoonCaption5": "시험 범위와 문제집에 맞는지 직접 확인했다.",
+        "reportReflection": "공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.",
+        "reportCardSummary": "[융합하기] 문제해결적 사고 · 학습력 · 자기이해",
+        "reportStrengthTags": [
+          "문제해결적 사고",
+          "학습력, 자기이해"
+        ],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "A3R3": {
         "score": 75,
@@ -6233,7 +7602,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "내 실력 확인하기 → 자신감과 풀이 비교하기 → 깊게 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "먼저 내가 아는 것과 모르는 것을 확인했다.",
+        "cartoonCaption3": "자신감과 실제 문제 풀이를 비교했다.",
+        "cartoonCaption4": "자신감 vs 실제 — 감의 어긋남 점검",
+        "cartoonCaption5": "직접 풀어보며 이해가 부족한 부분을 확인했다.",
+        "reportReflection": "공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.",
+        "reportCardSummary": "[융합하기] 문제해결적 사고 · 학습력 · 자기이해",
+        "reportStrengthTags": [
+          "문제해결적 사고",
+          "학습력, 자기이해"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B1R1": {
         "score": 16,
@@ -6250,7 +7632,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 공부 돕기 → AI 계획표 받기 → 그대로 진행하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "AI의 도움으로 공부 준비를 시작했다.",
+        "cartoonCaption3": "AI에게 2주 공부 계획표를 받았다.",
+        "cartoonCaption4": "AI 계획표 + 내 범위·시간 정합",
+        "cartoonCaption5": "깔끔한 계획이나 자료를 그대로 따르기로 했다.",
+        "reportReflection": "계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "B1R2": {
         "score": 29,
@@ -6267,7 +7659,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 공부 돕기 → AI 계획표 받기 → 한 번 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "AI의 도움으로 공부 준비를 시작했다.",
+        "cartoonCaption3": "AI에게 2주 공부 계획표를 받았다.",
+        "cartoonCaption4": "AI 계획표 + 내 범위·시간 정합",
+        "cartoonCaption5": "시험 범위와 문제집에 맞는지 직접 확인했다.",
+        "reportReflection": "공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "B1R3": {
         "score": 39,
@@ -6284,7 +7686,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 공부 돕기 → AI 계획표 받기 → 깊게 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "AI의 도움으로 공부 준비를 시작했다.",
+        "cartoonCaption3": "AI에게 2주 공부 계획표를 받았다.",
+        "cartoonCaption4": "AI 계획표 + 내 범위·시간 정합",
+        "cartoonCaption5": "직접 풀어보며 이해가 부족한 부분을 확인했다.",
+        "reportReflection": "공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "B2R1": {
         "score": 57,
@@ -6301,7 +7713,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "AI로 공부 돕기 → 약점으로 순서 받기 → 그대로 진행하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "AI의 도움으로 공부 준비를 시작했다.",
+        "cartoonCaption3": "내 약점을 말하고 공부 순서를 받았다.",
+        "cartoonCaption4": "AI 공부 순서 + 오답 확인",
+        "cartoonCaption5": "깔끔한 계획이나 자료를 그대로 따르기로 했다.",
+        "reportReflection": "계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "B2R2": {
         "score": 75,
@@ -6321,7 +7743,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 22
+        "expReward": 22,
+        "reportPathSummary": "AI로 공부 돕기 → 약점으로 순서 받기 → 한 번 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "AI의 도움으로 공부 준비를 시작했다.",
+        "cartoonCaption3": "내 약점을 말하고 공부 순서를 받았다.",
+        "cartoonCaption4": "AI 공부 순서 + 오답 확인",
+        "cartoonCaption5": "시험 범위와 문제집에 맞는지 직접 확인했다.",
+        "reportReflection": "공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.",
+        "reportCardSummary": "[융합하기] 문제해결적 사고 · 학습력 · 검토력",
+        "reportStrengthTags": [
+          "문제해결적 사고",
+          "학습력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B2R3": {
         "score": 85,
@@ -6341,7 +7776,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI로 공부 돕기 → 약점으로 순서 받기 → 깊게 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "AI의 도움으로 공부 준비를 시작했다.",
+        "cartoonCaption3": "내 약점을 말하고 공부 순서를 받았다.",
+        "cartoonCaption4": "AI 공부 순서 + 오답 확인",
+        "cartoonCaption5": "직접 풀어보며 이해가 부족한 부분을 확인했다.",
+        "reportReflection": "AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.",
+        "reportCardSummary": "[융합하기] 문제해결적 사고 · 학습력 · 검토력",
+        "reportStrengthTags": [
+          "문제해결적 사고",
+          "학습력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B3R1": {
         "score": 88,
@@ -6361,7 +7809,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI로 공부 돕기 → 약점·범위로 AI 자료 받기 → 그대로 진행하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "AI의 도움으로 공부 준비를 시작했다.",
+        "cartoonCaption3": "내 약점과 범위를 넣어 AI 자료를 받았다.",
+        "cartoonCaption4": "AI 공부 자료가 빠르게 생겼다.",
+        "cartoonCaption5": "깔끔한 계획이나 자료를 그대로 따르기로 했다.",
+        "reportReflection": "AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.",
+        "reportCardSummary": "[융합하기] 문제해결적 사고 · 학습력 · 자료판단력",
+        "reportStrengthTags": [
+          "문제해결적 사고",
+          "학습력, 자료판단력"
+        ],
+        "reportGrowthTags": "검토 필요"
       },
       "B3R2": {
         "score": 93,
@@ -6382,7 +7843,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 26
+        "expReward": 26,
+        "reportPathSummary": "AI로 공부 돕기 → 약점·범위로 AI 자료 받기 → 한 번 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "AI의 도움으로 공부 준비를 시작했다.",
+        "cartoonCaption3": "내 약점과 범위를 넣어 AI 자료를 받았다.",
+        "cartoonCaption4": "AI 공부 자료가 빠르게 생겼다.",
+        "cartoonCaption5": "시험 범위와 문제집에 맞는지 직접 확인했다.",
+        "reportReflection": "AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.",
+        "reportCardSummary": "[융합하기] 문제해결적 사고 · 학습력 · 자료판단력 · 검토력",
+        "reportStrengthTags": [
+          "문제해결적 사고",
+          "학습력, 자료판단력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "B3R3": {
         "score": 100,
@@ -6403,7 +7877,20 @@ var SCENARIOS = {
         ],
         "growthCard": "",
         "replayCardStatus": "",
-        "expReward": 30
+        "expReward": 30,
+        "reportPathSummary": "AI로 공부 돕기 → 약점·범위로 AI 자료 받기 → 깊게 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "AI의 도움으로 공부 준비를 시작했다.",
+        "cartoonCaption3": "내 약점과 범위를 넣어 AI 자료를 받았다.",
+        "cartoonCaption4": "AI 공부 자료가 빠르게 생겼다.",
+        "cartoonCaption5": "직접 풀어보며 이해가 부족한 부분을 확인했다.",
+        "reportReflection": "AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.",
+        "reportCardSummary": "[융합하기] 문제해결적 사고 · 학습력 · 자료판단력 · 검토력",
+        "reportStrengthTags": [
+          "문제해결적 사고",
+          "학습력, 자료판단력, 검토력"
+        ],
+        "reportGrowthTags": "확장 가능"
       },
       "C1R1": {
         "score": 18,
@@ -6420,7 +7907,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "다른 방법에 기대기 → 친구·학원 계획 따르기 → 그대로 진행하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "다른 자료나 쉬운 방법에서 시작했다.",
+        "cartoonCaption3": "친구나 학원 계획표를 따라갔다.",
+        "cartoonCaption4": "친구·학원 계획 + 내 약점 정합",
+        "cartoonCaption5": "깔끔한 계획이나 자료를 그대로 따르기로 했다.",
+        "reportReflection": "계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "C1R2": {
         "score": 38,
@@ -6437,7 +7934,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "다른 방법에 기대기 → 친구·학원 계획 따르기 → 한 번 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "다른 자료나 쉬운 방법에서 시작했다.",
+        "cartoonCaption3": "친구나 학원 계획표를 따라갔다.",
+        "cartoonCaption4": "친구·학원 계획 + 내 약점 정합",
+        "cartoonCaption5": "시험 범위와 문제집에 맞는지 직접 확인했다.",
+        "reportReflection": "공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C1R3": {
         "score": 50,
@@ -6454,7 +7961,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "다른 방법에 기대기 → 친구·학원 계획 따르기 → 깊게 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "다른 자료나 쉬운 방법에서 시작했다.",
+        "cartoonCaption3": "친구나 학원 계획표를 따라갔다.",
+        "cartoonCaption4": "친구·학원 계획 + 내 약점 정합",
+        "cartoonCaption5": "직접 풀어보며 이해가 부족한 부분을 확인했다.",
+        "reportReflection": "공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C2R1": {
         "score": 22,
@@ -6471,7 +7988,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "다른 방법에 기대기 → 작년·인터넷 자료 보기 → 그대로 진행하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "다른 자료나 쉬운 방법에서 시작했다.",
+        "cartoonCaption3": "작년 자료와 인터넷 요약에 기대었다.",
+        "cartoonCaption4": "작년·인터넷 자료 + 올해 범위 거리",
+        "cartoonCaption5": "깔끔한 계획이나 자료를 그대로 따르기로 했다.",
+        "reportReflection": "계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "C2R2": {
         "score": 42,
@@ -6488,7 +8015,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "다른 방법에 기대기 → 작년·인터넷 자료 보기 → 한 번 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "다른 자료나 쉬운 방법에서 시작했다.",
+        "cartoonCaption3": "작년 자료와 인터넷 요약에 기대었다.",
+        "cartoonCaption4": "작년·인터넷 자료 + 올해 범위 거리",
+        "cartoonCaption5": "시험 범위와 문제집에 맞는지 직접 확인했다.",
+        "reportReflection": "공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C2R3": {
         "score": 35,
@@ -6505,7 +8042,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "다른 방법에 기대기 → 작년·인터넷 자료 보기 → 깊게 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "다른 자료나 쉬운 방법에서 시작했다.",
+        "cartoonCaption3": "작년 자료와 인터넷 요약에 기대었다.",
+        "cartoonCaption4": "작년·인터넷 자료 + 올해 범위 거리",
+        "cartoonCaption5": "직접 풀어보며 이해가 부족한 부분을 확인했다.",
+        "reportReflection": "공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C3R1": {
         "score": 12,
@@ -6522,7 +8069,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "다른 방법에 기대기 → 미루거나 쉬운 일 하기 → 그대로 진행하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "다른 자료나 쉬운 방법에서 시작했다.",
+        "cartoonCaption3": "공부를 미루거나 쉬운 일만 했다.",
+        "cartoonCaption4": "미루기 → 작은 행동 하나로 전환",
+        "cartoonCaption5": "깔끔한 계획이나 자료를 그대로 따르기로 했다.",
+        "reportReflection": "계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "검토 필요"
       },
       "C3R2": {
         "score": 35,
@@ -6539,7 +8096,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "다른 방법에 기대기 → 미루거나 쉬운 일 하기 → 한 번 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "다른 자료나 쉬운 방법에서 시작했다.",
+        "cartoonCaption3": "공부를 미루거나 쉬운 일만 했다.",
+        "cartoonCaption4": "미루기 → 작은 행동 하나로 전환",
+        "cartoonCaption5": "시험 범위와 문제집에 맞는지 직접 확인했다.",
+        "reportReflection": "공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       },
       "C3R3": {
         "score": 50,
@@ -6556,7 +8123,17 @@ var SCENARIOS = {
         "domainCards": [],
         "growthCard": "회복력",
         "replayCardStatus": "도전력 후보",
-        "expReward": 8
+        "expReward": 8,
+        "reportPathSummary": "다른 방법에 기대기 → 미루거나 쉬운 일 하기 → 깊게 확인하기",
+        "cartoonCaption1": "시험 2주 전, 무엇부터 공부할지 정해야 했다.",
+        "cartoonCaption2": "다른 자료나 쉬운 방법에서 시작했다.",
+        "cartoonCaption3": "공부를 미루거나 쉬운 일만 했다.",
+        "cartoonCaption4": "미루기 → 작은 행동 하나로 전환",
+        "cartoonCaption5": "직접 풀어보며 이해가 부족한 부분을 확인했다.",
+        "reportReflection": "공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.",
+        "reportCardSummary": "회복력",
+        "reportStrengthTags": [],
+        "reportGrowthTags": "직접 근거 보강"
       }
     },
     "axisDelta": [
@@ -6893,7 +8470,8 @@ var CUT_IMAGES = {
 var TEXTS = {
   "humanCentricCards": {
     "중심잡기": {
-      "color": "#1a1a1a",
+      "color": "#c62828",
+      "bg": "#fff1ec",
       "short": "AI 시대에 자기 기준과 목표를 붙잡는 힘",
       "tags": {
         "주체성": {
@@ -6911,7 +8489,8 @@ var TEXTS = {
       }
     },
     "융합하기": {
-      "color": "#2a2a2a",
+      "color": "#1565c0",
+      "bg": "#e8f4fd",
       "short": "AI와 내 생각을 엮어 문제를 풀거나 새 결과를 만드는 힘",
       "tags": {
         "창의적 사고": {
@@ -6937,7 +8516,8 @@ var TEXTS = {
       }
     },
     "성찰하기": {
-      "color": "#3a3a3a",
+      "color": "#6a1b9a",
+      "bg": "#f0e8f5",
       "short": "AI 결과와 나의 선택을 다시 확인하고 책임 있게 고치는 힘",
       "tags": {
         "비판적 사고": {
@@ -7253,6 +8833,71 @@ var TEXTS = {
     "semester_final": {
       "title": "한 학기를 모두 통과했다.",
       "body": "다섯 결정이 누적되어 한 학생의 한 학기가 되었다.<br>처음부터 다시 시작하면 새 학생이 같은 결정을 마주한다."
+    }
+  },
+  "growthReport": {
+    "title": "AI리터러시 성장 리포트",
+    "intro": "이 리포트는 다섯 개의 선택 장면을 바탕으로, 학생이 AI를 어떤 방식으로 활용했는지 돌아보는 기록이다. 점수보다 중요한 것은 어떤 과정을 AI에게 맡겼고, 어떤 과정을 직접 붙잡았는지 확인하는 것이다.",
+    "patterns": {
+      "aiHeavy": "AI를 활용해 가능성을 넓히는 선택이 많았다. 빠른 초안과 제안은 출발을 쉽게 만들었지만, 좋은 결과가 나온 장면에서는 AI가 만든 것을 그대로 쓰지 않고 자기 자료와 기준으로 다시 확인했다. 다음 단계는 AI가 도와준 부분과 자신이 책임질 부분을 더 분명히 나누는 것이다.",
+      "selfStart": "먼저 직접 생각하고 자료를 붙잡는 선택이 많았다. 자기 경험과 기준에서 출발하는 힘이 강하게 나타났다. 다음 단계는 AI를 결과 대체자가 아니라 생각을 넓히는 보조 도구로 활용해 보는 것이다.",
+      "reviewStrong": "결과를 그대로 넘기지 않고 다시 확인하는 선택이 많았다. AI가 만든 답을 자기 기준으로 점검하는 힘은 AI리터러시의 중요한 기반이다. 이 강점은 성찰하기 역량과 검토력으로 이어진다.",
+      "reviewWeak": "빠르게 결과를 얻는 선택이 많았지만, 마지막 확인이 부족한 장면도 있었다. AI가 만든 결과를 그대로 쓰기 전에 자신이 설명할 수 있는지 확인하는 과정이 필요하다. 다음 선택에서는 검토 단계를 한 번 더 깊게 가져가는 것이 좋다.",
+      "recoveryNeeded": "몇몇 장면에서는 결과를 빠르게 얻었지만, 배움에 필요한 과정이 비어 있었다. 이 결과는 실패라기보다 무엇을 다시 붙잡아야 하는지 알려주는 신호다. 다음에는 빠른 답보다 자신이 직접 확인한 근거를 하나 남기는 것부터 시작할 수 있다."
+    },
+    "strengths": [
+      {
+        "tag": "검토",
+        "text": "AI 결과를 그대로 쓰지 않고 다시 확인했다."
+      },
+      {
+        "tag": "자기자료",
+        "text": "내 자료나 약점을 먼저 넣고 AI를 활용했다."
+      },
+      {
+        "tag": "설명가능",
+        "text": "내가 설명할 수 있는 내용인지 확인하려 했다."
+      },
+      {
+        "tag": "근거",
+        "text": "직접 읽거나 풀어본 근거를 남기려 했다."
+      },
+      {
+        "tag": "소통",
+        "text": "모둠 흐름이나 상대가 이해할 수 있는지를 함께 살폈다."
+      }
+    ],
+    "improvements": [
+      {
+        "tag": "검토 필요",
+        "text": "빠르게 만든 결과를 그대로 제출하기 전에 한 번 더 확인하기가 필요하다."
+      },
+      {
+        "tag": "위임 구분",
+        "text": "AI가 만든 부분과 내가 판단한 부분을 나누는 연습이 필요하다."
+      },
+      {
+        "tag": "근거 부족",
+        "text": "내가 직접 읽고 경험한 근거를 하나 이상 남기는 연습이 필요하다."
+      },
+      {
+        "tag": "설명 불가",
+        "text": "그럴듯한 결과보다 내가 설명할 수 있는 결과를 만드는 연습이 필요하다."
+      }
+    ],
+    "pledges": [
+      "AI가 만든 답을 그대로 제출하지 않는다.",
+      "내가 설명할 수 있는 내용인지 확인한다.",
+      "내 경험이나 자료를 먼저 넣고 도움을 받는다.",
+      "AI가 한 부분과 내가 판단한 부분을 나눈다.",
+      "빠른 결과보다 직접 확인한 근거를 하나 남긴다."
+    ],
+    "teacherNotes": {
+      "aiHeavy": "이 학생은 AI 활용에 적극적이며, 빠른 초안 생성 경로를 자주 선택했다. 다만 좋은 결과가 나온 장면은 대부분 검토 단계가 포함된 경우였다. 다음 수업에서는 AI 결과를 설명 가능한 문장으로 바꾸는 활동을 연결하면 좋다.",
+      "selfStart": "이 학생은 직접 시작하는 선택이 많아 자기 기준을 세우는 힘이 보인다. 다음 단계에서는 AI를 활용해 생각을 확장하고 비교하는 활동을 연결하면 좋다.",
+      "reviewStrong": "이 학생은 검토 단계에서 성과가 크게 달라졌다. AI 결과를 그대로 쓰는 것과 자기 기준으로 고치는 것의 차이를 토론하게 하면 좋다.",
+      "reviewWeak": "이 학생은 빠르게 결과를 만들지만 마지막 확인 습관이 아직 약하다. AI 결과를 제출 전에 한 문장으로 요약하게 하는 연습을 연결하면 좋다.",
+      "recoveryNeeded": "이 학생은 결과를 빠르게 얻는 경향이 있다. 한 과제에서 AI 없이 먼저 해보고, AI로 보강하는 순서를 체험하게 하면 좋다."
     }
   }
 };
@@ -9287,57 +10932,35 @@ function getCutImageFor(scenarioId, leaf, cutNum){
 }
 
 // 4/30 세션260 — 컷별 캡션 (코믹스트립용). hist의 r.leaf 기반, gameState 무관
-// 메시지 중심 — lesson 필드 우선. 위임판단력·도메인지식 두 축 임팩트.
-// 시나리오에 lesson이 없으면 label/desc/summary로 fallback (다른 시나리오 호환)
+// v14-slim — 컷별 캡션. finals.cartoonCaption1~5 우선, 없으면 레거시 fallback.
 function getCutCaptionFor(scenarioId, leaf, cutNum){
   var sc=SCENARIOS[scenarioId]; if(!sc) return '';
+  var fin=(sc.finals||{})[leaf];
+  if(fin){
+    var capField='cartoonCaption'+cutNum;
+    if(fin[capField]) return fin[capField];
+  }
   var t1=leaf?leaf.charAt(0):null;
   var t2=leaf?leaf.substr(0,2):null;
   var rv=leaf?leaf.substr(2):null;
   function _first(text){ if(!text) return ''; var m=text.match(/^[^.!?]+[.!?]/); return m?m[0].trim():text; }
   function _esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  function _stripInternal(s){return (s||'').replace(/\s*(위임판단력|도메인지식|위임|도메인|지식|판단력)\s*[+\-]\s*\d+/g,'').trim();}
-
-  if(cutNum===1){
-    var intro=_first(sc.situation && sc.situation.text);
-    return '<b>'+_esc(sc.title||'')+'</b>'+_esc(intro);
-  }
+  if(cutNum===1){ return _esc(_first(sc.situation && sc.situation.text)); }
   if(cutNum===2 && t1){
     var t1arr=sc.tier1||[];
-    for(var i=0;i<t1arr.length;i++){
-      if(t1arr[i].id===t1){
-        if(t1arr[i].lesson) return '<b>'+_esc(_stripInternal(t1arr[i].lesson))+'</b>';
-        return '<b>'+_esc(t1arr[i].label||'')+'</b>'+_esc(t1arr[i].desc||'');
-      }
-    }
-    return '';
+    for(var i=0;i<t1arr.length;i++){ if(t1arr[i].id===t1) return _esc(t1arr[i].label||''); }
   }
   if(cutNum===3 && t2){
     var t2arr=(sc.tier2||{})[t1]||[];
-    for(var j=0;j<t2arr.length;j++){
-      if(t2arr[j].id===t2){
-        if(t2arr[j].lesson) return '<b>'+_esc(_stripInternal(t2arr[j].lesson))+'</b>';
-        return '<b>'+_esc(t2arr[j].label||'')+'</b>';
-      }
-    }
-    return '';
+    for(var j=0;j<t2arr.length;j++){ if(t2arr[j].id===t2) return _esc(t2arr[j].label||''); }
   }
   if(cutNum===4 && t2){
     var rs=(sc.results||{})[t2];
-    if(!rs) return '';
-    var summary=rs.summary||'';
-    if(rs.lesson) return (summary?'<b>'+_esc(summary)+'</b>':'')+_esc(_stripInternal(rs.lesson));
-    var firstLine=_first(rs.text||'');
-    return (summary?'<b>'+_esc(summary)+'</b>':'')+_esc(firstLine);
+    return rs?_esc(rs.summary||''):'';
   }
   if(cutNum===5 && rv){
-    var rvArr=sc.reviews||[];
-    var rvObj=null;
-    for(var k=0;k<rvArr.length;k++){ if(rvArr[k].id===rv){ rvObj=rvArr[k]; break; } }
     var supp=(sc.reviewSupplements||{})[leaf];
-    if(rvObj && rvObj.lesson) return '<b>'+_esc(_stripInternal(rvObj.lesson))+'</b>'+(supp?_esc(supp):'');
-    if(supp) return (rvObj?'<b>'+_esc(rvObj.label||'')+'</b>':'')+_esc(supp);
-    return rvObj ? '<b>'+_esc(rvObj.label||'')+'</b>'+_esc(rvObj.desc||'') : '';
+    return supp?_esc(_first(supp)):'';
   }
   return '';
 }
@@ -9647,13 +11270,20 @@ function showFinalReport(){
     }).forEach(function(label){
       var g=cardGroups[label];
       var color=_cardColor(label);
-      // 출처 unique 보존 + 순서대로
+      var bg=_cardBg(label);
       var seen={},uniqSrc=[];
       for(var si=0;si<g.sources.length;si++){var s=g.sources[si];if(!seen[s]){seen[s]=1;uniqSrc.push(s);}}
-      h+='<div class="report-card-row">';
+      var axisMatch=label.match(/^\[(.+?)\]\s*(.+)/);
+      var rowBg=bg?'background:'+bg+';':'';
+      var rowBorder=bg?'border:1.5px solid rgba(0,0,0,0.06);':'';
+      h+='<div class="report-card-row" style="'+rowBg+rowBorder+'">';
       h+='<div class="report-card-row-head">';
       h+='<span class="report-card-count" style="background:'+color+'">x'+g.count+'</span>';
-      h+='<span class="report-card-label">'+_esc(label)+'</span>';
+      if(axisMatch){
+        h+='<span class="report-card-label"><span style="font-size:10px;color:'+(_axisMeta(axisMatch[1]).color||'#888')+';font-weight:700;display:block;margin-bottom:1px;">'+_esc(axisMatch[1])+'</span>'+_esc(axisMatch[2])+'</span>';
+      }else{
+        h+='<span class="report-card-label">'+_esc(label)+'</span>';
+      }
       h+='</div>';
       h+='<div class="report-card-source">'+_esc(uniqSrc.join(', '))+'</div>';
       h+='</div>';
@@ -9671,34 +11301,15 @@ function showFinalReport(){
     var sc=SCENARIOS[r.scenarioId];
     var grade=r.grade||'D';
     var gradeLow=grade.toLowerCase();
-    var info=_reportLeafInfo(r);
-    var thisCards=cardsByScene[r.scenarioId]||[];
-    // β. scene-summary 한 줄 — 선택 / Δ위 / Δ도 / 카드
-    var dlgD=(typeof r.dlgDelta==='number')?r.dlgDelta:null;
-    var knlD=(typeof r.knlDelta==='number')?r.knlDelta:null;
-    var fmtD=function(v){return (v>0?'+':(v<0?'':'±'))+v;};
-    var seenC={},uniqC=[];
-    for(var cc2=0;cc2<thisCards.length;cc2++){if(!seenC[thisCards[cc2]]){seenC[thisCards[cc2]]=1;uniqC.push(thisCards[cc2]);}}
-    var cardsLabel='';
-    if(uniqC.length===0)cardsLabel='카드 0장';
-    else if(uniqC.length<=2)cardsLabel='카드 '+uniqC.length+'장 — '+uniqC.join(', ');
-    else cardsLabel='카드 '+uniqC.length+'장 — '+uniqC.slice(0,2).join(', ')+' 외';
-    var summarySegs=[];
-    if(dlgD!==null)summarySegs.push('<span class="seg">위 '+fmtD(dlgD)+'</span>');
-    if(knlD!==null)summarySegs.push('<span class="seg">도 '+fmtD(knlD)+'</span>');
-    summarySegs.push('<span class="seg">'+_esc(cardsLabel)+'</span>');
+    var fin=(sc&&sc.finals)?sc.finals[r.leaf]:null;
 
     h+='<div class="comic-scene">';
     h+='<div class="comic-scene-title">'+(i+1)+'. '+_esc(sc?sc.title:r.scenarioId)+' <span class="comic-scene-meta">'+r.finalScore+'점 · '+grade+'등급</span></div>';
-    // v12: 선택 경로를 리포트 카툰 위 메타 정보로 표시
-    h+='<div class="comic-scene-path" style="font-size:12px;color:#666;margin:4px 0 6px;line-height:1.6;">';
-    if(info.t1)h+='<div>1차: '+_esc(info.t1)+'</div>';
-    if(info.t2)h+='<div>세부: '+_esc(info.t2)+'</div>';
-    if(info.rv)h+='<div>검토: '+_esc(info.rv)+'</div>';
-    h+='</div>';
-    h+='<div class="comic-scene-summary">'+summarySegs.join('')+'</div>';
+    var pathSummary=(fin&&fin.reportPathSummary)||'';
+    if(pathSummary){
+      h+='<div class="comic-scene-path" style="font-size:13px;color:#555;margin:4px 0 8px;">'+_esc(pathSummary)+'</div>';
+    }
     h+='<div class="comic-strip">';
-    // 4/30 세션260 — 코믹스트립: 각 컷 = panel(이미지 + 캡션)
     for(var c=1;c<=5;c++){
       var src=getCutImageFor(r.scenarioId, r.leaf, c);
       var cap=getCutCaptionFor(r.scenarioId, r.leaf, c);
@@ -9707,20 +11318,133 @@ function showFinalReport(){
       if(cap)h+='<div class="comic-caption">'+cap+'</div>';
       h+='</div>';
     }
-    // 시상 panel — 등급 이미지 + 학생 맥락 캡션 (mood 갈음, 5/3)
-    var sceneMood=_reportSceneMood(r,thisCards);
     h+='<div class="comic-panel comic-panel-prize">';
     h+='<img class="comic-cut comic-prize" src="../scenario_results/scenario_result__'+gradeLow+'.png" alt="'+grade+' 시상" onerror="this.style.display=\'none\'">';
-    if(sceneMood)h+='<div class="comic-caption comic-caption-mood">'+sceneMood+'</div>';
     h+='</div>';
-    h+='</div>'; // /strip
-    h+='</div>'; // /scene
+    h+='</div>';
+    var reflection=(fin&&fin.reportReflection)||'';
+    var cardSummary=(fin&&fin.reportCardSummary)||'';
+    if(reflection||cardSummary){
+      h+='<div class="comic-scene-footer" style="margin:8px 0 16px;padding:10px 12px;background:#f8f8f8;border-radius:6px;font-size:13px;line-height:1.6;">';
+      if(reflection)h+='<div style="margin-bottom:4px;"><b>핵심 돌아보기</b><br>'+_esc(reflection)+'</div>';
+      if(cardSummary&&cardSummary!=='없음')h+='<div style="color:#666;">카드: '+_esc(cardSummary)+'</div>';
+      h+='</div>';
+    }
+    h+='</div>';
   });
   h+='</div>';
+
+  // v14: AI리터러시 성장 리포트
+  h+=_renderGrowthReport(hist);
 
   h+='<button class="start-btn" onclick="resetGame()">'+_esc(R.btn_restart||'학기 처음부터')+'</button>';
   h+='</div></div>';
   container.innerHTML=h;
+}
+
+function _renderGrowthReport(hist){
+  var GR=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthReport)||{};
+  if(!GR.intro)return '';
+  function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+  // 패턴 판정: 5시나리오 tier1/review/grade 수집
+  var t1Counts={A:0,B:0,C:0},rvCounts={R1:0,R2:0,R3:0},grCounts={S:0,A:0,B:0,C:0,D:0};
+  var total=hist.length||1;
+  for(var i=0;i<hist.length;i++){
+    var t1=hist[i].tier1;if(t1&&t1Counts.hasOwnProperty(t1))t1Counts[t1]++;
+    var rv=hist[i].review||'';if(rv&&rvCounts.hasOwnProperty(rv))rvCounts[rv]++;
+    var gr=hist[i].grade||'D';if(grCounts.hasOwnProperty(gr))grCounts[gr]++;
+  }
+  var bcRate=(t1Counts.B+t1Counts.C)/total;
+  var aRate=t1Counts.A/total;
+  var r23Rate=(rvCounts.R2+rvCounts.R3)/total;
+  var r1Rate=rvCounts.R1/total;
+  var cdRate=(grCounts.C+grCounts.D)/total;
+
+  var pattern='selfStart';
+  if(cdRate>0.6)pattern='recoveryNeeded';
+  else if(r1Rate>0.6)pattern='reviewWeak';
+  else if(bcRate>0.6)pattern='aiHeavy';
+  else if(r23Rate>0.6)pattern='reviewStrong';
+  else if(aRate>0.6)pattern='selfStart';
+
+  // 강점/보완 태그 수집
+  var strengthMap={},growthMap={};
+  for(var j=0;j<hist.length;j++){
+    var sc=SCENARIOS[hist[j].scenarioId];
+    var fin=(sc&&sc.finals)?sc.finals[hist[j].leaf]:null;
+    if(!fin)continue;
+    var sTags=fin.reportStrengthTags;
+    if(sTags&&sTags.length){for(var si=0;si<sTags.length;si++){var st=sTags[si].trim();if(st)strengthMap[st]=(strengthMap[st]||0)+1;}}
+    var gTag=(fin.reportGrowthTags||'').trim();
+    if(gTag)growthMap[gTag]=(growthMap[gTag]||0)+1;
+  }
+
+  // 문장 매핑
+  var strengths=GR.strengths||[];
+  var improvements=GR.improvements||[];
+  var pledges=GR.pledges||[];
+  function matchSentences(tagMap,pool,maxN){
+    var sorted=Object.keys(tagMap).sort(function(a,b){return tagMap[b]-tagMap[a];});
+    var matched=[];
+    for(var mi=0;mi<sorted.length&&matched.length<maxN;mi++){
+      var tag=sorted[mi];
+      for(var pi=0;pi<pool.length;pi++){
+        if(tag.indexOf(pool[pi].tag)>=0||pool[pi].tag.indexOf(tag)>=0){
+          if(matched.indexOf(pool[pi].text)<0)matched.push(pool[pi].text);
+          break;
+        }
+      }
+    }
+    return matched;
+  }
+  var sLines=matchSentences(strengthMap,strengths,3);
+  var iLines=matchSentences(growthMap,improvements,2);
+
+  // 약속 문장: 보완 태그 기반 1~3개
+  var pLines=[];
+  if(pledges.length){
+    if(growthMap['검토 필요']&&pledges[1])pLines.push(pledges[1]);
+    if(growthMap['위임 구분']&&pledges[3])pLines.push(pledges[3]);
+    if(growthMap['근거 부족']&&pledges[4])pLines.push(pledges[4]);
+    if(pLines.length===0)pLines.push(pledges[0]);
+    if(pLines.length<2&&pledges[2])pLines.push(pledges[2]);
+  }
+
+  var h='<div class="report-growth" style="margin:24px 0;padding:16px;background:#fafafa;border:1px solid #e8e8e8;border-radius:8px;">';
+  h+='<div style="font-size:16px;font-weight:700;margin-bottom:12px;">'+_esc(GR.title||'AI리터러시 성장 리포트')+'</div>';
+  h+='<div style="font-size:13px;line-height:1.7;color:#444;margin-bottom:14px;">'+_esc(GR.intro)+'</div>';
+
+  var patText=(GR.patterns||{})[pattern]||'';
+  if(patText){
+    h+='<div style="font-size:13px;line-height:1.7;color:#333;margin-bottom:14px;padding:10px;background:#fff;border-radius:6px;">'+_esc(patText)+'</div>';
+  }
+
+  if(sLines.length){
+    h+='<div style="margin-bottom:12px;"><div style="font-size:13px;font-weight:700;margin-bottom:4px;">내가 잘 붙잡은 과정</div>';
+    for(var s2=0;s2<sLines.length;s2++)h+='<div style="font-size:13px;color:#333;line-height:1.6;padding-left:8px;">· '+_esc(sLines[s2])+'</div>';
+    h+='</div>';
+  }
+  if(iLines.length){
+    h+='<div style="margin-bottom:12px;"><div style="font-size:13px;font-weight:700;margin-bottom:4px;">더 연습할 과정</div>';
+    for(var i2=0;i2<iLines.length;i2++)h+='<div style="font-size:13px;color:#333;line-height:1.6;padding-left:8px;">· '+_esc(iLines[i2])+'</div>';
+    h+='</div>';
+  }
+  if(pLines.length){
+    h+='<div style="margin-bottom:12px;"><div style="font-size:13px;font-weight:700;margin-bottom:4px;">다음 AI 사용 약속</div>';
+    for(var p2=0;p2<pLines.length;p2++)h+='<div style="font-size:13px;color:#333;line-height:1.6;padding-left:8px;">· '+_esc(pLines[p2])+'</div>';
+    h+='</div>';
+  }
+
+  // 교사용 관찰 포인트 — 접기
+  var teacherNote=(GR.teacherNotes||{})[pattern]||'';
+  if(teacherNote){
+    h+='<details style="margin-top:8px;"><summary style="font-size:12px;color:#888;cursor:pointer;">교사용 관찰 포인트</summary>';
+    h+='<div style="font-size:12px;color:#666;line-height:1.6;margin-top:6px;padding:8px;background:#fff;border-radius:4px;">'+_esc(teacherNote)+'</div>';
+    h+='</details>';
+  }
+  h+='</div>';
+  return h;
 }
 
 // =====================================================
@@ -9996,7 +11720,6 @@ var _CARD_PALETTE_FALLBACK=['#d32f2f','#1976d2','#388e3c','#7b1fa2','#f57c00','#
 function _cardColor(label){
   if(!label)return _CARD_PALETTE_FALLBACK[0];
   if(typeof TEXTS!=='undefined'&&TEXTS){
-    // v0.8 3트랙: "[축] 태그" 형식이면 인간중심 태그 색상
     var axisMatch=label.match(/^\[(.+?)\]\s*(.+)/);
     if(axisMatch){
       var hcAxis=TEXTS.humanCentricCards&&TEXTS.humanCentricCards[axisMatch[1]];
@@ -10010,6 +11733,20 @@ function _cardColor(label){
   var h=0;
   for(var i=0;i<label.length;i++)h=((h<<5)-h+label.charCodeAt(i))|0;
   return _CARD_PALETTE_FALLBACK[Math.abs(h)%_CARD_PALETTE_FALLBACK.length];
+}
+function _cardBg(label){
+  if(!label||typeof TEXTS==='undefined'||!TEXTS)return null;
+  var axisMatch=label.match(/^\[(.+?)\]/);
+  if(axisMatch){
+    var hcAxis=TEXTS.humanCentricCards&&TEXTS.humanCentricCards[axisMatch[1]];
+    if(hcAxis&&hcAxis.bg)return hcAxis.bg;
+  }
+  return null;
+}
+function _axisMeta(axisName){
+  if(typeof TEXTS==='undefined'||!TEXTS||!TEXTS.humanCentricCards)return {color:'#111',bg:'#f8f8f8'};
+  var ax=TEXTS.humanCentricCards[axisName];
+  return ax?{color:ax.color||'#111',bg:ax.bg||'#f8f8f8',short:ax.short||''}:{color:'#111',bg:'#f8f8f8'};
 }
 function ensureInventory(){
   if(!gameState)return;
@@ -10054,17 +11791,23 @@ function renderInventory(){
   var html='';
   // 인간중심 역량
   if(hc.length){
-    html+='<div style="font-size:13px;font-weight:700;color:#333;margin-bottom:8px;border-bottom:1px solid #ddd;padding-bottom:4px;">인간중심 역량</div>';
+    html+='<div style="font-size:11px;font-weight:700;color:#888;letter-spacing:1.2px;margin-bottom:10px;padding-bottom:4px;border-bottom:1.5px solid #ddd;">인간중심 역량</div>';
     var axisGroups={};
     for(var i=0;i<hc.length;i++){var a=hc[i].axis||'기타';if(!axisGroups[a])axisGroups[a]=[];axisGroups[a].push(hc[i]);}
     Object.keys(axisGroups).forEach(function(axis){
       var items=axisGroups[axis];
+      var am=_axisMeta(axis);
       var tagCounts={};
       for(var j=0;j<items.length;j++){var t=items[j].tag;tagCounts[t]=(tagCounts[t]||0)+1;}
-      html+='<div style="margin-bottom:10px;padding:8px;background:#f8f8f8;border-radius:4px;">';
-      html+='<div style="font-size:12px;color:#666;margin-bottom:4px;">['+_invEscapeHTML(axis)+'] ×'+items.length+'</div>';
+      html+='<div style="margin-bottom:12px;padding:14px 12px;background:'+am.color+';border-radius:8px;">';
+      html+='<div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:2px;letter-spacing:0.3px;">'+_invEscapeHTML(axis)+'</div>';
+      if(am.short)html+='<div style="font-size:11px;color:rgba(255,255,255,0.75);margin-bottom:10px;line-height:1.4;">'+_invEscapeHTML(am.short)+'</div>';
       Object.keys(tagCounts).forEach(function(tag){
-        html+='<div style="font-size:13px;margin-left:8px;">'+_invEscapeHTML(tag)+(tagCounts[tag]>1?' ×'+tagCounts[tag]:'')+'</div>';
+        var td=(TEXTS&&TEXTS.humanCentricCards&&TEXTS.humanCentricCards[axis]&&TEXTS.humanCentricCards[axis].tags&&TEXTS.humanCentricCards[axis].tags[tag])||{};
+        html+='<div style="display:flex;align-items:center;gap:8px;padding:6px 10px;margin-bottom:4px;background:rgba(255,255,255,0.15);border-radius:4px;">';
+        html+='<span style="font-size:14px;font-weight:600;color:#fff;">'+_invEscapeHTML(tag)+'</span>';
+        if(tagCounts[tag]>1)html+='<span style="font-size:12px;color:rgba(255,255,255,0.7);font-weight:700;">×'+tagCounts[tag]+'</span>';
+        html+='</div>';
       });
       html+='</div>';
     });
@@ -10147,49 +11890,74 @@ function playCardRewardSequential(cards,note){
         if(card.parentNode)card.parentNode.removeChild(card);
         remaining--;if(remaining<=0)finishAll();return;
       }
-      card.classList.remove('appear');
-      card.style.animation='none';
       var r=tab.getBoundingClientRect();
       var cr=card.getBoundingClientRect();
       var cx=cr.left+cr.width/2;
       var cy=cr.top+cr.height/2;
       var tx=r.left+r.width/2-cx;
       var ty=r.top+r.height/2-cy;
-      card.style.transition='none';
+      card.style.opacity='1';
+      card.style.transform='translate(-50%,-50%) scale(1) rotate(0deg)';
+      card.classList.remove('appear');
+      card.style.animation='none';
       void card.offsetWidth;
-      card.style.transition='opacity 0.55s ease-in 0.1s, transform 0.6s cubic-bezier(0.55,0,0.85,0.3)';
+      card.style.transition='opacity 0.35s ease-in 0.15s, transform 0.5s cubic-bezier(0.55,0,0.85,0.3)';
       requestAnimationFrame(function(){
-        card.style.transform='translate(calc(-50% + '+tx+'px), calc(-50% + '+ty+'px)) scale(0.12) rotate(720deg)';
+        card.style.transform='translate(calc(-50% + '+tx+'px), calc(-50% + '+ty+'px)) scale(0.08) rotate(540deg)';
         card.style.opacity='0';
       });
+      setTimeout(function(){
+        tab.style.transition='transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease';
+        tab.style.transform='translateY(-50%) scale(1.15)';
+        tab.style.boxShadow='-3px 3px 0 #111, 0 0 20px rgba(255,220,80,0.6)';
+        setTimeout(function(){
+          tab.style.transform='translateY(-50%) scale(1)';
+          tab.style.boxShadow='-3px 3px 0 #111';
+        },300);
+      },420);
       setTimeout(function(){
         if(card.parentNode)card.parentNode.removeChild(card);
         remaining--;
         if(remaining<=0)finishAll();
-      },700);
+      },600);
     }
     function makeCard(idx){
       var label=cards[idx];
       var color=_cardColor(label);
       var card=document.createElement('div');
       card.className='card-reward-card';
-      card.style.borderLeftColor=color;
-      // 위치 인라인 (5점 좌표 중 하나 — cards.length>5는 5점 안에서 modulo)
       var pos=positions[idx%positions.length];
       card.style.top=pos.top;
       card.style.left=pos.left;
       var btnId='card-confirm-'+idx;
       var crM=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.ui_messages && TEXTS.ui_messages.card_reward) || {};
       var btnLabel=crM.btn_acquire||'확보';
-      var trackName=label.match(/^\[/)?'인간중심 역량':(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthCards&&TEXTS.growthCards[label])?'성장 역량':'도메인 역량';
-      var tagText=trackName+' · '+(idx+1)+'/'+cards.length;
-      var displayLabel=label.replace(/^\[.+?\]\s*/,'');
-      var axisPrefix=label.match(/^\[(.+?)\]/);
-      card.innerHTML='<div class="card-reward-tag">'+_invEscapeHTML(tagText)+'</div>'+
-        (axisPrefix?'<div style="font-size:10px;color:#888;margin-bottom:2px;">'+_invEscapeHTML(axisPrefix[1])+'</div>':'')+
-        '<div class="card-reward-label" style="color:'+color+'">'+_invEscapeHTML(displayLabel)+'</div>'+
-        (note?'<div class="card-reward-divider"></div><div class="card-reward-note">'+_invEscapeHTML(note)+'</div>':'')+
-        '<button class="card-reward-confirm" id="'+btnId+'">'+_invEscapeHTML(btnLabel)+'</button>';
+      var axisPrefix=label.match(/^\[(.+?)\]\s*(.+)/);
+      var isHC=!!axisPrefix;
+      var shortDesc='';
+      if(isHC){
+        var am=_axisMeta(axisPrefix[1]);
+        card.style.background=am.color;
+        card.style.borderColor=am.color;
+        card.style.borderLeftColor=am.color;
+        card.style.boxShadow='0 4px 0 '+am.color;
+        var tagData=(TEXTS&&TEXTS.humanCentricCards&&TEXTS.humanCentricCards[axisPrefix[1]]&&TEXTS.humanCentricCards[axisPrefix[1]].tags&&TEXTS.humanCentricCards[axisPrefix[1]].tags[axisPrefix[2]])||{};
+        shortDesc=tagData.short||'';
+        card.innerHTML='<div class="card-reward-tag" style="color:rgba(255,255,255,0.7);">인간중심 역량</div>'+
+          '<div class="card-reward-label" style="color:#fff;"><b>'+_invEscapeHTML(axisPrefix[1])+'</b> — '+_invEscapeHTML(axisPrefix[2])+'</div>'+
+          (shortDesc?'<div style="font-size:11px;color:rgba(255,255,255,0.85);line-height:1.5;margin-bottom:12px;">'+_invEscapeHTML(shortDesc)+'</div>':'')+
+          '<button class="card-reward-confirm" id="'+btnId+'" style="background:rgba(255,255,255,0.95);color:'+am.color+';border-color:rgba(255,255,255,0.5);">'+_invEscapeHTML(btnLabel)+'</button>';
+      }else{
+        card.style.borderLeftColor=color;
+        var isGrowth=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthCards&&TEXTS.growthCards[label]);
+        var trackName=isGrowth?'성장 역량':'도메인 역량';
+        var td=isGrowth?(TEXTS.growthCards[label]||{}):(TEXTS&&TEXTS.domainCards&&TEXTS.domainCards[label]||{});
+        shortDesc=td.short||'';
+        card.innerHTML='<div class="card-reward-tag">'+_invEscapeHTML(trackName)+'</div>'+
+          '<div class="card-reward-label" style="color:'+color+'">'+_invEscapeHTML(label)+'</div>'+
+          (shortDesc?'<div class="card-reward-divider"></div><div class="card-reward-note">'+_invEscapeHTML(shortDesc)+'</div>':'')+
+          '<button class="card-reward-confirm" id="'+btnId+'">'+_invEscapeHTML(btnLabel)+'</button>';
+      }
       overlay.appendChild(card);
       // 시간차 등장 — 0.18s 간격
       setTimeout(function(){card.classList.add('appear');},idx*180);
