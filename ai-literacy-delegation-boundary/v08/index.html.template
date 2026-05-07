@@ -737,8 +737,8 @@ var CONFIG={
   // v0.5 Phase 8.7 — 부분 회복 hook 폐기 (DECISIONS §10.1). RP 시스템으로 전환
   // v0.5 Phase 8.8 — 자원토큰(RP) 시스템 (DECISIONS §10.2~10.4)
   // 명칭: 코드는 RP 유지(식별자 길이/i18n), UI 텍스트는 "자원토큰"
-  rpRewardByGrade:{S:15,A:10,B:6,C:3,D:1},
-  rpLevelUpBonus:20,
+  rpRewardByGrade:{S:10,A:7,B:5,C:3,D:1},
+  rpLevelUpBonusByLevel:{2:10,3:15,4:20,5:20},
   rpCost:{time:1,energy:1}, // 2축 전용 (DECISIONS §10.4 — 위/도 분배 폐기)
   // v0.8 5/4 세션289 — 비대칭 효과 (mNeg=1 되돌림)
   // 양수 ×2 (잘하면 두 배 보상), 음수 ×1 (잘못해도 한 배만 페널티). 메모리 5/3 세션278 정합.
@@ -1179,12 +1179,15 @@ function consumeResources(leafPath){
 
 // v0.5 Phase 8.8 — 자원토큰(RP) 적립 (DECISIONS §10.2, §10.3)
 // 컷6 결과 직후 호출. 등급별 + 레벨업 보너스 합산하여 balance에 추가.
-function awardRP(grade,didLevelUp){
+function awardRP(grade,didLevelUp,newLevel){
   if(!gameState.rp)gameState.rp={balance:0,history:[]};
   var fromGrade=(CONFIG.rpRewardByGrade&&CONFIG.rpRewardByGrade[grade])||0;
-  var fromLevelUp=didLevelUp?(CONFIG.rpLevelUpBonus||0):0;
+  var fromLevelUp=0;
+  if(didLevelUp&&CONFIG.rpLevelUpBonusByLevel){
+    fromLevelUp=CONFIG.rpLevelUpBonusByLevel[newLevel]||0;
+  }
   var total=fromGrade+fromLevelUp;
-  gameState.rp.balance+=total;
+  gameState.rp.balance=total;
   gameState.rp.history.push({
     type:'awarded',
     scenarioId:gameState.currentScenarioId,
@@ -2296,7 +2299,7 @@ function goCut6(){
   // v0.5 Phase 8.7 — 부분 회복 hook 제거 (DECISIONS §10.1). RP 시스템(8.8)에서 적립으로 대체
   if(didLevelUp)applyLevelUpMeterIncrease(newLevel);
   // v0.5 Phase 8.8 — 자원토큰(RP) 적립 (DECISIONS §10.2~10.3)
-  var rpAwardInfo=awardRP(grade,didLevelUp);
+  var rpAwardInfo=awardRP(grade,didLevelUp,newLevel);
   // 9. scenarioRepeatCount 증가 (작업 8)
   var scid=gameState.currentScenarioId;
   gameState.scenarioRepeatCount[scid]=(gameState.scenarioRepeatCount[scid]||0)+1;
@@ -3631,7 +3634,7 @@ function dbgShowLevelUpModal(){
   var rt=gameState.resources.time, re=gameState.resources.energy;
   var prevMax={time:rt.max,energy:re.max};
   var newMax=(CONFIG.meterMaxByLevel&&CONFIG.meterMaxByLevel[lv+1])||{time:rt.max+10,energy:re.max+10};
-  var bonus=CONFIG.rpLevelUpBonus||20;
+  var bonus=(CONFIG.rpLevelUpBonusByLevel&&CONFIG.rpLevelUpBonusByLevel[lv+1])||15;
   showLevelUpModal(lv,lv+1,prevMax,newMax,bonus);
 }
 
