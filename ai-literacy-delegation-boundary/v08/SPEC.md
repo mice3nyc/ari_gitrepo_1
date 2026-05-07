@@ -1,6 +1,6 @@
 ## SPEC — v0.8
 
-**최종 업데이트**: 2026-05-07 세션308 (§18 리포트 통합 재설계 — 성장 리포트+학습자 패턴+카드 하나로)
+**최종 업데이트**: 2026-05-07 세션310 (§3.4 선택지 카드 시각 위계 조정 — 선택 텍스트 격상+비용 축소)
 **PLAN**: [[PLAN|PLAN.md]] / **TASKS**: [[TASKS|TASKS.md]] / **DESIGN**: [[DESIGN-REGISTRY|DESIGN-REGISTRY.md]]
 **v14-slim**: `Assets/incoming/AI리터러시/codex/ari-final-delivery-v14-slim/`
 **v14 리포트**: `Assets/incoming/AI리터러시/codex/ari-report-text-v14/`
@@ -357,6 +357,8 @@ CONFIG: `competencyDiscountMultPos: 2`, `competencyDiscountMultNeg: 2` (대칭).
 **학생 화면 도착 검증**: 화면이 보내는 메시지 = 메카닉이 보내려는 메시지. "보유 위임판단력이 이 선택의 시간 비용을 -2 할인해줬다"가 박스 안 산식 그대로 학생 화면에 도착한다. v0.6에서 학생이 "선택지가 위·도를 깎는다"로 오해했던 자리 정정.
 
 코드 자리: §6.6 참조 (`buildEffectCell`·`buildCostHTML` 공식형 박스 재작성).
+
+**시각 위계 + 카드 레이아웃 재설계 (세션310)**: 선택지 카드 구조를 세로 바(A) | 본문 flex-row에서 검정 인라인 박스 + 선택 텍스트 / 비용 한 줄 flex-column으로 변경. 선택 텍스트 15px/700으로 격상. 비용 공식은 박스 제거 — 숫자만 색 글씨로 표시(원가 빨강, 할인 초록, 최종 검정 볼드 14px). 시간·에너지 두 그룹을 한 줄 좌우 배치, 사이에 #ccc 세로 구분선. 카드 풀 너비 활용으로 비용 공식이 잘리지 않음. 학생이 "무엇을 선택하는가"를 먼저 읽고, "얼마나 드는가"는 그 다음에 확인.
 
 ##### 3.5 raw 비용 분배 룰 (v0.7 신설)
 

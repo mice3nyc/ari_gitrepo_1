@@ -104,19 +104,19 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .cost-box-effect.penalty { border-color:#c44; background:#fff5f5; color:#c44; }
 .cost-box-effect.zero { border:1.5px dashed #ccc; background:transparent; color:#bbb; font-weight:400; }
 /* v0.8 §3.4 — 공식형 박스 두 줄 라벨 분리 */
-.cost-formula-box { display:flex; flex-direction:column; gap:8px; padding:12px 8px 6px; border-top:1px dashed #ddd; margin-top:10px; }
-.cost-formula-line { display:flex; align-items:flex-end; justify-content:center; gap:6px; font-size:11px; }
-.cost-formula-cell { display:flex; flex-direction:column; align-items:center; gap:4px; }
-.cost-formula-label { color:#666; font-size:9px; font-weight:600; letter-spacing:0.3px; line-height:1; white-space:nowrap; }
-.cost-formula-val { width:42px; height:34px; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; line-height:1; border:1.5px solid #ccc; background:#fff; }
-.cost-formula-raw { border-color:#c44; background:#fff5f5; color:#c44; }
-.cost-formula-discount { border-color:#1a8c1a; background:#f3faf3; color:#1a8c1a; }
-.cost-formula-discount.zero { border:1.5px dashed #ccc; background:transparent; color:#bbb; font-weight:400; }
-.cost-formula-discount.penalty { border-color:#c44; background:#fff5f5; color:#c44; }
-.cost-formula-final { border-color:#111; background:#fafafa; color:#111; }
-.cost-formula-final b { font-size:17px; color:#111; font-weight:800; }
-.cost-formula-op { font-size:14px; font-weight:600; color:#888; padding:0 2px; padding-bottom:8px; }
-.cost-formula-op { font-size:13px; color:#666; font-weight:600; padding:0 2px; }
+.cost-formula-box { display:flex; flex-direction:row; gap:0; padding:6px 12px 6px; border-top:1px dashed #ddd; }
+.cost-formula-line { display:flex; align-items:flex-end; justify-content:center; gap:3px; font-size:10px; flex:1; }
+.cost-formula-line:first-child { border-right:1px solid #ccc; margin-right:4px; padding-right:4px; }
+.cost-formula-cell { display:flex; flex-direction:column; align-items:center; gap:3px; }
+.cost-formula-label { color:#888; font-size:8px; font-weight:600; letter-spacing:0.3px; line-height:1; white-space:nowrap; }
+.cost-formula-val { display:inline; font-size:12px; font-weight:700; line-height:1; }
+.cost-formula-raw { color:#c44; }
+.cost-formula-discount { color:#1a8c1a; }
+.cost-formula-discount.zero { color:#bbb; font-weight:400; }
+.cost-formula-discount.penalty { color:#c44; }
+.cost-formula-final { color:#111; }
+.cost-formula-final b { font-size:14px; color:#111; font-weight:800; }
+.cost-formula-op { font-size:10px; color:#999; font-weight:600; padding:0 1px; padding-bottom:6px; }
 
 /* ===== Overlay (Start) ===== */
 .overlay-card { display:flex; align-items:center; justify-content:center; min-height:480px; animation:overlayIn 0.5s ease; }
@@ -168,13 +168,13 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .chosen-label { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#888; margin-bottom:6px; }
 .chosen-title { font-size:14px; font-weight:700; margin-bottom:4px; }
 .chosen-way { font-size:12px; color:#444; line-height:1.4; }
-.choice-card { display:flex; background:#fff; color:#111; border:2px solid #111; padding:0; cursor:pointer; user-select:none; transition:all 0.2s; box-shadow:0 2px 0 #111; opacity:0; transform:translateY(12px); overflow:hidden; }
+.choice-card { display:flex; flex-direction:column; background:#fff; color:#111; border:2px solid #111; padding:0; cursor:pointer; user-select:none; transition:all 0.2s; box-shadow:0 2px 0 #111; opacity:0; transform:translateY(12px); overflow:hidden; }
 .choice-card.visible { opacity:1; transform:translateY(0); }
 .choice-card:hover { transform:translateX(4px); box-shadow:0 2px 0 #111,0 4px 10px rgba(0,0,0,0.08); }
 .choice-card:active { box-shadow:none; transform:translateY(2px); }
-.choice-num { background:#111; color:#fff; width:30px; padding:10px 0; text-align:center; font-size:14px; font-weight:700; line-height:1.4; flex-shrink:0; }
-.choice-body { flex:1; padding:9px 12px; min-width:0; }
-.choice-text { font-size:13px; font-weight:600; line-height:1.4; margin-bottom:2px; }
+.choice-header { display:flex; align-items:center; gap:8px; padding:9px 12px; }
+.choice-num { background:#111; color:#fff; width:24px; height:24px; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
+.choice-text { font-size:15px; font-weight:700; line-height:1.4; margin-bottom:2px; }
 .choice-desc { font-size:11px; color:#888; line-height:1.4; margin-top:3px; }
 /* v0.8 §6.6.3 — Cut5 review supplements를 메인 텍스트로 격상 */
 .choice-narrative { font-size:12px; color:#222; line-height:1.4; margin-top:3px; padding:5px 8px; background:#f6f6f6; border-left:2px solid #111; }
@@ -2135,7 +2135,7 @@ function goCut2(){
     if(afford)card.onclick=function(){onTier1(c.id);};
     var costHTML=buildCostHTML(costs[i],maxT,maxE);
     var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
-    card.innerHTML='<div class="choice-num">'+c.id+'</div><div class="choice-body"><div class="choice-text">'+c.label+tag+'</div>'+costHTML+'</div>';
+    card.innerHTML='<div class="choice-header"><span class="choice-num">'+c.id+'</span><span class="choice-text">'+c.label+tag+'</span></div>'+costHTML;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
@@ -2169,7 +2169,7 @@ function goCut3(){
     if(afford)card.onclick=function(){onTier2(c.id);};
     var costHTML=buildCostHTML(costs[i],maxT,maxE);
     var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
-    card.innerHTML='<div class="choice-num">'+(i+1)+'</div><div class="choice-body"><div class="choice-text">'+c.label+tag+'</div>'+costHTML+'</div>';
+    card.innerHTML='<div class="choice-header"><span class="choice-num">'+(i+1)+'</span><span class="choice-text">'+c.label+tag+'</span></div>'+costHTML;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
@@ -2234,7 +2234,7 @@ function goCut5(){
     // v0.8 5/5 — supplements 설명은 선택 후 컷6 c5body에 표시. 선택지 카드는 라벨만 (선택지 폭증 방지).
     // leaf별 V1/V2/V3 라벨이 reviewLabels에 있으면 그것 사용 (5 시나리오 다른 검토 행동)
     var leafLabel=(sc.reviewLabels&&sc.reviewLabels[leafKey])||r.label;
-    card.innerHTML='<div class="choice-num">'+r.id+'</div><div class="choice-body"><div class="choice-text">'+leafLabel+tag+'</div>'+costHTML+'</div>';
+    card.innerHTML='<div class="choice-header"><span class="choice-num">'+r.id+'</span><span class="choice-text">'+leafLabel+tag+'</span></div>'+costHTML;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });

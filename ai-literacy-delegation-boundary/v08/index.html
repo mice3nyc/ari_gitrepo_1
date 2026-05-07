@@ -104,19 +104,19 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .cost-box-effect.penalty { border-color:#c44; background:#fff5f5; color:#c44; }
 .cost-box-effect.zero { border:1.5px dashed #ccc; background:transparent; color:#bbb; font-weight:400; }
 /* v0.8 §3.4 — 공식형 박스 두 줄 라벨 분리 */
-.cost-formula-box { display:flex; flex-direction:column; gap:8px; padding:12px 8px 6px; border-top:1px dashed #ddd; margin-top:10px; }
-.cost-formula-line { display:flex; align-items:flex-end; justify-content:center; gap:6px; font-size:11px; }
-.cost-formula-cell { display:flex; flex-direction:column; align-items:center; gap:4px; }
-.cost-formula-label { color:#666; font-size:9px; font-weight:600; letter-spacing:0.3px; line-height:1; white-space:nowrap; }
-.cost-formula-val { width:42px; height:34px; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; line-height:1; border:1.5px solid #ccc; background:#fff; }
-.cost-formula-raw { border-color:#c44; background:#fff5f5; color:#c44; }
-.cost-formula-discount { border-color:#1a8c1a; background:#f3faf3; color:#1a8c1a; }
-.cost-formula-discount.zero { border:1.5px dashed #ccc; background:transparent; color:#bbb; font-weight:400; }
-.cost-formula-discount.penalty { border-color:#c44; background:#fff5f5; color:#c44; }
-.cost-formula-final { border-color:#111; background:#fafafa; color:#111; }
-.cost-formula-final b { font-size:17px; color:#111; font-weight:800; }
-.cost-formula-op { font-size:14px; font-weight:600; color:#888; padding:0 2px; padding-bottom:8px; }
-.cost-formula-op { font-size:13px; color:#666; font-weight:600; padding:0 2px; }
+.cost-formula-box { display:flex; flex-direction:row; gap:0; padding:6px 12px 6px; border-top:1px dashed #ddd; }
+.cost-formula-line { display:flex; align-items:flex-end; justify-content:center; gap:3px; font-size:10px; flex:1; }
+.cost-formula-line:first-child { border-right:1px solid #ccc; margin-right:4px; padding-right:4px; }
+.cost-formula-cell { display:flex; flex-direction:column; align-items:center; gap:3px; }
+.cost-formula-label { color:#888; font-size:8px; font-weight:600; letter-spacing:0.3px; line-height:1; white-space:nowrap; }
+.cost-formula-val { display:inline; font-size:12px; font-weight:700; line-height:1; }
+.cost-formula-raw { color:#c44; }
+.cost-formula-discount { color:#1a8c1a; }
+.cost-formula-discount.zero { color:#bbb; font-weight:400; }
+.cost-formula-discount.penalty { color:#c44; }
+.cost-formula-final { color:#111; }
+.cost-formula-final b { font-size:14px; color:#111; font-weight:800; }
+.cost-formula-op { font-size:10px; color:#999; font-weight:600; padding:0 1px; padding-bottom:6px; }
 
 /* ===== Overlay (Start) ===== */
 .overlay-card { display:flex; align-items:center; justify-content:center; min-height:480px; animation:overlayIn 0.5s ease; }
@@ -168,13 +168,13 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .chosen-label { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#888; margin-bottom:6px; }
 .chosen-title { font-size:14px; font-weight:700; margin-bottom:4px; }
 .chosen-way { font-size:12px; color:#444; line-height:1.4; }
-.choice-card { display:flex; background:#fff; color:#111; border:2px solid #111; padding:0; cursor:pointer; user-select:none; transition:all 0.2s; box-shadow:0 2px 0 #111; opacity:0; transform:translateY(12px); overflow:hidden; }
+.choice-card { display:flex; flex-direction:column; background:#fff; color:#111; border:2px solid #111; padding:0; cursor:pointer; user-select:none; transition:all 0.2s; box-shadow:0 2px 0 #111; opacity:0; transform:translateY(12px); overflow:hidden; }
 .choice-card.visible { opacity:1; transform:translateY(0); }
 .choice-card:hover { transform:translateX(4px); box-shadow:0 2px 0 #111,0 4px 10px rgba(0,0,0,0.08); }
 .choice-card:active { box-shadow:none; transform:translateY(2px); }
-.choice-num { background:#111; color:#fff; width:30px; padding:10px 0; text-align:center; font-size:14px; font-weight:700; line-height:1.4; flex-shrink:0; }
-.choice-body { flex:1; padding:9px 12px; min-width:0; }
-.choice-text { font-size:13px; font-weight:600; line-height:1.4; margin-bottom:2px; }
+.choice-header { display:flex; align-items:center; gap:8px; padding:9px 12px; }
+.choice-num { background:#111; color:#fff; width:24px; height:24px; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
+.choice-text { font-size:15px; font-weight:700; line-height:1.4; margin-bottom:2px; }
 .choice-desc { font-size:11px; color:#888; line-height:1.4; margin-top:3px; }
 /* v0.8 §6.6.3 — Cut5 review supplements를 메인 텍스트로 격상 */
 .choice-narrative { font-size:12px; color:#222; line-height:1.4; margin-top:3px; padding:5px 8px; background:#f6f6f6; border-left:2px solid #111; }
@@ -3969,7 +3969,7 @@ var SCENARIOS = {
     ],
     "domainLabel": "문해력",
     "situation": {
-      "text": "국어 시간에 어린왕자 독후감을 100자로 써 오라는 숙제가 나왔다. 책은 빌려 두었지만 아직 끝까지 읽지 못했고, 제출일은 내일이다. 줄거리는 어렴풋이 들어 본 것 같지만, 내가 직접 기억하는 장면은 많지 않다.",
+      "text": "어린왕자 독후감을 100자로 써야 하는데 책을 안 읽었습니다.",
       "image": "../images/s01_ch1.webp"
     },
     "tier1": [
@@ -10199,7 +10199,7 @@ function buildEffectCell(label,value){
 // 한 줄: 비용 [N] − 할인 [N] = 최종 [N] (학생 톤, 최종 볼드)
 function _buildCostLine(costLabel,rawVal,discountLabel,discountVal,finalLabel){
   // discountVal: 양수 = 할인, 0 = 표시 안함, 음수 = 페널티(부호 뒤집어 +로 표시)
-  var finalVal=(rawVal>0)?Math.max(CONFIG.minResourceCost||1,rawVal-discountVal):0;
+  var finalVal=Math.max(0,rawVal-discountVal);
   var opSym='−',discText=String(Math.abs(discountVal));
   var discCls='cost-formula-discount';
   if(discountVal===0){discCls+=' zero';}
@@ -10245,7 +10245,7 @@ function goCut2(){
     if(afford)card.onclick=function(){onTier1(c.id);};
     var costHTML=buildCostHTML(costs[i],maxT,maxE);
     var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
-    card.innerHTML='<div class="choice-num">'+c.id+'</div><div class="choice-body"><div class="choice-text">'+c.label+tag+'</div>'+costHTML+'</div>';
+    card.innerHTML='<div class="choice-header"><span class="choice-num">'+c.id+'</span><span class="choice-text">'+c.label+tag+'</span></div>'+costHTML;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
@@ -10279,7 +10279,7 @@ function goCut3(){
     if(afford)card.onclick=function(){onTier2(c.id);};
     var costHTML=buildCostHTML(costs[i],maxT,maxE);
     var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
-    card.innerHTML='<div class="choice-num">'+(i+1)+'</div><div class="choice-body"><div class="choice-text">'+c.label+tag+'</div>'+costHTML+'</div>';
+    card.innerHTML='<div class="choice-header"><span class="choice-num">'+(i+1)+'</span><span class="choice-text">'+c.label+tag+'</span></div>'+costHTML;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
@@ -10344,7 +10344,7 @@ function goCut5(){
     // v0.8 5/5 — supplements 설명은 선택 후 컷6 c5body에 표시. 선택지 카드는 라벨만 (선택지 폭증 방지).
     // leaf별 V1/V2/V3 라벨이 reviewLabels에 있으면 그것 사용 (5 시나리오 다른 검토 행동)
     var leafLabel=(sc.reviewLabels&&sc.reviewLabels[leafKey])||r.label;
-    card.innerHTML='<div class="choice-num">'+r.id+'</div><div class="choice-body"><div class="choice-text">'+leafLabel+tag+'</div>'+costHTML+'</div>';
+    card.innerHTML='<div class="choice-header"><span class="choice-num">'+r.id+'</span><span class="choice-text">'+leafLabel+tag+'</span></div>'+costHTML;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
@@ -10494,12 +10494,8 @@ function goCut6(){
 
   // v0.8 — 리플레이 자원 스냅샷 저장 (시나리오 시작 전 상태, 첫 플레이 시만)
   if(!gameState.replay)gameState.replay={};
-  if(!gameState.replay[scid]||!gameState.replay[scid].played){
-    // 첫 플레이 완료 — bestScore 기록
-    if(!gameState.replay[scid])gameState.replay[scid]={played:false,improved:false,bestScore:0,bestGrade:''};
-    gameState.replay[scid].played=true;
-    gameState.replay[scid].bestScore=gameState.score;
-    gameState.replay[scid].bestGrade=grade;
+  if(!gameState.replay[scid]){
+    gameState.replay[scid]={played:false,improved:false,bestScore:gameState.score,bestGrade:grade};
   } else {
     // 리플레이 완료 — best score 갱신 + 도전력 판정
     var prev=gameState.replay[scid];
@@ -10513,6 +10509,7 @@ function goCut6(){
         gameState.inventory.growthCards.push({label:'도전력',scenario:scid,leaf:leaf});
       }
     }
+    prev.played=true;
   }
 
   // v0.5: 컷6 결과로 충분 → 활동 리포트 거치지 않고 바로 다음 시나리오/종합 리포트
@@ -11254,39 +11251,29 @@ function showFinalReport(){
       var stitle=(scObj&&scObj.title)||cc.scenarioTitle||cc.scenario||'';
       cardGroups[cc.label].sources.push(stitle);
     }
-    // 정렬: 인간중심 → 도메인 → 성장 (각 그룹 내 count desc)
-    var sortedLabels=Object.keys(cardGroups).sort(function(a,b){
-      var ta=a.match(/^\[/)?0:((typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthCards&&TEXTS.growthCards[a])?2:1);
-      var tb=b.match(/^\[/)?0:((typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthCards&&TEXTS.growthCards[b])?2:1);
-      if(ta!==tb)return ta-tb;
-      return cardGroups[b].count - cardGroups[a].count || a.localeCompare(b,'ko');
-    });
     h+='<div class="report-cards-grid">';
-    sortedLabels.forEach(function(label){
+    Object.keys(cardGroups).sort(function(a,b){
+      return cardGroups[b].count - cardGroups[a].count || a.localeCompare(b,'ko');
+    }).forEach(function(label){
       var g=cardGroups[label];
       var color=_cardColor(label);
+      var bg=_cardBg(label);
       var seen={},uniqSrc=[];
       for(var si=0;si<g.sources.length;si++){var s=g.sources[si];if(!seen[s]){seen[s]=1;uniqSrc.push(s);}}
       var axisMatch=label.match(/^\[(.+?)\]\s*(.+)/);
+      var rowBg=bg?'background:'+bg+';':'';
+      var rowBorder=bg?'border:1.5px solid rgba(0,0,0,0.06);':'';
+      h+='<div class="report-card-row" style="'+rowBg+rowBorder+'">';
+      h+='<div class="report-card-row-head">';
+      h+='<span class="report-card-count" style="background:'+color+'">x'+g.count+'</span>';
       if(axisMatch){
-        // 인간중심: 풀 배경색 + 흰 글씨 (카드 수집 시와 동일)
-        var am=_axisMeta(axisMatch[1]);
-        h+='<div class="report-card-row" style="background:'+am.color+';border:1.5px solid '+am.color+';border-radius:6px;">';
-        h+='<div class="report-card-row-head">';
-        h+='<span class="report-card-count" style="background:rgba(255,255,255,0.25);color:#fff;">x'+g.count+'</span>';
-        h+='<span class="report-card-label" style="color:#fff;"><span style="font-size:15px;font-weight:800;display:block;margin-bottom:2px;">'+_esc(axisMatch[1])+'</span><span style="font-size:11px;font-weight:400;opacity:0.8;">'+_esc(axisMatch[2])+'</span></span>';
-        h+='</div>';
-        h+='<div class="report-card-source" style="background:rgba(0,0,0,0.08);border-top:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.85);">'+_esc(uniqSrc.join(', '))+'</div>';
-        h+='</div>';
+        h+='<span class="report-card-label"><span style="font-size:10px;color:'+(_axisMeta(axisMatch[1]).color||'#888')+';font-weight:700;display:block;margin-bottom:1px;">'+_esc(axisMatch[1])+'</span>'+_esc(axisMatch[2])+'</span>';
       }else{
-        h+='<div class="report-card-row">';
-        h+='<div class="report-card-row-head">';
-        h+='<span class="report-card-count" style="background:'+color+'">x'+g.count+'</span>';
         h+='<span class="report-card-label">'+_esc(label)+'</span>';
-        h+='</div>';
-        h+='<div class="report-card-source">'+_esc(uniqSrc.join(', '))+'</div>';
-        h+='</div>';
       }
+      h+='</div>';
+      h+='<div class="report-card-source">'+_esc(uniqSrc.join(', '))+'</div>';
+      h+='</div>';
     });
     h+='</div>';
   }
@@ -12082,8 +12069,6 @@ function playCardRewardSequential(cards,note){
         btn.disabled=true;
         travelCard(card);
       };
-      // 자동 확보 — 등장 후 0.8초 뒤 자동 travel (클릭 안 해도 진행)
-      setTimeout(function(){if(!btn.disabled){btn.disabled=true;travelCard(card);}},idx*180+800);
     }
     for(var i=0;i<cards.length;i++)makeCard(i);
   });

@@ -136,8 +136,12 @@
 | cost-box-main | 38x36, 1.5px #c44, bg:#fff5f5, 18px/700 #c44 |
 | cost-box-effect | 34x32, 1.5px #1a8c1a, bg:#f3faf3, 14px/700 #1a8c1a |
 | cost-box-effect.penalty | border:#c44, bg:#fff5f5, color:#c44 |
-| cost-formula-val | 42x34, 15px/700, border:1.5px #ccc |
-| cost-formula-final b | 17px / 800 / #111 |
+| cost-formula-box | flex-row, 시간·에너지 좌우 배치 (세션310 레이아웃 변경) |
+| cost-formula-val | 박스 제거, inline 12px/700 색 글씨만 (세션310) |
+| cost-formula-raw | color:#c44 |
+| cost-formula-discount | color:#1a8c1a |
+| cost-formula-final b | 14px / 800 / #111 |
+| cost-formula-line:first-child | border-right:1px solid #ccc (좌우 구분선) |
 
 ### L121~133 — Overlay (Start)
 | 속성 | 값 |
@@ -179,8 +183,10 @@
 | border | 2px solid #111 |
 | shadow | 0 2px 0 #111 |
 | hover | translateX(4px) |
-| choice-num width | 30px, bg:#111, 14px/700 |
-| choice-text | 13px / 600 |
+| choice-card | flex-direction:column (세션310: 세로 바→헤더+바디 구조) |
+| choice-header | flex, gap:8px, padding:9px 12px |
+| choice-num | 24x24 inline-flex, bg:#111, 12px/700 (세션310: 인라인 박스로 변경) |
+| choice-text | 15px / 700 (세션310 격상: 선택 텍스트 1순위) |
 | choice-desc | 11px / #888 |
 | choice-narrative | 12px / #222, border-left:2px solid #111 |
 | score-breakdown border | 2px solid #111 |
