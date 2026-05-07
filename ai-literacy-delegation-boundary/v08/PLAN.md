@@ -1,6 +1,6 @@
 ## PLAN — AI 리터러시: 위임의 경계 v0.8
 
-**최종 업데이트**: 2026-05-07 세션308 (v14-slim + v14 리포트 텍스트 반영 — 단계 10~13 신설)
+**최종 업데이트**: 2026-05-07 세션308 (§18 리포트 통합 재설계 + 자원 충전 너프)
 **진입점**: v14-slim (`Assets/incoming/AI리터러시/codex/ari-final-delivery-v14-slim/`) + v14 리포트 (`Assets/incoming/AI리터러시/codex/ari-report-text-v14/`)
 **v0.7 freeze**: `_dev/ai-literacy-delegation-boundary/v07/` (5/7 ad5168c, GitHub Pages 배포)
 
@@ -100,10 +100,13 @@ v14-slim CSV를 새 단일 진실로 교체. migrate_v11.py 수정하여 v14-sli
 ##### 단계 12 — AI리터러시 성장 리포트 구현 (메인)
 5패턴별 성장 요약(AI활용우세/직접시작우세/검토강점/검토부족/회복재도전) 판정 로직. reportStrengthTags/reportGrowthTags 기반 강점·보완 문장 선택. 다음 AI 사용 약속 문장 표시. 교사용 관찰 포인트 접기 영역.
 
-##### 단계 13 — 2차 빌드 + 종합 재검수 + git push (메인)
-v14-slim 반영 후 빌드 → 자체 검수 → 커밋·push.
+##### 단계 13 — 리포트 통합 재설계 (메인, §18)
+학기 종합 리포트의 6단계 구조를 통합. 상단 4박스→2박스(총점+레벨, 위/도 제거). 위/도 유형 박스 삭제. _reportNarrative(학습자 패턴+카드 인사이트+선택 패턴)를 _renderGrowthReport에 합침. 학생이 "나는 어떤 학습자인가"를 한 곳에서 읽도록. 자원 충전 너프(recoverBase 0.45, S80/A70/B60/C55/D45, 레벨업 풀충전 제거).
 
-##### 단계 14 — 플테 + QA (피터공 + 동현공)
+##### 단계 14 — 3차 빌드 + 종합 재검수 + git push (메인)
+리포트 통합 후 빌드 → 자체 검수 → 커밋·push.
+
+##### 단계 15 — 플테 + QA (피터공 + 동현공)
 플테 → QA 수집 → 수정 사이클.
 
 ---

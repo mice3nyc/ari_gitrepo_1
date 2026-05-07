@@ -11224,24 +11224,13 @@ function showFinalReport(){
   h+='<h2>'+_esc(R.title||'한 학기 활동 리포트')+'</h2>';
   h+='<div class="report-subtitle">'+(R.subtitle||'자기소개 → 모둠 발표 → 어린왕자 → 진로 → 시험 공부<br>다섯 결정이 한 학생의 한 학기를 만들었다.')+'</div>';
 
-  // 상단: 4박스 통계 (총점/레벨/위/도)
-  h+='<div class="report-grid-4">';
+  // 상단: 2박스 통계 (총점 + 레벨만, §18)
+  h+='<div class="report-grid" style="grid-template-columns:1fr 1fr;max-width:320px;margin:0 auto 16px;">';
   h+='<div class="report-stat-box"><div class="report-stat-num">'+totalScore+'</div><div class="report-stat-label">'+_esc(statL.total||'학기 총점')+'</div></div>';
   h+='<div class="report-stat-box"><div class="report-stat-num">Lv.'+lv+'</div><div class="report-stat-label">'+_esc(statL.level||'최종 레벨')+'</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+(dv>0?'+':'')+dv+'</div><div class="report-stat-label">'+_esc(statL.delegation||'위임 판단력')+'</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+(kv>0?'+':'')+kv+'</div><div class="report-stat-label">'+_esc(statL.knowledge||'도메인 지식')+'</div></div>';
   h+='</div>';
 
-  // 위/도 4유형 의미 박스
-  if(compText){
-    h+='<div class="report-comp-type">';
-    h+='<div class="report-comp-label">위 '+(dv>0?'+':'')+dv+' / 도 '+(kv>0?'+':'')+kv+'</div>';
-    h+='<div class="report-comp-text">'+compText+'</div>';
-    h+='</div>';
-  }
-
   ensureInventory();
-  h+=_reportNarrative(compType, gameState.inventory||{}, hist);
 
   // 카드 누적 리뷰 섹션 — v0.8 3트랙 통합
   var allCards=_reportAllCards();
@@ -11290,8 +11279,8 @@ function showFinalReport(){
   }
   h+='</div>';
 
-  // v14: AI리터러시 성장 리포트 — 카툰 위에 배치
-  h+=_renderGrowthReport(hist);
+  // §18: 성장 리포트 통합 — 학습자 유형 + 카드 분포 + 선택 패턴 + 강점/보완/약속
+  h+=_renderGrowthReport(hist, compType, gameState.inventory||{});
 
   // 회기별 카드 그룹
   var cardsByScene=_reportCardsByScenario();
@@ -11340,12 +11329,15 @@ function showFinalReport(){
   container.innerHTML=h;
 }
 
-function _renderGrowthReport(hist){
+function _renderGrowthReport(hist, compType, inventory){
   var GR=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthReport)||{};
   if(!GR.patterns)return '';
   var HC=TEXTS.humanCentricCards||{};
   var DC=TEXTS.domainCards||{};
+  var N=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.narrative)||{};
   function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+  // === 데이터 수집 ===
 
   // 패턴 판정
   var t1Counts={A:0,B:0,C:0},rvCounts={R1:0,R2:0,R3:0},grCounts={S:0,A:0,B:0,C:0,D:0};
@@ -11362,7 +11354,20 @@ function _renderGrowthReport(hist){
   else if((rvCounts.R2+rvCounts.R3)/total>0.6)pattern='reviewStrong';
   else if(t1Counts.A/total>0.6)pattern='selfStart';
 
-  // 카드명 기반 강점 수집: 획득한 카드의 short 설명을 직접 사용
+  // 카드 통계
+  var allCards=_reportAllCards();
+  var humanCount=0,domainCount=0,growthCount=0;
+  var cardGroupCounts={};
+  for(var ci=0;ci<allCards.length;ci++){
+    var lbl=allCards[ci].label;
+    cardGroupCounts[lbl]=(cardGroupCounts[lbl]||0)+1;
+    if(allCards[ci].track==='human')humanCount++;
+    else if(allCards[ci].track==='domain')domainCount++;
+    else if(allCards[ci].track==='growth')growthCount++;
+  }
+  var topCards=Object.keys(cardGroupCounts).sort(function(a,b){return cardGroupCounts[b]-cardGroupCounts[a];}).slice(0,3);
+
+  // 카드명 기반 강점 수집
   var strengthItems=[];
   var seenStrength={};
   var weakScenarios=[];
@@ -11371,7 +11376,6 @@ function _renderGrowthReport(hist){
     var fin=(sc&&sc.finals)?sc.finals[hist[j].leaf]:null;
     if(!fin)continue;
     var scTitle=(sc&&sc.title)||hist[j].scenarioId;
-    // 강점: humanCentric tag
     if(fin.humanCentricTag&&fin.humanCentricAxis){
       var axData=HC[fin.humanCentricAxis];
       var tagData=(axData&&axData.tags)?axData.tags[fin.humanCentricTag]:null;
@@ -11380,7 +11384,6 @@ function _renderGrowthReport(hist){
         strengthItems.push({label:'['+fin.humanCentricAxis+'] '+fin.humanCentricTag,desc:tagData.short,color:(axData&&axData.color)||'#111'});
       }
     }
-    // 강점: domain cards
     if(fin.domainCards){
       for(var di=0;di<fin.domainCards.length;di++){
         var dc=fin.domainCards[di];
@@ -11391,13 +11394,12 @@ function _renderGrowthReport(hist){
         }
       }
     }
-    // C/D 시나리오 수집 → 보완 대상
     if(fin.grade==='C'||fin.grade==='D'){
       weakScenarios.push({title:scTitle,reflection:fin.reportReflection||''});
     }
   }
 
-  // 보완: reportGrowthTags + GR.improvements 매칭 + C/D 시나리오 돌아보기
+  // 보완 매칭
   var growthMap={};
   for(var k=0;k<hist.length;k++){
     var sc2=SCENARIOS[hist[k].scenarioId];
@@ -11417,7 +11419,7 @@ function _renderGrowthReport(hist){
     }
   }
 
-  // 약속: 보완 맥락 기반
+  // 약속
   var pledges=GR.pledges||[];
   var pLines=[];
   if(pledges.length){
@@ -11429,17 +11431,40 @@ function _renderGrowthReport(hist){
     if(pLines.length<3&&pledges[1]&&pLines.indexOf(pledges[1])<0)pLines.push(pledges[1]);
   }
 
-  // === 렌더링 ===
-  var h='<div class="report-growth" style="margin:28px 0 20px;padding:20px 18px;background:#fff;border:2px solid #111;border-radius:10px;box-shadow:0 2px 0 #111;">';
-  h+='<div style="font-size:18px;font-weight:800;margin-bottom:16px;letter-spacing:0.5px;">'+_esc(GR.title||'AI리터러시 성장 리포트')+'</div>';
+  // 선택 패턴 해석
+  var t1pat=(N.tier1_patterns)||{};
+  var maxT=Math.max(t1Counts.A,t1Counts.B,t1Counts.C);
+  var totalT=t1Counts.A+t1Counts.B+t1Counts.C;
+  var patKey='balanced';
+  if(totalT>0){
+    if(t1Counts.A===t1Counts.B&&t1Counts.B===t1Counts.C)patKey='balanced';
+    else if(t1Counts.A===maxT&&t1Counts.B<maxT&&t1Counts.C<maxT)patKey='A_dominant';
+    else if(t1Counts.B===maxT)patKey='B_dominant';
+    else if(t1Counts.C===maxT)patKey='C_dominant';
+    else patKey='mixed';
+  }
+  var t1Interp=(t1pat[patKey]&&t1pat[patKey].interpretation)||'';
 
-  // 패턴 요약 — 가장 눈에 띄게
+  // === 렌더링 ===
+  var h='<div class="report-growth" style="margin:28px 0 20px;padding:22px 20px;background:#fff;border:2px solid #111;border-radius:10px;box-shadow:0 2px 0 #111;">';
+  h+='<div style="font-size:18px;font-weight:800;margin-bottom:18px;letter-spacing:0.5px;">'+_esc(GR.title||'AI리터러시 성장 리포트')+'</div>';
+
+  // (a) 학습자 유형
+  var typeName=_typeLabel(compType);
+  var typeText=_typeText(compType);
+  h+='<div style="margin-bottom:18px;padding:14px 16px;background:#f8f8f8;border:1.5px solid #111;border-radius:8px;">';
+  h+='<div style="font-size:11px;color:#888;font-weight:700;letter-spacing:1.5px;margin-bottom:4px;">학습자 유형</div>';
+  h+='<div style="font-size:17px;font-weight:800;margin-bottom:6px;">'+_esc(typeName)+'</div>';
+  if(typeText)h+='<div style="font-size:13px;line-height:1.7;color:#333;">'+typeText+'</div>';
+  h+='</div>';
+
+  // (b) 패턴 요약
   var patText=(GR.patterns||{})[pattern]||'';
   if(patText){
     h+='<div style="font-size:14px;line-height:1.8;color:#111;margin-bottom:18px;padding:14px 16px;background:#f8f8f8;border-left:4px solid #111;border-radius:0 6px 6px 0;">'+_esc(patText)+'</div>';
   }
 
-  // 내가 키운 역량 — 카드명 + short 설명
+  // (c) 내가 키운 역량
   if(strengthItems.length){
     h+='<div style="margin-bottom:18px;">';
     h+='<div style="font-size:15px;font-weight:700;margin-bottom:10px;">내가 키운 역량</div>';
@@ -11457,7 +11482,37 @@ function _renderGrowthReport(hist){
     h+='</div>';
   }
 
-  // 더 연습할 과정
+  // (d) 역량 카드 분포
+  if(allCards.length>0){
+    h+='<div style="margin-bottom:18px;">';
+    h+='<div style="font-size:15px;font-weight:700;margin-bottom:8px;">역량 카드 프로필</div>';
+    if(topCards.length){
+      h+='<div style="font-size:13px;line-height:1.7;color:#333;">';
+      h+='가장 많이 받은 카드: <b>'+_esc(topCards[0])+'</b> '+cardGroupCounts[topCards[0]]+'장';
+      if(topCards.length>=2){
+        h+='<br>다음: <b>'+_esc(topCards[1])+'</b> '+cardGroupCounts[topCards[1]]+'장';
+        if(topCards.length>=3)h+=' / <b>'+_esc(topCards[2])+'</b> '+cardGroupCounts[topCards[2]]+'장';
+      }
+      h+='</div>';
+    }
+    h+='<div style="font-size:12px;color:#666;margin-top:6px;">';
+    h+='인간중심 '+humanCount+'장 / 도메인 '+domainCount+'장';
+    if(growthCount>0)h+=' / 성장 '+growthCount+'장';
+    h+=' — 총 '+allCards.length+'장</div>';
+    h+='</div>';
+  }
+
+  // (e) 학생 선택 패턴
+  if(totalT>0){
+    h+='<div style="margin-bottom:18px;">';
+    h+='<div style="font-size:15px;font-weight:700;margin-bottom:8px;">선택 패턴</div>';
+    h+='<div style="font-size:13px;color:#333;line-height:1.7;">';
+    h+=totalT+' 시나리오 중 A '+t1Counts.A+' · B '+t1Counts.B+' · C '+t1Counts.C;
+    if(t1Interp)h+='<br>'+_esc(t1Interp);
+    h+='</div></div>';
+  }
+
+  // (f) 더 연습할 과정
   if(iLines.length||weakScenarios.length){
     h+='<div style="margin-bottom:18px;">';
     h+='<div style="font-size:15px;font-weight:700;margin-bottom:10px;">더 연습할 과정</div>';
@@ -11474,7 +11529,7 @@ function _renderGrowthReport(hist){
     h+='</div>';
   }
 
-  // 다음 AI 사용 약속
+  // (g) 다음에 이렇게 해볼 수 있다
   if(pLines.length){
     h+='<div style="margin-bottom:14px;padding:12px 14px;background:#f5f5f5;border-radius:6px;">';
     h+='<div style="font-size:15px;font-weight:700;margin-bottom:8px;">다음에 이렇게 해볼 수 있다</div>';
@@ -11484,7 +11539,7 @@ function _renderGrowthReport(hist){
     h+='</div>';
   }
 
-  // 교사용 관찰 포인트
+  // (h) 교사용 관찰 포인트
   var teacherNote=(GR.teacherNotes||{})[pattern]||'';
   if(teacherNote){
     h+='<details style="margin-top:10px;"><summary style="font-size:12px;color:#999;cursor:pointer;letter-spacing:0.5px;">교사용 관찰 포인트</summary>';
