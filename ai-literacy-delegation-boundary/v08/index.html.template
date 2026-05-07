@@ -743,7 +743,7 @@ var CONFIG={
   // v0.8 5/4 세션289 — 비대칭 효과 (mNeg=1 되돌림)
   // 양수 ×2 (잘하면 두 배 보상), 음수 ×1 (잘못해도 한 배만 페널티). 메모리 5/3 세션278 정합.
   // 미터 표시는 effective 값(양수 x2 적용)이지만, 비용 할인 계산 단계에서 또 곱하지 않음 — _applyDiscount의 raw → effective는 한 번만.
-  competencyDiscountMultPos:2,
+  competencyDiscountMultPos:1,
   competencyDiscountMultNeg:1,
   // v0.5 Phase 8.13 — 결과 리포트 (DECISIONS §10.13)
   // 위/도 4유형 텍스트. AI 리터러시 메시지: 비판적 위임 + 도메인 지식 둘 다 키워서 AI를 잘 쓰자.
