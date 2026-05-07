@@ -1081,45 +1081,34 @@ function getGrade(score){
 var STAGE_FLOOR={time:2,energy:1};
 function _rawTier1Cost(t1){
   var sc=getScenario();
+  if(sc.stageCosts&&sc.stageCosts.tier1&&sc.stageCosts.tier1[t1])return sc.stageCosts.tier1[t1];
   if(!sc.resourceCosts)return {time:0,energy:0};
   var minT=Infinity,minE=Infinity;
   Object.keys(sc.resourceCosts).forEach(function(k){
-    if(k.charAt(0)===t1){
-      var c=sc.resourceCosts[k];
-      if(c.time<minT)minT=c.time;
-      if(c.energy<minE)minE=c.energy;
-    }
+    if(k.charAt(0)===t1){var c=sc.resourceCosts[k];if(c.time<minT)minT=c.time;if(c.energy<minE)minE=c.energy;}
   });
   return {time:isFinite(minT)?minT:0, energy:isFinite(minE)?minE:0};
 }
 function _rawTier2Cost(t2){
   var sc=getScenario();
+  if(sc.stageCosts&&sc.stageCosts.tier2&&sc.stageCosts.tier2[t2])return sc.stageCosts.tier2[t2];
   if(!sc.resourceCosts||!t2)return {time:0,energy:0};
   var minT=Infinity,minE=Infinity;
   Object.keys(sc.resourceCosts).forEach(function(k){
-    if(k.substr(0,2)===t2){
-      var c=sc.resourceCosts[k];
-      if(c.time<minT)minT=c.time;
-      if(c.energy<minE)minE=c.energy;
-    }
+    if(k.substr(0,2)===t2){var c=sc.resourceCosts[k];if(c.time<minT)minT=c.time;if(c.energy<minE)minE=c.energy;}
   });
   var t1c=_rawTier1Cost(t2.charAt(0));
-  return {
-    time:Math.max(STAGE_FLOOR.time,(isFinite(minT)?minT:0)-t1c.time),
-    energy:Math.max(STAGE_FLOOR.energy,(isFinite(minE)?minE:0)-t1c.energy)
-  };
+  return {time:Math.max(STAGE_FLOOR.time,(isFinite(minT)?minT:0)-t1c.time),energy:Math.max(STAGE_FLOOR.energy,(isFinite(minE)?minE:0)-t1c.energy)};
 }
 function _rawReviewCost(leaf){
   var sc=getScenario();
+  var rIdx=leaf.lastIndexOf('R');
+  var rId=rIdx>0?leaf.substr(rIdx):null;
+  if(sc.stageCosts&&sc.stageCosts.review&&rId&&sc.stageCosts.review[rId])return sc.stageCosts.review[rId];
   if(!sc.resourceCosts||!sc.resourceCosts[leaf])return {time:0,energy:0};
-  var t2=leaf.substr(0,2);
-  var leafC=sc.resourceCosts[leaf];
-  var t1c=_rawTier1Cost(leaf.charAt(0));
-  var t2c=_rawTier2Cost(t2);
-  return {
-    time:Math.max(STAGE_FLOOR.time,leafC.time-t1c.time-t2c.time),
-    energy:Math.max(STAGE_FLOOR.energy,leafC.energy-t1c.energy-t2c.energy)
-  };
+  var t2=leaf.substr(0,2);var leafC=sc.resourceCosts[leaf];
+  var t1c=_rawTier1Cost(leaf.charAt(0));var t2c=_rawTier2Cost(t2);
+  return {time:Math.max(STAGE_FLOOR.time,leafC.time-t1c.time-t2c.time),energy:Math.max(STAGE_FLOOR.energy,leafC.energy-t1c.energy-t2c.energy)};
 }
 // multiplier 적용 (UI·소비 양쪽이 같은 값을 사용하도록 한 군데서 처리)
 function _applyMult(c){

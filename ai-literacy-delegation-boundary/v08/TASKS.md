@@ -1,6 +1,6 @@
 ## TASKS — v0.8
 
-**최종 업데이트**: 2026-05-07 세션310 (§3.4 선택지 카드 시각 위계 — 단계 13b 신설)
+**최종 업데이트**: 2026-05-07 세션310 (v15 밸런스 마이그레이션 — 단계 13c 신설)
 **PLAN**: [[PLAN|PLAN.md]] / **SPEC**: [[SPEC|SPEC.md]]
 **v14-slim**: `Assets/incoming/AI리터러시/codex/ari-final-delivery-v14-slim/`
 **v14 리포트**: `Assets/incoming/AI리터러시/codex/ari-report-text-v14/`
@@ -203,6 +203,19 @@ v14-slim CSV가 새 단일 진실. v11 CSV를 대체한다.
 - [x] 13b.3 CSS — 비용 공식 박스 제거, 색 글씨만 + 시간·에너지 좌우 한 줄 배치
 - [x] 13b.4 DESIGN-REGISTRY 갱신
 - [x] 13b.5 build.py 빌드 + 브라우저 확인 (601,136 bytes)
+
+---
+
+##### 단계 13c — v15 밸런스 데이터 마이그레이션 (§3.7)
+
+v15: 시험공부 점수 재조정 + 비용 1:1:1 분배 + stageCosts 명시 비용 체계.
+
+- [x] 13c.1 migrate_v15.py 작성 (integrated + costs + report 3개 CSV)
+- [x] 13c.2 scenarios.yaml 마이그레이션 (135 leaves score/grade + stageCosts + resourceCosts + reportData)
+- [x] 13c.3 JS _rawTier1Cost/_rawTier2Cost/_rawReviewCost → stageCosts 직접 참조 + fallback
+- [x] 13c.4 SPEC §3.7 v15 단계별 명시 비용 기록
+- [x] 13c.5 검증: studyplan A3R2=A(88), B3R2=B(78), stageCosts 5시나리오 ✅
+- [x] 13c.6 build.py 빌드 (741,208 bytes, +140K v15 데이터)
 
 ---
 

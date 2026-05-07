@@ -350,6 +350,9 @@ selfintro:
       - 주체성
       - 자기이해, 표현력
       reportGrowthTags: 검토 필요
+      adjustedScore: 19
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A1R2:
       score: 95
       grade: S
@@ -381,6 +384,9 @@ selfintro:
       - 주체성
       - 자기이해, 표현력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 17
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A1R3:
       score: 98
       grade: S
@@ -412,6 +418,9 @@ selfintro:
       - 주체성
       - 자기이해, 표현력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 8
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     A2R1:
       score: 70
       grade: C
@@ -442,6 +451,9 @@ selfintro:
       - 주체성
       - 자기이해, 표현력
       reportGrowthTags: 검토 필요
+      adjustedScore: 13
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A2R2:
       score: 75
       grade: B
@@ -472,6 +484,9 @@ selfintro:
       - 주체성
       - 자기이해, 표현력
       reportGrowthTags: 확장 가능
+      adjustedScore: 10
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A2R3:
       score: 81
       grade: B
@@ -502,6 +517,9 @@ selfintro:
       - 주체성
       - 자기이해, 표현력
       reportGrowthTags: 확장 가능
+      adjustedScore: 4
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     A3R1:
       score: 48
       grade: D
@@ -528,6 +546,9 @@ selfintro:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: 3
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     A3R2:
       score: 65
       grade: C
@@ -558,6 +579,9 @@ selfintro:
       - 성찰적 사고
       - 표현력, 자기이해
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 12
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A3R3:
       score: 75
       grade: B
@@ -588,6 +612,9 @@ selfintro:
       - 성찰적 사고
       - 표현력, 자기이해
       reportGrowthTags: 확장 가능
+      adjustedScore: 10
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     B1R1:
       score: 15
       grade: D
@@ -614,6 +641,9 @@ selfintro:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: -15
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     B1R2:
       score: 28
       grade: D
@@ -640,6 +670,9 @@ selfintro:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -10
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     B1R3:
       score: 38
       grade: D
@@ -666,6 +699,9 @@ selfintro:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -12
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     B2R1:
       score: 57
       grade: D
@@ -692,6 +728,9 @@ selfintro:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: 22
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     B2R2:
       score: 75
       grade: B
@@ -722,6 +761,9 @@ selfintro:
       - 맥락적 사고
       - 표현력, 자기이해
       reportGrowthTags: 확장 가능
+      adjustedScore: 32
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     B2R3:
       score: 85
       grade: A
@@ -753,6 +795,9 @@ selfintro:
       - 맥락적 사고
       - 표현력, 자기이해, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 30
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     B3R1:
       score: 88
       grade: A
@@ -783,6 +828,9 @@ selfintro:
       - 통합적 사고
       - 표현력, 자기이해
       reportGrowthTags: 검토 필요
+      adjustedScore: 33
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     B3R2:
       score: 93
       grade: A
@@ -814,6 +862,9 @@ selfintro:
       - 통합적 사고
       - 표현력, 자기이해, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 30
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     B3R3:
       score: 100
       grade: S
@@ -845,6 +896,9 @@ selfintro:
       - 통합적 사고
       - 표현력, 자기이해, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 25
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     C1R1:
       score: 15
       grade: D
@@ -871,6 +925,9 @@ selfintro:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: -13
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     C1R2:
       score: 28
       grade: D
@@ -897,6 +954,9 @@ selfintro:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -8
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     C1R3:
       score: 38
       grade: D
@@ -923,6 +983,9 @@ selfintro:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -10
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     C2R1:
       score: 57
       grade: D
@@ -949,6 +1012,9 @@ selfintro:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: 14
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     C2R2:
       score: 65
       grade: C
@@ -979,6 +1045,9 @@ selfintro:
       - 주체성
       - 자기이해, 표현력
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 14
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     C2R3:
       score: 72
       grade: C
@@ -1009,6 +1078,9 @@ selfintro:
       - 주체성
       - 자기이해, 표현력
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 9
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     C3R1:
       score: 88
       grade: A
@@ -1039,6 +1111,9 @@ selfintro:
       - 통합적 사고
       - 표현력, 검토력
       reportGrowthTags: 검토 필요
+      adjustedScore: 35
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     C3R2:
       score: 93
       grade: A
@@ -1069,6 +1144,9 @@ selfintro:
       - 통합적 사고
       - 표현력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 32
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     C3R3:
       score: 100
       grade: S
@@ -1099,6 +1177,9 @@ selfintro:
       - 통합적 사고
       - 표현력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 27
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
   axisDelta:
   - leafId: A1R3
     requireCard: 자기지식
@@ -1125,33 +1206,87 @@ selfintro:
     bonusPoint: 5
     note: AI가 만든 글 중 내가 책임지기 어려운 문장을 찾아내고 내 말로 바꾸는 자리 — 자기검증 카드와 강한 매칭
   resourceCosts:
-    A1R1: {time: 30, energy: 24}
-    A1R2: {time: 33, energy: 27}
-    A1R3: {time: 38, energy: 31}
-    A2R1: {time: 28, energy: 23}
-    A2R2: {time: 31, energy: 26}
-    A2R3: {time: 36, energy: 30}
-    A3R1: {time: 24, energy: 20}
-    A3R2: {time: 27, energy: 23}
-    A3R3: {time: 32, energy: 27}
-    B1R1: {time: 13, energy: 10}
-    B1R2: {time: 16, energy: 13}
-    B1R3: {time: 21, energy: 17}
-    B2R1: {time: 15, energy: 12}
-    B2R2: {time: 18, energy: 15}
-    B2R3: {time: 23, energy: 19}
-    B3R1: {time: 17, energy: 14}
-    B3R2: {time: 20, energy: 17}
-    B3R3: {time: 25, energy: 21}
-    C1R1: {time: 7, energy: 6}
-    C1R2: {time: 10, energy: 9}
-    C1R3: {time: 15, energy: 13}
-    C2R1: {time: 9, energy: 7}
-    C2R2: {time: 12, energy: 10}
-    C2R3: {time: 17, energy: 14}
-    C3R1: {time: 15, energy: 12}
-    C3R2: {time: 18, energy: 15}
-    C3R3: {time: 23, energy: 19}
+    A1R1:
+      time: 21
+      energy: 18
+    A1R2:
+      time: 23
+      energy: 20
+    A1R3:
+      time: 26
+      energy: 22
+    A2R1:
+      time: 20
+      energy: 17
+    A2R2:
+      time: 22
+      energy: 19
+    A2R3:
+      time: 25
+      energy: 21
+    A3R1:
+      time: 21
+      energy: 17
+    A3R2:
+      time: 23
+      energy: 19
+    A3R3:
+      time: 26
+      energy: 21
+    B1R1:
+      time: 18
+      energy: 15
+    B1R2:
+      time: 20
+      energy: 17
+    B1R3:
+      time: 23
+      energy: 19
+    B2R1:
+      time: 19
+      energy: 16
+    B2R2:
+      time: 21
+      energy: 18
+    B2R3:
+      time: 24
+      energy: 20
+    B3R1:
+      time: 20
+      energy: 16
+    B3R2:
+      time: 22
+      energy: 18
+    B3R3:
+      time: 25
+      energy: 20
+    C1R1:
+      time: 17
+      energy: 14
+    C1R2:
+      time: 19
+      energy: 16
+    C1R3:
+      time: 22
+      energy: 18
+    C2R1:
+      time: 18
+      energy: 15
+    C2R2:
+      time: 20
+      energy: 17
+    C2R3:
+      time: 23
+      energy: 19
+    C3R1:
+      time: 20
+      energy: 16
+    C3R2:
+      time: 22
+      energy: 18
+    C3R3:
+      time: 25
+      energy: 20
   expRewards:
     A1R1: 25
     A1R2: 27
@@ -1298,6 +1433,353 @@ selfintro:
     C3R1: 다시 썼으니 그대로 제출한다
     C3R2: 왜 그 내용에 동의하는지 내 경험과 연결한다
     C3R3: AI에게 친구나 선생님이 물어볼 만한 질문을 만들게 한 뒤 대답하기 어려운 부분을 고친다
+  stageCosts:
+    tier1:
+      A:
+        time: 8
+        energy: 7
+      B:
+        time: 7
+        energy: 6
+      C:
+        time: 6
+        energy: 5
+    tier2:
+      A1:
+        time: 8
+        energy: 7
+      A2:
+        time: 7
+        energy: 6
+      A3:
+        time: 8
+        energy: 6
+      B1:
+        time: 6
+        energy: 5
+      B2:
+        time: 7
+        energy: 6
+      B3:
+        time: 8
+        energy: 6
+      C1:
+        time: 6
+        energy: 5
+      C2:
+        time: 7
+        energy: 6
+      C3:
+        time: 9
+        energy: 7
+    review:
+      R1:
+        time: 5
+        energy: 4
+      R2:
+        time: 7
+        energy: 6
+      R3:
+        time: 10
+        energy: 8
+  reportData:
+    A1R1:
+      pathSummary: 내 이야기 찾기 → 내 단어로 쓰기 → 그대로 진행하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI보다 먼저 내 이야기를 떠올렸다.
+      caption3: 내가 고른 단어에서 글을 시작했다.
+      caption4: 내가 고른 단어로 시작한 자기소개
+      caption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      cardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력'
+      strengthTags: 주체성;자기이해, 표현력
+      growthTags: 검토 필요
+    A1R2:
+      pathSummary: 내 이야기 찾기 → 내 단어로 쓰기 → 한 번 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI보다 먼저 내 이야기를 떠올렸다.
+      caption3: 내가 고른 단어에서 글을 시작했다.
+      caption4: 내가 고른 단어로 시작한 자기소개
+      caption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reflection: 내 이야기를 먼저 세우고, 마지막에 책임질 수 있는 말만 남겼다.
+      cardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력 · 검토력'
+      strengthTags: 주체성;자기이해, 표현력, 검토력
+      growthTags: 확장 가능
+    A1R3:
+      pathSummary: 내 이야기 찾기 → 내 단어로 쓰기 → 깊게 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI보다 먼저 내 이야기를 떠올렸다.
+      caption3: 내가 고른 단어에서 글을 시작했다.
+      caption4: 내가 고른 단어로 시작한 자기소개
+      caption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reflection: 내 이야기를 먼저 세우고, 마지막에 책임질 수 있는 말만 남겼다.
+      cardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력 · 검토력'
+      strengthTags: 주체성;자기이해, 표현력, 검토력
+      growthTags: 확장 가능
+    A2R1:
+      pathSummary: 내 이야기 찾기 → 내 경험으로 쓰기 → 그대로 진행하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI보다 먼저 내 이야기를 떠올렸다.
+      caption3: 내 경험을 짧은 이야기로 옮겼다.
+      caption4: 실제 경험이 들어간 자기소개
+      caption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      cardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력'
+      strengthTags: 주체성;자기이해, 표현력
+      growthTags: 검토 필요
+    A2R2:
+      pathSummary: 내 이야기 찾기 → 내 경험으로 쓰기 → 한 번 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI보다 먼저 내 이야기를 떠올렸다.
+      caption3: 내 경험을 짧은 이야기로 옮겼다.
+      caption4: 실제 경험이 들어간 자기소개
+      caption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      cardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력'
+      strengthTags: 주체성;자기이해, 표현력
+      growthTags: 확장 가능
+    A2R3:
+      pathSummary: 내 이야기 찾기 → 내 경험으로 쓰기 → 깊게 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI보다 먼저 내 이야기를 떠올렸다.
+      caption3: 내 경험을 짧은 이야기로 옮겼다.
+      caption4: 실제 경험이 들어간 자기소개
+      caption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      cardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력'
+      strengthTags: 주체성;자기이해, 표현력
+      growthTags: 확장 가능
+    A3R1:
+      pathSummary: 내 이야기 찾기 → 먼저 초안 쓰기 → 그대로 진행하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI보다 먼저 내 이야기를 떠올렸다.
+      caption3: 서툴어도 먼저 내 초안을 만들었다.
+      caption4: 내 말투가 살아 있는 초안
+      caption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    A3R2:
+      pathSummary: 내 이야기 찾기 → 먼저 초안 쓰기 → 한 번 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI보다 먼저 내 이야기를 떠올렸다.
+      caption3: 서툴어도 먼저 내 초안을 만들었다.
+      caption4: 내 말투가 살아 있는 초안
+      caption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      cardSummary: '[성찰하기] 성찰적 사고 · 표현력 · 자기이해'
+      strengthTags: 성찰적 사고;표현력, 자기이해
+      growthTags: 직접 근거 보강
+    A3R3:
+      pathSummary: 내 이야기 찾기 → 먼저 초안 쓰기 → 깊게 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI보다 먼저 내 이야기를 떠올렸다.
+      caption3: 서툴어도 먼저 내 초안을 만들었다.
+      caption4: 내 말투가 살아 있는 초안
+      caption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      cardSummary: '[성찰하기] 성찰적 사고 · 표현력 · 자기이해'
+      strengthTags: 성찰적 사고;표현력, 자기이해
+      growthTags: 확장 가능
+    B1R1:
+      pathSummary: AI로 시작 열기 → AI 질문에 답하기 → 그대로 진행하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI의 도움으로 글의 시작을 열었다.
+      caption3: AI 질문에 답하며 글감을 만들었다.
+      caption4: AI 질문에서 시작한 자기소개
+      caption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    B1R2:
+      pathSummary: AI로 시작 열기 → AI 질문에 답하기 → 한 번 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI의 도움으로 글의 시작을 열었다.
+      caption3: AI 질문에 답하며 글감을 만들었다.
+      caption4: AI 질문에서 시작한 자기소개
+      caption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    B1R3:
+      pathSummary: AI로 시작 열기 → AI 질문에 답하기 → 깊게 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI의 도움으로 글의 시작을 열었다.
+      caption3: AI 질문에 답하며 글감을 만들었다.
+      caption4: AI 질문에서 시작한 자기소개
+      caption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    B2R1:
+      pathSummary: AI로 시작 열기 → AI 순서 바꾸기 → 그대로 진행하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI의 도움으로 글의 시작을 열었다.
+      caption3: AI가 준 순서에 내 이야기를 채웠다.
+      caption4: AI 구조에 내 이야기를 채운 자기소개
+      caption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    B2R2:
+      pathSummary: AI로 시작 열기 → AI 순서 바꾸기 → 한 번 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI의 도움으로 글의 시작을 열었다.
+      caption3: AI가 준 순서에 내 이야기를 채웠다.
+      caption4: AI 구조에 내 이야기를 채운 자기소개
+      caption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      cardSummary: '[융합하기] 맥락적 사고 · 표현력 · 자기이해'
+      strengthTags: 맥락적 사고;표현력, 자기이해
+      growthTags: 확장 가능
+    B2R3:
+      pathSummary: AI로 시작 열기 → AI 순서 바꾸기 → 깊게 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI의 도움으로 글의 시작을 열었다.
+      caption3: AI가 준 순서에 내 이야기를 채웠다.
+      caption4: AI 구조에 내 이야기를 채운 자기소개
+      caption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      cardSummary: '[융합하기] 맥락적 사고 · 표현력 · 자기이해 · 검토력'
+      strengthTags: 맥락적 사고;표현력, 자기이해, 검토력
+      growthTags: 확장 가능
+    B3R1:
+      pathSummary: AI로 시작 열기 → AI 문장과 내 메모 섞기 → 그대로 진행하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI의 도움으로 글의 시작을 열었다.
+      caption3: AI 문장과 내 메모를 함께 놓고 골랐다.
+      caption4: AI 문장과 내 메모가 섞인 자기소개
+      caption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      cardSummary: '[융합하기] 통합적 사고 · 표현력 · 자기이해'
+      strengthTags: 통합적 사고;표현력, 자기이해
+      growthTags: 검토 필요
+    B3R2:
+      pathSummary: AI로 시작 열기 → AI 문장과 내 메모 섞기 → 한 번 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI의 도움으로 글의 시작을 열었다.
+      caption3: AI 문장과 내 메모를 함께 놓고 골랐다.
+      caption4: AI 문장과 내 메모가 섞인 자기소개
+      caption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      cardSummary: '[융합하기] 통합적 사고 · 표현력 · 자기이해 · 검토력'
+      strengthTags: 통합적 사고;표현력, 자기이해, 검토력
+      growthTags: 확장 가능
+    B3R3:
+      pathSummary: AI로 시작 열기 → AI 문장과 내 메모 섞기 → 깊게 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: AI의 도움으로 글의 시작을 열었다.
+      caption3: AI 문장과 내 메모를 함께 놓고 골랐다.
+      caption4: AI 문장과 내 메모가 섞인 자기소개
+      caption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reflection: 내 이야기를 먼저 세우고, 마지막에 책임질 수 있는 말만 남겼다.
+      cardSummary: '[융합하기] 통합적 사고 · 표현력 · 자기이해 · 검토력'
+      strengthTags: 통합적 사고;표현력, 자기이해, 검토력
+      growthTags: 확장 가능
+    C1R1:
+      pathSummary: AI에게 맡기기 → 정보 없이 AI 초안 받기 → 그대로 진행하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      caption3: 내 정보 없이 AI가 글을 만들게 했다.
+      caption4: AI가 상상한 학생의 자기소개
+      caption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    C1R2:
+      pathSummary: AI에게 맡기기 → 정보 없이 AI 초안 받기 → 한 번 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      caption3: 내 정보 없이 AI가 글을 만들게 했다.
+      caption4: AI가 상상한 학생의 자기소개
+      caption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C1R3:
+      pathSummary: AI에게 맡기기 → 정보 없이 AI 초안 받기 → 깊게 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      caption3: 내 정보 없이 AI가 글을 만들게 했다.
+      caption4: AI가 상상한 학생의 자기소개
+      caption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C2R1:
+      pathSummary: AI에게 맡기기 → 기본 정보로 AI 초안 받기 → 그대로 진행하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      caption3: 몇 가지 정보만 넣고 AI 초안을 받았다.
+      caption4: 내 정보가 들어간 AI 자기소개
+      caption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    C2R2:
+      pathSummary: AI에게 맡기기 → 기본 정보로 AI 초안 받기 → 한 번 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      caption3: 몇 가지 정보만 넣고 AI 초안을 받았다.
+      caption4: 내 정보가 들어간 AI 자기소개
+      caption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      cardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력'
+      strengthTags: 주체성;자기이해, 표현력
+      growthTags: 직접 근거 보강
+    C2R3:
+      pathSummary: AI에게 맡기기 → 기본 정보로 AI 초안 받기 → 깊게 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      caption3: 몇 가지 정보만 넣고 AI 초안을 받았다.
+      caption4: 내 정보가 들어간 AI 자기소개
+      caption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      cardSummary: '[중심잡기] 주체성 · 자기이해 · 표현력'
+      strengthTags: 주체성;자기이해, 표현력
+      growthTags: 직접 근거 보강
+    C3R1:
+      pathSummary: AI에게 맡기기 → AI 글을 다시 쓰기 → 그대로 진행하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      caption3: AI 글을 참고해 다시 내 글로 고쳤다.
+      caption4: AI 흐름을 참고해 다시 쓴 자기소개
+      caption5: 그대로 내며 마지막 확인을 건너뛰었다.
+      reflection: 내 말에서 시작했더라도 마지막 확인이 부족하면 소개의 힘이 약해진다.
+      cardSummary: '[융합하기] 통합적 사고 · 표현력 · 검토력'
+      strengthTags: 통합적 사고;표현력, 검토력
+      growthTags: 검토 필요
+    C3R2:
+      pathSummary: AI에게 맡기기 → AI 글을 다시 쓰기 → 한 번 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      caption3: AI 글을 참고해 다시 내 글로 고쳤다.
+      caption4: AI 흐름을 참고해 다시 쓴 자기소개
+      caption5: 이상한 표현과 흐름을 한 번 확인했다.
+      reflection: 내 경험은 들어갔지만, 왜 그것이 나를 보여주는지 더 분명히 할 필요가 있다.
+      cardSummary: '[융합하기] 통합적 사고 · 표현력 · 검토력'
+      strengthTags: 통합적 사고;표현력, 검토력
+      growthTags: 확장 가능
+    C3R3:
+      pathSummary: AI에게 맡기기 → AI 글을 다시 쓰기 → 깊게 확인하기
+      caption1: 자기소개를 써야 하는 상황이 생겼다.
+      caption2: 자기소개의 결과를 먼저 AI에게 맡겼다.
+      caption3: AI 글을 참고해 다시 내 글로 고쳤다.
+      caption4: AI 흐름을 참고해 다시 쓴 자기소개
+      caption5: 다시 읽으며 내가 답할 수 있는 내용만 남겼다.
+      reflection: 내 이야기를 먼저 세우고, 마지막에 책임질 수 있는 말만 남겼다.
+      cardSummary: '[융합하기] 통합적 사고 · 표현력 · 검토력'
+      strengthTags: 통합적 사고;표현력, 검토력
+      growthTags: 확장 가능
 groupwork:
   id: groupwork
   category: 2
@@ -1661,6 +2143,9 @@ groupwork:
       - 사회·관계적 사고
       - 협업력, 소통력
       reportGrowthTags: 검토 필요
+      adjustedScore: 19
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A1R2:
       score: 96
       grade: S
@@ -1692,6 +2177,9 @@ groupwork:
       - 사회·관계적 사고
       - 협업력, 소통력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 18
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A1R3:
       score: 99
       grade: S
@@ -1723,6 +2211,9 @@ groupwork:
       - 사회·관계적 사고
       - 협업력, 소통력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 9
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     A2R1:
       score: 70
       grade: C
@@ -1753,6 +2244,9 @@ groupwork:
       - 사회·관계적 사고
       - 협업력, 학습력
       reportGrowthTags: 검토 필요
+      adjustedScore: 13
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A2R2:
       score: 75
       grade: B
@@ -1783,6 +2277,9 @@ groupwork:
       - 사회·관계적 사고
       - 협업력, 학습력
       reportGrowthTags: 확장 가능
+      adjustedScore: 10
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A2R3:
       score: 81
       grade: B
@@ -1813,6 +2310,9 @@ groupwork:
       - 사회·관계적 사고
       - 협업력, 학습력
       reportGrowthTags: 확장 가능
+      adjustedScore: 4
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     A3R1:
       score: 49
       grade: D
@@ -1839,6 +2339,9 @@ groupwork:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: 4
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     A3R2:
       score: 65
       grade: C
@@ -1869,6 +2372,9 @@ groupwork:
       - 주체성
       - 표현력, 협업력
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 12
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A3R3:
       score: 75
       grade: B
@@ -1899,6 +2405,9 @@ groupwork:
       - 주체성
       - 표현력, 협업력
       reportGrowthTags: 확장 가능
+      adjustedScore: 10
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     B1R1:
       score: 16
       grade: D
@@ -1925,6 +2434,9 @@ groupwork:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: -4
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     B1R2:
       score: 29
       grade: D
@@ -1951,6 +2463,9 @@ groupwork:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 1
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     B1R3:
       score: 39
       grade: D
@@ -1977,6 +2492,9 @@ groupwork:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -1
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     B2R1:
       score: 58
       grade: D
@@ -2003,6 +2521,9 @@ groupwork:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: 23
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     B2R2:
       score: 75
       grade: B
@@ -2033,6 +2554,9 @@ groupwork:
       - 맥락적 사고
       - 표현력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 32
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     B2R3:
       score: 85
       grade: A
@@ -2063,6 +2587,9 @@ groupwork:
       - 맥락적 사고
       - 표현력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 30
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     B3R1:
       score: 72
       grade: C
@@ -2091,6 +2618,9 @@ groupwork:
       reportStrengthTags:
       - 표현력
       reportGrowthTags: 검토 필요
+      adjustedScore: -16
+      adjustedType: 검토 부족 페널티
+      adjustedReason: 내 자료를 넣은 좋은 출발은 있었지만, AI 대본을 그대로 읽어 설명 가능성을 확인하지 않은 경로.
     B3R2:
       score: 93
       grade: A
@@ -2122,6 +2652,9 @@ groupwork:
       - 통합적 사고
       - 자료판단력, 표현력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 30
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     B3R3:
       score: 100
       grade: S
@@ -2153,6 +2686,9 @@ groupwork:
       - 통합적 사고
       - 자료판단력, 표현력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 25
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     C1R1:
       score: 18
       grade: D
@@ -2179,6 +2715,9 @@ groupwork:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: -10
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     C1R2:
       score: 35
       grade: D
@@ -2205,6 +2744,9 @@ groupwork:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -1
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     C1R3:
       score: 55
       grade: D
@@ -2231,6 +2773,9 @@ groupwork:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 7
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     C2R1:
       score: 28
       grade: D
@@ -2257,6 +2802,9 @@ groupwork:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: -15
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     C2R2:
       score: 48
       grade: D
@@ -2283,6 +2831,9 @@ groupwork:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -3
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     C2R3:
       score: 65
       grade: C
@@ -2313,6 +2864,9 @@ groupwork:
       - 사회·관계적 사고
       - 소통력, 검토력
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 2
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     C3R1:
       score: 22
       grade: D
@@ -2339,6 +2893,9 @@ groupwork:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: -16
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     C3R2:
       score: 42
       grade: D
@@ -2365,6 +2922,9 @@ groupwork:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -4
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     C3R3:
       score: 60
       grade: C
@@ -2395,6 +2955,9 @@ groupwork:
       - 비판적 사고
       - 자료판단력, 검토력
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 2
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
   axisDelta:
   - leafId: A1R3
     requireCard: 협업능력
@@ -2421,33 +2984,87 @@ groupwork:
     bonusPoint: 5
     note: 친구가 써 준 부분을 자기 말로 다시 잡아 발표하는 자리 — 소통능력 카드와 강한 매칭
   resourceCosts:
-    A1R1: {time: 26, energy: 21}
-    A1R2: {time: 30, energy: 25}
-    A1R3: {time: 37, energy: 31}
-    A2R1: {time: 24, energy: 20}
-    A2R2: {time: 28, energy: 24}
-    A2R3: {time: 35, energy: 30}
-    A3R1: {time: 25, energy: 20}
-    A3R2: {time: 29, energy: 24}
-    A3R3: {time: 36, energy: 30}
-    B1R1: {time: 13, energy: 10}
-    B1R2: {time: 17, energy: 14}
-    B1R3: {time: 24, energy: 20}
-    B2R1: {time: 13, energy: 11}
-    B2R2: {time: 17, energy: 15}
-    B2R3: {time: 24, energy: 21}
-    B3R1: {time: 12, energy: 10}
-    B3R2: {time: 16, energy: 14}
-    B3R3: {time: 23, energy: 20}
-    C1R1: {time: 13, energy: 10}
-    C1R2: {time: 17, energy: 14}
-    C1R3: {time: 24, energy: 20}
-    C2R1: {time: 10, energy: 7}
-    C2R2: {time: 14, energy: 11}
-    C2R3: {time: 21, energy: 17}
-    C3R1: {time: 12, energy: 9}
-    C3R2: {time: 16, energy: 13}
-    C3R3: {time: 23, energy: 19}
+    A1R1:
+      time: 22
+      energy: 18
+    A1R2:
+      time: 24
+      energy: 20
+    A1R3:
+      time: 27
+      energy: 22
+    A2R1:
+      time: 21
+      energy: 17
+    A2R2:
+      time: 23
+      energy: 19
+    A2R3:
+      time: 26
+      energy: 21
+    A3R1:
+      time: 22
+      energy: 18
+    A3R2:
+      time: 24
+      energy: 20
+    A3R3:
+      time: 27
+      energy: 22
+    B1R1:
+      time: 18
+      energy: 15
+    B1R2:
+      time: 20
+      energy: 17
+    B1R3:
+      time: 23
+      energy: 19
+    B2R1:
+      time: 19
+      energy: 16
+    B2R2:
+      time: 21
+      energy: 18
+    B2R3:
+      time: 24
+      energy: 20
+    B3R1:
+      time: 20
+      energy: 16
+    B3R2:
+      time: 22
+      energy: 18
+    B3R3:
+      time: 25
+      energy: 20
+    C1R1:
+      time: 17
+      energy: 14
+    C1R2:
+      time: 19
+      energy: 16
+    C1R3:
+      time: 22
+      energy: 18
+    C2R1:
+      time: 18
+      energy: 15
+    C2R2:
+      time: 20
+      energy: 17
+    C2R3:
+      time: 23
+      energy: 19
+    C3R1:
+      time: 20
+      energy: 16
+    C3R2:
+      time: 22
+      energy: 18
+    C3R3:
+      time: 25
+      energy: 20
   expRewards:
     A1R1: 25
     A1R2: 27
@@ -2597,6 +3214,353 @@ groupwork:
     C3R1: 보기 좋고 시간도 맞으니 그대로 발표한다
     C3R2: 디자인보다 내용이 부족한 슬라이드와 근거 없는 문장을 표시한다
     C3R3: AI에게 내용이 비어 보이는 슬라이드와 근거 없이 그럴듯한 문장을 표시하게 한 뒤 자료를 보충한다
+  stageCosts:
+    tier1:
+      A:
+        time: 9
+        energy: 7
+      B:
+        time: 7
+        energy: 6
+      C:
+        time: 6
+        energy: 5
+    tier2:
+      A1:
+        time: 8
+        energy: 7
+      A2:
+        time: 7
+        energy: 6
+      A3:
+        time: 8
+        energy: 7
+      B1:
+        time: 6
+        energy: 5
+      B2:
+        time: 7
+        energy: 6
+      B3:
+        time: 8
+        energy: 6
+      C1:
+        time: 6
+        energy: 5
+      C2:
+        time: 7
+        energy: 6
+      C3:
+        time: 9
+        energy: 7
+    review:
+      R1:
+        time: 5
+        energy: 4
+      R2:
+        time: 7
+        energy: 6
+      R3:
+        time: 10
+        energy: 8
+  reportData:
+    A1R1:
+      pathSummary: 모둠 방향 맞추기 → 발표 질문 정하기 → 그대로 진행하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 모둠과 발표 방향을 먼저 맞췄다.
+      caption3: 발표에서 답할 질문을 먼저 정했다.
+      caption4: 모둠 질문 중심의 발표 준비
+      caption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reflection: AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.
+      cardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 소통력'
+      strengthTags: 사회·관계적 사고;협업력, 소통력
+      growthTags: 검토 필요
+    A1R2:
+      pathSummary: 모둠 방향 맞추기 → 발표 질문 정하기 → 한 번 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 모둠과 발표 방향을 먼저 맞췄다.
+      caption3: 발표에서 답할 질문을 먼저 정했다.
+      caption4: 모둠 질문 중심의 발표 준비
+      caption5: 내가 이해하지 못한 내용은 지웠다.
+      reflection: AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.
+      cardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 소통력 · 검토력'
+      strengthTags: 사회·관계적 사고;협업력, 소통력, 검토력
+      growthTags: 확장 가능
+    A1R3:
+      pathSummary: 모둠 방향 맞추기 → 발표 질문 정하기 → 깊게 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 모둠과 발표 방향을 먼저 맞췄다.
+      caption3: 발표에서 답할 질문을 먼저 정했다.
+      caption4: 모둠 질문 중심의 발표 준비
+      caption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reflection: AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.
+      cardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 소통력 · 검토력'
+      strengthTags: 사회·관계적 사고;협업력, 소통력, 검토력
+      growthTags: 확장 가능
+    A2R1:
+      pathSummary: 모둠 방향 맞추기 → 역할 나누기 → 그대로 진행하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 모둠과 발표 방향을 먼저 맞췄다.
+      caption3: 모둠 안에서 역할과 흐름을 나눴다.
+      caption4: 역할 분담 + 흐름 정합 발표 준비
+      caption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reflection: 발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.
+      cardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 학습력'
+      strengthTags: 사회·관계적 사고;협업력, 학습력
+      growthTags: 검토 필요
+    A2R2:
+      pathSummary: 모둠 방향 맞추기 → 역할 나누기 → 한 번 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 모둠과 발표 방향을 먼저 맞췄다.
+      caption3: 모둠 안에서 역할과 흐름을 나눴다.
+      caption4: 역할 분담 + 흐름 정합 발표 준비
+      caption5: 내가 이해하지 못한 내용은 지웠다.
+      reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      cardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 학습력'
+      strengthTags: 사회·관계적 사고;협업력, 학습력
+      growthTags: 확장 가능
+    A2R3:
+      pathSummary: 모둠 방향 맞추기 → 역할 나누기 → 깊게 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 모둠과 발표 방향을 먼저 맞췄다.
+      caption3: 모둠 안에서 역할과 흐름을 나눴다.
+      caption4: 역할 분담 + 흐름 정합 발표 준비
+      caption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      cardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 학습력'
+      strengthTags: 사회·관계적 사고;협업력, 학습력
+      growthTags: 확장 가능
+    A3R1:
+      pathSummary: 모둠 방향 맞추기 → 내 파트 이해하기 → 그대로 진행하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 모둠과 발표 방향을 먼저 맞췄다.
+      caption3: 내가 맡은 내용을 먼저 이해했다.
+      caption4: 내 파트 이해 + 말로 설명 가능한 준비
+      caption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reflection: 발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    A3R2:
+      pathSummary: 모둠 방향 맞추기 → 내 파트 이해하기 → 한 번 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 모둠과 발표 방향을 먼저 맞췄다.
+      caption3: 내가 맡은 내용을 먼저 이해했다.
+      caption4: 내 파트 이해 + 말로 설명 가능한 준비
+      caption5: 내가 이해하지 못한 내용은 지웠다.
+      reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      cardSummary: '[중심잡기] 주체성 · 표현력 · 협업력'
+      strengthTags: 주체성;표현력, 협업력
+      growthTags: 직접 근거 보강
+    A3R3:
+      pathSummary: 모둠 방향 맞추기 → 내 파트 이해하기 → 깊게 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 모둠과 발표 방향을 먼저 맞췄다.
+      caption3: 내가 맡은 내용을 먼저 이해했다.
+      caption4: 내 파트 이해 + 말로 설명 가능한 준비
+      caption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      cardSummary: '[중심잡기] 주체성 · 표현력 · 협업력'
+      strengthTags: 주체성;표현력, 협업력
+      growthTags: 확장 가능
+    B1R1:
+      pathSummary: AI로 빠르게 준비하기 → AI 개요 받기 → 그대로 진행하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: AI로 발표 준비를 빠르게 시작했다.
+      caption3: AI에게 발표 개요를 부탁했다.
+      caption4: AI 개요 + 우리 동네 정합 검토 준비
+      caption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reflection: 발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    B1R2:
+      pathSummary: AI로 빠르게 준비하기 → AI 개요 받기 → 한 번 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: AI로 발표 준비를 빠르게 시작했다.
+      caption3: AI에게 발표 개요를 부탁했다.
+      caption4: AI 개요 + 우리 동네 정합 검토 준비
+      caption5: 내가 이해하지 못한 내용은 지웠다.
+      reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    B1R3:
+      pathSummary: AI로 빠르게 준비하기 → AI 개요 받기 → 깊게 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: AI로 발표 준비를 빠르게 시작했다.
+      caption3: AI에게 발표 개요를 부탁했다.
+      caption4: AI 개요 + 우리 동네 정합 검토 준비
+      caption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    B2R1:
+      pathSummary: AI로 빠르게 준비하기 → AI 슬라이드 문구 받기 → 그대로 진행하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: AI로 발표 준비를 빠르게 시작했다.
+      caption3: AI가 만든 슬라이드 문구를 받았다.
+      caption4: AI 슬라이드 + 설명 가능 검수 준비
+      caption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reflection: 발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    B2R2:
+      pathSummary: AI로 빠르게 준비하기 → AI 슬라이드 문구 받기 → 한 번 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: AI로 발표 준비를 빠르게 시작했다.
+      caption3: AI가 만든 슬라이드 문구를 받았다.
+      caption4: AI 슬라이드 + 설명 가능 검수 준비
+      caption5: 내가 이해하지 못한 내용은 지웠다.
+      reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      cardSummary: '[융합하기] 맥락적 사고 · 표현력 · 검토력'
+      strengthTags: 맥락적 사고;표현력, 검토력
+      growthTags: 확장 가능
+    B2R3:
+      pathSummary: AI로 빠르게 준비하기 → AI 슬라이드 문구 받기 → 깊게 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: AI로 발표 준비를 빠르게 시작했다.
+      caption3: AI가 만든 슬라이드 문구를 받았다.
+      caption4: AI 슬라이드 + 설명 가능 검수 준비
+      caption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reflection: AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.
+      cardSummary: '[융합하기] 맥락적 사고 · 표현력 · 검토력'
+      strengthTags: 맥락적 사고;표현력, 검토력
+      growthTags: 확장 가능
+    B3R1:
+      pathSummary: AI로 빠르게 준비하기 → 내 자료로 AI 대본 받기 → 그대로 진행하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: AI로 발표 준비를 빠르게 시작했다.
+      caption3: 내 자료를 바탕으로 AI 대본을 받았다.
+      caption4: AI 대본은 빠르게 만들어졌다.
+      caption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reflection: AI 대본은 발표를 빠르게 만들었지만, 그대로 읽으면 내가 설명할 수 있는지 확인하기 어렵다.
+      cardSummary: 표현력
+      strengthTags: 표현력
+      growthTags: 검토 필요
+    B3R2:
+      pathSummary: AI로 빠르게 준비하기 → 내 자료로 AI 대본 받기 → 한 번 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: AI로 발표 준비를 빠르게 시작했다.
+      caption3: 내 자료를 바탕으로 AI 대본을 받았다.
+      caption4: AI 대본은 빠르게 만들어졌다.
+      caption5: 내가 이해하지 못한 내용은 지웠다.
+      reflection: AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.
+      cardSummary: '[융합하기] 통합적 사고 · 자료판단력 · 표현력 · 검토력'
+      strengthTags: 통합적 사고;자료판단력, 표현력, 검토력
+      growthTags: 확장 가능
+    B3R3:
+      pathSummary: AI로 빠르게 준비하기 → 내 자료로 AI 대본 받기 → 깊게 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: AI로 발표 준비를 빠르게 시작했다.
+      caption3: 내 자료를 바탕으로 AI 대본을 받았다.
+      caption4: AI 대본은 빠르게 만들어졌다.
+      caption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reflection: AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.
+      cardSummary: '[융합하기] 통합적 사고 · 자료판단력 · 표현력 · 검토력'
+      strengthTags: 통합적 사고;자료판단력, 표현력, 검토력
+      growthTags: 확장 가능
+    C1R1:
+      pathSummary: 각자 준비하기 → 각자 자료 합치기 → 그대로 진행하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      caption3: 회의 없이 각자 찾은 자료를 합쳤다.
+      caption4: 각자 자료 모음 → 흐름 정합 자리
+      caption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reflection: 발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    C1R2:
+      pathSummary: 각자 준비하기 → 각자 자료 합치기 → 한 번 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      caption3: 회의 없이 각자 찾은 자료를 합쳤다.
+      caption4: 각자 자료 모음 → 흐름 정합 자리
+      caption5: 내가 이해하지 못한 내용은 지웠다.
+      reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C1R3:
+      pathSummary: 각자 준비하기 → 각자 자료 합치기 → 깊게 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      caption3: 회의 없이 각자 찾은 자료를 합쳤다.
+      caption4: 각자 자료 모음 → 흐름 정합 자리
+      caption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C2R1:
+      pathSummary: 각자 준비하기 → 한 사람에게 맡기기 → 그대로 진행하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      caption3: 발표를 잘하는 한 사람에게 많이 맡겼다.
+      caption4: 한 사람 주도 → 각자 이해 점검 자리
+      caption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reflection: 발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    C2R2:
+      pathSummary: 각자 준비하기 → 한 사람에게 맡기기 → 한 번 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      caption3: 발표를 잘하는 한 사람에게 많이 맡겼다.
+      caption4: 한 사람 주도 → 각자 이해 점검 자리
+      caption5: 내가 이해하지 못한 내용은 지웠다.
+      reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C2R3:
+      pathSummary: 각자 준비하기 → 한 사람에게 맡기기 → 깊게 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      caption3: 발표를 잘하는 한 사람에게 많이 맡겼다.
+      caption4: 한 사람 주도 → 각자 이해 점검 자리
+      caption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      cardSummary: '[성찰하기] 사회·관계적 사고 · 소통력 · 검토력'
+      strengthTags: 사회·관계적 사고;소통력, 검토력
+      growthTags: 직접 근거 보강
+    C3R1:
+      pathSummary: 각자 준비하기 → 발표 모양 먼저 만들기 → 그대로 진행하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      caption3: 자료보다 발표 모양을 먼저 만들었다.
+      caption4: 모양 우선 → 빈 부분 보충 자리
+      caption5: 그대로 읽기로 하며 설명 가능성을 확인하지 못했다.
+      reflection: 발표 모양은 빨리 만들었지만, 함께 설명할 수 있는지 확인하는 과정이 부족했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    C3R2:
+      pathSummary: 각자 준비하기 → 발표 모양 먼저 만들기 → 한 번 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      caption3: 자료보다 발표 모양을 먼저 만들었다.
+      caption4: 모양 우선 → 빈 부분 보충 자리
+      caption5: 내가 이해하지 못한 내용은 지웠다.
+      reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C3R3:
+      pathSummary: 각자 준비하기 → 발표 모양 먼저 만들기 → 깊게 확인하기
+      caption1: 모둠 발표를 준비해야 하는 상황이 생겼다.
+      caption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
+      caption3: 자료보다 발표 모양을 먼저 만들었다.
+      caption4: 모양 우선 → 빈 부분 보충 자리
+      caption5: 질문을 예상하고 답하기 어려운 부분을 고쳤다.
+      reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
+      cardSummary: '[성찰하기] 비판적 사고 · 자료판단력 · 검토력'
+      strengthTags: 비판적 사고;자료판단력, 검토력
+      growthTags: 직접 근거 보강
 eorinwangja:
   id: eorinwangja
   category: 3
@@ -2960,6 +3924,9 @@ eorinwangja:
       - 주체성
       - 문해력, 표현력
       reportGrowthTags: 검토 필요
+      adjustedScore: 19
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A1R2:
       score: 95
       grade: S
@@ -2991,6 +3958,9 @@ eorinwangja:
       - 주체성
       - 문해력, 표현력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 17
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A1R3:
       score: 98
       grade: S
@@ -3022,6 +3992,9 @@ eorinwangja:
       - 주체성
       - 문해력, 표현력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 8
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     A2R1:
       score: 70
       grade: C
@@ -3052,6 +4025,9 @@ eorinwangja:
       - 주체성
       - 문해력, 표현력
       reportGrowthTags: 검토 필요
+      adjustedScore: 13
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A2R2:
       score: 75
       grade: B
@@ -3082,6 +4058,9 @@ eorinwangja:
       - 주체성
       - 문해력, 표현력
       reportGrowthTags: 확장 가능
+      adjustedScore: 10
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A2R3:
       score: 81
       grade: B
@@ -3112,6 +4091,9 @@ eorinwangja:
       - 주체성
       - 문해력, 표현력
       reportGrowthTags: 확장 가능
+      adjustedScore: 4
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     A3R1:
       score: 55
       grade: D
@@ -3138,6 +4120,9 @@ eorinwangja:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: 10
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A3R2:
       score: 65
       grade: C
@@ -3168,6 +4153,9 @@ eorinwangja:
       - 호기심
       - 문해력, 분석력
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 12
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A3R3:
       score: 75
       grade: B
@@ -3198,6 +4186,9 @@ eorinwangja:
       - 호기심
       - 문해력, 분석력
       reportGrowthTags: 확장 가능
+      adjustedScore: 10
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     B1R1:
       score: 14
       grade: D
@@ -3224,6 +4215,9 @@ eorinwangja:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: -16
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     B1R2:
       score: 26
       grade: D
@@ -3250,6 +4244,9 @@ eorinwangja:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -12
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     B1R3:
       score: 37
       grade: D
@@ -3276,6 +4273,9 @@ eorinwangja:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -13
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     B2R1:
       score: 50
       grade: D
@@ -3302,6 +4302,9 @@ eorinwangja:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: 15
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     B2R2:
       score: 75
       grade: B
@@ -3332,6 +4335,9 @@ eorinwangja:
       - 맥락적 사고
       - 문해력, 자료판단력
       reportGrowthTags: 확장 가능
+      adjustedScore: 32
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     B2R3:
       score: 85
       grade: A
@@ -3363,6 +4369,9 @@ eorinwangja:
       - 맥락적 사고
       - 문해력, 자료판단력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 30
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     B3R1:
       score: 88
       grade: A
@@ -3393,6 +4402,9 @@ eorinwangja:
       - 호기심
       - 문해력, 표현력
       reportGrowthTags: 검토 필요
+      adjustedScore: 33
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     B3R2:
       score: 93
       grade: A
@@ -3424,6 +4436,9 @@ eorinwangja:
       - 호기심
       - 문해력, 표현력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 30
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     B3R3:
       score: 100
       grade: S
@@ -3455,6 +4470,9 @@ eorinwangja:
       - 호기심
       - 문해력, 표현력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 25
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     C1R1:
       score: 25
       grade: D
@@ -3481,6 +4499,9 @@ eorinwangja:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: -3
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     C1R2:
       score: 45
       grade: D
@@ -3507,6 +4528,9 @@ eorinwangja:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 9
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     C1R3:
       score: 65
       grade: C
@@ -3536,6 +4560,9 @@ eorinwangja:
       - 윤리적 사고
       - 검토력
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 17
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     C2R1:
       score: 28
       grade: D
@@ -3562,6 +4589,9 @@ eorinwangja:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: -15
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     C2R2:
       score: 38
       grade: D
@@ -3588,6 +4618,9 @@ eorinwangja:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -13
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     C2R3:
       score: 48
       grade: D
@@ -3614,6 +4647,9 @@ eorinwangja:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -15
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     C3R1:
       score: 12
       grade: D
@@ -3640,6 +4676,9 @@ eorinwangja:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: -41
+      adjustedType: 강한 공허함 페널티
+      adjustedReason: 결과는 생겼지만 직접 겪어야 할 핵심 과정이 크게 비어 있는 경로.
     C3R2:
       score: 23
       grade: D
@@ -3666,6 +4705,9 @@ eorinwangja:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -38
+      adjustedType: 강한 공허함 페널티
+      adjustedReason: 결과는 생겼지만 직접 겪어야 할 핵심 과정이 크게 비어 있는 경로.
     C3R3:
       score: 32
       grade: D
@@ -3692,6 +4734,9 @@ eorinwangja:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -41
+      adjustedType: 강한 공허함 페널티
+      adjustedReason: 결과는 생겼지만 직접 겪어야 할 핵심 과정이 크게 비어 있는 경로.
   axisDelta:
   - leafId: A1R3
     requireCard: 문해력
@@ -3718,33 +4763,87 @@ eorinwangja:
     bonusPoint: 5
     note: 다른 매체로 통과한 부분과 지금 자기 감상을 분리해 다시 정리하는 자리 — 해석능력 카드와 강한 매칭
   resourceCosts:
-    A1R1: {time: 38, energy: 30}
-    A1R2: {time: 42, energy: 34}
-    A1R3: {time: 50, energy: 40}
-    A2R1: {time: 34, energy: 27}
-    A2R2: {time: 38, energy: 31}
-    A2R3: {time: 46, energy: 37}
-    A3R1: {time: 33, energy: 27}
-    A3R2: {time: 37, energy: 31}
-    A3R3: {time: 45, energy: 37}
-    B1R1: {time: 16, energy: 12}
-    B1R2: {time: 20, energy: 16}
-    B1R3: {time: 28, energy: 22}
-    B2R1: {time: 17, energy: 13}
-    B2R2: {time: 21, energy: 17}
-    B2R3: {time: 29, energy: 23}
-    B3R1: {time: 15, energy: 12}
-    B3R2: {time: 19, energy: 16}
-    B3R3: {time: 27, energy: 22}
-    C1R1: {time: 7, energy: 5}
-    C1R2: {time: 11, energy: 9}
-    C1R3: {time: 19, energy: 15}
-    C2R1: {time: 9, energy: 6}
-    C2R2: {time: 13, energy: 10}
-    C2R3: {time: 21, energy: 16}
-    C3R1: {time: 8, energy: 6}
-    C3R2: {time: 12, energy: 10}
-    C3R3: {time: 20, energy: 16}
+    A1R1:
+      time: 25
+      energy: 20
+    A1R2:
+      time: 28
+      energy: 23
+    A1R3:
+      time: 31
+      energy: 25
+    A2R1:
+      time: 23
+      energy: 19
+    A2R2:
+      time: 26
+      energy: 22
+    A2R3:
+      time: 29
+      energy: 24
+    A3R1:
+      time: 24
+      energy: 19
+    A3R2:
+      time: 27
+      energy: 22
+    A3R3:
+      time: 30
+      energy: 24
+    B1R1:
+      time: 20
+      energy: 15
+    B1R2:
+      time: 23
+      energy: 18
+    B1R3:
+      time: 26
+      energy: 20
+    B2R1:
+      time: 21
+      energy: 17
+    B2R2:
+      time: 24
+      energy: 20
+    B2R3:
+      time: 27
+      energy: 22
+    B3R1:
+      time: 22
+      energy: 17
+    B3R2:
+      time: 25
+      energy: 20
+    B3R3:
+      time: 28
+      energy: 22
+    C1R1:
+      time: 19
+      energy: 15
+    C1R2:
+      time: 22
+      energy: 18
+    C1R3:
+      time: 25
+      energy: 20
+    C2R1:
+      time: 20
+      energy: 16
+    C2R2:
+      time: 23
+      energy: 19
+    C2R3:
+      time: 26
+      energy: 21
+    C3R1:
+      time: 22
+      energy: 18
+    C3R2:
+      time: 25
+      energy: 21
+    C3R3:
+      time: 28
+      energy: 23
   expRewards:
     A1R1: 25
     A1R2: 25
@@ -3901,6 +5000,353 @@ eorinwangja:
     C3R1: 분위기가 그럴듯하니 그대로 제출한다
     C3R2: 그 문장이나 이미지가 책에서 어떤 상황에 나오는지 찾아본다
     C3R3: AI에게 너무 흔한 감상 표현을 표시하게 한 뒤, 책 장면과 연결되는 말만 남긴다
+  stageCosts:
+    tier1:
+      A:
+        time: 10
+        energy: 8
+      B:
+        time: 8
+        energy: 6
+      C:
+        time: 7
+        energy: 6
+    tier2:
+      A1:
+        time: 10
+        energy: 8
+      A2:
+        time: 8
+        energy: 7
+      A3:
+        time: 9
+        energy: 7
+      B1:
+        time: 7
+        energy: 5
+      B2:
+        time: 8
+        energy: 7
+      B3:
+        time: 9
+        energy: 7
+      C1:
+        time: 7
+        energy: 5
+      C2:
+        time: 8
+        energy: 6
+      C3:
+        time: 10
+        energy: 8
+    review:
+      R1:
+        time: 5
+        energy: 4
+      R2:
+        time: 8
+        energy: 7
+      R3:
+        time: 11
+        energy: 9
+  reportData:
+    A1R1:
+      pathSummary: 책 직접 읽기 → 처음부터 읽기 → 그대로 진행하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책을 직접 읽는 쪽에서 시작했다.
+      caption3: 처음부터 읽고 짧게라도 직접 썼다.
+      caption4: 직접 읽은 흔적이 있는 독후감
+      caption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reflection: 책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.
+      cardSummary: '[중심잡기] 주체성 · 문해력 · 표현력'
+      strengthTags: 주체성;문해력, 표현력
+      growthTags: 검토 필요
+    A1R2:
+      pathSummary: 책 직접 읽기 → 처음부터 읽기 → 한 번 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책을 직접 읽는 쪽에서 시작했다.
+      caption3: 처음부터 읽고 짧게라도 직접 썼다.
+      caption4: 직접 읽은 흔적이 있는 독후감
+      caption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reflection: 책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.
+      cardSummary: '[중심잡기] 주체성 · 문해력 · 표현력 · 검토력'
+      strengthTags: 주체성;문해력, 표현력, 검토력
+      growthTags: 확장 가능
+    A1R3:
+      pathSummary: 책 직접 읽기 → 처음부터 읽기 → 깊게 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책을 직접 읽는 쪽에서 시작했다.
+      caption3: 처음부터 읽고 짧게라도 직접 썼다.
+      caption4: 직접 읽은 흔적이 있는 독후감
+      caption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reflection: 책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.
+      cardSummary: '[중심잡기] 주체성 · 문해력 · 표현력 · 검토력'
+      strengthTags: 주체성;문해력, 표현력, 검토력
+      growthTags: 확장 가능
+    A2R1:
+      pathSummary: 책 직접 읽기 → 밑줄 장면으로 쓰기 → 그대로 진행하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책을 직접 읽는 쪽에서 시작했다.
+      caption3: 밑줄 친 장면에서 내 감상을 시작했다.
+      caption4: 멈춘 문장 중심의 독후감
+      caption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: '[중심잡기] 주체성 · 문해력 · 표현력'
+      strengthTags: 주체성;문해력, 표현력
+      growthTags: 검토 필요
+    A2R2:
+      pathSummary: 책 직접 읽기 → 밑줄 장면으로 쓰기 → 한 번 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책을 직접 읽는 쪽에서 시작했다.
+      caption3: 밑줄 친 장면에서 내 감상을 시작했다.
+      caption4: 멈춘 문장 중심의 독후감
+      caption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: '[중심잡기] 주체성 · 문해력 · 표현력'
+      strengthTags: 주체성;문해력, 표현력
+      growthTags: 확장 가능
+    A2R3:
+      pathSummary: 책 직접 읽기 → 밑줄 장면으로 쓰기 → 깊게 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책을 직접 읽는 쪽에서 시작했다.
+      caption3: 밑줄 친 장면에서 내 감상을 시작했다.
+      caption4: 멈춘 문장 중심의 독후감
+      caption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: '[중심잡기] 주체성 · 문해력 · 표현력'
+      strengthTags: 주체성;문해력, 표현력
+      growthTags: 확장 가능
+    A3R1:
+      pathSummary: 책 직접 읽기 → 이해 안 된 부분 붙잡기 → 그대로 진행하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책을 직접 읽는 쪽에서 시작했다.
+      caption3: 이해되지 않는 부분을 붙잡고 썼다.
+      caption4: 이해 안 되는 부분을 솔직하게 담은 독후감
+      caption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    A3R2:
+      pathSummary: 책 직접 읽기 → 이해 안 된 부분 붙잡기 → 한 번 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책을 직접 읽는 쪽에서 시작했다.
+      caption3: 이해되지 않는 부분을 붙잡고 썼다.
+      caption4: 이해 안 되는 부분을 솔직하게 담은 독후감
+      caption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: '[중심잡기] 호기심 · 문해력 · 분석력'
+      strengthTags: 호기심;문해력, 분석력
+      growthTags: 직접 근거 보강
+    A3R3:
+      pathSummary: 책 직접 읽기 → 이해 안 된 부분 붙잡기 → 깊게 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책을 직접 읽는 쪽에서 시작했다.
+      caption3: 이해되지 않는 부분을 붙잡고 썼다.
+      caption4: 이해 안 되는 부분을 솔직하게 담은 독후감
+      caption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: '[중심잡기] 호기심 · 문해력 · 분석력'
+      strengthTags: 호기심;문해력, 분석력
+      growthTags: 확장 가능
+    B1R1:
+      pathSummary: AI로 읽기 돕기 → 요약 보고 책 확인하기 → 그대로 진행하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: AI 도움으로 책에 접근할 길을 찾았다.
+      caption3: AI 요약을 보고 책에서 장면을 찾아 읽었다.
+      caption4: 요약 + 한 장면 직접 확인한 독후감
+      caption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    B1R2:
+      pathSummary: AI로 읽기 돕기 → 요약 보고 책 확인하기 → 한 번 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: AI 도움으로 책에 접근할 길을 찾았다.
+      caption3: AI 요약을 보고 책에서 장면을 찾아 읽었다.
+      caption4: 요약 + 한 장면 직접 확인한 독후감
+      caption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    B1R3:
+      pathSummary: AI로 읽기 돕기 → 요약 보고 책 확인하기 → 깊게 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: AI 도움으로 책에 접근할 길을 찾았다.
+      caption3: AI 요약을 보고 책에서 장면을 찾아 읽었다.
+      caption4: 요약 + 한 장면 직접 확인한 독후감
+      caption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    B2R1:
+      pathSummary: AI로 읽기 돕기 → 유명 문장 앞뒤 읽기 → 그대로 진행하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: AI 도움으로 책에 접근할 길을 찾았다.
+      caption3: 유명한 문장 앞뒤를 직접 확인했다.
+      caption4: 유명한 문장 앞뒤 맥락을 확인한 독후감
+      caption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    B2R2:
+      pathSummary: AI로 읽기 돕기 → 유명 문장 앞뒤 읽기 → 한 번 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: AI 도움으로 책에 접근할 길을 찾았다.
+      caption3: 유명한 문장 앞뒤를 직접 확인했다.
+      caption4: 유명한 문장 앞뒤 맥락을 확인한 독후감
+      caption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: '[융합하기] 맥락적 사고 · 문해력 · 자료판단력'
+      strengthTags: 맥락적 사고;문해력, 자료판단력
+      growthTags: 확장 가능
+    B2R3:
+      pathSummary: AI로 읽기 돕기 → 유명 문장 앞뒤 읽기 → 깊게 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: AI 도움으로 책에 접근할 길을 찾았다.
+      caption3: 유명한 문장 앞뒤를 직접 확인했다.
+      caption4: 유명한 문장 앞뒤 맥락을 확인한 독후감
+      caption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reflection: 책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.
+      cardSummary: '[융합하기] 맥락적 사고 · 문해력 · 자료판단력 · 검토력'
+      strengthTags: 맥락적 사고;문해력, 자료판단력, 검토력
+      growthTags: 확장 가능
+    B3R1:
+      pathSummary: AI로 읽기 돕기 → 궁금한 장면 찾아 읽기 → 그대로 진행하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: AI 도움으로 책에 접근할 길을 찾았다.
+      caption3: 소개된 장면 중 궁금한 부분을 찾아 읽었다.
+      caption4: 외부 단서에서 시작해 직접 확인한 독후감
+      caption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reflection: 책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.
+      cardSummary: '[중심잡기] 호기심 · 문해력 · 표현력'
+      strengthTags: 호기심;문해력, 표현력
+      growthTags: 검토 필요
+    B3R2:
+      pathSummary: AI로 읽기 돕기 → 궁금한 장면 찾아 읽기 → 한 번 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: AI 도움으로 책에 접근할 길을 찾았다.
+      caption3: 소개된 장면 중 궁금한 부분을 찾아 읽었다.
+      caption4: 외부 단서에서 시작해 직접 확인한 독후감
+      caption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reflection: 책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.
+      cardSummary: '[중심잡기] 호기심 · 문해력 · 표현력 · 검토력'
+      strengthTags: 호기심;문해력, 표현력, 검토력
+      growthTags: 확장 가능
+    B3R3:
+      pathSummary: AI로 읽기 돕기 → 궁금한 장면 찾아 읽기 → 깊게 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: AI 도움으로 책에 접근할 길을 찾았다.
+      caption3: 소개된 장면 중 궁금한 부분을 찾아 읽었다.
+      caption4: 외부 단서에서 시작해 직접 확인한 독후감
+      caption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reflection: 책에서 직접 만난 장면을 바탕으로 내 감상을 세웠다.
+      cardSummary: '[중심잡기] 호기심 · 문해력 · 표현력 · 검토력'
+      strengthTags: 호기심;문해력, 표현력, 검토력
+      growthTags: 확장 가능
+    C1R1:
+      pathSummary: 책 읽기 건너뛰기 → AI 초안 바로 받기 → 그대로 진행하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      caption3: AI가 줄거리와 독후감 초안을 만들었다.
+      caption4: AI 초안은 빠르게 만들어졌다.
+      caption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reflection: 빠른 글은 생겼지만, 내가 읽고 생각한 과정이 거의 남지 않았다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    C1R2:
+      pathSummary: 책 읽기 건너뛰기 → AI 초안 바로 받기 → 한 번 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      caption3: AI가 줄거리와 독후감 초안을 만들었다.
+      caption4: AI 초안은 빠르게 만들어졌다.
+      caption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reflection: AI 초안을 걷어내며 책임질 수 있는 문장을 찾았지만, 직접 읽은 감상은 더 필요하다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C1R3:
+      pathSummary: 책 읽기 건너뛰기 → AI 초안 바로 받기 → 깊게 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      caption3: AI가 줄거리와 독후감 초안을 만들었다.
+      caption4: AI 초안은 빠르게 만들어졌다.
+      caption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reflection: AI 초안을 걷어내며 책임질 수 있는 문장을 찾았지만, 직접 읽은 감상은 더 필요하다.
+      cardSummary: '[성찰하기] 윤리적 사고 · 검토력'
+      strengthTags: 윤리적 사고;검토력
+      growthTags: 직접 근거 보강
+    C2R1:
+      pathSummary: 책 읽기 건너뛰기 → 줄거리·영상만 보기 → 그대로 진행하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      caption3: 줄거리나 영상 소개만 보고 글을 썼다.
+      caption4: 친구가 들어간 독후감
+      caption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    C2R2:
+      pathSummary: 책 읽기 건너뛰기 → 줄거리·영상만 보기 → 한 번 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      caption3: 줄거리나 영상 소개만 보고 글을 썼다.
+      caption4: 친구가 들어간 독후감
+      caption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C2R3:
+      pathSummary: 책 읽기 건너뛰기 → 줄거리·영상만 보기 → 깊게 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      caption3: 줄거리나 영상 소개만 보고 글을 썼다.
+      caption4: 친구가 들어간 독후감
+      caption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C3R1:
+      pathSummary: 책 읽기 건너뛰기 → 문장·분위기로 쓰기 → 그대로 진행하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      caption3: 유명한 문장과 분위기만으로 글을 만들었다.
+      caption4: 일반론으로 채운 독후감
+      caption5: 그대로 내며 직접 읽은 근거를 확인하지 못했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    C3R2:
+      pathSummary: 책 읽기 건너뛰기 → 문장·분위기로 쓰기 → 한 번 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      caption3: 유명한 문장과 분위기만으로 글을 만들었다.
+      caption4: 일반론으로 채운 독후감
+      caption5: 읽지 않은 장면과 설명하기 어려운 문장을 표시했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C3R3:
+      pathSummary: 책 읽기 건너뛰기 → 문장·분위기로 쓰기 → 깊게 확인하기
+      caption1: 독후감을 써야 하지만 책을 충분히 읽지 못했다.
+      caption2: 책 읽기를 건너뛰고 빠른 결과를 선택했다.
+      caption3: 유명한 문장과 분위기만으로 글을 만들었다.
+      caption4: 일반론으로 채운 독후감
+      caption5: 책에서 확인한 장면과 감상만 남기려 했다.
+      reflection: 요약이나 분위기보다 직접 확인한 장면이 독후감의 중심이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
 career:
   id: career
   category: 4
@@ -4182,6 +5628,9 @@ career:
       - 주체성
       - 자기이해, 탐색력
       reportGrowthTags: 검토 필요
+      adjustedScore: 19
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A1R2:
       score: 95
       grade: S
@@ -4213,6 +5662,9 @@ career:
       - 주체성
       - 자기이해, 탐색력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 17
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A1R3:
       score: 98
       grade: S
@@ -4244,6 +5696,9 @@ career:
       - 주체성
       - 자기이해, 탐색력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 8
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     A2R1:
       score: 72
       grade: C
@@ -4274,6 +5729,9 @@ career:
       - 주체성
       - 자기이해, 분석력
       reportGrowthTags: 검토 필요
+      adjustedScore: 15
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A2R2:
       score: 78
       grade: B
@@ -4304,6 +5762,9 @@ career:
       - 주체성
       - 자기이해, 분석력
       reportGrowthTags: 확장 가능
+      adjustedScore: 13
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A2R3:
       score: 83
       grade: B
@@ -4334,6 +5795,9 @@ career:
       - 주체성
       - 자기이해, 분석력
       reportGrowthTags: 확장 가능
+      adjustedScore: 6
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     A3R1:
       score: 48
       grade: D
@@ -4360,6 +5824,9 @@ career:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: 3
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     A3R2:
       score: 65
       grade: C
@@ -4390,6 +5857,9 @@ career:
       - 창의적 사고
       - 탐색력, 학습력
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 12
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     A3R3:
       score: 75
       grade: B
@@ -4420,6 +5890,9 @@ career:
       - 창의적 사고
       - 탐색력, 학습력
       reportGrowthTags: 확장 가능
+      adjustedScore: 10
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     B1R1:
       score: 17
       grade: D
@@ -4446,6 +5919,9 @@ career:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: -3
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     B1R2:
       score: 30
       grade: D
@@ -4472,6 +5948,9 @@ career:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 2
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     B1R3:
       score: 40
       grade: D
@@ -4498,6 +5977,9 @@ career:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 0
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     B2R1:
       score: 57
       grade: D
@@ -4524,6 +6006,9 @@ career:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: 22
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     B2R2:
       score: 75
       grade: B
@@ -4554,6 +6039,9 @@ career:
       - 맥락적 사고
       - 탐색력, 분석력
       reportGrowthTags: 확장 가능
+      adjustedScore: 32
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     B2R3:
       score: 85
       grade: A
@@ -4585,6 +6073,9 @@ career:
       - 맥락적 사고
       - 탐색력, 분석력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 30
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     B3R1:
       score: 88
       grade: A
@@ -4615,6 +6106,9 @@ career:
       - 창의적 사고
       - 탐색력, 검토력
       reportGrowthTags: 검토 필요
+      adjustedScore: 33
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     B3R2:
       score: 93
       grade: A
@@ -4645,6 +6139,9 @@ career:
       - 창의적 사고
       - 탐색력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 30
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     B3R3:
       score: 100
       grade: S
@@ -4675,6 +6172,9 @@ career:
       - 창의적 사고
       - 탐색력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 25
+      adjustedType: 강한 회복/조합 보정
+      adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
     C1R1:
       score: 18
       grade: D
@@ -4701,6 +6201,9 @@ career:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: -10
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     C1R2:
       score: 38
       grade: D
@@ -4727,6 +6230,9 @@ career:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 2
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     C1R3:
       score: 60
       grade: C
@@ -4757,6 +6263,9 @@ career:
       - 비판적 사고
       - 자료판단력, 검토력
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 12
+      adjustedType: 과정 소유권 보정
+      adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
     C2R1:
       score: 28
       grade: D
@@ -4783,6 +6292,9 @@ career:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: -15
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     C2R2:
       score: 48
       grade: D
@@ -4809,6 +6321,9 @@ career:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -3
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     C2R3:
       score: 65
       grade: C
@@ -4839,6 +6354,9 @@ career:
       - 사회·관계적 사고
       - 자기이해, 소통력
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 2
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     C3R1:
       score: 22
       grade: D
@@ -4865,6 +6383,9 @@ career:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: -16
+      adjustedType: 근거/검토 부족 페널티
+      adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
     C3R2:
       score: 42
       grade: D
@@ -4891,6 +6412,9 @@ career:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: -4
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
     C3R3:
       score: 60
       grade: C
@@ -4921,6 +6445,9 @@ career:
       - 비판적 사고
       - 분석력, 탐색력
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 2
+      adjustedType: 합산 유지 또는 미세 조정
+      adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
   axisDelta:
   - leafId: A1R3
     requireCard: 진로탐색
@@ -4955,33 +6482,87 @@ career:
     bonusPoint: 5
     note: 친구 말과 자기 경험을 갈라 놓고 자기 자리를 회수하는 자리 — 자기검증 카드와 강한 매칭
   resourceCosts:
-    A1R1: {time: 24, energy: 19}
-    A1R2: {time: 28, energy: 23}
-    A1R3: {time: 34, energy: 28}
-    A2R1: {time: 24, energy: 19}
-    A2R2: {time: 28, energy: 23}
-    A2R3: {time: 34, energy: 28}
-    A3R1: {time: 26, energy: 21}
-    A3R2: {time: 30, energy: 25}
-    A3R3: {time: 36, energy: 30}
-    B1R1: {time: 14, energy: 11}
-    B1R2: {time: 18, energy: 15}
-    B1R3: {time: 24, energy: 20}
-    B2R1: {time: 17, energy: 13}
-    B2R2: {time: 21, energy: 17}
-    B2R3: {time: 27, energy: 22}
-    B3R1: {time: 19, energy: 15}
-    B3R2: {time: 23, energy: 19}
-    B3R3: {time: 29, energy: 24}
-    C1R1: {time: 14, energy: 10}
-    C1R2: {time: 18, energy: 14}
-    C1R3: {time: 24, energy: 19}
-    C2R1: {time: 12, energy: 9}
-    C2R2: {time: 16, energy: 13}
-    C2R3: {time: 22, energy: 18}
-    C3R1: {time: 13, energy: 10}
-    C3R2: {time: 17, energy: 14}
-    C3R3: {time: 23, energy: 19}
+    A1R1:
+      time: 23
+      energy: 18
+    A1R2:
+      time: 26
+      energy: 20
+    A1R3:
+      time: 28
+      energy: 22
+    A2R1:
+      time: 22
+      energy: 17
+    A2R2:
+      time: 25
+      energy: 19
+    A2R3:
+      time: 27
+      energy: 21
+    A3R1:
+      time: 22
+      energy: 18
+    A3R2:
+      time: 25
+      energy: 20
+    A3R3:
+      time: 27
+      energy: 22
+    B1R1:
+      time: 18
+      energy: 15
+    B1R2:
+      time: 21
+      energy: 17
+    B1R3:
+      time: 23
+      energy: 19
+    B2R1:
+      time: 20
+      energy: 16
+    B2R2:
+      time: 23
+      energy: 18
+    B2R3:
+      time: 25
+      energy: 20
+    B3R1:
+      time: 20
+      energy: 17
+    B3R2:
+      time: 23
+      energy: 19
+    B3R3:
+      time: 25
+      energy: 21
+    C1R1:
+      time: 17
+      energy: 14
+    C1R2:
+      time: 20
+      energy: 16
+    C1R3:
+      time: 22
+      energy: 18
+    C2R1:
+      time: 18
+      energy: 15
+    C2R2:
+      time: 21
+      energy: 17
+    C2R3:
+      time: 23
+      energy: 19
+    C3R1:
+      time: 20
+      energy: 17
+    C3R2:
+      time: 23
+      energy: 19
+    C3R3:
+      time: 25
+      energy: 21
   expRewards:
     A1R1: 25
     A1R2: 27
@@ -5128,6 +6709,353 @@ career:
     C3R1: 순위나 안정성만 보고 진로를 정한다
     C3R2: 그 학과나 자격증에서 실제로 배우고 하는 일을 찾아본다
     C3R3: AI에게 학과 이름과 실제 공부 내용이 다른 부분, 자격증보다 먼저 해볼 경험을 묻게 한다
+  stageCosts:
+    tier1:
+      A:
+        time: 9
+        energy: 7
+      B:
+        time: 7
+        energy: 6
+      C:
+        time: 6
+        energy: 5
+    tier2:
+      A1:
+        time: 9
+        energy: 7
+      A2:
+        time: 8
+        energy: 6
+      A3:
+        time: 8
+        energy: 7
+      B1:
+        time: 6
+        energy: 5
+      B2:
+        time: 8
+        energy: 6
+      B3:
+        time: 8
+        energy: 7
+      C1:
+        time: 6
+        energy: 5
+      C2:
+        time: 7
+        energy: 6
+      C3:
+        time: 9
+        energy: 8
+    review:
+      R1:
+        time: 5
+        energy: 4
+      R2:
+        time: 8
+        energy: 6
+      R3:
+        time: 10
+        energy: 8
+  reportData:
+    A1R1:
+      pathSummary: 내 관심에서 시작하기 → 좋아하는 것 적기 → 그대로 진행하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      caption3: 내가 자주 보는 것과 좋아하는 것을 적었다.
+      caption4: 관심 목록 — 마음이 쓰이는 자리
+      caption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reflection: AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.
+      cardSummary: '[중심잡기] 주체성 · 자기이해 · 탐색력'
+      strengthTags: 주체성;자기이해, 탐색력
+      growthTags: 검토 필요
+    A1R2:
+      pathSummary: 내 관심에서 시작하기 → 좋아하는 것 적기 → 한 번 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      caption3: 내가 자주 보는 것과 좋아하는 것을 적었다.
+      caption4: 관심 목록 — 마음이 쓰이는 자리
+      caption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reflection: AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.
+      cardSummary: '[중심잡기] 주체성 · 자기이해 · 탐색력 · 검토력'
+      strengthTags: 주체성;자기이해, 탐색력, 검토력
+      growthTags: 확장 가능
+    A1R3:
+      pathSummary: 내 관심에서 시작하기 → 좋아하는 것 적기 → 깊게 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      caption3: 내가 자주 보는 것과 좋아하는 것을 적었다.
+      caption4: 관심 목록 — 마음이 쓰이는 자리
+      caption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reflection: AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.
+      cardSummary: '[중심잡기] 주체성 · 자기이해 · 탐색력 · 검토력'
+      strengthTags: 주체성;자기이해, 탐색력, 검토력
+      growthTags: 확장 가능
+    A2R1:
+      pathSummary: 내 관심에서 시작하기 → 걱정 적기 → 그대로 진행하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      caption3: AI 시대에 대한 내 걱정을 문장으로 적었다.
+      caption4: 걱정 메모 — 불안을 확인할 질문으로
+      caption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reflection: 추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.
+      cardSummary: '[중심잡기] 주체성 · 자기이해 · 분석력'
+      strengthTags: 주체성;자기이해, 분석력
+      growthTags: 검토 필요
+    A2R2:
+      pathSummary: 내 관심에서 시작하기 → 걱정 적기 → 한 번 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      caption3: AI 시대에 대한 내 걱정을 문장으로 적었다.
+      caption4: 걱정 메모 — 불안을 확인할 질문으로
+      caption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      cardSummary: '[중심잡기] 주체성 · 자기이해 · 분석력'
+      strengthTags: 주체성;자기이해, 분석력
+      growthTags: 확장 가능
+    A2R3:
+      pathSummary: 내 관심에서 시작하기 → 걱정 적기 → 깊게 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      caption3: AI 시대에 대한 내 걱정을 문장으로 적었다.
+      caption4: 걱정 메모 — 불안을 확인할 질문으로
+      caption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      cardSummary: '[중심잡기] 주체성 · 자기이해 · 분석력'
+      strengthTags: 주체성;자기이해, 분석력
+      growthTags: 확장 가능
+    A3R1:
+      pathSummary: 내 관심에서 시작하기 → 작은 실험 만들기 → 그대로 진행하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      caption3: 관심을 작은 실험으로 바꿔 보았다.
+      caption4: 작은 실험 — 해볼 수 있는 첫 단계
+      caption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reflection: 추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    A3R2:
+      pathSummary: 내 관심에서 시작하기 → 작은 실험 만들기 → 한 번 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      caption3: 관심을 작은 실험으로 바꿔 보았다.
+      caption4: 작은 실험 — 해볼 수 있는 첫 단계
+      caption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      cardSummary: '[융합하기] 창의적 사고 · 탐색력 · 학습력'
+      strengthTags: 창의적 사고;탐색력, 학습력
+      growthTags: 직접 근거 보강
+    A3R3:
+      pathSummary: 내 관심에서 시작하기 → 작은 실험 만들기 → 깊게 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 내 관심과 걱정에서 진로 탐색을 시작했다.
+      caption3: 관심을 작은 실험으로 바꿔 보았다.
+      caption4: 작은 실험 — 해볼 수 있는 첫 단계
+      caption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      cardSummary: '[융합하기] 창의적 사고 · 탐색력 · 학습력'
+      strengthTags: 창의적 사고;탐색력, 학습력
+      growthTags: 확장 가능
+    B1R1:
+      pathSummary: AI로 가능성 넓히기 → 유망 직업 추천받기 → 그대로 진행하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: AI로 진로 가능성을 넓혀 보았다.
+      caption3: AI에게 유망한 일을 추천받았다.
+      caption4: AI 유망 추천 + 근거 점검
+      caption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reflection: 추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    B1R2:
+      pathSummary: AI로 가능성 넓히기 → 유망 직업 추천받기 → 한 번 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: AI로 진로 가능성을 넓혀 보았다.
+      caption3: AI에게 유망한 일을 추천받았다.
+      caption4: AI 유망 추천 + 근거 점검
+      caption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    B1R3:
+      pathSummary: AI로 가능성 넓히기 → 유망 직업 추천받기 → 깊게 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: AI로 진로 가능성을 넓혀 보았다.
+      caption3: AI에게 유망한 일을 추천받았다.
+      caption4: AI 유망 추천 + 근거 점검
+      caption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    B2R1:
+      pathSummary: AI로 가능성 넓히기 → 새 일 제안받기 → 그대로 진행하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: AI로 진로 가능성을 넓혀 보았다.
+      caption3: 내 관심으로 만들 수 있는 일을 제안받았다.
+      caption4: AI 새 조합 + 진짜 끌림 점검
+      caption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reflection: 추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    B2R2:
+      pathSummary: AI로 가능성 넓히기 → 새 일 제안받기 → 한 번 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: AI로 진로 가능성을 넓혀 보았다.
+      caption3: 내 관심으로 만들 수 있는 일을 제안받았다.
+      caption4: AI 새 조합 + 진짜 끌림 점검
+      caption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      cardSummary: '[융합하기] 맥락적 사고 · 탐색력 · 분석력'
+      strengthTags: 맥락적 사고;탐색력, 분석력
+      growthTags: 확장 가능
+    B2R3:
+      pathSummary: AI로 가능성 넓히기 → 새 일 제안받기 → 깊게 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: AI로 진로 가능성을 넓혀 보았다.
+      caption3: 내 관심으로 만들 수 있는 일을 제안받았다.
+      caption4: AI 새 조합 + 진짜 끌림 점검
+      caption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reflection: AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.
+      cardSummary: '[융합하기] 맥락적 사고 · 탐색력 · 분석력 · 검토력'
+      strengthTags: 맥락적 사고;탐색력, 분석력, 검토력
+      growthTags: 확장 가능
+    B3R1:
+      pathSummary: AI로 가능성 넓히기 → AI 결과물로 탐색하기 → 그대로 진행하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: AI로 진로 가능성을 넓혀 보았다.
+      caption3: AI로 작은 결과물을 만들어 가능성을 보았다.
+      caption4: AI 결과물로 가능성을 맛보았다.
+      caption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reflection: AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.
+      cardSummary: '[융합하기] 창의적 사고 · 탐색력 · 검토력'
+      strengthTags: 창의적 사고;탐색력, 검토력
+      growthTags: 검토 필요
+    B3R2:
+      pathSummary: AI로 가능성 넓히기 → AI 결과물로 탐색하기 → 한 번 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: AI로 진로 가능성을 넓혀 보았다.
+      caption3: AI로 작은 결과물을 만들어 가능성을 보았다.
+      caption4: AI 결과물로 가능성을 맛보았다.
+      caption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reflection: AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.
+      cardSummary: '[융합하기] 창의적 사고 · 탐색력 · 검토력'
+      strengthTags: 창의적 사고;탐색력, 검토력
+      growthTags: 확장 가능
+    B3R3:
+      pathSummary: AI로 가능성 넓히기 → AI 결과물로 탐색하기 → 깊게 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: AI로 진로 가능성을 넓혀 보았다.
+      caption3: AI로 작은 결과물을 만들어 가능성을 보았다.
+      caption4: AI 결과물로 가능성을 맛보았다.
+      caption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reflection: AI는 가능성을 넓혔고, 마지막 선택은 내 관심과 기준에 남겨 두었다.
+      cardSummary: '[융합하기] 창의적 사고 · 탐색력 · 검토력'
+      strengthTags: 창의적 사고;탐색력, 검토력
+      growthTags: 확장 가능
+    C1R1:
+      pathSummary: 안전한 길 먼저 보기 → 뉴스·영상 길 찾기 → 그대로 진행하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      caption3: 뉴스와 영상에서 본 유망한 길을 찾았다.
+      caption4: 미디어 정보 + 빈틈 점검
+      caption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reflection: 추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    C1R2:
+      pathSummary: 안전한 길 먼저 보기 → 뉴스·영상 길 찾기 → 한 번 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      caption3: 뉴스와 영상에서 본 유망한 길을 찾았다.
+      caption4: 미디어 정보 + 빈틈 점검
+      caption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C1R3:
+      pathSummary: 안전한 길 먼저 보기 → 뉴스·영상 길 찾기 → 깊게 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      caption3: 뉴스와 영상에서 본 유망한 길을 찾았다.
+      caption4: 미디어 정보 + 빈틈 점검
+      caption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      cardSummary: '[성찰하기] 비판적 사고 · 자료판단력 · 검토력'
+      strengthTags: 비판적 사고;자료판단력, 검토력
+      growthTags: 직접 근거 보강
+    C2R1:
+      pathSummary: 안전한 길 먼저 보기 → 주변 추천 따라가기 → 그대로 진행하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      caption3: 주변 사람이 좋다고 한 길을 따라보았다.
+      caption4: 주변 추천 + 경험 정합
+      caption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reflection: 추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    C2R2:
+      pathSummary: 안전한 길 먼저 보기 → 주변 추천 따라가기 → 한 번 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      caption3: 주변 사람이 좋다고 한 길을 따라보았다.
+      caption4: 주변 추천 + 경험 정합
+      caption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C2R3:
+      pathSummary: 안전한 길 먼저 보기 → 주변 추천 따라가기 → 깊게 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      caption3: 주변 사람이 좋다고 한 길을 따라보았다.
+      caption4: 주변 추천 + 경험 정합
+      caption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      cardSummary: '[성찰하기] 사회·관계적 사고 · 자기이해 · 소통력'
+      strengthTags: 사회·관계적 사고;자기이해, 소통력
+      growthTags: 직접 근거 보강
+    C3R1:
+      pathSummary: 안전한 길 먼저 보기 → 인기·안정 길 보기 → 그대로 진행하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      caption3: 인기 학과나 안정적인 길을 먼저 보았다.
+      caption4: 안전한 길 + 실제 내용 확인
+      caption5: 그럴듯한 결과를 곧 내 진로처럼 받아들였다.
+      reflection: 추천은 빨랐지만, 내 경험과 맞는지 확인하는 과정이 부족했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    C3R2:
+      pathSummary: 안전한 길 먼저 보기 → 인기·안정 길 보기 → 한 번 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      caption3: 인기 학과나 안정적인 길을 먼저 보았다.
+      caption4: 안전한 길 + 실제 내용 확인
+      caption5: AI가 한 부분과 내가 판단한 부분을 나눴다.
+      reflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C3R3:
+      pathSummary: 안전한 길 먼저 보기 → 인기·안정 길 보기 → 깊게 확인하기
+      caption1: AI 시대의 진로를 고민해야 하는 상황이 생겼다.
+      caption2: 사람들이 안전하다고 말하는 길을 먼저 보았다.
+      caption3: 인기 학과나 안정적인 길을 먼저 보았다.
+      caption4: 안전한 길 + 실제 내용 확인
+      caption5: 내가 더 배워야 할 부분을 하나 골랐다.
+      reflection: 진로 추천은 출발점이고, 내 기준으로 다시 고를 때 의미가 생긴다.
+      cardSummary: '[성찰하기] 비판적 사고 · 분석력 · 탐색력'
+      strengthTags: 비판적 사고;분석력, 탐색력
+      growthTags: 직접 근거 보강
 studyplan:
   id: studyplan
   category: 5
@@ -5390,14 +7318,14 @@ studyplan:
     - 인식·해석
   finals:
     A1R1:
-      score: 89
-      grade: A
+      score: 77
+      grade: B
       item: 약점 자가 점검 카드
       delegation: ++
       knowledge: ++
       awareness: 내가 뭘 모르는지 보이자 공부할 순서가 생겼다.
-      cut6Feedback: 좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.
-      replaySuggestion: 다시 해본다면 마지막 확인을 한 단계 더 깊게 해 보세요.
+      cut6Feedback: 좋은 출발과 확인이 있었지만, 직접 풀이와 오답 정리가 더해지면 더 좋아져요.
+      replaySuggestion: 다시 해본다면 틀린 이유를 직접 분석하고 공부 순서를 다시 잡아 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
@@ -5419,15 +7347,18 @@ studyplan:
       - 문제해결적 사고
       - 학습력, 분석력
       reportGrowthTags: 검토 필요
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     A1R2:
-      score: 95
-      grade: S
+      score: 90
+      grade: A
       item: 약점 자가 점검 카드
       delegation: ++
       knowledge: ++
       awareness: 빠진 단원을 보태니 계획표가 내 시험 쪽으로 더 가까워졌다.
-      cut6Feedback: 자기 기준을 세우고 마지막 확인까지 해낸 선택이라 결과의 완성도가 높아요.
-      replaySuggestion: 다시 해본다면 같은 주제를 다른 방식으로 풀어 보며 선택의 차이를 비교해 보세요.
+      cut6Feedback: 자기 기준으로 공부 자료와 약점을 확인해 꽤 단단한 공부 방향을 만들었어요.
+      replaySuggestion: 다시 해본다면 오답 이유까지 정리해 공부 순서를 더 선명하게 만들어 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
@@ -5450,6 +7381,9 @@ studyplan:
       - 문제해결적 사고
       - 학습력, 분석력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     A1R3:
       score: 98
       grade: S
@@ -5457,8 +7391,8 @@ studyplan:
       delegation: ++
       knowledge: ++
       awareness: 내가 모르는 것을 알게 된 것만으로 한 단계였다.
-      cut6Feedback: 자기 기준을 세우고 마지막 확인까지 해낸 선택이라 결과의 완성도가 높아요.
-      replaySuggestion: 다시 해본다면 같은 주제를 다른 방식으로 풀어 보며 선택의 차이를 비교해 보세요.
+      cut6Feedback: 직접 확인한 약점과 깊은 검토가 이어져 공부 방향이 매우 분명해졌어요.
+      replaySuggestion: 다시 해본다면 같은 공부 전략을 다른 과목에도 적용해 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
@@ -5481,15 +7415,18 @@ studyplan:
       - 문제해결적 사고
       - 학습력, 분석력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     A2R1:
-      score: 75
-      grade: B
+      score: 67
+      grade: C
       item: 약점 + AI 점만 닿기 카드
       delegation: +
       knowledge: +
       awareness: 내 오답이 출발이었고 AI는 한 단원만 짚어 줬다.
-      cut6Feedback: 핵심 방향은 잡았지만, 검토나 자기 기준을 더 분명히 하면 결과가 더 좋아질 수 있어요.
-      replaySuggestion: 다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.
+      cut6Feedback: 공부 방향은 잡았지만, 실제로 풀고 틀린 이유를 확인하는 과정이 더 필요해요.
+      replaySuggestion: 다시 해본다면 AI 자료보다 먼저 실제 문제를 풀어 약점을 확인해 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
@@ -5511,6 +7448,9 @@ studyplan:
       - 문제해결적 사고
       - 학습력, 자료판단력
       reportGrowthTags: 검토 필요
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     A2R2:
       score: 80
       grade: B
@@ -5518,14 +7458,15 @@ studyplan:
       delegation: +
       knowledge: +
       awareness: 시험 범위 밖을 빼니 AI 답이 내 쪽으로 좁아졌다.
-      cut6Feedback: 핵심 방향은 잡았지만, 검토나 자기 기준을 더 분명히 하면 결과가 더 좋아질 수 있어요.
-      replaySuggestion: 다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.
+      cut6Feedback: 좋은 출발과 확인이 있었지만, 직접 풀이와 오답 정리가 더해지면 더 좋아져요.
+      replaySuggestion: 다시 해본다면 틀린 이유를 직접 분석하고 공부 순서를 다시 잡아 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
       domainCards:
       - 학습력
       - 자료판단력
+      - 검토력
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
@@ -5541,15 +7482,18 @@ studyplan:
       - 문제해결적 사고
       - 학습력, 자료판단력
       reportGrowthTags: 확장 가능
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     A2R3:
-      score: 86
+      score: 88
       grade: A
       item: 메타 공부 카드
       delegation: +
       knowledge: ++
       awareness: 내 오답 옆에 놓고 비교하니 AI 답이 도구가 됐다.
-      cut6Feedback: 좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.
-      replaySuggestion: 다시 해본다면 마지막 확인을 한 단계 더 깊게 해 보세요.
+      cut6Feedback: 자기 기준으로 공부 자료와 약점을 확인해 꽤 단단한 공부 방향을 만들었어요.
+      replaySuggestion: 다시 해본다면 오답 이유까지 정리해 공부 순서를 더 선명하게 만들어 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
@@ -5572,20 +7516,25 @@ studyplan:
       - 문제해결적 사고
       - 학습력, 자료판단력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     A3R1:
-      score: 55
-      grade: D
+      score: 75
+      grade: B
       item: 고른 시간표 카드
       delegation: '0'
       knowledge: +
       awareness: 모든 과목을 똑같이 보니 내 약점도 똑같이 작아 보였다.
-      cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
-      replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
+      cut6Feedback: 좋은 출발과 확인이 있었지만, 직접 풀이와 오답 정리가 더해지면 더 좋아져요.
+      replaySuggestion: 다시 해본다면 틀린 이유를 직접 분석하고 공부 순서를 다시 잡아 보세요.
       cardEarned: true
-      humanCentricAxis: ''
-      humanCentricTag: ''
-      domainCards: []
-      growthCard: 회복력
+      humanCentricAxis: '융합하기'
+      humanCentricTag: '문제해결적 사고'
+      domainCards:
+      - 학습력
+      - 자기이해
+      growthCard: ''
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 내 실력 확인하기 → 자신감과 풀이 비교하기 → 그대로 진행하기
@@ -5598,21 +7547,25 @@ studyplan:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     A3R2:
-      score: 65
-      grade: C
+      score: 88
+      grade: A
       item: 시간 다시 나눔 카드
       delegation: '0'
       knowledge: +
       awareness: 아는 과목과 모르는 과목은 같은 시간이 아니었다.
-      cut6Feedback: 출발은 했지만 중요한 확인 과정이 일부 비어 있어요. 다음에는 내가 책임질 수 있는 근거를 더 남겨 보세요.
-      replaySuggestion: 다시 해본다면 그대로 진행하기 전에 이상한 부분을 표시하거나 처음부터 다시 확인해 보세요.
+      cut6Feedback: 자기 기준으로 공부 자료와 약점을 확인해 꽤 단단한 공부 방향을 만들었어요.
+      replaySuggestion: 다시 해본다면 오답 이유까지 정리해 공부 순서를 더 선명하게 만들어 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
       domainCards:
       - 학습력
       - 자기이해
+      - 검토력
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
@@ -5628,21 +7581,25 @@ studyplan:
       - 문제해결적 사고
       - 학습력, 자기이해
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     A3R3:
-      score: 75
-      grade: B
+      score: 96
+      grade: S
       item: 약점 다시 보기 카드
       delegation: '0'
       knowledge: ++
       awareness: 문제를 풀어 보니 시간표가 다시 움직였다.
-      cut6Feedback: 핵심 방향은 잡았지만, 검토나 자기 기준을 더 분명히 하면 결과가 더 좋아질 수 있어요.
-      replaySuggestion: 다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.
+      cut6Feedback: 직접 확인한 약점과 깊은 검토가 이어져 공부 방향이 매우 분명해졌어요.
+      replaySuggestion: 다시 해본다면 같은 공부 전략을 다른 과목에도 적용해 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
       domainCards:
       - 학습력
       - 자기이해
+      - 검토력
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
@@ -5658,15 +7615,18 @@ studyplan:
       - 문제해결적 사고
       - 학습력, 자기이해
       reportGrowthTags: 확장 가능
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     B1R1:
-      score: 16
+      score: 38
       grade: D
       item:
       delegation: --
       knowledge: '-'
       awareness: AI 공부법은 좋았지만 내 시험은 아니었다.
-      cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
-      replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
+      cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
+      replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
@@ -5684,15 +7644,18 @@ studyplan:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     B1R2:
-      score: 29
+      score: 51
       grade: D
       item:
       delegation: --
       knowledge: '0'
       awareness: 그 계획에는 내가 틀리는 단원이 없었다.
-      cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
-      replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
+      cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
+      replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
@@ -5710,15 +7673,18 @@ studyplan:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     B1R3:
-      score: 39
+      score: 59
       grade: D
       item: 남의 공부법 경고 카드
       delegation: --
       knowledge: +
       awareness: AI 답을 내 오답 옆에 놓으니 맞는 것만 조금 남았다.
-      cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
-      replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
+      cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
+      replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
@@ -5736,15 +7702,18 @@ studyplan:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     B2R1:
-      score: 57
+      score: 51
       grade: D
       item: AI 공부법 카드
       delegation: '0'
       knowledge: '0'
       awareness: 내 약점을 말하니 공부법이 조금 내 쪽으로 왔다.
-      cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
-      replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
+      cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
+      replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
@@ -5762,15 +7731,18 @@ studyplan:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     B2R2:
-      score: 75
-      grade: B
+      score: 64
+      grade: C
       item: 약점 말하기 카드
       delegation: '0'
       knowledge: +
       awareness: 약점을 넓게 말하면 답도 넓게 돌아왔다.
-      cut6Feedback: 핵심 방향은 잡았지만, 검토나 자기 기준을 더 분명히 하면 결과가 더 좋아질 수 있어요.
-      replaySuggestion: 다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.
+      cut6Feedback: 공부 방향은 잡았지만, 실제로 풀고 틀린 이유를 확인하는 과정이 더 필요해요.
+      replaySuggestion: 다시 해본다면 AI 자료보다 먼저 실제 문제를 풀어 약점을 확인해 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
@@ -5792,15 +7764,18 @@ studyplan:
       - 문제해결적 사고
       - 학습력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     B2R3:
-      score: 85
-      grade: A
+      score: 72
+      grade: C
       item: AI 학습 도구 활용 카드
       delegation: '0'
       knowledge: ++
       awareness: AI가 준 방법은 내 오답을 지나가야 쓸모가 생겼다.
-      cut6Feedback: 좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.
-      replaySuggestion: 다시 해본다면 마지막 확인을 한 단계 더 깊게 해 보세요.
+      cut6Feedback: 공부 방향은 잡았지만, 실제로 풀고 틀린 이유를 확인하는 과정이 더 필요해요.
+      replaySuggestion: 다시 해본다면 AI 자료보다 먼저 실제 문제를 풀어 약점을 확인해 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
@@ -5822,15 +7797,18 @@ studyplan:
       - 문제해결적 사고
       - 학습력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     B3R1:
-      score: 88
-      grade: A
+      score: 65
+      grade: C
       item: 약점 자가 점검 + AI 도구 카드
       delegation: ++
       knowledge: ++
       awareness: 내가 먼저 약점을 짚었더니 AI 질문이 구체적으로 나왔다.
-      cut6Feedback: 좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.
-      replaySuggestion: 다시 해본다면 마지막 확인을 한 단계 더 깊게 해 보세요.
+      cut6Feedback: 공부 방향은 잡았지만, 실제로 풀고 틀린 이유를 확인하는 과정이 더 필요해요.
+      replaySuggestion: 다시 해본다면 AI 자료보다 먼저 실제 문제를 풀어 약점을 확인해 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
@@ -5852,15 +7830,18 @@ studyplan:
       - 문제해결적 사고
       - 학습력, 자료판단력
       reportGrowthTags: 검토 필요
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     B3R2:
-      score: 93
-      grade: A
+      score: 78
+      grade: B
       item: AI 답 검수 카드
       delegation: ++
       knowledge: ++
       awareness: AI 답에서 시험 범위 밖을 빼니 내 계획만 남았다.
-      cut6Feedback: 좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.
-      replaySuggestion: 다시 해본다면 마지막 확인을 한 단계 더 깊게 해 보세요.
+      cut6Feedback: 좋은 출발과 확인이 있었지만, 직접 풀이와 오답 정리가 더해지면 더 좋아져요.
+      replaySuggestion: 다시 해본다면 틀린 이유를 직접 분석하고 공부 순서를 다시 잡아 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
@@ -5883,15 +7864,18 @@ studyplan:
       - 문제해결적 사고
       - 학습력, 자료판단력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     B3R3:
-      score: 100
-      grade: S
+      score: 86
+      grade: A
       item: 메타 공부 + AI 검수 카드
       delegation: ++
       knowledge: ++
       awareness: 출발은 내 오답이었고 AI 답은 내 손에서 다시 걸러졌다.
-      cut6Feedback: 자기 기준을 세우고 마지막 확인까지 해낸 선택이라 결과의 완성도가 높아요.
-      replaySuggestion: 다시 해본다면 같은 주제를 다른 방식으로 풀어 보며 선택의 차이를 비교해 보세요.
+      cut6Feedback: 자기 기준으로 공부 자료와 약점을 확인해 꽤 단단한 공부 방향을 만들었어요.
+      replaySuggestion: 다시 해본다면 오답 이유까지 정리해 공부 순서를 더 선명하게 만들어 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
@@ -5914,15 +7898,18 @@ studyplan:
       - 문제해결적 사고
       - 학습력, 자료판단력, 검토력
       reportGrowthTags: 확장 가능
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     C1R1:
-      score: 18
+      score: 20
       grade: D
       item: 남의 계획 카드
       delegation: '-'
       knowledge: '-'
       awareness: 친구·학원 기준이 내 약점 자리에 들어왔다.
-      cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
-      replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
+      cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
+      replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
@@ -5940,15 +7927,18 @@ studyplan:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     C1R2:
-      score: 38
+      score: 33
       grade: D
       item: 계획 정합 카드
       delegation: +
       knowledge: +
       awareness: 외부 계획에서 내 시험 범위·약점에 맞지 않는 부분을 걷어냈다.
-      cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
-      replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
+      cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
+      replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
@@ -5966,15 +7956,18 @@ studyplan:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     C1R3:
-      score: 50
+      score: 41
       grade: D
       item: AI 표면 정리 카드
       delegation: '0'
       knowledge: '0'
       awareness: AI가 계획을 보기 좋게 바꿔주지만 내 약점 확인은 빈자리다.
-      cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
-      replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
+      cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
+      replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
@@ -5992,15 +7985,18 @@ studyplan:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     C2R1:
-      score: 22
+      score: 28
       grade: D
       item: 옛 자료 의존 카드
       delegation: '-'
       knowledge: '-'
       awareness: 공부 범위가 줄어든 느낌만 남고 올해 시험 범위는 흐리다.
-      cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
-      replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
+      cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
+      replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
@@ -6018,15 +8014,18 @@ studyplan:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     C2R2:
-      score: 42
+      score: 41
       grade: D
       item: 범위 거리 점검 카드
       delegation: +
       knowledge: +
       awareness: 작년 자료와 올해 범위의 거리를 짚어 빈자리를 줄였다.
-      cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
-      replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
+      cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
+      replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
@@ -6044,15 +8043,18 @@ studyplan:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     C2R3:
-      score: 35
+      score: 49
       grade: D
       item: AI 의존 심화 카드
       delegation: '-'
       knowledge: '-'
       awareness: AI가 좁혀준 예상에 기대 실제 범위 확인이 약해진 의도적 부정 자리.
-      cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
-      replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
+      cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
+      replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
@@ -6070,15 +8072,18 @@ studyplan:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     C3R1:
-      score: 12
+      score: 15
       grade: D
       item: 미룬 책상 카드
       delegation: '-'
       knowledge: '-'
       awareness: 정리된 책상과 예쁜 계획표는 남고 풀어본 문제는 거의 없다.
-      cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
-      replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
+      cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
+      replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
@@ -6096,15 +8101,18 @@ studyplan:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 검토 필요
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     C3R2:
-      score: 35
+      score: 28
       grade: D
       item: 작은 시작 카드
       delegation: +
       knowledge: '0'
       awareness: 거창한 계획 대신 작은 행동 하나로 미루기에서 빠져 나왔다.
-      cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
-      replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
+      cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
+      replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
@@ -6122,15 +8130,18 @@ studyplan:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
     C3R3:
-      score: 50
+      score: 36
       grade: D
       item: AI 최소 계획 카드
       delegation: +
       knowledge: '0'
       awareness: AI 최소 계획으로 부담을 줄이고 오늘 시작할 공부 항목을 남겼다.
-      cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
-      replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
+      cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
+      replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
@@ -6148,6 +8159,9 @@ studyplan:
       reportCardSummary: 회복력
       reportStrengthTags: []
       reportGrowthTags: 직접 근거 보강
+      adjustedScore: 0
+      adjustedType: 단계 점수 재산정
+      adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
   axisDelta:
   - leafId: A1R3
     requireCard: 자기검증
@@ -6174,33 +8188,87 @@ studyplan:
     bonusPoint: 5
     note: 작년 자기 자료에서 올해 약점을 짚어 시간을 다시 배치하는 자리 — 학습설계 카드와 강한 매칭
   resourceCosts:
-    A1R1: {time: 26, energy: 21}
-    A1R2: {time: 29, energy: 24}
-    A1R3: {time: 36, energy: 30}
-    A2R1: {time: 24, energy: 19}
-    A2R2: {time: 27, energy: 22}
-    A2R3: {time: 34, energy: 28}
-    A3R1: {time: 25, energy: 20}
-    A3R2: {time: 28, energy: 23}
-    A3R3: {time: 35, energy: 29}
-    B1R1: {time: 12, energy: 9}
-    B1R2: {time: 15, energy: 12}
-    B1R3: {time: 22, energy: 18}
-    B2R1: {time: 15, energy: 11}
-    B2R2: {time: 18, energy: 14}
-    B2R3: {time: 25, energy: 20}
-    B3R1: {time: 15, energy: 12}
-    B3R2: {time: 18, energy: 15}
-    B3R3: {time: 25, energy: 21}
-    C1R1: {time: 11, energy: 8}
-    C1R2: {time: 14, energy: 11}
-    C1R3: {time: 21, energy: 17}
-    C2R1: {time: 13, energy: 9}
-    C2R2: {time: 16, energy: 12}
-    C2R3: {time: 23, energy: 18}
-    C3R1: {time: 8, energy: 6}
-    C3R2: {time: 11, energy: 9}
-    C3R3: {time: 18, energy: 15}
+    A1R1:
+      time: 21
+      energy: 18
+    A1R2:
+      time: 23
+      energy: 20
+    A1R3:
+      time: 25
+      energy: 22
+    A2R1:
+      time: 20
+      energy: 17
+    A2R2:
+      time: 22
+      energy: 19
+    A2R3:
+      time: 24
+      energy: 21
+    A3R1:
+      time: 21
+      energy: 17
+    A3R2:
+      time: 23
+      energy: 19
+    A3R3:
+      time: 25
+      energy: 21
+    B1R1:
+      time: 18
+      energy: 14
+    B1R2:
+      time: 20
+      energy: 16
+    B1R3:
+      time: 22
+      energy: 18
+    B2R1:
+      time: 19
+      energy: 15
+    B2R2:
+      time: 21
+      energy: 17
+    B2R3:
+      time: 23
+      energy: 19
+    B3R1:
+      time: 20
+      energy: 15
+    B3R2:
+      time: 22
+      energy: 17
+    B3R3:
+      time: 24
+      energy: 19
+    C1R1:
+      time: 16
+      energy: 13
+    C1R2:
+      time: 18
+      energy: 15
+    C1R3:
+      time: 20
+      energy: 17
+    C2R1:
+      time: 18
+      energy: 14
+    C2R2:
+      time: 20
+      energy: 16
+    C2R3:
+      time: 22
+      energy: 18
+    C3R1:
+      time: 20
+      energy: 16
+    C3R2:
+      time: 22
+      energy: 18
+    C3R3:
+      time: 24
+      energy: 20
   expRewards:
     A1R1: 25
     A1R2: 27
@@ -6350,3 +8418,350 @@ studyplan:
     C3R1: 준비가 된 것 같아 계속 쉬운 일만 한다
     C3R2: 지금 바로 풀 문제 3개나 오늘 할 한 단원만 정한다
     C3R3: AI에게 남은 시간으로 가능한 최소 공부 계획을 만들게 한 뒤 바로 시작할 항목만 남긴다
+  stageCosts:
+    tier1:
+      A:
+        time: 8
+        energy: 7
+      B:
+        time: 7
+        energy: 5
+      C:
+        time: 6
+        energy: 5
+    tier2:
+      A1:
+        time: 8
+        energy: 7
+      A2:
+        time: 7
+        energy: 6
+      A3:
+        time: 8
+        energy: 6
+      B1:
+        time: 6
+        energy: 5
+      B2:
+        time: 7
+        energy: 6
+      B3:
+        time: 8
+        energy: 6
+      C1:
+        time: 5
+        energy: 4
+      C2:
+        time: 7
+        energy: 5
+      C3:
+        time: 9
+        energy: 7
+    review:
+      R1:
+        time: 5
+        energy: 4
+      R2:
+        time: 7
+        energy: 6
+      R3:
+        time: 9
+        energy: 8
+  reportData:
+    A1R1:
+      pathSummary: 내 실력 확인하기 → 약한 단원 찾기 → 그대로 진행하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      caption3: 문제를 풀어 약한 단원을 찾았다.
+      caption4: 약한 단원 목록 — 문제로 확인한 자리
+      caption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      cardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 분석력'
+      strengthTags: 문제해결적 사고;학습력, 분석력
+      growthTags: 검토 필요
+    A1R2:
+      pathSummary: 내 실력 확인하기 → 약한 단원 찾기 → 한 번 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      caption3: 문제를 풀어 약한 단원을 찾았다.
+      caption4: 약한 단원 목록 — 문제로 확인한 자리
+      caption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      cardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 분석력 · 검토력'
+      strengthTags: 문제해결적 사고;학습력, 분석력, 검토력
+      growthTags: 확장 가능
+    A1R3:
+      pathSummary: 내 실력 확인하기 → 약한 단원 찾기 → 깊게 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      caption3: 문제를 풀어 약한 단원을 찾았다.
+      caption4: 약한 단원 목록 — 문제로 확인한 자리
+      caption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      cardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 분석력 · 검토력'
+      strengthTags: 문제해결적 사고;학습력, 분석력, 검토력
+      growthTags: 확장 가능
+    A2R1:
+      pathSummary: 내 실력 확인하기 → 아는 것 나누기 → 그대로 진행하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      caption3: 시험 범위에서 아는 것과 모르는 것을 나눴다.
+      caption4: 범위표 분류 — 한눈에 본 시험 범위
+      caption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reflection: 계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.
+      cardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자료판단력'
+      strengthTags: 문제해결적 사고;학습력, 자료판단력
+      growthTags: 검토 필요
+    A2R2:
+      pathSummary: 내 실력 확인하기 → 아는 것 나누기 → 한 번 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      caption3: 시험 범위에서 아는 것과 모르는 것을 나눴다.
+      caption4: 범위표 분류 — 한눈에 본 시험 범위
+      caption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      cardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자료판단력'
+      strengthTags: 문제해결적 사고;학습력, 자료판단력
+      growthTags: 확장 가능
+    A2R3:
+      pathSummary: 내 실력 확인하기 → 아는 것 나누기 → 깊게 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      caption3: 시험 범위에서 아는 것과 모르는 것을 나눴다.
+      caption4: 범위표 분류 — 한눈에 본 시험 범위
+      caption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      cardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자료판단력 · 검토력'
+      strengthTags: 문제해결적 사고;학습력, 자료판단력, 검토력
+      growthTags: 확장 가능
+    A3R1:
+      pathSummary: 내 실력 확인하기 → 자신감과 풀이 비교하기 → 그대로 진행하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      caption3: 자신감과 실제 문제 풀이를 비교했다.
+      caption4: 자신감 vs 실제 — 감의 어긋남 점검
+      caption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reflection: 계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    A3R2:
+      pathSummary: 내 실력 확인하기 → 자신감과 풀이 비교하기 → 한 번 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      caption3: 자신감과 실제 문제 풀이를 비교했다.
+      caption4: 자신감 vs 실제 — 감의 어긋남 점검
+      caption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      cardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자기이해'
+      strengthTags: 문제해결적 사고;학습력, 자기이해
+      growthTags: 직접 근거 보강
+    A3R3:
+      pathSummary: 내 실력 확인하기 → 자신감과 풀이 비교하기 → 깊게 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 먼저 내가 아는 것과 모르는 것을 확인했다.
+      caption3: 자신감과 실제 문제 풀이를 비교했다.
+      caption4: 자신감 vs 실제 — 감의 어긋남 점검
+      caption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      cardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자기이해'
+      strengthTags: 문제해결적 사고;학습력, 자기이해
+      growthTags: 확장 가능
+    B1R1:
+      pathSummary: AI로 공부 돕기 → AI 계획표 받기 → 그대로 진행하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: AI의 도움으로 공부 준비를 시작했다.
+      caption3: AI에게 2주 공부 계획표를 받았다.
+      caption4: AI 계획표 + 내 범위·시간 정합
+      caption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reflection: 계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    B1R2:
+      pathSummary: AI로 공부 돕기 → AI 계획표 받기 → 한 번 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: AI의 도움으로 공부 준비를 시작했다.
+      caption3: AI에게 2주 공부 계획표를 받았다.
+      caption4: AI 계획표 + 내 범위·시간 정합
+      caption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    B1R3:
+      pathSummary: AI로 공부 돕기 → AI 계획표 받기 → 깊게 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: AI의 도움으로 공부 준비를 시작했다.
+      caption3: AI에게 2주 공부 계획표를 받았다.
+      caption4: AI 계획표 + 내 범위·시간 정합
+      caption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    B2R1:
+      pathSummary: AI로 공부 돕기 → 약점으로 순서 받기 → 그대로 진행하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: AI의 도움으로 공부 준비를 시작했다.
+      caption3: 내 약점을 말하고 공부 순서를 받았다.
+      caption4: AI 공부 순서 + 오답 확인
+      caption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reflection: 계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    B2R2:
+      pathSummary: AI로 공부 돕기 → 약점으로 순서 받기 → 한 번 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: AI의 도움으로 공부 준비를 시작했다.
+      caption3: 내 약점을 말하고 공부 순서를 받았다.
+      caption4: AI 공부 순서 + 오답 확인
+      caption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      cardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 검토력'
+      strengthTags: 문제해결적 사고;학습력, 검토력
+      growthTags: 확장 가능
+    B2R3:
+      pathSummary: AI로 공부 돕기 → 약점으로 순서 받기 → 깊게 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: AI의 도움으로 공부 준비를 시작했다.
+      caption3: 내 약점을 말하고 공부 순서를 받았다.
+      caption4: AI 공부 순서 + 오답 확인
+      caption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      cardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 검토력'
+      strengthTags: 문제해결적 사고;학습력, 검토력
+      growthTags: 확장 가능
+    B3R1:
+      pathSummary: AI로 공부 돕기 → 약점·범위로 AI 자료 받기 → 그대로 진행하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: AI의 도움으로 공부 준비를 시작했다.
+      caption3: 내 약점과 범위를 넣어 AI 자료를 받았다.
+      caption4: AI 공부 자료가 빠르게 생겼다.
+      caption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      cardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자료판단력'
+      strengthTags: 문제해결적 사고;학습력, 자료판단력
+      growthTags: 검토 필요
+    B3R2:
+      pathSummary: AI로 공부 돕기 → 약점·범위로 AI 자료 받기 → 한 번 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: AI의 도움으로 공부 준비를 시작했다.
+      caption3: 내 약점과 범위를 넣어 AI 자료를 받았다.
+      caption4: AI 공부 자료가 빠르게 생겼다.
+      caption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      cardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자료판단력 · 검토력'
+      strengthTags: 문제해결적 사고;학습력, 자료판단력, 검토력
+      growthTags: 확장 가능
+    B3R3:
+      pathSummary: AI로 공부 돕기 → 약점·범위로 AI 자료 받기 → 깊게 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: AI의 도움으로 공부 준비를 시작했다.
+      caption3: 내 약점과 범위를 넣어 AI 자료를 받았다.
+      caption4: AI 공부 자료가 빠르게 생겼다.
+      caption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reflection: AI 자료를 그대로 외우지 않고, 실제 문제 풀이로 이해를 확인했다.
+      cardSummary: '[융합하기] 문제해결적 사고 · 학습력 · 자료판단력 · 검토력'
+      strengthTags: 문제해결적 사고;학습력, 자료판단력, 검토력
+      growthTags: 확장 가능
+    C1R1:
+      pathSummary: 다른 방법에 기대기 → 친구·학원 계획 따르기 → 그대로 진행하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 다른 자료나 쉬운 방법에서 시작했다.
+      caption3: 친구나 학원 계획표를 따라갔다.
+      caption4: 친구·학원 계획 + 내 약점 정합
+      caption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reflection: 계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    C1R2:
+      pathSummary: 다른 방법에 기대기 → 친구·학원 계획 따르기 → 한 번 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 다른 자료나 쉬운 방법에서 시작했다.
+      caption3: 친구나 학원 계획표를 따라갔다.
+      caption4: 친구·학원 계획 + 내 약점 정합
+      caption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C1R3:
+      pathSummary: 다른 방법에 기대기 → 친구·학원 계획 따르기 → 깊게 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 다른 자료나 쉬운 방법에서 시작했다.
+      caption3: 친구나 학원 계획표를 따라갔다.
+      caption4: 친구·학원 계획 + 내 약점 정합
+      caption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C2R1:
+      pathSummary: 다른 방법에 기대기 → 작년·인터넷 자료 보기 → 그대로 진행하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 다른 자료나 쉬운 방법에서 시작했다.
+      caption3: 작년 자료와 인터넷 요약에 기대었다.
+      caption4: 작년·인터넷 자료 + 올해 범위 거리
+      caption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reflection: 계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    C2R2:
+      pathSummary: 다른 방법에 기대기 → 작년·인터넷 자료 보기 → 한 번 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 다른 자료나 쉬운 방법에서 시작했다.
+      caption3: 작년 자료와 인터넷 요약에 기대었다.
+      caption4: 작년·인터넷 자료 + 올해 범위 거리
+      caption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C2R3:
+      pathSummary: 다른 방법에 기대기 → 작년·인터넷 자료 보기 → 깊게 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 다른 자료나 쉬운 방법에서 시작했다.
+      caption3: 작년 자료와 인터넷 요약에 기대었다.
+      caption4: 작년·인터넷 자료 + 올해 범위 거리
+      caption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C3R1:
+      pathSummary: 다른 방법에 기대기 → 미루거나 쉬운 일 하기 → 그대로 진행하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 다른 자료나 쉬운 방법에서 시작했다.
+      caption3: 공부를 미루거나 쉬운 일만 했다.
+      caption4: 미루기 → 작은 행동 하나로 전환
+      caption5: 깔끔한 계획이나 자료를 그대로 따르기로 했다.
+      reflection: 계획이나 요약은 생겼지만, 내 약점에 맞는지 확인하지 못했다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 검토 필요
+    C3R2:
+      pathSummary: 다른 방법에 기대기 → 미루거나 쉬운 일 하기 → 한 번 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 다른 자료나 쉬운 방법에서 시작했다.
+      caption3: 공부를 미루거나 쉬운 일만 했다.
+      caption4: 미루기 → 작은 행동 하나로 전환
+      caption5: 시험 범위와 문제집에 맞는지 직접 확인했다.
+      reflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강
+    C3R3:
+      pathSummary: 다른 방법에 기대기 → 미루거나 쉬운 일 하기 → 깊게 확인하기
+      caption1: 시험 2주 전, 무엇부터 공부할지 정해야 했다.
+      caption2: 다른 자료나 쉬운 방법에서 시작했다.
+      caption3: 공부를 미루거나 쉬운 일만 했다.
+      caption4: 미루기 → 작은 행동 하나로 전환
+      caption5: 직접 풀어보며 이해가 부족한 부분을 확인했다.
+      reflection: 공부 계획은 내가 모르는 것을 확인할 때 내 것이 된다.
+      cardSummary: 회복력
+      strengthTags: ''
+      growthTags: 직접 근거 보강

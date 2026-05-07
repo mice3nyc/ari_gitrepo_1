@@ -1,7 +1,8 @@
 ## SPEC — v0.8
 
-**최종 업데이트**: 2026-05-07 세션310 (§3.4 선택지 카드 시각 위계 조정 — 선택 텍스트 격상+비용 축소)
+**최종 업데이트**: 2026-05-07 세션310 (v15 밸런스 데이터 마이그레이션 — stageCosts 신설 + 점수 재조정)
 **PLAN**: [[PLAN|PLAN.md]] / **TASKS**: [[TASKS|TASKS.md]] / **DESIGN**: [[DESIGN-REGISTRY|DESIGN-REGISTRY.md]]
+**v15-balance**: `Assets/incoming/AI리터러시/codex/ari-final-delivery-v15-balance/`
 **v14-slim**: `Assets/incoming/AI리터러시/codex/ari-final-delivery-v14-slim/`
 **v14 리포트**: `Assets/incoming/AI리터러시/codex/ari-report-text-v14/`
 
@@ -412,6 +413,29 @@ floor = (raw_cost == 0) ? 0 : 1
 - 원래 비용이 1 이상인 선택지: 할인 후 최소 1
 
 코드: `_applyDiscount` 함수에서 `Math.max(1, discounted)` 적용. raw_cost 0 체크 선행.
+
+##### 3.7 v15 단계별 명시 비용 (세션310)
+
+v15 밸런스에서 비용 분포를 1차:세부:검토 ≈ 1:1:1로 재조정. 기존에 leaf 총비용에서 min-of-family 로직으로 단계 비용을 역산하던 방식을 **명시 비용으로 교체**.
+
+yaml 구조:
+```yaml
+stageCosts:
+  tier1:
+    A: {time: 8, energy: 7}
+    B: {time: 7, energy: 6}
+    C: {time: 6, energy: 5}
+  tier2:
+    A1: {time: 8, energy: 7}
+    A2: {time: 7, energy: 6}
+    ...
+  review:
+    R1: {time: 5, energy: 4}
+    R2: {time: 7, energy: 6}
+    R3: {time: 10, energy: 8}
+```
+
+코드: `_rawTier1Cost`, `_rawTier2Cost`, `_rawReviewCost`가 `stageCosts` 존재 시 직접 참조, 없으면 기존 역산 fallback. `resourceCosts` (leaf 총비용)도 v15 값으로 교체됨.
 
 ---
 
