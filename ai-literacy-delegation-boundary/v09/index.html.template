@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 리터러시: 위임의 경계 v0.8</title>
+<title>AI 리터러시: 위임의 경계 v0.9</title>
 <style>
 @import url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css');
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -103,8 +103,9 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .cost-box-effect { width:34px; height:32px; border:1.5px solid #1a8c1a; background:#f3faf3; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#1a8c1a; line-height:1; }
 .cost-box-effect.penalty { border-color:#c44; background:#fff5f5; color:#c44; }
 .cost-box-effect.zero { border:1.5px dashed #ccc; background:transparent; color:#bbb; font-weight:400; }
+.cost-simple { display:flex; gap:12px; justify-content:center; padding:3px 8px; font-size:11px; color:#555; font-weight:600; border-top:1px dashed #ddd; }
 /* v0.8 §3.4 — 공식형 박스 두 줄 라벨 분리 */
-.cost-formula-box { display:flex; flex-direction:row; gap:0; padding:6px 12px 6px; border-top:1px dashed #ddd; }
+.cost-formula-box { display:flex; flex-direction:row; gap:0; padding:3px 12px 4px; border-top:1px dashed #ddd; }
 .cost-formula-line { display:flex; align-items:flex-end; justify-content:center; gap:3px; font-size:10px; flex:1; }
 .cost-formula-line:first-child { border-right:1px solid #ccc; margin-right:4px; padding-right:4px; }
 .cost-formula-cell { display:flex; flex-direction:column; align-items:center; gap:3px; }
@@ -117,6 +118,9 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .cost-formula-final { color:#111; }
 .cost-formula-final b { font-size:14px; color:#111; font-weight:800; }
 .cost-formula-op { font-size:10px; color:#999; font-weight:600; padding:0 1px; padding-bottom:6px; }
+.cost-energy-col { display:flex; flex-direction:column; flex:1; align-items:stretch; }
+.cost-card-chips { display:flex; flex-wrap:wrap; gap:3px; justify-content:center; margin-bottom:2px; }
+.cost-card-chips .card-chip { font-size:9px; color:#1a8c1a; font-weight:600; padding:1px 5px; background:#e8f5e9; border-radius:8px; white-space:nowrap; }
 
 /* ===== Overlay (Start) ===== */
 .overlay-card { display:flex; align-items:center; justify-content:center; min-height:480px; animation:overlayIn 0.5s ease; }
@@ -172,7 +176,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .choice-card.visible { opacity:1; transform:translateY(0); }
 .choice-card:hover { transform:translateX(4px); box-shadow:0 2px 0 #111,0 4px 10px rgba(0,0,0,0.08); }
 .choice-card:active { box-shadow:none; transform:translateY(2px); }
-.choice-header { display:flex; align-items:center; gap:8px; padding:9px 12px; }
+.choice-header { display:flex; align-items:center; gap:8px; padding:8px 12px 2px; }
 .choice-num { background:#111; color:#fff; width:24px; height:24px; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
 .choice-text { font-size:15px; font-weight:700; line-height:1.4; margin-bottom:2px; }
 .choice-desc { font-size:11px; color:#888; line-height:1.4; margin-top:3px; }
@@ -317,12 +321,8 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 /* v0.5 — 시나리오 선택 + 학기 프로그레스 */
 .semester-frame { max-width:640px; margin:0 auto; padding:32px 20px; }
 .semester-frame h1 { font-size:22px; font-weight:700; margin-bottom:6px; text-align:center; }
-.semester-frame .subtitle { font-size:14px; color:#666; margin-bottom:6px; text-align:center; }
+.semester-frame .subtitle { font-size:22px; color:#333; margin-bottom:10px; text-align:center; font-weight:600; letter-spacing:0.5px; }
 .semester-frame .vtag { font-size:11px; color:#999; margin-bottom:24px; letter-spacing:1px; text-align:center; }
-.progress-wrap { margin:16px 0 28px; }
-.progress-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px; }
-.progress-head .progress-label { font-size:13px; color:#444; font-weight:600; }
-.progress-head .progress-count { font-size:13px; color:#222; font-variant-numeric:tabular-nums; }
 .progress-bar { height:8px; background:#eee; border:1px solid #ddd; position:relative; overflow:hidden; }
 .progress-fill { height:100%; background:#111; transition:width 0.4s ease; }
 .progress-dots { display:flex; justify-content:space-between; margin-top:8px; }
@@ -607,15 +607,15 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
     <div class="panel-title">역량</div>
     <div class="stat" id="stat-delegation">
       <div class="stat-change-indicator" id="delta-delegation"></div>
-      <div class="stat-header"><span class="stat-name">위임 판단력</span><span class="stat-num" id="num-delegation">0</span></div>
-      <div class="pending-dots" id="pending-dots-delegation" aria-label="이번 시나리오 위임 판단력 변화"><div class="pending-dots-neg" id="pending-dots-delegation-neg"></div><div class="pending-dots-pos" id="pending-dots-delegation-pos"></div></div>
+      <div class="stat-header"><span class="stat-name">판단하는 힘</span><span class="stat-num" id="num-delegation">0</span></div>
+      <div class="pending-dots" id="pending-dots-delegation" aria-label="이번 시나리오 판단하는 힘 변화"><div class="pending-dots-neg" id="pending-dots-delegation-neg"></div><div class="pending-dots-pos" id="pending-dots-delegation-pos"></div></div>
       <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-delegation"></div></div>
       <div class="bipolar-labels"><span>-10</span><span>+20</span></div>
     </div>
     <div class="stat" id="stat-knowledge">
       <div class="stat-change-indicator" id="delta-knowledge"></div>
-      <div class="stat-header"><span class="stat-name" id="stat-name-knowledge">도메인 지식</span><span class="stat-num" id="num-knowledge">0</span></div>
-      <div class="pending-dots" id="pending-dots-knowledge" aria-label="이번 시나리오 도메인 지식 변화"><div class="pending-dots-neg" id="pending-dots-knowledge-neg"></div><div class="pending-dots-pos" id="pending-dots-knowledge-pos"></div></div>
+      <div class="stat-header"><span class="stat-name" id="stat-name-knowledge">아는것의 힘</span><span class="stat-num" id="num-knowledge">0</span></div>
+      <div class="pending-dots" id="pending-dots-knowledge" aria-label="이번 시나리오 아는것의 힘 변화"><div class="pending-dots-neg" id="pending-dots-knowledge-neg"></div><div class="pending-dots-pos" id="pending-dots-knowledge-pos"></div></div>
       <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-knowledge"></div></div>
       <div class="bipolar-labels"><span>-10</span><span>+20</span></div>
     </div>
@@ -1148,27 +1148,89 @@ function _applyMult(c){
   var m=(typeof CONFIG.resourceCostMultiplier==='number')?CONFIG.resourceCostMultiplier:1;
   return {time:Math.round(c.time*m), energy:Math.round(c.energy*m)};
 }
-// v0.6 발란스 — 비대칭 효과 배율 (5/3 세션278 정정)
-// 양수 점수 N → 비용 -N×mPos (할인). 음수 점수 -N → 비용 +N×mNeg (페널티).
-// 양수 ×2, 음수 ×1 — 학생이 점수를 올리는 동기 강화, 페널티는 가볍게.
-function _applyDiscount(c){
+// v0.9 §20 — 이중 할인: 축 숙련도 + 카드 태그 매칭
+// 축 숙련도: 위임→시간, 도메인→에너지 (기존, 폭 축소)
+// 카드 할인: 인간중심/도메인 카드 태그 매칭 → 에너지만 할인
+function _getChoiceDiscountTags(stageType,choiceId){
+  var sc=getScenario();if(!sc)return null;
+  if(stageType==='tier1'){
+    var list=sc.tier1||[];
+    for(var i=0;i<list.length;i++){if(list[i].id===choiceId)return list[i].discountTags||null;}
+  }else if(stageType==='tier2'){
+    var parent=choiceId.charAt(0);
+    var t2list=(sc.tier2&&sc.tier2[parent])||[];
+    for(var i=0;i<t2list.length;i++){if(t2list[i].id===choiceId)return t2list[i].discountTags||null;}
+  }else if(stageType==='review'){
+    var rIdx=choiceId.lastIndexOf('R');
+    var rId=rIdx>=0?choiceId.substr(rIdx):choiceId;
+    var revs=sc.reviews||[];
+    for(var i=0;i<revs.length;i++){if(revs[i].id===rId)return revs[i].discountTags||null;}
+  }
+  return null;
+}
+function _calculateCardEnergyDiscount(discountTags){
+  if(!discountTags||!gameState||!gameState.inventory)return {total:0,details:[]};
+  var inv=gameState.inventory;
+  var details=[],used={},total=0,MAX_CARD_DISCOUNT=6;
+  var hcTag=discountTags.humanCentric||'';
+  if(hcTag){
+    var hcCards=inv.humanCentricCards||[];
+    for(var i=0;i<hcCards.length;i++){
+      if(hcCards[i].axis===hcTag&&!used['hc:'+hcTag]){
+        used['hc:'+hcTag]=true;
+        var amt=2;total+=amt;
+        details.push({type:'humanCentric',tag:hcTag,display:hcCards[i].tag||hcTag,amount:amt});
+        break;
+      }
+    }
+  }
+  var strongSet={};
+  var strongDomain=discountTags.strongDomain||[];
+  for(var i=0;i<strongDomain.length;i++)strongSet[strongDomain[i]]=true;
+  var domainTags=discountTags.domain||[];
+  var domCards=inv.domainCards||[];
+  for(var i=0;i<domainTags.length;i++){
+    var dt=domainTags[i];if(used['dom:'+dt])continue;
+    for(var j=0;j<domCards.length;j++){
+      if(domCards[j].label===dt){
+        used['dom:'+dt]=true;
+        var amt=strongSet[dt]?3:2;total+=amt;
+        details.push({type:'domain',tag:dt,display:dt,amount:amt});
+        break;
+      }
+    }
+  }
+  if(total>MAX_CARD_DISCOUNT)total=MAX_CARD_DISCOUNT;
+  return {total:total,details:details};
+}
+function _applyDiscount(c,stageType,choiceId){
   var dlg=(gameState&&gameState.competencies)?gameState.competencies.delegationChoice.value||0:0;
   var knl=(gameState&&gameState.competencies)?gameState.competencies.knowledge.value||0:0;
   var mPos=(typeof CONFIG.competencyDiscountMultPos==='number')?CONFIG.competencyDiscountMultPos:2;
   var mNeg=(typeof CONFIG.competencyDiscountMultNeg==='number')?CONFIG.competencyDiscountMultNeg:1;
   var dlgEffect=dlg>=0?dlg*mPos:dlg*mNeg;
   var knlEffect=knl>=0?knl*mPos:knl*mNeg;
-  var floor=(typeof CONFIG.minResourceCost==='number')?CONFIG.minResourceCost:0;
   var rawT=c.time,rawE=c.energy;
+  var clampedDlg;
+  if(dlgEffect>0){clampedDlg=Math.min(dlgEffect,Math.floor(rawT*0.2));}
+  else{clampedDlg=dlgEffect;}
+  var tags=_getChoiceDiscountTags(stageType,choiceId);
+  var cardDisc=_calculateCardEnergyDiscount(tags);
+  var totalEnergyDisc=knlEffect+cardDisc.total;
+  var clampedEnergy;
+  if(totalEnergyDisc>0){clampedEnergy=Math.min(totalEnergyDisc,Math.floor(rawE*0.4),6);}
+  else{clampedEnergy=totalEnergyDisc;}
   return {
-    time:(rawT>0)?Math.max(floor,rawT-dlgEffect):0,
-    energy:(rawE>0)?Math.max(floor,rawE-knlEffect):0,
-    _discount:{dlg:dlg,knl:knl,dlgEffect:dlgEffect,knlEffect:knlEffect,mPos:mPos,mNeg:mNeg,rawTime:rawT,rawEnergy:rawE}
+    time:(rawT>0)?Math.max(1,rawT-clampedDlg):0,
+    energy:(rawE>0)?Math.max(1,rawE-clampedEnergy):0,
+    _discount:{dlg:dlg,knl:knl,dlgEffect:clampedDlg,knlEffect:knlEffect,
+      cardDiscount:cardDisc.total,cardDetails:cardDisc.details,
+      mPos:mPos,mNeg:mNeg,rawTime:rawT,rawEnergy:rawE,clampedEnergy:clampedEnergy}
   };
 }
-function getTier1Cost(t1){return _applyDiscount(_applyMult(_rawTier1Cost(t1)));}
-function getTier2Cost(t2){return _applyDiscount(_applyMult(_rawTier2Cost(t2)));}
-function getReviewCost(leaf){return _applyDiscount(_applyMult(_rawReviewCost(leaf)));}
+function getTier1Cost(t1){return _applyDiscount(_applyMult(_rawTier1Cost(t1)),'tier1',t1);}
+function getTier2Cost(t2){return _applyDiscount(_applyMult(_rawTier2Cost(t2)),'tier2',t2);}
+function getReviewCost(leaf){return _applyDiscount(_applyMult(_rawReviewCost(leaf)),'review',leaf);}
 
 // 단계별 소비 — onTier1/onTier2/onReview에서 호출
 function consumeStage(stage,costObj,leafPath){
@@ -1980,22 +2042,10 @@ function showStartScreen(){
   var nextId=null;
   for(var i=0;i<order.length;i++){if(cleared.indexOf(order[i])<0){nextId=order[i];break;}}
   var allDone=(nextId===null);
-  var pct=Math.round((cleared.length/order.length)*100);
   var h='<div class="semester-frame">';
   h+='<h1>AI 리터러시: 위임의 경계</h1>';
   h+='<div class="subtitle">이건 AI한테 맡겨도 돼?</div>';
-  h+='<div class="vtag">v0.8 — 한 학생의 한 학기</div>';
-  h+='<div class="progress-wrap">';
-  h+='<div class="progress-head"><span class="progress-label">학기 진행</span><span class="progress-count">'+cleared.length+' / '+order.length+'</span></div>';
-  h+='<div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div>';
-  h+='<div class="progress-dots">';
-  order.forEach(function(sid){
-    var cls='progress-dot';
-    if(cleared.indexOf(sid)>=0)cls+=' cleared';
-    else if(sid===nextId)cls+=' next';
-    h+='<span class="'+cls+'" title="'+sid+'"></span>';
-  });
-  h+='</div></div>';
+  h+='<div class="vtag">v0.9 — 한 학생의 한 학기</div>';
   if(allDone){
     h+='<div class="semester-final"><h2>한 학기를 모두 통과했다.</h2><p>다섯 결정이 누적되어 한 학생의 한 학기가 되었다.<br>처음부터 다시 시작하면 새 학생이 같은 결정을 마주한다.</p></div>';
   }
@@ -2158,9 +2208,8 @@ function buildEffectCell(label,value){
   return '<div class="cost-cell"><div class="cost-cell-label">'+label+'</div><div class="'+cls+'">'+text+'</div></div>';
 }
 // 한 줄: 비용 [N] − 할인 [N] = 최종 [N] (학생 톤, 최종 볼드)
-function _buildCostLine(costLabel,rawVal,discountLabel,discountVal,finalLabel){
-  // discountVal: 양수 = 할인, 0 = 표시 안함, 음수 = 페널티(부호 뒤집어 +로 표시)
-  var finalVal=Math.max(0,rawVal-discountVal);
+function _buildCostLine(costLabel,rawVal,discountLabel,discountVal,finalLabel,actualFinal){
+  var finalVal=(typeof actualFinal==='number')?actualFinal:Math.max(0,rawVal-discountVal);
   var opSym='−',discText=String(Math.abs(discountVal));
   var discCls='cost-formula-discount';
   if(discountVal===0){discCls+=' zero';}
@@ -2177,10 +2226,22 @@ function _buildCostLine(costLabel,rawVal,discountLabel,discountVal,finalLabel){
   '</div>';
 }
 function buildCostHTML(cost){
-  var d=cost._discount||{dlgEffect:0,knlEffect:0,rawTime:cost.time,rawEnergy:cost.energy};
+  var d=cost._discount||{dlgEffect:0,knlEffect:0,rawTime:cost.time,rawEnergy:cost.energy,cardDiscount:0,cardDetails:[],clampedEnergy:0};
+  var totalEnergyDisc=d.clampedEnergy||0;
+  var cardDisc=d.cardDiscount||0;
+  var energyHtml='';
+  if(cardDisc>0){
+    energyHtml+='<div class="cost-card-chips">';
+    var details=d.cardDetails||[];
+    for(var i=0;i<details.length;i++){
+      energyHtml+='<span class="card-chip">'+details[i].display+' 적용</span>';
+    }
+    energyHtml+='</div>';
+  }
+  energyHtml+=_buildCostLine('에너지 비용',d.rawEnergy,'총 할인',totalEnergyDisc,'최종 에너지',cost.energy);
   return '<div class="choice-cost cost-formula-box">'+
-    _buildCostLine('시간 비용',d.rawTime,'위임 할인',d.dlgEffect,'최종 시간')+
-    _buildCostLine('에너지 비용',d.rawEnergy,'지식 할인',d.knlEffect,'최종 에너지')+
+    _buildCostLine('시간 비용',d.rawTime,'숙련도 할인',d.dlgEffect,'최종 시간',cost.time)+
+    '<div class="cost-energy-col">'+energyHtml+'</div>'+
   '</div>';
 }
 
@@ -2330,7 +2391,7 @@ function goCut6(){
   // v0.8 — CSV 최종등급 lookup
   var grade=getFinalGrade(leaf);
   var item=fin?fin.item:null;
-  var awareness=fin?fin.awareness:'';
+  var awareness=fin?(fin.shortFeedback||fin.awareness||''):'';
   // cut6 panel-image에 등급+점수 큰 글자로 표시 (이미지 대신, final-grade 컬러 매칭)
   var c6img=currentRow.querySelector('[data-cut="6"] .panel-image');
   if(c6img){
@@ -2668,8 +2729,8 @@ function updateDomainLabel(){
   var sc=getScenario();
   var el=document.getElementById('stat-name-knowledge');
   if(!sc||!el)return;
-  var label=sc.domainLabel||(sc.domainPool&&sc.domainPool[0])||'도메인 지식';
-  el.textContent='도메인 지식 ('+label+')';
+  var label=sc.domainLabel||(sc.domainPool&&sc.domainPool[0])||'아는것의 힘';
+  el.textContent='아는것의 힘 ('+label+')';
 }
 
 function goNextScenario(){
@@ -2874,7 +2935,8 @@ function showReport(){
     h+='<div class="report-comment"><b>너의 경로</b>: '+last.tier1+' → '+last.tier2+' → '+last.review+' ('+last.leaf+')<br><br>';
     if(last.item)h+='<b>획득 아이템</b>: '+last.item+'<br><br>';
     var fin=sc.finals[last.leaf];
-    if(fin&&fin.awareness)h+='<i>"'+fin.awareness+'"</i><br><br>';
+    var rfb=fin?(fin.reportFeedback||fin.awareness||''):'';
+    if(rfb)h+='<i>"'+rfb+'"</i><br><br>';
     h+='<b>이 시나리오의 메시지</b>: '+msg+'</div>';
   }
   // v0.5: 학기 진행 알림 + 두 버튼

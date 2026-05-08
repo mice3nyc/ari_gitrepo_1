@@ -12,44 +12,36 @@ v0.8까지 "비용 높은 선택 = 좋은 선택"으로 읽히는 구조. 학생
 
 ### 구현 Phase
 
-#### Phase 1 — SPEC 세팅 + 데이터 준비
+#### Phase 1 — SPEC 세팅 + 데이터 준비 ✅
 - [x] v09 폴더 생성, v08 코드 복사
-- [x] SPEC §0 변경 요약 작성
-- [x] SPEC §19~§22 신규 섹션 작성
-- [ ] v20 CSV 마이그레이션 스크립트 (content 51컬럼 + costs 17컬럼 → yaml)
-- [ ] v20 데이터 yaml 반영 + 검증
+- [x] SPEC §0 변경 요약 + §19~§22 신규 섹션
+- [x] v20 CSV 마이그레이션 스크립트 (migrate_v20.py) → 135행 완료
 
-#### Phase 2 — 자원 체계 전환
-- [ ] 시간 시작값 120, 에너지 시작값 70 적용
-- [ ] 시나리오 종료 후 에너지 고정 +18 회복 구현
-- [ ] 1차 선택 비용 시간 1 / 에너지 1 적용
-- [ ] v0.8 등급별 차등 회복 제거 (recoverBase, gradeBonus)
+#### Phase 2 — 자원 체계 전환 ✅
+- [x] 시간 120 / 에너지 70, 고정 +18 회복, 등급별 차등 폐기
+- [x] RP 분배 제거 → 에너지 게이지 애니메이션 + 레벨업 에너지 자동충전
+- [x] storageKey v09 분리
+- [x] 도전력 첫 플레이 오지급 수정 (wasReplay + challengeAwardedNow, 덱스 권장안)
+- [x] 3 commits push + GitHub Pages 배포
 
-#### Phase 3 — 할인 이중 구조
-- [ ] 축 숙련도 할인 폭 축소 (시간 상한 20%)
-- [ ] 카드 태그 매칭 에너지 할인 함수 구현 (`calculateCardEnergyDiscount`)
-- [ ] 합산 상한 적용 (에너지 40%, 최대 -6)
-- [ ] 선택지 UI에 카드 할인 표시 추가
+#### Phase 3 — 할인 이중 구조 ✅
+- [x] v21 핸드오프 수신 + 마이그레이션 (콘텐츠/비용/카드할인태그)
+- [x] 축 숙련도 할인 폭 축소 (시간 상한 20%, 에너지 상한 40%+절대6)
+- [x] `_calculateCardEnergyDiscount` 함수 (인간중심-2/도메인-2/강한도메인-3, 최대-6)
+- [x] `_applyDiscount` 이중 할인 통합 + UI 카드 할인 표시
 
-#### Phase 4 — 피드백 2레이어
-- [ ] `finals.awareness` → `finals.reportFeedback` 마이그레이션
-- [ ] `finals.shortFeedback` 신규 필드 추가
-- [ ] CUT6 결과 화면: shortFeedback 표시
-- [ ] 성장 리포트: reportFeedback 표시
+#### Phase 4 — 피드백 2레이어 ✅
+- [x] CUT6: shortFeedback 우선 (awareness fallback)
+- [x] 리포트: reportFeedback 우선 (awareness fallback)
 
-#### Phase 5 — 용어 교체
-- [ ] texts.yaml 용어 교체 (위임판단력→판단하는 힘, 도메인지식→아는것의 힘)
-- [ ] 튜토리얼 문장 갱신
-- [ ] 카드 이름/설명 갱신
-- [ ] 리포트/결과 화면 라벨 갱신
+#### Phase 5 — 용어 교체 ✅
+- [x] texts.yaml + HTML: 위임판단력→판단하는 힘, 도메인지식→아는것의 힘
+- [x] 공식형 박스: 숙련도 할인/총 할인
+- [x] narrative 5종 본문 교체
 
 #### Phase 6 — 빌드 + 검증
-- [ ] build.py 빌드
-- [ ] 5개 시나리오 완주 가능 검증
-- [ ] AI 대행 반복 → 시간/에너지 남지만 점수/성장 낮은지 확인
-- [ ] 좋은 AI 활용 경로가 A/S 받을 수 있는지 확인
-- [ ] 카드 할인 적용 학생 화면 확인
-- [ ] git commit + push
+- [x] build.py 빌드 (823,113 bytes)
+- [ ] 브라우저 검증 + git commit + push
 
 ### 데이터 소스
 

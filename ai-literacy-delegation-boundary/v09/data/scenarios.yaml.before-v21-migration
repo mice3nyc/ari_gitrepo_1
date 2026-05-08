@@ -28,10 +28,6 @@ selfintro:
     knowledge: +
     basePoint: 10
     varPoint: 15
-    discountTags:
-      humanCentric: 중심잡기
-      domain:
-      - 자기이해
   - id: B
     label: AI에게 시작을 도움받는다
     desc: AI를 질문자, 구조 제공자, 초안 제공자로 쓰면서 시작을 도움받는다.
@@ -40,10 +36,6 @@ selfintro:
     knowledge: '-'
     basePoint: 10
     varPoint: 0
-    discountTags:
-      humanCentric: 중심잡기
-      domain:
-      - 표현력
   - id: C
     label: AI에게 자기소개를 맡겨본다
     desc: AI에게 자기소개 결과물을 먼저 맡기는 길이다.
@@ -52,10 +44,6 @@ selfintro:
     knowledge: '0'
     basePoint: 10
     varPoint: 8
-    discountTags:
-      humanCentric: 성찰하기
-      domain:
-      - 검토력
   tier2:
     A:
     - id: A1
@@ -73,13 +61,6 @@ selfintro:
       lesson: 내가 고른 단어에서 글이 시작됐다 — 자기 안에서 재료를 찾는 것이 자기소개의 출발점이다.
       basePoint: 10
       varPoint: 25
-      discountTags:
-        humanCentric: 중심잡기
-        domain:
-        - 자기이해
-        - 표현력
-        strongDomain:
-        - 자기이해
     - id: A2
       label: 나를 소개할 만한 일을 떠올려 짧은 이야기로 쓴다
       delta:
@@ -95,13 +76,6 @@ selfintro:
       lesson: 실제로 겪은 일에서 글이 나왔다 — 경험이 자기소개의 근거가 된다.
       basePoint: 10
       varPoint: 12
-      discountTags:
-        humanCentric: 중심잡기
-        domain:
-        - 자기이해
-        - 표현력
-        strongDomain:
-        - 자기이해
     - id: A3
       label: 서툴어도 일단 초안을 쓴 뒤 필요한 도움만 받는다
       delta:
@@ -117,16 +91,9 @@ selfintro:
       lesson: 짧고 서툴어도 내가 먼저 썼다 — 내 말투는 살아 있지만 더 다듬을 여지가 남는다.
       basePoint: 10
       varPoint: 0
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 표현력
-        - 검토력
-        strongDomain:
-        - 표현력
     B:
     - id: B1
-      label: AI 질문에 떠오르는 만큼 답하고 글을 만든다
+      label: AI에게 자기소개 질문을 받고 답해 글을 만든다
       delta:
         afterA:
           delegation: '-'
@@ -137,16 +104,9 @@ selfintro:
         afterC:
           delegation: --
           knowledge: '-'
-      lesson: AI 질문에 답하며 글이 시작됐다. 다만 답이 구체적이지 않으면 AI가 빈자리를 채워 일반적인 글로 흐를 수 있다.
+      lesson: AI 질문에 답하며 글이 시작됐다 — 답이 짧거나 경험이 없으면 글이 일반적으로 흐를 수 있다.
       basePoint: 10
       varPoint: 0
-      discountTags:
-        humanCentric: 중심잡기
-        domain:
-        - 탐색력
-        - 자기이해
-        strongDomain:
-        - 탐색력
     - id: B2
       label: AI에게 글의 순서를 받고 내 이야기에 맞게 바꾼다
       delta:
@@ -162,13 +122,6 @@ selfintro:
       lesson: AI 구조에 내 이야기를 채웠다 — 틀은 정리됐지만 내용이 틀에 맞춰 들어간 느낌이 남을 수 있다.
       basePoint: 10
       varPoint: 5
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 표현력
-        - 자기이해
-        strongDomain:
-        - 표현력
     - id: B3
       label: AI 초안을 받고 좋아 보이는 문장과 내 메모를 섞어 글을 만든다
       delta:
@@ -184,13 +137,6 @@ selfintro:
       lesson: AI 문장과 내 메모가 섞였다 — 어떤 표현이 내 이야기의 중심인지 확인하는 것이 핵심이다.
       basePoint: 10
       varPoint: 25
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 검토력
-        - 표현력
-        strongDomain:
-        - 검토력
     C:
     - id: C1
       label: 아무 정보 없이 AI에게 바로 써달라고 한다
@@ -207,12 +153,6 @@ selfintro:
       lesson: AI가 아무 정보 없이 만든 글에서 시작했다 — 문장은 매끄럽지만 내 이야기는 거의 없다.
       basePoint: 10
       varPoint: -10
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 검토력
-        strongDomain:
-        - 검토력
     - id: C2
       label: 내 정보 몇 가지만 넣어 AI에게 써달라고 한다
       delta:
@@ -228,13 +168,6 @@ selfintro:
       lesson: 기본 정보는 들어갔지만 이유와 맥락은 부족했다 — 검토에서 얼마나 채우는지가 중요하다.
       basePoint: 10
       varPoint: 5
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 자기이해
-        - 검토력
-        strongDomain:
-        - 자기이해
     - id: C3
       label: AI 글을 받은 뒤 내 글로 다시 쓴다
       delta:
@@ -250,13 +183,6 @@ selfintro:
       lesson: AI 흐름을 참고해 다시 썼다 — 내가 동의하는 내용만 골랐는지, 내 이야기가 들어갔는지가 핵심이다.
       basePoint: 10
       varPoint: 15
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 표현력
-        - 검토력
-        strongDomain:
-        - 검토력
   results:
     A1:
       text: 내가 고른 단어를 바탕으로 직접 이어 썼다. 단어마다 뭔가 설명하려는 문장이 있었지만 연결이 어색하거나 설명이 부족한 곳도 있었다.
@@ -324,41 +250,23 @@ selfintro:
       - 내가 실제로 설명할 수 있는 문장인지 확인이 필요함
   reviews:
   - id: R1
-    label: 바로 반 게시판 글로 넘긴다
-    desc: 확인하지 않고 바로 넘겼다. 빠르게 끝났지만 어색한 표현이나 내가 책임지기 어려운 내용이 남을 수 있다.
+    label: 그대로 제출
+    desc: 검토 없이 그대로 낸다.
     boostType: none
     lesson: 검토를 건너뛰었다 — 검증할 기회를 놓쳤다.
     points: 10
-    discountTags:
-      humanCentric: ''
-      domain: []
-      strongDomain: []
   - id: R2
-    label: 어색한 문장과 내 말투가 아닌 표현만 고친다
-    desc: 어색한 문장과 내 말투가 아닌 표현을 골라 고쳤다. 글의 표면은 다듬었지만, 내용의 중심까지 모두 확인한 것은 아니다.
+    label: 한 번 읽고 이상한 곳만 표시
+    desc: 명시적인 환각·오류만 발견.
     boostType: explicit
     lesson: 한 번 훑어 명백한 오류를 잡았다. 도메인지식 +1
     points: 18
-    discountTags:
-      humanCentric: 성찰하기
-      domain:
-      - 검토력
-      - 표현력
-      strongDomain:
-      - 검토력
   - id: R3
-    label: 친구가 물어봐도 내가 설명할 수 있는 내용인지 다시 본다
-    desc: 친구가 물어봐도 내가 설명할 수 있는 내용인지 처음부터 다시 확인했다. 자기소개를 내가 책임질 수 있는 글로 만드는 검토다.
+    label: 처음부터 다시 읽고 내 얘기인지 확인
+    desc: 내용, 말투, 빠진 경험까지 확인.
     boostType: all
     lesson: 처음부터 다시 읽으니 빠진 것이 보였다. 도메인지식 +3
     points: 30
-    discountTags:
-      humanCentric: 성찰하기
-      domain:
-      - 검토력
-      - 자기이해
-      strongDomain:
-      - 검토력
   reviewSupplements:
     A1R1: 직접 고른 단어와 내 말로 이어 쓴 자기소개를 그대로 냈다. 일부 문장이 갑자기 튀거나 왜 그 단어가 나를 보여주는지 이해하기 어려운 부분이 남았다.
     A1R2: 단어마다 짧은 설명을 덧붙이고 문장 흐름을 다시 봤다. 내가 고른 단어와 설명이 더 잘 이어져, 내가 어떤 사람인지 조금 더 또렷하게 보이는 자기소개가 됐다.
@@ -447,7 +355,7 @@ selfintro:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 내가 고른 단어에서 출발해 글 안에 내 기억이 남았어요.
       reportFeedback: 내가 고른 단어에서 출발해 글 안에 내 기억이 남았어요. 다만 바로 넘겨 어색한 연결은 확인하지 못했어요.
-      earnedCards: 자기이해, 표현력
+      earnedCards: 자기지식, 정리력
     A1R2:
       score: 91
       grade: A
@@ -484,7 +392,7 @@ selfintro:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 내가 고른 단어와 설명이 어색하게 이어진 곳을 고쳤어요.
       reportFeedback: 내가 고른 단어와 설명이 어색하게 이어진 곳을 고쳤어요. 내 말은 살아 있고 글의 흐름도 조금 더 자연스러워졌어요.
-      earnedCards: 자기이해, 표현력, 검토력
+      earnedCards: 자기지식, 정리력, 검수능력
     A1R3:
       score: 97
       grade: S
@@ -521,7 +429,7 @@ selfintro:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 처음부터 다시 읽으며 정말 내 이야기인지 확인했어요.
       reportFeedback: 처음부터 다시 읽으며 정말 내 이야기인지 확인했어요. 친구가 물어봐도 내가 설명할 수 있는 자기소개가 됐어요.
-      earnedCards: 자기이해, 표현력, 검토력
+      earnedCards: 자기지식, 정리력, 표현력, 자기검증
     A2R1:
       score: 78
       grade: B
@@ -557,7 +465,7 @@ selfintro:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 실제로 겪은 일이 들어가 글의 재료는 단단했어요.
       reportFeedback: 실제로 겪은 일이 들어가 글의 재료는 단단했어요. 다만 바로 넘겨 그 일이 왜 나를 보여주는지는 흐릿하게 남았어요.
-      earnedCards: 자기이해, 표현력
+      earnedCards: 자기지식, 표현력
     A2R2:
       score: 86
       grade: A
@@ -594,7 +502,7 @@ selfintro:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 경험 뒤에 이유를 붙이니 친구들이 나를 조금 더 이해하기 쉬워졌어요.
       reportFeedback: 경험 뒤에 이유를 붙이니 친구들이 나를 조금 더 이해하기 쉬워졌어요. 아직 한두 문장은 더 또렷하게 만들 수 있어요.
-      earnedCards: 자기이해, 표현력, 검토력
+      earnedCards: 자기지식, 표현력, 검수능력
     A2R3:
       score: 92
       grade: A
@@ -631,7 +539,7 @@ selfintro:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 경험과 내 특징이 이어지는지 처음부터 다시 확인했어요.
       reportFeedback: 경험과 내 특징이 이어지는지 처음부터 다시 확인했어요. 사건을 나열한 글에서 나를 설명하는 글로 가까워졌어요.
-      earnedCards: 자기이해, 표현력, 검토력
+      earnedCards: 자기지식, 표현력, 검수능력, 자기검증
     A3R1:
       score: 62
       grade: C
@@ -664,7 +572,7 @@ selfintro:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 서툴어도 내 초안에서 시작한 점은 좋았어요.
       reportFeedback: 서툴어도 내 초안에서 시작한 점은 좋았어요. 하지만 바로 넘겨 생각이 흩어진 부분과 부족한 설명이 그대로 남았어요.
-      earnedCards: 자기이해
+      earnedCards: 자기지식
     A3R2:
       score: 76
       grade: B
@@ -700,7 +608,7 @@ selfintro:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 다시 읽으며 빠진 내용과 반복되는 표현을 조금 줄였어요.
       reportFeedback: 다시 읽으며 빠진 내용과 반복되는 표현을 조금 줄였어요. 서툴지만 나를 보여주는 힘이 전보다 커졌어요.
-      earnedCards: 자기이해, 표현력
+      earnedCards: 자기지식, 정리력
     A3R3:
       score: 85
       grade: A
@@ -737,7 +645,7 @@ selfintro:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 부족한 초안을 끝까지 다시 보며 진짜 쓰고 싶은 말을 골랐어요.
       reportFeedback: 부족한 초안을 끝까지 다시 보며 진짜 쓰고 싶은 말을 골랐어요. 완벽하진 않아도 내 기준으로 고친 글이 됐어요.
-      earnedCards: 자기이해, 표현력, 검토력
+      earnedCards: 자기지식, 정리력, 자기성찰, 검수능력
     B1R1:
       score: 28
       grade: D
@@ -863,7 +771,7 @@ selfintro:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: AI가 잡아준 순서 덕분에 글 모양은 생겼어요.
       reportFeedback: AI가 잡아준 순서 덕분에 글 모양은 생겼어요. 하지만 바로 넘겨 내 정보와 내 말투 사이의 거리가 남았어요.
-      earnedCards: 자기이해
+      earnedCards: 자기지식
     B2R2:
       score: 72
       grade: C
@@ -899,7 +807,7 @@ selfintro:
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
       shortFeedback: AI가 만든 순서에 내 말투가 아닌 표현을 표시했어요.
       reportFeedback: AI가 만든 순서에 내 말투가 아닌 표현을 표시했어요. 글은 나아졌지만, 왜 이 이야기를 골랐는지는 더 필요했어요.
-      earnedCards: 자기이해, 표현력, 검토력
+      earnedCards: 자기지식, 표현력, 검수능력
     B2R3:
       score: 84
       grade: B
@@ -936,7 +844,7 @@ selfintro:
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
       shortFeedback: AI가 정리한 틀을 처음부터 다시 보며 내 말과 경험을 넣었어요.
       reportFeedback: AI가 정리한 틀을 처음부터 다시 보며 내 말과 경험을 넣었어요. 틀은 빌렸지만 내용의 책임은 조금 되찾았어요.
-      earnedCards: 자기이해, 표현력, 검토력
+      earnedCards: 자기지식, 표현력, 검수능력, 자기검증
     B3R1:
       score: 78
       grade: B
@@ -972,7 +880,7 @@ selfintro:
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
       shortFeedback: 내 메모가 들어가 글의 중심은 잡혔어요.
       reportFeedback: 내 메모가 들어가 글의 중심은 잡혔어요. 다만 바로 넘겨 AI 문장과 내 말이 섞인 부분을 충분히 가르지 못했어요.
-      earnedCards: 자기이해, 표현력, 검토력
+      earnedCards: 자기지식, 표현력, 검수능력
     B3R2:
       score: 86
       grade: A
@@ -984,10 +892,11 @@ selfintro:
       replaySuggestion: 다시 해본다면 마지막 확인을 한 단계 더 깊게 해 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
-      humanCentricTag: 직관적 통찰
+      humanCentricTag: 통합적 사고
       domainCards:
+      - 자기이해
       - 표현력
-      - 분석력
+      - 검토력
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
@@ -1008,7 +917,7 @@ selfintro:
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
       shortFeedback: AI가 고친 표현 중 내 말투에 맞는 것만 골랐어요.
       reportFeedback: AI가 고친 표현 중 내 말투에 맞는 것만 골랐어요. 글은 단단해졌지만, 더 깊게 보면 내 이야기의 중심이 더 선명해질 수 있어요.
-      earnedCards: 자기이해, 표현력, 검토력, 분석력
+      earnedCards: 자기지식, 표현력, 검수능력, 비판적 사고
     B3R3:
       score: 95
       grade: S
@@ -1019,11 +928,11 @@ selfintro:
       cut6Feedback: 자기 기준을 세우고 마지막 확인까지 해낸 선택이라 결과의 완성도가 높아요.
       replaySuggestion: 다시 해본다면 같은 주제를 다른 방식으로 풀어 보며 선택의 차이를 비교해 보세요.
       cardEarned: true
-      humanCentricAxis: 중심잡기
-      humanCentricTag: 적응성
+      humanCentricAxis: 융합하기
+      humanCentricTag: 통합적 사고
       domainCards:
+      - 자기이해
       - 표현력
-      - 분석력
       - 검토력
       growthCard: ''
       replayCardStatus: ''
@@ -1045,7 +954,7 @@ selfintro:
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
       shortFeedback: AI는 표현을 거들었고, 나는 내 메모와 설명할 수 있는 내용만 남겼어요.
       reportFeedback: AI는 표현을 거들었고, 나는 내 메모와 설명할 수 있는 내용만 남겼어요. AI를 썼지만 글의 무게는 내가 잡았어요.
-      earnedCards: 자기이해, 표현력, 검토력
+      earnedCards: 자기지식, 표현력, 정리력, 검수능력, 자기검증
     C1R1:
       score: 18
       grade: D
@@ -1077,7 +986,7 @@ selfintro:
       adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
       shortFeedback: 아무 정보 없이 AI에게 맡긴 글을 바로 넘겨, AI가 상상한 학생이 내 자기소개 자리를 채웠어요.
       reportFeedback: 아무 정보 없이 AI에게 맡긴 글을 바로 넘겨, AI가 상상한 학생이 내 자기소개 자리를 채웠어요.
-      earnedCards: 자기이해, 표현력
+      earnedCards: 자기지식, 정리력, 자기성찰
     C1R2:
       score: 32
       grade: D
@@ -1091,7 +1000,7 @@ selfintro:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 빈자리 발견
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: AI에게 맡기기 → 정보 없이 AI 초안 받기 → 한 번 확인하기
@@ -1109,7 +1018,7 @@ selfintro:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 내가 하지 않은 말을 몇 개 지웠어요.
       reportFeedback: 내가 하지 않은 말을 몇 개 지웠어요. 하지만 처음에 넣은 내 재료가 없어 남은 글도 아직 내 이야기라고 보기 어려웠어요.
-      earnedCards: 자기이해, 표현력, 분석력
+      earnedCards: 자기지식, 정리력, 자기성찰, 비판적 사고
     C1R3:
       score: 45
       grade: D
@@ -1123,7 +1032,7 @@ selfintro:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 빈자리 발견
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: AI에게 맡기기 → 정보 없이 AI 초안 받기 → 깊게 확인하기
@@ -1141,7 +1050,7 @@ selfintro:
       adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
       shortFeedback: 처음부터 다시 확인하며 문제를 발견했어요.
       reportFeedback: 처음부터 다시 확인하며 문제를 발견했어요. 하지만 출발 재료가 거의 없어 고칠 근거가 부족했고, 새로 써야 할 부분이 많았어요.
-      earnedCards: 자기이해, 표현력, 검토력
+      earnedCards: 자기지식, 정리력, 표현력, 자기성찰, 자기검증
     C2R1:
       score: 42
       grade: D
@@ -1155,7 +1064,7 @@ selfintro:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 빈자리 발견
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: AI에게 맡기기 → 기본 정보로 AI 초안 받기 → 그대로 진행하기
@@ -1183,8 +1092,8 @@ selfintro:
       cut6Feedback: 출발은 했지만 중요한 확인 과정이 일부 비어 있어요. 다음에는 내가 책임질 수 있는 근거를 더 남겨 보세요.
       replaySuggestion: 다시 해본다면 그대로 진행하기 전에 이상한 부분을 표시하거나 처음부터 다시 확인해 보세요.
       cardEarned: true
-      humanCentricAxis: 성찰하기
-      humanCentricTag: 윤리적 사고
+      humanCentricAxis: 중심잡기
+      humanCentricTag: 주체성
       domainCards:
       - 자기이해
       growthCard: ''
@@ -1207,7 +1116,7 @@ selfintro:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 기본 정보 뒤에 이유를 조금 붙였어요.
       reportFeedback: 기본 정보 뒤에 이유를 조금 붙였어요. 일부는 내 글처럼 보였지만, 아직 AI가 채운 빈칸이 남았어요.
-      earnedCards: 분석력
+      earnedCards: 비판적 사고
     C2R3:
       score: 72
       grade: C
@@ -1218,8 +1127,8 @@ selfintro:
       cut6Feedback: 출발은 했지만 중요한 확인 과정이 일부 비어 있어요. 다음에는 내가 책임질 수 있는 근거를 더 남겨 보세요.
       replaySuggestion: 다시 해본다면 그대로 진행하기 전에 이상한 부분을 표시하거나 처음부터 다시 확인해 보세요.
       cardEarned: true
-      humanCentricAxis: 성찰하기
-      humanCentricTag: 윤리적 사고
+      humanCentricAxis: 중심잡기
+      humanCentricTag: 주체성
       domainCards:
       - 자기이해
       - 검토력
@@ -1243,7 +1152,7 @@ selfintro:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 처음부터 다시 보며 정보 뒤에 숨어 있던 내 이야기를 조금 꺼냈어요.
       reportFeedback: 처음부터 다시 보며 정보 뒤에 숨어 있던 내 이야기를 조금 꺼냈어요. 다만 처음에 넣은 재료가 적어 깊이는 제한됐어요.
-      earnedCards: 자기이해, 표현력, 검토력
+      earnedCards: 자기지식, 정리력, 자기성찰, 자기검증
     C3R1:
       score: 66
       grade: C
@@ -1288,11 +1197,11 @@ selfintro:
       cut6Feedback: 좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.
       replaySuggestion: 다시 해본다면 마지막 확인을 한 단계 더 깊게 해 보세요.
       cardEarned: true
-      humanCentricAxis: 성찰하기
-      humanCentricTag: 비판적 사고
+      humanCentricAxis: 융합하기
+      humanCentricTag: 통합적 사고
       domainCards:
       - 표현력
-      - 분석력
+      - 자기이해
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
@@ -1323,11 +1232,11 @@ selfintro:
       cut6Feedback: 자기 기준을 세우고 마지막 확인까지 해낸 선택이라 결과의 완성도가 높아요.
       replaySuggestion: 다시 해본다면 같은 주제를 다른 방식으로 풀어 보며 선택의 차이를 비교해 보세요.
       cardEarned: true
-      humanCentricAxis: 성찰하기
-      humanCentricTag: 성찰적 사고
+      humanCentricAxis: 융합하기
+      humanCentricTag: 통합적 사고
       domainCards:
       - 표현력
-      - 분석력
+      - 자기이해
       - 검토력
       growthCard: ''
       replayCardStatus: ''
@@ -1979,11 +1888,6 @@ groupwork:
     knowledge: +
     basePoint: 10
     varPoint: 15
-    discountTags:
-      humanCentric: 중심잡기
-      domain:
-      - 협업력
-      - 소통력
   - id: B
     label: AI로 발표 준비를 빠르게 만들어본다
     desc: AI에게 발표 개요, 슬라이드 문구, 발표 대본 같은 결과물을 빠르게 받아보는 길이다.
@@ -1992,10 +1896,6 @@ groupwork:
     knowledge: '-'
     basePoint: 10
     varPoint: 0
-    discountTags:
-      humanCentric: 중심잡기
-      domain:
-      - 자료판단력
   - id: C
     label: 각자 따로 준비하거나 발표 모양부터 만든다
     desc: 모둠 회의를 충분히 하지 않고 각자 자료를 찾거나, 발표 잘하는 친구에게 맡기거나, 슬라이드 디자인과 대본의 모양을 먼저 만드는 길이다.
@@ -2004,11 +1904,6 @@ groupwork:
     knowledge: '0'
     basePoint: 10
     varPoint: 8
-    discountTags:
-      humanCentric: 성찰하기
-      domain:
-      - 협업력
-      - 검토력
   tier2:
     A:
     - id: A1
@@ -2026,13 +1921,6 @@ groupwork:
       lesson: 모둠 질문에서 시작했다 — 발표의 중심이 잡힌다.
       basePoint: 10
       varPoint: 25
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 협업력
-        - 소통력
-        strongDomain:
-        - 협업력
     - id: A2
       label: 역할을 나누고 각자 맡을 내용을 정한다
       delta:
@@ -2048,13 +1936,6 @@ groupwork:
       lesson: 역할을 나눴다 — 나뉜 일이 발표 흐름과 어떻게 이어지는지가 다음 자리다.
       basePoint: 10
       varPoint: 12
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 협업력
-        - 학습력
-        strongDomain:
-        - 협업력
     - id: A3
       label: 내가 맡은 내용을 먼저 이해하고 말로 정리한다
       delta:
@@ -2070,13 +1951,6 @@ groupwork:
       lesson: 내 파트를 이해했다 — 말로 설명할 수 있어야 내 발표가 된다.
       basePoint: 10
       varPoint: 0
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 표현력
-        - 문해력
-        strongDomain:
-        - 표현력
     B:
     - id: B1
       label: AI에게 발표 주제와 개요를 부탁한다
@@ -2093,13 +1967,6 @@ groupwork:
       lesson: AI 개요부터 받았다 — 모양은 잡히지만 우리 동네는 약하다.
       basePoint: 10
       varPoint: -10
-      discountTags:
-        humanCentric: 중심잡기
-        domain:
-        - 자료판단력
-        - 표현력
-        strongDomain:
-        - 자료판단력
     - id: B2
       label: AI에게 슬라이드 문구를 만들어 달라고 한다
       delta:
@@ -2115,13 +1982,6 @@ groupwork:
       lesson: AI 슬라이드를 받았다 — 발표자가 설명할 수 있는 문장인지가 자리다.
       basePoint: 10
       varPoint: 5
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 표현력
-        - 검토력
-        strongDomain:
-        - 표현력
     - id: B3
       label: 내가 찾은 자료를 바탕으로 AI에게 발표 대본 초안을 받는다
       delta:
@@ -2134,16 +1994,9 @@ groupwork:
         afterC:
           delegation: ++
           knowledge: ++
-      lesson: 내 자료 위에 AI 대본 초안을 얹었다 — 매끄러운 말보다 내가 설명하고 답할 수 있는지가 핵심이다.
+      lesson: AI 대본까지 맡겼다 — 매끄러우나 내가 답할 수 없으면 흔들린다.
       basePoint: 10
       varPoint: 25
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 자료판단력
-        - 표현력
-        strongDomain:
-        - 자료판단력
     C:
     - id: C1
       label: 모둠 회의 없이 각자 자료를 찾아 합친다
@@ -2160,13 +2013,6 @@ groupwork:
       lesson: 모임 없이 자료만 모았다 — 합쳐도 하나의 발표 질문이 안 보인다.
       basePoint: 10
       varPoint: -10
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 협업력
-        - 자료판단력
-        strongDomain:
-        - 협업력
     - id: C2
       label: 발표를 잘하는 친구나 한 사람에게 많이 맡긴다
       delta:
@@ -2182,13 +2028,6 @@ groupwork:
       lesson: 한 사람에게 맡겼다 — 결과는 나오지만 다른 모둠원의 이해가 빈자리다.
       basePoint: 10
       varPoint: 5
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 협업력
-        - 소통력
-        strongDomain:
-        - 협업력
     - id: C3
       label: 자료보다 발표 모양을 먼저 만든다
       delta:
@@ -2204,13 +2043,6 @@ groupwork:
       lesson: 모양부터 먼저 만들었다 — 깔끔해 보이지만 근거가 비어있다.
       basePoint: 10
       varPoint: 0
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 자료판단력
-        - 검토력
-        strongDomain:
-        - 자료판단력
   results:
     A1:
       text: 모둠원들이 함께 정한 발표 질문 하나가 만들어진다. 예를 들어 “우리 동네에서 청소년이 안전하게 쉴 공간은 충분한가?”처럼 발표의 중심이 되는 질문은 생겼지만, 아직 자료와 역할은 정리되지 않았다.
@@ -2289,42 +2121,23 @@ groupwork:
       - 발표 당일 질문에 답하기 어려움
   reviews:
   - id: R1
-    label: 만든 자료를 바로 모둠에 공유한다
-    desc: 확인 없이 자료를 모둠에 넘겼다. 빠르지만 출처나 역할 연결이 어긋날 수 있다.
+    label: 그대로 제출
+    desc: 검토 없이 그대로 낸다.
     boostType: none
     lesson: 검토를 건너뛰었다 — 검증할 기회를 놓쳤다.
     points: 10
-    discountTags:
-      humanCentric: ''
-      domain: []
-      strongDomain: []
   - id: R2
-    label: 빠진 출처와 어색한 슬라이드만 확인한다
-    desc: 빠진 출처와 어색한 슬라이드를 확인했다. 표면 오류는 줄였지만 모둠 흐름 전체를 맞춘 것은 아니다.
+    label: 한 번 읽고 이상한 곳만 표시
+    desc: 명시적인 환각·오류만 발견.
     boostType: explicit
     lesson: 한 번 훑어 명백한 오류를 잡았다. 도메인지식 +1
     points: 18
-    discountTags:
-      humanCentric: 성찰하기
-      domain:
-      - 검토력
-      - 자료판단력
-      strongDomain:
-      - 검토력
   - id: R3
-    label: 모둠 발표 흐름과 내 설명이 맞물리는지 점검한다
-    desc: 내 자료가 모둠 발표 흐름 안에서 설명 가능한지 점검했다. 발표 자료를 함께 책임지는 검토다.
+    label: 출처 확인 + 모둠 흐름 맞추기
+    desc: 자료의 근거와 다른 파트와의 연결까지 확인.
     boostType: all
     lesson: 출처와 모둠 흐름을 다시 보니 빠진 것이 보였다. 도메인지식 +3
     points: 30
-    discountTags:
-      humanCentric: 성찰하기
-      domain:
-      - 협업력
-      - 표현력
-      - 검토력
-      strongDomain:
-      - 협업력
   reviewSupplements:
     A1R1: 발표 방향은 생겼지만, 질문이 사회 시간의 주제와 잘 맞는지, 우리 동네 상황을 충분히 담는지는 확인하지 못한 발표 준비가 된다.
     A1R2: 모둠이 정한 질문을 다시 점검해, 발표 주제와 실제 동네 상황이 더 잘 이어지는 발표 방향이 된다.
@@ -2391,8 +2204,8 @@ groupwork:
       humanCentricAxis: 성찰하기
       humanCentricTag: 사회·관계적 사고
       domainCards:
-      - 협업력
-      - 소통력
+      - 협업능력
+      - 질문력
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
@@ -2413,7 +2226,7 @@ groupwork:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 모둠 질문에서 출발해 발표의 중심은 잡혔어요.
       reportFeedback: 모둠 질문에서 출발해 발표의 중심은 잡혔어요. 다만 바로 공유해 출처와 역할 연결은 아직 확인하지 못했어요.
-      earnedCards: 협업력, 소통력, 검토력
+      earnedCards: 협업능력, 소통능력, 자기검증
     A1R2:
       score: 91
       grade: A
@@ -2427,9 +2240,9 @@ groupwork:
       humanCentricAxis: 성찰하기
       humanCentricTag: 사회·관계적 사고
       domainCards:
-      - 협업력
-      - 소통력
+      - 협업능력
       - 자료판단력
+      - 검토력
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
@@ -2450,7 +2263,7 @@ groupwork:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 빠진 출처와 어색한 슬라이드를 고치며 모둠 질문이 더 잘 보였어요.
       reportFeedback: 빠진 출처와 어색한 슬라이드를 고치며 모둠 질문이 더 잘 보였어요. 발표 흐름 전체는 한 번 더 맞출 수 있어요.
-      earnedCards: 협업력, 소통력, 검토력, 분석력
+      earnedCards: 협업능력, 소통능력, 자기검증, 비판적 사고
     A1R3:
       score: 97
       grade: S
@@ -2464,9 +2277,9 @@ groupwork:
       humanCentricAxis: 성찰하기
       humanCentricTag: 사회·관계적 사고
       domainCards:
-      - 협업력
-      - 소통력
-      - 표현력
+      - 협업능력
+      - 발표력
+      - 검토력
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
@@ -2487,7 +2300,7 @@ groupwork:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 모둠 질문, 내 자료, 발표 흐름을 끝까지 맞췄어요.
       reportFeedback: 모둠 질문, 내 자료, 발표 흐름을 끝까지 맞췄어요. 내 파트가 모둠 발표 안에서 설명 가능한 자리를 얻었어요.
-      earnedCards: 협업력, 소통력, 표현력, 검토력, 자기이해
+      earnedCards: 협업능력, 소통능력, 발표력, 자기검증, 자기성찰
     A2R1:
       score: 78
       grade: B
@@ -2501,8 +2314,7 @@ groupwork:
       humanCentricAxis: 성찰하기
       humanCentricTag: 사회·관계적 사고
       domainCards:
-      - 협업력
-      - 소통력
+      - 협업능력
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
@@ -2523,7 +2335,7 @@ groupwork:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 역할을 나눠 각자 할 일은 생겼어요.
       reportFeedback: 역할을 나눠 각자 할 일은 생겼어요. 하지만 바로 공유해 서로의 파트가 어떻게 이어지는지는 흐릿했어요.
-      earnedCards: 협업력, 표현력
+      earnedCards: 협업능력, 발표력
     A2R2:
       score: 85
       grade: A
@@ -2537,8 +2349,8 @@ groupwork:
       humanCentricAxis: 성찰하기
       humanCentricTag: 사회·관계적 사고
       domainCards:
-      - 협업력
-      - 소통력
+      - 협업능력
+      - 정리력
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
@@ -2559,7 +2371,7 @@ groupwork:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 맡은 내용의 빠진 출처와 어색한 표현을 조금 고쳤어요.
       reportFeedback: 맡은 내용의 빠진 출처와 어색한 표현을 조금 고쳤어요. 역할은 보이지만 발표의 한 흐름으로 묶는 점검은 더 필요해요.
-      earnedCards: 협업력, 표현력, 검토력
+      earnedCards: 협업능력, 발표력, 검수능력
     A2R3:
       score: 91
       grade: A
@@ -2573,9 +2385,9 @@ groupwork:
       humanCentricAxis: 성찰하기
       humanCentricTag: 사회·관계적 사고
       domainCards:
-      - 협업력
-      - 소통력
-      - 표현력
+      - 협업능력
+      - 발표력
+      - 검토력
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
@@ -2596,7 +2408,7 @@ groupwork:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 역할을 나눈 뒤 발표 흐름에 맞춰 다시 확인했어요.
       reportFeedback: 역할을 나눈 뒤 발표 흐름에 맞춰 다시 확인했어요. 각자 맡은 자료가 하나의 발표로 이어지기 시작했어요.
-      earnedCards: 협업력, 표현력, 검토력
+      earnedCards: 협업능력, 발표력, 검수능력, 자기검증
     A3R1:
       score: 82
       grade: B
@@ -2610,8 +2422,8 @@ groupwork:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards:
-      - 표현력
-      - 문해력
+      - 발표력
+      - 이해력
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
@@ -2630,7 +2442,7 @@ groupwork:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 내가 맡은 내용을 먼저 이해한 점은 좋았어요.
       reportFeedback: 내가 맡은 내용을 먼저 이해한 점은 좋았어요. 다만 바로 공유해 친구들 파트와 연결되는지는 확인하지 못했어요.
-      earnedCards: 표현력
+      earnedCards: 발표력
     A3R2:
       score: 88
       grade: A
@@ -2644,7 +2456,7 @@ groupwork:
       humanCentricAxis: 중심잡기
       humanCentricTag: 주체성
       domainCards:
-      - 표현력
+      - 발표력
       - 자료판단력
       growthCard: ''
       replayCardStatus: ''
@@ -2666,7 +2478,7 @@ groupwork:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 내 설명에서 어색한 부분과 출처를 일부 확인했어요.
       reportFeedback: 내 설명에서 어색한 부분과 출처를 일부 확인했어요. 내 파트는 단단해졌지만 모둠 전체 흐름은 조금 더 맞춰야 해요.
-      earnedCards: 표현력, 검토력
+      earnedCards: 발표력, 검수능력
     A3R3:
       score: 96
       grade: S
@@ -2680,8 +2492,8 @@ groupwork:
       humanCentricAxis: 중심잡기
       humanCentricTag: 주체성
       domainCards:
-      - 표현력
-      - 협업력
+      - 발표력
+      - 협업능력
       - 검토력
       growthCard: ''
       replayCardStatus: ''
@@ -2703,7 +2515,7 @@ groupwork:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 내가 이해한 내용을 모둠 흐름 안에서 다시 점검했어요.
       reportFeedback: 내가 이해한 내용을 모둠 흐름 안에서 다시 점검했어요. 혼자 아는 자료가 아니라 함께 발표할 수 있는 자료가 됐어요.
-      earnedCards: 표현력, 검토력, 자기이해, 분석력
+      earnedCards: 발표력, 검수능력, 자기성찰, 비판적 사고
     B1R1:
       score: 24
       grade: D
@@ -2748,7 +2560,7 @@ groupwork:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 빈자리 발견
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: AI로 빠르게 준비하기 → AI 개요 받기 → 한 번 확인하기
@@ -2779,7 +2591,7 @@ groupwork:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 빈자리 발견
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: AI로 빠르게 준비하기 → AI 개요 받기 → 깊게 확인하기
@@ -2828,7 +2640,7 @@ groupwork:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: AI 문구 덕분에 슬라이드는 그럴듯해졌어요.
       reportFeedback: AI 문구 덕분에 슬라이드는 그럴듯해졌어요. 하지만 바로 넘겨 출처와 우리 모둠의 이해가 비어 있었어요.
-      earnedCards: 소통력
+      earnedCards: 소통능력
     B2R2:
       score: 48
       grade: D
@@ -2844,7 +2656,7 @@ groupwork:
       domainCards:
       - 표현력
       - 검토력
-      growthCard: '회복력'
+      growthCard: '빈자리 발견'
       replayCardStatus: ''
       expReward: 22
       reportPathSummary: AI로 빠르게 준비하기 → AI 슬라이드 문구 받기 → 한 번 확인하기
@@ -2864,7 +2676,7 @@ groupwork:
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
       shortFeedback: 어색한 문구와 빠진 출처를 일부 표시했어요.
       reportFeedback: 어색한 문구와 빠진 출처를 일부 표시했어요. 보기 좋은 말은 줄었지만 발표 근거는 아직 충분하지 않아요.
-      earnedCards: 소통력, 검토력, 분석력
+      earnedCards: 소통능력, 검수능력, 비판적 사고
     B2R3:
       score: 60
       grade: C
@@ -2900,7 +2712,7 @@ groupwork:
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
       shortFeedback: AI 문구를 끝까지 확인하며 빈칸을 발견했어요.
       reportFeedback: AI 문구를 끝까지 확인하며 빈칸을 발견했어요. 고칠 방향은 보였지만 자료를 다시 채워야 발표가 단단해져요.
-      earnedCards: 소통력, 검토력, 자기이해
+      earnedCards: 소통능력, 검수능력, 자기검증, 자기성찰
     B3R1:
       score: 76
       grade: B
@@ -2911,8 +2723,8 @@ groupwork:
       cut6Feedback: 출발은 했지만 중요한 확인 과정이 일부 비어 있어요. 다음에는 내가 책임질 수 있는 근거를 더 남겨 보세요.
       replaySuggestion: 다시 해본다면 AI 대본에서 내가 설명할 수 없는 부분을 표시하고 고쳐 보세요.
       cardEarned: true
-      humanCentricAxis: 중심잡기
-      humanCentricTag: '적응성'
+      humanCentricAxis: 융합하기
+      humanCentricTag: ''
       domainCards:
       - 자료판단력
       growthCard: ''
@@ -2934,7 +2746,7 @@ groupwork:
       adjustedReason: 내 자료를 넣은 좋은 출발은 있었지만, AI 대본을 그대로 읽어 설명 가능성을 확인하지 않은 경로.
       shortFeedback: 내가 찾은 자료를 넣어 AI 정리를 받았기 때문에 발표의 근거는 있었어요.
       reportFeedback: 내가 찾은 자료를 넣어 AI 정리를 받았기 때문에 발표의 근거는 있었어요. 다만 바로 공유해 모둠 흐름과 출처 확인은 부족했어요.
-      earnedCards: 협업력, 소통력, 검토력
+      earnedCards: 협업능력, 소통능력, 검수능력
     B3R2:
       score: 86
       grade: A
@@ -2946,10 +2758,10 @@ groupwork:
       replaySuggestion: 다시 해본다면 마지막 확인을 한 단계 더 깊게 해 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
-      humanCentricTag: 직관적 통찰
+      humanCentricTag: 통합적 사고
       domainCards:
       - 자료판단력
-      - 분석력
+      - 검토력
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
@@ -2970,7 +2782,7 @@ groupwork:
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
       shortFeedback: AI가 줄인 문장 중 빠진 조건과 출처를 일부 채웠어요.
       reportFeedback: AI가 줄인 문장 중 빠진 조건과 출처를 일부 채웠어요. 좋은 AI 활용이지만 모둠 전체 흐름까지 맞추면 더 단단해져요.
-      earnedCards: 협업력, 소통력, 검토력, 분석력
+      earnedCards: 협업능력, 소통능력, 검수능력, 비판적 사고
     B3R3:
       score: 95
       grade: S
@@ -2985,8 +2797,8 @@ groupwork:
       humanCentricTag: 통합적 사고
       domainCards:
       - 자료판단력
-      - 협업력
-      - 분석력
+      - 협업능력
+      - 검토력
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
@@ -3007,7 +2819,7 @@ groupwork:
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
       shortFeedback: 내 자료를 바탕으로 AI 도움을 받고, 출처와 모둠 흐름까지 확인했어요.
       reportFeedback: 내 자료를 바탕으로 AI 도움을 받고, 출처와 모둠 흐름까지 확인했어요. AI는 정리를 도왔고 발표의 책임은 모둠에 남았어요.
-      earnedCards: 협업력, 소통력, 검토력, 자기이해
+      earnedCards: 협업능력, 소통능력, 검수능력, 자기검증, 자기성찰
     C1R1:
       score: 45
       grade: D
@@ -3021,7 +2833,7 @@ groupwork:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 분산 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 각자 준비하기 → 각자 자료 합치기 → 그대로 진행하기
@@ -3039,7 +2851,7 @@ groupwork:
       adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
       shortFeedback: 각자 자료를 합쳐 양은 생겼지만 바로 공유해 발표 질문과 연결이 약했어요.
       reportFeedback: 각자 자료를 합쳐 양은 생겼지만 바로 공유해 발표 질문과 연결이 약했어요.
-      earnedCards: 협업력, 표현력, 분석력
+      earnedCards: 협업능력, 발표력, 비판적 사고
     C1R2:
       score: 58
       grade: D
@@ -3053,7 +2865,7 @@ groupwork:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 분산 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 각자 준비하기 → 각자 자료 합치기 → 한 번 확인하기
@@ -3071,7 +2883,7 @@ groupwork:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 어색한 연결을 조금 찾았지만 각자 모은 자료의 방향이 달라 빈틈이 남았어요.
       reportFeedback: 어색한 연결을 조금 찾았지만 각자 모은 자료의 방향이 달라 빈틈이 남았어요.
-      earnedCards: 협업력, 표현력, 분석력, 검토력
+      earnedCards: 협업능력, 발표력, 비판적 사고, 검수능력
     C1R3:
       score: 68
       grade: C
@@ -3082,11 +2894,10 @@ groupwork:
       cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
       replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
       cardEarned: true
-      humanCentricAxis: '성찰하기'
-      humanCentricTag: '성찰적 사고'
+      humanCentricAxis: ''
+      humanCentricTag: ''
       domainCards:
-      - 협업력
-      - 소통력
+      - 협업 점검
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
@@ -3105,7 +2916,7 @@ groupwork:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 끝까지 맞춰 보며 자료가 흩어져 있다는 걸 확인했어요.
       reportFeedback: 끝까지 맞춰 보며 자료가 흩어져 있다는 걸 확인했어요. 흐름은 조금 나아졌지만 처음 모둠 질문이 부족해 한계가 있었어요.
-      earnedCards: 협업력, 소통력, 표현력, 분석력, 검토력
+      earnedCards: 협업능력, 소통능력, 발표력, 비판적 사고, 자기검증
     C2R1:
       score: 35
       grade: D
@@ -3119,7 +2930,7 @@ groupwork:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 위임 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 각자 준비하기 → 한 사람에게 맡기기 → 그대로 진행하기
@@ -3150,7 +2961,7 @@ groupwork:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 위임 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 각자 준비하기 → 한 사람에게 맡기기 → 한 번 확인하기
@@ -3168,7 +2979,7 @@ groupwork:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 맡긴 자료에서 어색한 부분을 일부 찾았어요.
       reportFeedback: 맡긴 자료에서 어색한 부분을 일부 찾았어요. 그래도 친구 한 사람의 이해에 기대는 구조는 그대로 남았어요.
-      earnedCards: 분석력
+      earnedCards: 비판적 사고
     C2R3:
       score: 62
       grade: C
@@ -3180,9 +2991,10 @@ groupwork:
       replaySuggestion: 다시 해본다면 그대로 진행하기 전에 이상한 부분을 표시하거나 처음부터 다시 확인해 보세요.
       cardEarned: false
       humanCentricAxis: 성찰하기
-      humanCentricTag: 윤리적 사고
+      humanCentricTag: 사회·관계적 사고
       domainCards:
       - 소통력
+      - 검토력
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
@@ -3203,7 +3015,7 @@ groupwork:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 끝까지 확인하며 모둠의 빈자리를 발견했어요.
       reportFeedback: 끝까지 확인하며 모둠의 빈자리를 발견했어요. 발표를 함께 책임지려면 각자 이해한 내용을 다시 채워야 해요.
-      earnedCards: 분석력, 검토력, 자기이해
+      earnedCards: 비판적 사고, 검수능력, 자기성찰, 자기검증
     C3R1:
       score: 28
       grade: D
@@ -3217,7 +3029,7 @@ groupwork:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 모양 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 각자 준비하기 → 발표 모양 먼저 만들기 → 그대로 진행하기
@@ -3248,7 +3060,7 @@ groupwork:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 모양 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 각자 준비하기 → 발표 모양 먼저 만들기 → 한 번 확인하기
@@ -3279,8 +3091,7 @@ groupwork:
       humanCentricAxis: 성찰하기
       humanCentricTag: 비판적 사고
       domainCards:
-      - 자료판단력
-      - 분석력
+      - 자료 보충
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
@@ -3934,23 +3745,14 @@ eorinwangja:
     knowledge: +
     basePoint: 10
     varPoint: 15
-    discountTags:
-      humanCentric: 중심잡기
-      domain:
-      - 문해력
   - id: B
-    label: AI나 다른 도움으로 읽을 실마리를 잡는다
-    desc: AI, 요약, 소개 자료처럼 책 밖의 도움으로 읽을 부분을 찾는 길이다. 도움을 받더라도 책 안 장면을 직접 확인해야 내 감상이 생긴다.
-    lesson: AI나 다른 도움으로 책에 들어갈 실마리를 찾았다 — 도움은 입구가 될 수 있지만, 감상은 책 안에서 직접 만난 장면에서 나온다.
+    label: AI에게 부탁한다
+    desc: AI에게 책 내용과 감상을 받아 본다.
+    lesson: AI에 위임했다 — 안 읽은 책을 AI가 대신 읽어 줄 수는 없다.
     delegation: '-'
     knowledge: '-'
     basePoint: 10
     varPoint: 0
-    discountTags:
-      humanCentric: 중심잡기
-      domain:
-      - 문해력
-      - 탐색력
   - id: C
     label: 책 읽기를 건너뛰고 독후감을 만들어본다
     desc: AI, 검색, 영상, 유명한 문장 같은 책 밖의 단서로 독후감을 만드는 길이다.
@@ -3959,10 +3761,6 @@ eorinwangja:
     knowledge: '0'
     basePoint: 10
     varPoint: 8
-    discountTags:
-      humanCentric: 성찰하기
-      domain:
-      - 검토력
   tier2:
     A:
     - id: A1
@@ -3980,13 +3778,6 @@ eorinwangja:
       lesson: 처음부터 읽고 실제로 읽은 흔적을 남겼다 — 짧고 서툴어도 책이 내 안에서 나온다.
       basePoint: 10
       varPoint: 25
-      discountTags:
-        humanCentric: 중심잡기
-        domain:
-        - 문해력
-        - 표현력
-        strongDomain:
-        - 문해력
     - id: A2
       label: 읽다가 밑줄 친 문장이나 장면을 중심으로 쓴다
       delta:
@@ -4002,13 +3793,6 @@ eorinwangja:
       lesson: 멈춘 문장에서 감상이 나왔다 — 인상 깊은 부분이 독후감의 출발점이 된다.
       basePoint: 10
       varPoint: 12
-      discountTags:
-        humanCentric: 중심잡기
-        domain:
-        - 문해력
-        - 분석력
-        strongDomain:
-        - 문해력
     - id: A3
       label: 이해되지 않는 부분을 붙들고 독후감을 쓴다
       delta:
@@ -4024,16 +3808,9 @@ eorinwangja:
       lesson: 막힌 자리를 솔직하게 적었다 — 이해되지 않은 부분도 책을 통과한 흔적이다.
       basePoint: 10
       varPoint: 0
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 문해력
-        - 분석력
-        strongDomain:
-        - 분석력
     B:
     - id: B1
-      label: AI나 검색 요약으로 줄거리를 파악하고 중요한 장면 하나를 책에서 찾아 읽는다
+      label: 줄거리 요약을 보고 중요한 장면만 책에서 찾아 읽는다
       delta:
         afterA:
           delegation: '-'
@@ -4044,18 +3821,11 @@ eorinwangja:
         afterC:
           delegation: --
           knowledge: '-'
-      lesson: 요약으로 흐름을 잡고 한 장면은 직접 확인했다 — 책 안으로 돌아왔지만 전체 맥락은 아직 얕다.
+      lesson: 전체를 읽지는 않았지만 한 장면은 직접 확인했다 — 요약과 책 사이의 빈틈이 남는다.
       basePoint: 10
       varPoint: 0
-      discountTags:
-        humanCentric: 중심잡기
-        domain:
-        - 문해력
-        - 자료판단력
-        strongDomain:
-        - 문해력
     - id: B2
-      label: 유명한 문장이나 소개 자료를 보고 그 앞뒤 장면을 직접 읽는다
+      label: 유명한 문장이 나오는 앞뒤 장면을 읽고 쓴다
       delta:
         afterA:
           delegation: '0'
@@ -4066,18 +3836,11 @@ eorinwangja:
         afterC:
           delegation: '0'
           knowledge: '0'
-      lesson: 책 밖의 단서에서 시작했지만 문장이 놓인 장면은 직접 확인했다 — 유명한 말에 기대지 않고 맥락을 보려는 선택이다.
+      lesson: 유명한 문장 앞뒤를 읽었다 — 문장의 맥락은 일부 확인했지만 전체 이해는 얕다.
       basePoint: 10
       varPoint: 5
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 문해력
-        - 자료판단력
-        strongDomain:
-        - 자료판단력
     - id: B3
-      label: 책을 읽으며 AI에게 궁금한 점을 물어보고 내 생각을 정리한다
+      label: 친구나 영상이 소개한 장면 중 궁금한 부분만 찾아 읽는다
       delta:
         afterA:
           delegation: ++
@@ -4088,17 +3851,9 @@ eorinwangja:
         afterC:
           delegation: ++
           knowledge: ++
-      lesson: 책을 읽는 과정에 AI를 대화 상대로 썼다 — AI가 답을 대신 쓰는 것이 아니라, 내가 멈춘 지점을 더 생각하게 돕는 길이다.
+      lesson: 책 밖에서 시작했지만 책 안 장면을 직접 확인했다 — 출발점이 달라도 책에 닿으면 내 감상이 생긴다.
       basePoint: 10
       varPoint: 25
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 문해력
-        - 분석력
-        - 탐색력
-        strongDomain:
-        - 탐색력
     C:
     - id: C1
       label: AI에게 줄거리와 독후감 초안을 바로 부탁한다
@@ -4115,13 +3870,6 @@ eorinwangja:
       lesson: AI가 만든 글에서 시작했다 — 문장은 깔끔하지만 내가 책을 읽고 만난 장면은 거의 없다.
       basePoint: 10
       varPoint: -10
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 검토력
-        - 문해력
-        strongDomain:
-        - 검토력
     - id: C2
       label: 검색한 줄거리나 영상 소개만 보고 독후감을 쓴다
       delta:
@@ -4137,13 +3885,6 @@ eorinwangja:
       lesson: 책 밖의 자료로 독후감을 만들었다 — 줄거리는 알지만 책의 문장과 장면 앞에서 멈춘 시간이 없다.
       basePoint: 10
       varPoint: 5
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 자료판단력
-        - 문해력
-        strongDomain:
-        - 자료판단력
     - id: C3
       label: 유명한 문장이나 분위기만으로 독후감을 쓴다
       delta:
@@ -4156,16 +3897,9 @@ eorinwangja:
         afterC:
           delegation: +
           knowledge: +
-      lesson: 유명한 문장이나 분위기에서 바로 썼다 — 그럴듯한 감상은 만들 수 있지만 책의 구체 장면과 내 생각이 약하다.
+      lesson: 막연한 분위기에서 시작했지만 AI 검토를 통해 책의 구체 장면과 연결되는 말을 찾아냈다 — 흔한 감상을 줄이고 책임질 수 있는 말만 남겼다.
       basePoint: 10
       varPoint: 15
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 분석력
-        - 검토력
-        strongDomain:
-        - 검토력
   results:
     A1:
       text: 책을 처음부터 읽고, 기억에 남는 내용과 생각을 바탕으로 짧은 독후감 초안이 만들어졌다. 글은 짧고 서툴 수 있지만, 실제로 읽은 흔적이 들어 있다.
@@ -4245,42 +3979,23 @@ eorinwangja:
       - 어린왕자가 아니어도 통할 만한 일반 교훈만 적힘
   reviews:
   - id: R1
-    label: 감상문을 바로 낸다
-    desc: 확인 없이 감상문을 넘겼다. 빠르지만 책과 다른 내용이나 내 감상이 아닌 문장을 놓칠 수 있다.
+    label: 그대로 제출
+    desc: 검토 없이 그대로 낸다.
     boostType: none
     lesson: 검토를 건너뛰었다 — 검증할 기회를 놓쳤다.
     points: 10
-    discountTags:
-      humanCentric: ''
-      domain: []
-      strongDomain: []
   - id: R2
-    label: 이상한 내용이나 책과 다른 부분만 표시한다
-    desc: 책과 다른 부분이나 어색한 문장을 일부 표시했다. 오류는 줄였지만 감상과 장면의 연결까지 깊게 확인한 것은 아니다.
+    label: 한 번 읽고 이상한 곳만 표시
+    desc: 명시적인 환각·오류만 발견.
     boostType: explicit
     lesson: 한 번 훑어 명백한 오류를 잡았다. 도메인지식 +1
     points: 18
-    discountTags:
-      humanCentric: 성찰하기
-      domain:
-      - 검토력
-      - 자료판단력
-      strongDomain:
-      - 자료판단력
   - id: R3
-    label: 책의 장면과 내 감상이 실제로 이어지는지 다시 확인한다
-    desc: 책의 장면과 내 감상이 이어지는지 다시 확인했다. 감상문을 내가 읽은 흔적으로 책임지는 검토다.
+    label: 출처 확인 + 크로스체크
+    desc: 미세 오류까지 발견.
     boostType: all
     lesson: 출처와 대조하니 미세 오류까지 보였다. 도메인지식 +3
     points: 30
-    discountTags:
-      humanCentric: 성찰하기
-      domain:
-      - 검토력
-      - 문해력
-      - 분석력
-      strongDomain:
-      - 검토력
   reviewSupplements:
     A1R1: 끝까지 읽고 여우 장면 하나에 머물러 자기 말로 적어 그대로 냈다. 책이 자기 안에 자리 잡았다.
     A1R2: 한 번 읽으며 길어진 문장 하나를 둘로 나눴다. 머문 장면이 더 또렷해졌다.
@@ -4368,7 +4083,7 @@ eorinwangja:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 책을 직접 읽고 쓴 감상이라 내 흔적이 남았어요.
       reportFeedback: 책을 직접 읽고 쓴 감상이라 내 흔적이 남았어요. 다만 바로 내서 장면과 감상이 어색하게 이어진 부분은 확인하지 못했어요.
-      earnedCards: 문해력
+      earnedCards: 문해력, 공감력, 해석능력
     A1R2:
       score: 91
       grade: A
@@ -4405,7 +4120,7 @@ eorinwangja:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 책과 다른 부분을 고치며 내가 읽은 장면이 더 또렷해졌어요.
       reportFeedback: 책과 다른 부분을 고치며 내가 읽은 장면이 더 또렷해졌어요. 감상의 이유를 더 붙이면 더 깊어질 수 있어요.
-      earnedCards: 문해력, 검토력
+      earnedCards: 문해력, 공감력, 해석능력, 검수능력
     A1R3:
       score: 97
       grade: S
@@ -4442,7 +4157,7 @@ eorinwangja:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 책의 장면과 내 감상이 실제로 이어지는지 끝까지 확인했어요.
       reportFeedback: 책의 장면과 내 감상이 실제로 이어지는지 끝까지 확인했어요. 감상문이 내가 읽은 경험에서 나온 글이 됐어요.
-      earnedCards: 문해력, 검토력, 자기이해
+      earnedCards: 문해력, 공감력, 해석능력, 자기검증, 자기성찰
     A2R1:
       score: 88
       grade: A
@@ -4457,6 +4172,7 @@ eorinwangja:
       humanCentricTag: 주체성
       domainCards:
       - 문해력
+      - 해석능력
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
@@ -4477,7 +4193,7 @@ eorinwangja:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 밑줄 친 장면에서 출발해 감상의 근거는 분명했어요.
       reportFeedback: 밑줄 친 장면에서 출발해 감상의 근거는 분명했어요. 다만 바로 내서 왜 그 장면이 남았는지는 덜 설명됐어요.
-      earnedCards: 문해력
+      earnedCards: 문해력, 해석능력
     A2R2:
       score: 93
       grade: A
@@ -4492,6 +4208,7 @@ eorinwangja:
       humanCentricTag: 주체성
       domainCards:
       - 문해력
+      - 해석능력
       - 검토력
       growthCard: ''
       replayCardStatus: ''
@@ -4513,7 +4230,7 @@ eorinwangja:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 장면과 다른 표현을 고치며 감상이 더 정확해졌어요.
       reportFeedback: 장면과 다른 표현을 고치며 감상이 더 정확해졌어요. 한 장면에 머문 힘이 글에 살아났어요.
-      earnedCards: 문해력, 검토력
+      earnedCards: 문해력, 해석능력, 검수능력
     A2R3:
       score: 98
       grade: S
@@ -4528,6 +4245,7 @@ eorinwangja:
       humanCentricTag: 주체성
       domainCards:
       - 문해력
+      - 해석능력
       - 표현력
       - 검토력
       growthCard: ''
@@ -4550,7 +4268,7 @@ eorinwangja:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 밑줄 친 장면과 내 감상을 처음부터 다시 이어 봤어요.
       reportFeedback: 밑줄 친 장면과 내 감상을 처음부터 다시 이어 봤어요. 한 문장이 내 생각으로 자라는 독후감이 됐어요.
-      earnedCards: 문해력, 검토력
+      earnedCards: 문해력, 해석능력, 검수능력, 자기검증
     A3R1:
       score: 82
       grade: B
@@ -4565,7 +4283,7 @@ eorinwangja:
       humanCentricTag: ''
       domainCards:
       - 문해력
-      - 탐색력
+      - 호기심
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
@@ -4599,6 +4317,7 @@ eorinwangja:
       humanCentricTag: 호기심
       domainCards:
       - 문해력
+      - 해석능력
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
@@ -4619,7 +4338,7 @@ eorinwangja:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 이상한 부분을 표시하며 이해되지 않던 장면을 조금 정리했어요.
       reportFeedback: 이상한 부분을 표시하며 이해되지 않던 장면을 조금 정리했어요. 질문이 글의 중심으로 살아나기 시작했어요.
-      earnedCards: 문해력
+      earnedCards: 문해력, 해석능력
     A3R3:
       score: 96
       grade: S
@@ -4634,6 +4353,7 @@ eorinwangja:
       humanCentricTag: 호기심
       domainCards:
       - 문해력
+      - 해석능력
       - 검토력
       growthCard: ''
       replayCardStatus: ''
@@ -4655,14 +4375,14 @@ eorinwangja:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 모르겠던 장면을 끝까지 다시 확인했어요.
       reportFeedback: 모르겠던 장면을 끝까지 다시 확인했어요. 어려운 부분을 피하지 않은 시간이 감상의 깊이로 남았어요.
-      earnedCards: 문해력, 자기이해, 검토력
+      earnedCards: 문해력, 해석능력, 자기성찰, 검수능력
     B1R1:
-      score: 60
+      score: 62
       grade: C
       item:
       delegation: +
       knowledge: '+'
-      awareness: 요약에서 출발했지만 한 장면을 책에서 찾아본 점은 남았어요. 다만 바로 내서 요약 말투와 내 감상이 섞였어요.
+      awareness: 요약에서 출발했지만 중요한 장면을 책에서 찾아본 점은 남았어요. 다만 바로 내서 요약 말투와 내 감상이 섞였어요.
       cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
       replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
       cardEarned: false
@@ -4685,15 +4405,15 @@ eorinwangja:
       adjustedScore: -16
       adjustedType: 근거/검토 부족 페널티
       adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
-      shortFeedback: 요약에서 출발했지만 한 장면을 책에서 찾아본 점은 남았어요.
-      reportFeedback: 요약에서 출발했지만 한 장면을 책에서 찾아본 점은 남았어요. 다만 바로 내서 요약 말투와 내 감상이 섞였어요.
+      shortFeedback: 요약에서 출발했지만 중요한 장면을 책에서 찾아본 점은 남았어요.
+      reportFeedback: 요약에서 출발했지만 중요한 장면을 책에서 찾아본 점은 남았어요. 다만 바로 내서 요약 말투와 내 감상이 섞였어요.
     B1R2:
-      score: 73
-      grade: C
+      score: 75
+      grade: B
       item: 환각 발견 카드
       delegation: +
       knowledge: '+'
-      awareness: 요약과 책 장면이 다른 부분을 일부 찾았어요. 직접 확인한 장면은 있지만, 전체 맥락이 얕아 감상은 아직 조심스러워요.
+      awareness: 요약과 책 장면이 다른 부분을 일부 찾았어요. 직접 읽은 장면이 있어 감상은 조금 살아났어요.
       cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
       replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
       cardEarned: true
@@ -4718,19 +4438,19 @@ eorinwangja:
       adjustedType: 근거/검토 부족 페널티
       adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
       shortFeedback: 요약과 책 장면이 다른 부분을 일부 찾았어요.
-      reportFeedback: 요약과 책 장면이 다른 부분을 일부 찾았어요. 직접 확인한 장면은 있지만, 전체 맥락이 얕아 감상은 아직 조심스러워요.
+      reportFeedback: 요약과 책 장면이 다른 부분을 일부 찾았어요. 직접 읽은 장면이 있어 감상은 조금 살아났어요.
     B1R3:
-      score: 82
-      grade: B
+      score: 86
+      grade: A
       item: 위태로운 위임 카드
       delegation: +
       knowledge: +
-      awareness: 책 장면과 내 감상을 다시 맞추며 요약의 빈틈을 발견했어요. 늦게라도 책 안으로 돌아왔지만, 전체를 읽은 감상만큼 깊지는 않아요.
+      awareness: 요약에서 출발했지만 책 장면과 내 감상을 다시 맞췄어요. 늦게라도 책 안으로 돌아온 선택이 글을 살렸어요.
       cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
       replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
       cardEarned: true
-      humanCentricAxis: '중심잡기'
-      humanCentricTag: '호기심'
+      humanCentricAxis: ''
+      humanCentricTag: ''
       domainCards:
       - 문해력
       - 검토력
@@ -4750,22 +4470,21 @@ eorinwangja:
       adjustedScore: -13
       adjustedType: 근거/검토 부족 페널티
       adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
-      shortFeedback: 책 장면과 내 감상을 다시 맞추며 요약의 빈틈을 발견했어요.
-      reportFeedback: 책 장면과 내 감상을 다시 맞추며 요약의 빈틈을 발견했어요. 늦게라도 책 안으로 돌아왔지만, 전체를 읽은 감상만큼 깊지는 않아요.
+      shortFeedback: 요약에서 출발했지만 책 장면과 내 감상을 다시 맞췄어요.
+      reportFeedback: 요약에서 출발했지만 책 장면과 내 감상을 다시 맞췄어요. 늦게라도 책 안으로 돌아온 선택이 글을 살렸어요.
     B2R1:
-      score: 66
+      score: 68
       grade: C
       item: 검증되지 않은 인용 카드
       delegation: '+'
       knowledge: '+'
-      awareness: 유명한 문장의 앞뒤를 읽어 감상의 단서는 생겼어요. 다만 바로 내서 유명한 말에 내 생각이 눌린 부분이 남았어요.
+      awareness: 유명한 문장의 앞뒤를 읽어 근거는 생겼어요. 하지만 바로 내서 유명한 말에 내 생각이 눌린 부분이 남았어요.
       cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
       replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
-      cardEarned: true
+      cardEarned: false
       humanCentricAxis: ''
       humanCentricTag: ''
-      domainCards:
-      - 문해력
+      domainCards: []
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
@@ -4782,16 +4501,16 @@ eorinwangja:
       adjustedScore: 15
       adjustedType: 과정 소유권 보정
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
-      shortFeedback: 유명한 문장의 앞뒤를 읽어 감상의 단서는 생겼어요.
-      reportFeedback: 유명한 문장의 앞뒤를 읽어 감상의 단서는 생겼어요. 다만 바로 내서 유명한 말에 내 생각이 눌린 부분이 남았어요.
-      earnedCards: 문해력
+      shortFeedback: 유명한 문장의 앞뒤를 읽어 근거는 생겼어요.
+      reportFeedback: 유명한 문장의 앞뒤를 읽어 근거는 생겼어요. 하지만 바로 내서 유명한 말에 내 생각이 눌린 부분이 남았어요.
+      earnedCards: 해석능력
     B2R2:
-      score: 78
+      score: 80
       grade: B
       item: 인용 점검 카드
       delegation: '+'
       knowledge: +
-      awareness: 문장이 놓인 장면과 다른 표현을 일부 고쳤어요. 유명한 말이 아니라 내가 읽은 장면이 조금 더 보이기 시작했어요.
+      awareness: 문장이 놓인 장면과 다른 표현을 고쳤어요. 유명한 말이 아니라 내가 읽은 장면이 조금 더 보였어요.
       cut6Feedback: 핵심 방향은 잡았지만, 검토나 자기 기준을 더 분명히 하면 결과가 더 좋아질 수 있어요.
       replaySuggestion: 다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.
       cardEarned: true
@@ -4817,11 +4536,11 @@ eorinwangja:
       adjustedScore: 32
       adjustedType: 강한 회복/조합 보정
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
-      shortFeedback: 문장이 놓인 장면과 다른 표현을 일부 고쳤어요.
-      reportFeedback: 문장이 놓인 장면과 다른 표현을 일부 고쳤어요. 유명한 말이 아니라 내가 읽은 장면이 조금 더 보이기 시작했어요.
-      earnedCards: 문해력, 검토력, 분석력
+      shortFeedback: 문장이 놓인 장면과 다른 표현을 고쳤어요.
+      reportFeedback: 문장이 놓인 장면과 다른 표현을 고쳤어요. 유명한 말이 아니라 내가 읽은 장면이 조금 더 보였어요.
+      earnedCards: 해석능력, 검수능력, 비판적 사고
     B2R3:
-      score: 88
+      score: 90
       grade: A
       item: 검증의 눈 카드
       delegation: '+'
@@ -4834,7 +4553,7 @@ eorinwangja:
       humanCentricTag: 맥락적 사고
       domainCards:
       - 문해력
-      - 검토력
+      - 해석능력
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
@@ -4855,14 +4574,14 @@ eorinwangja:
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
       shortFeedback: 유명한 문장과 앞뒤 장면, 내 감상을 다시 연결했어요.
       reportFeedback: 유명한 문장과 앞뒤 장면, 내 감상을 다시 연결했어요. 빌린 문장이 내 질문으로 바뀌기 시작했어요.
-      earnedCards: 문해력, 검토력, 분석력
+      earnedCards: 해석능력, 검수능력, 자기검증, 비판적 사고
     B3R1:
-      score: 82
+      score: 76
       grade: B
       item: 자기 주도 + 다듬기 카드
       delegation: +
       knowledge: +
-      awareness: 책을 읽으며 AI와 질문을 나눠 생각의 실마리는 생겼어요. 다만 바로 내서 AI 답과 내 감상이 충분히 구분되지는 않았어요.
+      awareness: 친구나 영상에서 출발했지만 궁금한 장면을 직접 찾아 읽었어요. 다만 바로 내서 소개받은 말과 내 감상이 덜 구분됐어요.
       cut6Feedback: 좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.
       replaySuggestion: 다시 해본다면 마지막 확인을 한 단계 더 깊게 해 보세요.
       cardEarned: true
@@ -4870,7 +4589,6 @@ eorinwangja:
       humanCentricTag: 호기심
       domainCards:
       - 문해력
-      - 탐색력
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
@@ -4889,24 +4607,24 @@ eorinwangja:
       adjustedScore: 33
       adjustedType: 강한 회복/조합 보정
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
-      shortFeedback: 책을 읽으며 AI와 질문을 나눠 생각의 실마리는 생겼어요.
-      reportFeedback: 책을 읽으며 AI와 질문을 나눠 생각의 실마리는 생겼어요. 다만 바로 내서 AI 답과 내 감상이 충분히 구분되지는 않았어요.
-      earnedCards: 문해력, 검토력
+      shortFeedback: 친구나 영상에서 출발했지만 궁금한 장면을 직접 찾아 읽었어요.
+      reportFeedback: 친구나 영상에서 출발했지만 궁금한 장면을 직접 찾아 읽었어요. 다만 바로 내서 소개받은 말과 내 감상이 덜 구분됐어요.
+      earnedCards: 문해력, 공감력, 검수능력
     B3R2:
-      score: 90
+      score: 86
       grade: A
       item: 검수한 다듬기 카드
       delegation: +
       knowledge: +
-      awareness: AI 답 중 내 말 같지 않은 부분을 고치며 읽은 장면을 살렸어요. 감상은 선명해졌지만, 장면과 생각을 더 깊게 이을 수 있어요.
+      awareness: 내 말 같지 않은 표현을 되돌리며 직접 읽은 장면을 살렸어요. 좋은 출발이지만 장면과 감상을 더 깊게 이을 수 있어요.
       cut6Feedback: 좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.
       replaySuggestion: 다시 해본다면 마지막 확인을 한 단계 더 깊게 해 보세요.
       cardEarned: true
-      humanCentricAxis: 융합하기
-      humanCentricTag: 직관적 통찰
+      humanCentricAxis: 중심잡기
+      humanCentricTag: 호기심
       domainCards:
       - 문해력
-      - 분석력
+      - 표현력
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
@@ -4925,24 +4643,24 @@ eorinwangja:
       adjustedScore: 30
       adjustedType: 강한 회복/조합 보정
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
-      shortFeedback: AI 답 중 내 말 같지 않은 부분을 고치며 읽은 장면을 살렸어요.
-      reportFeedback: AI 답 중 내 말 같지 않은 부분을 고치며 읽은 장면을 살렸어요. 감상은 선명해졌지만, 장면과 생각을 더 깊게 이을 수 있어요.
-      earnedCards: 문해력, 검토력, 분석력
+      shortFeedback: 내 말 같지 않은 표현을 되돌리며 직접 읽은 장면을 살렸어요.
+      reportFeedback: 내 말 같지 않은 표현을 되돌리며 직접 읽은 장면을 살렸어요. 좋은 출발이지만 장면과 감상을 더 깊게 이을 수 있어요.
+      earnedCards: 문해력, 공감력, 검수능력, 비판적 사고
     B3R3:
-      score: 97
+      score: 95
       grade: S
       item: 머무른 감상 + 다듬기 카드
       delegation: +
       knowledge: +
-      awareness: 읽은 장면, AI와 나눈 질문, 내 감상을 끝까지 다시 맞췄어요. AI는 생각을 넓히는 상대였고 감상은 내가 읽은 장면에서 나왔어요.
+      awareness: 궁금한 장면을 직접 확인하고 내 말로 다시 골랐어요. AI나 영상은 입구였고 감상은 내가 읽은 장면에서 나왔어요.
       cut6Feedback: 자기 기준을 세우고 마지막 확인까지 해낸 선택이라 결과의 완성도가 높아요.
       replaySuggestion: 다시 해본다면 같은 주제를 다른 방식으로 풀어 보며 선택의 차이를 비교해 보세요.
       cardEarned: true
-      humanCentricAxis: 융합하기
-      humanCentricTag: 통합적 사고
+      humanCentricAxis: 중심잡기
+      humanCentricTag: 호기심
       domainCards:
       - 문해력
-      - 분석력
+      - 표현력
       - 검토력
       growthCard: ''
       replayCardStatus: ''
@@ -4962,9 +4680,9 @@ eorinwangja:
       adjustedScore: 25
       adjustedType: 강한 회복/조합 보정
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
-      shortFeedback: 읽은 장면, AI와 나눈 질문, 내 감상을 끝까지 다시 맞췄어요.
-      reportFeedback: 읽은 장면, AI와 나눈 질문, 내 감상을 끝까지 다시 맞췄어요. AI는 생각을 넓히는 상대였고 감상은 내가 읽은 장면에서 나왔어요.
-      earnedCards: 문해력, 검토력
+      shortFeedback: 궁금한 장면을 직접 확인하고 내 말로 다시 골랐어요.
+      reportFeedback: 궁금한 장면을 직접 확인하고 내 말로 다시 골랐어요. AI나 영상은 입구였고 감상은 내가 읽은 장면에서 나왔어요.
+      earnedCards: 문해력, 공감력, 해석능력, 검수능력, 자기검증
     C1R1:
       score: 14
       grade: D
@@ -4996,7 +4714,7 @@ eorinwangja:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 책을 읽지 않고 AI 초안을 바로 냈어요.
       reportFeedback: 책을 읽지 않고 AI 초안을 바로 냈어요. 문장은 생겼지만 내가 책에서 만난 장면은 없었어요.
-      earnedCards: 문해력, 자기이해
+      earnedCards: 공감력, 해석능력, 자기성찰
     C1R2:
       score: 28
       grade: D
@@ -5010,7 +4728,7 @@ eorinwangja:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 빈자리 발견
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 책 읽기 건너뛰기 → AI 초안 바로 받기 → 한 번 확인하기
@@ -5028,7 +4746,7 @@ eorinwangja:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 책과 다른 내용 몇 개를 찾았어요.
       reportFeedback: 책과 다른 내용 몇 개를 찾았어요. 하지만 직접 읽은 장면이 없어 감상문을 내 글로 고치기 어려웠어요.
-      earnedCards: 문해력, 자기이해, 분석력
+      earnedCards: 공감력, 해석능력, 자기성찰, 비판적 사고
     C1R3:
       score: 45
       grade: D
@@ -5043,7 +4761,7 @@ eorinwangja:
       humanCentricTag: 윤리적 사고
       domainCards:
       - 검토력
-      growthCard: '회복력'
+      growthCard: '빈자리 발견'
       replayCardStatus: ''
       expReward: 16
       reportPathSummary: 책 읽기 건너뛰기 → AI 초안 바로 받기 → 깊게 확인하기
@@ -5063,7 +4781,7 @@ eorinwangja:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 처음부터 다시 확인하며 문제는 발견했어요.
       reportFeedback: 처음부터 다시 확인하며 문제는 발견했어요. 하지만 책에서 직접 고른 장면이 없어 고칠 근거가 부족했어요.
-      earnedCards: 문해력, 자기이해, 검토력
+      earnedCards: 공감력, 해석능력, 문해력, 자기성찰, 자기검증
     C2R1:
       score: 25
       grade: D
@@ -5077,7 +4795,7 @@ eorinwangja:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 빈자리 발견
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 책 읽기 건너뛰기 → 줄거리·영상만 보기 → 그대로 진행하기
@@ -5108,7 +4826,7 @@ eorinwangja:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 빈자리 발견
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 책 읽기 건너뛰기 → 줄거리·영상만 보기 → 한 번 확인하기
@@ -5126,7 +4844,7 @@ eorinwangja:
       adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
       shortFeedback: 이상한 내용을 일부 찾았지만 줄거리 밖으로 나아가지는 못했어요.
       reportFeedback: 이상한 내용을 일부 찾았지만 줄거리 밖으로 나아가지는 못했어요. 감상보다 정리문에 가까웠어요.
-      earnedCards: 분석력
+      earnedCards: 비판적 사고
     C2R3:
       score: 52
       grade: D
@@ -5140,7 +4858,7 @@ eorinwangja:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 빈자리 발견
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 책 읽기 건너뛰기 → 줄거리·영상만 보기 → 깊게 확인하기
@@ -5158,21 +4876,21 @@ eorinwangja:
       adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
       shortFeedback: 끝까지 다시 보며 직접 읽은 장면이 없다는 한계를 확인했어요.
       reportFeedback: 끝까지 다시 보며 직접 읽은 장면이 없다는 한계를 확인했어요. 무엇을 읽어야 할지는 보였지만 감상은 아직 부족해요.
-      earnedCards: 문해력, 자기이해, 검토력, 분석력
+      earnedCards: 해석능력, 자기성찰, 자기검증, 비판적 사고
     C3R1:
-      score: 18
+      score: 20
       grade: D
       item:
       delegation: '-'
       knowledge: '-'
-      awareness: 유명한 문장과 분위기만으로 바로 썼어요. 감상문처럼 보이지만 책 안 장면과 내 생각이 거의 비어 있었어요.
+      awareness: 유명한 문장과 분위기만으로 감상문을 만들었어요. 그럴듯하지만 책 안 장면과 내 경험이 비어 있었어요.
       cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
       replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 빈자리 발견
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 책 읽기 건너뛰기 → 문장·분위기로 쓰기 → 그대로 진행하기
@@ -5188,22 +4906,22 @@ eorinwangja:
       adjustedScore: -41
       adjustedType: 강한 공허함 페널티
       adjustedReason: 결과는 생겼지만 직접 겪어야 할 핵심 과정이 크게 비어 있는 경로.
-      shortFeedback: 유명한 문장과 분위기만으로 바로 썼어요.
-      reportFeedback: 유명한 문장과 분위기만으로 바로 썼어요. 감상문처럼 보이지만 책 안 장면과 내 생각이 거의 비어 있었어요.
+      shortFeedback: 유명한 문장과 분위기만으로 감상문을 만들었어요.
+      reportFeedback: 유명한 문장과 분위기만으로 감상문을 만들었어요. 그럴듯하지만 책 안 장면과 내 경험이 비어 있었어요.
     C3R2:
-      score: 30
+      score: 32
       grade: D
       item:
       delegation: '-'
       knowledge: '-'
-      awareness: 어색한 표현은 조금 고쳤지만 분위기만으로는 감상의 근거가 약했어요. 책에서 직접 확인한 장면이 필요해요.
+      awareness: 어색한 표현을 조금 고쳤지만 분위기만으로는 감상의 근거가 약했어요.
       cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
       replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 빈자리 발견
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 책 읽기 건너뛰기 → 문장·분위기로 쓰기 → 한 번 확인하기
@@ -5219,22 +4937,22 @@ eorinwangja:
       adjustedScore: -38
       adjustedType: 강한 공허함 페널티
       adjustedReason: 결과는 생겼지만 직접 겪어야 할 핵심 과정이 크게 비어 있는 경로.
-      shortFeedback: 어색한 표현은 조금 고쳤지만 분위기만으로는 감상의 근거가 약했어요.
-      reportFeedback: 어색한 표현은 조금 고쳤지만 분위기만으로는 감상의 근거가 약했어요. 책에서 직접 확인한 장면이 필요해요.
+      shortFeedback: 어색한 표현을 조금 고쳤지만 분위기만으로는 감상의 근거가 약했어요.
+      reportFeedback: 어색한 표현을 조금 고쳤지만 분위기만으로는 감상의 근거가 약했어요.
     C3R3:
       score: 42
       grade: D
       item: 빈칸 경고 카드
       delegation: '-'
       knowledge: '-'
-      awareness: 처음부터 다시 보며 채울 재료가 부족하다는 걸 확인했어요. 좋은 검토 태도였지만 책을 직접 읽은 시간이 더 필요했어요.
+      awareness: 처음부터 다시 보며 채울 재료가 없다는 걸 확인했어요. 좋은 검토 태도였지만 책을 직접 읽은 시간이 필요했어요.
       cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
       replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 빈자리 발견
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 책 읽기 건너뛰기 → 문장·분위기로 쓰기 → 깊게 확인하기
@@ -5250,8 +4968,8 @@ eorinwangja:
       adjustedScore: -41
       adjustedType: 강한 공허함 페널티
       adjustedReason: 결과는 생겼지만 직접 겪어야 할 핵심 과정이 크게 비어 있는 경로.
-      shortFeedback: 처음부터 다시 보며 채울 재료가 부족하다는 걸 확인했어요.
-      reportFeedback: 처음부터 다시 보며 채울 재료가 부족하다는 걸 확인했어요. 좋은 검토 태도였지만 책을 직접 읽은 시간이 더 필요했어요.
+      shortFeedback: 처음부터 다시 보며 채울 재료가 없다는 걸 확인했어요.
+      reportFeedback: 처음부터 다시 보며 채울 재료가 없다는 걸 확인했어요. 좋은 검토 태도였지만 책을 직접 읽은 시간이 필요했어요.
   axisDelta:
   - leafId: A1R3
     requireCard: 문해력
@@ -5306,32 +5024,32 @@ eorinwangja:
       time: 29
       energy: 25
     B1R1:
-      time: 12
+      time: 13
       energy: 10
     B1R2:
-      time: 15
+      time: 16
       energy: 13
     B1R3:
-      time: 20
+      time: 21
       energy: 17
     B2R1:
+      time: 14
+      energy: 11
+    B2R2:
+      time: 17
+      energy: 14
+    B2R3:
+      time: 22
+      energy: 18
+    B3R1:
       time: 12
       energy: 10
-    B2R2:
+    B3R2:
       time: 15
       energy: 13
-    B2R3:
+    B3R3:
       time: 20
       energy: 17
-    B3R1:
-      time: 15
-      energy: 12
-    B3R2:
-      time: 18
-      energy: 15
-    B3R3:
-      time: 23
-      energy: 19
     C1R1:
       time: 7
       energy: 5
@@ -5351,13 +5069,13 @@ eorinwangja:
       time: 17
       energy: 14
     C3R1:
-      time: 9
+      time: 10
       energy: 7
     C3R2:
-      time: 12
+      time: 13
       energy: 10
     C3R3:
-      time: 17
+      time: 18
       energy: 14
   expRewards:
     A1R1: 25
@@ -5537,14 +5255,14 @@ eorinwangja:
         time: 18
         energy: 16
       B1:
-        time: 9
+        time: 10
         energy: 8
       B2:
+        time: 11
+        energy: 9
+      B3:
         time: 9
         energy: 8
-      B3:
-        time: 12
-        energy: 10
       C1:
         time: 4
         energy: 3
@@ -5552,7 +5270,7 @@ eorinwangja:
         time: 6
         energy: 5
       C3:
-        time: 6
+        time: 7
         energy: 5
     review:
       R1:
@@ -5891,11 +5609,6 @@ career:
     knowledge: +
     basePoint: 10
     varPoint: 15
-    discountTags:
-      humanCentric: 중심잡기
-      domain:
-      - 자기이해
-      - 탐색력
   - id: B
     label: AI로 가능성을 넓혀본다
     desc: AI에게 유망한 일, 새로운 조합, 작은 프로젝트, 사라질 일과 생길 일을 물어보며 가능성을 넓혀보는 길이다.
@@ -5904,24 +5617,14 @@ career:
     knowledge: '-'
     basePoint: 10
     varPoint: 0
-    discountTags:
-      humanCentric: 중심잡기
-      domain:
-      - 탐색력
-      - 분석력
   - id: C
-    label: 사람들이 좋다고 말하는 길을 먼저 찾아본다
+    label: 사람들이 말하는 안전한 길을 찾아본다
     desc: 부모님, 친구, 선생님, 유튜브, 뉴스, 인기 학과, 자격증처럼 바깥에서 좋아 보이는 기준을 따라가보는 길이다.
-    lesson: 외부 기준을 따라갔다 — 바깥에서 좋다고 하는 말이 내 확인 없이 들어오면 그럴듯한 보고서가 된다.
+    lesson: 외부 기준을 따라갔다 — 바깥의 좋은 말이 내 확인 없이 들어오면 안전해 보이는 보고서가 된다.
     delegation: '0'
     knowledge: '0'
     basePoint: 10
     varPoint: 8
-    discountTags:
-      humanCentric: 성찰하기
-      domain:
-      - 자료판단력
-      - 분석력
   tier2:
     A:
     - id: A1
@@ -5931,13 +5634,6 @@ career:
       lesson: 내 관심부터 적었다 — 어디에 마음이 쓰이는지가 진로의 출발점이다.
       basePoint: 10
       varPoint: 25
-      discountTags:
-        humanCentric: 중심잡기
-        domain:
-        - 자기이해
-        - 탐색력
-        strongDomain:
-        - 자기이해
     - id: A2
       label: AI 시대에 내가 걱정하는 말을 적어본다
       delegation: +
@@ -5945,13 +5641,6 @@ career:
       lesson: 내 걱정을 적었다 — 불안은 확인할 질문으로 바꿀 수 있다.
       basePoint: 10
       varPoint: 12
-      discountTags:
-        humanCentric: 중심잡기
-        domain:
-        - 자기이해
-        - 분석력
-        strongDomain:
-        - 자기이해
     - id: A3
       label: 관심을 작은 실험으로 바꿔본다
       delegation: '0'
@@ -5959,12 +5648,6 @@ career:
       lesson: 작은 실험으로 바꿨다 — 진로는 해보면서 확인된다.
       basePoint: 10
       varPoint: 0
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 탐색력
-        strongDomain:
-        - 탐색력
     B:
     - id: B1
       label: AI에게 앞으로 유망한 일을 추천받는다
@@ -5973,13 +5656,6 @@ career:
       lesson: AI 유망 추천을 받았다 — 사실/예상/의견을 나누는 자리가 다음이다.
       basePoint: 10
       varPoint: -10
-      discountTags:
-        humanCentric: 중심잡기
-        domain:
-        - 분석력
-        - 탐색력
-        strongDomain:
-        - 분석력
     - id: B2
       label: AI에게 내 관심으로 만들 수 있는 새 일을 제안받는다
       delegation: '0'
@@ -5987,13 +5663,6 @@ career:
       lesson: AI로 새 조합을 받았다 — 그럴듯함과 진짜 끌림은 다르다.
       basePoint: 10
       varPoint: 5
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 탐색력
-        - 분석력
-        strongDomain:
-        - 탐색력
     - id: B3
       label: AI로 작은 결과물을 만들어보고 진로를 생각한다
       delegation: ++
@@ -6001,13 +5670,6 @@ career:
       lesson: AI로 결과물을 만들었다 — AI가 한 부분과 내가 판단한 부분을 나눠야 한다.
       basePoint: 10
       varPoint: 25
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 탐색력
-        - 표현력
-        strongDomain:
-        - 탐색력
     C:
     - id: C1
       label: 유튜브나 뉴스에서 본 유망한 길을 찾아본다
@@ -6016,13 +5678,6 @@ career:
       lesson: 미디어 추천을 따라갔다 — 빈틈과 위험도 같이 봐야 한다.
       basePoint: 10
       varPoint: -10
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 자료판단력
-        - 분석력
-        strongDomain:
-        - 자료판단력
     - id: C2
       label: 부모님, 친구, 선생님이 좋다고 한 길을 따라본다
       delegation: '0'
@@ -6030,13 +5685,6 @@ career:
       lesson: 주변 추천을 따랐다 — 추천이 내 경험과 맞는지가 자리다.
       basePoint: 10
       varPoint: 5
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 자기이해
-        - 분석력
-        strongDomain:
-        - 자기이해
     - id: C3
       label: 인기 학과나 자격증, 안정적인 길을 먼저 찾아본다
       delegation: '-'
@@ -6044,13 +5692,6 @@ career:
       lesson: 안전한 길을 모았다 — 이름이 아니라 실제 공부와 일을 봐야 한다.
       basePoint: 10
       varPoint: 0
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 탐색력
-        - 분석력
-        strongDomain:
-        - 탐색력
   results:
     A1:
       text: 내가 자주 보는 콘텐츠, 좋아하는 활동, 계속 찾아보게 되는 주제들이 적힌 관심 목록이 만들어진다. 아직 직업으로 정리되지는 않았지만, 내가 어디에 자주 마음을 쓰는지는 보이기 시작한다.
@@ -6119,43 +5760,23 @@ career:
       - 다음에 알아볼 행동이 정해지지 않음
   reviews:
   - id: R1
-    label: 나온 추천을 그대로 정리한다
-    desc: 추천이나 자료를 그대로 정리했다. 빠르지만 내 기준과 실제 경험이 빠질 수 있다.
+    label: 그대로 제출
+    desc: 검토 없이 그대로 낸다.
     boostType: none
     lesson: 검토를 건너뛰면 불안도 그대로 남는다.
     points: 10
-    discountTags:
-      humanCentric: ''
-      domain: []
-      strongDomain: []
   - id: R2
-    label: 낯선 직업 이름과 이상한 정보만 확인한다
-    desc: 낯선 정보와 이상한 표현을 일부 확인했다. 오류는 줄였지만 내 기준과 연결한 검토는 아직 약하다.
+    label: 한 번 읽고 이상한 곳만 표시
+    desc: 명백히 이상하거나 내 경험과 안 맞는 부분만 표시한다.
     boostType: explicit
     lesson: 이상한 부분을 잡았다. 도메인지식 +1
     points: 18
-    discountTags:
-      humanCentric: 성찰하기
-      domain:
-      - 검토력
-      - 자료판단력
-      - 분석력
-      strongDomain:
-      - 자료판단력
   - id: R3
-    label: 내 관심, 걱정, 실제 해볼 활동과 이어지는지 다시 본다
-    desc: 추천과 정보를 내 관심, 걱정, 실제 해볼 활동에 비춰 다시 봤다. 진로 판단을 자기 기준으로 되돌리는 검토다.
+    label: 내 질문과 경험에 비춰 다시 확인
+    desc: AI 답, 남의 의견, 내 생각이 실제 경험과 이어지는지 확인한다.
     boostType: all
     lesson: 내 기준으로 다시 봤다. 도메인지식 +3
     points: 30
-    discountTags:
-      humanCentric: 성찰하기
-      domain:
-      - 검토력
-      - 자기이해
-      - 탐색력
-      strongDomain:
-      - 검토력
   reviewSupplements:
     A1R1: 내 취향은 보이지만, 왜 그것이 나에게 중요한지나 진로탐구와 어떻게 이어지는지는 약한 보고서가 된다.
     A1R2: 단순한 취향 목록이 아니라, 내가 어떤 장면과 문제에 끌리는지 조금 더 분명해진 진로탐구가 된다.
@@ -6223,7 +5844,7 @@ career:
       humanCentricAxis: 중심잡기
       humanCentricTag: 주체성
       domainCards:
-      - 탐색력
+      - 진로탐색
       - 자기이해
       growthCard: ''
       replayCardStatus: ''
@@ -6245,7 +5866,7 @@ career:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 내가 자주 보고 좋아하는 것에서 출발해 기준의 씨앗은 생겼어요.
       reportFeedback: 내가 자주 보고 좋아하는 것에서 출발해 기준의 씨앗은 생겼어요. 다만 그대로 정리해 실제로 해볼 활동은 아직 약해요.
-      earnedCards: 탐색력, 분석력
+      earnedCards: 진로탐색, 정보분석
     A1R2:
       score: 90
       grade: A
@@ -6259,9 +5880,9 @@ career:
       humanCentricAxis: 중심잡기
       humanCentricTag: 주체성
       domainCards:
-      - 탐색력
+      - 진로탐색
       - 자기이해
-      - 자료판단력
+      - 정보확인
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
@@ -6282,7 +5903,7 @@ career:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 낯선 정보와 어색한 말을 확인하며 내 관심이 조금 더 구체화됐어요.
       reportFeedback: 낯선 정보와 어색한 말을 확인하며 내 관심이 조금 더 구체화됐어요. 다음에는 작은 실험으로 이어볼 수 있어요.
-      earnedCards: 탐색력, 분석력, 검토력
+      earnedCards: 진로탐색, 정보분석, 검수능력
     A1R3:
       score: 96
       grade: S
@@ -6296,9 +5917,9 @@ career:
       humanCentricAxis: 중심잡기
       humanCentricTag: 주체성
       domainCards:
-      - 탐색력
+      - 진로탐색
       - 자기이해
-      - 분석력
+      - 판단력
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
@@ -6319,7 +5940,7 @@ career:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 내 관심과 걱정, 실제 해볼 활동을 함께 확인했어요.
       reportFeedback: 내 관심과 걱정, 실제 해볼 활동을 함께 확인했어요. 미래는 모르지만 내가 따져볼 기준은 만들었어요.
-      earnedCards: 탐색력, 분석력, 검토력
+      earnedCards: 진로탐색, 정보분석, 직업이해, 자기검증
     A2R1:
       score: 80
       grade: B
@@ -6354,7 +5975,7 @@ career:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: AI 시대에 걱정하는 말을 적어 진로 질문이 생겼어요.
       reportFeedback: AI 시대에 걱정하는 말을 적어 진로 질문이 생겼어요. 다만 바로 정리해 걱정을 행동으로 바꾸지는 못했어요.
-      earnedCards: 탐색력
+      earnedCards: 진로탐색, 직업이해
     A2R2:
       score: 87
       grade: A
@@ -6369,7 +5990,7 @@ career:
       humanCentricTag: 주체성
       domainCards:
       - 자기이해
-      - 탐색력
+      - 진로탐색
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
@@ -6390,7 +6011,7 @@ career:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 걱정과 관련된 정보를 일부 확인했어요.
       reportFeedback: 걱정과 관련된 정보를 일부 확인했어요. 불안이 막연한 말에서 따져볼 질문으로 바뀌기 시작했어요.
-      earnedCards: 탐색력, 검토력
+      earnedCards: 진로탐색, 직업이해, 검수능력
     A2R3:
       score: 94
       grade: A
@@ -6405,7 +6026,7 @@ career:
       humanCentricTag: 주체성
       domainCards:
       - 자기이해
-      - 분석력
+      - 판단력
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
@@ -6426,7 +6047,7 @@ career:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 내 걱정을 기준으로 추천과 활동을 다시 봤어요.
       reportFeedback: 내 걱정을 기준으로 추천과 활동을 다시 봤어요. 불안을 피하지 않고 판단의 단서로 바꾼 선택이에요.
-      earnedCards: 탐색력, 검토력
+      earnedCards: 진로탐색, 직업이해, 검수능력, 자기검증
     A3R1:
       score: 86
       grade: A
@@ -6437,10 +6058,11 @@ career:
       cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
       replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
       cardEarned: true
-      humanCentricAxis: '중심잡기'
-      humanCentricTag: '적응성'
+      humanCentricAxis: ''
+      humanCentricTag: ''
       domainCards:
-      - 탐색력
+      - 진로탐색
+      - 실험력
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
@@ -6459,7 +6081,7 @@ career:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 관심을 작은 실험으로 바꾼 점이 좋아요.
       reportFeedback: 관심을 작은 실험으로 바꾼 점이 좋아요. 다만 바로 정리해 실험에서 무엇을 확인할지는 덜 남았어요.
-      earnedCards: 탐색력
+      earnedCards: 진로탐색
     A3R2:
       score: 92
       grade: A
@@ -6473,8 +6095,8 @@ career:
       humanCentricAxis: 융합하기
       humanCentricTag: 창의적 사고
       domainCards:
-      - 탐색력
-      - 분석력
+      - 진로탐색
+      - 정보분석
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
@@ -6495,7 +6117,7 @@ career:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 실험과 관련된 낯선 정보를 확인했어요.
       reportFeedback: 실험과 관련된 낯선 정보를 확인했어요. 해보고 싶은 일과 실제 조건이 조금 더 가까워졌어요.
-      earnedCards: 탐색력, 자기이해
+      earnedCards: 진로탐색, 자기성찰
     A3R3:
       score: 98
       grade: S
@@ -6509,8 +6131,9 @@ career:
       humanCentricAxis: 융합하기
       humanCentricTag: 창의적 사고
       domainCards:
-      - 탐색력
-      - 분석력
+      - 진로탐색
+      - 실험력
+      - 판단력
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
@@ -6531,7 +6154,7 @@ career:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 작은 실험, 내 관심, AI 시대의 변화를 함께 확인했어요.
       reportFeedback: 작은 실험, 내 관심, AI 시대의 변화를 함께 확인했어요. 추천보다 내가 해볼 수 있는 경험이 중심이 됐어요.
-      earnedCards: 탐색력, 자기이해, 분석력, 검토력
+      earnedCards: 진로탐색, 자기성찰, 비판적 사고, 검수능력
     B1R1:
       score: 20
       grade: D
@@ -6545,7 +6168,7 @@ career:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 추천 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: AI로 가능성 넓히기 → 유망 직업 추천받기 → 그대로 진행하기
@@ -6576,7 +6199,7 @@ career:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 추천 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: AI로 가능성 넓히기 → 유망 직업 추천받기 → 한 번 확인하기
@@ -6607,7 +6230,7 @@ career:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 빈자리 발견
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: AI로 가능성 넓히기 → 유망 직업 추천받기 → 깊게 확인하기
@@ -6635,8 +6258,8 @@ career:
       cut6Feedback: 이번 결과는 부족했던 과정을 알아차리는 출발점이에요. 다시 시도하며 내 기준과 확인 과정을 세워 볼 수 있어요.
       replaySuggestion: 다시 해본다면 빠른 결과보다 내가 직접 확인할 수 있는 자료나 경험에서 시작해 보세요.
       cardEarned: false
-      humanCentricAxis: '중심잡기'
-      humanCentricTag: '호기심'
+      humanCentricAxis: ''
+      humanCentricTag: ''
       domainCards: []
       growthCard: 회복력
       replayCardStatus: 도전력 후보
@@ -6656,7 +6279,7 @@ career:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: AI가 내 관심에서 새 가능성을 넓혀줬어요.
       reportFeedback: AI가 내 관심에서 새 가능성을 넓혀줬어요. 다만 그대로 정리해 어떤 가능성이 내게 맞는지는 덜 따졌어요.
-      earnedCards: 탐색력
+      earnedCards: 직업이해
     B2R2:
       score: 80
       grade: B
@@ -6668,9 +6291,9 @@ career:
       replaySuggestion: 다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
-      humanCentricTag: 창의적 사고
+      humanCentricTag: 맥락적 사고
       domainCards:
-      - 탐색력
+      - 진로탐색
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
@@ -6691,7 +6314,7 @@ career:
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
       shortFeedback: 낯선 말과 이상한 정보를 확인하며 가능성의 일부를 걸렀어요.
       reportFeedback: 낯선 말과 이상한 정보를 확인하며 가능성의 일부를 걸렀어요. 내 기준과 연결하면 더 단단해질 수 있어요.
-      earnedCards: 탐색력, 분석력, 검토력
+      earnedCards: 직업이해, 정보분석, 검수능력
     B2R3:
       score: 90
       grade: A
@@ -6703,10 +6326,10 @@ career:
       replaySuggestion: 다시 해본다면 마지막 확인을 한 단계 더 깊게 해 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
-      humanCentricTag: 창의적 사고
+      humanCentricTag: 맥락적 사고
       domainCards:
-      - 탐색력
-      - 분석력
+      - 진로탐색
+      - 판단력
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
@@ -6727,7 +6350,7 @@ career:
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
       shortFeedback: AI가 넓힌 가능성을 내 관심과 실제 활동에 비춰 다시 봤어요.
       reportFeedback: AI가 넓힌 가능성을 내 관심과 실제 활동에 비춰 다시 봤어요. 추천을 내 판단으로 좁혀간 선택이에요.
-      earnedCards: 탐색력, 분석력, 검토력
+      earnedCards: 직업이해, 정보분석, 검수능력, 자기검증
     B3R1:
       score: 78
       grade: B
@@ -6741,7 +6364,7 @@ career:
       humanCentricAxis: 융합하기
       humanCentricTag: 창의적 사고
       domainCards:
-      - 탐색력
+      - 실험력
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
@@ -6762,7 +6385,7 @@ career:
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
       shortFeedback: AI로 작은 결과물을 만들어 보며 진로를 조금 현실적으로 만졌어요.
       reportFeedback: AI로 작은 결과물을 만들어 보며 진로를 조금 현실적으로 만졌어요. 다만 그대로 정리해 배운 점은 덜 정리됐어요.
-      earnedCards: 탐색력, 분석력, 검토력
+      earnedCards: 진로탐색, 정보분석, 검수능력
     B3R2:
       score: 86
       grade: A
@@ -6774,10 +6397,10 @@ career:
       replaySuggestion: 다시 해본다면 마지막 확인을 한 단계 더 깊게 해 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
-      humanCentricTag: 직관적 통찰
+      humanCentricTag: 창의적 사고
       domainCards:
-      - 탐색력
-      - 분석력
+      - 실험력
+      - 정보분석
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
@@ -6798,7 +6421,7 @@ career:
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
       shortFeedback: 모르는 말을 다시 찾으며 결과물이 조금 현실처럼 보였어요.
       reportFeedback: 모르는 말을 다시 찾으며 결과물이 조금 현실처럼 보였어요. 좋은 AI 활용이지만 내 기준으로 더 깊게 고를 수 있어요.
-      earnedCards: 탐색력, 분석력, 검토력
+      earnedCards: 진로탐색, 정보분석, 검수능력, 비판적 사고
     B3R3:
       score: 95
       grade: S
@@ -6810,10 +6433,10 @@ career:
       replaySuggestion: 다시 해본다면 같은 주제를 다른 방식으로 풀어 보며 선택의 차이를 비교해 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
-      humanCentricTag: 통합적 사고
+      humanCentricTag: 창의적 사고
       domainCards:
-      - 탐색력
-      - 분석력
+      - 실험력
+      - 판단력
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
@@ -6834,7 +6457,7 @@ career:
       adjustedReason: 앞 단계의 위험을 이후 검토와 재구성으로 회복한 경로.
       shortFeedback: AI 결과물을 내 관심과 실제 해볼 활동에 비춰 다시 봤어요.
       reportFeedback: AI 결과물을 내 관심과 실제 해볼 활동에 비춰 다시 봤어요. AI는 자료를 줬고, 고르는 쪽은 내 판단에 남았어요.
-      earnedCards: 탐색력, 분석력, 검토력
+      earnedCards: 진로탐색, 정보분석, 직업이해, 검수능력, 자기검증
     C1R1:
       score: 30
       grade: D
@@ -6848,7 +6471,7 @@ career:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 유행 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 안전한 길 먼저 보기 → 뉴스·영상 길 찾기 → 그대로 진행하기
@@ -6866,7 +6489,7 @@ career:
       adjustedReason: 검토, 근거 확인, 자기 기준 형성이 부족한 경로.
       shortFeedback: 유튜브나 뉴스에서 본 길을 그대로 정리했어요.
       reportFeedback: 유튜브나 뉴스에서 본 길을 그대로 정리했어요. 그럴듯하지만 내 관심과 경험은 거의 들어가지 못했어요.
-      earnedCards: 탐색력, 자기이해
+      earnedCards: 직업이해, 진로탐색, 자기성찰
     C1R2:
       score: 45
       grade: D
@@ -6880,7 +6503,7 @@ career:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 유행 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 안전한 길 먼저 보기 → 뉴스·영상 길 찾기 → 한 번 확인하기
@@ -6898,7 +6521,7 @@ career:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 유행하는 말과 낯선 정보를 일부 확인했어요.
       reportFeedback: 유행하는 말과 낯선 정보를 일부 확인했어요. 그래도 미디어가 만든 기준이 내 질문보다 앞에 있었어요.
-      earnedCards: 탐색력, 자기이해, 분석력
+      earnedCards: 직업이해, 진로탐색, 자기성찰, 비판적 사고
     C1R3:
       score: 60
       grade: C
@@ -6912,7 +6535,7 @@ career:
       humanCentricAxis: 성찰하기
       humanCentricTag: 비판적 사고
       domainCards:
-      - 자료판단력
+      - 정보확인
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
@@ -6933,7 +6556,7 @@ career:
       adjustedReason: AI나 외부 도움을 자기 기준으로 걸러 과정 소유권을 회복한 경로.
       shortFeedback: 처음부터 다시 보며 미디어 정보의 빈틈을 발견했어요.
       reportFeedback: 처음부터 다시 보며 미디어 정보의 빈틈을 발견했어요. 다만 출발이 유행이라 내 경험과 연결은 제한적이에요.
-      earnedCards: 탐색력, 분석력, 자기이해, 검토력
+      earnedCards: 직업이해, 진로탐색, 정보분석, 자기성찰, 자기검증
     C2R1:
       score: 38
       grade: D
@@ -6947,7 +6570,7 @@ career:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 외부기준 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 안전한 길 먼저 보기 → 주변 추천 따라가기 → 그대로 진행하기
@@ -6978,7 +6601,7 @@ career:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 외부기준 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 안전한 길 먼저 보기 → 주변 추천 따라가기 → 한 번 확인하기
@@ -6996,7 +6619,7 @@ career:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 이상한 정보는 조금 확인했지만 외부 기준을 내 기준으로 바꾸지는 못했어요.
       reportFeedback: 이상한 정보는 조금 확인했지만 외부 기준을 내 기준으로 바꾸지는 못했어요.
-      earnedCards: 분석력
+      earnedCards: 비판적 사고
     C2R3:
       score: 68
       grade: C
@@ -7008,10 +6631,9 @@ career:
       replaySuggestion: 다시 해본다면 그대로 진행하기 전에 이상한 부분을 표시하거나 처음부터 다시 확인해 보세요.
       cardEarned: true
       humanCentricAxis: 성찰하기
-      humanCentricTag: 윤리적 사고
+      humanCentricTag: 사회·관계적 사고
       domainCards:
       - 자기이해
-      - 분석력
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
@@ -7032,7 +6654,7 @@ career:
       adjustedReason: 단계별 선택의 의미가 최종 결과에 거의 그대로 반영된 경로.
       shortFeedback: 추천받은 길을 내 관심과 걱정에 비춰 다시 봤어요.
       reportFeedback: 추천받은 길을 내 관심과 걱정에 비춰 다시 봤어요. 남의 기준에서 출발했지만 내 질문을 조금 되찾았어요.
-      earnedCards: 탐색력, 자기이해, 검토력, 분석력
+      earnedCards: 진로탐색, 자기성찰, 자기검증, 비판적 사고
     C3R1:
       score: 40
       grade: D
@@ -7046,7 +6668,7 @@ career:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 라벨 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 안전한 길 먼저 보기 → 인기·안정 길 보기 → 그대로 진행하기
@@ -7077,7 +6699,7 @@ career:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 라벨 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 안전한 길 먼저 보기 → 인기·안정 길 보기 → 한 번 확인하기
@@ -7108,8 +6730,7 @@ career:
       humanCentricAxis: 성찰하기
       humanCentricTag: 비판적 사고
       domainCards:
-      - 탐색력
-      - 분석력
+      - 진로탐색
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
@@ -7768,11 +7389,6 @@ studyplan:
     knowledge: +
     basePoint: 10
     varPoint: 15
-    discountTags:
-      humanCentric: 중심잡기
-      domain:
-      - 학습력
-      - 자기이해
   - id: B
     label: AI로 시험공부를 도와보게 한다
     desc: AI에게 공부법, 계획표, 요약, 예상문제 같은 도움을 받아보는 길이다.
@@ -7781,23 +7397,14 @@ studyplan:
     knowledge: '-'
     basePoint: 10
     varPoint: 0
-    discountTags:
-      humanCentric: 중심잡기
-      domain:
-      - 학습력
   - id: C
-    label: 공부한 느낌이 드는 쉬운 방법에서 시작한다
-    desc: 친구 계획표, 학원 자료, 작년 시험지, 인터넷 요약, 책상 정리나 쉬운 과목처럼 공부한 느낌이 드는 것에서 시작하는 길이다.
-    lesson: 공부한 느낌이 드는 쉬운 방법에서 시작했다 — 내 약점·올해 범위와 맞지 않으면 실제 공부는 비어 있을 수 있다.
+    label: 공부에 도움 될 것 같은 다른 방법에서 시작한다
+    desc: 친구 계획표, 학원 자료, 작년 시험지, 인터넷 요약, 책상 정리처럼 공부에 도움이 될 것 같은 것에서 시작하는 길이다.
+    lesson: 외부 자료에 기댔다 — 내 약점·올해 범위와 맞지 않으면 공부한 느낌만 남는다.
     delegation: '0'
     knowledge: '0'
     basePoint: 10
     varPoint: 0
-    discountTags:
-      humanCentric: 성찰하기
-      domain:
-      - 검토력
-      - 학습력
   tier2:
     A:
     - id: A1
@@ -7807,13 +7414,6 @@ studyplan:
       lesson: 문제로 약한 단원을 찾았다 — 막연한 불안이 구체적 단원으로 보인다.
       basePoint: 10
       varPoint: 25
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 학습력
-        - 자기이해
-        strongDomain:
-        - 학습력
     - id: A2
       label: 시험 범위표를 보며 아는 단원과 모르는 단원을 나눈다
       delegation: +
@@ -7821,13 +7421,6 @@ studyplan:
       lesson: 범위표로 단원을 나눴다 — 어렵다는 느낌과 실제 어려움은 다르다.
       basePoint: 10
       varPoint: 12
-      discountTags:
-        humanCentric: 중심잡기
-        domain:
-        - 학습력
-        - 자료판단력
-        strongDomain:
-        - 자료판단력
     - id: A3
       label: 과목별 자신감과 실제 문제 풀이를 비교한다
       delegation: '0'
@@ -7835,13 +7428,6 @@ studyplan:
       lesson: 자신감과 실제 풀이를 비교했다 — 감과 점수의 어긋남이 약점이다.
       basePoint: 10
       varPoint: 0
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 학습력
-        - 자기이해
-        strongDomain:
-        - 자기이해
     B:
     - id: B1
       label: AI에게 2주 공부 계획표를 만들어 달라고 한다
@@ -7850,12 +7436,6 @@ studyplan:
       lesson: AI 계획표를 받았다 — 내 시험 범위·생활 시간 정합이 다음 자리다.
       basePoint: 10
       varPoint: -10
-      discountTags:
-        humanCentric: 중심잡기
-        domain:
-        - 학습력
-        strongDomain:
-        - 학습력
     - id: B2
       label: AI에게 내 약점을 말하고 공부 순서를 받는다
       delegation: '0'
@@ -7863,27 +7443,13 @@ studyplan:
       lesson: AI 공부 순서를 받았다 — 추천 이유와 내 오답 정합이 자리다.
       basePoint: 10
       varPoint: 5
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 학습력
-        - 자기이해
-        strongDomain:
-        - 자기이해
     - id: B3
       label: 내 약점과 시험 범위를 넣어 AI에게 요약본이나 예상문제를 받는다
       delegation: ++
       knowledge: ++
-      lesson: 내 약점과 시험 범위를 넣어 AI 자료를 받았다 — 실제 범위와 오답에 맞는지 확인해야 한다.
+      lesson: AI 요약·예상문제를 받았다 — 실제 시험 범위 확인이 자리다.
       basePoint: 10
       varPoint: 25
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 학습력
-        - 자료판단력
-        strongDomain:
-        - 자료판단력
     C:
     - id: C1
       label: 친구나 학원 계획표를 따라 한다
@@ -7892,41 +7458,20 @@ studyplan:
       lesson: 친구·학원 계획을 따랐다 — 그쪽 약점은 내 약점과 다르다.
       basePoint: 10
       varPoint: -10
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 학습력
-        - 검토력
-        strongDomain:
-        - 검토력
     - id: C2
       label: 작년 시험지나 인터넷 요약 자료에 기대어 공부한다
       delegation: '0'
       knowledge: '0'
-      lesson: 작년 시험지나 인터넷 요약에서 시작했다 — 공부할 양은 줄어든 것 같지만, 올해 시험 범위와 내 약점이 빠질 수 있다.
+      lesson: C2-V3는 의도적 부정 자리 — AI 의존이 깊어지면 V3여도 검토가 형식만 남는다.
       basePoint: 10
       varPoint: 0
-      discountTags:
-        humanCentric: 성찰하기
-        domain:
-        - 자료판단력
-        - 학습력
-        strongDomain:
-        - 자료판단력
     - id: C3
-      label: 책상 정리나 쉬운 과목처럼 부담 없는 일부터 한다
+      label: 공부를 미루거나 쉬운 일만 한다
       delegation: '-'
       knowledge: '-'
-      lesson: 공부한 느낌은 만들었다 — 정리된 책상과 쉬운 문제는 약점 확인을 대신하지 못한다.
+      lesson: 공부를 미뤘다 — 정리된 책상은 풀어본 문제가 아니다.
       basePoint: 10
       varPoint: -10
-      discountTags:
-        humanCentric: 융합하기
-        domain:
-        - 학습력
-        - 자기이해
-        strongDomain:
-        - 자기이해
   results:
     A1:
       text: 문제를 조금 풀어본 뒤, 틀린 문제가 많은 단원과 헷갈리는 개념이 표시된 간단한 약점 목록이 만들어진다. 아직 정확한 공부 순서는 정리되지 않았지만, 막연한 불안이 구체적인 단원으로 보이기 시작한다.
@@ -8005,42 +7550,23 @@ studyplan:
       - 공부 계획 없이 시간이 지나감
   reviews:
   - id: R1
-    label: 계획표대로 바로 시작한다
-    desc: 계획을 바로 실행했다. 빠르게 시작하지만 내 약점이나 범위 오류를 놓칠 수 있다.
+    label: 그대로 진행
+    desc: 검토 없이 그대로 공부를 시작한다.
     boostType: none
     lesson: 검토를 건너뛰었다 — 내 계획을 다시 볼 기회를 놓쳤다.
     points: 10
-    discountTags:
-      humanCentric: ''
-      domain: []
-      strongDomain: []
   - id: R2
-    label: 빠진 단원이나 너무 빡센 일정만 고친다
-    desc: 빠진 단원과 무리한 일정을 일부 고쳤다. 표면 조정은 했지만 오답 기준으로 다시 짠 것은 아니다.
+    label: 한 번 보고 빠진 과목만 표시
+    desc: 명시적으로 빠진 과목이나 단원을 발견.
     boostType: explicit
     lesson: 한 번 훑어 빠진 단원을 잡았다. 도메인지식 +1
     points: 18
-    discountTags:
-      humanCentric: 성찰하기
-      domain:
-      - 검토력
-      - 학습력
-      strongDomain:
-      - 검토력
   - id: R3
-    label: 내 오답과 남은 시간을 기준으로 우선순위를 다시 잡는다
-    desc: 내 오답과 남은 시간을 기준으로 우선순위를 다시 잡았다. 공부 계획을 내 약점에 맞게 책임지는 검토다.
+    label: 오답 확인 + 약점 다시 배치
+    desc: 내가 모르는 단원과 공부 시간을 다시 맞춘다.
     boostType: all
     lesson: 오답을 다시 보고 약점에 시간을 옮겼다. 도메인지식 +3
     points: 30
-    discountTags:
-      humanCentric: 성찰하기
-      domain:
-      - 검토력
-      - 학습력
-      - 자기이해
-      strongDomain:
-      - 학습력
   reviewSupplements:
     A1R1: 공부가 바로 시작되지만, 왜 틀렸는지 확인하지 않아 같은 단원 안에서도 무엇을 먼저 봐야 하는지는 애매하게 남는다.
     A1R2: 단순히 많이 틀린 단원이 아니라, 개념을 몰라서 틀린 문제와 실수로 틀린 문제를 나누어 공부 순서를 조정한 계획이 된다.
@@ -8107,7 +7633,8 @@ studyplan:
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
       domainCards:
-      - 학습력
+      - 학습설계
+      - 약점파악
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
@@ -8128,7 +7655,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 문제를 풀어 약한 단원은 보였어요.
       reportFeedback: 문제를 풀어 약한 단원은 보였어요. 다만 바로 시작해 왜 틀렸는지와 우선순위는 아직 흐릿해요.
-      earnedCards: 학습력
+      earnedCards: 학습설계, 시간관리
     A1R2:
       score: 88
       grade: A
@@ -8142,7 +7669,8 @@ studyplan:
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
       domainCards:
-      - 학습력
+      - 학습설계
+      - 약점파악
       - 검토력
       growthCard: ''
       replayCardStatus: ''
@@ -8164,7 +7692,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 빠진 단원과 무리한 일정을 고치며 공부 순서가 더 현실적이 됐어요.
       reportFeedback: 빠진 단원과 무리한 일정을 고치며 공부 순서가 더 현실적이 됐어요. 오답까지 보면 더 정확해져요.
-      earnedCards: 학습력, 검토력
+      earnedCards: 학습설계, 시간관리, 검수능력
     A1R3:
       score: 97
       grade: S
@@ -8178,7 +7706,9 @@ studyplan:
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
       domainCards:
-      - 학습력
+      - 학습설계
+      - 약점파악
+      - 메타인지
       growthCard: ''
       replayCardStatus: ''
       expReward: 30
@@ -8199,7 +7729,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 내 오답과 남은 시간을 기준으로 우선순위를 다시 잡았어요.
       reportFeedback: 내 오답과 남은 시간을 기준으로 우선순위를 다시 잡았어요. 내가 모르는 것을 아는 데서 공부 계획이 시작됐어요.
-      earnedCards: 학습력, 검토력
+      earnedCards: 학습설계, 시간관리, 학습전략, 자기검증
     A2R1:
       score: 76
       grade: B
@@ -8213,7 +7743,7 @@ studyplan:
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
       domainCards:
-      - 학습력
+      - 학습설계
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
@@ -8234,7 +7764,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 시험 범위에서 아는 것과 모르는 것을 나눴어요.
       reportFeedback: 시험 범위에서 아는 것과 모르는 것을 나눴어요. 다만 바로 시작해 실제 문제에서 약한 부분은 덜 확인됐어요.
-      earnedCards: 학습력
+      earnedCards: 학습설계, 학습전략
     A2R2:
       score: 84
       grade: B
@@ -8248,7 +7778,8 @@ studyplan:
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
       domainCards:
-      - 학습력
+      - 학습설계
+      - 시간관리
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
@@ -8269,7 +7800,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 빠진 단원과 무리한 일정을 고치며 범위표가 공부 계획으로 가까워졌어요.
       reportFeedback: 빠진 단원과 무리한 일정을 고치며 범위표가 공부 계획으로 가까워졌어요.
-      earnedCards: 학습력, 검토력
+      earnedCards: 학습설계, 학습전략, 검수능력
     A2R3:
       score: 92
       grade: A
@@ -8283,7 +7814,8 @@ studyplan:
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
       domainCards:
-      - 학습력
+      - 학습설계
+      - 시간관리
       - 검토력
       growthCard: ''
       replayCardStatus: ''
@@ -8305,7 +7837,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 범위표와 내 오답을 함께 보며 우선순위를 다시 잡았어요.
       reportFeedback: 범위표와 내 오답을 함께 보며 우선순위를 다시 잡았어요. 공부할 목록이 내 약점에 더 가까워졌어요.
-      earnedCards: 학습력, 검토력
+      earnedCards: 학습설계, 학습전략, 검수능력, 자기검증
     A3R1:
       score: 78
       grade: B
@@ -8319,7 +7851,7 @@ studyplan:
       humanCentricAxis: '융합하기'
       humanCentricTag: '문제해결적 사고'
       domainCards:
-      - 학습력
+      - 메타인지
       growthCard: ''
       replayCardStatus: 도전력 후보
       expReward: 8
@@ -8338,7 +7870,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 자신감과 실제 풀이를 비교해 착각을 줄일 단서가 생겼어요.
       reportFeedback: 자신감과 실제 풀이를 비교해 착각을 줄일 단서가 생겼어요. 다만 바로 시작해 시간 배분은 덜 조정됐어요.
-      earnedCards: 학습력
+      earnedCards: 학습설계
     A3R2:
       score: 86
       grade: A
@@ -8352,7 +7884,8 @@ studyplan:
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
       domainCards:
-      - 학습력
+      - 메타인지
+      - 약점파악
       growthCard: ''
       replayCardStatus: ''
       expReward: 16
@@ -8373,7 +7906,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 자신감과 실제 풀이가 다른 부분을 확인했어요.
       reportFeedback: 자신감과 실제 풀이가 다른 부분을 확인했어요. 공부 계획이 기분보다 근거에 가까워졌어요.
-      earnedCards: 학습력
+      earnedCards: 학습설계, 시간관리
     A3R3:
       score: 96
       grade: S
@@ -8387,7 +7920,8 @@ studyplan:
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
       domainCards:
-      - 학습력
+      - 메타인지
+      - 학습설계
       - 검토력
       growthCard: ''
       replayCardStatus: ''
@@ -8409,7 +7943,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 자신감, 실제 오답, 남은 시간을 함께 보며 다시 배치했어요.
       reportFeedback: 자신감, 실제 오답, 남은 시간을 함께 보며 다시 배치했어요. 공부 계획이 내 상태를 더 정확히 반영했어요.
-      earnedCards: 학습력, 자기이해, 검토력
+      earnedCards: 학습설계, 시간관리, 자기성찰, 검수능력
     B1R1:
       score: 28
       grade: D
@@ -8423,7 +7957,7 @@ studyplan:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 계획표 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: AI로 공부 돕기 → AI 계획표 받기 → 그대로 진행하기
@@ -8454,7 +7988,7 @@ studyplan:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 계획표 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: AI로 공부 돕기 → AI 계획표 받기 → 한 번 확인하기
@@ -8485,7 +8019,7 @@ studyplan:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 빈자리 발견
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: AI로 공부 돕기 → AI 계획표 받기 → 깊게 확인하기
@@ -8513,8 +8047,8 @@ studyplan:
       cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
       replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: false
-      humanCentricAxis: '중심잡기'
-      humanCentricTag: '적응성'
+      humanCentricAxis: ''
+      humanCentricTag: ''
       domainCards: []
       growthCard: 회복력
       replayCardStatus: 도전력 후보
@@ -8534,7 +8068,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: AI에게 약점을 말해 공부 순서는 생겼어요.
       reportFeedback: AI에게 약점을 말해 공부 순서는 생겼어요. 다만 바로 시작해 실제 오답과 범위가 맞는지는 확인하지 못했어요.
-      earnedCards: 학습력
+      earnedCards: 학습설계
     B2R2:
       score: 76
       grade: B
@@ -8548,7 +8082,7 @@ studyplan:
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
       domainCards:
-      - 학습력
+      - 학습설계
       growthCard: ''
       replayCardStatus: ''
       expReward: 22
@@ -8569,7 +8103,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 빠진 단원과 무리한 일정을 일부 고쳤어요.
       reportFeedback: 빠진 단원과 무리한 일정을 일부 고쳤어요. AI 도움은 썼지만 내 약점 기준이 조금 살아났어요.
-      earnedCards: 학습력, 검토력
+      earnedCards: 학습설계, 학습전략, 검수능력
     B2R3:
       score: 88
       grade: A
@@ -8583,7 +8117,7 @@ studyplan:
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
       domainCards:
-      - 학습력
+      - 학습설계
       - 검토력
       growthCard: ''
       replayCardStatus: ''
@@ -8605,7 +8139,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: AI가 제안한 순서를 내 오답과 남은 시간으로 다시 걸렀어요.
       reportFeedback: AI가 제안한 순서를 내 오답과 남은 시간으로 다시 걸렀어요. 도움은 받았지만 마지막 우선순위는 내가 잡았어요.
-      earnedCards: 학습력, 검토력
+      earnedCards: 학습설계, 학습전략, 검수능력, 자기검증
     B3R1:
       score: 68
       grade: C
@@ -8619,7 +8153,7 @@ studyplan:
       humanCentricAxis: 융합하기
       humanCentricTag: 문제해결적 사고
       domainCards:
-      - 학습력
+      - 학습전략
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
@@ -8640,7 +8174,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 내 약점과 시험 범위를 넣어 AI 자료를 받았어요.
       reportFeedback: 내 약점과 시험 범위를 넣어 AI 자료를 받았어요. 다만 바로 시작해 범위 밖 내용이나 쉬운 내용은 걸러내지 못했어요.
-      earnedCards: 학습력, 검토력
+      earnedCards: 학습설계, 학습전략, 검수능력
     B3R2:
       score: 80
       grade: B
@@ -8652,10 +8186,10 @@ studyplan:
       replaySuggestion: 다시 해본다면 틀린 이유를 직접 분석하고 공부 순서를 다시 잡아 보세요.
       cardEarned: true
       humanCentricAxis: 융합하기
-      humanCentricTag: 직관적 통찰
+      humanCentricTag: 문제해결적 사고
       domainCards:
-      - 학습력
-      - 자료판단력
+      - 학습전략
+      - 범위확인
       growthCard: ''
       replayCardStatus: ''
       expReward: 26
@@ -8676,7 +8210,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: AI 답에서 시험 범위 밖 내용을 빼니 내 공부에 맞는 부분이 남았어요.
       reportFeedback: AI 답에서 시험 범위 밖 내용을 빼니 내 공부에 맞는 부분이 남았어요. 다만 오답 기준으로 다시 배치하면 더 좋아져요.
-      earnedCards: 학습력, 검토력, 분석력
+      earnedCards: 학습설계, 학습전략, 검수능력, 비판적 사고
     B3R3:
       score: 90
       grade: A
@@ -8687,10 +8221,11 @@ studyplan:
       cut6Feedback: 자기 기준으로 공부 자료와 약점을 확인해 꽤 단단한 공부 방향을 만들었어요.
       replaySuggestion: 다시 해본다면 오답 이유까지 정리해 공부 순서를 더 선명하게 만들어 보세요.
       cardEarned: true
-      humanCentricAxis: 중심잡기
-      humanCentricTag: 적응성
+      humanCentricAxis: 융합하기
+      humanCentricTag: 문제해결적 사고
       domainCards:
-      - 학습력
+      - 학습전략
+      - 약점파악
       - 검토력
       growthCard: ''
       replayCardStatus: ''
@@ -8712,7 +8247,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 내 약점과 범위를 넣고, AI 답을 오답 기준으로 다시 걸렀어요.
       reportFeedback: 내 약점과 범위를 넣고, AI 답을 오답 기준으로 다시 걸렀어요. 출발은 내 자료였고 계획은 내 손에서 정리됐어요.
-      earnedCards: 학습력, 검토력
+      earnedCards: 학습설계, 학습전략, 시간관리, 검수능력, 자기검증
     C1R1:
       score: 20
       grade: D
@@ -8726,7 +8261,7 @@ studyplan:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 남의 계획 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 다른 방법에 기대기 → 친구·학원 계획 따르기 → 그대로 진행하기
@@ -8744,7 +8279,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 친구나 학원 계획표를 그대로 따라가 빠르게 시작했어요.
       reportFeedback: 친구나 학원 계획표를 그대로 따라가 빠르게 시작했어요. 하지만 그 계획은 내 약점을 보고 만든 것이 아니었어요.
-      earnedCards: 학습력, 자기이해
+      earnedCards: 학습설계, 시간관리, 자기성찰
     C1R2:
       score: 32
       grade: D
@@ -8758,7 +8293,7 @@ studyplan:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 남의 계획 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 다른 방법에 기대기 → 친구·학원 계획 따르기 → 한 번 확인하기
@@ -8776,7 +8311,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 빠진 단원이나 무리한 일정은 조금 보였어요.
       reportFeedback: 빠진 단원이나 무리한 일정은 조금 보였어요. 그래도 남의 계획을 내 오답에 맞게 바꾸지는 못했어요.
-      earnedCards: 학습력, 자기이해, 분석력
+      earnedCards: 학습설계, 시간관리, 자기성찰, 비판적 사고
     C1R3:
       score: 45
       grade: D
@@ -8790,7 +8325,7 @@ studyplan:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 빈자리 발견
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 다른 방법에 기대기 → 친구·학원 계획 따르기 → 깊게 확인하기
@@ -8808,7 +8343,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 처음부터 다시 보며 내 약점과 맞지 않는다는 걸 발견했어요.
       reportFeedback: 처음부터 다시 보며 내 약점과 맞지 않는다는 걸 발견했어요. 남의 계획은 참고가 될 수 있지만 내 기준이 더 필요해요.
-      earnedCards: 학습력, 자기이해, 검토력
+      earnedCards: 학습설계, 시간관리, 학습전략, 자기성찰, 자기검증
     C2R1:
       score: 35
       grade: D
@@ -8822,7 +8357,7 @@ studyplan:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 자료 의존 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 다른 방법에 기대기 → 작년·인터넷 자료 보기 → 그대로 진행하기
@@ -8853,7 +8388,7 @@ studyplan:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 자료 의존 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 다른 방법에 기대기 → 작년·인터넷 자료 보기 → 한 번 확인하기
@@ -8871,7 +8406,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 빠진 단원과 범위 밖 내용을 조금 표시했어요.
       reportFeedback: 빠진 단원과 범위 밖 내용을 조금 표시했어요. 자료를 걸러 쓰려는 시작은 했지만 아직 내 계획은 약해요.
-      earnedCards: 분석력
+      earnedCards: 비판적 사고
     C2R3:
       score: 62
       grade: C
@@ -8882,11 +8417,10 @@ studyplan:
       cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
       replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
-      humanCentricAxis: '성찰하기'
-      humanCentricTag: '성찰적 사고'
+      humanCentricAxis: ''
+      humanCentricTag: ''
       domainCards:
-      - 자료판단력
-      - 분석력
+      - 범위확인
       growthCard: 회복력
       replayCardStatus: 도전력 후보
       expReward: 8
@@ -8905,7 +8439,7 @@ studyplan:
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 자료를 내 범위와 약점에 맞춰 다시 봤어요.
       reportFeedback: 자료를 내 범위와 약점에 맞춰 다시 봤어요. 외부 자료에서 출발했지만 무엇을 버릴지 조금 판단했어요.
-      earnedCards: 학습력, 자기이해, 검토력
+      earnedCards: 학습설계, 시간관리, 자기성찰, 자기검증
     C3R1:
       score: 18
       grade: D
@@ -8919,7 +8453,7 @@ studyplan:
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 회피 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 다른 방법에 기대기 → 미루거나 쉬운 일 하기 → 그대로 진행하기
@@ -8943,14 +8477,14 @@ studyplan:
       item: 작은 시작 카드
       delegation: '-'
       knowledge: '-'
-      awareness: 무리한 일정이나 빠진 과목을 조금 보려 했지만, 피하고 있던 약점 확인은 아직 그대로 남았어요.
+      awareness: 무리한 일정이나 빠진 과목을 조금 보려 했지만, 미뤄둔 공부의 핵심은 아직 그대로 남았어요.
       cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
       replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 회피 경고
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 다른 방법에 기대기 → 미루거나 쉬운 일 하기 → 한 번 확인하기
@@ -8966,22 +8500,22 @@ studyplan:
       adjustedScore: 0
       adjustedType: 단계 점수 재산정
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
-      shortFeedback: 무리한 일정이나 빠진 과목을 조금 보려 했지만, 피하고 있던 약점 확인은 아직 그대로 남았어요.
-      reportFeedback: 무리한 일정이나 빠진 과목을 조금 보려 했지만, 피하고 있던 약점 확인은 아직 그대로 남았어요.
+      shortFeedback: 무리한 일정이나 빠진 과목을 조금 보려 했지만, 미뤄둔 공부의 핵심은 아직 그대로 남았어요.
+      reportFeedback: 무리한 일정이나 빠진 과목을 조금 보려 했지만, 미뤄둔 공부의 핵심은 아직 그대로 남았어요.
     C3R3:
       score: 42
       grade: D
       item: AI 최소 계획 카드
       delegation: '-'
       knowledge: '-'
-      awareness: 오늘 바로 시작할 작은 항목 하나는 남겼어요. 하지만 쉬운 일에서 멈추지 않으려면 내 약점 확인이 다시 필요해요.
+      awareness: 오늘 바로 시작할 작은 항목 하나는 남겼어요. 하지만 미룬 시간을 만회하려면 내 약점 확인이 다시 필요해요.
       cut6Feedback: 빠른 자료나 남의 계획에 기대어 내 공부 과정이 부족했어요. 다시 내 약점부터 확인해 보세요.
       replaySuggestion: 다시 해본다면 남의 계획이나 AI 자료를 보기 전에 내가 모르는 단원부터 확인해 보세요.
       cardEarned: true
       humanCentricAxis: ''
       humanCentricTag: ''
       domainCards: []
-      growthCard: 회복력
+      growthCard: 작은 시작
       replayCardStatus: 도전력 후보
       expReward: 8
       reportPathSummary: 다른 방법에 기대기 → 미루거나 쉬운 일 하기 → 깊게 확인하기
@@ -8998,7 +8532,7 @@ studyplan:
       adjustedType: 단계 점수 재산정
       adjustedReason: 시험공부는 학생이 직접 풀고, 약점을 확인하고, 오답과 범위를 다시 보는 과정이 핵심이라는 기준으로 단계 점수를 재산정함.
       shortFeedback: 오늘 바로 시작할 작은 항목 하나는 남겼어요.
-      reportFeedback: 오늘 바로 시작할 작은 항목 하나는 남겼어요. 하지만 쉬운 일에서 멈추지 않으려면 내 약점 확인이 다시 필요해요.
+      reportFeedback: 오늘 바로 시작할 작은 항목 하나는 남겼어요. 하지만 미룬 시간을 만회하려면 내 약점 확인이 다시 필요해요.
   axisDelta:
   - leafId: A1R3
     requireCard: 자기검증
