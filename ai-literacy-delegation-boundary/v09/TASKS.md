@@ -98,6 +98,26 @@
 - [ ] 검증: 5개 시나리오 여러 경로 완주 가능
 - [ ] 검증: 카드 할인 적용 화면 인지 가능 (tier2부터)
 
+### Phase 8 — 선택지 인라인 전개 (세션320, SPEC §23)
+
+- [x] `showTier1Choices()` 신설 — Cut 1 body에 1차 선택지 append
+- [x] `showCut2Summary()` 신설 — Cut 2 활성화 (이미지+요약+"더 자세히" 버튼)
+- [x] `onTier1()` 수정 — fadeOut → showCut2Summary 호출
+- [x] `showTier2Choices()` 신설 — Cut 2 body에 2차 선택지 append
+- [x] `showCut3Summary()` 신설 — Cut 3 활성화 (이미지+요약+"결과 확인하기" 버튼)
+- [x] `onTier2()` 수정 — fadeOut → showCut3Summary 호출
+- [x] `goCut4()` 수정 — "결과 확인하기" 클릭 시 호출, 버튼이 showReviewChoices 호출
+- [x] `showReviewChoices()` 신설 — Cut 4 body에 검토 선택지 append
+- [x] `showCut5Summary()` 신설 — Cut 5 활성화 (검토 요약)
+- [x] `onReview()` 수정 — fadeOut → showCut5Summary + goCut6
+- [x] `goCut6()` 수정 — Cut 5 요약 설정 제거
+- [x] `continueGame()` 복원 chain 갱신
+- [x] `dbgJumpCut()` 디버그 chain 갱신
+- [x] 기존 `goCut2()`, `goCut3()`, `goCut5()` 제거
+- [x] `fadeOutChoices()` 수정 — fade 후 choices-area DOM 제거 (패널 크기 복원)
+- [x] 피터공 플테 확인
+- [ ] 커밋 + 푸시
+
 ### 다음 작업 (플테 후)
 
 - [ ] UI: 시간/에너지 미터를 시각적으로 분리 — 두 자원이 다르게 작동하므로 (시간=학기 예산, 에너지=회복 가능) 구분이 필요

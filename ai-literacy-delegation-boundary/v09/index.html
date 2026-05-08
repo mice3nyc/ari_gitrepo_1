@@ -13684,7 +13684,7 @@ function renderCut1(){
   panel.querySelector('.panel-body').innerHTML=
     '<p class="highlight">'+sc.title+'</p>'+
     '<p>'+sc.situation.text+'</p>'+
-    '<div class="advance-wrap"><button class="advance-btn" onclick="goCut2()">어떻게 할까? &#8594;</button></div>';
+    '<div class="advance-wrap"><button class="advance-btn" onclick="showTier1Choices()">어떻게 할까? &#8594;</button></div>';
   updateStats();
 }
 
@@ -13797,21 +13797,16 @@ function buildCostHTML(cost){
   '</div>';
 }
 
-// 컷 2: 1차 선택 (A·B·C)
-function goCut2(){
-  if(btnGuard('goCut2'))return;
+// §23 — 1차 선택지를 Cut 1 body 아래에 펼침
+function showTier1Choices(){
+  if(btnGuard('showTier1Choices'))return;
   var sc=getScenario();
-  var c1=currentRow.querySelector('[data-cut="1"] .advance-wrap');if(c1)c1.style.display='none';
-  setPanelImage(2,'1차 선택');
-  var panel=activatePanel(2);
+  var btn=currentRow.querySelector('[data-cut="1"] .advance-wrap');if(btn)btn.style.display='none';
+  var body=currentRow.querySelector('[data-cut="1"] .panel-body');
   var area=document.createElement('div');area.className='choices-area';area.id='tier1-choices';
   area.innerHTML='<div class="choices-q">어떻게 할까?</div>';
-  panel.querySelector('.panel-body').innerHTML='';
-  panel.querySelector('.panel-body').appendChild(area);
-  // 각 t1 비용 사전 계산 + 정규화 max
+  body.appendChild(area);
   var costs=sc.tier1.map(function(c){return getTier1Cost(c.id);});
-  var maxT=Math.max(1,Math.max.apply(null,costs.map(function(c){return c.time;})));
-  var maxE=Math.max(1,Math.max.apply(null,costs.map(function(c){return c.energy;})));
   sc.tier1.forEach(function(c,i){
     var card=document.createElement('div');
     var afford=canAffordCost(costs[i]);
@@ -13823,55 +13818,66 @@ function goCut2(){
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
   updateStats();
-  // 5/3 정정 — 모든 tier1 선택지 비용 부족이면 GAME OVER
   if(_checkAllUnaffordable(costs))triggerGameOver();
 }
 
-// 컷 3: 2차 선택 (선택된 1차의 3개)
-function goCut3(){
+// §23 — Cut 2 활성화: 이미지 + 1차 선택 요약 + "더 자세히" 버튼
+function showCut2Summary(){
   var sc=getScenario(),t1=gameState.selectedTier1;
-  var c2body=currentRow.querySelector('[data-cut="2"] .panel-body');
   var t1obj=sc.tier1.find(function(x){return x.id===t1;});
-  c2body.innerHTML='<div class="chosen-summary"><div class="chosen-label">1차 선택</div><div class="chosen-title">'+t1+'. '+t1obj.label+'</div><div class="chosen-way">'+t1obj.desc+'</div></div>';
   setPanelImage(2,'1차 선택');
-  setPanelImage(3,'2차 선택');
-  var panel=activatePanel(3);
+  var panel=activatePanel(2);
+  panel.querySelector('.panel-body').innerHTML=
+    '<div class="chosen-summary"><div class="chosen-label">1차 선택</div><div class="chosen-title">'+t1+'. '+t1obj.label+'</div><div class="chosen-way">'+t1obj.desc+'</div></div>'+
+    '<div class="advance-wrap"><button class="advance-btn" onclick="showTier2Choices()">더 자세히 — 어떻게 할까? &#8594;</button></div>';
+}
+
+// §23 — 2차 선택지를 Cut 2 body 아래에 펼침
+function showTier2Choices(){
+  if(btnGuard('showTier2Choices'))return;
+  var sc=getScenario(),t1=gameState.selectedTier1;
+  var btn=currentRow.querySelector('[data-cut="2"] .advance-wrap');if(btn)btn.style.display='none';
+  var body=currentRow.querySelector('[data-cut="2"] .panel-body');
   var area=document.createElement('div');area.className='choices-area';area.id='tier2-choices';
   area.innerHTML='<div class="choices-q">더 자세히 — 어떻게 할까?</div>';
-  panel.querySelector('.panel-body').innerHTML='';
-  panel.querySelector('.panel-body').appendChild(area);
+  body.appendChild(area);
   var t2list=sc.tier2[t1];
-  // 각 t2 추가 비용 사전 계산
   var costs=t2list.map(function(c){return getTier2Cost(c.id);});
-  var maxT=Math.max(1,Math.max.apply(null,costs.map(function(c){return c.time;})));
-  var maxE=Math.max(1,Math.max.apply(null,costs.map(function(c){return c.energy;})));
   t2list.forEach(function(c,i){
     var card=document.createElement('div');
     var afford=canAffordCost(costs[i]);
     card.className='choice-card'+(afford?'':' disabled');
     if(afford)card.onclick=function(){onTier2(c.id);};
-    var costHTML=buildCostHTML(costs[i],maxT,maxE);
+    var costHTML=buildCostHTML(costs[i]);
     var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
     card.innerHTML='<div class="choice-header"><span class="choice-num">'+(i+1)+'</span><span class="choice-text">'+c.label+tag+'</span></div>'+costHTML;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
   updateStats();
-  // 5/3 정정 — 모든 tier2 선택지 비용 부족이면 GAME OVER
   if(_checkAllUnaffordable(costs))triggerGameOver();
 }
 
-// 컷 4: 결과 (raw 결과물)
-function goCut4(){
+// §23 — Cut 3 활성화: 이미지 + 2차 선택 요약 + "결과 확인하기" 버튼
+function showCut3Summary(){
   var sc=getScenario(),t2=gameState.selectedTier2;
-  // v0.6 옵션 1 — 9 leaf 모두 가능. 묶음 묻지 않고 모든 그룹 검색
   var t2obj=null;
   ['A','B','C'].forEach(function(g){if(!t2obj&&sc.tier2[g])t2obj=sc.tier2[g].find(function(x){return x.id===t2;});});
   var t2Delta=getLeafDelta(t2obj,gameState.selectedTier1);
-  // 컷3 요약
-  var c3body=currentRow.querySelector('[data-cut="3"] .panel-body');
-  c3body.innerHTML='<div class="chosen-summary"><div class="chosen-label">2차 선택</div><div class="chosen-title">'+t2+'. '+t2obj.label+'</div><div class="chosen-way">위임 깊이: '+t2Delta.delegation+'</div></div>';
   setPanelImage(3,'2차 선택');
+  var panel=activatePanel(3);
+  panel.querySelector('.panel-body').innerHTML=
+    '<div class="chosen-summary"><div class="chosen-label">2차 선택</div><div class="chosen-title">'+t2+'. '+t2obj.label+'</div><div class="chosen-way">위임 깊이: '+t2Delta.delegation+'</div></div>'+
+    '<div class="advance-wrap"><button class="advance-btn" onclick="goCut4()">결과 확인하기 &#8594;</button></div>';
+}
+
+// 컷 4: 결과 (raw 결과물) — §23: "결과 확인하기" 클릭 시 호출
+function goCut4(){
+  if(btnGuard('goCut4'))return;
+  var sc=getScenario(),t2=gameState.selectedTier2;
+  var t2obj=null;
+  ['A','B','C'].forEach(function(g){if(!t2obj&&sc.tier2[g])t2obj=sc.tier2[g].find(function(x){return x.id===t2;});});
+  var c3btn=currentRow.querySelector('[data-cut="3"] .advance-wrap');if(c3btn)c3btn.style.display='none';
   setPanelImage(4,'결과');
   var panel=activatePanel(4);
   var result=sc.results[t2];
@@ -13881,62 +13887,53 @@ function goCut4(){
     '<p class="highlight">결과 — '+sc.title+'</p>'+
     '<div class="result-text">'+result.text+'</div>'+
     '<div class="result-meta">'+result.summary+' (이 행동의 점수 '+t2Pts.points+'점)</div>'+
-    '<div class="advance-wrap"><button class="advance-btn" onclick="goCut5()">검토할까? &#8594;</button></div>';
+    '<div class="advance-wrap"><button class="advance-btn" onclick="showReviewChoices()">검토할까? &#8594;</button></div>';
   trackEvent('result_viewed',{scenarioId:sc.id,tier2:t2,tier2Points:t2Pts.points});
   updateStats();
 }
 
-// 컷 5: 검토 선택 (R1·R2·R3)
-// v0.8 §6.6.3 — reviewSupplements[leaf+review] 학생 톤 narrative를 메인 텍스트로 격상.
-// 각 검토 옵션 카드의 메인 텍스트 = 그 옵션을 골랐을 때의 학생 톤 narrative (한 호흡 두 줄).
-// r.desc는 보조로 내림. 미리 보여주는 자리라 "직관·구체만" 박스 룰에 맞춤.
-function goCut5(){
-  if(btnGuard('goCut5'))return;
+// §23 — 검토 선택지를 Cut 4 body 아래에 펼침
+function showReviewChoices(){
+  if(btnGuard('showReviewChoices'))return;
   var sc=getScenario();
-  var c4btn=currentRow.querySelector('[data-cut="4"] .advance-wrap');if(c4btn)c4btn.style.display='none';
-  setPanelImage(5,'검토');
-  var panel=activatePanel(5);
+  var btn=currentRow.querySelector('[data-cut="4"] .advance-wrap');if(btn)btn.style.display='none';
+  var body=currentRow.querySelector('[data-cut="4"] .panel-body');
   var area=document.createElement('div');area.className='choices-area';area.id='review-choices';
   area.innerHTML='<div class="choices-q">제출 전, 어떻게 검토할까?</div>';
-  panel.querySelector('.panel-body').innerHTML='';
-  panel.querySelector('.panel-body').appendChild(area);
-  var t2cur=gameState.selectedTier2; // 'A1','A2',...
-  var supplements=sc.reviewSupplements||{};
-  // 각 review 잔여 비용 사전 계산 (해당 leaf = t2 + r.id)
+  body.appendChild(area);
+  var t2cur=gameState.selectedTier2;
   var costs=sc.reviews.map(function(r){return getReviewCost(t2cur+r.id);});
-  var maxT=Math.max(1,Math.max.apply(null,costs.map(function(c){return c.time;})));
-  var maxE=Math.max(1,Math.max.apply(null,costs.map(function(c){return c.energy;})));
   sc.reviews.forEach(function(r,i){
     var card=document.createElement('div');
     var afford=canAffordCost(costs[i]);
     card.className='choice-card'+(afford?'':' disabled');
     if(afford)card.onclick=function(){onReview(r.id);};
-    var costHTML=buildCostHTML(costs[i],maxT,maxE);
+    var costHTML=buildCostHTML(costs[i]);
     var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
     var leafKey=t2cur+r.id;
-    // v0.8 5/5 — supplements 설명은 선택 후 컷6 c5body에 표시. 선택지 카드는 라벨만 (선택지 폭증 방지).
-    // leaf별 V1/V2/V3 라벨이 reviewLabels에 있으면 그것 사용 (5 시나리오 다른 검토 행동)
     var leafLabel=(sc.reviewLabels&&sc.reviewLabels[leafKey])||r.label;
     card.innerHTML='<div class="choice-header"><span class="choice-num">'+r.id+'</span><span class="choice-text">'+leafLabel+tag+'</span></div>'+costHTML;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
   updateStats();
-  // 5/3 정정 — 모든 review 선택지 비용 부족이면 GAME OVER
   if(_checkAllUnaffordable(costs))triggerGameOver();
+}
+
+// §23 — Cut 5 활성화: 이미지 + 검토 선택 요약
+function showCut5Summary(){
+  var sc=getScenario(),leaf=getLeafPath();
+  var rvObj=sc.reviews.find(function(x){return x.id===gameState.selectedReview;});
+  var supplement=sc.reviewSupplements[leaf]||'';
+  var rvLabelLeaf=(sc.reviewLabels&&sc.reviewLabels[leaf])||rvObj.label;
+  setPanelImage(5,'검토');
+  var panel=activatePanel(5);
+  panel.querySelector('.panel-body').innerHTML='<div class="chosen-summary"><div class="chosen-label">검토 선택</div><div class="chosen-title">'+rvObj.id+'. '+rvLabelLeaf+'</div>'+(supplement?'<div class="chosen-way">'+supplement+'</div>':'')+'</div>';
 }
 
 // 컷 6: 최종 점수 + 아이템 + 자각 + 경험치/레벨업 (Phase 4 통합)
 function goCut6(){
   var sc=getScenario(),leaf=getLeafPath(),fin=sc.finals[leaf];
-  // 컷5 요약
-  var c5body=currentRow.querySelector('[data-cut="5"] .panel-body');
-  var rvObj=sc.reviews.find(function(x){return x.id===gameState.selectedReview;});
-  var supplement=sc.reviewSupplements[leaf]||'';
-  // v0.8 5/5 — leaf별 V 라벨 우선
-  var rvLabelLeaf=(sc.reviewLabels&&sc.reviewLabels[leaf])||rvObj.label;
-  c5body.innerHTML='<div class="chosen-summary"><div class="chosen-label">검토 선택</div><div class="chosen-title">'+rvObj.id+'. '+rvLabelLeaf+'</div>'+(supplement?'<div class="chosen-way">'+supplement+'</div>':'')+'</div>';
-  setPanelImage(5,'검토');
   setPanelImage(6,'최종');
   var panel=activatePanel(6);
   // v0.8 — CSV 최종등급 lookup
@@ -14343,27 +14340,21 @@ function continueGame(){
   renderCut1();
   if(gameState.selectedTier1){
     setTimeout(function(){
-      goCut2();
-      // 1차 선택 표시
-      setTimeout(function(){
-        applyTier1ToView();
-        if(gameState.selectedTier2){
-          goCut3();
+      showCut2Summary();
+      if(gameState.selectedTier2){
+        setTimeout(function(){
+          showCut3Summary();
           setTimeout(function(){
-            applyTier2ToView();
             goCut4();
             if(gameState.selectedReview){
               setTimeout(function(){
-                goCut5();
-                setTimeout(function(){
-                  applyReviewToView();
-                  goCut6();
-                },200);
+                showCut5Summary();
+                goCut6();
               },200);
             }
           },200);
-        }
-      },200);
+        },200);
+      }
     },200);
   }
 }
@@ -14377,7 +14368,7 @@ function fadeOutChoices(areaId,cb){
   if(!area){if(cb)cb();return;}
   var cards=area.querySelectorAll('.choice-card');
   cards.forEach(function(c,i){setTimeout(function(){c.classList.add('fade-out');},i*60);});
-  setTimeout(function(){if(cb)cb();},Math.max(300,cards.length*60+200));
+  setTimeout(function(){if(area.parentNode)area.parentNode.removeChild(area);if(cb)cb();},Math.max(300,cards.length*60+200));
 }
 
 function onTier1(t1id){
@@ -14389,7 +14380,7 @@ function onTier1(t1id){
   var nowTime=gameState.resources.time.current;
   var nowEnergy=gameState.resources.energy.current;
   fadeOutChoices('tier1-choices',function(){
-    goCut3();
+    showCut2Summary();
     animateResource('time',prevTime,nowTime);
     animateResource('energy',prevEnergy,nowEnergy);
     updateStats();
@@ -14407,7 +14398,7 @@ function onTier2(t2id){
   var nowTime=gameState.resources.time.current;
   var nowEnergy=gameState.resources.energy.current;
   fadeOutChoices('tier2-choices',function(){
-    goCut4();
+    showCut3Summary();
     animateStat('delegation',prev,now);
     animateResource('time',prevTime,nowTime);
     animateResource('energy',prevEnergy,nowEnergy);
@@ -14427,12 +14418,12 @@ function onReview(rid){
   var nowTime=gameState.resources.time.current;
   var nowEnergy=gameState.resources.energy.current;
   fadeOutChoices('review-choices',function(){
+    showCut5Summary();
     goCut6();
     animateStat('knowledge',prevK,nowK);
     animateResource('time',prevTime,nowTime);
     animateResource('energy',prevEnergy,nowEnergy);
     updateStats();
-    // 중앙 SCORE 펄스 — 최종 점수 강조
     var sn=document.getElementById('score-num');
     if(sn){sn.classList.add('pulsing');setTimeout(function(){sn.classList.remove('pulsing');},600);}
   });
@@ -15270,16 +15261,14 @@ function dbgEnsureGame(){
 function dbgJumpCut(n){
   dbgEnsureGame();
   if(n===1){renderCut1();}
-  else if(n===2){renderCut1();setTimeout(goCut2,200);}
+  else if(n===2){renderCut1();setTimeout(function(){showTier1Choices();},200);}
   else if(n===5){
-    // A1 → R 미선택 상태로 점프
     gameState.selectedTier1='A';gameState.selectedTier2='A1';gameState.currentTier='result';
     container.innerHTML='';currentRow=null;
     renderCut1();
-    setTimeout(function(){goCut2();setTimeout(function(){goCut3();setTimeout(function(){goCut4();setTimeout(goCut5,300);},300);},300);},300);
+    setTimeout(function(){showCut2Summary();setTimeout(function(){showCut3Summary();setTimeout(function(){goCut4();setTimeout(showReviewChoices,300);},300);},300);},300);
   }
   else if(n===6){
-    // 임의 경로 A1R3 점프 (v0.8: 합산 모델 calculateFinalScore(leaf, reviewId))
     gameState.selectedTier1='A';gameState.selectedTier2='A1';
     gameState.competencies.delegationChoice.value=2;
     gameState.competencies.knowledge.value=2;
@@ -15289,7 +15278,7 @@ function dbgJumpCut(n){
     gameState.totalScore+=gameState.score;if(fin6&&fin6.item)gameState.itemsCollected.push(fin6.item);
     container.innerHTML='';currentRow=null;
     renderCut1();
-    setTimeout(function(){goCut2();setTimeout(function(){goCut3();setTimeout(function(){goCut4();setTimeout(function(){goCut5();setTimeout(goCut6,300);},300);},300);},300);},300);
+    setTimeout(function(){showCut2Summary();setTimeout(function(){showCut3Summary();setTimeout(function(){goCut4();setTimeout(function(){showCut5Summary();setTimeout(goCut6,300);},300);},300);},300);},300);
   }
   saveGame();updateStats();renderDebug();
 }
