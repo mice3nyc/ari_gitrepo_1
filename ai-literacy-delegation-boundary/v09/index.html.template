@@ -2232,8 +2232,9 @@ function buildCostHTML(cost){
   var cardDisc=d.cardDiscount||0;
   var hasDiscount=(d.dlgEffect>0||totalEnergyDisc>0);
   if(!hasDiscount){
-    return '<div class="choice-cost cost-simple">'+
-      '<span>시간 '+cost.time+'</span><span>에너지 '+cost.energy+'</span>'+
+    return '<div class="choice-cost cost-formula-box">'+
+      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">시간 비용</div><div class="cost-formula-val cost-formula-final"><b>'+cost.time+'</b></div></div></div>'+
+      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">에너지 비용</div><div class="cost-formula-val cost-formula-final"><b>'+cost.energy+'</b></div></div></div>'+
     '</div>';
   }
   var energyHtml='';
