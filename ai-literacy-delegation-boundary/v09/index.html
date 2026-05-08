@@ -29,8 +29,8 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .resource-bar.flash-levelup { animation:flashLevelUp 0.8s ease; }
 
 /* ===== 좌측 패널 — 자원 게이지 (단방향) ===== */
-.resource-bar { flex:1; display:flex; flex-direction:column; gap:10px; padding:10px 14px; border:2px solid #111; background:#fff; box-shadow:0 2px 0 #111; }
-.resource-item { display:flex; flex-direction:column; padding:2px 4px; position:relative; transition:background-color 0.3s; }
+.resource-bar { flex:1; display:flex; flex-direction:row; gap:0; padding:0; border:2px solid #111; background:#fff; box-shadow:0 2px 0 #111; overflow:hidden; }
+.resource-item { display:flex; flex-direction:column; padding:8px 12px; position:relative; transition:background-color 0.3s; }
 .resource-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:4px; }
 .resource-name { font-size:11px; color:#555; font-weight:600; letter-spacing:0.5px; }
 .resource-num { font-size:15px; font-weight:700; line-height:1; transition:all 0.3s; }
@@ -45,10 +45,10 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 @keyframes flashGray { 0%{background-color:rgba(80,80,80,0.10)} 100%{background-color:transparent} }
 
 /* ===== 우측 패널 — 역량(양방향) + 점수 (5/3 — 컷/아이템은 중앙 progress-strip로 분리) ===== */
-.stats-bar { flex:1; display:flex; flex-direction:column; gap:6px; padding:6px 10px; border:2px solid #111; background:#fff; box-shadow:0 2px 0 #111; }
-.stat { display:flex; flex-direction:column; padding:1px 2px; position:relative; transition:background-color 0.3s; }
-.stat-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:2px; }
-.stat-name { font-size:11px; color:#555; font-weight:600; }
+.stats-bar { flex:1; display:flex; flex-direction:row; gap:0; padding:0; border:2px solid #111; background:#fff; box-shadow:0 2px 0 #111; overflow:hidden; }
+.stat { display:flex; flex-direction:column; padding:6px 10px; position:relative; transition:background-color 0.3s; }
+.stat-header { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:2px; }
+.stat-name { font-size:11px; color:#111; font-weight:700; }
 .stat-num { font-size:16px; font-weight:700; line-height:1; transition:all 0.3s; }
 
 /* === 양방향 바 (Diverging Bar) — 위임 판단 / 문해력 전용 === */
@@ -86,7 +86,9 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 /* ===== 중앙 LV·SCORE 큰 디스플레이 ===== */
 .score-display { flex:0 0 auto; display:flex; flex-direction:column; align-items:stretch; gap:8px; padding:8px 18px; border:2px solid #111; background:#fff; box-shadow:0 2px 0 #111; min-width:180px; }
 .score-display-row { display:flex; flex-direction:row; align-items:center; gap:18px; justify-content:center; }
-.panel-title { font-size:15px; font-weight:700; color:#111; letter-spacing:3px; padding:2px 0 8px; border-bottom:1.5px solid #111; margin-bottom:8px; text-align:center; }
+.panel-title { display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:#111; letter-spacing:3px; padding:8px 14px; border-right:1.5px solid #111; min-width:52px; }
+.panel-content { flex:1; display:flex; flex-direction:column; }
+.panel-divider { height:1px; background:#ddd; }
 .score-block { display:flex; flex-direction:column; align-items:center; gap:3px; min-width:54px; }
 .display-label { font-size:9px; color:#888; letter-spacing:1.5px; line-height:1; font-weight:700; }
 .display-num { font-size:34px; font-weight:700; color:#111; line-height:1; transition:transform 0.3s, color 0.3s; }
@@ -205,7 +207,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .choice-card.disabled .insufficient-tag { display:inline-block; margin-left:6px; padding:1px 6px; background:#c44; color:#fff; font-size:10px; font-weight:700; border-radius:2px; vertical-align:middle; }
 
 /* ===== Result Block ===== */
-.result-text { border:2px solid #111; padding:9px 12px; background:#fafafa; font-size:13px; line-height:1.5; margin-bottom:6px; }
+.result-text { padding:0; background:transparent; font-size:13px; line-height:1.5; margin-bottom:6px; }
 .result-meta { font-size:11px; color:#888; margin-bottom:8px; }
 
 /* ===== Final Block ===== */
@@ -316,7 +318,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
   .panel-row { flex-direction:column; }
   .score-display { flex-direction:column; min-width:0; padding:6px 12px; }
   .score-display-row { gap:12px; }
-  .panel-title { font-size:13px; letter-spacing:2px; padding:1px 0 5px; margin-bottom:5px; }
+  .panel-title { font-size:12px; letter-spacing:1.5px; padding:6px 10px; min-width:40px; }
   .display-num { font-size:28px; }
 }
 /* v0.5 — 시나리오 선택 + 학기 프로그레스 */
@@ -366,7 +368,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 /* ===== pending 원 마커 (§12, 5/3 세션278) ===== */
 /* 좌우 분할: 좌측 50%(음수, 중앙 쪽으로 모임) / 우측 50%(양수, 중앙에서 우측으로 뻗음) */
 /* 분할 비율은 bipolar-gauge zero 위치(left:50% = 시각 중앙선)와 정렬 — SPEC 라벨 -4/+8은 점수 max(단위당 폭 비대칭)이지 시각 자리가 아니다 */
-.pending-dots { display:flex; align-items:center; min-height:12px; margin:2px 0 4px; }
+.pending-dots { display:flex; align-items:center; flex:1; min-height:0; margin:0; }
 .pending-dots-neg { flex:0 0 50%; display:flex; flex-direction:row-reverse; justify-content:flex-start; align-items:center; gap:4px; padding-right:2px; overflow:hidden; }
 .pending-dots-pos { flex:0 0 50%; display:flex; flex-direction:row; justify-content:flex-start; align-items:center; gap:4px; padding-left:2px; overflow:hidden; }
 .pending-dot { width:11px; height:11px; border-radius:50%; flex-shrink:0; transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease; }
@@ -578,8 +580,11 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
   <!-- 좌측: 자원 게이지 (시간/에너지) -->
   <div class="resource-bar" id="resource-bar">
     <div class="panel-title">자원</div>
-    <div class="resource-item" id="res-time"><div class="resource-change-indicator" id="rdelta-time"></div><div class="resource-header"><span class="resource-name">시간</span><span class="resource-num" id="rnum-time">120</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-time" style="width:100%"></div></div></div>
-    <div class="resource-item" id="res-energy"><div class="resource-change-indicator" id="rdelta-energy"></div><div class="resource-header"><span class="resource-name">에너지</span><span class="resource-num" id="rnum-energy">70</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-energy" style="width:100%"></div></div></div>
+    <div class="panel-content">
+      <div class="resource-item" id="res-time"><div class="resource-change-indicator" id="rdelta-time"></div><div class="resource-header"><span class="resource-name">시간</span><span class="resource-num" id="rnum-time">120</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-time" style="width:100%"></div></div></div>
+      <div class="panel-divider"></div>
+      <div class="resource-item" id="res-energy"><div class="resource-change-indicator" id="rdelta-energy"></div><div class="resource-header"><span class="resource-name">에너지</span><span class="resource-num" id="rnum-energy">70</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-energy" style="width:100%"></div></div></div>
+    </div>
   </div>
   <!-- 중앙: LV + SCORE + XP -->
   <div class="score-display" id="score-display">
@@ -606,19 +611,20 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
   <!-- 우측: 역량(양방향 바) + 진행 -->
   <div class="stats-bar" id="stats-bar">
     <div class="panel-title">역량</div>
-    <div class="stat" id="stat-delegation">
-      <div class="stat-change-indicator" id="delta-delegation"></div>
-      <div class="stat-header"><span class="stat-name">판단하는 힘</span><span class="stat-num" id="num-delegation">0</span></div>
-      <div class="pending-dots" id="pending-dots-delegation" aria-label="이번 시나리오 판단하는 힘 변화"><div class="pending-dots-neg" id="pending-dots-delegation-neg"></div><div class="pending-dots-pos" id="pending-dots-delegation-pos"></div></div>
-      <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-delegation"></div></div>
-      <div class="bipolar-labels"><span>-10</span><span>+20</span></div>
-    </div>
-    <div class="stat" id="stat-knowledge">
-      <div class="stat-change-indicator" id="delta-knowledge"></div>
-      <div class="stat-header"><span class="stat-name" id="stat-name-knowledge">아는것의 힘</span><span class="stat-num" id="num-knowledge">0</span></div>
-      <div class="pending-dots" id="pending-dots-knowledge" aria-label="이번 시나리오 아는것의 힘 변화"><div class="pending-dots-neg" id="pending-dots-knowledge-neg"></div><div class="pending-dots-pos" id="pending-dots-knowledge-pos"></div></div>
-      <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-knowledge"></div></div>
-      <div class="bipolar-labels"><span>-10</span><span>+20</span></div>
+    <div class="panel-content">
+      <div class="stat" id="stat-delegation">
+        <div class="stat-change-indicator" id="delta-delegation"></div>
+        <div class="stat-header"><span class="stat-name">판단하는 힘</span><div class="pending-dots" id="pending-dots-delegation" aria-label="이번 시나리오 판단하는 힘 변화"><div class="pending-dots-neg" id="pending-dots-delegation-neg"></div><div class="pending-dots-pos" id="pending-dots-delegation-pos"></div></div><span class="stat-num" id="num-delegation">0</span></div>
+        <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-delegation"></div></div>
+        <div class="bipolar-labels"><span>-10</span><span>+20</span></div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="stat" id="stat-knowledge">
+        <div class="stat-change-indicator" id="delta-knowledge"></div>
+        <div class="stat-header"><span class="stat-name" id="stat-name-knowledge">아는것의 힘</span><div class="pending-dots" id="pending-dots-knowledge" aria-label="이번 시나리오 아는것의 힘 변화"><div class="pending-dots-neg" id="pending-dots-knowledge-neg"></div><div class="pending-dots-pos" id="pending-dots-knowledge-pos"></div></div><span class="stat-num" id="num-knowledge">0</span></div>
+        <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-knowledge"></div></div>
+        <div class="bipolar-labels"><span>-10</span><span>+20</span></div>
+      </div>
     </div>
   </div>
 </div>
