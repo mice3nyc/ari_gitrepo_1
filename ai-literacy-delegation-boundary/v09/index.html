@@ -176,7 +176,8 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .choice-card.visible { opacity:1; transform:translateY(0); }
 .choice-card:hover { transform:translateX(4px); box-shadow:0 2px 0 #111,0 4px 10px rgba(0,0,0,0.08); }
 .choice-card:active { box-shadow:none; transform:translateY(2px); }
-.choice-header { display:flex; align-items:center; gap:8px; padding:8px 12px 2px; }
+.choice-header { display:flex; align-items:center; gap:8px; padding:8px 12px 4px; }
+.choice-card-nocost .choice-header { padding:8px 12px 8px; }
 .choice-num { background:#111; color:#fff; width:24px; height:24px; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
 .choice-text { font-size:15px; font-weight:700; line-height:1.4; margin-bottom:2px; }
 .choice-desc { font-size:11px; color:#888; line-height:1.4; margin-top:3px; }
@@ -13767,6 +13768,12 @@ function buildCostHTML(cost){
   var d=cost._discount||{dlgEffect:0,knlEffect:0,rawTime:cost.time,rawEnergy:cost.energy,cardDiscount:0,cardDetails:[],clampedEnergy:0};
   var totalEnergyDisc=d.clampedEnergy||0;
   var cardDisc=d.cardDiscount||0;
+  var hasDiscount=(d.dlgEffect>0||totalEnergyDisc>0);
+  if(!hasDiscount){
+    return '<div class="choice-cost cost-simple">'+
+      '<span>시간 '+cost.time+'</span><span>에너지 '+cost.energy+'</span>'+
+    '</div>';
+  }
   var energyHtml='';
   if(cardDisc>0){
     energyHtml+='<div class="cost-card-chips">';
@@ -13801,7 +13808,7 @@ function goCut2(){
   sc.tier1.forEach(function(c,i){
     var card=document.createElement('div');
     var afford=canAffordCost(costs[i]);
-    card.className='choice-card'+(afford?'':' disabled');
+    card.className='choice-card choice-card-nocost'+(afford?'':' disabled');
     if(afford)card.onclick=function(){onTier1(c.id);};
     var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
     card.innerHTML='<div class="choice-header"><span class="choice-num">'+c.id+'</span><span class="choice-text">'+c.label+tag+'</span></div>';
