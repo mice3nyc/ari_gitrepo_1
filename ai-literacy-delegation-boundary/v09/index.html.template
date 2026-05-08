@@ -111,12 +111,12 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .cost-formula-cell { display:flex; flex-direction:column; align-items:center; gap:3px; }
 .cost-formula-label { color:#888; font-size:8px; font-weight:600; letter-spacing:0.3px; line-height:1; white-space:nowrap; }
 .cost-formula-val { display:inline; font-size:12px; font-weight:700; line-height:1; }
-.cost-formula-raw { color:#c44; }
+.cost-formula-raw { color:#111; }
 .cost-formula-discount { color:#1a8c1a; }
 .cost-formula-discount.zero { color:#bbb; font-weight:400; }
 .cost-formula-discount.penalty { color:#c44; }
-.cost-formula-final { color:#111; }
-.cost-formula-final b { font-size:14px; color:#111; font-weight:800; }
+.cost-formula-final { color:#c44; }
+.cost-formula-final b { font-size:14px; color:#c44; font-weight:800; }
 .cost-formula-op { font-size:10px; color:#999; font-weight:600; padding:0 1px; padding-bottom:6px; }
 .cost-energy-col { display:flex; flex-direction:column; flex:1; align-items:stretch; }
 .cost-card-chips { display:flex; flex-wrap:wrap; gap:3px; justify-content:center; margin-bottom:2px; }
@@ -2238,9 +2238,9 @@ function buildCostHTML(cost){
     }
     energyHtml+='</div>';
   }
-  energyHtml+=_buildCostLine('에너지 비용',d.rawEnergy,'총 할인',totalEnergyDisc,'최종 에너지',cost.energy);
+  energyHtml+=_buildCostLine('에너지 비용',d.rawEnergy,'할인',totalEnergyDisc,'최종 에너지',cost.energy);
   return '<div class="choice-cost cost-formula-box">'+
-    _buildCostLine('시간 비용',d.rawTime,'숙련도 할인',d.dlgEffect,'최종 시간',cost.time)+
+    _buildCostLine('시간 비용',d.rawTime,'할인',d.dlgEffect,'최종 시간',cost.time)+
     '<div class="cost-energy-col">'+energyHtml+'</div>'+
   '</div>';
 }
@@ -2265,9 +2265,8 @@ function goCut2(){
     var afford=canAffordCost(costs[i]);
     card.className='choice-card'+(afford?'':' disabled');
     if(afford)card.onclick=function(){onTier1(c.id);};
-    var costHTML=buildCostHTML(costs[i],maxT,maxE);
     var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
-    card.innerHTML='<div class="choice-header"><span class="choice-num">'+c.id+'</span><span class="choice-text">'+c.label+tag+'</span></div>'+costHTML;
+    card.innerHTML='<div class="choice-header"><span class="choice-num">'+c.id+'</span><span class="choice-text">'+c.label+tag+'</span></div>';
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
