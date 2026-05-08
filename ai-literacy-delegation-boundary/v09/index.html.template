@@ -2453,23 +2453,25 @@ function goCut6(){
     },400);
   }
 
-  // v0.8 — 리플레이 자원 스냅샷 저장 (시나리오 시작 전 상태, 첫 플레이 시만)
+  // v0.8 — 리플레이 판정 (played 플래그로 첫 플레이 vs 리플레이 구분)
   if(!gameState.replay)gameState.replay={};
-  if(!gameState.replay[scid]){
-    gameState.replay[scid]={played:false,improved:false,bestScore:gameState.score,bestGrade:grade};
-  } else {
+  if(!gameState.replay[scid])gameState.replay[scid]={played:false,improved:false,bestScore:0,bestGrade:''};
+  var prev=gameState.replay[scid];
+  if(prev.played){
     // 리플레이 완료 — best score 갱신 + 도전력 판정
-    var prev=gameState.replay[scid];
     if(gameState.score>prev.bestScore){
       prev.bestScore=gameState.score;
       prev.bestGrade=grade;
       if(!prev.improved){
         prev.improved=true;
-        // 도전력 지급
         if(!gameState.inventory.growthCards)gameState.inventory.growthCards=[];
         gameState.inventory.growthCards.push({label:'도전력',scenario:scid,leaf:leaf});
       }
     }
+  } else {
+    // 첫 플레이 완료
+    prev.bestScore=gameState.score;
+    prev.bestGrade=grade;
     prev.played=true;
   }
 
