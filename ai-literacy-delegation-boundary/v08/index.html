@@ -530,6 +530,26 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .card-reward-confirm { display:block; width:100%; padding:8px 12px; border:1.5px solid #111; background:#111; color:#fff; font-family:inherit; font-size:12px; font-weight:700; letter-spacing:1px; cursor:pointer; transition:background 0.15s ease; }
 .card-reward-confirm:hover { background:#333; }
 .card-reward-confirm:disabled { background:#888; border-color:#888; cursor:default; }
+/* 성장 카드 (회복력/도전력) 전용 스타일 */
+.card-reward-card.growth-card { border:2.5px dashed #546e7a; border-left-width:2.5px; background:#f8f9fa; box-shadow:0 4px 16px rgba(0,0,0,0.12); }
+.growth-symbol { font-size:32px; text-align:center; margin-bottom:6px; line-height:1; color:#546e7a; }
+/* 회복력 중앙 오버레이 */
+.recovery-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:410; display:flex; align-items:center; justify-content:center; animation:fadeIn 0.3s ease; }
+.recovery-overlay.hidden { display:none; }
+.recovery-card { width:300px; padding:28px 24px; border:2.5px dashed #546e7a; background:#f8f9fa; border-radius:16px; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.2); animation:recoveryPopIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; opacity:0; }
+@keyframes recoveryPopIn {
+  0%   { opacity:0; transform:scale(0.3); }
+  60%  { opacity:1; transform:scale(1.08); }
+  100% { opacity:1; transform:scale(1); }
+}
+.recovery-card .growth-symbol { font-size:48px; margin-bottom:12px; }
+.recovery-card-title { font-size:20px; font-weight:700; color:#546e7a; margin-bottom:6px; }
+.recovery-card-desc { font-size:13px; color:#666; line-height:1.5; margin-bottom:20px; }
+.recovery-card-btn { display:block; width:100%; padding:12px; margin-bottom:8px; font-family:inherit; font-size:14px; font-weight:700; border-radius:8px; cursor:pointer; transition:all 0.15s; }
+.recovery-card-btn.primary { background:#546e7a; color:#fff; border:2px solid #546e7a; }
+.recovery-card-btn.primary:hover { background:#455a64; }
+.recovery-card-btn.secondary { background:transparent; color:#888; border:1.5px solid #ccc; font-weight:600; }
+.recovery-card-btn.secondary:hover { border-color:#999; color:#666; }
 .no-card-notice { margin-top:10px; padding:8px 12px; background:#f7f7f7; border-left:3px solid #bbb; font-size:12px; color:#666; }
 /* ===== GAME OVER 모달 (5/3 정정 — 자원 부족) ===== */
 .gameover-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:1100; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
@@ -615,6 +635,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
   </div>
 </aside>
 <div class="card-reward-overlay hidden" id="card-reward-overlay"></div>
+<div class="recovery-overlay hidden" id="recovery-overlay"></div>
 <button class="debug-toggle" onclick="toggleDebug()">DEBUG</button>
 <div class="debug-panel" id="debug-panel"></div>
 <div class="version">v0.8</div>
@@ -11450,6 +11471,17 @@ function applyReview(rid){
       gameState.inventory.growthCards.push({label:fin.growthCard,scenario:gameState.currentScenarioId,leaf:leaf});
     }
   }
+  // v0.8 세션310 — B 이하 결과 시 회복력 자동 지급 (yaml에 없어도)
+  var _grade=fin?fin.grade:'';
+  if(_grade==='B'||_grade==='C'||_grade==='D'){
+    var hasRecovery=false;
+    var gc=gameState.inventory.growthCards||[];
+    for(var gi=0;gi<gc.length;gi++){if(gc[gi].scenario===gameState.currentScenarioId&&gc[gi].label==='회복력'){hasRecovery=true;break;}}
+    if(!hasRecovery){
+      if(!gameState.inventory.growthCards)gameState.inventory.growthCards=[];
+      gameState.inventory.growthCards.push({label:'회복력',scenario:gameState.currentScenarioId,leaf:leaf});
+    }
+  }
   var resourcePenalty=calcResourcePenalty(gameState.resources);
   var ownedCards=(gameState.inventory&&gameState.inventory.competencyCards)||[];
   var cardMatchBonus=getCardMatchBonus(sc2,leaf,ownedCards);
@@ -12892,20 +12924,33 @@ function goCut6(){
   nb.onclick=goNextScenario;
 
   // 시나리오 끝 chain (SPEC §6.3, v0.8 — 카드 3트랙 반영)
-  // 결과 패널 1.4초 보여주고 → [0] pending 흡수 → [1] 카드 → [2] 레벨업 → [3] 자원 충전 → 다음 버튼
+  // 결과 패널 1.4초 보여주고 → [0] pending 흡수 → [1] 카드 → [1.5] 회복력 특별 UI → [2] 레벨업 → [3] 자원 충전 → 다음 버튼
   var _v8CardLabels=[];
+  var _hasRecoveryCard=false;
   if(fin&&fin.cardEarned){
     if(fin.humanCentricAxis&&fin.humanCentricTag)_v8CardLabels.push('['+fin.humanCentricAxis+'] '+fin.humanCentricTag);
     if(fin.domainCards)for(var _di=0;_di<fin.domainCards.length;_di++)_v8CardLabels.push(fin.domainCards[_di]);
-    if(fin.growthCard)_v8CardLabels.push(fin.growthCard);
+  }
+  // 회복력은 일반 카드 목록에서 빼고 특별 UI로 표시
+  if(grade==='B'||grade==='C'||grade==='D')_hasRecoveryCard=true;
+  // 도전력은 리플레이 완료 시 — replay chain에서 처리
+  var _isReplay=gameState.replay&&gameState.replay[scid]&&gameState.replay[scid].played;
+  var _challengeAwarded=false;
+  if(_isReplay&&gameState.replay[scid].improved){
+    _challengeAwarded=true;
+    _v8CardLabels.push('도전력');
   }
   setTimeout(function(){
     var chain=Promise.resolve();
     // [0] §12 pending → 누적 흡수 (원 마커가 게이지로 흘러내림)
     chain=chain.then(function(){return absorbPending();});
-    // [1] v0.8 카드 reward — 3트랙 카드를 flat 라벨로 변환하여 기존 팝업 사용
+    // [1] v0.8 카드 reward — 인간중심 + 도메인 + 도전력 (회복력 제외)
     if(_v8CardLabels.length){
       chain=chain.then(function(){return playCardRewardSequential(_v8CardLabels,'');});
+    }
+    // [1.5] 회복력 특별 UI — 화면 중앙, 리플레이 진입점
+    if(_hasRecoveryCard){
+      chain=chain.then(function(){return showRecoveryCardModal(scid);});
     }
     // [2] 레벨업
     if(didLevelUp){
@@ -14398,7 +14443,8 @@ function playCardRewardSequential(cards,note){
       var label=cards[idx];
       var color=_cardColor(label);
       var card=document.createElement('div');
-      card.className='card-reward-card';
+      var _isGrowth=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthCards&&TEXTS.growthCards[label]);
+      card.className='card-reward-card'+(_isGrowth?' growth-card':'');
       var pos=positions[idx%positions.length];
       card.style.top=pos.top;
       card.style.left=pos.left;
@@ -14426,7 +14472,9 @@ function playCardRewardSequential(cards,note){
         var trackName=isGrowth?'성장 역량':'도메인 역량';
         var td=isGrowth?(TEXTS.growthCards[label]||{}):(TEXTS&&TEXTS.domainCards&&TEXTS.domainCards[label]||{});
         shortDesc=td.short||'';
-        card.innerHTML='<div class="card-reward-tag">'+_invEscapeHTML(trackName)+'</div>'+
+        var growthSymbol=(label==='도전력')?'↑':(label==='회복력')?'↺':'';
+        card.innerHTML=(growthSymbol?'<div class="growth-symbol">'+growthSymbol+'</div>':'')+
+          '<div class="card-reward-tag">'+_invEscapeHTML(trackName)+'</div>'+
           '<div class="card-reward-label" style="color:'+color+'">'+_invEscapeHTML(label)+'</div>'+
           (shortDesc?'<div class="card-reward-divider"></div><div class="card-reward-note">'+_invEscapeHTML(shortDesc)+'</div>':'')+
           '<button class="card-reward-confirm" id="'+btnId+'">'+_invEscapeHTML(btnLabel)+'</button>';
@@ -14441,6 +14489,31 @@ function playCardRewardSequential(cards,note){
       };
     }
     for(var i=0;i<cards.length;i++)makeCard(i);
+  });
+}
+
+// 회복력 특별 UI — 화면 중앙, 리플레이 진입점
+function showRecoveryCardModal(scid){
+  return new Promise(function(resolve){
+    var overlay=document.getElementById('recovery-overlay');
+    if(!overlay){resolve();return;}
+    overlay.classList.remove('hidden');
+    var td=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthCards&&TEXTS.growthCards['회복력'])||{};
+    overlay.innerHTML='<div class="recovery-card">'+
+      '<div class="growth-symbol">↺</div>'+
+      '<div class="recovery-card-title">회복력</div>'+
+      '<div class="recovery-card-desc">'+(td.short||'낮은 결과에서 비어 있던 과정을 알아차리고 다시 세우는 힘')+'</div>'+
+      '<button class="recovery-card-btn primary" id="recovery-use-btn">회복역량 사용해 시간 되돌리기<br><span style="font-size:12px;font-weight:400;opacity:0.8;">시나리오 다시 도전</span></button>'+
+      '<button class="recovery-card-btn secondary" id="recovery-skip-btn">다음 시나리오로 →</button>'+
+    '</div>';
+    document.getElementById('recovery-use-btn').onclick=function(){
+      overlay.classList.add('hidden');overlay.innerHTML='';
+      replayScenario(scid);
+    };
+    document.getElementById('recovery-skip-btn').onclick=function(){
+      overlay.classList.add('hidden');overlay.innerHTML='';
+      resolve();
+    };
   });
 }
 

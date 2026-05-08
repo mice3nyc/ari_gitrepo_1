@@ -345,7 +345,28 @@
 | reward-label | 19px / 700 |
 | confirm | bg:#111, 12px/700, letter-spacing:1px |
 
-### L534~551 — GAME OVER 모달
+### L534~556 — 성장 카드 (회복력/도전력)
+| 속성 | 값 |
+|------|-----|
+| growth-card border | 2.5px dashed #546e7a |
+| growth-card bg | #f8f9fa |
+| growth-card shadow | 0 4px 16px rgba(0,0,0,0.12) |
+| growth-symbol font | 32px (카드), 48px (모달) |
+| growth-symbol color | #546e7a |
+| recovery-overlay z-index | 410 |
+| recovery-overlay bg | rgba(0,0,0,0.5) |
+| recovery-card width | 300px |
+| recovery-card border | 2.5px dashed #546e7a |
+| recovery-card radius | 16px |
+| recoveryPopIn | scale(0.3→1.08→1), 0.5s |
+| recovery-card-title | 20px / 700 / #546e7a |
+| recovery-card-desc | 13px / #666 |
+| btn primary | bg:#546e7a, border:#546e7a |
+| btn primary hover | bg:#455a64 |
+| btn secondary | transparent, border:1.5px #ccc, color:#888 |
+| 심볼 | ↺ 회복력, ↑ 도전력 |
+
+### L558~575 — GAME OVER 모달
 | 속성 | 값 |
 |------|-----|
 | overlay bg | rgba(0,0,0,0.65) |
@@ -363,6 +384,7 @@
 |---------|---------|
 | 1100 | GAME OVER overlay |
 | 1000 | 모달 overlay (레벨업/자원분배) |
+| 410 | recovery overlay (성장 카드) |
 | 405 | reward 카드 |
 | 400 | reward overlay |
 | 310 | 인벤토리 패널 |
@@ -375,5 +397,5 @@
 ## 마지막 동기화
 
 - **기준 파일**: `index.html.template` L7~L551
-- **날짜**: 2026-05-07 (세션307)
-- **빌드**: 472,145 bytes (v0.8)
+- **날짜**: 2026-05-08 (세션313)
+- **빌드**: 미빌드 (13d 코드 미커밋 상태)
