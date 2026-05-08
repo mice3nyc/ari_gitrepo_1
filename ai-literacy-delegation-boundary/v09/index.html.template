@@ -158,7 +158,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .panel-place { font-size:10px; color:#999; position:absolute; bottom:4px; right:8px; background:rgba(255,255,255,0.8); padding:1px 6px; }
 .panel-body { flex:1; padding:10px 12px; overflow-y:auto; font-size:13px; line-height:1.5; }
 .panel-body p { margin-bottom:6px; }
-.panel-body .highlight { font-weight:700; }
+.panel-body .highlight { font-size:15px; font-weight:700; }
 .panel-body .core-q { font-weight:600; font-size:14px; margin:6px 0; padding:6px 0; border-top:1px solid #eee; }
 .advance-wrap { text-align:center; margin-top:10px; }
 .advance-btn { background:#111; color:#fff; border:2px solid #111; padding:8px 24px; font-size:12px; font-family:'Paperlogy',sans-serif; cursor:pointer; box-shadow:0 2px 0 #000; transition:all 0.2s; }
@@ -168,9 +168,9 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 /* ===== Choice Cards ===== */
 .choices-area { padding:8px; display:flex; flex-direction:column; gap:8px; height:100%; }
 .choices-q { font-size:14px; font-weight:700; padding:6px 0 8px; color:#111; }
-.chosen-summary { padding:10px 12px; border:2px solid #111; background:#fff; animation:panelSlideIn 0.4s ease; }
-.chosen-label { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#888; margin-bottom:6px; }
-.chosen-title { font-size:14px; font-weight:700; margin-bottom:4px; }
+.chosen-summary { padding:8px 4px; background:transparent; animation:panelSlideIn 0.4s ease; }
+.chosen-label { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#888; margin-bottom:4px; }
+.chosen-title { font-size:15px; font-weight:700; margin-bottom:4px; }
 .chosen-way { font-size:12px; color:#444; line-height:1.4; }
 .choice-card { display:flex; flex-direction:column; background:#fff; color:#111; border:2px solid #111; padding:0; cursor:pointer; user-select:none; transition:all 0.2s; box-shadow:0 2px 0 #111; opacity:0; transform:translateY(12px); overflow:hidden; }
 .choice-card.visible { opacity:1; transform:translateY(0); }
