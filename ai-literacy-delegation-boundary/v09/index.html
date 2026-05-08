@@ -13324,26 +13324,33 @@ function goCut6(){
     },400);
   }
 
-  // v0.8 — 리플레이 판정 (played 플래그로 첫 플레이 vs 리플레이 구분)
+  // v0.9 — 리플레이 판정 (덱스 12-ari-challenge-card-bug.md 권장안 적용)
+  // 완료 처리 전 상태를 먼저 저장 — played가 완료 전부터 true였는지로 판단
   if(!gameState.replay)gameState.replay={};
-  if(!gameState.replay[scid])gameState.replay[scid]={played:false,improved:false,bestScore:0,bestGrade:''};
-  var prev=gameState.replay[scid];
-  if(prev.played){
-    // 리플레이 완료 — best score 갱신 + 도전력 판정
-    if(gameState.score>prev.bestScore){
-      prev.bestScore=gameState.score;
-      prev.bestGrade=grade;
-      if(!prev.improved){
-        prev.improved=true;
+  var replayState=gameState.replay[scid];
+  var wasReplay=replayState&&replayState.played===true;
+  var challengeAwardedNow=false;
+  if(!replayState){
+    // 방어 코드 — startScenario에서 보통 이미 만들어져 있지만 없을 경우 대비
+    replayState=gameState.replay[scid]={played:true,improved:false,bestScore:gameState.score,bestGrade:grade,resourceSnapshot:{time:gameState.resources.time.current,energy:gameState.resources.energy.current}};
+  } else if(!wasReplay){
+    // 첫 플레이 완료
+    replayState.played=true;
+    replayState.improved=false;
+    replayState.bestScore=gameState.score;
+    replayState.bestGrade=grade;
+  } else {
+    // 진짜 리플레이 완료
+    if(gameState.score>replayState.bestScore){
+      replayState.bestScore=gameState.score;
+      replayState.bestGrade=grade;
+      if(!replayState.improved){
+        replayState.improved=true;
+        challengeAwardedNow=true;
         if(!gameState.inventory.growthCards)gameState.inventory.growthCards=[];
         gameState.inventory.growthCards.push({label:'도전력',scenario:scid,leaf:leaf});
       }
     }
-  } else {
-    // 첫 플레이 완료
-    prev.bestScore=gameState.score;
-    prev.bestGrade=grade;
-    prev.played=true;
   }
 
   // v0.5: 컷6 결과로 충분 → 활동 리포트 거치지 않고 바로 다음 시나리오/종합 리포트
@@ -13365,11 +13372,8 @@ function goCut6(){
   }
   // 회복력은 B 이하만 — 특별 UI로 표시
   if(grade==='B'||grade==='C'||grade==='D')_hasRecoveryCard=true;
-  // 도전력은 리플레이 완료 시 — replay chain에서 처리
-  var _isReplay=gameState.replay&&gameState.replay[scid]&&gameState.replay[scid].played;
-  var _challengeAwarded=false;
-  if(_isReplay&&gameState.replay[scid].improved){
-    _challengeAwarded=true;
+  // 도전력은 리플레이 완료 시 — wasReplay 기반 (덱스 권장안)
+  if(challengeAwardedNow){
     _v8CardLabels.push('도전력');
   }
   setTimeout(function(){
