@@ -104,19 +104,25 @@ function _calculateCardEnergyDiscount(discountTags){
   return {total:total,details:details};
 }
 // v0.9 세션322: 고정 할인 — 역량 점수 = 할인액. 비율 상한 폐기.
+// v1.0 세션325: tier1 할인 끔 + 바닥값 도입 (덱스 QA)
+var DISCOUNT_FLOOR={tier1:{time:4,energy:3},tier2:{time:3,energy:2},review:{time:3,energy:2}};
 function _applyDiscount(c,stageType,choiceId,selectedCard){
   var dlg=(gameState&&gameState.competencies)?gameState.competencies.delegationChoice.value||0:0;
   var knl=(gameState&&gameState.competencies)?gameState.competencies.knowledge.value||0:0;
   var rawT=c.time,rawE=c.energy;
+  if(stageType==='tier1'){
+    return {time:0,energy:0,_discount:{dlg:0,knl:0,dlgEffect:0,knlEffect:0,cardDiscount:0,cardDetails:[],mPos:1,mNeg:1,rawTime:0,rawEnergy:0,clampedEnergy:0}};
+  }
   var timeDisc=dlg;
   var cardDisc={total:0,details:[]};
   if(selectedCard){
     cardDisc={total:selectedCard.amount,details:[selectedCard]};
   }
   var energyDisc=knl+cardDisc.total;
+  var floor=DISCOUNT_FLOOR[stageType]||{time:3,energy:2};
   return {
-    time:(rawT>0)?Math.max(1,rawT-timeDisc):0,
-    energy:(rawE>0)?Math.max(1,rawE-energyDisc):0,
+    time:(rawT>0)?Math.max(floor.time,rawT-timeDisc):0,
+    energy:(rawE>0)?Math.max(floor.energy,rawE-energyDisc):0,
     _discount:{dlg:dlg,knl:knl,dlgEffect:timeDisc,knlEffect:knl,
       cardDiscount:cardDisc.total,cardDetails:cardDisc.details,
       mPos:1,mNeg:1,rawTime:rawT,rawEnergy:rawE,clampedEnergy:energyDisc}

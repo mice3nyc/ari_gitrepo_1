@@ -24,8 +24,8 @@ var CONFIG={
   // v0.5 Phase 8.7 — 부분 회복 hook 폐기 (DECISIONS §10.1). RP 시스템으로 전환
   // v0.5 Phase 8.8 — 자원토큰(RP) 시스템 (DECISIONS §10.2~10.4)
   // 명칭: 코드는 RP 유지(식별자 길이/i18n), UI 텍스트는 "자원토큰"
-  rpRewardByGrade:{S:10,A:7,B:5,C:3,D:1},
-  rpLevelUpBonusByLevel:{2:10,3:15,4:20,5:20},
+  rpRewardByGrade:{S:5,A:3,B:2,C:1,D:0},
+  rpLevelUpBonusByLevel:{2:3,3:4,4:5,5:6},
   rpCost:{time:1,energy:1}, // 2축 전용 (DECISIONS §10.4 — 위/도 분배 폐기)
   // v0.8 5/4 세션289 — 비대칭 효과 (mNeg=1 되돌림)
   // 양수 ×2 (잘하면 두 배 보상), 음수 ×1 (잘못해도 한 배만 페널티). 메모리 5/3 세션278 정합.
@@ -52,8 +52,8 @@ var CONFIG={
     'C':'좀 헷갈렸지? 뭐가 내 일이고 뭐가 AI 일인지.',
     'D':'이번 학기는 그냥 흘려보냈어. 한 번 더 도전!'
   },
-  expScoreMultiplier:0.3,
-  expThresholds:[0,20,40,65,100],
+  expScoreMultiplier:0.2,
+  expThresholds:[0,30,70,120,180],
   meterMaxByLevel:{
     1:{time:100,energy:100},
     2:{time:100,energy:100},

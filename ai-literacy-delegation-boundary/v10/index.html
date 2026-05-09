@@ -1533,8 +1533,8 @@ var CONFIG={
   // v0.5 Phase 8.7 — 부분 회복 hook 폐기 (DECISIONS §10.1). RP 시스템으로 전환
   // v0.5 Phase 8.8 — 자원토큰(RP) 시스템 (DECISIONS §10.2~10.4)
   // 명칭: 코드는 RP 유지(식별자 길이/i18n), UI 텍스트는 "자원토큰"
-  rpRewardByGrade:{S:10,A:7,B:5,C:3,D:1},
-  rpLevelUpBonusByLevel:{2:10,3:15,4:20,5:20},
+  rpRewardByGrade:{S:5,A:3,B:2,C:1,D:0},
+  rpLevelUpBonusByLevel:{2:3,3:4,4:5,5:6},
   rpCost:{time:1,energy:1}, // 2축 전용 (DECISIONS §10.4 — 위/도 분배 폐기)
   // v0.8 5/4 세션289 — 비대칭 효과 (mNeg=1 되돌림)
   // 양수 ×2 (잘하면 두 배 보상), 음수 ×1 (잘못해도 한 배만 페널티). 메모리 5/3 세션278 정합.
@@ -1561,8 +1561,8 @@ var CONFIG={
     'C':'좀 헷갈렸지? 뭐가 내 일이고 뭐가 AI 일인지.',
     'D':'이번 학기는 그냥 흘려보냈어. 한 번 더 도전!'
   },
-  expScoreMultiplier:0.3,
-  expThresholds:[0,20,40,65,100],
+  expScoreMultiplier:0.2,
+  expThresholds:[0,30,70,120,180],
   meterMaxByLevel:{
     1:{time:100,energy:100},
     2:{time:100,energy:100},
@@ -2462,7 +2462,7 @@ var SCENARIOS = {
         "delegation": "+",
         "knowledge": "+",
         "awareness": "부족한 초안을 끝까지 다시 보며 진짜 쓰고 싶은 말을 골랐어요. 완벽하진 않아도 내 기준으로 고친 글이 됐어요.",
-        "cut6Feedback": "핵심 방향은 잡았지만, 검토나 자기 기준을 더 분명히 하면 결과가 더 좋아질 수 있어요.",
+        "cut6Feedback": "좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.",
         "replaySuggestion": "다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.",
         "cardEarned": true,
         "humanCentricAxis": "성찰하기",
@@ -4590,7 +4590,7 @@ var SCENARIOS = {
         "delegation": "+",
         "knowledge": "+",
         "awareness": "맡은 내용의 빠진 출처와 어색한 표현을 조금 고쳤어요. 역할은 보이지만 발표의 한 흐름으로 묶는 점검은 더 필요해요.",
-        "cut6Feedback": "핵심 방향은 잡았지만, 검토나 자기 기준을 더 분명히 하면 결과가 더 좋아질 수 있어요.",
+        "cut6Feedback": "좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.",
         "replaySuggestion": "다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.",
         "cardEarned": true,
         "humanCentricAxis": "성찰하기",
@@ -4629,7 +4629,7 @@ var SCENARIOS = {
         "delegation": "+",
         "knowledge": "+",
         "awareness": "역할을 나눈 뒤 발표 흐름에 맞춰 다시 확인했어요. 각자 맡은 자료가 하나의 발표로 이어지기 시작했어요.",
-        "cut6Feedback": "핵심 방향은 잡았지만, 검토나 자기 기준을 더 분명히 하면 결과가 더 좋아질 수 있어요.",
+        "cut6Feedback": "좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.",
         "replaySuggestion": "다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.",
         "cardEarned": true,
         "humanCentricAxis": "성찰하기",
@@ -4705,7 +4705,7 @@ var SCENARIOS = {
         "delegation": "+",
         "knowledge": "++",
         "awareness": "내 설명에서 어색한 부분과 출처를 일부 확인했어요. 내 파트는 단단해졌지만 모둠 전체 흐름은 조금 더 맞춰야 해요.",
-        "cut6Feedback": "출발은 했지만 중요한 확인 과정이 일부 비어 있어요. 다음에는 내가 책임질 수 있는 근거를 더 남겨 보세요.",
+        "cut6Feedback": "좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.",
         "replaySuggestion": "다시 해본다면 그대로 진행하기 전에 이상한 부분을 표시하거나 처음부터 다시 확인해 보세요.",
         "cardEarned": true,
         "humanCentricAxis": "중심잡기",
@@ -4744,7 +4744,7 @@ var SCENARIOS = {
         "delegation": "+",
         "knowledge": "++",
         "awareness": "내가 이해한 내용을 모둠 흐름 안에서 다시 점검했어요. 혼자 아는 자료가 아니라 함께 발표할 수 있는 자료가 됐어요.",
-        "cut6Feedback": "핵심 방향은 잡았지만, 검토나 자기 기준을 더 분명히 하면 결과가 더 좋아질 수 있어요.",
+        "cut6Feedback": "자기 기준을 세우고 마지막 확인까지 해낸 선택이라 결과의 완성도가 높아요.",
         "replaySuggestion": "다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.",
         "cardEarned": true,
         "humanCentricAxis": "중심잡기",
@@ -6817,7 +6817,7 @@ var SCENARIOS = {
         "delegation": "+",
         "knowledge": "++",
         "awareness": "밑줄 친 장면에서 출발해 감상의 근거는 분명했어요. 다만 바로 내서 왜 그 장면이 남았는지는 덜 설명됐어요.",
-        "cut6Feedback": "출발은 했지만 중요한 확인 과정이 일부 비어 있어요. 다음에는 내가 책임질 수 있는 근거를 더 남겨 보세요.",
+        "cut6Feedback": "좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.",
         "replaySuggestion": "다시 해본다면 그대로 진행하기 전에 이상한 부분을 표시하거나 처음부터 다시 확인해 보세요.",
         "cardEarned": true,
         "humanCentricAxis": "중심잡기",
@@ -6855,7 +6855,7 @@ var SCENARIOS = {
         "delegation": "+",
         "knowledge": "++",
         "awareness": "장면과 다른 표현을 고치며 감상이 더 정확해졌어요. 한 장면에 머문 힘이 글에 살아났어요.",
-        "cut6Feedback": "핵심 방향은 잡았지만, 검토나 자기 기준을 더 분명히 하면 결과가 더 좋아질 수 있어요.",
+        "cut6Feedback": "좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.",
         "replaySuggestion": "다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.",
         "cardEarned": true,
         "humanCentricAxis": "중심잡기",
@@ -6894,7 +6894,7 @@ var SCENARIOS = {
         "delegation": "+",
         "knowledge": "++",
         "awareness": "밑줄 친 장면과 내 감상을 처음부터 다시 이어 봤어요. 한 문장이 내 생각으로 자라는 독후감이 됐어요.",
-        "cut6Feedback": "핵심 방향은 잡았지만, 검토나 자기 기준을 더 분명히 하면 결과가 더 좋아질 수 있어요.",
+        "cut6Feedback": "자기 기준을 세우고 마지막 확인까지 해낸 선택이라 결과의 완성도가 높아요.",
         "replaySuggestion": "다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.",
         "cardEarned": true,
         "humanCentricAxis": "중심잡기",
@@ -6970,7 +6970,7 @@ var SCENARIOS = {
         "delegation": "++",
         "knowledge": "++",
         "awareness": "이상한 부분을 표시하며 이해되지 않던 장면을 조금 정리했어요. 질문이 글의 중심으로 살아나기 시작했어요.",
-        "cut6Feedback": "출발은 했지만 중요한 확인 과정이 일부 비어 있어요. 다음에는 내가 책임질 수 있는 근거를 더 남겨 보세요.",
+        "cut6Feedback": "좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.",
         "replaySuggestion": "다시 해본다면 그대로 진행하기 전에 이상한 부분을 표시하거나 처음부터 다시 확인해 보세요.",
         "cardEarned": true,
         "humanCentricAxis": "중심잡기",
@@ -7008,7 +7008,7 @@ var SCENARIOS = {
         "delegation": "++",
         "knowledge": "++",
         "awareness": "모르겠던 장면을 끝까지 다시 확인했어요. 어려운 부분을 피하지 않은 시간이 감상의 깊이로 남았어요.",
-        "cut6Feedback": "핵심 방향은 잡았지만, 검토나 자기 기준을 더 분명히 하면 결과가 더 좋아질 수 있어요.",
+        "cut6Feedback": "자기 기준을 세우고 마지막 확인까지 해낸 선택이라 결과의 완성도가 높아요.",
         "replaySuggestion": "다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.",
         "cardEarned": true,
         "humanCentricAxis": "중심잡기",
@@ -9007,7 +9007,7 @@ var SCENARIOS = {
         "delegation": "+",
         "knowledge": "++",
         "awareness": "걱정과 관련된 정보를 일부 확인했어요. 불안이 막연한 말에서 따져볼 질문으로 바뀌기 시작했어요.",
-        "cut6Feedback": "핵심 방향은 잡았지만, 검토나 자기 기준을 더 분명히 하면 결과가 더 좋아질 수 있어요.",
+        "cut6Feedback": "좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.",
         "replaySuggestion": "다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.",
         "cardEarned": true,
         "humanCentricAxis": "중심잡기",
@@ -9046,7 +9046,7 @@ var SCENARIOS = {
         "delegation": "+",
         "knowledge": "++",
         "awareness": "내 걱정을 기준으로 추천과 활동을 다시 봤어요. 불안을 피하지 않고 판단의 단서로 바꾼 선택이에요.",
-        "cut6Feedback": "핵심 방향은 잡았지만, 검토나 자기 기준을 더 분명히 하면 결과가 더 좋아질 수 있어요.",
+        "cut6Feedback": "좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.",
         "replaySuggestion": "다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.",
         "cardEarned": true,
         "humanCentricAxis": "중심잡기",
@@ -9120,7 +9120,7 @@ var SCENARIOS = {
         "delegation": "++",
         "knowledge": "++",
         "awareness": "실험과 관련된 낯선 정보를 확인했어요. 해보고 싶은 일과 실제 조건이 조금 더 가까워졌어요.",
-        "cut6Feedback": "출발은 했지만 중요한 확인 과정이 일부 비어 있어요. 다음에는 내가 책임질 수 있는 근거를 더 남겨 보세요.",
+        "cut6Feedback": "좋은 방향의 선택이 많았고, 한두 지점을 더 확인하면 더 단단해질 수 있어요.",
         "replaySuggestion": "다시 해본다면 그대로 진행하기 전에 이상한 부분을 표시하거나 처음부터 다시 확인해 보세요.",
         "cardEarned": true,
         "humanCentricAxis": "융합하기",
@@ -9159,7 +9159,7 @@ var SCENARIOS = {
         "delegation": "++",
         "knowledge": "++",
         "awareness": "작은 실험, 내 관심, AI 시대의 변화를 함께 확인했어요. 추천보다 내가 해볼 수 있는 경험이 중심이 됐어요.",
-        "cut6Feedback": "핵심 방향은 잡았지만, 검토나 자기 기준을 더 분명히 하면 결과가 더 좋아질 수 있어요.",
+        "cut6Feedback": "자기 기준을 세우고 마지막 확인까지 해낸 선택이라 결과의 완성도가 높아요.",
         "replaySuggestion": "다시 해본다면 내가 직접 확인한 근거를 하나 더 넣어 보세요.",
         "cardEarned": true,
         "humanCentricAxis": "융합하기",
@@ -13517,19 +13517,25 @@ function _calculateCardEnergyDiscount(discountTags){
   return {total:total,details:details};
 }
 // v0.9 세션322: 고정 할인 — 역량 점수 = 할인액. 비율 상한 폐기.
+// v1.0 세션325: tier1 할인 끔 + 바닥값 도입 (덱스 QA)
+var DISCOUNT_FLOOR={tier1:{time:4,energy:3},tier2:{time:3,energy:2},review:{time:3,energy:2}};
 function _applyDiscount(c,stageType,choiceId,selectedCard){
   var dlg=(gameState&&gameState.competencies)?gameState.competencies.delegationChoice.value||0:0;
   var knl=(gameState&&gameState.competencies)?gameState.competencies.knowledge.value||0:0;
   var rawT=c.time,rawE=c.energy;
+  if(stageType==='tier1'){
+    return {time:0,energy:0,_discount:{dlg:0,knl:0,dlgEffect:0,knlEffect:0,cardDiscount:0,cardDetails:[],mPos:1,mNeg:1,rawTime:0,rawEnergy:0,clampedEnergy:0}};
+  }
   var timeDisc=dlg;
   var cardDisc={total:0,details:[]};
   if(selectedCard){
     cardDisc={total:selectedCard.amount,details:[selectedCard]};
   }
   var energyDisc=knl+cardDisc.total;
+  var floor=DISCOUNT_FLOOR[stageType]||{time:3,energy:2};
   return {
-    time:(rawT>0)?Math.max(1,rawT-timeDisc):0,
-    energy:(rawE>0)?Math.max(1,rawE-energyDisc):0,
+    time:(rawT>0)?Math.max(floor.time,rawT-timeDisc):0,
+    energy:(rawE>0)?Math.max(floor.energy,rawE-energyDisc):0,
     _discount:{dlg:dlg,knl:knl,dlgEffect:timeDisc,knlEffect:knl,
       cardDiscount:cardDisc.total,cardDetails:cardDisc.details,
       mPos:1,mNeg:1,rawTime:rawT,rawEnergy:rawE,clampedEnergy:energyDisc}
@@ -14984,9 +14990,9 @@ function startScenario(scid){
   currentRow=null;
   trackEvent('scenario_selected',{scenarioId:scid,clearedCount:gameState.clearedScenarios.length});
   container.innerHTML='';
-  showStats();
   updateStats();
   updateDomainLabel();
+  showStats();
   renderCut1();
 }
 
@@ -15068,9 +15074,9 @@ function replayScenario(scid){
   currentRow=null;
   trackEvent('replay_started',{scenarioId:scid});
   container.innerHTML='';
-  showStats();
   updateStats();
   updateDomainLabel();
+  showStats();
   renderCut1();
 }
 
@@ -15143,8 +15149,8 @@ function continueGame(){
   trackEvent('session_continued',{version:CONFIG.version});
   container.innerHTML='';
   currentRow=null;
-  showStats();
   updateStats();
+  showStats();
   if(gameState.completed){showReport();return;}
   // 진행 단계에 따라 복원
   renderCut1();
@@ -15405,7 +15411,7 @@ function _reportLeafInfo(r){
   if(t1&&sc.tier1){for(var i=0;i<sc.tier1.length;i++){if(sc.tier1[i].id===t1){t1Label=sc.tier1[i].label||'';break;}}}
   if(t2&&sc.tier2&&sc.tier2[t1]){var arr=sc.tier2[t1];for(var j=0;j<arr.length;j++){if(arr[j].id===t2){t2Label=arr[j].label||'';break;}}}
   if(rv&&sc.reviews){for(var k=0;k<sc.reviews.length;k++){if(sc.reviews[k].id===rv){rvLabel=sc.reviews[k].label||'';break;}}}
-  // tier2 라벨이 학생이 실제 고른 행동 — 가장 의미 있는 한 줄
+  if(sc.reviewLabels&&sc.reviewLabels[r.leaf]){rvLabel=sc.reviewLabels[r.leaf];}
   return {path:r.leaf||'',t1:t1Label,t2:t2Label,rv:rvLabel,label:t2Label||t1Label||r.leaf||''};
 }
 
@@ -15780,7 +15786,7 @@ function showFinalReport(){
       var cap=getCutCaptionFor(r.scenarioId, r.leaf, c);
       h+='<div>';
       if(src)h+='<div style="aspect-ratio:1/1;position:relative;overflow:hidden;border:var(--border-w) solid var(--ink);box-shadow:4px 4px 0 var(--ink);background:var(--bg-card);"><img src="'+src+'" alt="컷'+c+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display=\'none\'"></div>';
-      if(cap)h+='<div style="font-family:var(--font-hand);font-size:16px;line-height:1.3;color:var(--ink-mute);margin-top:6px;word-break:keep-all;">'+cap+'</div>';
+      if(cap)h+='<div style="font-family:var(--font-hand);font-size:20px;line-height:1.35;color:var(--ink-mute);margin-top:8px;word-break:keep-all;">'+cap+'</div>';
       h+='</div>';
     }
     h+='</div>';

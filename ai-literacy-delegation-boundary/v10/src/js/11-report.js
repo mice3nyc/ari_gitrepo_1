@@ -103,7 +103,7 @@ function _reportLeafInfo(r){
   if(t1&&sc.tier1){for(var i=0;i<sc.tier1.length;i++){if(sc.tier1[i].id===t1){t1Label=sc.tier1[i].label||'';break;}}}
   if(t2&&sc.tier2&&sc.tier2[t1]){var arr=sc.tier2[t1];for(var j=0;j<arr.length;j++){if(arr[j].id===t2){t2Label=arr[j].label||'';break;}}}
   if(rv&&sc.reviews){for(var k=0;k<sc.reviews.length;k++){if(sc.reviews[k].id===rv){rvLabel=sc.reviews[k].label||'';break;}}}
-  // tier2 라벨이 학생이 실제 고른 행동 — 가장 의미 있는 한 줄
+  if(sc.reviewLabels&&sc.reviewLabels[r.leaf]){rvLabel=sc.reviewLabels[r.leaf];}
   return {path:r.leaf||'',t1:t1Label,t2:t2Label,rv:rvLabel,label:t2Label||t1Label||r.leaf||''};
 }
 
@@ -478,7 +478,7 @@ function showFinalReport(){
       var cap=getCutCaptionFor(r.scenarioId, r.leaf, c);
       h+='<div>';
       if(src)h+='<div style="aspect-ratio:1/1;position:relative;overflow:hidden;border:var(--border-w) solid var(--ink);box-shadow:4px 4px 0 var(--ink);background:var(--bg-card);"><img src="'+src+'" alt="컷'+c+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display=\'none\'"></div>';
-      if(cap)h+='<div style="font-family:var(--font-hand);font-size:16px;line-height:1.3;color:var(--ink-mute);margin-top:6px;word-break:keep-all;">'+cap+'</div>';
+      if(cap)h+='<div style="font-family:var(--font-hand);font-size:20px;line-height:1.35;color:var(--ink-mute);margin-top:8px;word-break:keep-all;">'+cap+'</div>';
       h+='</div>';
     }
     h+='</div>';

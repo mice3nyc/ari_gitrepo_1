@@ -44,9 +44,9 @@ function startScenario(scid){
   currentRow=null;
   trackEvent('scenario_selected',{scenarioId:scid,clearedCount:gameState.clearedScenarios.length});
   container.innerHTML='';
-  showStats();
   updateStats();
   updateDomainLabel();
+  showStats();
   renderCut1();
 }
 
@@ -128,9 +128,9 @@ function replayScenario(scid){
   currentRow=null;
   trackEvent('replay_started',{scenarioId:scid});
   container.innerHTML='';
-  showStats();
   updateStats();
   updateDomainLabel();
+  showStats();
   renderCut1();
 }
 
@@ -203,8 +203,8 @@ function continueGame(){
   trackEvent('session_continued',{version:CONFIG.version});
   container.innerHTML='';
   currentRow=null;
-  showStats();
   updateStats();
+  showStats();
   if(gameState.completed){showReport();return;}
   // 진행 단계에 따라 복원
   renderCut1();
