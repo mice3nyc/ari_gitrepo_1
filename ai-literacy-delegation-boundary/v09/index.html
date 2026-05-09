@@ -318,8 +318,9 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .coupon-strong-tag { font-size:10px; color:#888; margin-left:4px; }
 .coupon-confirm { width:100%; padding:10px; background:#111; color:#fff; border:none; font-size:13px; font-weight:600; cursor:pointer; }
 .coupon-confirm:hover { background:#333; }
-.cost-coupon-badge { display:inline-block; font-size:11px; color:#1a8a4a; font-weight:700; margin-left:8px; padding:2px 8px; border:1px solid #1a8a4a; background:#eafaf0; animation:couponPulse 1.8s ease-in-out infinite; }
-@keyframes couponPulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+.cost-coupon-badge { display:inline-block; font-size:11px; color:#fff; font-weight:700; margin-left:8px; padding:2px 8px; border:none; background:#15803d; animation:couponBlink 0.3s step-end 3; }
+.cost-coupon-badge.applied { animation:none; background:#15803d; }
+@keyframes couponBlink { 0%,100%{opacity:1;} 50%{opacity:0;} }
 
 /* ===== Debug ===== (4/30 세션260: 노안 친화 — font-size 1.4배 + max-width 460px) */
 .debug-toggle { position:fixed; bottom:10px; right:10px; background:#333; color:#fff; border:none; padding:5px 10px; font-size:11px; cursor:pointer; z-index:300; font-family:monospace; }
@@ -13708,8 +13709,23 @@ function buildCostHTML(cost){
 }
 function getCouponBadge(stageType,choiceId){
   var avail=getAvailableCardDiscounts(stageType,choiceId);
-  if(avail.length>0)return '<span class="cost-coupon-badge">역량할인적용</span>';
+  if(avail.length>0)return '<span class="cost-coupon-badge" data-coupon-id="'+stageType+':'+choiceId+'">역량할인적용</span>';
   return '';
+}
+function _updateCouponBadge(areaId,choiceId,selectedCard){
+  var area=document.getElementById(areaId);if(!area)return;
+  var badges=area.querySelectorAll('.cost-coupon-badge');
+  for(var i=0;i<badges.length;i++){
+    var bid=badges[i].getAttribute('data-coupon-id');
+    if(bid&&bid.indexOf(choiceId)>=0){
+      if(selectedCard){
+        badges[i].textContent=selectedCard.display+' 역량할인적용';
+        badges[i].classList.add('applied');
+      } else {
+        badges[i].textContent='역량할인적용';
+      }
+    }
+  }
 }
 
 // §23 — 1차 선택지를 Cut 1 body 아래에 펼침
@@ -14072,6 +14088,7 @@ function startNewGame(){
 function startScenario(scid){
   if(btnGuard('startScenario'))return;
   if(!SCENARIOS[scid])return;
+  _couponSelections={};
   if(!gameState||!gameState.clearedScenarios){gameState=createInitialState();}
   if(gameState.clearedScenarios.indexOf(scid)>=0)return; // 1회 제한 (리플레이는 replayScenario 사용)
   // v0.8 — 리플레이용 자원 스냅샷 저장
@@ -14305,60 +14322,71 @@ function onTier1(t1id){
   });
 }
 
+var _couponSelections={};
 function onTier2(t2id){
   var availCards=getAvailableCardDiscounts('tier2',t2id);
-  function proceed(selectedCard){
-    var prev=gameState.competencies.delegationChoice.value;
-    var prevTime=gameState.resources.time.current;
-    var prevEnergy=gameState.resources.energy.current;
-    applyTier2(t2id);
-    var now=gameState.competencies.delegationChoice.value;
-    var cost=selectedCard?getTier2CostWithCard(t2id,selectedCard):getTier2Cost(t2id);
-    consumeStage('tier2',cost,null);
-    var nowTime=gameState.resources.time.current;
-    var nowEnergy=gameState.resources.energy.current;
-    fadeOutChoices('tier2-choices',function(){
-      showCut3Summary();
-      animateStat('delegation',prev,now);
-      animateResource('time',prevTime,nowTime);
-      animateResource('energy',prevEnergy,nowEnergy);
-      updateStats();
+  var couponKey='tier2:'+t2id;
+  if(availCards.length>0&&_couponSelections[couponKey]===undefined){
+    showCouponSelect(availCards,function(selectedCard){
+      _couponSelections[couponKey]=selectedCard;
+      _updateCouponBadge('tier2-choices',t2id,selectedCard);
     });
+    return;
   }
-  if(availCards.length>0){showCouponSelect(availCards,proceed);}
-  else{proceed(null);}
+  var selectedCard=_couponSelections[couponKey]||null;
+  var prev=gameState.competencies.delegationChoice.value;
+  var prevTime=gameState.resources.time.current;
+  var prevEnergy=gameState.resources.energy.current;
+  applyTier2(t2id);
+  var now=gameState.competencies.delegationChoice.value;
+  var cost=selectedCard?getTier2CostWithCard(t2id,selectedCard):getTier2Cost(t2id);
+  consumeStage('tier2',cost,null);
+  var nowTime=gameState.resources.time.current;
+  var nowEnergy=gameState.resources.energy.current;
+  fadeOutChoices('tier2-choices',function(){
+    showCut3Summary();
+    animateStat('delegation',prev,now);
+    animateResource('time',prevTime,nowTime);
+    animateResource('energy',prevEnergy,nowEnergy);
+    updateStats();
+  });
 }
 
 function onReview(rid){
   var leaf=getLeafPath();
   var reviewLeaf=leaf||rid;
   var availCards=getAvailableCardDiscounts('review',reviewLeaf);
-  function proceed(selectedCard){
-    var prevK=gameState.competencies.knowledge.value;
-    var prevTime=gameState.resources.time.current;
-    var prevEnergy=gameState.resources.energy.current;
-    applyReview(rid);
-    var nowK=gameState.competencies.knowledge.value;
-    var lp=getLeafPath();
-    if(lp){
-      var cost=selectedCard?getReviewCostWithCard(lp,selectedCard):getReviewCost(lp);
-      consumeStage('review',cost,lp);
-    }
-    var nowTime=gameState.resources.time.current;
-    var nowEnergy=gameState.resources.energy.current;
-    fadeOutChoices('review-choices',function(){
-      showCut5Summary();
-      goCut6();
-      animateStat('knowledge',prevK,nowK);
-      animateResource('time',prevTime,nowTime);
-      animateResource('energy',prevEnergy,nowEnergy);
-      updateStats();
-      var sn=document.getElementById('score-num');
-      if(sn){sn.classList.add('pulsing');setTimeout(function(){sn.classList.remove('pulsing');},600);}
+  var couponKey='review:'+reviewLeaf;
+  if(availCards.length>0&&_couponSelections[couponKey]===undefined){
+    showCouponSelect(availCards,function(selectedCard){
+      _couponSelections[couponKey]=selectedCard;
+      _updateCouponBadge('review-choices',reviewLeaf,selectedCard);
     });
+    return;
   }
-  if(availCards.length>0){showCouponSelect(availCards,proceed);}
-  else{proceed(null);}
+  var selectedCard=_couponSelections[couponKey]||null;
+  var prevK=gameState.competencies.knowledge.value;
+  var prevTime=gameState.resources.time.current;
+  var prevEnergy=gameState.resources.energy.current;
+  applyReview(rid);
+  var nowK=gameState.competencies.knowledge.value;
+  var lp=getLeafPath();
+  if(lp){
+    var cost=selectedCard?getReviewCostWithCard(lp,selectedCard):getReviewCost(lp);
+    consumeStage('review',cost,lp);
+  }
+  var nowTime=gameState.resources.time.current;
+  var nowEnergy=gameState.resources.energy.current;
+  fadeOutChoices('review-choices',function(){
+    showCut5Summary();
+    goCut6();
+    animateStat('knowledge',prevK,nowK);
+    animateResource('time',prevTime,nowTime);
+    animateResource('energy',prevEnergy,nowEnergy);
+    updateStats();
+    var sn=document.getElementById('score-num');
+    if(sn){sn.classList.add('pulsing');setTimeout(function(){sn.classList.remove('pulsing');},600);}
+  });
 }
 
 function onNext(){/* placeholder — overridden in goCut6 */}

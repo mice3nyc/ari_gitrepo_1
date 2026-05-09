@@ -121,25 +121,29 @@
 
 ### Phase 9 — XP score 기반 전환 + 카드 할인 쿠폰 UX (세션321, SPEC §24~§25)
 
-**9a. XP score 기반 전환 (§24)**
+**9a. XP score 기반 전환 (§24) ✅**
 
-- [ ] `calculateExpGain` 수정 — `expRewards[leafPath]` → `finals[leafPath].score * CONFIG.expScoreMultiplier`
-- [ ] CONFIG에 `expScoreMultiplier: 0.3` 추가
-- [ ] 등급 배율(`gradeMultiplier`) 제거 — score에 이미 등급 반영
-- [ ] 시나리오 데이터에서 `expRewards` 맵 전체 삭제 (5시나리오)
-- [ ] 빌드 검증: XP 획득량이 이전과 유사한 범위인지 확인
+- [x] `calculateExpGain` 수정 — `finals[leafPath].score * CONFIG.expScoreMultiplier`
+- [x] CONFIG에 `expScoreMultiplier: 0.3` 추가
+- [x] 등급 배율(`gradeMultiplier`) 제거
+- [x] 시나리오 데이터에서 `expRewards` 맵 전체 삭제 (5시나리오 × 27 leaf)
+- [x] 리플레이 EXP 롤백도 score 기반으로 전환
+- [x] trackEvent `baseExp` → `baseScore`
 
-**9b. 카드 할인 쿠폰 UX (§25)**
+**9b. 카드 할인 쿠폰 UX (§25) ✅**
 
-- [ ] `_applyDiscount` 분리 — 축 숙련도(자동) + 카드 할인(별도 반환, 미적용 상태)
-- [ ] `getAvailableCardDiscounts(stageType, choiceId)` 신설 — 적용 가능한 카드 목록 + 각 할인량 반환
-- [ ] `showCouponSelect(choiceId, stageType, callback)` 신설 — 쿠폰 선택 UI
-- [ ] 쿠폰 UI CSS — 라디오 선택, 카드명+할인량, 확인 버튼
-- [ ] `buildCostHTML` 수정 — 할인 가능 시 "할인 가능" 뱃지 표시 (확정 전)
-- [ ] `onTier2` 수정 — 적용 가능 카드 있으면 쿠폰 UI 삽입 → 확인 후 비용 차감
-- [ ] `onReview` 수정 — 동일
-- [ ] 카드 소모 안 함 확인 — 인벤토리에서 제거하지 않음
-- [ ] 공식형 박스 — 쿠폰 선택 후 최종 비용 표시 (축 할인 + 선택한 카드 할인 반영)
+- [x] `_applyDiscount` 4번째 인자 `selectedCard` 추가 — 카드 할인 수동 적용
+- [x] `getAvailableCardDiscounts(stageType, choiceId)` 신설
+- [x] `getTier2CostWithCard` / `getReviewCostWithCard` 신설
+- [x] `showCouponSelect(cards, callback)` 신설 — 쿠폰 선택 모달 UI
+- [x] 쿠폰 UI CSS — 라디오 선택, 찐초록 배경 흰 글씨, 강한매칭 태그
+- [x] `getCouponBadge(stageType, choiceId)` 신설 — 선택지 텍스트 끝에 [역량할인적용] 뱃지
+- [x] 뱃지 스타일: 찐초록(#15803d) 배경, 흰 글씨, 빠른 깜빡임 3회
+- [x] `onTier2` 수정 — 2단계 선택: 첫 클릭→쿠폰, 두 번째 클릭→proceed
+- [x] `onReview` 수정 — 동일
+- [x] `_couponSelections` — 선택지별 할인 상태 저장, `startScenario` 시 초기화
+- [x] `_updateCouponBadge` — 카드 선택 후 뱃지 텍스트 업데이트 ([카드명 역량할인적용])
+- [x] 카드 소모 안 함 확인
 - [ ] 빌드 + 플테 검증
 
 ### 다음 작업 (플테 후)
