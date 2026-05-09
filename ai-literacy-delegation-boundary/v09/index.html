@@ -302,6 +302,24 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 .report-narrative-body .narrative-line + .narrative-line { border-top-color:#eee; padding-top:6px; margin-top:3px; }
 .report-narrative-cardtype { font-size:15px; font-weight:800; color:#fff; background:#111; padding:4px 10px; border-radius:3px; letter-spacing:0.3px; display:inline-block; margin-bottom:8px; }
 
+/* ===== Coupon Select (§25) ===== */
+.coupon-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); z-index:200; display:flex; align-items:center; justify-content:center; }
+.coupon-box { background:#fff; padding:20px 24px; max-width:340px; width:90%; box-shadow:0 8px 32px rgba(0,0,0,0.18); }
+.coupon-title { font-size:14px; font-weight:700; margin-bottom:14px; color:#111; }
+.coupon-options { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+.coupon-option { display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid #ddd; cursor:pointer; transition:border-color 0.15s; }
+.coupon-option:hover { border-color:#888; }
+.coupon-option.selected { border-color:#111; background:#f8f8f8; }
+.coupon-radio { width:16px; height:16px; border:2px solid #999; border-radius:50%; flex-shrink:0; position:relative; }
+.coupon-option.selected .coupon-radio { border-color:#111; }
+.coupon-option.selected .coupon-radio::after { content:''; position:absolute; top:3px; left:3px; width:6px; height:6px; background:#111; border-radius:50%; }
+.coupon-card-name { font-size:13px; font-weight:600; color:#222; flex:1; }
+.coupon-discount-amount { font-size:12px; color:#c0392b; font-weight:600; white-space:nowrap; }
+.coupon-strong-tag { font-size:10px; color:#888; margin-left:4px; }
+.coupon-confirm { width:100%; padding:10px; background:#111; color:#fff; border:none; font-size:13px; font-weight:600; cursor:pointer; }
+.coupon-confirm:hover { background:#333; }
+.cost-coupon-badge { display:inline-block; font-size:10px; color:#c0392b; font-weight:600; margin-left:6px; padding:1px 6px; border:1px solid #c0392b; }
+
 /* ===== Debug ===== (4/30 세션260: 노안 친화 — font-size 1.4배 + max-width 460px) */
 .debug-toggle { position:fixed; bottom:10px; right:10px; background:#333; color:#fff; border:none; padding:5px 10px; font-size:11px; cursor:pointer; z-index:300; font-family:monospace; }
 .debug-panel { display:none; position:fixed; bottom:38px; right:10px; background:#1a1a1a; color:#ddd; padding:10px 12px; font-size:11px; line-height:1.4; font-family:monospace; z-index:300; max-width:420px; max-height:calc(100vh - 48px); overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
@@ -794,6 +812,7 @@ var CONFIG={
     'C':'좀 헷갈렸지? 뭐가 내 일이고 뭐가 AI 일인지.',
     'D':'이번 학기는 그냥 흘려보냈어. 한 번 더 도전!'
   },
+  expScoreMultiplier:0.3,
   expThresholds:[0,20,40,65,100],
   meterMaxByLevel:{
     1:{time:120,energy:70},
@@ -2525,35 +2544,6 @@ var SCENARIOS = {
         "time": 22,
         "energy": 18
       }
-    },
-    "expRewards": {
-      "A1R1": 25,
-      "A1R2": 27,
-      "A1R3": 30,
-      "A2R1": 18,
-      "A2R2": 20,
-      "A2R3": 23,
-      "A3R1": 12,
-      "A3R2": 14,
-      "A3R3": 17,
-      "B1R1": 8,
-      "B1R2": 10,
-      "B1R3": 12,
-      "B2R1": 7,
-      "B2R2": 9,
-      "B2R3": 12,
-      "B3R1": 10,
-      "B3R2": 12,
-      "B3R3": 14,
-      "C1R1": 5,
-      "C1R2": 7,
-      "C1R3": 10,
-      "C2R1": 3,
-      "C2R2": 5,
-      "C2R3": 8,
-      "C3R1": 1,
-      "C3R2": 2,
-      "C3R3": 4
     },
     "competencyCards": {
       "A1R1": [
@@ -4788,35 +4778,6 @@ var SCENARIOS = {
         "energy": 19
       }
     },
-    "expRewards": {
-      "A1R1": 25,
-      "A1R2": 27,
-      "A1R3": 30,
-      "A2R1": 18,
-      "A2R2": 20,
-      "A2R3": 23,
-      "A3R1": 12,
-      "A3R2": 14,
-      "A3R3": 17,
-      "B1R1": 8,
-      "B1R2": 10,
-      "B1R3": 12,
-      "B2R1": 7,
-      "B2R2": 9,
-      "B2R3": 12,
-      "B3R1": 10,
-      "B3R2": 12,
-      "B3R3": 14,
-      "C1R1": 5,
-      "C1R2": 7,
-      "C1R3": 10,
-      "C2R1": 3,
-      "C2R2": 5,
-      "C2R3": 8,
-      "C3R1": 1,
-      "C3R2": 2,
-      "C3R3": 4
-    },
     "competencyCards": {
       "A1R1": [
         "협업능력",
@@ -7050,35 +7011,6 @@ var SCENARIOS = {
         "energy": 14
       }
     },
-    "expRewards": {
-      "A1R1": 25,
-      "A1R2": 25,
-      "A1R3": 25,
-      "A2R1": 18,
-      "A2R2": 18,
-      "A2R3": 18,
-      "A3R1": 12,
-      "A3R2": 12,
-      "A3R3": 12,
-      "B1R1": 8,
-      "B1R2": 10,
-      "B1R3": 14,
-      "B2R1": 6,
-      "B2R2": 8,
-      "B2R3": 12,
-      "B3R1": 3,
-      "B3R2": 5,
-      "B3R3": 10,
-      "C1R1": 5,
-      "C1R2": 7,
-      "C1R3": 9,
-      "C2R1": 3,
-      "C2R2": 5,
-      "C2R3": 7,
-      "C3R1": 1,
-      "C3R2": 2,
-      "C3R3": 4
-    },
     "cuts": {
       "1": "상황 제시",
       "2": "1차 선택지 (A·B·C)",
@@ -9216,35 +9148,6 @@ var SCENARIOS = {
         "energy": 17
       }
     },
-    "expRewards": {
-      "A1R1": 25,
-      "A1R2": 27,
-      "A1R3": 30,
-      "A2R1": 18,
-      "A2R2": 20,
-      "A2R3": 23,
-      "A3R1": 12,
-      "A3R2": 14,
-      "A3R3": 17,
-      "B1R1": 8,
-      "B1R2": 10,
-      "B1R3": 12,
-      "B2R1": 7,
-      "B2R2": 9,
-      "B2R3": 12,
-      "B3R1": 10,
-      "B3R2": 12,
-      "B3R3": 14,
-      "C1R1": 5,
-      "C1R2": 7,
-      "C1R3": 10,
-      "C2R1": 5,
-      "C2R2": 7,
-      "C2R3": 10,
-      "C3R1": 1,
-      "C3R2": 2,
-      "C3R3": 4
-    },
     "competencyCards": {
       "A1R1": [
         "진로탐색",
@@ -11347,35 +11250,6 @@ var SCENARIOS = {
         "energy": 13
       }
     },
-    "expRewards": {
-      "A1R1": 25,
-      "A1R2": 27,
-      "A1R3": 30,
-      "A2R1": 18,
-      "A2R2": 20,
-      "A2R3": 23,
-      "A3R1": 12,
-      "A3R2": 14,
-      "A3R3": 17,
-      "B1R1": 8,
-      "B1R2": 10,
-      "B1R3": 12,
-      "B2R1": 7,
-      "B2R2": 9,
-      "B2R3": 12,
-      "B3R1": 10,
-      "B3R2": 12,
-      "B3R3": 14,
-      "C1R1": 5,
-      "C1R2": 7,
-      "C1R3": 10,
-      "C2R1": 5,
-      "C2R2": 7,
-      "C2R3": 10,
-      "C3R1": 1,
-      "C3R2": 2,
-      "C3R3": 4
-    },
     "competencyCards": {
       "A1R1": [
         "학습설계",
@@ -12748,7 +12622,7 @@ function _calculateCardEnergyDiscount(discountTags){
   if(total>MAX_CARD_DISCOUNT)total=MAX_CARD_DISCOUNT;
   return {total:total,details:details};
 }
-function _applyDiscount(c,stageType,choiceId){
+function _applyDiscount(c,stageType,choiceId,selectedCard){
   var dlg=(gameState&&gameState.competencies)?gameState.competencies.delegationChoice.value||0:0;
   var knl=(gameState&&gameState.competencies)?gameState.competencies.knowledge.value||0:0;
   var mPos=(typeof CONFIG.competencyDiscountMultPos==='number')?CONFIG.competencyDiscountMultPos:2;
@@ -12759,8 +12633,10 @@ function _applyDiscount(c,stageType,choiceId){
   var clampedDlg;
   if(dlgEffect>0){clampedDlg=Math.min(dlgEffect,Math.floor(rawT*0.2));}
   else{clampedDlg=dlgEffect;}
-  var tags=_getChoiceDiscountTags(stageType,choiceId);
-  var cardDisc=_calculateCardEnergyDiscount(tags);
+  var cardDisc={total:0,details:[]};
+  if(selectedCard){
+    cardDisc={total:selectedCard.amount,details:[selectedCard]};
+  }
   var totalEnergyDisc=knlEffect+cardDisc.total;
   var clampedEnergy;
   if(totalEnergyDisc>0){clampedEnergy=Math.min(totalEnergyDisc,Math.floor(rawE*0.4),6);}
@@ -12773,9 +12649,51 @@ function _applyDiscount(c,stageType,choiceId){
       mPos:mPos,mNeg:mNeg,rawTime:rawT,rawEnergy:rawE,clampedEnergy:clampedEnergy}
   };
 }
-function getTier1Cost(t1){return _applyDiscount(_applyMult(_rawTier1Cost(t1)),'tier1',t1);}
-function getTier2Cost(t2){return _applyDiscount(_applyMult(_rawTier2Cost(t2)),'tier2',t2);}
-function getReviewCost(leaf){return _applyDiscount(_applyMult(_rawReviewCost(leaf)),'review',leaf);}
+function getAvailableCardDiscounts(stageType,choiceId){
+  var tags=_getChoiceDiscountTags(stageType,choiceId);
+  var disc=_calculateCardEnergyDiscount(tags);
+  return disc.details;
+}
+function getTier1Cost(t1){return _applyDiscount(_applyMult(_rawTier1Cost(t1)),'tier1',t1,null);}
+function getTier2Cost(t2){return _applyDiscount(_applyMult(_rawTier2Cost(t2)),'tier2',t2,null);}
+function getTier2CostWithCard(t2,card){return _applyDiscount(_applyMult(_rawTier2Cost(t2)),'tier2',t2,card);}
+function getReviewCost(leaf){return _applyDiscount(_applyMult(_rawReviewCost(leaf)),'review',leaf,null);}
+function getReviewCostWithCard(leaf,card){return _applyDiscount(_applyMult(_rawReviewCost(leaf)),'review',leaf,card);}
+
+function showCouponSelect(cards,onConfirm){
+  var overlay=document.createElement('div');overlay.className='coupon-overlay';
+  var box=document.createElement('div');box.className='coupon-box';
+  var selected=null;
+  var html='<div class="coupon-title">할인 적용</div>';
+  html+='<div style="font-size:12px;color:#555;margin-bottom:12px;">이번 선택에 사용할 수 있는 역량:</div>';
+  html+='<div class="coupon-options">';
+  for(var i=0;i<cards.length;i++){
+    var c=cards[i];
+    var strongTag=c.amount>=3?'<span class="coupon-strong-tag">강한 매칭</span>':'';
+    html+='<div class="coupon-option" data-idx="'+i+'"><div class="coupon-radio"></div><div class="coupon-card-name">'+c.display+strongTag+'</div><div class="coupon-discount-amount">에너지 -'+c.amount+'</div></div>';
+  }
+  html+='<div class="coupon-option selected" data-idx="-1"><div class="coupon-radio"></div><div class="coupon-card-name">적용 안 함</div><div class="coupon-discount-amount"></div></div>';
+  html+='</div>';
+  html+='<button class="coupon-confirm">확인</button>';
+  box.innerHTML=html;
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+  var opts=box.querySelectorAll('.coupon-option');
+  for(var j=0;j<opts.length;j++){
+    (function(opt){
+      opt.onclick=function(){
+        for(var k=0;k<opts.length;k++)opts[k].classList.remove('selected');
+        opt.classList.add('selected');
+        var idx=parseInt(opt.getAttribute('data-idx'));
+        selected=idx>=0?cards[idx]:null;
+      };
+    })(opts[j]);
+  }
+  box.querySelector('.coupon-confirm').onclick=function(){
+    document.body.removeChild(overlay);
+    onConfirm(selected);
+  };
+}
 
 // 단계별 소비 — onTier1/onTier2/onReview에서 호출
 function consumeStage(stage,costObj,leafPath){
@@ -13110,12 +13028,12 @@ function recoverResources(grade,didLevelUp){
 // =====================================================
 
 // 작업 3: 경험치 획득 계산 (SPEC §3.2)
-function calculateExpGain(leafPath,grade){
+function calculateExpGain(leafPath){
   var sc=getScenario();
-  var leafExp=sc.expRewards?sc.expRewards[leafPath]:0;
-  if(!leafExp)return 0;
-  var gradeMultiplier={S:1.5,A:1.3,B:1.0,C:0.7,D:0.5};
-  return Math.floor(leafExp*(gradeMultiplier[grade]||1.0));
+  var finals=sc.finals||{};
+  var leaf=finals[leafPath];
+  if(!leaf||!leaf.score)return 0;
+  return Math.floor(leaf.score*(CONFIG.expScoreMultiplier||0.3));
 }
 
 // 작업 4: 레벨업 트리거 검출 (SPEC §3.1)
@@ -13770,27 +13688,23 @@ function _buildCostLine(costLabel,rawVal,discountLabel,discountVal,finalLabel,ac
       '<div class="cost-formula-val cost-formula-final"><b>'+finalVal+'</b></div></div>'+
   '</div>';
 }
-function buildCostHTML(cost){
+function buildCostHTML(cost,stageType,choiceId){
   var d=cost._discount||{dlgEffect:0,knlEffect:0,rawTime:cost.time,rawEnergy:cost.energy,cardDiscount:0,cardDetails:[],clampedEnergy:0};
   var totalEnergyDisc=d.clampedEnergy||0;
-  var cardDisc=d.cardDiscount||0;
-  var hasDiscount=(d.dlgEffect>0||totalEnergyDisc>0);
-  if(!hasDiscount){
+  var hasAxisDiscount=(d.dlgEffect>0||totalEnergyDisc>0);
+  var couponBadge='';
+  if(stageType&&choiceId){
+    var avail=getAvailableCardDiscounts(stageType,choiceId);
+    if(avail.length>0)couponBadge='<span class="cost-coupon-badge">할인 가능</span>';
+  }
+  if(!hasAxisDiscount){
     return '<div class="choice-cost cost-formula-box">'+
       '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">시간 비용</div><div class="cost-formula-val cost-formula-final"><b>'+cost.time+'</b></div></div></div>'+
-      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">에너지 비용</div><div class="cost-formula-val cost-formula-final"><b>'+cost.energy+'</b></div></div></div>'+
+      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">에너지 비용'+couponBadge+'</div><div class="cost-formula-val cost-formula-final"><b>'+cost.energy+'</b></div></div></div>'+
     '</div>';
   }
   var energyHtml='';
-  if(cardDisc>0){
-    energyHtml+='<div class="cost-card-chips">';
-    var details=d.cardDetails||[];
-    for(var i=0;i<details.length;i++){
-      energyHtml+='<span class="card-chip">'+details[i].display+' 적용</span>';
-    }
-    energyHtml+='</div>';
-  }
-  energyHtml+=_buildCostLine('에너지 비용',d.rawEnergy,'할인',totalEnergyDisc,'최종 에너지',cost.energy);
+  energyHtml+=_buildCostLine('에너지 비용'+couponBadge,d.rawEnergy,'할인',totalEnergyDisc,'최종 에너지',cost.energy);
   return '<div class="choice-cost cost-formula-box">'+
     _buildCostLine('시간 비용',d.rawTime,'할인',d.dlgEffect,'최종 시간',cost.time)+
     '<div class="cost-energy-col">'+energyHtml+'</div>'+
@@ -13848,7 +13762,7 @@ function showTier2Choices(){
     var afford=canAffordCost(costs[i]);
     card.className='choice-card'+(afford?'':' disabled');
     if(afford)card.onclick=function(){onTier2(c.id);};
-    var costHTML=buildCostHTML(costs[i]);
+    var costHTML=buildCostHTML(costs[i],'tier2',c.id);
     var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
     card.innerHTML='<div class="choice-header"><span class="choice-num">'+(i+1)+'</span><span class="choice-text">'+c.label+tag+'</span></div>'+costHTML;
     area.appendChild(card);
@@ -13908,7 +13822,7 @@ function showReviewChoices(){
     var afford=canAffordCost(costs[i]);
     card.className='choice-card'+(afford?'':' disabled');
     if(afford)card.onclick=function(){onReview(r.id);};
-    var costHTML=buildCostHTML(costs[i]);
+    var costHTML=buildCostHTML(costs[i],'review',t2cur+r.id);
     var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
     var leafKey=t2cur+r.id;
     var leafLabel=(sc.reviewLabels&&sc.reviewLabels[leafKey])||r.label;
@@ -13970,7 +13884,7 @@ function goCut6(){
   }
 
   // === Phase 4 통합 흐름 ===
-  var expGain=calculateExpGain(leaf,grade);
+  var expGain=calculateExpGain(leaf);
   var prevExp=gameState.exp.current;
   var prevLevel=gameState.exp.level;
   gameState.exp.current+=expGain;
@@ -14045,7 +13959,7 @@ function goCut6(){
   gameState.completed=true;
 
   // 이벤트 로그 (작업 9)
-  trackEvent('exp_gained',{leafPath:leaf,grade:grade,baseExp:sc.expRewards?sc.expRewards[leaf]:0,gainedExp:expGain,expBefore:prevExp,expAfter:gameState.exp.current,level:newLevel});
+  trackEvent('exp_gained',{leafPath:leaf,grade:grade,baseScore:(sc.finals&&sc.finals[leaf])?sc.finals[leaf].score:0,gainedExp:expGain,expBefore:prevExp,expAfter:gameState.exp.current,level:newLevel});
   if(didLevelUp){
     trackEvent('level_up',{prevLevel:prevLevel,newLevel:newLevel,expAtLevelUp:gameState.exp.current,newTimeMax:gameState.resources.time.max,newEnergyMax:gameState.resources.energy.max});
   }
@@ -14206,7 +14120,8 @@ function replayScenario(scid){
       if(typeof r.finalScore==='number')gameState.totalScore-=r.finalScore;
       // EXP 롤백 — 해당 시나리오에서 얻은 EXP 빼기 + 레벨 재계산
       var sc2r=SCENARIOS[scid];
-      var expForLeaf=(sc2r&&sc2r.finals&&sc2r.finals[r.leaf])?sc2r.finals[r.leaf].expReward:0;
+      var leafScore=(sc2r&&sc2r.finals&&sc2r.finals[r.leaf])?sc2r.finals[r.leaf].score:0;
+      var expForLeaf=Math.floor(leafScore*(CONFIG.expScoreMultiplier||0.3));
       if(expForLeaf&&gameState.exp){
         gameState.exp.current=Math.max(0,gameState.exp.current-expForLeaf);
         // 레벨 재계산
@@ -14388,45 +14303,59 @@ function onTier1(t1id){
 }
 
 function onTier2(t2id){
-  var prev=gameState.competencies.delegationChoice.value;
-  var prevTime=gameState.resources.time.current;
-  var prevEnergy=gameState.resources.energy.current;
-  applyTier2(t2id);
-  var now=gameState.competencies.delegationChoice.value;
-  // 단계 2 자원 소비 (t2 = 'A1' 형식, 이미 t1 letter 포함)
-  consumeStage('tier2',getTier2Cost(t2id),null);
-  var nowTime=gameState.resources.time.current;
-  var nowEnergy=gameState.resources.energy.current;
-  fadeOutChoices('tier2-choices',function(){
-    showCut3Summary();
-    animateStat('delegation',prev,now);
-    animateResource('time',prevTime,nowTime);
-    animateResource('energy',prevEnergy,nowEnergy);
-    updateStats();
-  });
+  var availCards=getAvailableCardDiscounts('tier2',t2id);
+  function proceed(selectedCard){
+    var prev=gameState.competencies.delegationChoice.value;
+    var prevTime=gameState.resources.time.current;
+    var prevEnergy=gameState.resources.energy.current;
+    applyTier2(t2id);
+    var now=gameState.competencies.delegationChoice.value;
+    var cost=selectedCard?getTier2CostWithCard(t2id,selectedCard):getTier2Cost(t2id);
+    consumeStage('tier2',cost,null);
+    var nowTime=gameState.resources.time.current;
+    var nowEnergy=gameState.resources.energy.current;
+    fadeOutChoices('tier2-choices',function(){
+      showCut3Summary();
+      animateStat('delegation',prev,now);
+      animateResource('time',prevTime,nowTime);
+      animateResource('energy',prevEnergy,nowEnergy);
+      updateStats();
+    });
+  }
+  if(availCards.length>0){showCouponSelect(availCards,proceed);}
+  else{proceed(null);}
 }
 
 function onReview(rid){
-  var prevK=gameState.competencies.knowledge.value;
-  var prevTime=gameState.resources.time.current;
-  var prevEnergy=gameState.resources.energy.current;
-  applyReview(rid);
-  var nowK=gameState.competencies.knowledge.value;
-  // 단계 3 자원 소비 (review 잔여분만 — t1+t2는 이미 차감됨)
   var leaf=getLeafPath();
-  if(leaf)consumeStage('review',getReviewCost(leaf),leaf);
-  var nowTime=gameState.resources.time.current;
-  var nowEnergy=gameState.resources.energy.current;
-  fadeOutChoices('review-choices',function(){
-    showCut5Summary();
-    goCut6();
-    animateStat('knowledge',prevK,nowK);
-    animateResource('time',prevTime,nowTime);
-    animateResource('energy',prevEnergy,nowEnergy);
-    updateStats();
-    var sn=document.getElementById('score-num');
-    if(sn){sn.classList.add('pulsing');setTimeout(function(){sn.classList.remove('pulsing');},600);}
-  });
+  var reviewLeaf=leaf||rid;
+  var availCards=getAvailableCardDiscounts('review',reviewLeaf);
+  function proceed(selectedCard){
+    var prevK=gameState.competencies.knowledge.value;
+    var prevTime=gameState.resources.time.current;
+    var prevEnergy=gameState.resources.energy.current;
+    applyReview(rid);
+    var nowK=gameState.competencies.knowledge.value;
+    var lp=getLeafPath();
+    if(lp){
+      var cost=selectedCard?getReviewCostWithCard(lp,selectedCard):getReviewCost(lp);
+      consumeStage('review',cost,lp);
+    }
+    var nowTime=gameState.resources.time.current;
+    var nowEnergy=gameState.resources.energy.current;
+    fadeOutChoices('review-choices',function(){
+      showCut5Summary();
+      goCut6();
+      animateStat('knowledge',prevK,nowK);
+      animateResource('time',prevTime,nowTime);
+      animateResource('energy',prevEnergy,nowEnergy);
+      updateStats();
+      var sn=document.getElementById('score-num');
+      if(sn){sn.classList.add('pulsing');setTimeout(function(){sn.classList.remove('pulsing');},600);}
+    });
+  }
+  if(availCards.length>0){showCouponSelect(availCards,proceed);}
+  else{proceed(null);}
 }
 
 function onNext(){/* placeholder — overridden in goCut6 */}

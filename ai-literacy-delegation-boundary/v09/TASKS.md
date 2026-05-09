@@ -1,7 +1,8 @@
 ## TASKS — v0.9
 
-**현재 Phase**: Phase 6 플테 피드백 반영 중. 피터공 플테 진행 중.
-**마지막 커밋**: 3fed956 (5/9, 플테 피드백 UI 4건)
+**현재 Phase**: Phase 9 — XP score 기반 전환 + 카드 할인 쿠폰 UX
+**마지막 커밋**: 108266d (5/9, 디버그 패널 수정)
+**롤백 태그**: `v0.9-before-xp-coupon`
 
 ---
 
@@ -116,7 +117,30 @@
 - [x] 기존 `goCut2()`, `goCut3()`, `goCut5()` 제거
 - [x] `fadeOutChoices()` 수정 — fade 후 choices-area DOM 제거 (패널 크기 복원)
 - [x] 피터공 플테 확인
-- [ ] 커밋 + 푸시
+- [x] 커밋 + 푸시 (6f07f63)
+
+### Phase 9 — XP score 기반 전환 + 카드 할인 쿠폰 UX (세션321, SPEC §24~§25)
+
+**9a. XP score 기반 전환 (§24)**
+
+- [ ] `calculateExpGain` 수정 — `expRewards[leafPath]` → `finals[leafPath].score * CONFIG.expScoreMultiplier`
+- [ ] CONFIG에 `expScoreMultiplier: 0.3` 추가
+- [ ] 등급 배율(`gradeMultiplier`) 제거 — score에 이미 등급 반영
+- [ ] 시나리오 데이터에서 `expRewards` 맵 전체 삭제 (5시나리오)
+- [ ] 빌드 검증: XP 획득량이 이전과 유사한 범위인지 확인
+
+**9b. 카드 할인 쿠폰 UX (§25)**
+
+- [ ] `_applyDiscount` 분리 — 축 숙련도(자동) + 카드 할인(별도 반환, 미적용 상태)
+- [ ] `getAvailableCardDiscounts(stageType, choiceId)` 신설 — 적용 가능한 카드 목록 + 각 할인량 반환
+- [ ] `showCouponSelect(choiceId, stageType, callback)` 신설 — 쿠폰 선택 UI
+- [ ] 쿠폰 UI CSS — 라디오 선택, 카드명+할인량, 확인 버튼
+- [ ] `buildCostHTML` 수정 — 할인 가능 시 "할인 가능" 뱃지 표시 (확정 전)
+- [ ] `onTier2` 수정 — 적용 가능 카드 있으면 쿠폰 UI 삽입 → 확인 후 비용 차감
+- [ ] `onReview` 수정 — 동일
+- [ ] 카드 소모 안 함 확인 — 인벤토리에서 제거하지 않음
+- [ ] 공식형 박스 — 쿠폰 선택 후 최종 비용 표시 (축 할인 + 선택한 카드 할인 반영)
+- [ ] 빌드 + 플테 검증
 
 ### 다음 작업 (플테 후)
 
