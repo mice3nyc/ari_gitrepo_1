@@ -1,7 +1,7 @@
 ## TASKS — v0.9
 
-**현재 Phase**: Phase 9 — XP score 기반 전환 + 카드 할인 쿠폰 UX
-**마지막 커밋**: 108266d (5/9, 디버그 패널 수정)
+**현재 Phase**: Phase 10 — 자원 직접 배분 + 고정 할인 + 이미지 교체
+**마지막 커밋**: 4da88fe (5/9, 이미지 캐시 버스터)
 **롤백 태그**: `v0.9-before-xp-coupon`
 
 ---
@@ -146,9 +146,37 @@
 - [x] 카드 소모 안 함 확인
 - [ ] 빌드 + 플테 검증
 
+### Phase 10 — 자원 직접 배분 전환 (세션322, SPEC §19 세션322)
+
+자동 회복 전면 폐기, RP 분배 복원. 카드 할인 쿠폰과 같은 원칙 — 직접 선택해야 각인된다.
+
+- [x] SPEC §0.1 overview 테이블 업데이트 (시작값 100/100, 자동 회복 없음)
+- [x] SPEC §0.3 자원 체계 전환 설명 업데이트
+- [x] SPEC §6.3 시나리오 끝 chain 변경 (에너지 회복 → RP 배분)
+- [x] SPEC §19 전면 재작성 (시간·에너지 100/100, 자동 회복 폐기, RP 분배 복원)
+- [x] CONFIG.resourceMaxStart → {time:100, energy:100}
+- [x] CONFIG.energyRecoverFlat → 0
+- [x] CONFIG.meterMaxByLevel → 전 레벨 100/100
+- [x] HTML 자원 초기값 100/100 교체
+- [x] RP 모달 HTML bucket num 100/100 교체
+- [x] showLevelUpModal — 에너지 자동 충전 제거, 보너스 RP 적립 안내만
+- [x] 시나리오 끝 chain — showEnergyRecoverAnimation 제거, showRPDistributionModal 복원
+- [x] RP 모달 subtitle — "알아서 돌아오지 않습니다" 안내 추가
+- [x] 튜토리얼 텍스트 — "충전된다" → "직접 넣는다"
+- [x] continueGame 마이그레이션 가드 — 이전 세이브 max 120/70 → 100/100 교정
+- [x] 고정 할인 전환 — competencyDiscountMultPos 2→1, 비율 상한(20%/40%) + 절대 상한(6) 폐기
+- [x] 양방향 바 라벨 — -10/+20 → -10/+10
+- [x] 쿠폰 뱃지 반전 — 적용 후 흰배경+초록글씨+초록 아웃라인
+- [x] 선택지 자동 스크롤 — 마지막 카드가 화면 밖이면 smooth scroll (block:nearest)
+- [x] 이미지 교체 — 시나리오 1~5 전체 130개 PNG→webp (scenario_images 2)
+- [x] getCutImageFor 캐시 버스터 추가
+- [x] SPEC §0.1, §0.3, §6.3, §19, §20 갱신
+- [x] template↔index.html desync 발견 — build.py가 이전 세션 수정 덮어씀. 복구 완료 (git checkout HEAD + 직접 적용)
+- [ ] git commit + push
+- [ ] template 동기화 (현재 index.html 기반으로 template 재생성 — 별도 작업)
+
 ### 다음 작업 (플테 후)
 
-- [ ] UI: 시간/에너지 미터를 시각적으로 분리 — 두 자원이 다르게 작동하므로 (시간=학기 예산, 에너지=회복 가능) 구분이 필요
 - [ ] 레벨 체계: XP/레벨을 역량과 연결 — 현재 랜덤·분리된 XP 대신 역량 성장이 레벨에 반영되어야
 - [ ] 미결: 인간중심 카드 → 시간 할인 분리 여부 (피터공 보류)
 

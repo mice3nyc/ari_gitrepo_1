@@ -578,8 +578,8 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
   <!-- 좌측: 자원 게이지 (시간/에너지) -->
   <div class="resource-bar" id="resource-bar">
     <div class="panel-title">자원</div>
-    <div class="resource-item" id="res-time"><div class="resource-change-indicator" id="rdelta-time"></div><div class="resource-header"><span class="resource-name">시간</span><span class="resource-num" id="rnum-time">120</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-time" style="width:100%"></div></div></div>
-    <div class="resource-item" id="res-energy"><div class="resource-change-indicator" id="rdelta-energy"></div><div class="resource-header"><span class="resource-name">에너지</span><span class="resource-num" id="rnum-energy">70</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-energy" style="width:100%"></div></div></div>
+    <div class="resource-item" id="res-time"><div class="resource-change-indicator" id="rdelta-time"></div><div class="resource-header"><span class="resource-name">시간</span><span class="resource-num" id="rnum-time">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-time" style="width:100%"></div></div></div>
+    <div class="resource-item" id="res-energy"><div class="resource-change-indicator" id="rdelta-energy"></div><div class="resource-header"><span class="resource-name">에너지</span><span class="resource-num" id="rnum-energy">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-energy" style="width:100%"></div></div></div>
   </div>
   <!-- 중앙: LV + SCORE + XP -->
   <div class="score-display" id="score-display">
@@ -696,7 +696,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 <div id="rp-modal" class="modal-overlay hidden">
   <div class="modal-card">
     <div class="modal-title">자원토큰 분배</div>
-    <div class="modal-subtitle">받은 토큰을 시간과 에너지에 나눠 담으세요. 남은 토큰이 0이 되면 다음 시나리오로 넘어갑니다.</div>
+    <div class="modal-subtitle">받은 토큰을 시간과 에너지에 나눠 담으세요.<br><span style="font-size:11px;color:#888;">시간과 에너지는 알아서 돌아오지 않습니다. 여기서 넣는 만큼만 충전됩니다.</span></div>
     <div class="rp-bal">
       <div class="rp-bal-label">남은 자원토큰</div>
       <div class="rp-bal-num" id="rp-bal-num">0</div>
@@ -708,7 +708,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
           <div class="rp-bucket-fill" id="rp-bucket-time-fill" style="width:0%"></div>
           <div class="rp-bucket-overlay" id="rp-bucket-time-overlay" style="width:0%; left:0%"></div>
         </div>
-        <div class="rp-bucket-num" id="rp-bucket-time-num">0/120</div>
+        <div class="rp-bucket-num" id="rp-bucket-time-num">0/100</div>
         <div class="rp-bucket-controls">
           <button class="rp-btn rp-minus" data-axis="time" type="button">−</button>
           <span class="rp-allocate" id="rp-allocate-time">+0</span>
@@ -721,7 +721,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
           <div class="rp-bucket-fill" id="rp-bucket-energy-fill" style="width:0%"></div>
           <div class="rp-bucket-overlay" id="rp-bucket-energy-overlay" style="width:0%; left:0%"></div>
         </div>
-        <div class="rp-bucket-num" id="rp-bucket-energy-num">0/70</div>
+        <div class="rp-bucket-num" id="rp-bucket-energy-num">0/100</div>
         <div class="rp-bucket-controls">
           <button class="rp-btn rp-minus" data-axis="energy" type="button">−</button>
           <span class="rp-allocate" id="rp-allocate-energy">+0</span>
@@ -749,14 +749,14 @@ var CONFIG={
   cardBoost:20,
   detectedIssueBoost:10,
   // v0.4 신규 (SPEC §12) — Phase 3 이후 사용
-  resourceMaxStart:{time:120,energy:70},
+  resourceMaxStart:{time:100,energy:100},
   // v0.5 — 비용 multiplier (데이터 보존 + 튜닝 조정용). 0.6 = 적정 선택 시 1.7~3 시나리오 버팀
   resourceCostMultiplier:1.0,  // v0.6 5/3: 폐지 (raw에 0.6 곱한 값으로 재조정 완료, MIGRATION-VALUES.md §4)
   // v0.5 — 시나리오 종료 시 자원 자동 회복 OFF ([[요청.26.0429.1925-v05회복없는학기]])
   autoRecoverOnEnd:false,
   recoverBase:0, // v0.9: 등급별 차등 폐기, 에너지 고정 +18
   gradeBonus:{S:0,A:0,B:0,C:0,D:0},
-  energyRecoverFlat:18, // v0.9: 시나리오 종료 후 에너지 고정 회복량
+  energyRecoverFlat:0, // v0.9 세션322: 자동 회복 전면 폐기. RP 직접 배분으로 전환
   // v0.5 Phase 8.7 — 부분 회복 hook 폐기 (DECISIONS §10.1). RP 시스템으로 전환
   // v0.5 Phase 8.8 — 자원토큰(RP) 시스템 (DECISIONS §10.2~10.4)
   // 명칭: 코드는 RP 유지(식별자 길이/i18n), UI 텍스트는 "자원토큰"
@@ -790,11 +790,11 @@ var CONFIG={
   },
   expThresholds:[0,20,40,65,100],
   meterMaxByLevel:{
-    1:{time:120,energy:70},
-    2:{time:120,energy:70},
-    3:{time:120,energy:70},
-    4:{time:120,energy:70},
-    5:{time:120,energy:70}
+    1:{time:100,energy:100},
+    2:{time:100,energy:100},
+    3:{time:100,energy:100},
+    4:{time:100,energy:100},
+    5:{time:100,energy:100}
   },
   // v0.8 — 폐기 (합산 모델 §6.6.5): useReviewLevelBoost / levelStep / levelExtraBonus / levelDetectBonus.
   // detectIssues / 검토 격상 메카닉은 합산 모델로 흡수. review.points (R1=10·R2=20·R3=30) 단순 분배.
@@ -862,19 +862,21 @@ function createInitialState(){
   };
 }
 
-// v0.5: 시나리오별 컷 이미지 동적 매핑
+// v0.5: 시나리오별 컷 이미지 동적 매핑. ?v= 캐시 버스터 (이미지 교체 시 갱신)
+var _imgVer='20260509';
 function getCutImage(scenarioId,cutNum){
   var n=({'selfintro':'01','groupwork':'02','eorinwangja':'03','career':'04','studyplan':'05'})[scenarioId]||'01';
   var base='../images/s'+n;
   var t1=gameState&&gameState.selectedTier1;
   var t2=gameState&&gameState.selectedTier2;
   var rv=gameState&&gameState.selectedReview;
-  if(cutNum===1)return base+'_c1.webp';
-  if(cutNum===2)return t1?base+'_c2_'+t1+'.webp':null;
-  if(cutNum===3)return t2?base+'_c3_'+t2+'.webp':null;
-  if(cutNum===4)return t2?base+'_c4_'+t2+'.webp':null;
-  if(cutNum===5)return rv?base+'_c5_'+rv+'.webp':null;
-  if(cutNum===6)return null; // cut6는 등급 표시로 대체
+  var v='?v='+_imgVer;
+  if(cutNum===1)return base+'_c1.webp'+v;
+  if(cutNum===2)return t1?base+'_c2_'+t1+'.webp'+v:null;
+  if(cutNum===3)return t2?base+'_c3_'+t2+'.webp'+v:null;
+  if(cutNum===4)return t2?base+'_c4_'+t2+'.webp'+v:null;
+  if(cutNum===5)return rv?base+'_c5_'+rv+'.webp'+v:null;
+  if(cutNum===6)return null;
   return null;
 }
 
@@ -1420,7 +1422,7 @@ function showEnergyRecoverAnimation(){
     },dur/steps);
   });
 }
-// v0.9 — 레벨업 모달 (에너지 자동 충전 표시, RP 분배 없음)
+// v0.9 세션322 — 레벨업 모달 (에너지 자동 충전 폐기, 보너스 RP 적립 안내만)
 function showLevelUpModal(prevLevel,newLevel){
   return new Promise(function(resolve){
     var modal=document.getElementById('levelup-modal');
@@ -1428,16 +1430,11 @@ function showLevelUpModal(prevLevel,newLevel){
     document.getElementById('lvup-from').textContent='Lv.'+prevLevel;
     document.getElementById('lvup-to').textContent='Lv.'+newLevel;
     var lvBonus=CONFIG.rpLevelUpBonusByLevel[newLevel]||10;
-    var res=gameState.resources;
-    var eBefore=res.energy.current;
-    res.energy.current=Math.min(res.energy.max,res.energy.current+lvBonus);
-    var eGained=res.energy.current-eBefore;
-    document.getElementById('lvup-meter-delta').textContent='에너지 +'+eGained+' 충전';
+    document.getElementById('lvup-meter-delta').textContent='자원토큰 +'+lvBonus+' 추가 지급';
     var tokenEl=document.getElementById('lvup-token-bonus');
     if(tokenEl)tokenEl.textContent='';
     modal.classList.remove('hidden');
     requestAnimationFrame(function(){modal.classList.add('visible');});
-    animateResource('energy',eBefore,res.energy.current);
     var btn=document.getElementById('lvup-confirm');
     btn.onclick=function(){
       modal.classList.remove('visible');
@@ -2001,7 +1998,7 @@ function showTitleScreen(){
   h+='<ol class="tutorial-list">';
   h+='<li>시나리오마다 선택지를 고른다. 각 선택은 <span class="kw-time">시간</span>과 <span class="kw-energy">에너지</span>를 쓴다.</li>';
   h+='<li>어떤 선택을 하느냐에 따라 결과물의 점수가 달라지고, 내가 어떤 힘을 썼는지 역량 카드로 확인할 수 있다.</li>';
-  h+='<li>결과물 점수에 따라 등급이 매겨지고, 다음 시나리오의 <span class="kw-time">시간</span>·<span class="kw-energy">에너지</span>가 충전된다.</li>';
+  h+='<li>결과물 점수에 따라 등급이 매겨지고, 받은 토큰을 <span class="kw-time">시간</span>이나 <span class="kw-energy">에너지</span>에 직접 넣는다.</li>';
   h+='<li>경험이 쌓이면 다음 선택의 <span class="kw-time">시간</span>·<span class="kw-energy">에너지</span> 비용이 줄어든다.</li>';
   h+='</ol>';
   // 버튼 두 개: 게임 시작 / 튜토리얼 다시 보기
@@ -2559,8 +2556,8 @@ function goCut6(){
   nb.textContent=willBeAllDone?'학기 종합 리포트 보기':'다음 시나리오로 →';
   nb.onclick=goNextScenario;
 
-  // 시나리오 끝 chain (SPEC §6.3, v0.9 — RP 분배 제거, 에너지 자동 회복)
-  // 결과 패널 1.4초 보여주고 → [0] pending 흡수 → [1] 카드 → [1.5] 회복력 특별 UI(B 이하) → [2] 에너지 회복 애니메이션 → [3] 레벨업 → 다음 버튼
+  // 시나리오 끝 chain (SPEC §6.3, v0.9 세션322 — 자동 회복 폐기, RP 직접 배분 복원)
+  // 결과 패널 1.4초 보여주고 → [0] pending 흡수 → [1] 카드 → [1.5] 회복력 특별 UI(B 이하) → [2] 레벨업 → [3] RP 배분 → 다음 버튼
   var _v8CardLabels=[];
   var _hasRecoveryCard=false;
   if(fin&&fin.cardEarned){
@@ -2585,13 +2582,13 @@ function goCut6(){
     if(_hasRecoveryCard){
       chain=chain.then(function(){return showRecoveryCardModal(scid);});
     }
-    // [2] v0.9 에너지 회복 애니메이션 (+18, 시간은 회복 없음)
-    if(!willBeAllDone){
-      chain=chain.then(function(){return showEnergyRecoverAnimation();});
-    }
-    // [3] 레벨업 — 에너지 자동 충전 포함
+    // [2] 레벨업 — 레벨 표시 + 보너스 RP 안내 (에너지 자동 충전 없음)
     if(didLevelUp){
       chain=chain.then(function(){return showLevelUpModal(prevLevel,newLevel);});
+    }
+    // [3] v0.9 세션322 — RP 직접 배분 (학기 끝 아닐 때만)
+    if(!willBeAllDone){
+      chain=chain.then(function(){return showRPDistributionModal();});
     }
     chain.then(function(){nw.classList.add('visible');});
   },1400);
@@ -2767,6 +2764,14 @@ function continueGame(){
   if(!gameState.resources){
     var rms=CONFIG.resourceMaxStart;
     gameState.resources={time:{current:rms.time,max:rms.time,history:[]},energy:{current:rms.energy,max:rms.energy,history:[]}};
+  }
+  // v0.9 세션322 guard: 자원 max 값을 현재 CONFIG에 맞춤 (120/70 → 100/100 전환)
+  var _rms=CONFIG.resourceMaxStart;
+  if(gameState.resources.time.max!==_rms.time||gameState.resources.energy.max!==_rms.energy){
+    gameState.resources.time.max=_rms.time;
+    gameState.resources.energy.max=_rms.energy;
+    gameState.resources.time.current=Math.min(gameState.resources.time.current,_rms.time);
+    gameState.resources.energy.current=Math.min(gameState.resources.energy.current,_rms.energy);
   }
   if(!gameState.exp){gameState.exp={current:0,level:1,thresholds:CONFIG.expThresholds};}
   if(gameState.hintEnabled===undefined){gameState.hintEnabled=CONFIG.hintEnabledDefault;}
@@ -2968,11 +2973,12 @@ function getCutImageFor(scenarioId, leaf, cutNum){
   var t1=leaf?leaf.charAt(0):null;
   var t2=leaf?leaf.substr(0,2):null;
   var rv=leaf?leaf.substr(2):null;
-  if(cutNum===1)return base+'_c1.webp';
-  if(cutNum===2)return t1?base+'_c2_'+t1+'.webp':null;
-  if(cutNum===3)return t2?base+'_c3_'+t2+'.webp':null;
-  if(cutNum===4)return t2?base+'_c4_'+t2+'.webp':null;
-  if(cutNum===5)return rv?base+'_c5_'+rv+'.webp':null;
+  var v='?v='+_imgVer;
+  if(cutNum===1)return base+'_c1.webp'+v;
+  if(cutNum===2)return t1?base+'_c2_'+t1+'.webp'+v:null;
+  if(cutNum===3)return t2?base+'_c3_'+t2+'.webp'+v:null;
+  if(cutNum===4)return t2?base+'_c4_'+t2+'.webp'+v:null;
+  if(cutNum===5)return rv?base+'_c5_'+rv+'.webp'+v:null;
   return null;
 }
 
