@@ -26,7 +26,7 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: var(--font-main); background: var(--bg-page); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
-.container { max-width: 1100px; width: 100%; padding: 0 24px 80px; }
+.container { max-width: 1100px; width: 100%; padding: 8px 24px 80px; }
 
 /* ===== Resource Header Bar (상단 가로 — 시간/에너지) ===== */
 /* ===== Panel Row (좌/우 분할 컨테이너 — sticky) ===== */
@@ -404,9 +404,9 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--i
 .pending-dots { display:flex; align-items:center; flex:1; min-height:0; margin:0; }
 .pending-dots-neg { flex:0 0 50%; display:flex; flex-direction:row-reverse; justify-content:flex-start; align-items:center; gap:4px; padding-right:2px; overflow:hidden; }
 .pending-dots-pos { flex:0 0 50%; display:flex; flex-direction:row; justify-content:flex-start; align-items:center; gap:4px; padding-left:2px; overflow:hidden; }
-.pending-dot { width:11px; height:11px; border-radius:50%; flex-shrink:0; transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease; }
-.pending-dot.positive { background:var(--acc-mint); box-shadow:0 1px 0 var(--ink); }
-.pending-dot.negative { background:var(--acc-pink); box-shadow:0 1px 0 var(--ink); }
+.pending-dot { width:0; height:0; border:6px solid transparent; flex-shrink:0; transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease; }
+.pending-dot.positive { border-left:10px solid #1a8c1a; border-right:0; }
+.pending-dot.negative { border-right:10px solid #cc3333; border-left:0; }
 .pending-dot.appearing { animation:dotAppear 0.35s cubic-bezier(0.34,1.56,0.64,1); }
 @keyframes dotAppear {
   0% { transform:scale(0); opacity:0; }
@@ -601,6 +601,746 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--i
 .gameover-actions button:active { transform:translate(2px,2px); box-shadow:var(--shadow-press); }
 .gameover-actions .gameover-report { background:var(--acc-yellow); color:var(--ink); }
 .gameover-actions .gameover-restart { background:var(--bg-card); color:var(--ink); }
+/* ===== Paperlogy Reference Theme — Marjo-style visual pass ===== */
+:root {
+  --bg-page:#f7f7f1;
+  --bg-card:#fffdf6;
+  --bg-soft:#f3f0e6;
+  --bg-dark:#080808;
+  --ink:#080808;
+  --ink-mute:#333333;
+  --ink-soft:rgba(8,8,8,.54);
+  --acc-yellow:#ffdb31;
+  --acc-cyan:#63d8f1;
+  --acc-mint:#b9eed7;
+  --acc-pink:#ff67a1;
+  --acc-yellow-soft:#fff0a4;
+  --acc-yellow-deep:#b48b00;
+  --acc-cyan-soft:#cbf4fb;
+  --acc-cyan-deep:#17a2c2;
+  --acc-mint-soft:#dcf8eb;
+  --acc-mint-deep:#219b6c;
+  --acc-pink-soft:#ffd4e5;
+  --acc-pink-deep:#d93a75;
+  --border-w:3px;
+  --shadow-offset:7px;
+  --shadow:var(--shadow-offset) var(--shadow-offset) 0 var(--ink);
+  --shadow-press:3px 3px 0 var(--ink);
+  --radius:0;
+}
+
+html {
+  width:100%;
+  max-width:100vw;
+  overflow-x:hidden;
+}
+
+body {
+  background:
+    linear-gradient(rgba(8,8,8,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(8,8,8,.035) 1px, transparent 1px),
+    var(--bg-page);
+  background-size:24px 24px;
+  color:var(--ink);
+  letter-spacing:0;
+  width:100%;
+  max-width:100vw;
+  overflow-x:hidden;
+}
+
+body::before { content:none; }
+
+.container,
+.debug-toggle,
+.version {
+  position:relative;
+  z-index:1;
+}
+
+.container {
+  width:100%;
+  max-width:min(1120px, calc(100vw - 48px));
+  padding:24px 32px 96px;
+  overflow-x:clip;
+}
+
+button,
+.choice-card,
+.scenario-card,
+.inv-card {
+  font-family:var(--font-main);
+  border-radius:6px;
+}
+
+/* ===== Title / Semester screens ===== */
+.title-frame,
+.semester-frame {
+  width:100%;
+  max-width:1080px;
+  min-height:calc(100vh - 96px);
+  margin:0 auto;
+  padding:32px 36px 64px;
+  background:rgba(255,253,246,.84);
+  border:5px solid var(--ink);
+  box-shadow:12px 12px 0 var(--ink);
+}
+
+.title-frame::before,
+.semester-frame::before {
+  content:none;
+}
+
+.title-frame h1,
+.semester-frame h1 {
+  max-width:720px;
+  margin:0 0 22px;
+  text-align:left;
+  font-size:56px;
+  line-height:1.08;
+  font-weight:700;
+  letter-spacing:0;
+}
+
+.semester-frame .subtitle {
+  text-align:left;
+  font-size:28px;
+  font-weight:700;
+  color:var(--acc-cyan-deep);
+}
+
+.title-frame h1::first-line,
+.semester-frame h1::first-line {
+  color:var(--ink);
+}
+
+.intro-text {
+  max-width:640px;
+  margin:0 0 28px;
+  padding:0;
+  color:var(--ink-mute);
+  text-align:left;
+  font-size:18px;
+  line-height:1.85;
+  word-break:keep-all;
+}
+
+.host-text {
+  max-width:680px;
+  margin:0 0 28px;
+  padding:26px 30px;
+  text-align:left;
+  background:var(--acc-cyan-soft);
+  border:var(--border-w) solid var(--ink);
+  box-shadow:var(--shadow);
+}
+
+.host-text .host-q,
+.host-text .host-line {
+  color:var(--ink-mute);
+}
+
+.host-text .host-call {
+  font-size:28px;
+  font-weight:700;
+  color:var(--ink);
+}
+
+.tutorial-list {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  margin:0 0 30px;
+}
+
+.tutorial-list li {
+  min-height:98px;
+  margin:0;
+  padding:20px 18px 20px 64px;
+  border:var(--border-w) solid var(--ink);
+  background:var(--bg-card);
+  box-shadow:5px 5px 0 var(--ink);
+  font-size:16px;
+  line-height:1.65;
+}
+
+.tutorial-list li::before {
+  left:18px;
+  top:20px;
+  width:30px;
+  height:30px;
+  border:var(--border-w) solid var(--ink);
+  border-radius:0;
+  background:var(--acc-yellow);
+  font-weight:700;
+}
+
+.start-btn-large,
+.semester-actions .action-main {
+  width:100%;
+  min-height:68px;
+  border:var(--border-w) solid var(--ink);
+  background:var(--acc-cyan);
+  color:var(--ink);
+  box-shadow:var(--shadow);
+  font-size:18px;
+  font-weight:700;
+}
+
+.start-btn-large:hover,
+.semester-actions .action-main:hover,
+.start-btn:hover,
+.advance-btn:hover,
+.next-btn:hover,
+.lvup-confirm:hover,
+.rp-confirm:hover {
+  transform:translate(-3px,-3px);
+  box-shadow:10px 10px 0 var(--ink);
+}
+
+.tutorial-link {
+  color:var(--ink);
+  font-weight:700;
+  text-decoration-thickness:2px;
+  margin-top:18px;
+}
+
+/* ===== Scenario selection ===== */
+.semester-frame .vtag {
+  text-align:left;
+  color:var(--ink-soft);
+}
+
+.progress-bar {
+  height:12px;
+  margin:24px 0 14px;
+  border:var(--border-w) solid var(--ink);
+  background:var(--bg-card);
+  box-shadow:5px 5px 0 var(--ink);
+}
+
+.progress-fill {
+  background:var(--acc-cyan);
+}
+
+.progress-dot {
+  width:13px;
+  height:13px;
+  border:2px solid var(--ink);
+  background:var(--bg-card);
+}
+
+.progress-dot.cleared,
+.progress-dot.next {
+  background:var(--acc-yellow);
+  border-color:var(--ink);
+}
+
+.scenario-list {
+  gap:14px;
+  margin-top:32px;
+}
+
+.scenario-card {
+  min-height:82px;
+  padding:18px 20px;
+  background:var(--bg-card);
+  border:var(--border-w) solid var(--ink);
+  box-shadow:var(--shadow);
+}
+
+.scenario-card:hover:not(.cleared) {
+  transform:translate(-3px,-3px);
+  box-shadow:10px 10px 0 var(--ink);
+  background:#fff;
+  border-color:var(--ink);
+}
+
+.scenario-card .sc-num {
+  width:42px;
+  height:42px;
+  border:var(--border-w) solid var(--ink);
+  border-radius:0;
+  background:var(--acc-cyan);
+  color:var(--ink);
+  font-weight:700;
+}
+
+.scenario-card.next {
+  border:var(--border-w) solid var(--ink);
+  background:var(--acc-yellow-soft);
+}
+
+.scenario-card.next .sc-num {
+  background:var(--acc-pink);
+  color:var(--ink);
+}
+
+.scenario-card .sc-title {
+  font-size:18px;
+  font-weight:700;
+  color:var(--ink);
+}
+
+.scenario-card .sc-meta,
+.scenario-card .sc-mark {
+  color:var(--ink-soft);
+  font-weight:700;
+}
+
+.semester-actions .action-secondary,
+.start-btn,
+.advance-btn,
+.next-btn,
+.lvup-confirm,
+.rp-confirm,
+.gameover-actions button,
+.confirm-actions button {
+  border:var(--border-w) solid var(--ink);
+  box-shadow:var(--shadow);
+  font-weight:700;
+}
+
+/* ===== Sticky dashboard ===== */
+.panel-row {
+  position:fixed;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  max-width:min(1120px, calc(100vw - 24px));
+  width:calc(100vw - 24px);
+  gap:12px;
+  padding:10px;
+  background:rgba(255,253,246,.88);
+  border:var(--border-w) solid var(--ink);
+  border-top:0;
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(8px);
+  z-index:1000;
+}
+
+.panel-row.visible + .container {
+  padding-top:128px;
+}
+
+.resource-bar,
+.stats-bar,
+.score-display,
+.scenario-progress-strip {
+  border:var(--border-w) solid var(--ink);
+  background:var(--bg-card);
+  box-shadow:5px 5px 0 var(--ink);
+}
+
+.panel-title {
+  background:var(--acc-yellow);
+  color:var(--ink);
+  font-weight:700;
+  border-right:var(--border-w) solid var(--ink);
+}
+
+.score-display {
+  background:var(--acc-cyan);
+}
+
+.display-label,
+.resource-name,
+.bipolar-labels,
+.exp-num {
+  color:var(--ink-soft);
+  font-weight:700;
+}
+
+.display-num,
+.resource-num,
+.stat-num {
+  font-weight:700;
+}
+
+.resource-gauge,
+.bipolar-gauge,
+.exp-bar {
+  border:2px solid var(--ink);
+  background:#fff;
+}
+
+.resource-gauge-fill,
+.exp-bar-fill {
+  background:var(--ink);
+}
+
+.bipolar-fill.positive {
+  background:var(--acc-mint-deep);
+}
+
+.bipolar-fill.negative {
+  background:var(--acc-pink-deep);
+}
+
+.scenario-progress-strip {
+  margin:0 0 18px;
+  background:var(--acc-yellow);
+}
+
+.scenario-progress-strip .sps-items {
+  border:var(--border-w) solid var(--ink);
+  background:var(--bg-card);
+}
+
+/* ===== Comic board ===== */
+.binder-divider {
+  min-height:76px;
+  margin:22px 0 26px;
+  background:var(--acc-yellow);
+  border:var(--border-w) solid var(--ink);
+  box-shadow:var(--shadow);
+}
+
+.binder-title {
+  font-size:16px;
+  font-weight:700;
+}
+
+.binder-subtitle {
+  color:var(--ink-soft);
+  font-weight:700;
+}
+
+.panels-grid {
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+
+.panels-row2 {
+  margin-top:14px;
+}
+
+.panel {
+  min-height:320px;
+  background:rgba(255,253,246,.72);
+  border:var(--border-w) dashed rgba(8,8,8,.42);
+}
+
+.panel.active,
+.panel.done {
+  background:var(--bg-card);
+  border:var(--border-w) solid var(--ink);
+  box-shadow:var(--shadow);
+}
+
+.panel-image {
+  border-bottom:var(--border-w) solid var(--ink);
+  background:
+    linear-gradient(rgba(8,8,8,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(8,8,8,.035) 1px, transparent 1px),
+    var(--acc-cyan-soft);
+  background-size:16px 16px;
+}
+
+.panel-image {
+  aspect-ratio:1/1;
+}
+
+.cut-label {
+  color:rgba(8,8,8,.12);
+  font-size:72px;
+  font-weight:700;
+}
+
+.cut-num,
+.panel-place {
+  border:2px solid var(--ink);
+  background:var(--acc-yellow);
+  color:var(--ink);
+  font-weight:700;
+}
+
+.panel-body {
+  padding:14px 16px;
+  font-size:13px;
+  line-height:1.62;
+}
+
+.panel-body .highlight {
+  font-size:18px;
+  font-weight:700;
+}
+
+.panel-body .core-q {
+  margin:12px 0;
+  padding:12px 0 0;
+  border-top:2px dashed rgba(8,8,8,.18);
+  font-weight:700;
+}
+
+/* ===== Choices / costs ===== */
+.choices-area {
+  gap:12px;
+  padding:12px;
+}
+
+.choices-q {
+  padding:0 2px 4px;
+  font-size:16px;
+  font-weight:700;
+}
+
+.choice-card {
+  border:var(--border-w) solid var(--ink);
+  background:var(--bg-card);
+  box-shadow:5px 5px 0 var(--ink);
+}
+
+.choice-card:hover {
+  transform:translate(-3px,-3px);
+  box-shadow:10px 10px 0 var(--ink);
+}
+
+.choice-header {
+  gap:12px;
+  padding:14px 16px 8px;
+}
+
+.choice-num {
+  width:34px;
+  height:34px;
+  border:var(--border-w) solid var(--ink);
+  background:var(--acc-yellow);
+  font-weight:700;
+}
+
+.choice-text {
+  font-size:16px;
+  font-weight:700;
+}
+
+.choice-desc {
+  color:var(--ink-soft);
+  font-size:12px;
+  line-height:1.55;
+}
+
+.choice-narrative {
+  margin:6px 14px 14px;
+  padding:10px 12px;
+  background:var(--acc-cyan-soft);
+  border:2px solid var(--ink);
+  color:var(--ink-mute);
+}
+
+.choice-cost,
+.cost-formula-box,
+.cost-simple {
+  border-top:2px dashed rgba(8,8,8,.18);
+}
+
+.cost-box-main,
+.cost-box-effect,
+.cost-card-chips .card-chip {
+  border:2px solid var(--ink);
+}
+
+.cost-box-main {
+  background:var(--acc-pink-soft);
+}
+
+.cost-box-effect {
+  background:var(--acc-mint-soft);
+}
+
+/* ===== Inventory / modals / report ===== */
+.inv-tab {
+  position:fixed;
+  top:50%;
+  right:18px;
+  transform:translateY(-50%);
+  background:var(--acc-cyan);
+  border:var(--border-w) solid var(--ink);
+  box-shadow:-7px 7px 0 var(--ink);
+  z-index:1200;
+}
+
+.inv-tab:hover {
+  background:var(--acc-yellow);
+  transform:translateY(-50%) translateX(-6px);
+}
+
+.inv-panel,
+.modal-card,
+.gameover-card,
+.coupon-box,
+.card-reward-card,
+.recovery-card,
+.report-stat-box,
+.report-comp-type,
+.report-cards-section,
+.report-narrative {
+  border:var(--border-w) solid var(--ink);
+  background:var(--bg-card);
+  box-shadow:var(--shadow);
+}
+
+.inv-panel {
+  top:0;
+  height:100vh;
+  z-index:1300;
+}
+
+.inv-panel-backdrop {
+  z-index:1250;
+}
+
+.inv-panel-header {
+  background:var(--acc-yellow);
+  border-bottom:var(--border-w) solid var(--ink);
+}
+
+.inv-card,
+.report-card-row,
+.final-item,
+.awareness,
+.score-breakdown {
+  border:var(--border-w) solid var(--ink);
+  background:var(--bg-card);
+  box-shadow:4px 4px 0 var(--ink);
+}
+
+.report-overlay {
+  padding:24px 0 48px;
+}
+
+.report-inner h2 {
+  font-size:42px;
+  line-height:1.1;
+  font-weight:700;
+}
+
+.report-subtitle {
+  color:var(--ink-mute);
+  font-size:16px;
+}
+
+.report-narrative-cardtype {
+  border:2px solid var(--ink);
+}
+
+.comic-scene {
+  border-top:var(--border-w) solid var(--ink);
+}
+
+.debug-toggle {
+  position:fixed;
+  bottom:12px;
+  right:12px;
+  left:auto;
+  background:var(--ink);
+  border:2px solid var(--ink);
+  box-shadow:3px 3px 0 rgba(0,0,0,.25);
+}
+
+.version {
+  color:rgba(8,8,8,.28);
+}
+
+@media (max-width:900px) {
+  .container {
+    max-width:calc(100vw - 24px);
+    padding:16px 12px 80px;
+  }
+
+  .title-frame,
+  .semester-frame {
+    min-height:auto;
+    padding:20px 18px 32px;
+    border-width:3px;
+    box-shadow:7px 7px 0 var(--ink);
+  }
+
+  .title-frame::before,
+  .semester-frame::before {
+    min-height:58px;
+    margin-bottom:30px;
+    padding:0 18px;
+  }
+
+  .title-frame h1,
+  .semester-frame h1 {
+    font-size:34px;
+  }
+
+  .intro-text {
+    font-size:15px;
+  }
+
+  .tutorial-list {
+    grid-template-columns:1fr;
+  }
+
+  .panel-row {
+    width:calc(100vw - 16px);
+    max-width:calc(100vw - 16px);
+    top:0;
+    gap:8px;
+  }
+
+  .panel-row.visible + .container {
+    padding-top:282px;
+  }
+
+  .panels-grid {
+    gap:10px;
+  }
+
+  .panels-row2 {
+    margin-top:10px;
+  }
+
+  .panel-image {
+    aspect-ratio:1/1;
+  }
+
+  .resource-bar,
+  .stats-bar {
+    flex-direction:column;
+  }
+
+  .panel-title {
+    border-right:0;
+    border-bottom:var(--border-w) solid var(--ink);
+  }
+
+  .panel {
+    min-height:0;
+  }
+
+  .report-grid-4 {
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media (max-width:560px) {
+  .title-frame h1,
+  .semester-frame h1 {
+    font-size:28px;
+  }
+
+  .host-text {
+    padding:18px;
+  }
+
+  .host-text .host-call {
+    font-size:22px;
+  }
+
+  .tutorial-list li {
+    padding-left:58px;
+    font-size:14px;
+  }
+
+  .report-grid-4,
+  .report-grid {
+    grid-template-columns:1fr;
+  }
+}
 </style>
 </head>
 <body>
@@ -674,7 +1414,7 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--i
 <div class="recovery-overlay hidden" id="recovery-overlay"></div>
 <button class="debug-toggle" onclick="toggleDebug()">DEBUG</button>
 <div class="debug-panel" id="debug-panel"></div>
-<div class="version">v0.8</div>
+<div class="version" id="version-label">v1.0</div>
 
 <!-- Phase 8.10b — 레벨업 이벤트 팝업 (DECISIONS §10.11) -->
 <div id="levelup-modal" class="modal-overlay hidden">
@@ -686,10 +1426,6 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--i
       <span class="lvup-to" id="lvup-to">Lv.2</span>
     </div>
     <div class="lvup-effects">
-      <div class="lvup-effect">
-        <span class="lvup-effect-label">자원 메터 max 증가</span>
-        <span class="lvup-effect-val" id="lvup-meter-delta">시간 +10 / 에너지 +10</span>
-      </div>
       <div class="lvup-effect">
         <span class="lvup-effect-label">자원토큰 보너스</span>
         <span class="lvup-effect-val" id="lvup-token-bonus">+20</span>
@@ -777,7 +1513,7 @@ var CONFIG={
   storageKey:'ai-literacy-delegation-boundary-v10',
   eventLogKey:'ai-literacy-delegation-boundary-v10-events',
   sessionIdKey:'ai-literacy-v10-session-id',
-  version:'v0.8',
+  version:'v1.0',
   scenarios:['selfintro','groupwork','eorinwangja','career','studyplan'],
   pointThresholds:{S:95,A:85,B:75,C:60,D:0},
   minResourceCost:1,
@@ -12564,7 +13300,7 @@ function applyReview(rid){
     for(var gi=0;gi<gc.length;gi++){if(gc[gi].scenario===gameState.currentScenarioId&&gc[gi].label==='회복력'){hasRecovery=true;break;}}
     if(!hasRecovery){
       if(!gameState.inventory.growthCards)gameState.inventory.growthCards=[];
-      gameState.inventory.growthCards.push({label:'회복력',scenario:gameState.currentScenarioId,leaf:leaf});
+      gameState.inventory.growthCards.push({label:'회복력',scenario:gameState.currentScenarioId,leaf:leaf,note:'이번 결과를 바탕으로 다시 시도할 수 있는 회복력 카드가 생겼어요.'});
     }
   }
   var resourcePenalty=calcResourcePenalty(gameState.resources);
@@ -12809,20 +13545,23 @@ function getReviewCost(leaf){return _applyDiscount(_applyMult(_rawReviewCost(lea
 function getReviewCostWithCard(leaf,card){return _applyDiscount(_applyMult(_rawReviewCost(leaf)),'review',leaf,card);}
 
 function showCouponSelect(cards,onConfirm){
+  if(cards.length===1){
+    onConfirm(cards[0]);
+    return;
+  }
   var overlay=document.createElement('div');overlay.className='coupon-overlay';
   var box=document.createElement('div');box.className='coupon-box';
-  var selected=null;
+  var selected=cards[0];
   var html='<div class="coupon-title">할인 적용</div>';
-  html+='<div style="font-size:12px;color:#555;margin-bottom:12px;">이번 선택에 사용할 수 있는 역량:</div>';
+  html+='<div style="font-size:12px;color:#555;margin-bottom:12px;">이번 선택에 사용할 역량을 골라주세요:</div>';
   html+='<div class="coupon-options">';
   for(var i=0;i<cards.length;i++){
     var c=cards[i];
     var strongTag=c.amount>=3?'<span class="coupon-strong-tag">강한 매칭</span>':'';
-    html+='<div class="coupon-option" data-idx="'+i+'"><div class="coupon-radio"></div><div class="coupon-card-name">'+c.display+strongTag+'</div><div class="coupon-discount-amount">에너지 -'+c.amount+'</div></div>';
+    html+='<div class="coupon-option'+(i===0?' selected':'')+'" data-idx="'+i+'"><div class="coupon-radio"></div><div class="coupon-card-name">'+c.display+strongTag+'</div><div class="coupon-discount-amount">에너지 -'+c.amount+'</div></div>';
   }
-  html+='<div class="coupon-option selected" data-idx="-1"><div class="coupon-radio"></div><div class="coupon-card-name">적용 안 함</div><div class="coupon-discount-amount"></div></div>';
   html+='</div>';
-  html+='<button class="coupon-confirm">확인</button>';
+  html+='<button class="coupon-confirm">적용하고 진행 →</button>';
   box.innerHTML=html;
   overlay.appendChild(box);
   document.body.appendChild(overlay);
@@ -13038,9 +13777,8 @@ function showLevelUpModal(prevLevel,newLevel){
     document.getElementById('lvup-from').textContent='Lv.'+prevLevel;
     document.getElementById('lvup-to').textContent='Lv.'+newLevel;
     var lvBonus=CONFIG.rpLevelUpBonusByLevel[newLevel]||10;
-    document.getElementById('lvup-meter-delta').textContent='자원토큰 +'+lvBonus+' 추가 지급';
     var tokenEl=document.getElementById('lvup-token-bonus');
-    if(tokenEl)tokenEl.textContent='';
+    if(tokenEl)tokenEl.textContent='+'+lvBonus;
     modal.classList.remove('hidden');
     requestAnimationFrame(function(){modal.classList.add('visible');});
     var btn=document.getElementById('lvup-confirm');
@@ -13112,12 +13850,15 @@ function showRPDistributionModal(){
         preview.classList.add('empty');
       }
 
-      // Buttons enabled state
+      // Buttons enabled state — 미터 초과 불가
+      var timeFull=(rt.current+alloc.time)>=rt.max;
+      var energyFull=(re.current+alloc.energy)>=re.max;
       modal.querySelector('.rp-minus[data-axis="time"]').disabled=alloc.time<=0;
-      modal.querySelector('.rp-plus[data-axis="time"]').disabled=remaining<=0;
+      modal.querySelector('.rp-plus[data-axis="time"]').disabled=remaining<=0||timeFull;
       modal.querySelector('.rp-minus[data-axis="energy"]').disabled=alloc.energy<=0;
-      modal.querySelector('.rp-plus[data-axis="energy"]').disabled=remaining<=0;
-      document.getElementById('rp-confirm').disabled=remaining!==0;
+      modal.querySelector('.rp-plus[data-axis="energy"]').disabled=remaining<=0||energyFull;
+      var bothFull=timeFull&&energyFull;
+      document.getElementById('rp-confirm').disabled=remaining!==0&&!bothFull;
     }
 
     // Reset alloc + bind buttons with hold-to-repeat (re-bind safe across invocations)
@@ -13529,16 +14270,6 @@ function updateStats(){
   // 중앙 SCORE 표시 (LV은 updateExpUI가 담당)
   var scoreNumEl=document.getElementById('score-num');
   if(scoreNumEl)scoreNumEl.textContent=gameState.score;
-  var cutNum=getCurrentCutNum();
-  // 5/3 — progress-strip (시나리오 화면 헤더)으로 이동. stats-bar의 stat-progress 폐기.
-  var spsCut=document.getElementById('sps-cut-num');
-  if(spsCut)spsCut.textContent=cutNum;
-  var spsItems=document.getElementById('sps-items');
-  if(spsItems){
-    var n=(gameState.itemsCollected&&gameState.itemsCollected.length)||0;
-    spsItems.textContent='아이템 '+n+'개';
-    if(n===0)spsItems.classList.add('zero'); else spsItems.classList.remove('zero');
-  }
   updateResourceUI();
   updateExpUI();
 }
@@ -13590,17 +14321,12 @@ function showTitleScreen(){
     else{gameState=createInitialState();saveGame();}
   }
   var h='<div class="title-frame">';
-  // 제목: 피터공 캐논 한 줄 (직접 명제, 슬로건·메타포 X)
-  h+='<h1>위임의 경계 — AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가</h1>';
-  // 캐논 도입 (큰 화두): v0.6 무드 복구
-  h+='<div class="intro-text">';
-  h+='딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>';
-  h+='누구나 할 수 있다면, 누구인가가 중요하다.';
-  h+='</div>';
-  // 진행자 무드 (분위기): 큰 화두만, 메카닉 반복 X (튜토리얼이 짊어짐)
+  h+='<h1>AI 리터러시, 위임의 경계!</h1>';
+  h+='<div class="intro-text">AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가</div>';
   h+='<div class="host-text">';
-  h+='<div class="host-q">무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지.<br>당신은 구별할 수 있을까?</div>';
-  h+='<div class="host-call">AI 리터러시, 위임의 경계!</div>';
+  h+='딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>';
+  h+='누구나 할 수 있다면, 누구인가가 중요하다.<br>';
+  h+='무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지. 당신은 구별할 수 있을까?';
   h+='</div>';
   // 튜토리얼 4문장 (학생 톤 §11.5)
   h+='<ol class="tutorial-list">';
@@ -13653,7 +14379,7 @@ function showStartScreen(){
   h+='<div class="subtitle">이건 AI한테 맡겨도 돼?</div>';
   h+='<div class="vtag">v1.0 — 한 학생의 한 학기</div>';
   if(allDone){
-    h+='<div class="semester-final"><h2>한 학기를 모두 통과했다.</h2><p>다섯 결정이 누적되어 한 학생의 한 학기가 되었다.<br>처음부터 다시 시작하면 새 학생이 같은 결정을 마주한다.</p></div>';
+    h+='<div style="max-width:420px;margin:8px auto 24px;padding:14px 24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);text-align:center;font-family:var(--font-hand);font-size:26px;font-weight:400;color:var(--ink);transform:rotate(-1.5deg);letter-spacing:1px;">AI 리터러시 시나리오를 모두 완료했습니다!</div>';
   }
   h+='<div class="scenario-list">';
   order.forEach(function(sid,idx){
@@ -13672,15 +14398,10 @@ function showStartScreen(){
     h+='</button>';
   });
   h+='</div>';
-  // §13 (5/3 세션278) — 메인 액션 가운데 큰 버튼 + 좌측 학기 처음부터 (보조)
   h+='<div class="semester-actions">';
-  // 학기 처음부터 (cleared 1+ 또는 allDone일 때만)
-  if(cleared.length>0||allDone){
-    h+='<button class="action-secondary" onclick="confirmReset()">학기 처음부터</button>';
-  }
   // 메인 액션 — 진행 중 / 다음 시나리오 / 종합 리포트
   if(allDone){
-    h+='<button class="action-main" onclick="showFinalReport()">학기 종합 리포트</button>';
+    h+='<button class="action-main" onclick="showFinalReport()">AI 리터러시 성장 리포트</button>';
   }else if(hasSave()&&gameState.currentScenarioId&&!gameState.completed){
     h+='<button class="action-main" onclick="continueGame()">이어서 진행</button>';
   }else if(nextId){
@@ -13697,11 +14418,6 @@ function ensureRow(){
   if(currentRow)return currentRow;
   var sc=getScenario();
   var row=document.createElement('div');row.className='scenario-row';row.id='scenario-row';
-  // 5/3 — 컷/아이템 progress-strip (시나리오 화면 상단, stats-bar에서 분리)
-  var stripHTML='<div class="scenario-progress-strip" id="scenario-progress-strip">'
-    +'<div class="sps-cut">컷 <span class="sps-cut-num" id="sps-cut-num">1</span> / 6</div>'
-    +'<div class="sps-items zero" id="sps-items">아이템 0개</div>'
-    +'</div>';
   // 6 panels in 2 rows of 3
   var panels='';
   for(var i=1;i<=6;i++){
@@ -13709,7 +14425,7 @@ function ensureRow(){
     if(i===3)panels='<div class="panels-grid panels-row1">'+panels+'</div><div class="panels-grid panels-row2">';
   }
   panels+='</div>';
-  row.innerHTML=stripHTML+panels+'<div class="next-btn-wrap" id="next-wrap"><button class="next-btn" id="next-btn" onclick="onNext()">다음 &#8594;</button></div>';
+  row.innerHTML=panels+'<div class="next-btn-wrap" id="next-wrap"><button class="next-btn" id="next-btn" onclick="onNext()">다음 &#8594;</button></div>';
   container.appendChild(row);
   currentRow=row;
   return row;
@@ -14180,7 +14896,7 @@ function goCut6(){
   var clearedAfter=(gameState.clearedScenarios||[]).slice();
   if(clearedAfter.indexOf(scid)<0)clearedAfter.push(scid);
   var willBeAllDone=(clearedAfter.length>=CONFIG.scenarios.length);
-  nb.textContent=willBeAllDone?'학기 종합 리포트 보기':'다음 시나리오로 →';
+  nb.textContent=willBeAllDone?'AI 리터러시 성장 리포트':'다음 시나리오로 →';
   nb.onclick=goNextScenario;
 
   // 시나리오 끝 chain (SPEC §6.3, v0.9 — RP 분배 제거, 에너지 자동 회복)
@@ -14575,6 +15291,14 @@ function confirmResetDo(){
   setTimeout(function(){resetGame();},150);
 }
 
+function backToStartScreen(){
+  var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='';
+  var debugBtn=document.querySelector('.debug-toggle');if(debugBtn)debugBtn.style.display='';
+  var verLabel=document.getElementById('version-label');if(verLabel)verLabel.style.display='';
+  currentRow=null;
+  showStartScreen();
+}
+
 // =====================================================
 // 11. Report Generator (v0.3 — 두 역량 + 아이템)
 // =====================================================
@@ -14605,8 +15329,7 @@ function showReport(){
   var totalN=CONFIG.scenarios.length;
   var willBeAllDone=(clearedNow.length>=totalN);
   h+='<div class="report-progress" style="margin:18px 0 14px;font-size:13px;color:#444;text-align:center;">학기 진행 '+clearedNow.length+' / '+totalN+(willBeAllDone?' — 학기를 모두 통과했다':'')+'</div>';
-  h+='<button class="start-btn" onclick="goNextScenario()">'+(willBeAllDone?'학기 종합 리포트 보기':'시나리오 선택으로')+'</button>';
-  h+='<button class="start-btn secondary" onclick="resetGame()">학기 처음부터</button>';
+  h+='<button class="start-btn" onclick="goNextScenario()">'+(willBeAllDone?'AI 리터러시 성장 리포트':'시나리오 선택으로')+'</button>';
   h+='</div></div>';
   container.innerHTML=h;
 }
@@ -14812,17 +15535,23 @@ function _reportNarrative(compType,inventory,history){
     html+='<div class="narrative-line">'+(noCards.title||'이번 학기는 카드를 한 장도 받지 못했다.')+'</div>';
     html+='<div class="narrative-line">'+(noCards.body||'시나리오 후반부의 leaf 선택이 카드 보상과 연결되어 있다 — 다음 학기에는 자기 선택이 어떤 카드로 이어지는지 의식해 보자.')+'</div>';
   }else{
-    // top1 — 한 줄
-    if(top[0]){
-      html+='<div class="narrative-line">가장 많이 받은 카드: <b>'+_esc(top[0])+'</b> '+groupCounts[top[0]]+'장</div>';
-    }
-    // top2/top3 — 한 줄
-    if(top.length>=2){
-      var nextLine='다음 많이 받은 카드: <b>'+_esc(top[1])+'</b> '+groupCounts[top[1]]+'장';
-      if(top.length>=3){
-        nextLine+=' / <b>'+_esc(top[2])+'</b> '+groupCounts[top[2]]+'장';
+    // 동률 감지 — 모든 카드가 같은 수이면 별도 메시지
+    var allSameCount=true;
+    var firstCount=groupCounts[labels[0]]||0;
+    for(var qi=1;qi<labels.length;qi++){if(groupCounts[labels[qi]]!==firstCount){allSameCount=false;break;}}
+    if(allSameCount&&labels.length>1){
+      html+='<div class="narrative-line">이번 학기에는 다양한 역량을 고르게 획득했습니다. 총 '+labels.length+'종 카드, 각 '+firstCount+'장.</div>';
+    }else{
+      if(top[0]){
+        html+='<div class="narrative-line">가장 많이 받은 카드: <b>'+_esc(top[0])+'</b> '+groupCounts[top[0]]+'장</div>';
       }
-      html+='<div class="narrative-line">'+nextLine+'</div>';
+      if(top.length>=2){
+        var nextLine='다음: <b>'+_esc(top[1])+'</b> '+groupCounts[top[1]]+'장';
+        if(top.length>=3){
+          nextLine+=' / <b>'+_esc(top[2])+'</b> '+groupCounts[top[2]]+'장';
+        }
+        html+='<div class="narrative-line">'+nextLine+'</div>';
+      }
     }
     // 카드별 해석 — 각 top 카드 한 줄씩 (texts.yaml cards[label].short)
     for(var ti=0;ti<top.length;ti++){
@@ -14907,6 +15636,9 @@ function _reportNarrative(compType,inventory,history){
 
 function showFinalReport(){
   hideStats();
+  var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='none';
+  var debugBtn=document.querySelector('.debug-toggle');if(debugBtn)debugBtn.style.display='none';
+  var verLabel=document.getElementById('version-label');if(verLabel)verLabel.style.display='none';
   trackEvent('semester_report_viewed',{totalScore:gameState.totalScore,history:gameState.scenarioHistory,level:gameState.exp.level,cards:_reportAllCards().map(function(c){return c.label;}),items:gameState.itemsCollected});
   var hist=gameState.scenarioHistory||[];
   var totalScore=hist.reduce(function(s,r){return s+(r.finalScore||0);},0);
@@ -14921,61 +15653,94 @@ function showFinalReport(){
   var R=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.report) || {};
   var statL=R.stat_labels||{};
   var cardsSec=R.cards_section||{};
-  var h='<div class="report-overlay"><div class="report-inner report-v813">';
-  h+='<h2>'+_esc(R.title||'한 학기 활동 리포트')+'</h2>';
-  h+='<div class="report-subtitle">'+(R.subtitle||'자기소개 → 모둠 발표 → 어린왕자 → 진로 → 시험 공부<br>다섯 결정이 한 학생의 한 학기를 만들었다.')+'</div>';
+  var dvE=effectiveCompetency(dv);
+  var kvE=effectiveCompetency(kv);
 
-  // 상단: 2박스 통계 (총점 + 레벨만, §18)
-  h+='<div class="report-grid" style="grid-template-columns:1fr 1fr;max-width:320px;margin:0 auto 16px;">';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+totalScore+'</div><div class="report-stat-label">'+_esc(statL.total||'학기 총점')+'</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">Lv.'+lv+'</div><div class="report-stat-label">'+_esc(statL.level||'최종 레벨')+'</div></div>';
+  var h='<div class="report-overlay"><div class="report-inner report-v813">';
+  h+='<div style="display:flex;align-items:center;min-height:56px;padding:0 22px;margin-bottom:24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);font-size:20px;font-weight:700;letter-spacing:1px;">AI 리터러시 성장 리포트</div>';
+  h+='<div class="report-subtitle">한 학기 동안 다섯 시나리오에서 내린 선택과 그 결과를 돌아봅니다.<br>AI에게 무엇을 맡기고 무엇을 직접 했는지, 어떤 역량이 자랐는지 확인하세요.</div>';
+
+  // 상단: 4박스 통계 (총점 + 레벨 + 판단하는 힘 + 아는것의 힘)
+  h+='<div class="report-grid" style="grid-template-columns:repeat(4,1fr);max-width:600px;margin:0 auto 16px;">';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+totalScore+'</div><div class="report-stat-label">학기 총점</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">Lv.'+lv+'</div><div class="report-stat-label">최종 레벨</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num" style="color:'+(dvE>=0?'var(--acc-mint-deep)':'var(--acc-pink-deep)')+'">'+(dvE>0?'+':'')+dvE+'</div><div class="report-stat-label">판단하는 힘</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num" style="color:'+(kvE>=0?'var(--acc-mint-deep)':'var(--acc-pink-deep)')+'">'+(kvE>0?'+':'')+kvE+'</div><div class="report-stat-label">아는것의 힘</div></div>';
   h+='</div>';
 
   ensureInventory();
 
-  // 카드 누적 리뷰 섹션 — v0.8 3트랙 통합
   var allCards=_reportAllCards();
-  var totalCardCount=allCards.length;
-  h+='<div class="report-cards-section">';
-  var cardsTitleTpl=cardsSec.title||'한 학기 동안 모은 역량 카드 — 총 {N}장';
-  h+='<div class="report-cards-title">'+cardsTitleTpl.replace(/\{N\}/g,totalCardCount)+'</div>';
-  if(totalCardCount===0){
-    h+='<div class="report-cards-empty">'+_esc(cardsSec.empty||'이번 학기는 역량 카드를 받지 못했어요. 다시 도전!')+'</div>';
-  }else{
-    // 라벨로 그룹화 + 회기 출처 회수 (renderInventory와 동일 패턴)
-    var cardGroups={};
-    for(var ci=0;ci<allCards.length;ci++){
-      var cc=allCards[ci];
-      if(!cardGroups[cc.label])cardGroups[cc.label]={count:0,sources:[]};
-      cardGroups[cc.label].count++;
-      var scObj=SCENARIOS[cc.scenario];
-      var stitle=(scObj&&scObj.title)||cc.scenarioTitle||cc.scenario||'';
-      cardGroups[cc.label].sources.push(stitle);
+  var ownedHC={};
+  var inv=gameState.inventory||{};
+  if(inv.humanCentricCards){
+    for(var hi=0;hi<inv.humanCentricCards.length;hi++){
+      var hc=inv.humanCentricCards[hi];
+      ownedHC[hc.axis+'::'+hc.tag]=true;
     }
-    h+='<div class="report-cards-grid">';
-    Object.keys(cardGroups).sort(function(a,b){
-      return cardGroups[b].count - cardGroups[a].count || a.localeCompare(b,'ko');
-    }).forEach(function(label){
-      var g=cardGroups[label];
-      var color=_cardColor(label);
-      var bg=_cardBg(label);
-      var seen={},uniqSrc=[];
-      for(var si=0;si<g.sources.length;si++){var s=g.sources[si];if(!seen[s]){seen[s]=1;uniqSrc.push(s);}}
-      var axisMatch=label.match(/^\[(.+?)\]\s*(.+)/);
-      var rowBg=bg?'background:'+bg+';':'';
-      var rowBorder=bg?'border:1.5px solid rgba(0,0,0,0.06);':'';
-      h+='<div class="report-card-row" style="'+rowBg+rowBorder+'">';
-      h+='<div class="report-card-row-head">';
-      h+='<span class="report-card-count" style="background:'+color+'">x'+g.count+'</span>';
-      if(axisMatch){
-        h+='<span class="report-card-label"><span style="font-size:10px;color:'+(_axisMeta(axisMatch[1]).color||'#888')+';font-weight:700;display:block;margin-bottom:1px;">'+_esc(axisMatch[1])+'</span>'+_esc(axisMatch[2])+'</span>';
-      }else{
-        h+='<span class="report-card-label">'+_esc(label)+'</span>';
-      }
+  }
+  var ownedDomain={};
+  if(inv.domainCards){
+    for(var di2=0;di2<inv.domainCards.length;di2++){
+      ownedDomain[inv.domainCards[di2].label]=true;
+    }
+  }
+
+  var HC_ALL=[
+    {axis:'중심잡기',tags:['주체성','적응성','호기심']},
+    {axis:'융합하기',tags:['창의적 사고','문제해결적 사고','직관적 통찰','통합적 사고','맥락적 사고']},
+    {axis:'성찰하기',tags:['비판적 사고','윤리적 사고','성찰적 사고','사회·관계적 사고']}
+  ];
+  var hcFlat=[];
+  for(var ai=0;ai<HC_ALL.length;ai++){
+    for(var ti=0;ti<HC_ALL[ai].tags.length;ti++){
+      hcFlat.push({axis:HC_ALL[ai].axis,tag:HC_ALL[ai].tags[ti]});
+    }
+  }
+  var hcOwned=0;
+  for(var oi=0;oi<hcFlat.length;oi++){if(ownedHC[hcFlat[oi].axis+'::'+hcFlat[oi].tag])hcOwned++;}
+
+  h+='<div class="report-cards-section" style="border:var(--border-w) solid var(--ink);background:var(--bg-card);box-shadow:var(--shadow);padding:0 0 20px;margin-bottom:20px;">';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:var(--acc-mint);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">판단하는 힘 — 인간중심 역량 카드<span style="font-size:13px;font-weight:600;color:var(--ink-mute);">'+hcOwned+' / '+hcFlat.length+'</span></div>';
+  h+='<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding:14px 16px;">';
+  for(var ci=0;ci<hcFlat.length;ci++){
+    var card=hcFlat[ci];
+    var owned=!!ownedHC[card.axis+'::'+card.tag];
+    var am=_axisMeta(card.axis);
+    if(owned){
+      h+='<div style="border:var(--border-w) solid var(--ink);background:'+am.bg+';padding:10px 6px;text-align:center;box-shadow:var(--shadow);">';
+      h+='<div style="font-size:15px;font-weight:600;color:'+am.color+';margin-bottom:3px;">'+_esc(card.axis)+'</div>';
+      h+='<div style="font-size:13px;font-weight:700;color:var(--ink);">'+_esc(card.tag)+'</div>';
       h+='</div>';
-      h+='<div class="report-card-source">'+_esc(uniqSrc.join(', '))+'</div>';
+    }else{
+      h+='<div style="border:2px dashed #ccc;background:transparent;padding:10px 6px;text-align:center;">';
+      h+='<div style="font-size:15px;font-weight:600;color:#bbb;margin-bottom:3px;">'+_esc(card.axis)+'</div>';
+      h+='<div style="font-size:12px;color:#bbb;">'+_esc(card.tag)+'</div>';
       h+='</div>';
-    });
+    }
+  }
+  h+='</div>';
+
+  var DOM_ALL=['자기이해','표현력','문해력','분석력','검토력','자료판단력','소통력','협업력','학습력','탐색력'];
+  var domOwned=[];
+  for(var dj=0;dj<DOM_ALL.length;dj++){if(ownedDomain[DOM_ALL[dj]])domOwned.push(DOM_ALL[dj]);}
+
+  h+='</div>';
+  h+='<div class="report-cards-section" style="border:var(--border-w) solid var(--ink);background:var(--bg-card);box-shadow:var(--shadow);padding:0 0 20px;margin-bottom:20px;">';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:var(--acc-cyan);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">아는것의 힘 — 도메인 역량 카드<span style="font-size:13px;font-weight:600;color:var(--ink-mute);">'+domOwned.length+'장</span></div>';
+  if(domOwned.length===0){
+    h+='<div style="font-size:13px;color:#888;padding:14px 16px;">이번 학기는 도메인 역량 카드를 받지 못했어요.</div>';
+  }else{
+    h+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px 16px;">';
+    for(var dk=0;dk<domOwned.length;dk++){
+      var dlbl=domOwned[dk];
+      var dc=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.domainCards)?TEXTS.domainCards[dlbl]:null;
+      var dcolor=(dc&&dc.color)||'var(--ink)';
+      h+='<div style="border:var(--border-w) solid var(--ink);background:var(--bg-card);padding:12px 8px;text-align:center;box-shadow:var(--shadow);">';
+      h+='<div style="font-size:14px;font-weight:700;color:'+dcolor+';">'+_esc(dlbl)+'</div>';
+      if(dc&&dc.short)h+='<div style="font-size:11px;color:var(--ink-soft);margin-top:4px;line-height:1.4;">'+_esc(dc.short)+'</div>';
+      h+='</div>';
+    }
     h+='</div>';
   }
   h+='</div>';
@@ -14986,59 +15751,51 @@ function showFinalReport(){
   // 회기별 카드 그룹
   var cardsByScene=_reportCardsByScenario();
 
-  // 하단: 시나리오별 카툰 6컷 시리얼 (위→아래)
+  // 하단: 시나리오별 카툰
   h+='<div class="report-comic">';
+  var sceneColors=['var(--acc-cyan)','var(--acc-mint)','var(--acc-yellow)','var(--acc-pink-soft)','var(--acc-cyan-soft)'];
   hist.forEach(function(r,i){
     var sc=SCENARIOS[r.scenarioId];
     var grade=r.grade||'D';
-    var gradeLow=grade.toLowerCase();
     var fin=(sc&&sc.finals)?sc.finals[r.leaf]:null;
+    var accentColor=sceneColors[i%sceneColors.length];
 
-    h+='<div class="comic-scene">';
-    h+='<div class="comic-scene-title">'+(i+1)+'. '+_esc(sc?sc.title:r.scenarioId)+' <span class="comic-scene-meta">'+r.finalScore+'점 · '+grade+'등급</span></div>';
-    var pathSummary=(fin&&fin.reportPathSummary)||'';
-    if(pathSummary){
-      h+='<div class="comic-scene-path" style="font-size:13px;color:#555;margin:4px 0 8px;">'+_esc(pathSummary)+'</div>';
+    h+='<div style="margin-bottom:24px;border:var(--border-w) solid var(--ink);background:var(--bg-card);box-shadow:var(--shadow);overflow:hidden;">';
+    h+='<div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px;min-height:42px;background:'+accentColor+';border-bottom:var(--border-w) solid var(--ink);font-size:15px;font-weight:700;">';
+    h+='<span>'+(i+1)+'. '+_esc(sc?sc.title:r.scenarioId)+'</span>';
+    h+='<span>'+r.finalScore+'점 · '+grade+'</span>';
+    h+='</div>';
+
+    var reflection=(fin&&fin.reportReflection)||'';
+    if(reflection){
+      h+='<div style="margin:10px 14px 4px;padding:8px 12px;background:var(--bg-soft);border:2px solid var(--ink);font-size:12px;line-height:1.6;color:var(--ink-mute);">';
+      h+='<b>핵심 돌아보기</b> — '+_esc(reflection);
+      h+='</div>';
     }
-    h+='<div class="comic-strip">';
+
+    h+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:10px 14px 14px;">';
     for(var c=1;c<=5;c++){
       var src=getCutImageFor(r.scenarioId, r.leaf, c);
       var cap=getCutCaptionFor(r.scenarioId, r.leaf, c);
-      h+='<div class="comic-panel">';
-      if(src)h+='<img class="comic-cut" src="'+src+'" alt="컷'+c+'" onerror="this.style.display=\'none\'">';
-      if(cap)h+='<div class="comic-caption">'+cap+'</div>';
+      h+='<div>';
+      if(src)h+='<div style="aspect-ratio:1/1;position:relative;overflow:hidden;border:2px solid var(--ink);"><img src="'+src+'" alt="컷'+c+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display=\'none\'"><div style="position:absolute;inset:0;box-shadow:inset 0 0 0 5px #fff,inset 0 0 0 6px var(--ink);pointer-events:none;"></div></div>';
+      if(cap)h+='<div style="font-family:var(--font-hand);font-size:16px;line-height:1.3;color:var(--ink-mute);margin-top:4px;word-break:keep-all;">'+cap+'</div>';
       h+='</div>';
     }
-    h+='<div class="comic-panel comic-panel-prize">';
-    h+='<img class="comic-cut comic-prize" src="../scenario_results/scenario_result__'+gradeLow+'.png" alt="'+grade+' 시상" onerror="this.style.display=\'none\'">';
     h+='</div>';
-    h+='</div>';
-    var reflection=(fin&&fin.reportReflection)||'';
-    var cardSummary=(fin&&fin.reportCardSummary)||'';
-    if(reflection||cardSummary){
-      h+='<div class="comic-scene-footer" style="margin:8px 0 16px;padding:10px 12px;background:#f4f1ea;border:3px solid #000;border-radius:0;font-size:13px;line-height:1.6;">';
-      if(reflection)h+='<div style="margin-bottom:4px;"><b>핵심 돌아보기</b><br>'+_esc(reflection)+'</div>';
-      if(cardSummary&&cardSummary!=='없음')h+='<div style="color:#666;">카드: '+_esc(cardSummary)+'</div>';
-      h+='</div>';
-    }
     h+='</div>';
   });
   h+='</div>';
 
-  h+='<button class="start-btn" onclick="resetGame()">'+_esc(R.btn_restart||'학기 처음부터')+'</button>';
+  h+='<button class="start-btn" onclick="backToStartScreen()">시작 화면 돌아가기</button>';
   h+='</div></div>';
   container.innerHTML=h;
 }
 
 function _renderGrowthReport(hist, compType, inventory){
   var GR=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthReport)||{};
-  if(!GR.patterns)return '';
-  var HC=TEXTS.humanCentricCards||{};
-  var DC=TEXTS.domainCards||{};
   var N=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.narrative)||{};
   function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
-  // === 데이터 수집 ===
 
   // 패턴 판정
   var t1Counts={A:0,B:0,C:0},rvCounts={R1:0,R2:0,R3:0},grCounts={S:0,A:0,B:0,C:0,D:0};
@@ -15055,198 +15812,64 @@ function _renderGrowthReport(hist, compType, inventory){
   else if((rvCounts.R2+rvCounts.R3)/total>0.6)pattern='reviewStrong';
   else if(t1Counts.A/total>0.6)pattern='selfStart';
 
-  // 카드 통계
-  var allCards=_reportAllCards();
-  var humanCount=0,domainCount=0,growthCount=0;
-  var cardGroupCounts={};
-  for(var ci=0;ci<allCards.length;ci++){
-    var lbl=allCards[ci].label;
-    cardGroupCounts[lbl]=(cardGroupCounts[lbl]||0)+1;
-    if(allCards[ci].track==='human')humanCount++;
-    else if(allCards[ci].track==='domain')domainCount++;
-    else if(allCards[ci].track==='growth')growthCount++;
-  }
-  var topCards=Object.keys(cardGroupCounts).sort(function(a,b){return cardGroupCounts[b]-cardGroupCounts[a];}).slice(0,3);
+  var h='<div class="report-growth" style="margin:28px 0 20px;padding:22px 20px;background:var(--bg-card);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);">';
 
-  // 카드명 기반 강점 수집
-  var strengthItems=[];
-  var seenStrength={};
-  var weakScenarios=[];
-  for(var j=0;j<hist.length;j++){
-    var sc=SCENARIOS[hist[j].scenarioId];
-    var fin=(sc&&sc.finals)?sc.finals[hist[j].leaf]:null;
-    if(!fin)continue;
-    var scTitle=(sc&&sc.title)||hist[j].scenarioId;
-    if(fin.humanCentricTag&&fin.humanCentricAxis){
-      var axData=HC[fin.humanCentricAxis];
-      var tagData=(axData&&axData.tags)?axData.tags[fin.humanCentricTag]:null;
-      if(tagData&&tagData.short&&!seenStrength[fin.humanCentricTag]){
-        seenStrength[fin.humanCentricTag]=1;
-        strengthItems.push({label:'['+fin.humanCentricAxis+'] '+fin.humanCentricTag,desc:tagData.short,color:(axData&&axData.color)||'#111'});
-      }
-    }
-    if(fin.domainCards){
-      for(var di=0;di<fin.domainCards.length;di++){
-        var dc=fin.domainCards[di];
-        var dd=DC[dc];
-        if(dd&&dd.short&&!seenStrength[dc]){
-          seenStrength[dc]=1;
-          strengthItems.push({label:dc,desc:dd.short,color:(dd&&dd.color)||'#555'});
-        }
-      }
-    }
-    if(fin.grade==='C'||fin.grade==='D'){
-      weakScenarios.push({title:scTitle,reflection:fin.reportReflection||''});
-    }
-  }
-
-  // 보완 매칭
-  var growthMap={};
-  for(var k=0;k<hist.length;k++){
-    var sc2=SCENARIOS[hist[k].scenarioId];
-    var fin2=(sc2&&sc2.finals)?sc2.finals[hist[k].leaf]:null;
-    if(fin2){var gTag=(fin2.reportGrowthTags||'').trim();if(gTag)growthMap[gTag]=(growthMap[gTag]||0)+1;}
-  }
-  var improvements=GR.improvements||[];
-  var iLines=[];
-  var gSorted=Object.keys(growthMap).sort(function(a,b){return growthMap[b]-growthMap[a];});
-  for(var gi=0;gi<gSorted.length&&iLines.length<3;gi++){
-    var gt=gSorted[gi];
-    for(var ii=0;ii<improvements.length;ii++){
-      if(gt.indexOf(improvements[ii].tag)>=0||improvements[ii].tag.indexOf(gt)>=0){
-        if(iLines.indexOf(improvements[ii].text)<0)iLines.push(improvements[ii].text);
-        break;
-      }
-    }
-  }
-
-  // 약속
-  var pledges=GR.pledges||[];
-  var pLines=[];
-  if(pledges.length){
-    if(growthMap['검토 필요'])pLines.push(pledges[1]||pledges[0]);
-    if(growthMap['위임 구분']&&pledges[3])pLines.push(pledges[3]);
-    if(growthMap['근거 부족']&&pledges[4])pLines.push(pledges[4]);
-    if(pLines.length===0)pLines.push(pledges[0]);
-    if(pLines.length<2&&pledges[2]&&pLines.indexOf(pledges[2])<0)pLines.push(pledges[2]);
-    if(pLines.length<3&&pledges[1]&&pLines.indexOf(pledges[1])<0)pLines.push(pledges[1]);
-  }
-
-  // 선택 패턴 해석
-  var t1pat=(N.tier1_patterns)||{};
-  var maxT=Math.max(t1Counts.A,t1Counts.B,t1Counts.C);
-  var totalT=t1Counts.A+t1Counts.B+t1Counts.C;
-  var patKey='balanced';
-  if(totalT>0){
-    if(t1Counts.A===t1Counts.B&&t1Counts.B===t1Counts.C)patKey='balanced';
-    else if(t1Counts.A===maxT&&t1Counts.B<maxT&&t1Counts.C<maxT)patKey='A_dominant';
-    else if(t1Counts.B===maxT)patKey='B_dominant';
-    else if(t1Counts.C===maxT)patKey='C_dominant';
-    else patKey='mixed';
-  }
-  var t1Interp=(t1pat[patKey]&&t1pat[patKey].interpretation)||'';
-
-  // === 렌더링 ===
-  var h='<div class="report-growth" style="margin:28px 0 20px;padding:22px 20px;background:#fff;border:3px solid #000;border-radius:0;box-shadow:4px 4px 0 #000;">';
-  h+='<div style="font-size:18px;font-weight:800;margin-bottom:18px;letter-spacing:0.5px;">'+_esc(GR.title||'AI리터러시 성장 리포트')+'</div>';
-
-  // (a) 학습자 유형
+  // (5) 학습자 유형 + 패턴 요약 — 하나의 박스
   var typeName=_typeLabel(compType);
   var typeText=_typeText(compType);
-  h+='<div style="margin-bottom:18px;padding:14px 16px;background:#f4f1ea;border:3px solid #000;border-radius:0;">';
-  h+='<div style="font-size:11px;color:#888;font-weight:700;letter-spacing:1.5px;margin-bottom:4px;">학습자 유형</div>';
-  h+='<div style="font-size:17px;font-weight:800;margin-bottom:6px;">'+_esc(typeName)+'</div>';
-  if(typeText)h+='<div style="font-size:13px;line-height:1.7;color:#333;">'+typeText+'</div>';
+  var patText=(GR.patterns||{})[pattern]||'';
+  h+='<div style="margin-bottom:20px;padding:16px 18px;background:var(--bg-soft);border:var(--border-w) solid var(--ink);">';
+  h+='<div style="font-size:11px;color:var(--ink-soft);font-weight:700;letter-spacing:1.5px;margin-bottom:4px;">학습자 유형</div>';
+  h+='<div style="font-size:18px;font-weight:800;margin-bottom:8px;">'+_esc(typeName)+'</div>';
+  if(typeText)h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);margin-bottom:8px;">'+typeText+'</div>';
+  if(patText)h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);">'+_esc(patText)+'</div>';
   h+='</div>';
 
-  // (b) 패턴 요약
-  var patText=(GR.patterns||{})[pattern]||'';
-  if(patText){
-    h+='<div style="font-size:14px;line-height:1.8;color:#000;margin-bottom:18px;padding:14px 16px;background:#f4f1ea;border:3px solid #000;border-radius:0;">'+_esc(patText)+'</div>';
+  // (6) 시나리오별 선택 경로 + 결과 메시지
+  h+='<div style="margin-bottom:20px;">';
+  h+='<div style="font-size:16px;font-weight:700;margin-bottom:12px;">시나리오별 결과</div>';
+  for(var j=0;j<hist.length;j++){
+    var r=hist[j];
+    var sc=SCENARIOS[r.scenarioId];
+    var fin=(sc&&sc.finals)?sc.finals[r.leaf]:null;
+    var scTitle=(sc&&sc.title)||r.scenarioId;
+    var info=_reportLeafInfo(r);
+    var feedback=fin?(fin.shortFeedback||fin.reportFeedback||fin.awareness||''):'';
+    var gradeColor=({S:'var(--acc-mint-deep)',A:'var(--acc-mint-deep)',B:'var(--ink)',C:'var(--acc-yellow-deep)',D:'var(--acc-pink-deep)'})[r.grade]||'var(--ink)';
+    h+='<div style="margin-bottom:10px;padding:12px 14px;border:2px solid var(--ink);background:var(--bg-card);box-shadow:3px 3px 0 var(--ink);">';
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">';
+    h+='<span style="font-size:14px;font-weight:700;">'+_esc(scTitle)+'</span>';
+    h+='<span style="font-size:14px;font-weight:700;color:'+gradeColor+';">'+r.finalScore+'점 · '+(r.grade||'')+'</span>';
+    h+='</div>';
+    h+='<div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">'+_esc(info.t1)+' → '+_esc(info.t2)+' → '+_esc(info.rv)+'</div>';
+    if(feedback)h+='<div style="font-size:13px;line-height:1.6;color:var(--ink-mute);">'+feedback+'</div>';
+    h+='</div>';
   }
+  h+='</div>';
 
-  // (c) 내가 키운 역량
-  if(strengthItems.length){
-    h+='<div style="margin-bottom:18px;">';
-    h+='<div style="font-size:15px;font-weight:700;margin-bottom:10px;">내가 키운 역량</div>';
-    var maxShow=Math.min(strengthItems.length,5);
-    for(var s2=0;s2<maxShow;s2++){
-      var si=strengthItems[s2];
-      h+='<div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px;font-size:13px;line-height:1.6;">';
-      h+='<span style="flex-shrink:0;font-weight:700;color:'+si.color+';">'+_esc(si.label)+'</span>';
-      h+='<span style="color:#333;">'+_esc(si.desc)+'</span>';
+  // (9) 회복력 / 도전력
+  var allCards=_reportAllCards();
+  var hasRecovery=false,hasChallengeCard=false;
+  for(var gc=0;gc<allCards.length;gc++){
+    if(allCards[gc].label==='회복력')hasRecovery=true;
+    if(allCards[gc].label==='도전력')hasChallengeCard=true;
+  }
+  if(hasRecovery||hasChallengeCard){
+    h+='<div style="margin-bottom:20px;padding:14px 16px;background:var(--acc-yellow-soft);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);">';
+    h+='<div style="font-size:15px;font-weight:700;margin-bottom:8px;">성장 카드</div>';
+    if(hasRecovery){
+      h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);margin-bottom:6px;">';
+      h+='<b>회복력</b> — 결과가 아쉬웠지만 포기하지 않았다. 다시 도전할 수 있는 힘이 생겼다.';
       h+='</div>';
     }
-    if(strengthItems.length>5){
-      h+='<div style="font-size:12px;color:#888;margin-top:4px;">외 '+(strengthItems.length-5)+'개 역량</div>';
-    }
-    h+='</div>';
-  }
-
-  // (d) 역량 카드 분포
-  if(allCards.length>0){
-    h+='<div style="margin-bottom:18px;">';
-    h+='<div style="font-size:15px;font-weight:700;margin-bottom:8px;">역량 카드 프로필</div>';
-    if(topCards.length){
-      h+='<div style="font-size:13px;line-height:1.7;color:#333;">';
-      h+='가장 많이 받은 카드: <b>'+_esc(topCards[0])+'</b> '+cardGroupCounts[topCards[0]]+'장';
-      if(topCards.length>=2){
-        h+='<br>다음: <b>'+_esc(topCards[1])+'</b> '+cardGroupCounts[topCards[1]]+'장';
-        if(topCards.length>=3)h+=' / <b>'+_esc(topCards[2])+'</b> '+cardGroupCounts[topCards[2]]+'장';
-      }
+    if(hasChallengeCard){
+      h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);">';
+      h+='<b>도전력</b> — 같은 시나리오에 다시 도전해서 더 나은 결과를 만들었다. 실패에서 배우는 힘이다.';
       h+='</div>';
     }
-    h+='<div style="font-size:12px;color:#666;margin-top:6px;">';
-    h+='인간중심 '+humanCount+'장 / 도메인 '+domainCount+'장';
-    if(growthCount>0)h+=' / 성장 '+growthCount+'장';
-    h+=' — 총 '+allCards.length+'장</div>';
     h+='</div>';
   }
 
-  // (e) 학생 선택 패턴
-  if(totalT>0){
-    h+='<div style="margin-bottom:18px;">';
-    h+='<div style="font-size:15px;font-weight:700;margin-bottom:8px;">선택 패턴</div>';
-    h+='<div style="font-size:13px;color:#333;line-height:1.7;">';
-    h+=totalT+' 시나리오 중 A '+t1Counts.A+' · B '+t1Counts.B+' · C '+t1Counts.C;
-    if(t1Interp)h+='<br>'+_esc(t1Interp);
-    h+='</div></div>';
-  }
-
-  // (f) 더 연습할 과정
-  if(iLines.length||weakScenarios.length){
-    h+='<div style="margin-bottom:18px;">';
-    h+='<div style="font-size:15px;font-weight:700;margin-bottom:10px;">더 연습할 과정</div>';
-    for(var i2=0;i2<iLines.length;i2++){
-      h+='<div style="font-size:13px;color:#333;line-height:1.7;padding-left:10px;margin-bottom:4px;">· '+_esc(iLines[i2])+'</div>';
-    }
-    if(weakScenarios.length&&iLines.length<2){
-      for(var wi=0;wi<weakScenarios.length&&wi<2;wi++){
-        h+='<div style="font-size:12px;color:#666;line-height:1.6;padding-left:10px;margin-top:4px;">';
-        h+=_esc(weakScenarios[wi].title)+' — '+_esc(weakScenarios[wi].reflection);
-        h+='</div>';
-      }
-    }
-    h+='</div>';
-  }
-
-  // (g) 다음에 이렇게 해볼 수 있다
-  if(pLines.length){
-    h+='<div style="margin-bottom:14px;padding:12px 14px;background:#f4f1ea;border:3px solid #000;border-radius:0;">';
-    h+='<div style="font-size:15px;font-weight:700;margin-bottom:8px;">다음에 이렇게 해볼 수 있다</div>';
-    for(var p2=0;p2<pLines.length;p2++){
-      h+='<div style="font-size:13px;color:#222;line-height:1.7;padding-left:10px;margin-bottom:3px;"><b>'+(p2+1)+'.</b> '+_esc(pLines[p2])+'</div>';
-    }
-    h+='</div>';
-  }
-
-  // (h) 교사용 관찰 포인트
-  var teacherNote=(GR.teacherNotes||{})[pattern]||'';
-  if(teacherNote){
-    h+='<details style="margin-top:10px;"><summary style="font-size:12px;color:#999;cursor:pointer;letter-spacing:0.5px;">교사용 관찰 포인트</summary>';
-    h+='<div style="font-size:12px;color:#000;line-height:1.7;margin-top:8px;padding:10px 12px;background:#f4f1ea;border:3px solid #000;border-radius:0;">'+_esc(teacherNote)+'</div>';
-    h+='</details>';
-  }
   h+='</div>';
   return h;
 }
@@ -15256,7 +15879,7 @@ function _renderGrowthReport(hist, compType, inventory){
 // =====================================================
 var dbgOn=false;
 function toggleDebug(){dbgOn=!dbgOn;document.getElementById('debug-panel').classList.toggle('active',dbgOn);if(dbgOn)renderDebug();}
-document.addEventListener('click',function(e){if(!dbgOn)return;var p=document.getElementById('debug-panel'),t=document.querySelector('.debug-toggle');if(!p.contains(e.target)&&e.target!==t){dbgOn=false;p.classList.remove('active');}});
+document.addEventListener('click',function(e){if(!dbgOn)return;var p=document.getElementById('debug-panel'),t=document.querySelector('.debug-toggle');var r=p.getBoundingClientRect(),tr=t.getBoundingClientRect();var inP=(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom);var inT=(e.clientX>=tr.left&&e.clientX<=tr.right&&e.clientY>=tr.top&&e.clientY<=tr.bottom);if(!inP&&!inT){dbgOn=false;p.classList.remove('active');}});
 function renderDebug(){
   if(!dbgOn)return;
   var p=document.getElementById('debug-panel'),logs=getEvents(),last=logs.length?logs[logs.length-1]:null;
@@ -15301,12 +15924,19 @@ function renderDebug(){
   h+='<div class="debug-buttons">';
   h+='<button class="debug-btn" onclick="toggleHint()">'+(gameState && gameState.hintEnabled?'ON → OFF':'OFF → ON')+'</button>';
   h+='</div></div>';
-  h+='<div class="debug-section"><div class="debug-label">Cards (강제 추가)</div>';
-  h+='<div class="debug-buttons">';
-  h+='<button class="debug-btn" onclick="dbgAddCard(\'AI 환각 식별\')">+환각</button>';
-  h+='<button class="debug-btn" onclick="dbgAddCard(\'검증 방법\')">+검증</button>';
-  h+='<button class="debug-btn" onclick="dbgAddCard(\'AI 한계\')">+한계</button>';
-  h+='<button class="debug-btn" onclick="dbgAddCard(\'비판적 사고\')">+비판</button>';
+  h+='<div class="debug-section"><div class="debug-label">인간중심 카드 (강제 추가)</div>';
+  h+='<div class="debug-buttons" style="flex-wrap:wrap">';
+  var _hcDbg=[['중심잡기','주체성'],['중심잡기','적응성'],['중심잡기','호기심'],['융합하기','창의적 사고'],['융합하기','문제해결적 사고'],['융합하기','직관적 통찰'],['융합하기','통합적 사고'],['융합하기','맥락적 사고'],['성찰하기','비판적 사고'],['성찰하기','윤리적 사고'],['성찰하기','성찰적 사고'],['성찰하기','사회·관계적 사고']];
+  for(var _hi=0;_hi<_hcDbg.length;_hi++){
+    h+='<button class="debug-btn" onclick="dbgAddHC(\''+_hcDbg[_hi][0]+'\',\''+_hcDbg[_hi][1]+'\')">'+_hcDbg[_hi][1]+'</button>';
+  }
+  h+='</div></div>';
+  h+='<div class="debug-section"><div class="debug-label">도메인 카드 (강제 추가)</div>';
+  h+='<div class="debug-buttons" style="flex-wrap:wrap">';
+  var _domDbg=['자기이해','표현력','문해력','분석력','검토력','자료판단력','소통력','협업력','학습력','탐색력'];
+  for(var _di=0;_di<_domDbg.length;_di++){
+    h+='<button class="debug-btn" onclick="dbgAddDomain(\''+_domDbg[_di]+'\')">'+_domDbg[_di]+'</button>';
+  }
   h+='</div></div>';
   h+='<div class="debug-section"><div class="debug-label">Level (강제 점프)</div>';
   h+='<div class="debug-buttons">';
@@ -15404,11 +16034,24 @@ function dbgJumpCut(n){
 }
 
 function dbgAddCard(name){
-  // v0.8 — cardsHeld 폐기. inventory.competencyCards에 직접 push (디버그 용).
   dbgEnsureGame();
   if(!gameState.inventory)gameState.inventory={competencyCards:[]};
   if(!gameState.inventory.competencyCards)gameState.inventory.competencyCards=[];
   gameState.inventory.competencyCards.push({label:name,scenario:'_dbg',scenarioTitle:'디버그',leaf:'_dbg',note:'',ts:Date.now()});
+  saveGame();updateStats();renderDebug();
+}
+function dbgAddHC(axis,tag){
+  dbgEnsureGame();
+  if(!gameState.inventory)gameState.inventory={competencyCards:[]};
+  if(!gameState.inventory.humanCentricCards)gameState.inventory.humanCentricCards=[];
+  gameState.inventory.humanCentricCards.push({axis:axis,tag:tag,scenario:'_dbg',leaf:'_dbg'});
+  saveGame();updateStats();renderDebug();
+}
+function dbgAddDomain(label){
+  dbgEnsureGame();
+  if(!gameState.inventory)gameState.inventory={competencyCards:[]};
+  if(!gameState.inventory.domainCards)gameState.inventory.domainCards=[];
+  gameState.inventory.domainCards.push({label:label,scenario:'_dbg',leaf:'_dbg'});
   saveGame();updateStats();renderDebug();
 }
 

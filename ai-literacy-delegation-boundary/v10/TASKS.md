@@ -1,8 +1,9 @@
 ## TASKS — v1.0
 
-**현재 Phase**: Phase 0 완료, Phase 1 대기
+**현재 Phase**: Phase 1~4 통합 완료, Phase 5 대기
 **v0.9 마지막 커밋**: 928c740
-**베이스**: v0.9 index.html (826,534 bytes → v1.0 빌드 829,037 bytes)
+**v1.0 커밋**: a0915f8 (Phase 0 + Phase 1~4 통합)
+**빌드**: 832,048 bytes
 **스타일 가이드**: [[AI 리터러시 게임 — 스타일 가이드]]
 
 ---
@@ -19,69 +20,83 @@
 
 ---
 
-### Phase 1 — CSS 토큰 + 전역 리셋
+### Phase 1~4 통합 — Neo-Brutalism 전면 적용 ✅
 
-- [ ] `:root` CSS custom properties 선언 (surface, ink, accent 4색, accent 변형, geometry)
-- [ ] body background: `#f5f5f5` → `var(--bg-page)`
-- [ ] 나눔손글씨 펜 @import 추가
-- [ ] font-family 변수 적용 (`--font-main`, `--font-hand`)
-- [ ] border-radius 전역 0 리셋 (template 내 ~25건)
-  - 제외: `.pending-dot`, `.coupon-radio`, `.progress-dot`, `.inv-tab-badge`, `.scenario-card .sc-num` (원형 요소)
-- [ ] border 통일: 옅은 회색(`#aaa/#ccc/#e5e5e5`) → `var(--border-w) solid var(--ink)` (~10건)
-- [ ] box-shadow 통일: 블러 있는 것 → `var(--shadow)` (~15건)
-- [ ] 브라우저 검증
-- [ ] 커밋
+피터공 피드백("색 없이 테두리만 두꺼워졌다")으로 Phase 1~4를 합쳐서 한 번에 적용.
 
-### Phase 2 — 버튼 체계 통일
+**Phase 1 — CSS 토큰 + 전역 리셋 ✅**
+- [x] `:root` CSS custom properties 선언 (surface, ink, accent 4색+변형, geometry, font)
+- [x] body background: `#f5f5f5` → `var(--bg-page)` (#d0d0d0)
+- [x] 나눔손글씨 펜 @import 추가
+- [x] font-family 변수 적용 (`--font-main`, `--font-hand`)
+- [x] border-radius 전역 0 리셋 (30건, 원형 50% 7건 유지)
+- [x] border 통일: 옅은 회색 → `var(--border-w) solid var(--ink)` (12건)
+- [x] box-shadow 통일: 블러 → `var(--shadow)` 4px offset 단색 (10건+)
+- [x] JS 인라인 스타일 border-radius/shadow/border (12건)
 
-- [ ] `.btn` 공통 클래스 CSS 정의 (yellow bg, black text, 3px border, 4px shadow)
-- [ ] `.btn--ghost` / `.btn--correct` / `.btn--wrong` 변형
-- [ ] `.start-btn` → `.btn` 전환 (bg:#111,color:#fff → yellow,black)
-- [ ] `.advance-btn` → `.btn` 전환
-- [ ] `.next-btn` → `.btn` 전환
-- [ ] `.action-main` → `.btn` 전환 (Display 크기 유지)
-- [ ] `.lvup-confirm` → `.btn` 전환
-- [ ] `.rp-confirm` → `.btn` 전환
-- [ ] `.recovery-card-btn` → `.btn` / `.btn--ghost` 전환
-- [ ] JS 인라인 스타일 버튼들 전환 (replay-btn-grade, replay-btn-cut6 등)
-- [ ] 누름 피드백 통일: translate(2px,2px) + shadow-press
-- [ ] 브라우저 검증
-- [ ] 커밋
+**Phase 2 — 버튼 체계 통일 ✅**
+- [x] `.start-btn` — bg:#111,color:#fff → yellow bg, black text, 4px shadow
+- [x] `.advance-btn` — 동일
+- [x] `.next-btn` — 동일
+- [x] `.action-main` — 동일 (Display 크기 유지)
+- [x] `.action-secondary` — ghost 스타일 (white bg, black text)
+- [x] `.lvup-confirm` — yellow
+- [x] `.rp-confirm` — yellow, disabled=bg-page
+- [x] `.rp-btn` — white bg + 4px shadow, charging=yellow
+- [x] `.recovery-card-btn.primary` — yellow
+- [x] `.recovery-card-btn.secondary` — ghost
+- [x] `.confirm-cancel` — ghost
+- [x] `.confirm-destructive` — pink bg, black text
+- [x] `.gameover-report` — yellow
+- [x] `.gameover-restart` — ghost
+- [x] JS 인라인 버튼 (replay-btn-grade, replay-btn-cut6) — yellow/ghost
+- [x] 누름 피드백 통일: translate(2px,2px) + shadow-press
 
-### Phase 3 — 카드·패널·모달 컴포넌트
+**Phase 3 — 카드·패널·모달 컴포넌트 ✅**
+- [x] `.choice-card` — 3px border + 4px shadow + hover 리프트(-2px) + active 누름
+- [x] `.choice-num` — yellow bg + black text + 2px border
+- [x] `.panel` inactive — dashed ink-soft, bg-soft
+- [x] `.panel.active/.done` — solid ink, bg-card, 4px shadow
+- [x] `.modal-card` — 8px 8px 0 #000, radius 0
+- [x] `.coupon-box` — border + 8px shadow
+- [x] `.coupon-option` — 3px border
+- [x] `.inv-tab` — radius 0, -4px 4px shadow
+- [x] `.inv-card` — radius 0, 4px shadow
+- [x] `.card-reward-card` — radius 0, 4px shadow
+- [x] `.card-reward-card.growth-card` — dashed ink, bg-soft
+- [x] `.recovery-card` — dashed ink, bg-soft, radius 0, 4px shadow
+- [x] `.report-*` 섹션들 — border/shadow 교체
+- [x] `.report-narrative` — bg-soft, 3px border, 4px shadow
+- [x] `.report-narrative-cardtype` — bg:#111,color:#fff → yellow bg, black text
+- [x] `.scenario-progress-strip` — 3px border, bg-soft, 4px shadow
+- [x] `.scenario-card` — 3px border, 4px shadow
+- [x] `.score-display` — 3px border, 4px shadow
+- [x] `.gameover-card` — 8px shadow
+- [x] `.card-inner` (시작화면) — white bg, 3px border, 8px shadow, h1 28px/800
+- [x] `.binder-divider` — yellow 배경, 3px border
 
-- [ ] `.choice-card` — 3px border + 4px shadow + hover 리프트 + active 누름
-- [ ] `.panel.active/.done` — border/shadow 교체
-- [ ] `.modal-card` — 블러 shadow → 8px 8px 0 #000, radius 0
-- [ ] `.coupon-box` — 동일
-- [ ] `.inv-tab` — radius 0, shadow 교체
-- [ ] `.inv-card` — radius 0, shadow 교체
-- [ ] `.card-reward-card` — radius 0, shadow 교체
-- [ ] `.recovery-card` — dashed border 유지, radius 0, shadow 교체
-- [ ] `.report-*` 섹션들 — border/shadow 교체, 내부 배경 → bg-soft
-- [ ] `.report-narrative-cardtype` — 현재 bg:#111,color:#fff → 검토 (절대 규칙 충돌)
-- [ ] `.scenario-progress-strip` — border/shadow 교체
-- [ ] `.score-display` — border/shadow 교체
-- [ ] 브라우저 검증
-- [ ] 커밋
-
-### Phase 4 — 색상 재매핑
-
-- [ ] `.bipolar-fill.positive` — `#1a8c1a` → `var(--acc-mint-deep)`
-- [ ] `.bipolar-fill.negative` — `#c44` → `var(--acc-pink-deep)`
-- [ ] `.pending-dot.positive` — `#1a8c1a` → `var(--acc-mint)`
-- [ ] `.pending-dot.negative` — `#c44` → `var(--acc-pink)`
-- [ ] `.cost-box-effect` — green 계열 → mint 토큰
-- [ ] `.cost-card-chips .card-chip` — green 계열 → mint 토큰
-- [ ] `.insufficient-tag` — `#c44, color:#fff` → pink, color:black
-- [ ] 인라인 스타일 색상 교체 (JS 내부 HTML — grep으로 찾기)
-  - `#1a8c1a` → mint 계열
-  - `#c44` / `#a33` → pink 계열
-  - `#f8f8f8` / `#fafafa` → bg-soft
-  - `#fff8e1` / `#f57c00` (경고 배경) → yellow-soft / yellow-deep
-- [ ] 쿠폰 뱃지 색상 전환 (`#15803d` → mint 계열)
-- [ ] 브라우저 검증
-- [ ] 커밋
+**Phase 4 — 색상 재매핑 ✅**
+- [x] `.bipolar-fill.positive` — `#1a8c1a` → `var(--acc-mint-deep)`
+- [x] `.bipolar-fill.negative` — `#c44` → `var(--acc-pink-deep)`
+- [x] `.stat-num.positive/.negative` — mint-deep / pink-deep
+- [x] `.pending-dot.positive/.negative` — mint / pink
+- [x] `.cost-box-main` — pink-deep border, pink-soft bg
+- [x] `.cost-box-effect` — mint-deep border, mint-soft bg
+- [x] `.cost-formula-discount` — mint-deep
+- [x] `.cost-formula-final` — pink-deep
+- [x] `.card-chip` — mint-soft bg, ink text
+- [x] `.insufficient-tag` — pink bg, black text
+- [x] `.final-grade` — S/A mint-deep, C yellow-deep, D pink-deep
+- [x] `.score-step-pts` — mint-deep
+- [x] `.score-stat` — cyan bg, black text
+- [x] `.inv-tab-badge` — pink
+- [x] `.rp-bal-num.zero` — mint-deep
+- [x] `.rp-bucket-num .waste` — pink-deep
+- [x] `.gameover-resource-num` — pink-deep
+- [x] JS `gaugeColorByPct` — mint/yellow/yellow-deep/pink
+- [x] JS `gradeColor` — mint/black/yellow-deep/pink-deep
+- [x] 브라우저 검증
+- [x] 커밋 + 푸시 (a0915f8)
 
 ### Phase 5 — 인라인 하이라이트 + 손글씨
 
@@ -113,5 +128,5 @@
 
 ### 볼트 노트 갱신
 
-- [ ] 세션 체크리스트 갱신
-- [ ] DN 오늘의 요청 등록
+- [x] 세션 체크리스트 갱신
+- [x] DN 오늘의 요청 등록

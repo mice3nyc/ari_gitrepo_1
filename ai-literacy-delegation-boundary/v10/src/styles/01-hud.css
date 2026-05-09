@@ -1,0 +1,85 @@
+/* ===== Resource Header Bar (상단 가로 — 시간/에너지) ===== */
+/* ===== Panel Row (좌/우 분할 컨테이너 — sticky) ===== */
+.panel-row { display:none; gap:12px; position:sticky; top:0; z-index:100; max-width:1100px; width:calc(100% - 48px); padding:8px 0; background:transparent; }
+.panel-row.visible { display:flex; }
+
+/* ===== 경험치 + 레벨 표시 (좌측 패널 상단 — Phase 4) ===== */
+.exp-display { display:flex; flex-direction:column; gap:4px; padding:2px 4px 6px; }
+.exp-header { display:flex; align-items:baseline; justify-content:space-between; }
+.exp-level { font-size:15px; font-weight:700; line-height:1; color:#111; }
+.exp-bar { height:6px; width:100%; background:#e0e0e0; overflow:hidden; }
+.exp-bar-fill { height:100%; background:#111; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+.exp-num { font-size:10px; color:#888; line-height:1; }
+.exp-divider { height:1px; background:#e8e8e8; width:100%; }
+
+/* ===== 레벨업 애니메이션 ===== */
+@keyframes flashLevelUp { 0%{background-color:#fff8d0} 50%{background-color:#fff3a0} 100%{background-color:#fff} }
+.resource-bar.flash-levelup { animation:flashLevelUp 0.8s ease; }
+
+/* ===== 좌측 패널 — 자원 게이지 (단방향) ===== */
+.resource-bar { flex:1; display:flex; flex-direction:row; gap:0; padding:0; border:var(--border-w) solid var(--ink); background:var(--bg-card); box-shadow:var(--shadow); overflow:hidden; }
+.resource-item { display:flex; flex-direction:column; padding:8px 12px; position:relative; transition:background-color 0.3s; }
+.resource-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:4px; }
+.resource-name { font-size:11px; color:#555; font-weight:600; letter-spacing:0.5px; }
+.resource-num { font-size:15px; font-weight:700; line-height:1; transition:all 0.3s; }
+.resource-gauge { height:8px; width:100%; background:var(--bg-page); border:2px solid var(--ink); overflow:hidden; }
+.resource-gauge-fill { height:100%; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1), background-color 0.6s ease; background:#555; }
+.resource-change-indicator { font-size:12px; font-weight:700; position:absolute; top:50%; right:-4px; transform:translateY(-50%); opacity:0; white-space:nowrap; pointer-events:none; }
+.resource-change-indicator.show { opacity:1; animation:changeFloat 1.8s ease forwards; }
+.resource-change-indicator.up { color:#1a8c1a; }
+.resource-change-indicator.down { color:#888; }
+.resource-item.flash-up { animation:flashGreen 0.8s ease; }
+.resource-item.flash-down { animation:flashGray 0.8s ease; }
+@keyframes flashGray { 0%{background-color:rgba(80,80,80,0.10)} 100%{background-color:transparent} }
+
+/* ===== 우측 패널 — 역량(양방향) + 점수 (5/3 — 컷/아이템은 중앙 progress-strip로 분리) ===== */
+.stats-bar { flex:1; display:flex; flex-direction:row; gap:0; padding:0; border:var(--border-w) solid var(--ink); background:var(--bg-card); box-shadow:var(--shadow); overflow:hidden; }
+.stat { display:flex; flex-direction:column; padding:6px 10px; position:relative; transition:background-color 0.3s; }
+.stat-header { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:2px; }
+.stat-name { font-size:11px; color:#111; font-weight:700; }
+.stat-num { font-size:16px; font-weight:700; line-height:1; transition:all 0.3s; }
+
+/* === 양방향 바 (Diverging Bar) — 위임 판단 / 문해력 전용 === */
+.bipolar-gauge { position:relative; height:8px; width:100%; background:var(--bg-card); border:2px solid var(--ink); overflow:hidden; }
+.bipolar-zero { position:absolute; left:50%; top:-2px; bottom:-2px; width:1px; background:#111; z-index:2; }
+.bipolar-fill { position:absolute; top:0; bottom:0; width:0; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1), left 0.3s ease, right 0.3s ease, background-color 0.6s ease; }
+.bipolar-fill.positive { left:50%; right:auto; background:var(--acc-mint-deep); }
+.bipolar-fill.negative { right:50%; left:auto; background:var(--acc-pink-deep); }
+.bipolar-labels { display:flex; justify-content:space-between; font-size:8px; color:#aaa; margin-top:1px; line-height:1; letter-spacing:0.3px; }
+.stat-num.positive { color:var(--acc-mint-deep); }
+.stat-num.negative { color:var(--acc-pink-deep); }
+
+.stat-change-indicator { font-size:13px; font-weight:700; position:absolute; top:50%; right:-4px; transform:translateY(-50%); opacity:0; white-space:nowrap; pointer-events:none; }
+.stat-change-indicator.show { opacity:1; animation:changeFloat 1.8s ease forwards; }
+.stat-change-indicator.up { color:#1a8c1a; }
+.stat-change-indicator.down { color:#c44; }
+@keyframes changeFloat { 0%{opacity:0;transform:translateY(-50%) translateX(0)} 15%{opacity:1;transform:translateY(-50%) translateX(8px)} 70%{opacity:1} 100%{opacity:0;transform:translateY(-50%) translateX(16px)} }
+@keyframes numPulse { 0%{transform:scale(1)} 30%{transform:scale(1.4)} 100%{transform:scale(1)} }
+.stat-num.pulsing { animation:numPulse 0.5s ease; }
+@keyframes flashGreen { 0%{background-color:rgba(26,140,26,0.12)} 100%{background-color:transparent} }
+@keyframes flashRed { 0%{background-color:rgba(204,68,68,0.12)} 100%{background-color:transparent} }
+.stat.flash-up { animation:flashGreen 0.8s ease; }
+.stat.flash-down { animation:flashRed 0.8s ease; }
+
+.stats-divider { height:1px; width:100%; background:#ddd; }
+.score-stat { font-size:12px; font-weight:700; padding:5px 10px; border:var(--border-w) solid var(--ink); background:var(--acc-cyan); color:var(--ink); text-align:center; }
+
+/* 5/3 — 시나리오 화면 헤더 progress-strip (컷 N/6 + 아이템 N개). 학생이 회기 중 자주 보는 자리로 stats-bar에서 분리. */
+.scenario-progress-strip { display:flex; align-items:center; justify-content:space-between; padding:8px 14px; margin:0 0 12px; border:var(--border-w) solid var(--ink); background:var(--bg-soft); box-shadow:var(--shadow); }
+.scenario-progress-strip .sps-cut { font-size:13px; font-weight:700; color:#111; letter-spacing:0.5px; }
+.scenario-progress-strip .sps-cut-num { font-size:18px; font-weight:800; color:#111; }
+.scenario-progress-strip .sps-items { font-size:12px; color:#555; font-weight:600; padding:3px 10px; border:var(--border-w) solid var(--ink); background:var(--bg-card); border-radius:0; }
+.scenario-progress-strip .sps-items.zero { color:#bbb; border-color:#ddd; }
+
+/* ===== 중앙 LV·SCORE 큰 디스플레이 ===== */
+.score-display { flex:0 0 auto; display:flex; flex-direction:column; align-items:stretch; gap:8px; padding:8px 18px; border:var(--border-w) solid var(--ink); background:var(--bg-card); box-shadow:var(--shadow); min-width:180px; }
+.score-display-row { display:flex; flex-direction:row; align-items:center; gap:18px; justify-content:center; }
+.panel-title { display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:#111; letter-spacing:3px; padding:8px 14px; border-right:1.5px solid #111; min-width:52px; }
+.panel-content { flex:1; display:flex; flex-direction:column; }
+.panel-divider { height:1px; background:#ddd; }
+.score-block { display:flex; flex-direction:column; align-items:center; gap:3px; min-width:54px; }
+.display-label { font-size:9px; color:#888; letter-spacing:1.5px; line-height:1; font-weight:700; }
+.display-num { font-size:34px; font-weight:700; color:#111; line-height:1; transition:transform 0.3s, color 0.3s; }
+.display-num.pulsing { animation:numPulse 0.5s ease; }
+.score-vsep { width:1px; height:46px; background:#ddd; }
+
