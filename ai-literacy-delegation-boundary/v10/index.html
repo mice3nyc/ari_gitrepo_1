@@ -601,6 +601,706 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--i
 .gameover-actions button:active { transform:translate(2px,2px); box-shadow:var(--shadow-press); }
 .gameover-actions .gameover-report { background:var(--acc-yellow); color:var(--ink); }
 .gameover-actions .gameover-restart { background:var(--bg-card); color:var(--ink); }
+/* ===== Paperlogy Reference Theme — Marjo-style visual pass ===== */
+:root {
+  --bg-page:#f7f7f1;
+  --bg-card:#fffdf6;
+  --bg-soft:#f3f0e6;
+  --bg-dark:#080808;
+  --ink:#080808;
+  --ink-mute:#333333;
+  --ink-soft:rgba(8,8,8,.54);
+  --acc-yellow:#ffdb31;
+  --acc-cyan:#63d8f1;
+  --acc-mint:#b9eed7;
+  --acc-pink:#ff67a1;
+  --acc-yellow-soft:#fff0a4;
+  --acc-yellow-deep:#b48b00;
+  --acc-cyan-soft:#cbf4fb;
+  --acc-cyan-deep:#17a2c2;
+  --acc-mint-soft:#dcf8eb;
+  --acc-mint-deep:#219b6c;
+  --acc-pink-soft:#ffd4e5;
+  --acc-pink-deep:#d93a75;
+  --border-w:3px;
+  --shadow-offset:7px;
+  --shadow:var(--shadow-offset) var(--shadow-offset) 0 var(--ink);
+  --shadow-press:3px 3px 0 var(--ink);
+  --radius:0;
+}
+
+body {
+  background:
+    linear-gradient(rgba(8,8,8,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(8,8,8,.035) 1px, transparent 1px),
+    var(--bg-page);
+  background-size:24px 24px;
+  color:var(--ink);
+  letter-spacing:0;
+}
+
+body::before {
+  content:"";
+  position:fixed;
+  inset:8px;
+  border:5px solid var(--ink);
+  pointer-events:none;
+  z-index:0;
+}
+
+.container,
+.panel-row,
+.inv-tab,
+.debug-toggle,
+.version {
+  position:relative;
+  z-index:1;
+}
+
+.container {
+  max-width:1180px;
+  padding:24px 32px 96px;
+}
+
+button,
+.choice-card,
+.scenario-card,
+.inv-card {
+  font-family:var(--font-main);
+}
+
+/* ===== Title / Semester screens ===== */
+.title-frame,
+.semester-frame {
+  max-width:1080px;
+  min-height:calc(100vh - 96px);
+  margin:0 auto;
+  padding:32px 36px 64px;
+  background:rgba(255,253,246,.84);
+  border:5px solid var(--ink);
+  box-shadow:12px 12px 0 var(--ink);
+}
+
+.title-frame::before,
+.semester-frame::before {
+  content:"AI LITERACY";
+  display:flex;
+  align-items:center;
+  min-height:72px;
+  margin:0 0 48px;
+  padding:0 28px;
+  background:var(--acc-yellow);
+  border:var(--border-w) solid var(--ink);
+  box-shadow:7px 7px 0 var(--ink);
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:1.5px;
+}
+
+.title-frame h1,
+.semester-frame h1 {
+  max-width:720px;
+  margin:0 0 22px;
+  text-align:left;
+  font-size:56px;
+  line-height:1.08;
+  font-weight:900;
+  letter-spacing:0;
+}
+
+.semester-frame .subtitle {
+  text-align:left;
+  font-size:28px;
+  font-weight:900;
+  color:var(--acc-cyan-deep);
+}
+
+.title-frame h1::first-line,
+.semester-frame h1::first-line {
+  color:var(--ink);
+}
+
+.intro-text {
+  max-width:640px;
+  margin:0 0 28px;
+  padding:0;
+  color:var(--ink-mute);
+  text-align:left;
+  font-size:18px;
+  line-height:1.85;
+  word-break:keep-all;
+}
+
+.host-text {
+  max-width:680px;
+  margin:0 0 28px;
+  padding:26px 30px;
+  text-align:left;
+  background:var(--acc-cyan-soft);
+  border:var(--border-w) solid var(--ink);
+  box-shadow:var(--shadow);
+}
+
+.host-text .host-q,
+.host-text .host-line {
+  color:var(--ink-mute);
+}
+
+.host-text .host-call {
+  font-size:28px;
+  font-weight:900;
+  color:var(--ink);
+}
+
+.tutorial-list {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  margin:0 0 30px;
+}
+
+.tutorial-list li {
+  min-height:98px;
+  margin:0;
+  padding:20px 18px 20px 64px;
+  border:var(--border-w) solid var(--ink);
+  background:var(--bg-card);
+  box-shadow:5px 5px 0 var(--ink);
+  font-size:16px;
+  line-height:1.65;
+}
+
+.tutorial-list li::before {
+  left:18px;
+  top:20px;
+  width:30px;
+  height:30px;
+  border:var(--border-w) solid var(--ink);
+  border-radius:0;
+  background:var(--acc-yellow);
+  font-weight:900;
+}
+
+.start-btn-large,
+.semester-actions .action-main {
+  width:100%;
+  min-height:68px;
+  border:var(--border-w) solid var(--ink);
+  background:var(--acc-cyan);
+  color:var(--ink);
+  box-shadow:var(--shadow);
+  font-size:18px;
+  font-weight:900;
+}
+
+.start-btn-large:hover,
+.semester-actions .action-main:hover,
+.start-btn:hover,
+.advance-btn:hover,
+.next-btn:hover,
+.lvup-confirm:hover,
+.rp-confirm:hover {
+  transform:translate(-3px,-3px);
+  box-shadow:10px 10px 0 var(--ink);
+}
+
+.tutorial-link {
+  color:var(--ink);
+  font-weight:700;
+  text-decoration-thickness:2px;
+  margin-top:18px;
+}
+
+/* ===== Scenario selection ===== */
+.semester-frame .vtag {
+  text-align:left;
+  color:var(--ink-soft);
+}
+
+.progress-bar {
+  height:12px;
+  margin:24px 0 14px;
+  border:var(--border-w) solid var(--ink);
+  background:var(--bg-card);
+  box-shadow:5px 5px 0 var(--ink);
+}
+
+.progress-fill {
+  background:var(--acc-cyan);
+}
+
+.progress-dot {
+  width:13px;
+  height:13px;
+  border:2px solid var(--ink);
+  background:var(--bg-card);
+}
+
+.progress-dot.cleared,
+.progress-dot.next {
+  background:var(--acc-yellow);
+  border-color:var(--ink);
+}
+
+.scenario-list {
+  gap:14px;
+  margin-top:32px;
+}
+
+.scenario-card {
+  min-height:82px;
+  padding:18px 20px;
+  background:var(--bg-card);
+  border:var(--border-w) solid var(--ink);
+  box-shadow:var(--shadow);
+}
+
+.scenario-card:hover:not(.cleared) {
+  transform:translate(-3px,-3px);
+  box-shadow:10px 10px 0 var(--ink);
+  background:#fff;
+  border-color:var(--ink);
+}
+
+.scenario-card .sc-num {
+  width:42px;
+  height:42px;
+  border:var(--border-w) solid var(--ink);
+  border-radius:0;
+  background:var(--acc-cyan);
+  color:var(--ink);
+  font-weight:900;
+}
+
+.scenario-card.next {
+  border:var(--border-w) solid var(--ink);
+  background:var(--acc-yellow-soft);
+}
+
+.scenario-card.next .sc-num {
+  background:var(--acc-pink);
+  color:var(--ink);
+}
+
+.scenario-card .sc-title {
+  font-size:18px;
+  font-weight:900;
+  color:var(--ink);
+}
+
+.scenario-card .sc-meta,
+.scenario-card .sc-mark {
+  color:var(--ink-soft);
+  font-weight:700;
+}
+
+.semester-actions .action-secondary,
+.start-btn,
+.advance-btn,
+.next-btn,
+.lvup-confirm,
+.rp-confirm,
+.gameover-actions button,
+.confirm-actions button {
+  border:var(--border-w) solid var(--ink);
+  box-shadow:var(--shadow);
+  font-weight:900;
+}
+
+/* ===== Sticky dashboard ===== */
+.panel-row {
+  top:12px;
+  max-width:1180px;
+  width:calc(100% - 64px);
+  gap:16px;
+  padding:12px;
+  background:rgba(255,253,246,.88);
+  border:var(--border-w) solid var(--ink);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(8px);
+}
+
+.resource-bar,
+.stats-bar,
+.score-display,
+.scenario-progress-strip {
+  border:var(--border-w) solid var(--ink);
+  background:var(--bg-card);
+  box-shadow:5px 5px 0 var(--ink);
+}
+
+.panel-title {
+  background:var(--acc-yellow);
+  color:var(--ink);
+  font-weight:900;
+  border-right:var(--border-w) solid var(--ink);
+}
+
+.score-display {
+  background:var(--acc-cyan);
+}
+
+.display-label,
+.resource-name,
+.bipolar-labels,
+.exp-num {
+  color:var(--ink-soft);
+  font-weight:800;
+}
+
+.display-num,
+.resource-num,
+.stat-num {
+  font-weight:900;
+}
+
+.resource-gauge,
+.bipolar-gauge,
+.exp-bar {
+  border:2px solid var(--ink);
+  background:#fff;
+}
+
+.resource-gauge-fill,
+.exp-bar-fill {
+  background:var(--ink);
+}
+
+.bipolar-fill.positive {
+  background:var(--acc-mint-deep);
+}
+
+.bipolar-fill.negative {
+  background:var(--acc-pink-deep);
+}
+
+.scenario-progress-strip {
+  margin:0 0 18px;
+  background:var(--acc-yellow);
+}
+
+.scenario-progress-strip .sps-items {
+  border:var(--border-w) solid var(--ink);
+  background:var(--bg-card);
+}
+
+/* ===== Comic board ===== */
+.binder-divider {
+  min-height:76px;
+  margin:22px 0 26px;
+  background:var(--acc-yellow);
+  border:var(--border-w) solid var(--ink);
+  box-shadow:var(--shadow);
+}
+
+.binder-title {
+  font-size:16px;
+  font-weight:900;
+}
+
+.binder-subtitle {
+  color:var(--ink-soft);
+  font-weight:700;
+}
+
+.panels-grid {
+  gap:18px;
+}
+
+.panels-row2 {
+  margin-top:18px;
+}
+
+.panel {
+  min-height:430px;
+  background:rgba(255,253,246,.72);
+  border:var(--border-w) dashed rgba(8,8,8,.42);
+}
+
+.panel.active,
+.panel.done {
+  background:var(--bg-card);
+  border:var(--border-w) solid var(--ink);
+  box-shadow:var(--shadow);
+}
+
+.panel-image {
+  border-bottom:var(--border-w) solid var(--ink);
+  background:
+    linear-gradient(rgba(8,8,8,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(8,8,8,.035) 1px, transparent 1px),
+    var(--acc-cyan-soft);
+  background-size:16px 16px;
+}
+
+.cut-label {
+  color:rgba(8,8,8,.12);
+  font-size:72px;
+  font-weight:900;
+}
+
+.cut-num,
+.panel-place {
+  border:2px solid var(--ink);
+  background:var(--acc-yellow);
+  color:var(--ink);
+  font-weight:900;
+}
+
+.panel-body {
+  padding:16px 18px;
+  font-size:14px;
+  line-height:1.7;
+}
+
+.panel-body .highlight {
+  font-size:18px;
+  font-weight:900;
+}
+
+.panel-body .core-q {
+  margin:12px 0;
+  padding:12px 0 0;
+  border-top:2px dashed rgba(8,8,8,.18);
+  font-weight:900;
+}
+
+/* ===== Choices / costs ===== */
+.choices-area {
+  gap:12px;
+  padding:12px;
+}
+
+.choices-q {
+  padding:0 2px 4px;
+  font-size:16px;
+  font-weight:900;
+}
+
+.choice-card {
+  border:var(--border-w) solid var(--ink);
+  background:var(--bg-card);
+  box-shadow:5px 5px 0 var(--ink);
+}
+
+.choice-card:hover {
+  transform:translate(-3px,-3px);
+  box-shadow:10px 10px 0 var(--ink);
+}
+
+.choice-header {
+  gap:12px;
+  padding:14px 16px 8px;
+}
+
+.choice-num {
+  width:34px;
+  height:34px;
+  border:var(--border-w) solid var(--ink);
+  background:var(--acc-yellow);
+  font-weight:900;
+}
+
+.choice-text {
+  font-size:16px;
+  font-weight:900;
+}
+
+.choice-desc {
+  color:var(--ink-soft);
+  font-size:12px;
+  line-height:1.55;
+}
+
+.choice-narrative {
+  margin:6px 14px 14px;
+  padding:10px 12px;
+  background:var(--acc-cyan-soft);
+  border:2px solid var(--ink);
+  color:var(--ink-mute);
+}
+
+.choice-cost,
+.cost-formula-box,
+.cost-simple {
+  border-top:2px dashed rgba(8,8,8,.18);
+}
+
+.cost-box-main,
+.cost-box-effect,
+.cost-card-chips .card-chip {
+  border:2px solid var(--ink);
+}
+
+.cost-box-main {
+  background:var(--acc-pink-soft);
+}
+
+.cost-box-effect {
+  background:var(--acc-mint-soft);
+}
+
+/* ===== Inventory / modals / report ===== */
+.inv-tab {
+  background:var(--acc-cyan);
+  border:var(--border-w) solid var(--ink);
+  box-shadow:-7px 7px 0 var(--ink);
+}
+
+.inv-tab:hover {
+  background:var(--acc-yellow);
+}
+
+.inv-panel,
+.modal-card,
+.gameover-card,
+.coupon-box,
+.card-reward-card,
+.recovery-card,
+.report-stat-box,
+.report-comp-type,
+.report-cards-section,
+.report-narrative {
+  border:var(--border-w) solid var(--ink);
+  background:var(--bg-card);
+  box-shadow:var(--shadow);
+}
+
+.inv-panel-header {
+  background:var(--acc-yellow);
+  border-bottom:var(--border-w) solid var(--ink);
+}
+
+.inv-card,
+.report-card-row,
+.final-item,
+.awareness,
+.score-breakdown {
+  border:var(--border-w) solid var(--ink);
+  background:var(--bg-card);
+  box-shadow:4px 4px 0 var(--ink);
+}
+
+.report-overlay {
+  padding:24px 0 48px;
+}
+
+.report-inner h2 {
+  font-size:42px;
+  line-height:1.1;
+  font-weight:900;
+}
+
+.report-subtitle {
+  color:var(--ink-mute);
+  font-size:16px;
+}
+
+.report-narrative-cardtype {
+  border:2px solid var(--ink);
+}
+
+.comic-scene {
+  border-top:var(--border-w) solid var(--ink);
+}
+
+.debug-toggle {
+  background:var(--ink);
+  border:2px solid var(--ink);
+  box-shadow:3px 3px 0 rgba(0,0,0,.25);
+}
+
+.version {
+  color:rgba(8,8,8,.28);
+}
+
+@media (max-width:900px) {
+  body::before {
+    inset:5px;
+    border-width:3px;
+  }
+
+  .container {
+    padding:16px 18px 80px;
+  }
+
+  .title-frame,
+  .semester-frame {
+    min-height:auto;
+    padding:20px 18px 32px;
+    border-width:3px;
+    box-shadow:7px 7px 0 var(--ink);
+  }
+
+  .title-frame::before,
+  .semester-frame::before {
+    min-height:58px;
+    margin-bottom:30px;
+    padding:0 18px;
+  }
+
+  .title-frame h1,
+  .semester-frame h1 {
+    font-size:34px;
+  }
+
+  .intro-text {
+    font-size:15px;
+  }
+
+  .tutorial-list {
+    grid-template-columns:1fr;
+  }
+
+  .panel-row {
+    width:calc(100% - 36px);
+    top:8px;
+    gap:10px;
+  }
+
+  .resource-bar,
+  .stats-bar {
+    flex-direction:column;
+  }
+
+  .panel-title {
+    border-right:0;
+    border-bottom:var(--border-w) solid var(--ink);
+  }
+
+  .panel {
+    min-height:0;
+  }
+
+  .report-grid-4 {
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media (max-width:560px) {
+  .title-frame h1,
+  .semester-frame h1 {
+    font-size:28px;
+  }
+
+  .host-text {
+    padding:18px;
+  }
+
+  .host-text .host-call {
+    font-size:22px;
+  }
+
+  .tutorial-list li {
+    padding-left:58px;
+    font-size:14px;
+  }
+
+  .report-grid-4,
+  .report-grid {
+    grid-template-columns:1fr;
+  }
+}
 </style>
 </head>
 <body>

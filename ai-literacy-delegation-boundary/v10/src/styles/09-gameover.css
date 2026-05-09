@@ -1,0 +1,17 @@
+/* ===== GAME OVER 모달 (5/3 정정 — 자원 부족) ===== */
+.gameover-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:1100; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
+.gameover-overlay.visible { opacity:1; pointer-events:auto; }
+.gameover-overlay.hidden { display:none; }
+.gameover-card { background:var(--bg-card); border:var(--border-w) solid var(--ink); padding:24px 28px; width:min(440px,90vw); box-shadow:8px 8px 0 var(--ink); transform:translateY(8px); transition:transform 0.25s ease; font-family:var(--font-main); text-align:center; }
+.gameover-overlay.visible .gameover-card { transform:translateY(0); }
+.gameover-title { font-size:26px; font-weight:800; color:#111; letter-spacing:2px; margin-bottom:10px; }
+.gameover-body { font-size:13px; color:#333; line-height:1.6; margin-bottom:14px; }
+.gameover-resources { display:flex; justify-content:center; gap:14px; margin-bottom:18px; padding:10px; background:var(--bg-soft); border:var(--border-w) dashed var(--ink); }
+.gameover-resource { display:flex; flex-direction:column; align-items:center; }
+.gameover-resource-label { font-size:10px; color:var(--ink-mute); letter-spacing:1px; font-weight:700; }
+.gameover-resource-num { font-size:20px; font-weight:800; color:var(--acc-pink-deep); }
+.gameover-actions { display:flex; gap:10px; }
+.gameover-actions button { flex:1; padding:12px 16px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; transition:transform 0.05s, box-shadow 0.05s; border:var(--border-w) solid var(--ink); box-shadow:var(--shadow); }
+.gameover-actions button:active { transform:translate(2px,2px); box-shadow:var(--shadow-press); }
+.gameover-actions .gameover-report { background:var(--acc-yellow); color:var(--ink); }
+.gameover-actions .gameover-restart { background:var(--bg-card); color:var(--ink); }

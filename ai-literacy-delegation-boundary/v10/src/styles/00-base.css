@@ -1,0 +1,24 @@
+
+@import url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
+
+:root {
+  --bg-page:#d0d0d0; --bg-card:#ffffff; --bg-soft:#f4f1ea; --bg-dark:#000000;
+  --ink:#000000; --ink-mute:#3c3c3c; --ink-soft:rgba(0,0,0,.55);
+  --acc-yellow:#ffd93d; --acc-cyan:#66d9ef; --acc-mint:#a8e6cf; --acc-pink:#ff6b9d;
+  --acc-yellow-soft:rgba(255,217,61,0.70); --acc-yellow-deep:#d9b620;
+  --acc-cyan-soft:rgba(102,217,239,0.70); --acc-cyan-deep:#2ba8c6;
+  --acc-mint-soft:rgba(168,230,207,0.70); --acc-mint-deep:#5fbf95;
+  --acc-pink-soft:rgba(255,107,157,0.70); --acc-pink-deep:#d63f7a;
+  --border-w:3px; --shadow-offset:4px;
+  --shadow:var(--shadow-offset) var(--shadow-offset) 0 var(--ink);
+  --shadow-press:2px 2px 0 var(--ink);
+  --radius:0;
+  --font-main:"Paperlogy","Pretendard",system-ui,sans-serif;
+  --font-hand:"Nanum Pen Script","Caveat",cursive;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font-main); background: var(--bg-page); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+.container { max-width: 1100px; width: 100%; padding: 0 24px 80px; }
+

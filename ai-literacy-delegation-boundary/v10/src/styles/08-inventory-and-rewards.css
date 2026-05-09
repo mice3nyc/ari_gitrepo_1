@@ -1,0 +1,87 @@
+/* ===== 역량 카드 인벤토리 (§7.5) ===== */
+.inv-tab { position:fixed; top:50%; right:-6px; transform:translateY(-50%); z-index:200; padding:18px 22px 18px 18px; border:2px solid #111; background:#fff; color:#111; font-family:inherit; cursor:pointer; box-shadow:-4px 4px 0 var(--ink); transition:transform 0.05s, box-shadow 0.05s; border-radius:0; min-width:108px; text-align:left; }
+.inv-tab:hover { background:#f8f8f8; transform:translateY(-50%) translateX(-4px); }
+.inv-tab-name { display:block; font-size:15px; font-weight:700; letter-spacing:1.5px; line-height:1.2; margin-bottom:4px; }
+.inv-tab-desc { display:block; font-size:11px; color:#666; font-weight:500; letter-spacing:0.5px; line-height:1.3; }
+.inv-tab-badge { position:absolute; top:8px; right:8px; width:10px; height:10px; background:var(--acc-pink); border-radius:50%; box-shadow:0 0 0 2px var(--bg-card); }
+.inv-tab-badge.hidden { display:none; }
+.inv-panel-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.25); z-index:300; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
+.inv-panel-backdrop.open { opacity:1; pointer-events:auto; }
+.inv-panel { position:fixed; top:0; right:0; height:100vh; width:320px; max-width:90vw; background:#fff; border-left:2px solid #111; box-shadow:-4px 0 0 #111; z-index:310; transform:translateX(100%); transition:transform 0.35s cubic-bezier(0.34,1.2,0.64,1); display:flex; flex-direction:column; }
+.inv-panel.open { transform:translateX(0); }
+.inv-panel-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:2px solid #111; }
+.inv-panel-title { font-size:16px; font-weight:700; letter-spacing:1px; }
+.inv-panel-close { background:none; border:1.5px solid #111; width:28px; height:28px; font-size:16px; font-weight:700; cursor:pointer; line-height:1; }
+.inv-panel-close:hover { background:#f0f0f0; }
+.inv-panel-body { flex:1; overflow-y:auto; padding:16px 20px; }
+.inv-empty { font-size:13px; color:#888; text-align:center; padding:40px 12px; line-height:1.7; }
+/* 5/3 — inv-card 재배치: 좌측 색띠(카드색+카운트, 흰 글씨) + 우측 본문(라벨 큰 글씨) */
+.inv-card { display:flex; flex-direction:column; margin-bottom:8px; border:1.5px solid #111; background:#fff; box-shadow:var(--shadow); cursor:pointer; transition:transform 0.05s, box-shadow 0.05s; border-radius:0; overflow:hidden; }
+.inv-card:hover { transform:translate(-1px,-1px); box-shadow:1px 3px 0 #111; }
+.inv-card-row { display:flex; align-items:stretch; gap:0; min-height:54px; }
+.inv-card-count { font-size:22px; font-weight:800; color:#fff; background:#888; flex:0 0 50px; display:flex; align-items:center; justify-content:center; line-height:1; letter-spacing:0.3px; }
+.inv-card-body { flex:1; display:flex; align-items:center; padding:12px 14px; }
+.inv-card-label { font-size:18px; font-weight:700; color:#111; line-height:1.25; word-break:keep-all; }
+/* 5/3 — expand 시각 신호 (chevron). 닫힘 ⌄ → 열림 180deg 회전 */
+.inv-card-chevron { flex:0 0 auto; display:flex; align-items:center; justify-content:center; padding:0 14px 0 4px; font-size:16px; color:#888; line-height:1; transition:transform 0.25s ease; transform-origin:center; }
+.inv-card.expanded .inv-card-chevron { transform:rotate(180deg); }
+.inv-card-detail { font-size:11px; color:#666; padding:8px 14px 10px; border-top:1px dashed #ddd; line-height:1.6; display:none; background:#fafafa; }
+.inv-card.expanded .inv-card-detail { display:block; }
+/* 5/3 — expand 영역 카드 의미 박스 (좌측 색띠 + 본문) */
+.inv-card-meaning { display:none; padding:12px 14px; border-top:1px dashed #ddd; border-left:4px solid #888; background:#fff; }
+.inv-card.expanded .inv-card-meaning { display:block; }
+.inv-card-meaning-label { font-size:14px; font-weight:800; color:#111; margin-bottom:4px; }
+.inv-card-meaning-def { font-size:12px; font-weight:600; color:#333; margin-bottom:8px; line-height:1.5; word-break:keep-all; }
+.inv-card-meaning-desc { font-size:12px; color:#555; line-height:1.7; word-break:keep-all; white-space:pre-line; }
+.inv-card-detail-title { font-size:10px; font-weight:700; color:#888; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+/* ===== reward 팝업 — 단건 컨펌 (§7.6, 5/3 세션278) ===== */
+.card-reward-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:400; display:flex; align-items:center; justify-content:center; pointer-events:auto; }
+.card-reward-overlay.hidden { display:none; }
+/* 5/3 — Pop In! 애니메이션 (fadein 폐기): scale + rotate 오버슛 + box-shadow pulse
+   5/3 정정 — 카드 N장 동시 펼침 (5점 별/W 패턴 좌표). 각 카드마다 다른 (top,left) %로 배치. */
+.card-reward-card { position:fixed; width:220px; padding:18px 18px 14px 22px; border:2px solid #111; background:#fff; box-shadow:var(--shadow); border-radius:0; opacity:0; z-index:405; border-left-width:22px;
+  /* 기본: 중앙 (1장 분기 / fallback). top/left는 JS에서 인라인으로 덮어씀
+     5/3 정정 — 폭 280→220, 좌표 압축에 맞춰 카드도 작게 */
+  top:50%; left:50%; transform:translate(-50%,-50%) scale(0.3) rotate(-5deg);
+}
+.card-reward-card.appear { animation:cardPopIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards, cardGlow 0.6s ease 0.15s; }
+@keyframes cardPopIn {
+  0%   { opacity:0; transform:translate(-50%,-50%) scale(0.3) rotate(-5deg); }
+  60%  { opacity:1; transform:translate(-50%,-50%) scale(1.15) rotate(2deg); }
+  80%  { transform:translate(-50%,-50%) scale(0.96) rotate(-1deg); }
+  100% { opacity:1; transform:translate(-50%,-50%) scale(1) rotate(0deg); }
+}
+@keyframes cardGlow {
+  0%   { box-shadow:0 4px 0 #111, 0 0 0 0 rgba(255,220,80,0); }
+  35%  { box-shadow:0 4px 0 #111, 0 0 36px 14px rgba(255,220,80,0.55); }
+  100% { box-shadow:0 4px 0 #111, 0 0 0 0 rgba(255,220,80,0); }
+}
+.card-reward-card.travel { opacity:0; transition:opacity 0.35s ease-in, transform 0.35s cubic-bezier(0.55,0,0.85,0.3); }
+.card-reward-tag { font-size:9px; color:#888; letter-spacing:1.4px; font-weight:700; margin-bottom:5px; }
+.card-reward-label { font-size:19px; font-weight:700; color:#111; margin-bottom:8px; letter-spacing:0.4px; }
+.card-reward-divider { height:1px; background:#ddd; margin:6px 0 8px; }
+.card-reward-note { font-size:11px; color:#555; line-height:1.65; margin-bottom:12px; }
+.card-reward-confirm { display:block; width:100%; padding:8px 12px; border:1.5px solid #111; background:#111; color:#fff; font-family:inherit; font-size:12px; font-weight:700; letter-spacing:1px; cursor:pointer; transition:background 0.15s ease; }
+.card-reward-confirm:hover { background:#333; }
+.card-reward-confirm:disabled { background:#888; border-color:#888; cursor:default; }
+/* 성장 카드 (회복력/도전력) 전용 스타일 */
+.card-reward-card.growth-card { border:var(--border-w) dashed var(--ink); border-left-width:var(--border-w); background:var(--bg-soft); box-shadow:var(--shadow); }
+.growth-symbol { font-size:32px; text-align:center; margin-bottom:6px; line-height:1; color:#546e7a; }
+/* 회복력 중앙 오버레이 */
+.recovery-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:410; display:flex; align-items:center; justify-content:center; animation:fadeIn 0.3s ease; }
+.recovery-overlay.hidden { display:none; }
+.recovery-card { width:300px; padding:28px 24px; border:var(--border-w) dashed var(--ink); background:var(--bg-soft); border-radius:0; text-align:center; box-shadow:var(--shadow); animation:recoveryPopIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; opacity:0; }
+@keyframes recoveryPopIn {
+  0%   { opacity:0; transform:scale(0.3); }
+  60%  { opacity:1; transform:scale(1.08); }
+  100% { opacity:1; transform:scale(1); }
+}
+.recovery-card .growth-symbol { font-size:48px; margin-bottom:12px; }
+.recovery-card-title { font-size:20px; font-weight:700; color:#546e7a; margin-bottom:6px; }
+.recovery-card-desc { font-size:13px; color:#666; line-height:1.5; margin-bottom:20px; }
+.recovery-card-btn { display:block; width:100%; padding:12px; margin-bottom:8px; font-family:inherit; font-size:14px; font-weight:700; border-radius:0; cursor:pointer; transition:all 0.15s; }
+.recovery-card-btn.primary { background:var(--acc-yellow); color:var(--ink); border:var(--border-w) solid var(--ink); box-shadow:var(--shadow); }
+.recovery-card-btn.primary:active { transform:translate(2px,2px); box-shadow:var(--shadow-press); }
+.recovery-card-btn.secondary { background:var(--bg-card); color:var(--ink); border:var(--border-w) solid var(--ink); font-weight:600; }
+.recovery-card-btn.secondary:hover { border-color:#999; color:#666; }
+.no-card-notice { margin-top:10px; padding:8px 12px; background:var(--bg-soft); border:var(--border-w) solid var(--ink); font-size:12px; color:var(--ink); }
