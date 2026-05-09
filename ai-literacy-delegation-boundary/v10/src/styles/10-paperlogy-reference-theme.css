@@ -116,7 +116,8 @@ button,
   padding:0;
   color:var(--ink-mute);
   text-align:left;
-  font-size:18px;
+  font-size:22px;
+  font-weight:600;
   line-height:1.85;
   word-break:keep-all;
 }
@@ -129,6 +130,7 @@ button,
   background:var(--acc-cyan-soft);
   border:var(--border-w) solid var(--ink);
   box-shadow:var(--shadow);
+  font-weight:600;
 }
 
 .host-text .host-q,

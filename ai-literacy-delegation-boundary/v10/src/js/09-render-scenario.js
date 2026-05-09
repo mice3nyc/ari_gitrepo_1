@@ -5,9 +5,11 @@ var container=document.getElementById('main-container');
 
 function showStats(){
   document.getElementById('panel-row').classList.add('visible');
+  var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='';
 }
 function hideStats(){
   document.getElementById('panel-row').classList.remove('visible');
+  var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='none';
 }
 
 // 자원 게이지 업데이트 (작업 2)
@@ -235,10 +237,8 @@ function showTitleScreen(){
   h+='<li>결과물 점수에 따라 등급이 매겨지고, 받은 토큰을 <span class="kw-time">시간</span>이나 <span class="kw-energy">에너지</span>에 직접 넣는다.</li>';
   h+='<li>경험이 쌓이면 다음 선택의 <span class="kw-time">시간</span>·<span class="kw-energy">에너지</span> 비용이 줄어든다.</li>';
   h+='</ol>';
-  // 버튼 두 개: 게임 시작 / 튜토리얼 다시 보기
   h+='<div class="title-actions">';
   h+='<button class="start-btn-large" onclick="enterFromTitle()">게임 시작</button>';
-  h+='<button class="tutorial-link" onclick="showTitleScreen()">튜토리얼 다시 보기</button>';
   h+='</div>';
   // 캐논 도입·진행자 톤은 별도 자리로 이동 (README 또는 ending). v0.8.x 결정 자리.
   // 폐기 카피 (참고용 주석):
@@ -277,7 +277,6 @@ function showStartScreen(){
   var h='<div class="semester-frame">';
   h+='<h1>AI 리터러시: 위임의 경계</h1>';
   h+='<div class="subtitle">이건 AI한테 맡겨도 돼?</div>';
-  h+='<div class="vtag">v1.0 — 한 학생의 한 학기</div>';
   if(allDone){
     h+='<div style="max-width:420px;margin:8px auto 24px;padding:14px 24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);text-align:center;font-family:var(--font-hand);font-size:26px;font-weight:400;color:var(--ink);transform:rotate(-1.5deg);letter-spacing:1px;">AI 리터러시 시나리오를 모두 완료했습니다!</div>';
   }

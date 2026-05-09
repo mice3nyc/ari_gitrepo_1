@@ -472,13 +472,13 @@ function showFinalReport(){
       h+='</div>';
     }
 
-    h+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:10px 14px 14px;">';
+    h+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;padding:14px 14px 18px;">';
     for(var c=1;c<=5;c++){
       var src=getCutImageFor(r.scenarioId, r.leaf, c);
       var cap=getCutCaptionFor(r.scenarioId, r.leaf, c);
       h+='<div>';
-      if(src)h+='<div style="aspect-ratio:1/1;position:relative;overflow:hidden;border:2px solid var(--ink);"><img src="'+src+'" alt="컷'+c+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display=\'none\'"><div style="position:absolute;inset:0;box-shadow:inset 0 0 0 5px #fff,inset 0 0 0 6px var(--ink);pointer-events:none;"></div></div>';
-      if(cap)h+='<div style="font-family:var(--font-hand);font-size:16px;line-height:1.3;color:var(--ink-mute);margin-top:4px;word-break:keep-all;">'+cap+'</div>';
+      if(src)h+='<div style="aspect-ratio:1/1;position:relative;overflow:hidden;border:var(--border-w) solid var(--ink);box-shadow:4px 4px 0 var(--ink);background:var(--bg-card);"><img src="'+src+'" alt="컷'+c+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display=\'none\'"></div>';
+      if(cap)h+='<div style="font-family:var(--font-hand);font-size:16px;line-height:1.3;color:var(--ink-mute);margin-top:6px;word-break:keep-all;">'+cap+'</div>';
       h+='</div>';
     }
     h+='</div>';

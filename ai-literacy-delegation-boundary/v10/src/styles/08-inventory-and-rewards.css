@@ -1,5 +1,5 @@
 /* ===== 역량 카드 인벤토리 (§7.5) ===== */
-.inv-tab { position:fixed; top:50%; right:-6px; transform:translateY(-50%); z-index:200; padding:18px 22px 18px 18px; border:2px solid #111; background:#fff; color:#111; font-family:inherit; cursor:pointer; box-shadow:-4px 4px 0 var(--ink); transition:transform 0.05s, box-shadow 0.05s; border-radius:0; min-width:108px; text-align:left; }
+.inv-tab { position:fixed; top:50%; right:-6px; transform:translateY(-50%); z-index:200; padding:18px 22px 18px 18px; border:2px solid #111; background:#fff; color:#111; font-family:inherit; cursor:pointer; box-shadow:-4px 4px 0 var(--ink); transition:transform 0.05s, box-shadow 0.05s; border-radius:0; min-width:108px; text-align:left; display:none; }
 .inv-tab:hover { background:#f8f8f8; transform:translateY(-50%) translateX(-4px); }
 .inv-tab-name { display:block; font-size:15px; font-weight:700; letter-spacing:1.5px; line-height:1.2; margin-bottom:4px; }
 .inv-tab-desc { display:block; font-size:11px; color:#666; font-weight:500; letter-spacing:0.5px; line-height:1.3; }
