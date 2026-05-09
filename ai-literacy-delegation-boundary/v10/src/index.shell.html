@@ -101,15 +101,15 @@
 <!-- GAME OVER 모달 (5/3 정정 — 자원 부족 시 / texts.yaml inject) -->
 <div id="gameover-modal" class="gameover-overlay hidden">
   <div class="gameover-card">
-    <div class="gameover-title" id="gameover-title">GAME OVER</div>
-    <div class="gameover-body" id="gameover-body">자원이 부족해요.<br>시간과 에너지가 모자라 더 이상 선택할 수 없습니다.</div>
+    <div class="gameover-title" id="gameover-title">자원이 부족!</div>
+    <div class="gameover-body" id="gameover-body">자원이 부족해서 더 이상 진행할 수 없습니다.</div>
     <div class="gameover-resources">
       <div class="gameover-resource"><span class="gameover-resource-label" id="gameover-time-label">시간</span><span class="gameover-resource-num" id="gameover-time">0</span></div>
       <div class="gameover-resource"><span class="gameover-resource-label" id="gameover-energy-label">에너지</span><span class="gameover-resource-num" id="gameover-energy">0</span></div>
     </div>
     <div class="gameover-actions">
-      <button class="gameover-report" id="gameover-btn-report" onclick="gameOverShowReport()">리포트 보기</button>
-      <button class="gameover-restart" id="gameover-btn-restart" onclick="gameOverRestart()">학기 처음부터</button>
+      <button class="gameover-report" id="gameover-btn-report" onclick="gameOverShowReport()">AI 리터러시 성장 리포트</button>
+      <button class="gameover-restart" id="gameover-btn-restart" onclick="gameOverRestart()">처음부터 다시 시작하기</button>
     </div>
   </div>
 </div>

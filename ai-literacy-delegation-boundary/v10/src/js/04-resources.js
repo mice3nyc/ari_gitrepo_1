@@ -46,7 +46,11 @@ function _rawReviewCost(leaf){
 // multiplier 적용 (UI·소비 양쪽이 같은 값을 사용하도록 한 군데서 처리)
 function _applyMult(c){
   var m=(typeof CONFIG.resourceCostMultiplier==='number')?CONFIG.resourceCostMultiplier:1;
-  return {time:Math.round(c.time*m), energy:Math.round(c.energy*m)};
+  var sm=1;
+  if(gameState&&gameState.currentScenarioId&&CONFIG.scenarioCostMultiplier){
+    sm=CONFIG.scenarioCostMultiplier[gameState.currentScenarioId]||1;
+  }
+  return {time:Math.round(c.time*m*sm), energy:Math.round(c.energy*m*sm)};
 }
 // v0.9 §20 — 이중 할인: 축 숙련도 + 카드 태그 매칭
 // 축 숙련도: 위임→시간, 도메인→에너지 (기존, 폭 축소)
@@ -105,7 +109,7 @@ function _calculateCardEnergyDiscount(discountTags){
 }
 // v0.9 세션322: 고정 할인 — 역량 점수 = 할인액. 비율 상한 폐기.
 // v1.0 세션325: tier1 할인 끔 + 바닥값 도입 (덱스 QA)
-var DISCOUNT_FLOOR={tier1:{time:4,energy:3},tier2:{time:3,energy:2},review:{time:3,energy:2}};
+var DISCOUNT_FLOOR={tier1:{time:0,energy:0},tier2:{time:5,energy:4},review:{time:4,energy:3}};
 function _applyDiscount(c,stageType,choiceId,selectedCard){
   var dlg=(gameState&&gameState.competencies)?gameState.competencies.delegationChoice.value||0:0;
   var knl=(gameState&&gameState.competencies)?gameState.competencies.knowledge.value||0:0;

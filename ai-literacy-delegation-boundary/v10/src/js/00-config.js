@@ -15,7 +15,8 @@ var CONFIG={
   // v0.4 신규 (SPEC §12) — Phase 3 이후 사용
   resourceMaxStart:{time:100,energy:100},
   // v0.5 — 비용 multiplier (데이터 보존 + 튜닝 조정용). 0.6 = 적정 선택 시 1.7~3 시나리오 버팀
-  resourceCostMultiplier:1.0,  // v0.6 5/3: 폐지 (raw에 0.6 곱한 값으로 재조정 완료, MIGRATION-VALUES.md §4)
+  resourceCostMultiplier:1.25,
+  scenarioCostMultiplier:{selfintro:1.0,groupwork:1.1,eorinwangja:1.15,career:1.25,studyplan:1.3},
   // v0.5 — 시나리오 종료 시 자원 자동 회복 OFF ([[요청.26.0429.1925-v05회복없는학기]])
   autoRecoverOnEnd:false,
   recoverBase:0, // v0.9: 등급별 차등 폐기, 에너지 고정 +18

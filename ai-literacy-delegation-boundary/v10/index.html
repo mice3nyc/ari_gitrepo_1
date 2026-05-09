@@ -1440,15 +1440,15 @@ button,
 <!-- GAME OVER 모달 (5/3 정정 — 자원 부족 시 / texts.yaml inject) -->
 <div id="gameover-modal" class="gameover-overlay hidden">
   <div class="gameover-card">
-    <div class="gameover-title" id="gameover-title">GAME OVER</div>
-    <div class="gameover-body" id="gameover-body">자원이 부족해요.<br>시간과 에너지가 모자라 더 이상 선택할 수 없습니다.</div>
+    <div class="gameover-title" id="gameover-title">자원이 부족!</div>
+    <div class="gameover-body" id="gameover-body">자원이 부족해서 더 이상 진행할 수 없습니다.</div>
     <div class="gameover-resources">
       <div class="gameover-resource"><span class="gameover-resource-label" id="gameover-time-label">시간</span><span class="gameover-resource-num" id="gameover-time">0</span></div>
       <div class="gameover-resource"><span class="gameover-resource-label" id="gameover-energy-label">에너지</span><span class="gameover-resource-num" id="gameover-energy">0</span></div>
     </div>
     <div class="gameover-actions">
-      <button class="gameover-report" id="gameover-btn-report" onclick="gameOverShowReport()">리포트 보기</button>
-      <button class="gameover-restart" id="gameover-btn-restart" onclick="gameOverRestart()">학기 처음부터</button>
+      <button class="gameover-report" id="gameover-btn-report" onclick="gameOverShowReport()">AI 리터러시 성장 리포트</button>
+      <button class="gameover-restart" id="gameover-btn-restart" onclick="gameOverRestart()">처음부터 다시 시작하기</button>
     </div>
   </div>
 </div>
@@ -1524,7 +1524,8 @@ var CONFIG={
   // v0.4 신규 (SPEC §12) — Phase 3 이후 사용
   resourceMaxStart:{time:100,energy:100},
   // v0.5 — 비용 multiplier (데이터 보존 + 튜닝 조정용). 0.6 = 적정 선택 시 1.7~3 시나리오 버팀
-  resourceCostMultiplier:1.0,  // v0.6 5/3: 폐지 (raw에 0.6 곱한 값으로 재조정 완료, MIGRATION-VALUES.md §4)
+  resourceCostMultiplier:1.25,
+  scenarioCostMultiplier:{selfintro:1.0,groupwork:1.1,eorinwangja:1.15,career:1.25,studyplan:1.3},
   // v0.5 — 시나리오 종료 시 자원 자동 회복 OFF ([[요청.26.0429.1925-v05회복없는학기]])
   autoRecoverOnEnd:false,
   recoverBase:0, // v0.9: 등급별 차등 폐기, 에너지 고정 +18
@@ -13000,13 +13001,13 @@ var TEXTS = {
   },
   "ui_messages": {
     "game_over": {
-      "title": "GAME OVER",
-      "body": "자원이 부족해요.<br>시간과 에너지가 모자라 더 이상 선택할 수 없습니다.",
+      "title": "자원이 부족!",
+      "body": "자원이 부족해서 더 이상 진행할 수 없습니다.",
       "resources_label": "현재 자원",
       "time_label": "시간",
       "energy_label": "에너지",
-      "btn_report": "리포트 보기",
-      "btn_restart": "학기 처음부터"
+      "btn_report": "AI 리터러시 성장 리포트",
+      "btn_restart": "처음부터 다시 시작하기"
     },
     "inventory": {
       "panel_title": "역량 카드",
@@ -13459,7 +13460,11 @@ function _rawReviewCost(leaf){
 // multiplier 적용 (UI·소비 양쪽이 같은 값을 사용하도록 한 군데서 처리)
 function _applyMult(c){
   var m=(typeof CONFIG.resourceCostMultiplier==='number')?CONFIG.resourceCostMultiplier:1;
-  return {time:Math.round(c.time*m), energy:Math.round(c.energy*m)};
+  var sm=1;
+  if(gameState&&gameState.currentScenarioId&&CONFIG.scenarioCostMultiplier){
+    sm=CONFIG.scenarioCostMultiplier[gameState.currentScenarioId]||1;
+  }
+  return {time:Math.round(c.time*m*sm), energy:Math.round(c.energy*m*sm)};
 }
 // v0.9 §20 — 이중 할인: 축 숙련도 + 카드 태그 매칭
 // 축 숙련도: 위임→시간, 도메인→에너지 (기존, 폭 축소)
@@ -13518,7 +13523,7 @@ function _calculateCardEnergyDiscount(discountTags){
 }
 // v0.9 세션322: 고정 할인 — 역량 점수 = 할인액. 비율 상한 폐기.
 // v1.0 세션325: tier1 할인 끔 + 바닥값 도입 (덱스 QA)
-var DISCOUNT_FLOOR={tier1:{time:4,energy:3},tier2:{time:3,energy:2},review:{time:3,energy:2}};
+var DISCOUNT_FLOOR={tier1:{time:0,energy:0},tier2:{time:5,energy:4},review:{time:4,energy:3}};
 function _applyDiscount(c,stageType,choiceId,selectedCard){
   var dlg=(gameState&&gameState.competencies)?gameState.competencies.delegationChoice.value||0:0;
   var knl=(gameState&&gameState.competencies)?gameState.competencies.knowledge.value||0:0;
@@ -14113,7 +14118,7 @@ var container=document.getElementById('main-container');
 
 function showStats(){
   document.getElementById('panel-row').classList.add('visible');
-  var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='';
+  var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='block';
 }
 function hideStats(){
   document.getElementById('panel-row').classList.remove('visible');

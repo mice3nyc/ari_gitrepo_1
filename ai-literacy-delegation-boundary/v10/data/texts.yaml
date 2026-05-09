@@ -369,13 +369,13 @@ narrative:
 # =====================================================
 ui_messages:
   game_over:
-    title: "GAME OVER"
-    body: "자원이 부족해요.<br>시간과 에너지가 모자라 더 이상 선택할 수 없습니다."
+    title: "자원이 부족!"
+    body: "자원이 부족해서 더 이상 진행할 수 없습니다."
     resources_label: "현재 자원"
     time_label: "시간"
     energy_label: "에너지"
-    btn_report: "리포트 보기"
-    btn_restart: "학기 처음부터"
+    btn_report: "AI 리터러시 성장 리포트"
+    btn_restart: "처음부터 다시 시작하기"
 
   inventory:
     panel_title: "역량 카드"

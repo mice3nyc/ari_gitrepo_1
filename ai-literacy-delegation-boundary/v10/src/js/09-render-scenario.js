@@ -5,7 +5,7 @@ var container=document.getElementById('main-container');
 
 function showStats(){
   document.getElementById('panel-row').classList.add('visible');
-  var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='';
+  var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='block';
 }
 function hideStats(){
   document.getElementById('panel-row').classList.remove('visible');
