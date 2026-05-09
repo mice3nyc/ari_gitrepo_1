@@ -34,6 +34,8 @@ body {
   background-size:24px 24px;
   color:var(--ink);
   letter-spacing:0;
+  width:100%;
+  overflow-x:hidden;
 }
 
 body::before {
@@ -46,8 +48,6 @@ body::before {
 }
 
 .container,
-.panel-row,
-.inv-tab,
 .debug-toggle,
 .version {
   position:relative;
@@ -69,6 +69,7 @@ button,
 /* ===== Title / Semester screens ===== */
 .title-frame,
 .semester-frame {
+  width:100%;
   max-width:1080px;
   min-height:calc(100vh - 96px);
   margin:0 auto;
@@ -306,7 +307,10 @@ button,
 
 /* ===== Sticky dashboard ===== */
 .panel-row {
+  position:fixed;
   top:12px;
+  left:50%;
+  transform:translateX(-50%);
   max-width:1180px;
   width:calc(100% - 64px);
   gap:16px;
@@ -315,6 +319,11 @@ button,
   border:var(--border-w) solid var(--ink);
   box-shadow:var(--shadow);
   backdrop-filter:blur(8px);
+  z-index:1000;
+}
+
+.panel-row.visible + .container {
+  padding-top:154px;
 }
 
 .resource-bar,
@@ -539,13 +548,19 @@ button,
 
 /* ===== Inventory / modals / report ===== */
 .inv-tab {
+  position:fixed;
+  top:50%;
+  right:18px;
+  transform:translateY(-50%);
   background:var(--acc-cyan);
   border:var(--border-w) solid var(--ink);
   box-shadow:-7px 7px 0 var(--ink);
+  z-index:1200;
 }
 
 .inv-tab:hover {
   background:var(--acc-yellow);
+  transform:translateY(-50%) translateX(-6px);
 }
 
 .inv-panel,
@@ -653,6 +668,10 @@ button,
     width:calc(100% - 36px);
     top:8px;
     gap:10px;
+  }
+
+  .panel-row.visible + .container {
+    padding-top:314px;
   }
 
   .resource-bar,
