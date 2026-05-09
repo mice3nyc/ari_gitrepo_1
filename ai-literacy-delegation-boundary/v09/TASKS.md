@@ -172,7 +172,7 @@
 - [x] getCutImageFor 캐시 버스터 추가
 - [x] SPEC §0.1, §0.3, §6.3, §19, §20 갱신
 - [x] template↔index.html desync 발견 — build.py가 이전 세션 수정 덮어씀. 복구 완료 (git checkout HEAD + 직접 적용)
-- [ ] git commit + push
+- [x] git commit + push (928c740)
 - [ ] template 동기화 (현재 index.html 기반으로 template 재생성 — 별도 작업)
 
 ### 다음 작업 (플테 후)
