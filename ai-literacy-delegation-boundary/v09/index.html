@@ -304,7 +304,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 
 /* ===== Debug ===== (4/30 세션260: 노안 친화 — font-size 1.4배 + max-width 460px) */
 .debug-toggle { position:fixed; bottom:10px; right:10px; background:#333; color:#fff; border:none; padding:5px 10px; font-size:11px; cursor:pointer; z-index:300; font-family:monospace; }
-.debug-panel { display:none; position:fixed; bottom:38px; right:10px; background:#1a1a1a; color:#ddd; padding:10px 12px; font-size:11px; line-height:1.4; font-family:monospace; z-index:300; max-width:420px; max-height:70vh; overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
+.debug-panel { display:none; position:fixed; bottom:38px; right:10px; background:#1a1a1a; color:#ddd; padding:10px 12px; font-size:11px; line-height:1.4; font-family:monospace; z-index:300; max-width:420px; max-height:calc(100vh - 48px); overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
 .debug-panel.active { display:block; }
 .debug-section { margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid #333; }
 .debug-label { color:#aaa; font-size:10px; text-transform:uppercase; margin-bottom:4px; letter-spacing:0.5px; }
@@ -15137,6 +15137,7 @@ function _renderGrowthReport(hist, compType, inventory){
 // =====================================================
 var dbgOn=false;
 function toggleDebug(){dbgOn=!dbgOn;document.getElementById('debug-panel').classList.toggle('active',dbgOn);if(dbgOn)renderDebug();}
+document.addEventListener('click',function(e){if(!dbgOn)return;var p=document.getElementById('debug-panel'),t=document.querySelector('.debug-toggle');if(!p.contains(e.target)&&e.target!==t){dbgOn=false;p.classList.remove('active');}});
 function renderDebug(){
   if(!dbgOn)return;
   var p=document.getElementById('debug-panel'),logs=getEvents(),last=logs.length?logs[logs.length-1]:null;
