@@ -12283,18 +12283,19 @@ function createInitialState(){
 }
 
 // v0.5: 시나리오별 컷 이미지 동적 매핑
+var _imgCacheBust='?v=20260509';
 function getCutImage(scenarioId,cutNum){
   var n=({'selfintro':'01','groupwork':'02','eorinwangja':'03','career':'04','studyplan':'05'})[scenarioId]||'01';
   var base='../images/s'+n;
   var t1=gameState&&gameState.selectedTier1;
   var t2=gameState&&gameState.selectedTier2;
   var rv=gameState&&gameState.selectedReview;
-  if(cutNum===1)return base+'_c1.webp';
-  if(cutNum===2)return t1?base+'_c2_'+t1+'.webp':null;
-  if(cutNum===3)return t2?base+'_c3_'+t2+'.webp':null;
-  if(cutNum===4)return t2?base+'_c4_'+t2+'.webp':null;
-  if(cutNum===5)return rv?base+'_c5_'+rv+'.webp':null;
-  if(cutNum===6)return null; // cut6는 등급 표시로 대체
+  if(cutNum===1)return base+'_c1.webp'+_imgCacheBust;
+  if(cutNum===2)return t1?base+'_c2_'+t1+'.webp'+_imgCacheBust:null;
+  if(cutNum===3)return t2?base+'_c3_'+t2+'.webp'+_imgCacheBust:null;
+  if(cutNum===4)return t2?base+'_c4_'+t2+'.webp'+_imgCacheBust:null;
+  if(cutNum===5)return rv?base+'_c5_'+rv+'.webp'+_imgCacheBust:null;
+  if(cutNum===6)return null;
   return null;
 }
 
