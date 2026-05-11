@@ -98,14 +98,35 @@
 - [x] 브라우저 검증
 - [x] 커밋 + 푸시 (a0915f8)
 
-### Phase 5 — 인라인 하이라이트 + 손글씨
+### 세션332 수정 (Phase 1~4 이후) ✅
 
-- [ ] `.hl` 클래스 4종 CSS 정의 (hl--y, hl--c, hl--m, hl--p)
-- [ ] 튜토리얼 텍스트에 하이라이트 적용
-- [ ] 시나리오 인트로/아웃로에 하이라이트 적용 검토
-- [ ] 피드백 한마디 영역에 `--font-hand` 적용
-- [ ] 브라우저 검증
-- [ ] 커밋
+- [x] 역량카드 배지: 텍스트 "역량카드 할인가능 – 할인 적용하기" + 블록 배치 + 1개도 선택 모달 필수
+- [x] 적용 후 "{카드명} 역량카드 효과: -{N} 할인" + 비용 UI 실시간 갱신 + 할인+최종 동시 깜빡임
+- [x] pending-dots 0점 정렬 (gauge-with-pending 래퍼)
+- [x] choice-cost margin-top 1px
+- [x] 할인 바닥값(DISCOUNT_FLOOR) 전면 폐지 — 전부 0
+- [x] review 비용 계산 버그 픽스 (bid에서 전체 leaf 추출)
+- [x] 어린왕자 시나리오 situation 텍스트 보강 (1문장→3문장)
+- [x] 커밋 3건 push (f5b4c81, 166fa50, 6c685c0)
+
+### Phase 4.5 — 이미지 프레임 효과 (SPEC §7.3) ✅
+
+- [x] `.panel-image::after, .img-frame::after` — inset 5px 흰색 + 7px 검정 inner border
+- [x] 리포트 카툰 이미지 — `class="img-frame"` 추가 (CSS ::after 공유)
+- [x] 이미지 `width:100%; height:100%; object-fit:cover` 확인
+- [x] 브라우저 검증
+
+### Phase 5 — 인라인 하이라이트 + 손글씨 ✅
+
+- [x] `.hl` 클래스 4종 CSS 정의 (hl--y, hl--c, hl--m, hl--p)
+- [x] 튜토리얼 텍스트에 하이라이트 적용 (kw-time→hl--c, kw-energy→hl--p, kw-* CSS 삭제)
+- [x] 피드백 한마디(awareness) — Cut6 + 리포트에 `--font-hand` 적용
+- [x] 브라우저 검증
+
+### 세션333 UX 수정 ✅
+
+- [x] 다음 시나리오 버튼: 화면 하단 → Cut 6 패널 body 안으로 이동 (full-width yellow)
+- [x] CUT 라벨: "CUT 3" → "3"만 표시 (숫자만)
 
 ### Phase 6 — 모션 통일 + 최종 검증
 

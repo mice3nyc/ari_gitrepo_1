@@ -232,10 +232,10 @@ function showTitleScreen(){
   h+='</div>';
   // 튜토리얼 4문장 (학생 톤 §11.5)
   h+='<ol class="tutorial-list">';
-  h+='<li>시나리오마다 선택지를 고른다. 각 선택은 <span class="kw-time">시간</span>과 <span class="kw-energy">에너지</span>를 쓴다.</li>';
+  h+='<li>시나리오마다 선택지를 고른다. 각 선택은 <span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>를 쓴다.</li>';
   h+='<li>어떤 선택을 하느냐에 따라 결과물의 점수가 달라지고, 내가 어떤 힘을 썼는지 역량 카드로 확인할 수 있다.</li>';
-  h+='<li>결과물 점수에 따라 등급이 매겨지고, 받은 토큰을 <span class="kw-time">시간</span>이나 <span class="kw-energy">에너지</span>에 직접 넣는다.</li>';
-  h+='<li>경험이 쌓이면 다음 선택의 <span class="kw-time">시간</span>·<span class="kw-energy">에너지</span> 비용이 줄어든다.</li>';
+  h+='<li>결과물 점수에 따라 등급이 매겨지고, 받은 토큰을 <span class="hl hl--c">시간</span>이나 <span class="hl hl--p">에너지</span>에 직접 넣는다.</li>';
+  h+='<li>경험이 쌓이면 다음 선택의 <span class="hl hl--c">시간</span>·<span class="hl hl--p">에너지</span> 비용이 줄어든다.</li>';
   h+='</ol>';
   h+='<div class="title-actions">';
   h+='<button class="start-btn-large" onclick="enterFromTitle()">게임 시작</button>';
@@ -320,7 +320,7 @@ function ensureRow(){
   // 6 panels in 2 rows of 3
   var panels='';
   for(var i=1;i<=6;i++){
-    panels+='<div class="panel" data-cut="'+i+'"><div class="panel-image"><span class="cut-num">CUT '+i+'</span><span class="cut-label">'+i+'</span></div><div class="panel-body"></div></div>';
+    panels+='<div class="panel" data-cut="'+i+'"><div class="panel-image"><span class="cut-num">'+i+'</span><span class="cut-label">'+i+'</span></div><div class="panel-body"></div></div>';
     if(i===3)panels='<div class="panels-grid panels-row1">'+panels+'</div><div class="panels-grid panels-row2">';
   }
   panels+='</div>';
@@ -337,8 +337,8 @@ function setPanelImage(cutNum,labelText){
   var src=gameState&&gameState.currentScenarioId?getCutImage(gameState.currentScenarioId,cutNum):CUT_IMAGES[cutNum];
   if(src){
     var img=new Image();img.src=src;
-    img.onload=function(){imgEl.innerHTML='<img src="'+src+'" alt="컷 '+cutNum+'"><span class="cut-num">CUT '+cutNum+'</span>'+(labelText?'<span class="panel-place">'+labelText+'</span>':'');};
-    img.onerror=function(){imgEl.innerHTML='<span class="cut-num">CUT '+cutNum+'</span><span class="cut-label">'+cutNum+'</span>'+(labelText?'<span class="panel-place">'+labelText+'</span>':'');};
+    img.onload=function(){imgEl.innerHTML='<img src="'+src+'" alt="컷 '+cutNum+'"><span class="cut-num">'+cutNum+'</span>'+(labelText?'<span class="panel-place">'+labelText+'</span>':'');};
+    img.onerror=function(){imgEl.innerHTML='<span class="cut-num">'+cutNum+'</span><span class="cut-label">'+cutNum+'</span>'+(labelText?'<span class="panel-place">'+labelText+'</span>':'');};
   }
 }
 
@@ -683,7 +683,7 @@ function goCut6(){
     if(replayInGrade){
       gradeHTML+='<button id="replay-btn-grade" style="margin-top:12px;padding:10px 28px;font-size:14px;font-weight:700;background:#ffd93d;color:#000;border:3px solid #000;border-radius:0;cursor:pointer;letter-spacing:0.5px;box-shadow:4px 4px 0 #000;transition:transform 0.05s,box-shadow 0.05s;" onmousedown="this.style.transform=\'translate(2px,2px)\';this.style.boxShadow=\'2px 2px 0 #000\'" onmouseup="this.style.transform=\'none\';this.style.boxShadow=\'4px 4px 0 #000\'" onmouseleave="this.style.transform=\'none\';this.style.boxShadow=\'4px 4px 0 #000\'">다시 도전하기</button>';
     }
-    gradeHTML+='</div><span class="cut-num">CUT 6</span><span class="panel-place">최종</span>';
+    gradeHTML+='</div><span class="cut-num">6</span><span class="panel-place">최종</span>';
     c6img.innerHTML=gradeHTML;
     if(replayInGrade){
       var gradeReplayBtn=document.getElementById('replay-btn-grade');
@@ -727,7 +727,7 @@ function goCut6(){
 
   // ① awareness — 결과 설명
   if(awareness){
-    h+='<div class="result-awareness" style="margin-bottom:16px;font-size:15px;line-height:1.7;color:#333;">'+awareness+'</div>';
+    h+='<div class="result-awareness" style="margin-bottom:16px;font-family:var(--font-hand);font-size:22px;line-height:1.6;color:var(--ink-mute);">'+awareness+'</div>';
   }
 
   // ② CUT6 보정 피드백 — 하단 메시지
@@ -866,7 +866,20 @@ function goCut6(){
     if(!willBeAllDone){
       chain=chain.then(function(){return showRPDistributionModal();});
     }
-    chain.then(function(){nw.classList.add('visible');});
+    chain.then(function(){
+      var c6body=currentRow.querySelector('[data-cut="6"] .panel-body');
+      if(c6body){
+        var d=document.createElement('div');
+        d.style.cssText='text-align:center;margin-top:16px;padding-top:12px;border-top:2px dashed var(--ink-soft);';
+        var btn=document.createElement('button');
+        btn.className='next-btn';
+        btn.style.cssText='width:100%;padding:14px;font-size:15px;';
+        btn.textContent=nb.textContent;
+        btn.onclick=goNextScenario;
+        d.appendChild(btn);
+        c6body.appendChild(d);
+      }
+    });
   },1400);
 }
 

@@ -477,7 +477,7 @@ function showFinalReport(){
       var src=getCutImageFor(r.scenarioId, r.leaf, c);
       var cap=getCutCaptionFor(r.scenarioId, r.leaf, c);
       h+='<div>';
-      if(src)h+='<div style="aspect-ratio:1/1;position:relative;overflow:hidden;border:var(--border-w) solid var(--ink);box-shadow:4px 4px 0 var(--ink);background:var(--bg-card);"><img src="'+src+'" alt="컷'+c+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display=\'none\'"></div>';
+      if(src)h+='<div class="img-frame" style="aspect-ratio:1/1;position:relative;overflow:hidden;border:var(--border-w) solid var(--ink);box-shadow:4px 4px 0 var(--ink);background:var(--bg-card);"><img src="'+src+'" alt="컷'+c+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display=\'none\'"></div>';
       if(cap)h+='<div style="font-family:var(--font-hand);font-size:20px;line-height:1.35;color:var(--ink-mute);margin-top:8px;word-break:keep-all;">'+cap+'</div>';
       h+='</div>';
     }
@@ -541,7 +541,7 @@ function _renderGrowthReport(hist, compType, inventory){
     h+='<span style="font-size:14px;font-weight:700;color:'+gradeColor+';">'+r.finalScore+'점 · '+(r.grade||'')+'</span>';
     h+='</div>';
     h+='<div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">'+_esc(info.t1)+' → '+_esc(info.t2)+' → '+_esc(info.rv)+'</div>';
-    if(feedback)h+='<div style="font-size:13px;line-height:1.6;color:var(--ink-mute);">'+feedback+'</div>';
+    if(feedback)h+='<div style="font-family:var(--font-hand);font-size:20px;line-height:1.5;color:var(--ink-mute);">'+feedback+'</div>';
     h+='</div>';
   }
   h+='</div>';

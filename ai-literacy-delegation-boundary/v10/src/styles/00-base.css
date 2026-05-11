@@ -18,6 +18,12 @@
   --font-hand:"Nanum Pen Script","Caveat",cursive;
 }
 
+.hl { padding:1px 8px; color:var(--ink); white-space:nowrap; }
+.hl--y { background:var(--acc-yellow); }
+.hl--c { background:var(--acc-cyan); }
+.hl--m { background:var(--acc-mint); }
+.hl--p { background:var(--acc-pink); }
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: var(--font-main); background: var(--bg-page); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
 .container { max-width: 1100px; width: 100%; padding: 8px 24px 80px; }
