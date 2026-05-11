@@ -41,9 +41,9 @@
 .semester-final p { font-size:13px; color:#555; line-height:1.7; }
 
 /* ===== pending 원 마커 (§12, 5/3 세션278) ===== */
-/* 좌우 분할: 좌측 50%(음수, 중앙 쪽으로 모임) / 우측 50%(양수, 중앙에서 우측으로 뻗음) */
-/* 분할 비율은 bipolar-gauge zero 위치(left:50% = 시각 중앙선)와 정렬 — SPEC 라벨 -4/+8은 점수 max(단위당 폭 비대칭)이지 시각 자리가 아니다 */
-.pending-dots { display:flex; align-items:center; flex:1; min-height:0; margin:0; }
+/* gauge-with-pending: gauge와 pending-dots를 겹쳐 0점 정렬 */
+.gauge-with-pending { position:relative; }
+.pending-dots { display:flex; align-items:center; position:absolute; top:-14px; left:0; right:0; height:14px; z-index:1; pointer-events:none; }
 .pending-dots-neg { flex:0 0 50%; display:flex; flex-direction:row-reverse; justify-content:flex-start; align-items:center; gap:4px; padding-right:2px; overflow:hidden; }
 .pending-dots-pos { flex:0 0 50%; display:flex; flex-direction:row; justify-content:flex-start; align-items:center; gap:4px; padding-left:2px; overflow:hidden; }
 .pending-dot { width:0; height:0; border:6px solid transparent; flex-shrink:0; transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease; }

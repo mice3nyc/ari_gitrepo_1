@@ -17,7 +17,7 @@ Neo-Brutalism 디자인 시스템 전면 적용. marjoballabani.me 영감.
 ##### 0.1 v0.9에서 계승 (변경 없음)
 
 - 자원: 시간·에너지 100/100 시작, 자동 회복 없음, RP 직접 배분
-- 할인: 고정 (역량 점수 = 할인액) + 카드 쿠폰 수동 적용
+- 할인: 고정 (역량 점수 = 할인액) + 카드 쿠폰 수동 적용. 카드 1개여도 선택 모달 표시 (학습 효과). 배지 "역량카드 할인가능 – 할인 적용하기" → 적용 후 "{카드명} 역량카드 효과: -{할인액} 할인" + 비용 UI 실시간 갱신 (할인+최종 동시 깜빡임)
 - 피드백: 2레이어 (shortFeedback + reportFeedback)
 - 용어: 판단하는 힘 / 아는것의 힘
 - 선택지: 인라인 전개 (Cut 1~5 순차)
@@ -205,6 +205,8 @@ Neo-Brutalism 디자인 시스템 전면 적용. marjoballabani.me 영감.
 전환: `border:3px solid var(--ink), box-shadow:var(--shadow), border-radius:0`
 hover: `transform:translate(-2px,-2px), box-shadow:6px 6px 0 var(--ink)` (리프트)
 active: `transform:translate(2px,2px), box-shadow:var(--shadow-press)` (누름)
+비용 간격: `.choice-cost` margin-top `1px` (텍스트와 점선 구분선 최소 간격)
+역량카드 배지: choice-text 밖, 비용 섹션 아래 block 배치. 미적용 "역량카드 할인가능 – 할인 적용하기" → 적용 후 "{카드명} 역량카드 효과: -{N} 할인". 적용 시 할인 금액+최종 에너지 동시 2회 깜빡임(cost-blink 0.8s) → 새 값 교체 → 2회 깜빡임 후 확정
 
 ##### 6.2 패널 (.panel)
 
@@ -251,9 +253,10 @@ bipolar-fill:
 - positive: `#1a8c1a` → `var(--acc-mint-deep)` (#5fbf95)
 - negative: `#c44` → `var(--acc-pink-deep)` (#d63f7a)
 
-pending-dot:
-- positive: `#1a8c1a` → `var(--acc-mint)`
-- negative: `#c44` → `var(--acc-pink)`
+pending-dot (gauge-with-pending 래퍼 안, gauge 위 absolute 배치 — 0점과 정렬):
+- positive: `#1a8c1a` → `var(--acc-mint)`, 0점 오른쪽에 배치
+- negative: `#c44` → `var(--acc-pink)`, 0점 왼쪽에 배치
+- pending-dots를 stat-header에서 분리 → gauge와 같은 너비로 50/50 분할하여 bipolar-zero와 정렬
 
 ---
 

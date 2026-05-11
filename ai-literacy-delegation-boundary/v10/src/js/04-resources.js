@@ -144,10 +144,6 @@ function getReviewCost(leaf){return _applyDiscount(_applyMult(_rawReviewCost(lea
 function getReviewCostWithCard(leaf,card){return _applyDiscount(_applyMult(_rawReviewCost(leaf)),'review',leaf,card);}
 
 function showCouponSelect(cards,onConfirm){
-  if(cards.length===1){
-    onConfirm(cards[0]);
-    return;
-  }
   var overlay=document.createElement('div');overlay.className='coupon-overlay';
   var box=document.createElement('div');box.className='coupon-box';
   var selected=cards[0];

@@ -264,7 +264,7 @@ function onTier2(t2id){
   if(availCards.length>0&&_couponSelections[couponKey]===undefined){
     showCouponSelect(availCards,function(selectedCard){
       _couponSelections[couponKey]=selectedCard;
-      _updateCouponBadge('tier2-choices',t2id,selectedCard);
+      _updateCouponBadge('tier2-choices',t2id,selectedCard,'tier2');
     });
     return;
   }
@@ -295,7 +295,7 @@ function onReview(rid){
   if(availCards.length>0&&_couponSelections[couponKey]===undefined){
     showCouponSelect(availCards,function(selectedCard){
       _couponSelections[couponKey]=selectedCard;
-      _updateCouponBadge('review-choices',reviewLeaf,selectedCard);
+      _updateCouponBadge('review-choices',reviewLeaf,selectedCard,'review');
     });
     return;
   }

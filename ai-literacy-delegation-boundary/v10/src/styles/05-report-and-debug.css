@@ -130,8 +130,8 @@
 .coupon-strong-tag { font-size:10px; color:#888; margin-left:4px; }
 .coupon-confirm { width:100%; padding:10px; background:#111; color:#fff; border:none; font-size:13px; font-weight:600; cursor:pointer; }
 .coupon-confirm:hover { background:#333; }
-.cost-coupon-badge { display:inline-block; font-size:11px; color:#fff; font-weight:700; margin-left:8px; padding:2px 8px; border:none; background:#15803d; animation:couponBlink 0.3s step-end 3; }
-.cost-coupon-badge.applied { animation:none; background:#fff; color:#15803d; border:2px solid #15803d; }
+.cost-coupon-badge { display:block; font-size:12px; color:#fff; font-weight:700; margin-top:6px; padding:6px 12px; border:2px solid #15803d; background:#15803d; text-align:center; cursor:pointer; animation:couponBlink 0.3s step-end 3; }
+.cost-coupon-badge.applied { animation:none; background:#f0fdf4; color:#15803d; border:2px solid #15803d; font-size:11px; cursor:default; }
 @keyframes couponBlink { 0%,100%{opacity:1;} 50%{opacity:0;} }
 
 /* ===== Debug ===== (4/30 세션260: 노안 친화 — font-size 1.4배 + max-width 460px) */

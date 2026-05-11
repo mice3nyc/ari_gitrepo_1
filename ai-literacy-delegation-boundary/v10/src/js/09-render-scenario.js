@@ -465,20 +465,53 @@ function buildCostHTML(cost){
 }
 function getCouponBadge(stageType,choiceId){
   var avail=getAvailableCardDiscounts(stageType,choiceId);
-  if(avail.length>0)return '<span class="cost-coupon-badge" data-coupon-id="'+stageType+':'+choiceId+'">역량할인적용</span>';
+  if(avail.length>0)return '<div class="cost-coupon-badge" data-coupon-id="'+stageType+':'+choiceId+'">역량카드 할인가능 – 할인 적용하기</div>';
   return '';
 }
-function _updateCouponBadge(areaId,choiceId,selectedCard){
+function _updateCouponBadge(areaId,choiceId,selectedCard,stageType){
   var area=document.getElementById(areaId);if(!area)return;
   var badges=area.querySelectorAll('.cost-coupon-badge');
   for(var i=0;i<badges.length;i++){
     var bid=badges[i].getAttribute('data-coupon-id');
     if(bid&&bid.indexOf(choiceId)>=0){
       if(selectedCard){
-        badges[i].textContent=selectedCard.display+' 역량할인적용';
+        badges[i].textContent=selectedCard.display+' 역량카드 효과: -'+selectedCard.amount+' 할인';
         badges[i].classList.add('applied');
+        var choiceCard=badges[i].closest('.choice-card');
+        if(choiceCard&&stageType){
+          var costEl=choiceCard.querySelector('.choice-cost');
+          if(costEl){
+            var newCost;
+            if(stageType==='tier2')newCost=getTier2CostWithCard(choiceId,selectedCard);
+            else if(stageType==='review')newCost=getReviewCostWithCard(choiceId,selectedCard);
+            if(newCost){
+              var eCol=costEl.querySelector('.cost-energy-col');
+              var oldDisc=eCol?eCol.querySelector('.cost-formula-discount'):null;
+              var oldFinal=eCol?eCol.querySelector('.cost-formula-final b'):null;
+              if(oldDisc||oldFinal){
+                if(oldDisc)oldDisc.classList.add('cost-blink');
+                if(oldFinal)oldFinal.classList.add('cost-blink');
+                (function(ce,cc,nc){setTimeout(function(){
+                  var tmp=document.createElement('div');tmp.innerHTML=buildCostHTML(nc);
+                  ce.parentNode.replaceChild(tmp.firstChild,ce);
+                  var ne=cc.querySelector('.choice-cost');
+                  if(ne){
+                    var nCol=ne.querySelector('.cost-energy-col');
+                    var nDisc=nCol?nCol.querySelector('.cost-formula-discount'):null;
+                    var nFinal=nCol?nCol.querySelector('.cost-formula-final b'):null;
+                    if(nDisc)nDisc.classList.add('cost-blink');
+                    if(nFinal)nFinal.classList.add('cost-blink');
+                  }
+                },800);})(costEl,choiceCard,newCost);
+              } else {
+                var tmp=document.createElement('div');tmp.innerHTML=buildCostHTML(newCost);
+                costEl.parentNode.replaceChild(tmp.firstChild,costEl);
+              }
+            }
+          }
+        }
       } else {
-        badges[i].textContent='역량할인적용';
+        badges[i].textContent='역량카드 할인가능 – 할인 적용하기';
       }
     }
   }
@@ -545,7 +578,7 @@ function showTier2Choices(){
     var costHTML=buildCostHTML(costs[i]);
     var badge=afford?getCouponBadge('tier2',c.id):'';
     var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
-    card.innerHTML='<div class="choice-header"><span class="choice-num">'+(i+1)+'</span><span class="choice-text">'+c.label+tag+badge+'</span></div>'+costHTML;
+    card.innerHTML='<div class="choice-header"><span class="choice-num">'+(i+1)+'</span><span class="choice-text">'+c.label+tag+'</span></div>'+costHTML+badge;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
@@ -609,7 +642,7 @@ function showReviewChoices(){
     var badge=afford?getCouponBadge('review',leafKey):'';
     var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
     var leafLabel=(sc.reviewLabels&&sc.reviewLabels[leafKey])||r.label;
-    card.innerHTML='<div class="choice-header"><span class="choice-num">'+r.id+'</span><span class="choice-text">'+leafLabel+tag+badge+'</span></div>'+costHTML;
+    card.innerHTML='<div class="choice-header"><span class="choice-num">'+r.id+'</span><span class="choice-text">'+leafLabel+tag+'</span></div>'+costHTML+badge;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });

@@ -114,7 +114,7 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--i
 .score-vsep { width:1px; height:46px; background:#ddd; }
 
 /* ===== 선택지 비용 표시 — 4박스 그리드 (DECISIONS §10.6 4/30 세션257) ===== */
-.choice-cost { display:flex; gap:0; margin-top:10px; padding-top:10px; border-top:1px dashed #ddd; }
+.choice-cost { display:flex; gap:0; margin-top:1px; padding-top:10px; border-top:1px dashed #ddd; }
 .cost-group { display:flex; gap:10px; flex:1; align-items:flex-end; justify-content:center; padding:0 8px; }
 .cost-group:not(:last-child) { border-right:1px solid #ddd; }
 .cost-cell { display:flex; flex-direction:column; align-items:center; gap:4px; }
@@ -141,6 +141,8 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--i
 .cost-energy-col { display:flex; flex-direction:column; flex:1; align-items:stretch; }
 .cost-card-chips { display:flex; flex-wrap:wrap; gap:3px; justify-content:center; margin-bottom:2px; }
 .cost-card-chips .card-chip { font-size:9px; color:var(--ink); font-weight:600; padding:1px 5px; background:var(--acc-mint-soft); border:2px solid var(--ink); border-radius:0; white-space:nowrap; }
+.cost-blink { animation:costBlink 0.8s steps(1); }
+@keyframes costBlink { 0%,100%{opacity:1;} 20%,60%{opacity:0;} 40%,80%{opacity:1;} }
 
 /* ===== Overlay (Start) ===== */
 .overlay-card { display:flex; align-items:center; justify-content:center; min-height:480px; animation:overlayIn 0.5s ease; }
@@ -333,8 +335,8 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--i
 .coupon-strong-tag { font-size:10px; color:#888; margin-left:4px; }
 .coupon-confirm { width:100%; padding:10px; background:#111; color:#fff; border:none; font-size:13px; font-weight:600; cursor:pointer; }
 .coupon-confirm:hover { background:#333; }
-.cost-coupon-badge { display:inline-block; font-size:11px; color:#fff; font-weight:700; margin-left:8px; padding:2px 8px; border:none; background:#15803d; animation:couponBlink 0.3s step-end 3; }
-.cost-coupon-badge.applied { animation:none; background:#fff; color:#15803d; border:2px solid #15803d; }
+.cost-coupon-badge { display:block; font-size:12px; color:#fff; font-weight:700; margin-top:6px; padding:6px 12px; border:2px solid #15803d; background:#15803d; text-align:center; cursor:pointer; animation:couponBlink 0.3s step-end 3; }
+.cost-coupon-badge.applied { animation:none; background:#f0fdf4; color:#15803d; border:2px solid #15803d; font-size:11px; cursor:default; }
 @keyframes couponBlink { 0%,100%{opacity:1;} 50%{opacity:0;} }
 
 /* ===== Debug ===== (4/30 세션260: 노안 친화 — font-size 1.4배 + max-width 460px) */
@@ -399,9 +401,9 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--i
 .semester-final p { font-size:13px; color:#555; line-height:1.7; }
 
 /* ===== pending 원 마커 (§12, 5/3 세션278) ===== */
-/* 좌우 분할: 좌측 50%(음수, 중앙 쪽으로 모임) / 우측 50%(양수, 중앙에서 우측으로 뻗음) */
-/* 분할 비율은 bipolar-gauge zero 위치(left:50% = 시각 중앙선)와 정렬 — SPEC 라벨 -4/+8은 점수 max(단위당 폭 비대칭)이지 시각 자리가 아니다 */
-.pending-dots { display:flex; align-items:center; flex:1; min-height:0; margin:0; }
+/* gauge-with-pending: gauge와 pending-dots를 겹쳐 0점 정렬 */
+.gauge-with-pending { position:relative; }
+.pending-dots { display:flex; align-items:center; position:absolute; top:-14px; left:0; right:0; height:14px; z-index:1; pointer-events:none; }
 .pending-dots-neg { flex:0 0 50%; display:flex; flex-direction:row-reverse; justify-content:flex-start; align-items:center; gap:4px; padding-right:2px; overflow:hidden; }
 .pending-dots-pos { flex:0 0 50%; display:flex; flex-direction:row; justify-content:flex-start; align-items:center; gap:4px; padding-left:2px; overflow:hidden; }
 .pending-dot { width:0; height:0; border:6px solid transparent; flex-shrink:0; transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease; }
@@ -1385,15 +1387,15 @@ button,
     <div class="panel-content">
       <div class="stat" id="stat-delegation">
         <div class="stat-change-indicator" id="delta-delegation"></div>
-        <div class="stat-header"><span class="stat-name">판단하는 힘</span><div class="pending-dots" id="pending-dots-delegation" aria-label="이번 시나리오 판단하는 힘 변화"><div class="pending-dots-neg" id="pending-dots-delegation-neg"></div><div class="pending-dots-pos" id="pending-dots-delegation-pos"></div></div><span class="stat-num" id="num-delegation">0</span></div>
-        <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-delegation"></div></div>
+        <div class="stat-header"><span class="stat-name">판단하는 힘</span><span class="stat-num" id="num-delegation">0</span></div>
+        <div class="gauge-with-pending"><div class="pending-dots" id="pending-dots-delegation" aria-label="이번 시나리오 판단하는 힘 변화"><div class="pending-dots-neg" id="pending-dots-delegation-neg"></div><div class="pending-dots-pos" id="pending-dots-delegation-pos"></div></div><div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-delegation"></div></div></div>
         <div class="bipolar-labels"><span>-10</span><span>+10</span></div>
       </div>
       <div class="panel-divider"></div>
       <div class="stat" id="stat-knowledge">
         <div class="stat-change-indicator" id="delta-knowledge"></div>
-        <div class="stat-header"><span class="stat-name" id="stat-name-knowledge">아는것의 힘</span><div class="pending-dots" id="pending-dots-knowledge" aria-label="이번 시나리오 아는것의 힘 변화"><div class="pending-dots-neg" id="pending-dots-knowledge-neg"></div><div class="pending-dots-pos" id="pending-dots-knowledge-pos"></div></div><span class="stat-num" id="num-knowledge">0</span></div>
-        <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-knowledge"></div></div>
+        <div class="stat-header"><span class="stat-name" id="stat-name-knowledge">아는것의 힘</span><span class="stat-num" id="num-knowledge">0</span></div>
+        <div class="gauge-with-pending"><div class="pending-dots" id="pending-dots-knowledge" aria-label="이번 시나리오 아는것의 힘 변화"><div class="pending-dots-neg" id="pending-dots-knowledge-neg"></div><div class="pending-dots-pos" id="pending-dots-knowledge-pos"></div></div><div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-knowledge"></div></div></div>
         <div class="bipolar-labels"><span>-10</span><span>+10</span></div>
       </div>
     </div>
@@ -13558,10 +13560,6 @@ function getReviewCost(leaf){return _applyDiscount(_applyMult(_rawReviewCost(lea
 function getReviewCostWithCard(leaf,card){return _applyDiscount(_applyMult(_rawReviewCost(leaf)),'review',leaf,card);}
 
 function showCouponSelect(cards,onConfirm){
-  if(cards.length===1){
-    onConfirm(cards[0]);
-    return;
-  }
   var overlay=document.createElement('div');overlay.className='coupon-overlay';
   var box=document.createElement('div');box.className='coupon-box';
   var selected=cards[0];
@@ -14578,20 +14576,53 @@ function buildCostHTML(cost){
 }
 function getCouponBadge(stageType,choiceId){
   var avail=getAvailableCardDiscounts(stageType,choiceId);
-  if(avail.length>0)return '<span class="cost-coupon-badge" data-coupon-id="'+stageType+':'+choiceId+'">역량할인적용</span>';
+  if(avail.length>0)return '<div class="cost-coupon-badge" data-coupon-id="'+stageType+':'+choiceId+'">역량카드 할인가능 – 할인 적용하기</div>';
   return '';
 }
-function _updateCouponBadge(areaId,choiceId,selectedCard){
+function _updateCouponBadge(areaId,choiceId,selectedCard,stageType){
   var area=document.getElementById(areaId);if(!area)return;
   var badges=area.querySelectorAll('.cost-coupon-badge');
   for(var i=0;i<badges.length;i++){
     var bid=badges[i].getAttribute('data-coupon-id');
     if(bid&&bid.indexOf(choiceId)>=0){
       if(selectedCard){
-        badges[i].textContent=selectedCard.display+' 역량할인적용';
+        badges[i].textContent=selectedCard.display+' 역량카드 효과: -'+selectedCard.amount+' 할인';
         badges[i].classList.add('applied');
+        var choiceCard=badges[i].closest('.choice-card');
+        if(choiceCard&&stageType){
+          var costEl=choiceCard.querySelector('.choice-cost');
+          if(costEl){
+            var newCost;
+            if(stageType==='tier2')newCost=getTier2CostWithCard(choiceId,selectedCard);
+            else if(stageType==='review')newCost=getReviewCostWithCard(choiceId,selectedCard);
+            if(newCost){
+              var eCol=costEl.querySelector('.cost-energy-col');
+              var oldDisc=eCol?eCol.querySelector('.cost-formula-discount'):null;
+              var oldFinal=eCol?eCol.querySelector('.cost-formula-final b'):null;
+              if(oldDisc||oldFinal){
+                if(oldDisc)oldDisc.classList.add('cost-blink');
+                if(oldFinal)oldFinal.classList.add('cost-blink');
+                (function(ce,cc,nc){setTimeout(function(){
+                  var tmp=document.createElement('div');tmp.innerHTML=buildCostHTML(nc);
+                  ce.parentNode.replaceChild(tmp.firstChild,ce);
+                  var ne=cc.querySelector('.choice-cost');
+                  if(ne){
+                    var nCol=ne.querySelector('.cost-energy-col');
+                    var nDisc=nCol?nCol.querySelector('.cost-formula-discount'):null;
+                    var nFinal=nCol?nCol.querySelector('.cost-formula-final b'):null;
+                    if(nDisc)nDisc.classList.add('cost-blink');
+                    if(nFinal)nFinal.classList.add('cost-blink');
+                  }
+                },800);})(costEl,choiceCard,newCost);
+              } else {
+                var tmp=document.createElement('div');tmp.innerHTML=buildCostHTML(newCost);
+                costEl.parentNode.replaceChild(tmp.firstChild,costEl);
+              }
+            }
+          }
+        }
       } else {
-        badges[i].textContent='역량할인적용';
+        badges[i].textContent='역량카드 할인가능 – 할인 적용하기';
       }
     }
   }
@@ -14658,7 +14689,7 @@ function showTier2Choices(){
     var costHTML=buildCostHTML(costs[i]);
     var badge=afford?getCouponBadge('tier2',c.id):'';
     var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
-    card.innerHTML='<div class="choice-header"><span class="choice-num">'+(i+1)+'</span><span class="choice-text">'+c.label+tag+badge+'</span></div>'+costHTML;
+    card.innerHTML='<div class="choice-header"><span class="choice-num">'+(i+1)+'</span><span class="choice-text">'+c.label+tag+'</span></div>'+costHTML+badge;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
@@ -14722,7 +14753,7 @@ function showReviewChoices(){
     var badge=afford?getCouponBadge('review',leafKey):'';
     var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
     var leafLabel=(sc.reviewLabels&&sc.reviewLabels[leafKey])||r.label;
-    card.innerHTML='<div class="choice-header"><span class="choice-num">'+r.id+'</span><span class="choice-text">'+leafLabel+tag+badge+'</span></div>'+costHTML;
+    card.innerHTML='<div class="choice-header"><span class="choice-num">'+r.id+'</span><span class="choice-text">'+leafLabel+tag+'</span></div>'+costHTML+badge;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
@@ -15215,7 +15246,7 @@ function onTier2(t2id){
   if(availCards.length>0&&_couponSelections[couponKey]===undefined){
     showCouponSelect(availCards,function(selectedCard){
       _couponSelections[couponKey]=selectedCard;
-      _updateCouponBadge('tier2-choices',t2id,selectedCard);
+      _updateCouponBadge('tier2-choices',t2id,selectedCard,'tier2');
     });
     return;
   }
@@ -15246,7 +15277,7 @@ function onReview(rid){
   if(availCards.length>0&&_couponSelections[couponKey]===undefined){
     showCouponSelect(availCards,function(selectedCard){
       _couponSelections[couponKey]=selectedCard;
-      _updateCouponBadge('review-choices',reviewLeaf,selectedCard);
+      _updateCouponBadge('review-choices',reviewLeaf,selectedCard,'review');
     });
     return;
   }
