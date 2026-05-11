@@ -127,6 +127,7 @@
 
 - [x] 다음 시나리오 버튼: 화면 하단 → Cut 6 패널 body 안으로 이동 (full-width yellow)
 - [x] CUT 라벨: "CUT 3" → "3"만 표시 (숫자만)
+- [x] 리플레이 버튼: A 등급에서도 제거 (S/A 없음, B ghost, C/D yellow)
 
 ### Phase 6 — 모션 통일 + 최종 검증
 

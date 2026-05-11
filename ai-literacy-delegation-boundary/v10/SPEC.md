@@ -217,6 +217,8 @@ active: `transform:translate(2px,2px), box-shadow:var(--shadow-press)` (누름)
 
 시나리오 종료 후 다음 시나리오 버튼: Cut 6 패널 body 안에 full-width yellow `.next-btn`으로 배치. 하단 별도 `next-wrap` 대신 패널 안에서 바로 접근. 세션333.
 
+리플레이 버튼 등급별 노출: S/A — 없음, B — Cut 6 body 하단 작은 ghost 버튼, C/D — 등급 박스 안 큰 yellow 버튼. 세션333 (A 제거).
+
 ##### 6.3 모달 (.modal-card, .coupon-box)
 
 현재: `box-shadow:0 8px 32px rgba(...)`
