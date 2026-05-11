@@ -61,9 +61,9 @@
 .card-reward-label { font-size:19px; font-weight:700; color:#111; margin-bottom:8px; letter-spacing:0.4px; }
 .card-reward-divider { height:1px; background:#ddd; margin:6px 0 8px; }
 .card-reward-note { font-size:11px; color:#555; line-height:1.65; margin-bottom:12px; }
-.card-reward-confirm { display:block; width:100%; padding:8px 12px; border:1.5px solid #111; background:#111; color:#fff; font-family:inherit; font-size:12px; font-weight:700; letter-spacing:1px; cursor:pointer; transition:background 0.15s ease; }
-.card-reward-confirm:hover { background:#333; }
-.card-reward-confirm:disabled { background:#888; border-color:#888; cursor:default; }
+.card-reward-confirm { display:block; width:100%; padding:8px 12px; border:var(--border-w) solid var(--ink); background:var(--acc-yellow); color:var(--ink); font-family:inherit; font-size:12px; font-weight:700; letter-spacing:1px; cursor:pointer; transition:transform 0.05s, box-shadow 0.05s; box-shadow:var(--shadow); }
+.card-reward-confirm:active { transform:translate(2px,2px); box-shadow:var(--shadow-press); }
+.card-reward-confirm:disabled { background:var(--bg-page); border-color:var(--ink-soft); color:var(--ink-soft); cursor:default; box-shadow:none; }
 /* 성장 카드 (회복력/도전력) 전용 스타일 */
 .card-reward-card.growth-card { border:var(--border-w) dashed var(--ink); border-left-width:var(--border-w); background:var(--bg-soft); box-shadow:var(--shadow); }
 .growth-symbol { font-size:32px; text-align:center; margin-bottom:6px; line-height:1; color:#546e7a; }
@@ -79,7 +79,7 @@
 .recovery-card .growth-symbol { font-size:48px; margin-bottom:12px; }
 .recovery-card-title { font-size:20px; font-weight:700; color:#546e7a; margin-bottom:6px; }
 .recovery-card-desc { font-size:13px; color:#666; line-height:1.5; margin-bottom:20px; }
-.recovery-card-btn { display:block; width:100%; padding:12px; margin-bottom:8px; font-family:inherit; font-size:14px; font-weight:700; border-radius:0; cursor:pointer; transition:all 0.15s; }
+.recovery-card-btn { display:block; width:100%; padding:12px; margin-bottom:8px; font-family:inherit; font-size:14px; font-weight:700; border-radius:0; cursor:pointer; transition:transform 0.05s, box-shadow 0.05s; }
 .recovery-card-btn.primary { background:var(--acc-yellow); color:var(--ink); border:var(--border-w) solid var(--ink); box-shadow:var(--shadow); }
 .recovery-card-btn.primary:active { transform:translate(2px,2px); box-shadow:var(--shadow-press); }
 .recovery-card-btn.secondary { background:var(--bg-card); color:var(--ink); border:var(--border-w) solid var(--ink); font-weight:600; }

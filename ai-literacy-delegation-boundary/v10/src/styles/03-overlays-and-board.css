@@ -22,7 +22,7 @@
 .panels-row2 { margin-top:12px; }
 
 /* ===== Panel ===== */
-.panel { border:var(--border-w) dashed var(--ink-soft); background:var(--bg-soft); display:flex; flex-direction:column; overflow:hidden; transition:all 0.3s ease-out; min-height:380px; }
+.panel { border:var(--border-w) dashed var(--ink-soft); background:var(--bg-soft); display:flex; flex-direction:column; overflow:hidden; transition:border 0.3s ease-out, background 0.3s ease-out, box-shadow 0.3s ease-out; min-height:380px; }
 .panel.active, .panel.done { border:var(--border-w) solid var(--ink); background:var(--bg-card); box-shadow:var(--shadow); }
 .panel.slide-in { animation:panelSlideIn 0.4s ease-out; }
 @keyframes panelSlideIn { from{opacity:0;transform:translateX(30px)} to{opacity:1;transform:translateX(0)} }

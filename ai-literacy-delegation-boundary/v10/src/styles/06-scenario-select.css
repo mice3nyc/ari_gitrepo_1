@@ -80,8 +80,8 @@
 .tutorial-list { padding:0; margin:0 0 32px; list-style:none; counter-reset:tut; }
 .tutorial-list li { position:relative; padding:14px 14px 14px 48px; margin-bottom:10px; border-left:3px solid #111; background:#fff; font-size:15px; font-weight:700; color:#111; line-height:1.75; counter-increment:tut; }
 .tutorial-list li::before { content:counter(tut); position:absolute; left:14px; top:14px; width:24px; height:24px; border:1.5px solid #111; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#111; background:#fff; }
-.start-btn-large { display:block; width:100%; padding:16px; border:2px solid #111; background:#111; color:#fff; font-family:inherit; font-size:15px; font-weight:700; letter-spacing:2px; cursor:pointer; transition:background 0.15s ease; }
-.start-btn-large:hover { background:#333; }
+.start-btn-large { display:block; width:100%; padding:16px; border:var(--border-w) solid var(--ink); background:var(--acc-yellow); color:var(--ink); font-family:inherit; font-size:15px; font-weight:700; letter-spacing:2px; cursor:pointer; transition:transform 0.05s, box-shadow 0.05s; box-shadow:var(--shadow); }
+.start-btn-large:active { transform:translate(2px,2px); box-shadow:var(--shadow-press); }
 .tutorial-link { display:block; text-align:center; margin-top:14px; font-size:11px; color:#888; cursor:pointer; text-decoration:underline; background:none; border:none; font-family:inherit; }
 .tutorial-link:hover { color:#444; }
 /* v0.8 §11.5 — 타이틀 화면 직접 명제 정정 + 두 버튼 */
