@@ -482,8 +482,9 @@ function _updateCouponBadge(areaId,choiceId,selectedCard,stageType){
           var costEl=choiceCard.querySelector('.choice-cost');
           if(costEl){
             var newCost;
-            if(stageType==='tier2')newCost=getTier2CostWithCard(choiceId,selectedCard);
-            else if(stageType==='review')newCost=getReviewCostWithCard(choiceId,selectedCard);
+            var costId=bid?bid.split(':')[1]:choiceId;
+            if(stageType==='tier2')newCost=getTier2CostWithCard(costId,selectedCard);
+            else if(stageType==='review')newCost=getReviewCostWithCard(costId,selectedCard);
             if(newCost){
               var eCol=costEl.querySelector('.cost-energy-col');
               var oldDisc=eCol?eCol.querySelector('.cost-formula-discount'):null;

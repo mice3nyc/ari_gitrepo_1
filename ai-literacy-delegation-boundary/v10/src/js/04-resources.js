@@ -109,7 +109,7 @@ function _calculateCardEnergyDiscount(discountTags){
 }
 // v0.9 세션322: 고정 할인 — 역량 점수 = 할인액. 비율 상한 폐기.
 // v1.0 세션325: tier1 할인 끔 + 바닥값 도입 (덱스 QA)
-var DISCOUNT_FLOOR={tier1:{time:0,energy:0},tier2:{time:5,energy:4},review:{time:4,energy:3}};
+var DISCOUNT_FLOOR={tier1:{time:0,energy:0},tier2:{time:0,energy:0},review:{time:0,energy:0}};
 function _applyDiscount(c,stageType,choiceId,selectedCard){
   var dlg=(gameState&&gameState.competencies)?gameState.competencies.delegationChoice.value||0:0;
   var knl=(gameState&&gameState.competencies)?gameState.competencies.knowledge.value||0:0;
