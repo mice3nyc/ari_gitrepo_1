@@ -222,23 +222,23 @@ function showTitleScreen(){
     if(saved&&saved.clearedScenarios){gameState=saved;}
     else{gameState=createInitialState();saveGame();}
   }
+  var _ts=_t('title_screen',{});
   var h='<div class="title-frame">';
-  h+='<h1>AI 리터러시, 위임의 경계!</h1>';
-  h+='<div class="intro-text">AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가</div>';
-  h+='<div class="host-text">';
-  h+='딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>';
-  h+='누구나 할 수 있다면, 누구인가가 중요하다.<br>';
-  h+='무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지. 당신은 구별할 수 있을까?';
-  h+='</div>';
-  // 튜토리얼 4문장 (학생 톤 §11.5)
+  h+='<h1>'+(_ts.heading||'AI 리터러시, 위임의 경계!')+'</h1>';
+  h+='<div class="intro-text">'+(_ts.intro||'AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가')+'</div>';
+  h+='<div class="host-text">'+(_ts.host_text||'딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>누구나 할 수 있다면, 누구인가가 중요하다.<br>무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지. 당신은 구별할 수 있을까?')+'</div>';
+  var _tut=_ts.tutorial||[];
   h+='<ol class="tutorial-list">';
-  h+='<li>시나리오마다 선택지를 고른다. 각 선택은 <span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>를 쓴다.</li>';
-  h+='<li>어떤 선택을 하느냐에 따라 결과물의 점수가 달라지고, 내가 어떤 힘을 썼는지 역량 카드로 확인할 수 있다.</li>';
-  h+='<li>결과물 점수에 따라 등급이 매겨지고, 받은 토큰을 <span class="hl hl--c">시간</span>이나 <span class="hl hl--p">에너지</span>에 직접 넣는다.</li>';
-  h+='<li>경험이 쌓이면 다음 선택의 <span class="hl hl--c">시간</span>·<span class="hl hl--p">에너지</span> 비용이 줄어든다.</li>';
+  if(_tut.length){for(var ti=0;ti<_tut.length;ti++)h+='<li>'+_tut[ti]+'</li>';}
+  else{
+    h+='<li>시나리오마다 선택지를 고른다. 각 선택은 <span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>를 쓴다.</li>';
+    h+='<li>어떤 선택을 하느냐에 따라 결과물의 점수가 달라지고, 내가 어떤 힘을 썼는지 역량 카드로 확인할 수 있다.</li>';
+    h+='<li>결과물 점수에 따라 등급이 매겨지고, 받은 토큰을 <span class="hl hl--c">시간</span>이나 <span class="hl hl--p">에너지</span>에 직접 넣는다.</li>';
+    h+='<li>경험이 쌓이면 다음 선택의 <span class="hl hl--c">시간</span>·<span class="hl hl--p">에너지</span> 비용이 줄어든다.</li>';
+  }
   h+='</ol>';
   h+='<div class="title-actions">';
-  h+='<button class="start-btn-large" onclick="enterFromTitle()">게임 시작</button>';
+  h+='<button class="start-btn-large" onclick="enterFromTitle()">'+(_ts.btn_start||'게임 시작')+'</button>';
   h+='</div>';
   // 캐논 도입·진행자 톤은 별도 자리로 이동 (README 또는 ending). v0.8.x 결정 자리.
   // 폐기 카피 (참고용 주석):
@@ -274,11 +274,12 @@ function showStartScreen(){
   var nextId=null;
   for(var i=0;i<order.length;i++){if(cleared.indexOf(order[i])<0){nextId=order[i];break;}}
   var allDone=(nextId===null);
+  var _ss=_t('start_screen',{});
   var h='<div class="semester-frame">';
-  h+='<h1>AI 리터러시: 위임의 경계</h1>';
-  h+='<div class="subtitle">이건 AI한테 맡겨도 돼?</div>';
+  h+='<h1>'+(_ss.heading||'AI 리터러시: 위임의 경계')+'</h1>';
+  h+='<div class="subtitle">'+(_ss.subtitle||'이건 AI한테 맡겨도 돼?')+'</div>';
   if(allDone){
-    h+='<div style="max-width:420px;margin:8px auto 24px;padding:14px 24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);text-align:center;font-family:var(--font-hand);font-size:26px;font-weight:400;color:var(--ink);transform:rotate(-1.5deg);letter-spacing:1px;">AI 리터러시 시나리오를 모두 완료했습니다!</div>';
+    h+='<div style="max-width:420px;margin:8px auto 24px;padding:14px 24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);text-align:center;font-family:var(--font-hand);font-size:26px;font-weight:400;color:var(--ink);transform:rotate(-1.5deg);letter-spacing:1px;">'+(_ss.all_done_banner||'AI 리터러시 시나리오를 모두 완료했습니다!')+'</div>';
   }
   h+='<div class="scenario-list">';
   order.forEach(function(sid,idx){
@@ -288,7 +289,7 @@ function showStartScreen(){
     var cls='scenario-card';
     if(isCleared)cls+=' cleared';
     if(isNext)cls+=' next';
-    var mark=isCleared?'클리어':(isNext?'다음 추천 →':'자유 선택');
+    var mark=isCleared?(_ss.mark_cleared||'클리어'):(isNext?(_ss.mark_next||'다음 추천 →'):(_ss.mark_free||'자유 선택'));
     var clickAttr=isCleared?'':' onclick="startScenario(\''+sid+'\')"';
     h+='<button class="'+cls+'" type="button"'+clickAttr+'>';
     h+='<span class="sc-num">'+(idx+1)+'</span>';
@@ -298,17 +299,15 @@ function showStartScreen(){
   });
   h+='</div>';
   h+='<div class="semester-actions">';
-  // 메인 액션 — 진행 중 / 다음 시나리오 / 종합 리포트
   if(allDone){
-    h+='<button class="action-main" onclick="showFinalReport()">AI 리터러시 성장 리포트</button>';
+    h+='<button class="action-main" onclick="showFinalReport()">'+(_ss.btn_report||'AI 리터러시 성장 리포트')+'</button>';
   }else if(hasSave()&&gameState.currentScenarioId&&!gameState.completed){
-    h+='<button class="action-main" onclick="continueGame()">이어서 진행</button>';
+    h+='<button class="action-main" onclick="continueGame()">'+(_ss.btn_continue||'이어서 진행')+'</button>';
   }else if(nextId){
-    h+='<button class="action-main" onclick="startScenario(\''+nextId+'\')">다음 시나리오</button>';
+    h+='<button class="action-main" onclick="startScenario(\''+nextId+'\')">'+(_ss.btn_next_scenario||'다음 시나리오')+'</button>';
   }
   h+='</div>';
-  // 튜토리얼 다시 보기 (§11)
-  h+='<button class="tutorial-link" onclick="showTitleScreen()">튜토리얼 다시 보기</button>';
+  h+='<button class="tutorial-link" onclick="showTitleScreen()">'+(_ss.btn_tutorial_again||'튜토리얼 다시 보기')+'</button>';
   h+='</div>';
   container.innerHTML=h;
 }
@@ -324,7 +323,7 @@ function ensureRow(){
     if(i===3)panels='<div class="panels-grid panels-row1">'+panels+'</div><div class="panels-grid panels-row2">';
   }
   panels+='</div>';
-  row.innerHTML=panels+'<div class="next-btn-wrap" id="next-wrap"><button class="next-btn" id="next-btn" onclick="onNext()">다음 &#8594;</button></div>';
+  row.innerHTML=panels+'<div class="next-btn-wrap" id="next-wrap"><button class="next-btn" id="next-btn" onclick="onNext()">'+_t('game_flow.buttons.next','다음 →')+'</button></div>';
   container.appendChild(row);
   currentRow=row;
   return row;
@@ -360,7 +359,7 @@ function renderCut1(){
   panel.querySelector('.panel-body').innerHTML=
     '<p class="highlight">'+sc.title+'</p>'+
     '<p>'+sc.situation.text+'</p>'+
-    '<div class="advance-wrap"><button class="advance-btn" onclick="showTier1Choices()">어떻게 할까? &#8594;</button></div>';
+    '<div class="advance-wrap"><button class="advance-btn" onclick="showTier1Choices()">'+_t('game_flow.buttons.tier1_advance','어떻게 할까? →')+'</button></div>';
   updateStats();
 }
 
@@ -451,21 +450,23 @@ function buildCostHTML(cost){
   var totalEnergyDisc=d.clampedEnergy||0;
   var hasAxisDiscount=(d.dlgEffect>0||totalEnergyDisc>0);
   if(!hasAxisDiscount){
+    var _cl=_t('cost_labels',{});
     return '<div class="choice-cost cost-formula-box">'+
-      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">시간 비용</div><div class="cost-formula-val cost-formula-final"><b>'+cost.time+'</b></div></div></div>'+
-      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">에너지 비용</div><div class="cost-formula-val cost-formula-final"><b>'+cost.energy+'</b></div></div></div>'+
+      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">'+(_cl.time_cost||'시간 비용')+'</div><div class="cost-formula-val cost-formula-final"><b>'+cost.time+'</b></div></div></div>'+
+      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">'+(_cl.energy_cost||'에너지 비용')+'</div><div class="cost-formula-val cost-formula-final"><b>'+cost.energy+'</b></div></div></div>'+
     '</div>';
   }
   var energyHtml='';
-  energyHtml+=_buildCostLine('에너지 비용',d.rawEnergy,'할인',totalEnergyDisc,'최종 에너지',cost.energy);
+  var _cl2=_t('cost_labels',{});
+  energyHtml+=_buildCostLine(_cl2.energy_cost||'에너지 비용',d.rawEnergy,_cl2.discount||'할인',totalEnergyDisc,_cl2.final_energy||'최종 에너지',cost.energy);
   return '<div class="choice-cost cost-formula-box">'+
-    _buildCostLine('시간 비용',d.rawTime,'할인',d.dlgEffect,'최종 시간',cost.time)+
+    _buildCostLine(_cl2.time_cost||'시간 비용',d.rawTime,_cl2.discount||'할인',d.dlgEffect,_cl2.final_time||'최종 시간',cost.time)+
     '<div class="cost-energy-col">'+energyHtml+'</div>'+
   '</div>';
 }
 function getCouponBadge(stageType,choiceId){
   var avail=getAvailableCardDiscounts(stageType,choiceId);
-  if(avail.length>0)return '<div class="cost-coupon-badge" data-coupon-id="'+stageType+':'+choiceId+'">역량카드 할인가능 – 할인 적용하기</div>';
+  if(avail.length>0)return '<div class="cost-coupon-badge" data-coupon-id="'+stageType+':'+choiceId+'">'+_t('coupon.badge_available','역량카드 할인가능 – 할인 적용하기')+'</div>';
   return '';
 }
 function _updateCouponBadge(areaId,choiceId,selectedCard,stageType){
@@ -475,7 +476,8 @@ function _updateCouponBadge(areaId,choiceId,selectedCard,stageType){
     var bid=badges[i].getAttribute('data-coupon-id');
     if(bid&&bid.indexOf(choiceId)>=0){
       if(selectedCard){
-        badges[i].textContent=selectedCard.display+' 역량카드 효과: -'+selectedCard.amount+' 할인';
+        var _badgeTpl=_t('coupon.badge_applied_format','{card} 역량카드 효과: -{amount} 할인');
+        badges[i].textContent=_badgeTpl.replace('{card}',selectedCard.display).replace('{amount}',selectedCard.amount);
         badges[i].classList.add('applied');
         var choiceCard=badges[i].closest('.choice-card');
         if(choiceCard&&stageType){
@@ -512,7 +514,7 @@ function _updateCouponBadge(areaId,choiceId,selectedCard,stageType){
           }
         }
       } else {
-        badges[i].textContent='역량카드 할인가능 – 할인 적용하기';
+        badges[i].textContent=_t('coupon.badge_available','역량카드 할인가능 – 할인 적용하기');
       }
     }
   }
@@ -531,7 +533,7 @@ function showTier1Choices(){
   var btn=currentRow.querySelector('[data-cut="1"] .advance-wrap');if(btn)btn.style.display='none';
   var body=currentRow.querySelector('[data-cut="1"] .panel-body');
   var area=document.createElement('div');area.className='choices-area';area.id='tier1-choices';
-  area.innerHTML='<div class="choices-q">어떻게 할까?</div>';
+  area.innerHTML='<div class="choices-q">'+_t('game_flow.questions.tier1','어떻게 할까?')+'</div>';
   body.appendChild(area);
   var costs=sc.tier1.map(function(c){return getTier1Cost(c.id);});
   sc.tier1.forEach(function(c,i){
@@ -539,7 +541,7 @@ function showTier1Choices(){
     var afford=canAffordCost(costs[i]);
     card.className='choice-card choice-card-nocost'+(afford?'':' disabled');
     if(afford)card.onclick=function(){onTier1(c.id);};
-    var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
+    var tag=afford?'':'<span class="insufficient-tag">'+_t('game_flow.insufficient','자원 부족')+'</span>';
     card.innerHTML='<div class="choice-header"><span class="choice-num">'+c.id+'</span><span class="choice-text">'+c.label+tag+'</span></div>';
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
@@ -553,11 +555,11 @@ function showTier1Choices(){
 function showCut2Summary(){
   var sc=getScenario(),t1=gameState.selectedTier1;
   var t1obj=sc.tier1.find(function(x){return x.id===t1;});
-  setPanelImage(2,'1차 선택');
+  setPanelImage(2,_t('game_flow.panel_labels.tier1_choice','1차 선택'));
   var panel=activatePanel(2);
   panel.querySelector('.panel-body').innerHTML=
-    '<div class="chosen-summary"><div class="chosen-label">1차 선택</div><div class="chosen-title">'+t1+'. '+t1obj.label+'</div><div class="chosen-way">'+t1obj.desc+'</div></div>'+
-    '<div class="advance-wrap"><button class="advance-btn" onclick="showTier2Choices()">더 자세히 — 어떻게 할까? &#8594;</button></div>';
+    '<div class="chosen-summary"><div class="chosen-label">'+_t('game_flow.chosen_labels.tier1','1차 선택')+'</div><div class="chosen-title">'+t1+'. '+t1obj.label+'</div><div class="chosen-way">'+t1obj.desc+'</div></div>'+
+    '<div class="advance-wrap"><button class="advance-btn" onclick="showTier2Choices()">'+_t('game_flow.buttons.tier2_advance','더 자세히 — 어떻게 할까? →')+'</button></div>';
 }
 
 // §23 — 2차 선택지를 Cut 2 body 아래에 펼침
@@ -567,7 +569,7 @@ function showTier2Choices(){
   var btn=currentRow.querySelector('[data-cut="2"] .advance-wrap');if(btn)btn.style.display='none';
   var body=currentRow.querySelector('[data-cut="2"] .panel-body');
   var area=document.createElement('div');area.className='choices-area';area.id='tier2-choices';
-  area.innerHTML='<div class="choices-q">더 자세히 — 어떻게 할까?</div>';
+  area.innerHTML='<div class="choices-q">'+_t('game_flow.questions.tier2','더 자세히 — 어떻게 할까?')+'</div>';
   body.appendChild(area);
   var t2list=sc.tier2[t1];
   var costs=t2list.map(function(c){return getTier2Cost(c.id);});
@@ -578,7 +580,7 @@ function showTier2Choices(){
     if(afford)card.onclick=function(){onTier2(c.id);};
     var costHTML=buildCostHTML(costs[i]);
     var badge=afford?getCouponBadge('tier2',c.id):'';
-    var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
+    var tag=afford?'':'<span class="insufficient-tag">'+_t('game_flow.insufficient','자원 부족')+'</span>';
     card.innerHTML='<div class="choice-header"><span class="choice-num">'+(i+1)+'</span><span class="choice-text">'+c.label+tag+'</span></div>'+costHTML+badge;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
@@ -594,11 +596,11 @@ function showCut3Summary(){
   var t2obj=null;
   ['A','B','C'].forEach(function(g){if(!t2obj&&sc.tier2[g])t2obj=sc.tier2[g].find(function(x){return x.id===t2;});});
   var t2Delta=getLeafDelta(t2obj,gameState.selectedTier1);
-  setPanelImage(3,'2차 선택');
+  setPanelImage(3,_t('game_flow.panel_labels.tier2_choice','2차 선택'));
   var panel=activatePanel(3);
   panel.querySelector('.panel-body').innerHTML=
-    '<div class="chosen-summary"><div class="chosen-label">2차 선택</div><div class="chosen-title">'+t2+'. '+t2obj.label+'</div><div class="chosen-way">위임 깊이: '+t2Delta.delegation+'</div></div>'+
-    '<div class="advance-wrap"><button class="advance-btn" onclick="goCut4()">결과 확인하기 &#8594;</button></div>';
+    '<div class="chosen-summary"><div class="chosen-label">'+_t('game_flow.chosen_labels.tier2','2차 선택')+'</div><div class="chosen-title">'+t2+'. '+t2obj.label+'</div><div class="chosen-way">'+_t('game_flow.delegation_depth','위임 깊이: ')+t2Delta.delegation+'</div></div>'+
+    '<div class="advance-wrap"><button class="advance-btn" onclick="goCut4()">'+_t('game_flow.buttons.result_advance','결과 확인하기 →')+'</button></div>';
 }
 
 // 컷 4: 결과 (raw 결과물) — §23: "결과 확인하기" 클릭 시 호출
@@ -608,16 +610,17 @@ function goCut4(){
   var t2obj=null;
   ['A','B','C'].forEach(function(g){if(!t2obj&&sc.tier2[g])t2obj=sc.tier2[g].find(function(x){return x.id===t2;});});
   var c3btn=currentRow.querySelector('[data-cut="3"] .advance-wrap');if(c3btn)c3btn.style.display='none';
-  setPanelImage(4,'결과');
+  setPanelImage(4,_t('game_flow.panel_labels.result','결과'));
   var panel=activatePanel(4);
   var result=sc.results[t2];
-  // v0.8 — results.basePoint 폐기. 합산 모델은 tier2 단계에서 점수가 박힘 (basePoint+varPoint).
   var t2Pts=getTier2Points(sc,t2);
+  var _metaTpl=_t('game_flow.result_meta','{summary} (이 행동의 점수 {points}점)');
+  var _metaStr=_metaTpl.replace('{summary}',result.summary).replace('{points}',t2Pts.points);
   panel.querySelector('.panel-body').innerHTML=
-    '<p class="highlight">결과 — '+sc.title+'</p>'+
+    '<p class="highlight">'+_t('game_flow.result_prefix','결과 — ')+sc.title+'</p>'+
     '<div class="result-text">'+result.text+'</div>'+
-    '<div class="result-meta">'+result.summary+' (이 행동의 점수 '+t2Pts.points+'점)</div>'+
-    '<div class="advance-wrap"><button class="advance-btn" onclick="showReviewChoices()">검토할까? &#8594;</button></div>';
+    '<div class="result-meta">'+_metaStr+'</div>'+
+    '<div class="advance-wrap"><button class="advance-btn" onclick="showReviewChoices()">'+_t('game_flow.buttons.review_advance','검토할까? →')+'</button></div>';
   trackEvent('result_viewed',{scenarioId:sc.id,tier2:t2,tier2Points:t2Pts.points});
   updateStats();
 }
@@ -629,7 +632,7 @@ function showReviewChoices(){
   var btn=currentRow.querySelector('[data-cut="4"] .advance-wrap');if(btn)btn.style.display='none';
   var body=currentRow.querySelector('[data-cut="4"] .panel-body');
   var area=document.createElement('div');area.className='choices-area';area.id='review-choices';
-  area.innerHTML='<div class="choices-q">제출 전, 어떻게 검토할까?</div>';
+  area.innerHTML='<div class="choices-q">'+_t('game_flow.questions.review','제출 전, 어떻게 검토할까?')+'</div>';
   body.appendChild(area);
   var t2cur=gameState.selectedTier2;
   var costs=sc.reviews.map(function(r){return getReviewCost(t2cur+r.id);});
@@ -641,7 +644,7 @@ function showReviewChoices(){
     var costHTML=buildCostHTML(costs[i]);
     var leafKey=t2cur+r.id;
     var badge=afford?getCouponBadge('review',leafKey):'';
-    var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
+    var tag=afford?'':'<span class="insufficient-tag">'+_t('game_flow.insufficient','자원 부족')+'</span>';
     var leafLabel=(sc.reviewLabels&&sc.reviewLabels[leafKey])||r.label;
     card.innerHTML='<div class="choice-header"><span class="choice-num">'+r.id+'</span><span class="choice-text">'+leafLabel+tag+'</span></div>'+costHTML+badge;
     area.appendChild(card);
@@ -658,15 +661,15 @@ function showCut5Summary(){
   var rvObj=sc.reviews.find(function(x){return x.id===gameState.selectedReview;});
   var supplement=sc.reviewSupplements[leaf]||'';
   var rvLabelLeaf=(sc.reviewLabels&&sc.reviewLabels[leaf])||rvObj.label;
-  setPanelImage(5,'검토');
+  setPanelImage(5,_t('game_flow.panel_labels.review','검토'));
   var panel=activatePanel(5);
-  panel.querySelector('.panel-body').innerHTML='<div class="chosen-summary"><div class="chosen-label">검토 선택</div><div class="chosen-title">'+rvObj.id+'. '+rvLabelLeaf+'</div>'+(supplement?'<div class="chosen-way">'+supplement+'</div>':'')+'</div>';
+  panel.querySelector('.panel-body').innerHTML='<div class="chosen-summary"><div class="chosen-label">'+_t('game_flow.chosen_labels.review','검토 선택')+'</div><div class="chosen-title">'+rvObj.id+'. '+rvLabelLeaf+'</div>'+(supplement?'<div class="chosen-way">'+supplement+'</div>':'')+'</div>';
 }
 
 // 컷 6: 최종 점수 + 아이템 + 자각 + 경험치/레벨업 (Phase 4 통합)
 function goCut6(){
   var sc=getScenario(),leaf=getLeafPath(),fin=sc.finals[leaf];
-  setPanelImage(6,'최종');
+  setPanelImage(6,_t('game_flow.panel_labels.final','최종'));
   var panel=activatePanel(6);
   // v0.8 — CSV 최종등급 lookup
   var grade=getFinalGrade(leaf);
@@ -681,7 +684,7 @@ function goCut6(){
     gradeHTML+='<div style="font-size:140px;font-weight:700;color:'+gradeColor+';letter-spacing:-4px;line-height:1;">'+grade+'</div>';
     gradeHTML+='<div style="font-size:28px;color:#444;font-weight:600;">'+gameState.score+'점</div>';
     if(replayInGrade){
-      gradeHTML+='<button id="replay-btn-grade" style="margin-top:12px;padding:10px 28px;font-size:14px;font-weight:700;background:#ffd93d;color:#000;border:3px solid #000;border-radius:0;cursor:pointer;letter-spacing:0.5px;box-shadow:4px 4px 0 #000;transition:transform 0.05s,box-shadow 0.05s;" onmousedown="this.style.transform=\'translate(2px,2px)\';this.style.boxShadow=\'2px 2px 0 #000\'" onmouseup="this.style.transform=\'none\';this.style.boxShadow=\'4px 4px 0 #000\'" onmouseleave="this.style.transform=\'none\';this.style.boxShadow=\'4px 4px 0 #000\'">다시 도전하기</button>';
+      gradeHTML+='<button id="replay-btn-grade" style="margin-top:12px;padding:10px 28px;font-size:14px;font-weight:700;background:#ffd93d;color:#000;border:3px solid #000;border-radius:0;cursor:pointer;letter-spacing:0.5px;box-shadow:4px 4px 0 #000;transition:transform 0.05s,box-shadow 0.05s;" onmousedown="this.style.transform=\'translate(2px,2px)\';this.style.boxShadow=\'2px 2px 0 #000\'" onmouseup="this.style.transform=\'none\';this.style.boxShadow=\'4px 4px 0 #000\'" onmouseleave="this.style.transform=\'none\';this.style.boxShadow=\'4px 4px 0 #000\'">'+_t('game_flow.buttons.replay_grade','다시 도전하기')+'</button>';
     }
     gradeHTML+='</div><span class="cut-num">6</span><span class="panel-place">최종</span>';
     c6img.innerHTML=gradeHTML;
@@ -738,7 +741,7 @@ function goCut6(){
 
   // ③ B — low key 리플레이 버튼 (C/D는 등급 박스에, S/A는 없음)
   if(grade==='B'){
-    h+='<div style="text-align:center;margin-top:8px;"><button class="replay-btn" id="replay-btn-cut6" style="background:#fff;border:3px solid #000;padding:6px 16px;font-size:12px;color:#000;cursor:pointer;border-radius:0;box-shadow:4px 4px 0 #000;">이 시나리오 다시 해보기</button></div>';
+    h+='<div style="text-align:center;margin-top:8px;"><button class="replay-btn" id="replay-btn-cut6" style="background:#fff;border:3px solid #000;padding:6px 16px;font-size:12px;color:#000;cursor:pointer;border-radius:0;box-shadow:4px 4px 0 #000;">'+_t('game_flow.buttons.replay','이 시나리오 다시 해보기')+'</button></div>';
   }
 
   panel.querySelector('.panel-body').innerHTML=h;
@@ -829,7 +832,7 @@ function goCut6(){
   var clearedAfter=(gameState.clearedScenarios||[]).slice();
   if(clearedAfter.indexOf(scid)<0)clearedAfter.push(scid);
   var willBeAllDone=(clearedAfter.length>=CONFIG.scenarios.length);
-  nb.textContent=willBeAllDone?'AI 리터러시 성장 리포트':'다음 시나리오로 →';
+  nb.textContent=willBeAllDone?_t('game_flow.buttons.report','AI 리터러시 성장 리포트'):_t('game_flow.buttons.next_scenario','다음 시나리오로 →');
   nb.onclick=goNextScenario;
 
   // 시나리오 끝 chain (SPEC §6.3, v0.9 — RP 분배 제거, 에너지 자동 회복)

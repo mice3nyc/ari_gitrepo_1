@@ -7,28 +7,30 @@ function showReport(){
   var sc=getScenario();
   var last=gameState.scenarioHistory[gameState.scenarioHistory.length-1];
   var msg=sc.learningMessage;
-  var h='<div class="report-overlay"><div class="report-inner"><h2>활동 리포트</h2>';
+  var _sr=_t('scenario_report',{});
+  var h='<div class="report-overlay"><div class="report-inner"><h2>'+(_sr.title||'활동 리포트')+'</h2>';
   h+='<div class="report-grid">';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+gameState.score+'</div><div class="report-stat-label">최종 점수</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+(last?last.grade:'-')+'</div><div class="report-stat-label">등급</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+(effectiveCompetency(gameState.competencies.delegationChoice.value)>0?'+':'')+effectiveCompetency(gameState.competencies.delegationChoice.value)+'</div><div class="report-stat-label">위임 선택력</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+(effectiveCompetency(gameState.competencies.knowledge.value)>0?'+':'')+effectiveCompetency(gameState.competencies.knowledge.value)+'</div><div class="report-stat-label">지식</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+gameState.score+'</div><div class="report-stat-label">'+(_sr.stat_score||'최종 점수')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(last?last.grade:'-')+'</div><div class="report-stat-label">'+(_sr.stat_grade||'등급')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(effectiveCompetency(gameState.competencies.delegationChoice.value)>0?'+':'')+effectiveCompetency(gameState.competencies.delegationChoice.value)+'</div><div class="report-stat-label">'+(_sr.stat_delegation||'위임 선택력')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(effectiveCompetency(gameState.competencies.knowledge.value)>0?'+':'')+effectiveCompetency(gameState.competencies.knowledge.value)+'</div><div class="report-stat-label">'+(_sr.stat_knowledge||'지식')+'</div></div>';
   h+='</div>';
   if(last){
-    h+='<div class="report-comment"><b>너의 경로</b>: '+last.tier1+' → '+last.tier2+' → '+last.review+' ('+last.leaf+')<br><br>';
-    if(last.item)h+='<b>획득 아이템</b>: '+last.item+'<br><br>';
+    h+='<div class="report-comment"><b>'+_t('game_flow.your_path','너의 경로')+'</b>: '+last.tier1+' → '+last.tier2+' → '+last.review+' ('+last.leaf+')<br><br>';
+    if(last.item)h+='<b>'+_t('game_flow.acquired_item','획득 아이템')+'</b>: '+last.item+'<br><br>';
     var fin=sc.finals[last.leaf];
     var rfb=fin?(fin.reportFeedback||fin.awareness||''):'';
     if(rfb)h+='<i>"'+rfb+'"</i><br><br>';
-    h+='<b>이 시나리오의 메시지</b>: '+msg+'</div>';
+    h+='<b>'+_t('game_flow.scenario_message','이 시나리오의 메시지')+'</b>: '+msg+'</div>';
   }
   // v0.5: 학기 진행 알림 + 두 버튼
   var clearedNow=(gameState.clearedScenarios||[]).slice();
   if(gameState.currentScenarioId&&clearedNow.indexOf(gameState.currentScenarioId)<0)clearedNow.push(gameState.currentScenarioId);
   var totalN=CONFIG.scenarios.length;
   var willBeAllDone=(clearedNow.length>=totalN);
-  h+='<div class="report-progress" style="margin:18px 0 14px;font-size:13px;color:#444;text-align:center;">학기 진행 '+clearedNow.length+' / '+totalN+(willBeAllDone?' — 학기를 모두 통과했다':'')+'</div>';
-  h+='<button class="start-btn" onclick="goNextScenario()">'+(willBeAllDone?'AI 리터러시 성장 리포트':'시나리오 선택으로')+'</button>';
+  var _progTpl=_t('game_flow.semester_progress','학기 진행 {done} / {total}');
+  h+='<div class="report-progress" style="margin:18px 0 14px;font-size:13px;color:#444;text-align:center;">'+_progTpl.replace('{done}',clearedNow.length).replace('{total}',totalN)+(willBeAllDone?_t('game_flow.semester_all_done',' — 학기를 모두 통과했다'):'')+'</div>';
+  h+='<button class="start-btn" onclick="goNextScenario()">'+(willBeAllDone?_t('game_flow.buttons.report','AI 리터러시 성장 리포트'):_t('game_flow.buttons.scenario_select','시나리오 선택으로'))+'</button>';
   h+='</div></div>';
   container.innerHTML=h;
 }
@@ -345,7 +347,7 @@ function showFinalReport(){
   var dv=gameState.competencies.delegationChoice.value;
   var kv=gameState.competencies.knowledge.value;
   var compType=getCompetencyType(dv,kv);
-  var compText=(CONFIG.resultTextsByType||{})[compType]||'';
+  var compText=_t('config_texts.result_types.'+compType,'')||(CONFIG.resultTextsByType||{})[compType]||'';
   function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
   // texts.yaml — report 섹션 텍스트
@@ -356,15 +358,17 @@ function showFinalReport(){
   var kvE=effectiveCompetency(kv);
 
   var h='<div class="report-overlay"><div class="report-inner report-v813">';
-  h+='<div style="display:flex;align-items:center;min-height:56px;padding:0 22px;margin-bottom:24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);font-size:20px;font-weight:700;letter-spacing:1px;">AI 리터러시 성장 리포트</div>';
-  h+='<div class="report-subtitle">한 학기 동안 다섯 시나리오에서 내린 선택과 그 결과를 돌아봅니다.<br>AI에게 무엇을 맡기고 무엇을 직접 했는지, 어떤 역량이 자랐는지 확인하세요.</div>';
+  var _fr=_t('final_report',{});
+  h+='<div style="display:flex;align-items:center;min-height:56px;padding:0 22px;margin-bottom:24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);font-size:20px;font-weight:700;letter-spacing:1px;">'+(_fr.title_bar||'AI 리터러시 성장 리포트')+'</div>';
+  h+='<div class="report-subtitle">'+(_fr.subtitle||'한 학기 동안 다섯 시나리오에서 내린 선택과 그 결과를 돌아봅니다.<br>AI에게 무엇을 맡기고 무엇을 직접 했는지, 어떤 역량이 자랐는지 확인하세요.')+'</div>';
 
   // 상단: 4박스 통계 (총점 + 레벨 + 판단하는 힘 + 아는것의 힘)
   h+='<div class="report-grid" style="grid-template-columns:repeat(4,1fr);max-width:600px;margin:0 auto 16px;">';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+totalScore+'</div><div class="report-stat-label">학기 총점</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">Lv.'+lv+'</div><div class="report-stat-label">최종 레벨</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num" style="color:'+(dvE>=0?'var(--acc-mint-deep)':'var(--acc-pink-deep)')+'">'+(dvE>0?'+':'')+dvE+'</div><div class="report-stat-label">판단하는 힘</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num" style="color:'+(kvE>=0?'var(--acc-mint-deep)':'var(--acc-pink-deep)')+'">'+(kvE>0?'+':'')+kvE+'</div><div class="report-stat-label">아는것의 힘</div></div>';
+  var _sl=R.stat_labels||{};
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+totalScore+'</div><div class="report-stat-label">'+(_sl.total||'학기 총점')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">Lv.'+lv+'</div><div class="report-stat-label">'+(_sl.level||'최종 레벨')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num" style="color:'+(dvE>=0?'var(--acc-mint-deep)':'var(--acc-pink-deep)')+'">'+(dvE>0?'+':'')+dvE+'</div><div class="report-stat-label">'+(_sl.delegation||'판단하는 힘')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num" style="color:'+(kvE>=0?'var(--acc-mint-deep)':'var(--acc-pink-deep)')+'">'+(kvE>0?'+':'')+kvE+'</div><div class="report-stat-label">'+(_sl.knowledge||'아는것의 힘')+'</div></div>';
   h+='</div>';
 
   ensureInventory();
@@ -400,7 +404,7 @@ function showFinalReport(){
   for(var oi=0;oi<hcFlat.length;oi++){if(ownedHC[hcFlat[oi].axis+'::'+hcFlat[oi].tag])hcOwned++;}
 
   h+='<div class="report-cards-section" style="border:var(--border-w) solid var(--ink);background:var(--bg-card);box-shadow:var(--shadow);padding:0 0 20px;margin-bottom:20px;">';
-  h+='<div style="display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:var(--acc-mint);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">판단하는 힘 — 인간중심 역량 카드<span style="font-size:13px;font-weight:600;color:var(--ink-mute);">'+hcOwned+' / '+hcFlat.length+'</span></div>';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:var(--acc-mint);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">'+_t('final_report.delegation_header','판단하는 힘 — 인간중심 역량 카드')+'<span style="font-size:13px;font-weight:600;color:var(--ink-mute);">'+hcOwned+' / '+hcFlat.length+'</span></div>';
   h+='<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding:14px 16px;">';
   for(var ci=0;ci<hcFlat.length;ci++){
     var card=hcFlat[ci];
@@ -426,9 +430,9 @@ function showFinalReport(){
 
   h+='</div>';
   h+='<div class="report-cards-section" style="border:var(--border-w) solid var(--ink);background:var(--bg-card);box-shadow:var(--shadow);padding:0 0 20px;margin-bottom:20px;">';
-  h+='<div style="display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:var(--acc-cyan);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">아는것의 힘 — 도메인 역량 카드<span style="font-size:13px;font-weight:600;color:var(--ink-mute);">'+domOwned.length+'장</span></div>';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:var(--acc-cyan);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">'+_t('final_report.knowledge_header','아는것의 힘 — 도메인 역량 카드')+'<span style="font-size:13px;font-weight:600;color:var(--ink-mute);">'+domOwned.length+'장</span></div>';
   if(domOwned.length===0){
-    h+='<div style="font-size:13px;color:#888;padding:14px 16px;">이번 학기는 도메인 역량 카드를 받지 못했어요.</div>';
+    h+='<div style="font-size:13px;color:#888;padding:14px 16px;">'+_t('final_report.no_domain_cards','이번 학기는 도메인 역량 카드를 받지 못했어요.')+'</div>';
   }else{
     h+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px 16px;">';
     for(var dk=0;dk<domOwned.length;dk++){
@@ -468,7 +472,7 @@ function showFinalReport(){
     var reflection=(fin&&fin.reportReflection)||'';
     if(reflection){
       h+='<div style="margin:10px 14px 4px;padding:8px 12px;background:var(--bg-soft);border:2px solid var(--ink);font-size:12px;line-height:1.6;color:var(--ink-mute);">';
-      h+='<b>핵심 돌아보기</b> — '+_esc(reflection);
+      h+='<b>'+_t('game_flow.reflection_label','핵심 돌아보기')+'</b> — '+_esc(reflection);
       h+='</div>';
     }
 
@@ -486,7 +490,7 @@ function showFinalReport(){
   });
   h+='</div>';
 
-  h+='<button class="start-btn" onclick="backToStartScreen()">시작 화면 돌아가기</button>';
+  h+='<button class="start-btn" onclick="backToStartScreen()">'+_t('game_flow.buttons.back_to_start','시작 화면 돌아가기')+'</button>';
   h+='</div></div>';
   container.innerHTML=h;
 }
@@ -518,7 +522,7 @@ function _renderGrowthReport(hist, compType, inventory){
   var typeText=_typeText(compType);
   var patText=(GR.patterns||{})[pattern]||'';
   h+='<div style="margin-bottom:20px;padding:16px 18px;background:var(--bg-soft);border:var(--border-w) solid var(--ink);">';
-  h+='<div style="font-size:11px;color:var(--ink-soft);font-weight:700;letter-spacing:1.5px;margin-bottom:4px;">학습자 유형</div>';
+  h+='<div style="font-size:11px;color:var(--ink-soft);font-weight:700;letter-spacing:1.5px;margin-bottom:4px;">'+_t('final_report.learner_type_label','학습자 유형')+'</div>';
   h+='<div style="font-size:18px;font-weight:800;margin-bottom:8px;">'+_esc(typeName)+'</div>';
   if(typeText)h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);margin-bottom:8px;">'+typeText+'</div>';
   if(patText)h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);">'+_esc(patText)+'</div>';
@@ -526,7 +530,7 @@ function _renderGrowthReport(hist, compType, inventory){
 
   // (6) 시나리오별 선택 경로 + 결과 메시지
   h+='<div style="margin-bottom:20px;">';
-  h+='<div style="font-size:16px;font-weight:700;margin-bottom:12px;">시나리오별 결과</div>';
+  h+='<div style="font-size:16px;font-weight:700;margin-bottom:12px;">'+_t('final_report.scenario_results_title','시나리오별 결과')+'</div>';
   for(var j=0;j<hist.length;j++){
     var r=hist[j];
     var sc=SCENARIOS[r.scenarioId];
@@ -555,15 +559,15 @@ function _renderGrowthReport(hist, compType, inventory){
   }
   if(hasRecovery||hasChallengeCard){
     h+='<div style="margin-bottom:20px;padding:14px 16px;background:var(--acc-yellow-soft);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);">';
-    h+='<div style="font-size:15px;font-weight:700;margin-bottom:8px;">성장 카드</div>';
+    h+='<div style="font-size:15px;font-weight:700;margin-bottom:8px;">'+_t('final_report.growth_cards_title','성장 카드')+'</div>';
     if(hasRecovery){
       h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);margin-bottom:6px;">';
-      h+='<b>회복력</b> — 결과가 아쉬웠지만 포기하지 않았다. 다시 도전할 수 있는 힘이 생겼다.';
+      h+='<b>'+_t('recovery.title','회복력')+'</b> — '+_t('recovery.report_recovery','결과가 아쉬웠지만 포기하지 않았다. 다시 도전할 수 있는 힘이 생겼다.');
       h+='</div>';
     }
     if(hasChallengeCard){
       h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);">';
-      h+='<b>도전력</b> — 같은 시나리오에 다시 도전해서 더 나은 결과를 만들었다. 실패에서 배우는 힘이다.';
+      h+='<b>도전력</b> — '+_t('recovery.report_challenge','같은 시나리오에 다시 도전해서 더 나은 결과를 만들었다. 실패에서 배우는 힘이다.');
       h+='</div>';
     }
     h+='</div>';

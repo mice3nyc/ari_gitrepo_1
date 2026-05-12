@@ -147,16 +147,18 @@ function showCouponSelect(cards,onConfirm){
   var overlay=document.createElement('div');overlay.className='coupon-overlay';
   var box=document.createElement('div');box.className='coupon-box';
   var selected=cards[0];
-  var html='<div class="coupon-title">할인 적용</div>';
-  html+='<div style="font-size:12px;color:#555;margin-bottom:12px;">이번 선택에 사용할 역량을 골라주세요:</div>';
+  var _cpn=_t('coupon',{});
+  var html='<div class="coupon-title">'+(_cpn.title||'할인 적용')+'</div>';
+  html+='<div style="font-size:12px;color:#555;margin-bottom:12px;">'+(_cpn.subtitle||'이번 선택에 사용할 역량을 골라주세요:')+'</div>';
   html+='<div class="coupon-options">';
   for(var i=0;i<cards.length;i++){
     var c=cards[i];
-    var strongTag=c.amount>=3?'<span class="coupon-strong-tag">강한 매칭</span>':'';
-    html+='<div class="coupon-option'+(i===0?' selected':'')+'" data-idx="'+i+'"><div class="coupon-radio"></div><div class="coupon-card-name">'+c.display+strongTag+'</div><div class="coupon-discount-amount">에너지 -'+c.amount+'</div></div>';
+    var strongTag=c.amount>=3?'<span class="coupon-strong-tag">'+(_cpn.strong_tag||'강한 매칭')+'</span>':'';
+    var _edFmt=(_cpn.energy_discount_format||'에너지 -{amount}').replace('{amount}',c.amount);
+    html+='<div class="coupon-option'+(i===0?' selected':'')+'" data-idx="'+i+'"><div class="coupon-radio"></div><div class="coupon-card-name">'+c.display+strongTag+'</div><div class="coupon-discount-amount">'+_edFmt+'</div></div>';
   }
   html+='</div>';
-  html+='<button class="coupon-confirm">적용하고 진행 →</button>';
+  html+='<button class="coupon-confirm">'+(_cpn.btn_confirm||'적용하고 진행 →')+'</button>';
   box.innerHTML=html;
   overlay.appendChild(box);
   document.body.appendChild(overlay);

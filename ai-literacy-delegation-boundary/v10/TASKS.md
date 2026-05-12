@@ -131,20 +131,50 @@
 
 ### Phase 6 — 모션 통일 + 최종 검증
 
-- [ ] `transition: all 0.2s` → `transform 0.05s, box-shadow 0.05s` (전역)
-- [ ] 모든 인터랙션 누름 피드백 점검
-- [ ] 스타일 가이드 §9 체크리스트 전항목 검증:
-  - [ ] 모든 카드/버튼 — 3px 검정 테두리
-  - [ ] 모서리 직각 (border-radius: 0)
-  - [ ] 그림자 4px 오프셋 단색 (블러 0)
-  - [ ] 화면당 액센트 2색 이하
-  - [ ] 정답/오답 색 매핑 일관 (mint/pink)
-  - [ ] 모든 텍스트 검정 — 흰글씨 없음
-  - [ ] 손글씨 보조 영역만
-  - [ ] Paperlogy 로드 + Pretendard 폴백
-  - [ ] 모든 인터랙션 누름 피드백
+**모션 통일 ✅** (e363c50)
+- [x] `transition: all` 전부 제거 → 구체 속성으로 (panel, resource-num, stat-num)
+- [x] start-btn-large: bg:#111/color:#fff → yellow + press 0.05s
+- [x] card-reward-confirm: bg:#111/color:#fff → yellow + press 0.05s
+- [x] recovery-card-btn: all 0.15s → transform 0.05s, box-shadow 0.05s
+
+**스타일 가이드 체크리스트** (미완)
 - [ ] 5시나리오 여러 경로 완주 검증
-- [ ] 빌드 + 커밋 + 푸시
+- [ ] 전항목 최종 QA
+
+---
+
+### Phase 7 — UI 텍스트 분리 (texts.yaml 확장) ✅
+
+**texts.yaml 확장** (258개 항목, 새 섹션 12개)
+- [x] title_screen — 타이틀 화면 텍스트
+- [x] start_screen — 시나리오 선택 화면
+- [x] game_flow — 게임 진행 UI (질문, 버튼, 패널 라벨)
+- [x] cost_labels — 비용 라벨 (시간/에너지/할인/최종)
+- [x] hud — HUD (자원/역량 패널)
+- [x] modals — 레벨업, RP 분배 모달
+- [x] coupon — 할인 카드 선택
+- [x] recovery — 회복력 특별 UI
+- [x] config_texts — resultTextsByType, resultMoods
+- [x] inventory_labels — 인벤토리 섹션 라벨
+- [x] scenario_report — 시나리오 활동 리포트
+- [x] final_report — 최종 리포트 확장
+
+**JS 코드 수정** (하드코딩 → TEXTS 참조, fallback 유지)
+- [x] _t() 텍스트 헬퍼 함수 추가 (00-config.js)
+- [x] 09-render-scenario.js — 타이틀/시작/게임흐름/비용/쿠폰 배지
+- [x] 11-report.js — 활동 리포트/최종 리포트/성장 리포트
+- [x] 13-inventory.js — 인벤토리 섹션/카드 리워드/회복력 모달
+- [x] 04-resources.js — 쿠폰 선택 UI
+- [x] 05-modals.js — RP 분배 모달 미리보기/손실 텍스트
+- [x] 03-engine.js — 회복력 카드 노트 텍스트
+- [x] 10-event-handlers.js — 아는것의 힘 라벨
+- [x] 14-init.js — applyUITexts 확장 (HUD, 레벨업, RP, 리셋 모달)
+
+**CSV 변환 워크플로우**
+- [x] texts_to_csv.py — YAML → CSV (258개 항목)
+- [x] csv_to_texts.py — CSV → YAML (round-trip 검증 통과)
+
+**빌드**: 861,582 bytes (이전 847,291 → +14,291)
 
 ---
 

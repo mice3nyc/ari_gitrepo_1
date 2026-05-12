@@ -139,8 +139,9 @@ function updateDomainLabel(){
   var sc=getScenario();
   var el=document.getElementById('stat-name-knowledge');
   if(!sc||!el)return;
-  var label=sc.domainLabel||(sc.domainPool&&sc.domainPool[0])||'아는것의 힘';
-  el.textContent='아는것의 힘 ('+label+')';
+  var _knlName=_t('hud.knowledge','아는것의 힘');
+  var label=sc.domainLabel||(sc.domainPool&&sc.domainPool[0])||_knlName;
+  el.textContent=_knlName+' ('+label+')';
 }
 
 function goNextScenario(){

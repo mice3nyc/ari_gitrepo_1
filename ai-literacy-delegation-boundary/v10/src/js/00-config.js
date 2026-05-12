@@ -1,5 +1,19 @@
 
 // =====================================================
+// 2a. Text Helper — texts.yaml → JS 참조
+// =====================================================
+function _t(path,fallback){
+  if(typeof TEXTS==='undefined'||!TEXTS)return fallback;
+  var keys=path.split('.');
+  var obj=TEXTS;
+  for(var i=0;i<keys.length;i++){
+    if(obj==null)return fallback;
+    obj=obj[keys[i]];
+  }
+  return obj!=null?obj:fallback;
+}
+
+// =====================================================
 // 3. Config
 // =====================================================
 var CONFIG={

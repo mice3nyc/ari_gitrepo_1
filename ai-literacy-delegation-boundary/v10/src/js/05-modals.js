@@ -131,7 +131,9 @@ function showRPDistributionModal(){
       var tWaste=tCurrent-tClamp;
       document.getElementById('rp-allocate-time').textContent='+'+alloc.time;
       var tNum=document.getElementById('rp-bucket-time-num');
-      tNum.innerHTML=tClamp+'/'+rt.max+(tWaste>0?' <span class="waste">(+'+(alloc.time)+', 손실 '+tWaste+')</span>':'');
+      var _rpM=_t('modals.rp_distribution',{});
+      var _wasteFmt=(_rpM.waste_format||'(+{alloc}, 손실 {waste})');
+      tNum.innerHTML=tClamp+'/'+rt.max+(tWaste>0?' <span class="waste">'+_wasteFmt.replace('{alloc}',alloc.time).replace('{waste}',tWaste)+'</span>':'');
       document.getElementById('rp-bucket-time-fill').style.width=((rt.current/rt.max)*100)+'%';
       var tOver=document.getElementById('rp-bucket-time-overlay');
       var tApplied=tClamp-rt.current;
@@ -144,7 +146,7 @@ function showRPDistributionModal(){
       var eWaste=eCurrent-eClamp;
       document.getElementById('rp-allocate-energy').textContent='+'+alloc.energy;
       var eNum=document.getElementById('rp-bucket-energy-num');
-      eNum.innerHTML=eClamp+'/'+re.max+(eWaste>0?' <span class="waste">(+'+(alloc.energy)+', 손실 '+eWaste+')</span>':'');
+      eNum.innerHTML=eClamp+'/'+re.max+(eWaste>0?' <span class="waste">'+_wasteFmt.replace('{alloc}',alloc.energy).replace('{waste}',eWaste)+'</span>':'');
       document.getElementById('rp-bucket-energy-fill').style.width=((re.current/re.max)*100)+'%';
       var eOver=document.getElementById('rp-bucket-energy-overlay');
       var eApplied=eClamp-re.current;
@@ -154,13 +156,14 @@ function showRPDistributionModal(){
       // Preview
       var preview=document.getElementById('rp-preview');
       if(alloc.time||alloc.energy){
-        var p='→ 시간 +'+tApplied+' / 에너지 +'+eApplied+' 충전';
+        var _prevFmt=(_rpM.preview_format||'→ 시간 +{time} / 에너지 +{energy} 충전');
+        var p=_prevFmt.replace('{time}',tApplied).replace('{energy}',eApplied);
         var totalWaste=tWaste+eWaste;
-        if(totalWaste>0)p+=' <span class="rp-overflow-warn">(메터 초과로 '+totalWaste+' 손실)</span>';
+        if(totalWaste>0)p+=' <span class="rp-overflow-warn">'+(_rpM.overflow_warn||'(메터 초과로 {waste} 손실)').replace('{waste}',totalWaste)+'</span>';
         preview.innerHTML=p;
         preview.classList.remove('empty');
       }else{
-        preview.textContent='토큰을 시간/에너지에 분배하세요';
+        preview.textContent=(_rpM.preview_empty||'토큰을 시간/에너지에 분배하세요');
         preview.classList.add('empty');
       }
 

@@ -1514,6 +1514,20 @@ button,
 
 <script>
 // =====================================================
+// 2a. Text Helper — texts.yaml → JS 참조
+// =====================================================
+function _t(path,fallback){
+  if(typeof TEXTS==='undefined'||!TEXTS)return fallback;
+  var keys=path.split('.');
+  var obj=TEXTS;
+  for(var i=0;i<keys.length;i++){
+    if(obj==null)return fallback;
+    obj=obj[keys[i]];
+  }
+  return obj!=null?obj:fallback;
+}
+
+// =====================================================
 // 3. Config
 // =====================================================
 var CONFIG={
@@ -13130,6 +13144,165 @@ var TEXTS = {
       "reviewWeak": "이 학생은 빠르게 결과를 만들지만 마지막 확인 습관이 아직 약하다. AI 결과를 제출 전에 한 문장으로 요약하게 하는 연습을 연결하면 좋다.",
       "recoveryNeeded": "이 학생은 결과를 빠르게 얻는 경향이 있다. 한 과제에서 AI 없이 먼저 해보고, AI로 보강하는 순서를 체험하게 하면 좋다."
     }
+  },
+  "title_screen": {
+    "heading": "경기도 하이러닝 - AI 리터러시, 위임의 경계!",
+    "intro": "AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가",
+    "host_text": "딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>누구나 할 수 있다면, 누구인가가 중요하다.<br>무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지. 당신은 구별할 수 있을까?",
+    "tutorial": [
+      "시나리오마다 선택지를 고른다. 각 선택은 <span class=\"hl hl--c\">시간</span>과 <span class=\"hl hl--p\">에너지</span>를 쓴다.",
+      "어떤 선택을 하느냐에 따라 결과물의 점수가 달라지고, 내가 어떤 힘을 썼는지 역량 카드로 확인할 수 있다.",
+      "결과물 점수에 따라 등급이 매겨지고, 받은 토큰을 <span class=\"hl hl--c\">시간</span>이나 <span class=\"hl hl--p\">에너지</span>에 직접 넣는다.",
+      "경험이 쌓이면 다음 선택의 <span class=\"hl hl--c\">시간</span>·<span class=\"hl hl--p\">에너지</span> 비용이 줄어든다."
+    ],
+    "btn_start": "게임 시작"
+  },
+  "start_screen": {
+    "heading": "AI 리터러시: 위임의 경계",
+    "subtitle": "이건 AI한테 맡겨도 돼?",
+    "all_done_banner": "AI 리터러시 시나리오를 모두 완료했습니다!",
+    "mark_cleared": "클리어",
+    "mark_next": "다음 추천 →",
+    "mark_free": "자유 선택",
+    "btn_report": "AI 리터러시 성장 리포트",
+    "btn_continue": "이어서 진행",
+    "btn_next_scenario": "다음 시나리오",
+    "btn_tutorial_again": "튜토리얼 다시 보기"
+  },
+  "game_flow": {
+    "panel_labels": {
+      "tier1_choice": "1차 선택",
+      "tier2_choice": "2차 선택",
+      "result": "결과",
+      "review": "검토",
+      "final": "최종"
+    },
+    "questions": {
+      "tier1": "어떻게 할까?",
+      "tier2": "더 자세히 — 어떻게 할까?",
+      "review": "제출 전, 어떻게 검토할까?"
+    },
+    "buttons": {
+      "tier1_advance": "어떻게 할까? →",
+      "tier2_advance": "더 자세히 — 어떻게 할까? →",
+      "result_advance": "결과 확인하기 →",
+      "review_advance": "검토할까? →",
+      "next": "다음 →",
+      "next_scenario": "다음 시나리오로 →",
+      "scenario_select": "시나리오 선택으로",
+      "report": "AI 리터러시 성장 리포트",
+      "replay": "이 시나리오 다시 해보기",
+      "replay_grade": "다시 도전하기",
+      "back_to_start": "시작 화면 돌아가기"
+    },
+    "chosen_labels": {
+      "tier1": "1차 선택",
+      "tier2": "2차 선택",
+      "review": "검토 선택"
+    },
+    "result_prefix": "결과 — ",
+    "result_meta": "{summary} (이 행동의 점수 {points}점)",
+    "delegation_depth": "위임 깊이: ",
+    "insufficient": "자원 부족",
+    "semester_progress": "학기 진행 {done} / {total}",
+    "semester_all_done": " — 학기를 모두 통과했다",
+    "reflection_label": "핵심 돌아보기",
+    "your_path": "너의 경로",
+    "acquired_item": "획득 아이템",
+    "scenario_message": "이 시나리오의 메시지"
+  },
+  "cost_labels": {
+    "time_cost": "시간 비용",
+    "energy_cost": "에너지 비용",
+    "discount": "할인",
+    "final_time": "최종 시간",
+    "final_energy": "최종 에너지"
+  },
+  "hud": {
+    "resource_title": "자원",
+    "time": "시간",
+    "energy": "에너지",
+    "competency_title": "역량",
+    "delegation": "판단하는 힘",
+    "knowledge": "아는것의 힘"
+  },
+  "modals": {
+    "levelup": {
+      "badge": "LEVEL UP",
+      "token_bonus_label": "자원토큰 보너스",
+      "btn_confirm": "확인 →"
+    },
+    "rp_distribution": {
+      "title": "자원토큰 분배",
+      "subtitle": "받은 토큰을 시간과 에너지에 나눠 담으세요.",
+      "subtitle_hint": "시간과 에너지는 알아서 돌아오지 않습니다. 여기서 넣는 만큼만 충전됩니다.",
+      "remaining_label": "남은 자원토큰",
+      "preview_empty": "토큰을 시간/에너지에 분배하세요",
+      "preview_format": "→ 시간 +{time} / 에너지 +{energy} 충전",
+      "overflow_warn": "(메터 초과로 {waste} 손실)",
+      "waste_format": "(+{alloc}, 손실 {waste})",
+      "btn_confirm": "분배 완료 →"
+    }
+  },
+  "coupon": {
+    "title": "할인 적용",
+    "subtitle": "이번 선택에 사용할 역량을 골라주세요:",
+    "strong_tag": "강한 매칭",
+    "energy_discount_format": "에너지 -{amount}",
+    "btn_confirm": "적용하고 진행 →",
+    "badge_available": "역량카드 할인가능 – 할인 적용하기",
+    "badge_applied_format": "{card} 역량카드 효과: -{amount} 할인"
+  },
+  "recovery": {
+    "title": "회복력",
+    "btn_use": "회복역량 사용해 시간 되돌리기",
+    "btn_use_sub": "시나리오 다시 도전",
+    "btn_skip": "다음 시나리오로 →",
+    "note": "이번 결과를 바탕으로 다시 시도할 수 있는 회복력 카드가 생겼어요.",
+    "report_recovery": "결과가 아쉬웠지만 포기하지 않았다. 다시 도전할 수 있는 힘이 생겼다.",
+    "report_challenge": "같은 시나리오에 다시 도전해서 더 나은 결과를 만들었다. 실패에서 배우는 힘이다."
+  },
+  "config_texts": {
+    "result_types": {
+      "pp": "AI를 동료로 쓰면서 자기 지식도 같이 키웠다. AI 리터러시의 본 모습.",
+      "pn": "AI를 잘 골라 썼지만, 검증할 자기 토대가 얇다. AI의 답을 비판할 힘이 모자란다.",
+      "np": "자기 힘으로 풀어냈다. 다만 AI에 맡겨야 할 자리에서도 혼자 갔다 — 효율이 떨어졌다.",
+      "nn": "AI 리터러시의 출발선. 무엇을 위임하고 무엇을 익힐지, 다시 한 번.",
+      "mid": "흔들리며 길을 찾는 중."
+    },
+    "result_moods": {
+      "S": "와, 이번 학기 진짜 멋졌어. AI랑 베프가 됐네.",
+      "A": "꽤 잘 골라 썼어. 다음엔 더 멀리 갈 수 있겠다.",
+      "B": "맞췄다 놓쳤다 한 학기. 다음엔 어떻게 갈까?",
+      "C": "좀 헷갈렸지? 뭐가 내 일이고 뭐가 AI 일인지.",
+      "D": "이번 학기는 그냥 흘려보냈어. 한 번 더 도전!"
+    }
+  },
+  "inventory_labels": {
+    "section_human_centric": "인간중심 역량",
+    "section_domain": "도메인 역량",
+    "section_growth": "성장 역량",
+    "legacy_prefix": "이전 버전 카드",
+    "track_human_centric": "인간중심 역량",
+    "track_domain": "도메인 역량",
+    "track_growth": "성장 역량"
+  },
+  "scenario_report": {
+    "title": "활동 리포트",
+    "stat_score": "최종 점수",
+    "stat_grade": "등급",
+    "stat_delegation": "위임 선택력",
+    "stat_knowledge": "지식"
+  },
+  "final_report": {
+    "title_bar": "AI 리터러시 성장 리포트",
+    "subtitle": "한 학기 동안 다섯 시나리오에서 내린 선택과 그 결과를 돌아봅니다.<br>AI에게 무엇을 맡기고 무엇을 직접 했는지, 어떤 역량이 자랐는지 확인하세요.",
+    "delegation_header": "판단하는 힘 — 인간중심 역량 카드",
+    "knowledge_header": "아는것의 힘 — 도메인 역량 카드",
+    "no_domain_cards": "이번 학기는 도메인 역량 카드를 받지 못했어요.",
+    "scenario_results_title": "시나리오별 결과",
+    "growth_cards_title": "성장 카드",
+    "learner_type_label": "학습자 유형"
   }
 };
 // =====================================================
@@ -13308,7 +13481,7 @@ function applyReview(rid){
     for(var gi=0;gi<gc.length;gi++){if(gc[gi].scenario===gameState.currentScenarioId&&gc[gi].label==='회복력'){hasRecovery=true;break;}}
     if(!hasRecovery){
       if(!gameState.inventory.growthCards)gameState.inventory.growthCards=[];
-      gameState.inventory.growthCards.push({label:'회복력',scenario:gameState.currentScenarioId,leaf:leaf,note:'이번 결과를 바탕으로 다시 시도할 수 있는 회복력 카드가 생겼어요.'});
+      gameState.inventory.growthCards.push({label:'회복력',scenario:gameState.currentScenarioId,leaf:leaf,note:_t('recovery.note','이번 결과를 바탕으로 다시 시도할 수 있는 회복력 카드가 생겼어요.')});
     }
   }
   var resourcePenalty=calcResourcePenalty(gameState.resources);
@@ -13566,16 +13739,18 @@ function showCouponSelect(cards,onConfirm){
   var overlay=document.createElement('div');overlay.className='coupon-overlay';
   var box=document.createElement('div');box.className='coupon-box';
   var selected=cards[0];
-  var html='<div class="coupon-title">할인 적용</div>';
-  html+='<div style="font-size:12px;color:#555;margin-bottom:12px;">이번 선택에 사용할 역량을 골라주세요:</div>';
+  var _cpn=_t('coupon',{});
+  var html='<div class="coupon-title">'+(_cpn.title||'할인 적용')+'</div>';
+  html+='<div style="font-size:12px;color:#555;margin-bottom:12px;">'+(_cpn.subtitle||'이번 선택에 사용할 역량을 골라주세요:')+'</div>';
   html+='<div class="coupon-options">';
   for(var i=0;i<cards.length;i++){
     var c=cards[i];
-    var strongTag=c.amount>=3?'<span class="coupon-strong-tag">강한 매칭</span>':'';
-    html+='<div class="coupon-option'+(i===0?' selected':'')+'" data-idx="'+i+'"><div class="coupon-radio"></div><div class="coupon-card-name">'+c.display+strongTag+'</div><div class="coupon-discount-amount">에너지 -'+c.amount+'</div></div>';
+    var strongTag=c.amount>=3?'<span class="coupon-strong-tag">'+(_cpn.strong_tag||'강한 매칭')+'</span>':'';
+    var _edFmt=(_cpn.energy_discount_format||'에너지 -{amount}').replace('{amount}',c.amount);
+    html+='<div class="coupon-option'+(i===0?' selected':'')+'" data-idx="'+i+'"><div class="coupon-radio"></div><div class="coupon-card-name">'+c.display+strongTag+'</div><div class="coupon-discount-amount">'+_edFmt+'</div></div>';
   }
   html+='</div>';
-  html+='<button class="coupon-confirm">적용하고 진행 →</button>';
+  html+='<button class="coupon-confirm">'+(_cpn.btn_confirm||'적용하고 진행 →')+'</button>';
   box.innerHTML=html;
   overlay.appendChild(box);
   document.body.appendChild(overlay);
@@ -13831,7 +14006,9 @@ function showRPDistributionModal(){
       var tWaste=tCurrent-tClamp;
       document.getElementById('rp-allocate-time').textContent='+'+alloc.time;
       var tNum=document.getElementById('rp-bucket-time-num');
-      tNum.innerHTML=tClamp+'/'+rt.max+(tWaste>0?' <span class="waste">(+'+(alloc.time)+', 손실 '+tWaste+')</span>':'');
+      var _rpM=_t('modals.rp_distribution',{});
+      var _wasteFmt=(_rpM.waste_format||'(+{alloc}, 손실 {waste})');
+      tNum.innerHTML=tClamp+'/'+rt.max+(tWaste>0?' <span class="waste">'+_wasteFmt.replace('{alloc}',alloc.time).replace('{waste}',tWaste)+'</span>':'');
       document.getElementById('rp-bucket-time-fill').style.width=((rt.current/rt.max)*100)+'%';
       var tOver=document.getElementById('rp-bucket-time-overlay');
       var tApplied=tClamp-rt.current;
@@ -13844,7 +14021,7 @@ function showRPDistributionModal(){
       var eWaste=eCurrent-eClamp;
       document.getElementById('rp-allocate-energy').textContent='+'+alloc.energy;
       var eNum=document.getElementById('rp-bucket-energy-num');
-      eNum.innerHTML=eClamp+'/'+re.max+(eWaste>0?' <span class="waste">(+'+(alloc.energy)+', 손실 '+eWaste+')</span>':'');
+      eNum.innerHTML=eClamp+'/'+re.max+(eWaste>0?' <span class="waste">'+_wasteFmt.replace('{alloc}',alloc.energy).replace('{waste}',eWaste)+'</span>':'');
       document.getElementById('rp-bucket-energy-fill').style.width=((re.current/re.max)*100)+'%';
       var eOver=document.getElementById('rp-bucket-energy-overlay');
       var eApplied=eClamp-re.current;
@@ -13854,13 +14031,14 @@ function showRPDistributionModal(){
       // Preview
       var preview=document.getElementById('rp-preview');
       if(alloc.time||alloc.energy){
-        var p='→ 시간 +'+tApplied+' / 에너지 +'+eApplied+' 충전';
+        var _prevFmt=(_rpM.preview_format||'→ 시간 +{time} / 에너지 +{energy} 충전');
+        var p=_prevFmt.replace('{time}',tApplied).replace('{energy}',eApplied);
         var totalWaste=tWaste+eWaste;
-        if(totalWaste>0)p+=' <span class="rp-overflow-warn">(메터 초과로 '+totalWaste+' 손실)</span>';
+        if(totalWaste>0)p+=' <span class="rp-overflow-warn">'+(_rpM.overflow_warn||'(메터 초과로 {waste} 손실)').replace('{waste}',totalWaste)+'</span>';
         preview.innerHTML=p;
         preview.classList.remove('empty');
       }else{
-        preview.textContent='토큰을 시간/에너지에 분배하세요';
+        preview.textContent=(_rpM.preview_empty||'토큰을 시간/에너지에 분배하세요');
         preview.classList.add('empty');
       }
 
@@ -14336,23 +14514,23 @@ function showTitleScreen(){
     if(saved&&saved.clearedScenarios){gameState=saved;}
     else{gameState=createInitialState();saveGame();}
   }
+  var _ts=_t('title_screen',{});
   var h='<div class="title-frame">';
-  h+='<h1>AI 리터러시, 위임의 경계!</h1>';
-  h+='<div class="intro-text">AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가</div>';
-  h+='<div class="host-text">';
-  h+='딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>';
-  h+='누구나 할 수 있다면, 누구인가가 중요하다.<br>';
-  h+='무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지. 당신은 구별할 수 있을까?';
-  h+='</div>';
-  // 튜토리얼 4문장 (학생 톤 §11.5)
+  h+='<h1>'+(_ts.heading||'AI 리터러시, 위임의 경계!')+'</h1>';
+  h+='<div class="intro-text">'+(_ts.intro||'AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가')+'</div>';
+  h+='<div class="host-text">'+(_ts.host_text||'딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>누구나 할 수 있다면, 누구인가가 중요하다.<br>무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지. 당신은 구별할 수 있을까?')+'</div>';
+  var _tut=_ts.tutorial||[];
   h+='<ol class="tutorial-list">';
-  h+='<li>시나리오마다 선택지를 고른다. 각 선택은 <span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>를 쓴다.</li>';
-  h+='<li>어떤 선택을 하느냐에 따라 결과물의 점수가 달라지고, 내가 어떤 힘을 썼는지 역량 카드로 확인할 수 있다.</li>';
-  h+='<li>결과물 점수에 따라 등급이 매겨지고, 받은 토큰을 <span class="hl hl--c">시간</span>이나 <span class="hl hl--p">에너지</span>에 직접 넣는다.</li>';
-  h+='<li>경험이 쌓이면 다음 선택의 <span class="hl hl--c">시간</span>·<span class="hl hl--p">에너지</span> 비용이 줄어든다.</li>';
+  if(_tut.length){for(var ti=0;ti<_tut.length;ti++)h+='<li>'+_tut[ti]+'</li>';}
+  else{
+    h+='<li>시나리오마다 선택지를 고른다. 각 선택은 <span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>를 쓴다.</li>';
+    h+='<li>어떤 선택을 하느냐에 따라 결과물의 점수가 달라지고, 내가 어떤 힘을 썼는지 역량 카드로 확인할 수 있다.</li>';
+    h+='<li>결과물 점수에 따라 등급이 매겨지고, 받은 토큰을 <span class="hl hl--c">시간</span>이나 <span class="hl hl--p">에너지</span>에 직접 넣는다.</li>';
+    h+='<li>경험이 쌓이면 다음 선택의 <span class="hl hl--c">시간</span>·<span class="hl hl--p">에너지</span> 비용이 줄어든다.</li>';
+  }
   h+='</ol>';
   h+='<div class="title-actions">';
-  h+='<button class="start-btn-large" onclick="enterFromTitle()">게임 시작</button>';
+  h+='<button class="start-btn-large" onclick="enterFromTitle()">'+(_ts.btn_start||'게임 시작')+'</button>';
   h+='</div>';
   // 캐논 도입·진행자 톤은 별도 자리로 이동 (README 또는 ending). v0.8.x 결정 자리.
   // 폐기 카피 (참고용 주석):
@@ -14388,11 +14566,12 @@ function showStartScreen(){
   var nextId=null;
   for(var i=0;i<order.length;i++){if(cleared.indexOf(order[i])<0){nextId=order[i];break;}}
   var allDone=(nextId===null);
+  var _ss=_t('start_screen',{});
   var h='<div class="semester-frame">';
-  h+='<h1>AI 리터러시: 위임의 경계</h1>';
-  h+='<div class="subtitle">이건 AI한테 맡겨도 돼?</div>';
+  h+='<h1>'+(_ss.heading||'AI 리터러시: 위임의 경계')+'</h1>';
+  h+='<div class="subtitle">'+(_ss.subtitle||'이건 AI한테 맡겨도 돼?')+'</div>';
   if(allDone){
-    h+='<div style="max-width:420px;margin:8px auto 24px;padding:14px 24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);text-align:center;font-family:var(--font-hand);font-size:26px;font-weight:400;color:var(--ink);transform:rotate(-1.5deg);letter-spacing:1px;">AI 리터러시 시나리오를 모두 완료했습니다!</div>';
+    h+='<div style="max-width:420px;margin:8px auto 24px;padding:14px 24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);text-align:center;font-family:var(--font-hand);font-size:26px;font-weight:400;color:var(--ink);transform:rotate(-1.5deg);letter-spacing:1px;">'+(_ss.all_done_banner||'AI 리터러시 시나리오를 모두 완료했습니다!')+'</div>';
   }
   h+='<div class="scenario-list">';
   order.forEach(function(sid,idx){
@@ -14402,7 +14581,7 @@ function showStartScreen(){
     var cls='scenario-card';
     if(isCleared)cls+=' cleared';
     if(isNext)cls+=' next';
-    var mark=isCleared?'클리어':(isNext?'다음 추천 →':'자유 선택');
+    var mark=isCleared?(_ss.mark_cleared||'클리어'):(isNext?(_ss.mark_next||'다음 추천 →'):(_ss.mark_free||'자유 선택'));
     var clickAttr=isCleared?'':' onclick="startScenario(\''+sid+'\')"';
     h+='<button class="'+cls+'" type="button"'+clickAttr+'>';
     h+='<span class="sc-num">'+(idx+1)+'</span>';
@@ -14412,17 +14591,15 @@ function showStartScreen(){
   });
   h+='</div>';
   h+='<div class="semester-actions">';
-  // 메인 액션 — 진행 중 / 다음 시나리오 / 종합 리포트
   if(allDone){
-    h+='<button class="action-main" onclick="showFinalReport()">AI 리터러시 성장 리포트</button>';
+    h+='<button class="action-main" onclick="showFinalReport()">'+(_ss.btn_report||'AI 리터러시 성장 리포트')+'</button>';
   }else if(hasSave()&&gameState.currentScenarioId&&!gameState.completed){
-    h+='<button class="action-main" onclick="continueGame()">이어서 진행</button>';
+    h+='<button class="action-main" onclick="continueGame()">'+(_ss.btn_continue||'이어서 진행')+'</button>';
   }else if(nextId){
-    h+='<button class="action-main" onclick="startScenario(\''+nextId+'\')">다음 시나리오</button>';
+    h+='<button class="action-main" onclick="startScenario(\''+nextId+'\')">'+(_ss.btn_next_scenario||'다음 시나리오')+'</button>';
   }
   h+='</div>';
-  // 튜토리얼 다시 보기 (§11)
-  h+='<button class="tutorial-link" onclick="showTitleScreen()">튜토리얼 다시 보기</button>';
+  h+='<button class="tutorial-link" onclick="showTitleScreen()">'+(_ss.btn_tutorial_again||'튜토리얼 다시 보기')+'</button>';
   h+='</div>';
   container.innerHTML=h;
 }
@@ -14438,7 +14615,7 @@ function ensureRow(){
     if(i===3)panels='<div class="panels-grid panels-row1">'+panels+'</div><div class="panels-grid panels-row2">';
   }
   panels+='</div>';
-  row.innerHTML=panels+'<div class="next-btn-wrap" id="next-wrap"><button class="next-btn" id="next-btn" onclick="onNext()">다음 &#8594;</button></div>';
+  row.innerHTML=panels+'<div class="next-btn-wrap" id="next-wrap"><button class="next-btn" id="next-btn" onclick="onNext()">'+_t('game_flow.buttons.next','다음 →')+'</button></div>';
   container.appendChild(row);
   currentRow=row;
   return row;
@@ -14474,7 +14651,7 @@ function renderCut1(){
   panel.querySelector('.panel-body').innerHTML=
     '<p class="highlight">'+sc.title+'</p>'+
     '<p>'+sc.situation.text+'</p>'+
-    '<div class="advance-wrap"><button class="advance-btn" onclick="showTier1Choices()">어떻게 할까? &#8594;</button></div>';
+    '<div class="advance-wrap"><button class="advance-btn" onclick="showTier1Choices()">'+_t('game_flow.buttons.tier1_advance','어떻게 할까? →')+'</button></div>';
   updateStats();
 }
 
@@ -14565,21 +14742,23 @@ function buildCostHTML(cost){
   var totalEnergyDisc=d.clampedEnergy||0;
   var hasAxisDiscount=(d.dlgEffect>0||totalEnergyDisc>0);
   if(!hasAxisDiscount){
+    var _cl=_t('cost_labels',{});
     return '<div class="choice-cost cost-formula-box">'+
-      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">시간 비용</div><div class="cost-formula-val cost-formula-final"><b>'+cost.time+'</b></div></div></div>'+
-      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">에너지 비용</div><div class="cost-formula-val cost-formula-final"><b>'+cost.energy+'</b></div></div></div>'+
+      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">'+(_cl.time_cost||'시간 비용')+'</div><div class="cost-formula-val cost-formula-final"><b>'+cost.time+'</b></div></div></div>'+
+      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">'+(_cl.energy_cost||'에너지 비용')+'</div><div class="cost-formula-val cost-formula-final"><b>'+cost.energy+'</b></div></div></div>'+
     '</div>';
   }
   var energyHtml='';
-  energyHtml+=_buildCostLine('에너지 비용',d.rawEnergy,'할인',totalEnergyDisc,'최종 에너지',cost.energy);
+  var _cl2=_t('cost_labels',{});
+  energyHtml+=_buildCostLine(_cl2.energy_cost||'에너지 비용',d.rawEnergy,_cl2.discount||'할인',totalEnergyDisc,_cl2.final_energy||'최종 에너지',cost.energy);
   return '<div class="choice-cost cost-formula-box">'+
-    _buildCostLine('시간 비용',d.rawTime,'할인',d.dlgEffect,'최종 시간',cost.time)+
+    _buildCostLine(_cl2.time_cost||'시간 비용',d.rawTime,_cl2.discount||'할인',d.dlgEffect,_cl2.final_time||'최종 시간',cost.time)+
     '<div class="cost-energy-col">'+energyHtml+'</div>'+
   '</div>';
 }
 function getCouponBadge(stageType,choiceId){
   var avail=getAvailableCardDiscounts(stageType,choiceId);
-  if(avail.length>0)return '<div class="cost-coupon-badge" data-coupon-id="'+stageType+':'+choiceId+'">역량카드 할인가능 – 할인 적용하기</div>';
+  if(avail.length>0)return '<div class="cost-coupon-badge" data-coupon-id="'+stageType+':'+choiceId+'">'+_t('coupon.badge_available','역량카드 할인가능 – 할인 적용하기')+'</div>';
   return '';
 }
 function _updateCouponBadge(areaId,choiceId,selectedCard,stageType){
@@ -14589,7 +14768,8 @@ function _updateCouponBadge(areaId,choiceId,selectedCard,stageType){
     var bid=badges[i].getAttribute('data-coupon-id');
     if(bid&&bid.indexOf(choiceId)>=0){
       if(selectedCard){
-        badges[i].textContent=selectedCard.display+' 역량카드 효과: -'+selectedCard.amount+' 할인';
+        var _badgeTpl=_t('coupon.badge_applied_format','{card} 역량카드 효과: -{amount} 할인');
+        badges[i].textContent=_badgeTpl.replace('{card}',selectedCard.display).replace('{amount}',selectedCard.amount);
         badges[i].classList.add('applied');
         var choiceCard=badges[i].closest('.choice-card');
         if(choiceCard&&stageType){
@@ -14626,7 +14806,7 @@ function _updateCouponBadge(areaId,choiceId,selectedCard,stageType){
           }
         }
       } else {
-        badges[i].textContent='역량카드 할인가능 – 할인 적용하기';
+        badges[i].textContent=_t('coupon.badge_available','역량카드 할인가능 – 할인 적용하기');
       }
     }
   }
@@ -14645,7 +14825,7 @@ function showTier1Choices(){
   var btn=currentRow.querySelector('[data-cut="1"] .advance-wrap');if(btn)btn.style.display='none';
   var body=currentRow.querySelector('[data-cut="1"] .panel-body');
   var area=document.createElement('div');area.className='choices-area';area.id='tier1-choices';
-  area.innerHTML='<div class="choices-q">어떻게 할까?</div>';
+  area.innerHTML='<div class="choices-q">'+_t('game_flow.questions.tier1','어떻게 할까?')+'</div>';
   body.appendChild(area);
   var costs=sc.tier1.map(function(c){return getTier1Cost(c.id);});
   sc.tier1.forEach(function(c,i){
@@ -14653,7 +14833,7 @@ function showTier1Choices(){
     var afford=canAffordCost(costs[i]);
     card.className='choice-card choice-card-nocost'+(afford?'':' disabled');
     if(afford)card.onclick=function(){onTier1(c.id);};
-    var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
+    var tag=afford?'':'<span class="insufficient-tag">'+_t('game_flow.insufficient','자원 부족')+'</span>';
     card.innerHTML='<div class="choice-header"><span class="choice-num">'+c.id+'</span><span class="choice-text">'+c.label+tag+'</span></div>';
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
@@ -14667,11 +14847,11 @@ function showTier1Choices(){
 function showCut2Summary(){
   var sc=getScenario(),t1=gameState.selectedTier1;
   var t1obj=sc.tier1.find(function(x){return x.id===t1;});
-  setPanelImage(2,'1차 선택');
+  setPanelImage(2,_t('game_flow.panel_labels.tier1_choice','1차 선택'));
   var panel=activatePanel(2);
   panel.querySelector('.panel-body').innerHTML=
-    '<div class="chosen-summary"><div class="chosen-label">1차 선택</div><div class="chosen-title">'+t1+'. '+t1obj.label+'</div><div class="chosen-way">'+t1obj.desc+'</div></div>'+
-    '<div class="advance-wrap"><button class="advance-btn" onclick="showTier2Choices()">더 자세히 — 어떻게 할까? &#8594;</button></div>';
+    '<div class="chosen-summary"><div class="chosen-label">'+_t('game_flow.chosen_labels.tier1','1차 선택')+'</div><div class="chosen-title">'+t1+'. '+t1obj.label+'</div><div class="chosen-way">'+t1obj.desc+'</div></div>'+
+    '<div class="advance-wrap"><button class="advance-btn" onclick="showTier2Choices()">'+_t('game_flow.buttons.tier2_advance','더 자세히 — 어떻게 할까? →')+'</button></div>';
 }
 
 // §23 — 2차 선택지를 Cut 2 body 아래에 펼침
@@ -14681,7 +14861,7 @@ function showTier2Choices(){
   var btn=currentRow.querySelector('[data-cut="2"] .advance-wrap');if(btn)btn.style.display='none';
   var body=currentRow.querySelector('[data-cut="2"] .panel-body');
   var area=document.createElement('div');area.className='choices-area';area.id='tier2-choices';
-  area.innerHTML='<div class="choices-q">더 자세히 — 어떻게 할까?</div>';
+  area.innerHTML='<div class="choices-q">'+_t('game_flow.questions.tier2','더 자세히 — 어떻게 할까?')+'</div>';
   body.appendChild(area);
   var t2list=sc.tier2[t1];
   var costs=t2list.map(function(c){return getTier2Cost(c.id);});
@@ -14692,7 +14872,7 @@ function showTier2Choices(){
     if(afford)card.onclick=function(){onTier2(c.id);};
     var costHTML=buildCostHTML(costs[i]);
     var badge=afford?getCouponBadge('tier2',c.id):'';
-    var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
+    var tag=afford?'':'<span class="insufficient-tag">'+_t('game_flow.insufficient','자원 부족')+'</span>';
     card.innerHTML='<div class="choice-header"><span class="choice-num">'+(i+1)+'</span><span class="choice-text">'+c.label+tag+'</span></div>'+costHTML+badge;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
@@ -14708,11 +14888,11 @@ function showCut3Summary(){
   var t2obj=null;
   ['A','B','C'].forEach(function(g){if(!t2obj&&sc.tier2[g])t2obj=sc.tier2[g].find(function(x){return x.id===t2;});});
   var t2Delta=getLeafDelta(t2obj,gameState.selectedTier1);
-  setPanelImage(3,'2차 선택');
+  setPanelImage(3,_t('game_flow.panel_labels.tier2_choice','2차 선택'));
   var panel=activatePanel(3);
   panel.querySelector('.panel-body').innerHTML=
-    '<div class="chosen-summary"><div class="chosen-label">2차 선택</div><div class="chosen-title">'+t2+'. '+t2obj.label+'</div><div class="chosen-way">위임 깊이: '+t2Delta.delegation+'</div></div>'+
-    '<div class="advance-wrap"><button class="advance-btn" onclick="goCut4()">결과 확인하기 &#8594;</button></div>';
+    '<div class="chosen-summary"><div class="chosen-label">'+_t('game_flow.chosen_labels.tier2','2차 선택')+'</div><div class="chosen-title">'+t2+'. '+t2obj.label+'</div><div class="chosen-way">'+_t('game_flow.delegation_depth','위임 깊이: ')+t2Delta.delegation+'</div></div>'+
+    '<div class="advance-wrap"><button class="advance-btn" onclick="goCut4()">'+_t('game_flow.buttons.result_advance','결과 확인하기 →')+'</button></div>';
 }
 
 // 컷 4: 결과 (raw 결과물) — §23: "결과 확인하기" 클릭 시 호출
@@ -14722,16 +14902,17 @@ function goCut4(){
   var t2obj=null;
   ['A','B','C'].forEach(function(g){if(!t2obj&&sc.tier2[g])t2obj=sc.tier2[g].find(function(x){return x.id===t2;});});
   var c3btn=currentRow.querySelector('[data-cut="3"] .advance-wrap');if(c3btn)c3btn.style.display='none';
-  setPanelImage(4,'결과');
+  setPanelImage(4,_t('game_flow.panel_labels.result','결과'));
   var panel=activatePanel(4);
   var result=sc.results[t2];
-  // v0.8 — results.basePoint 폐기. 합산 모델은 tier2 단계에서 점수가 박힘 (basePoint+varPoint).
   var t2Pts=getTier2Points(sc,t2);
+  var _metaTpl=_t('game_flow.result_meta','{summary} (이 행동의 점수 {points}점)');
+  var _metaStr=_metaTpl.replace('{summary}',result.summary).replace('{points}',t2Pts.points);
   panel.querySelector('.panel-body').innerHTML=
-    '<p class="highlight">결과 — '+sc.title+'</p>'+
+    '<p class="highlight">'+_t('game_flow.result_prefix','결과 — ')+sc.title+'</p>'+
     '<div class="result-text">'+result.text+'</div>'+
-    '<div class="result-meta">'+result.summary+' (이 행동의 점수 '+t2Pts.points+'점)</div>'+
-    '<div class="advance-wrap"><button class="advance-btn" onclick="showReviewChoices()">검토할까? &#8594;</button></div>';
+    '<div class="result-meta">'+_metaStr+'</div>'+
+    '<div class="advance-wrap"><button class="advance-btn" onclick="showReviewChoices()">'+_t('game_flow.buttons.review_advance','검토할까? →')+'</button></div>';
   trackEvent('result_viewed',{scenarioId:sc.id,tier2:t2,tier2Points:t2Pts.points});
   updateStats();
 }
@@ -14743,7 +14924,7 @@ function showReviewChoices(){
   var btn=currentRow.querySelector('[data-cut="4"] .advance-wrap');if(btn)btn.style.display='none';
   var body=currentRow.querySelector('[data-cut="4"] .panel-body');
   var area=document.createElement('div');area.className='choices-area';area.id='review-choices';
-  area.innerHTML='<div class="choices-q">제출 전, 어떻게 검토할까?</div>';
+  area.innerHTML='<div class="choices-q">'+_t('game_flow.questions.review','제출 전, 어떻게 검토할까?')+'</div>';
   body.appendChild(area);
   var t2cur=gameState.selectedTier2;
   var costs=sc.reviews.map(function(r){return getReviewCost(t2cur+r.id);});
@@ -14755,7 +14936,7 @@ function showReviewChoices(){
     var costHTML=buildCostHTML(costs[i]);
     var leafKey=t2cur+r.id;
     var badge=afford?getCouponBadge('review',leafKey):'';
-    var tag=afford?'':'<span class="insufficient-tag">자원 부족</span>';
+    var tag=afford?'':'<span class="insufficient-tag">'+_t('game_flow.insufficient','자원 부족')+'</span>';
     var leafLabel=(sc.reviewLabels&&sc.reviewLabels[leafKey])||r.label;
     card.innerHTML='<div class="choice-header"><span class="choice-num">'+r.id+'</span><span class="choice-text">'+leafLabel+tag+'</span></div>'+costHTML+badge;
     area.appendChild(card);
@@ -14772,15 +14953,15 @@ function showCut5Summary(){
   var rvObj=sc.reviews.find(function(x){return x.id===gameState.selectedReview;});
   var supplement=sc.reviewSupplements[leaf]||'';
   var rvLabelLeaf=(sc.reviewLabels&&sc.reviewLabels[leaf])||rvObj.label;
-  setPanelImage(5,'검토');
+  setPanelImage(5,_t('game_flow.panel_labels.review','검토'));
   var panel=activatePanel(5);
-  panel.querySelector('.panel-body').innerHTML='<div class="chosen-summary"><div class="chosen-label">검토 선택</div><div class="chosen-title">'+rvObj.id+'. '+rvLabelLeaf+'</div>'+(supplement?'<div class="chosen-way">'+supplement+'</div>':'')+'</div>';
+  panel.querySelector('.panel-body').innerHTML='<div class="chosen-summary"><div class="chosen-label">'+_t('game_flow.chosen_labels.review','검토 선택')+'</div><div class="chosen-title">'+rvObj.id+'. '+rvLabelLeaf+'</div>'+(supplement?'<div class="chosen-way">'+supplement+'</div>':'')+'</div>';
 }
 
 // 컷 6: 최종 점수 + 아이템 + 자각 + 경험치/레벨업 (Phase 4 통합)
 function goCut6(){
   var sc=getScenario(),leaf=getLeafPath(),fin=sc.finals[leaf];
-  setPanelImage(6,'최종');
+  setPanelImage(6,_t('game_flow.panel_labels.final','최종'));
   var panel=activatePanel(6);
   // v0.8 — CSV 최종등급 lookup
   var grade=getFinalGrade(leaf);
@@ -14795,7 +14976,7 @@ function goCut6(){
     gradeHTML+='<div style="font-size:140px;font-weight:700;color:'+gradeColor+';letter-spacing:-4px;line-height:1;">'+grade+'</div>';
     gradeHTML+='<div style="font-size:28px;color:#444;font-weight:600;">'+gameState.score+'점</div>';
     if(replayInGrade){
-      gradeHTML+='<button id="replay-btn-grade" style="margin-top:12px;padding:10px 28px;font-size:14px;font-weight:700;background:#ffd93d;color:#000;border:3px solid #000;border-radius:0;cursor:pointer;letter-spacing:0.5px;box-shadow:4px 4px 0 #000;transition:transform 0.05s,box-shadow 0.05s;" onmousedown="this.style.transform=\'translate(2px,2px)\';this.style.boxShadow=\'2px 2px 0 #000\'" onmouseup="this.style.transform=\'none\';this.style.boxShadow=\'4px 4px 0 #000\'" onmouseleave="this.style.transform=\'none\';this.style.boxShadow=\'4px 4px 0 #000\'">다시 도전하기</button>';
+      gradeHTML+='<button id="replay-btn-grade" style="margin-top:12px;padding:10px 28px;font-size:14px;font-weight:700;background:#ffd93d;color:#000;border:3px solid #000;border-radius:0;cursor:pointer;letter-spacing:0.5px;box-shadow:4px 4px 0 #000;transition:transform 0.05s,box-shadow 0.05s;" onmousedown="this.style.transform=\'translate(2px,2px)\';this.style.boxShadow=\'2px 2px 0 #000\'" onmouseup="this.style.transform=\'none\';this.style.boxShadow=\'4px 4px 0 #000\'" onmouseleave="this.style.transform=\'none\';this.style.boxShadow=\'4px 4px 0 #000\'">'+_t('game_flow.buttons.replay_grade','다시 도전하기')+'</button>';
     }
     gradeHTML+='</div><span class="cut-num">6</span><span class="panel-place">최종</span>';
     c6img.innerHTML=gradeHTML;
@@ -14852,7 +15033,7 @@ function goCut6(){
 
   // ③ B — low key 리플레이 버튼 (C/D는 등급 박스에, S/A는 없음)
   if(grade==='B'){
-    h+='<div style="text-align:center;margin-top:8px;"><button class="replay-btn" id="replay-btn-cut6" style="background:#fff;border:3px solid #000;padding:6px 16px;font-size:12px;color:#000;cursor:pointer;border-radius:0;box-shadow:4px 4px 0 #000;">이 시나리오 다시 해보기</button></div>';
+    h+='<div style="text-align:center;margin-top:8px;"><button class="replay-btn" id="replay-btn-cut6" style="background:#fff;border:3px solid #000;padding:6px 16px;font-size:12px;color:#000;cursor:pointer;border-radius:0;box-shadow:4px 4px 0 #000;">'+_t('game_flow.buttons.replay','이 시나리오 다시 해보기')+'</button></div>';
   }
 
   panel.querySelector('.panel-body').innerHTML=h;
@@ -14943,7 +15124,7 @@ function goCut6(){
   var clearedAfter=(gameState.clearedScenarios||[]).slice();
   if(clearedAfter.indexOf(scid)<0)clearedAfter.push(scid);
   var willBeAllDone=(clearedAfter.length>=CONFIG.scenarios.length);
-  nb.textContent=willBeAllDone?'AI 리터러시 성장 리포트':'다음 시나리오로 →';
+  nb.textContent=willBeAllDone?_t('game_flow.buttons.report','AI 리터러시 성장 리포트'):_t('game_flow.buttons.next_scenario','다음 시나리오로 →');
   nb.onclick=goNextScenario;
 
   // 시나리오 끝 chain (SPEC §6.3, v0.9 — RP 분배 제거, 에너지 자동 회복)
@@ -15138,8 +15319,9 @@ function updateDomainLabel(){
   var sc=getScenario();
   var el=document.getElementById('stat-name-knowledge');
   if(!sc||!el)return;
-  var label=sc.domainLabel||(sc.domainPool&&sc.domainPool[0])||'아는것의 힘';
-  el.textContent='아는것의 힘 ('+label+')';
+  var _knlName=_t('hud.knowledge','아는것의 힘');
+  var label=sc.domainLabel||(sc.domainPool&&sc.domainPool[0])||_knlName;
+  el.textContent=_knlName+' ('+label+')';
 }
 
 function goNextScenario(){
@@ -15368,28 +15550,30 @@ function showReport(){
   var sc=getScenario();
   var last=gameState.scenarioHistory[gameState.scenarioHistory.length-1];
   var msg=sc.learningMessage;
-  var h='<div class="report-overlay"><div class="report-inner"><h2>활동 리포트</h2>';
+  var _sr=_t('scenario_report',{});
+  var h='<div class="report-overlay"><div class="report-inner"><h2>'+(_sr.title||'활동 리포트')+'</h2>';
   h+='<div class="report-grid">';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+gameState.score+'</div><div class="report-stat-label">최종 점수</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+(last?last.grade:'-')+'</div><div class="report-stat-label">등급</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+(effectiveCompetency(gameState.competencies.delegationChoice.value)>0?'+':'')+effectiveCompetency(gameState.competencies.delegationChoice.value)+'</div><div class="report-stat-label">위임 선택력</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+(effectiveCompetency(gameState.competencies.knowledge.value)>0?'+':'')+effectiveCompetency(gameState.competencies.knowledge.value)+'</div><div class="report-stat-label">지식</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+gameState.score+'</div><div class="report-stat-label">'+(_sr.stat_score||'최종 점수')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(last?last.grade:'-')+'</div><div class="report-stat-label">'+(_sr.stat_grade||'등급')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(effectiveCompetency(gameState.competencies.delegationChoice.value)>0?'+':'')+effectiveCompetency(gameState.competencies.delegationChoice.value)+'</div><div class="report-stat-label">'+(_sr.stat_delegation||'위임 선택력')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(effectiveCompetency(gameState.competencies.knowledge.value)>0?'+':'')+effectiveCompetency(gameState.competencies.knowledge.value)+'</div><div class="report-stat-label">'+(_sr.stat_knowledge||'지식')+'</div></div>';
   h+='</div>';
   if(last){
-    h+='<div class="report-comment"><b>너의 경로</b>: '+last.tier1+' → '+last.tier2+' → '+last.review+' ('+last.leaf+')<br><br>';
-    if(last.item)h+='<b>획득 아이템</b>: '+last.item+'<br><br>';
+    h+='<div class="report-comment"><b>'+_t('game_flow.your_path','너의 경로')+'</b>: '+last.tier1+' → '+last.tier2+' → '+last.review+' ('+last.leaf+')<br><br>';
+    if(last.item)h+='<b>'+_t('game_flow.acquired_item','획득 아이템')+'</b>: '+last.item+'<br><br>';
     var fin=sc.finals[last.leaf];
     var rfb=fin?(fin.reportFeedback||fin.awareness||''):'';
     if(rfb)h+='<i>"'+rfb+'"</i><br><br>';
-    h+='<b>이 시나리오의 메시지</b>: '+msg+'</div>';
+    h+='<b>'+_t('game_flow.scenario_message','이 시나리오의 메시지')+'</b>: '+msg+'</div>';
   }
   // v0.5: 학기 진행 알림 + 두 버튼
   var clearedNow=(gameState.clearedScenarios||[]).slice();
   if(gameState.currentScenarioId&&clearedNow.indexOf(gameState.currentScenarioId)<0)clearedNow.push(gameState.currentScenarioId);
   var totalN=CONFIG.scenarios.length;
   var willBeAllDone=(clearedNow.length>=totalN);
-  h+='<div class="report-progress" style="margin:18px 0 14px;font-size:13px;color:#444;text-align:center;">학기 진행 '+clearedNow.length+' / '+totalN+(willBeAllDone?' — 학기를 모두 통과했다':'')+'</div>';
-  h+='<button class="start-btn" onclick="goNextScenario()">'+(willBeAllDone?'AI 리터러시 성장 리포트':'시나리오 선택으로')+'</button>';
+  var _progTpl=_t('game_flow.semester_progress','학기 진행 {done} / {total}');
+  h+='<div class="report-progress" style="margin:18px 0 14px;font-size:13px;color:#444;text-align:center;">'+_progTpl.replace('{done}',clearedNow.length).replace('{total}',totalN)+(willBeAllDone?_t('game_flow.semester_all_done',' — 학기를 모두 통과했다'):'')+'</div>';
+  h+='<button class="start-btn" onclick="goNextScenario()">'+(willBeAllDone?_t('game_flow.buttons.report','AI 리터러시 성장 리포트'):_t('game_flow.buttons.scenario_select','시나리오 선택으로'))+'</button>';
   h+='</div></div>';
   container.innerHTML=h;
 }
@@ -15706,7 +15890,7 @@ function showFinalReport(){
   var dv=gameState.competencies.delegationChoice.value;
   var kv=gameState.competencies.knowledge.value;
   var compType=getCompetencyType(dv,kv);
-  var compText=(CONFIG.resultTextsByType||{})[compType]||'';
+  var compText=_t('config_texts.result_types.'+compType,'')||(CONFIG.resultTextsByType||{})[compType]||'';
   function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
   // texts.yaml — report 섹션 텍스트
@@ -15717,15 +15901,17 @@ function showFinalReport(){
   var kvE=effectiveCompetency(kv);
 
   var h='<div class="report-overlay"><div class="report-inner report-v813">';
-  h+='<div style="display:flex;align-items:center;min-height:56px;padding:0 22px;margin-bottom:24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);font-size:20px;font-weight:700;letter-spacing:1px;">AI 리터러시 성장 리포트</div>';
-  h+='<div class="report-subtitle">한 학기 동안 다섯 시나리오에서 내린 선택과 그 결과를 돌아봅니다.<br>AI에게 무엇을 맡기고 무엇을 직접 했는지, 어떤 역량이 자랐는지 확인하세요.</div>';
+  var _fr=_t('final_report',{});
+  h+='<div style="display:flex;align-items:center;min-height:56px;padding:0 22px;margin-bottom:24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);font-size:20px;font-weight:700;letter-spacing:1px;">'+(_fr.title_bar||'AI 리터러시 성장 리포트')+'</div>';
+  h+='<div class="report-subtitle">'+(_fr.subtitle||'한 학기 동안 다섯 시나리오에서 내린 선택과 그 결과를 돌아봅니다.<br>AI에게 무엇을 맡기고 무엇을 직접 했는지, 어떤 역량이 자랐는지 확인하세요.')+'</div>';
 
   // 상단: 4박스 통계 (총점 + 레벨 + 판단하는 힘 + 아는것의 힘)
   h+='<div class="report-grid" style="grid-template-columns:repeat(4,1fr);max-width:600px;margin:0 auto 16px;">';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+totalScore+'</div><div class="report-stat-label">학기 총점</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">Lv.'+lv+'</div><div class="report-stat-label">최종 레벨</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num" style="color:'+(dvE>=0?'var(--acc-mint-deep)':'var(--acc-pink-deep)')+'">'+(dvE>0?'+':'')+dvE+'</div><div class="report-stat-label">판단하는 힘</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num" style="color:'+(kvE>=0?'var(--acc-mint-deep)':'var(--acc-pink-deep)')+'">'+(kvE>0?'+':'')+kvE+'</div><div class="report-stat-label">아는것의 힘</div></div>';
+  var _sl=R.stat_labels||{};
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+totalScore+'</div><div class="report-stat-label">'+(_sl.total||'학기 총점')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">Lv.'+lv+'</div><div class="report-stat-label">'+(_sl.level||'최종 레벨')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num" style="color:'+(dvE>=0?'var(--acc-mint-deep)':'var(--acc-pink-deep)')+'">'+(dvE>0?'+':'')+dvE+'</div><div class="report-stat-label">'+(_sl.delegation||'판단하는 힘')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num" style="color:'+(kvE>=0?'var(--acc-mint-deep)':'var(--acc-pink-deep)')+'">'+(kvE>0?'+':'')+kvE+'</div><div class="report-stat-label">'+(_sl.knowledge||'아는것의 힘')+'</div></div>';
   h+='</div>';
 
   ensureInventory();
@@ -15761,7 +15947,7 @@ function showFinalReport(){
   for(var oi=0;oi<hcFlat.length;oi++){if(ownedHC[hcFlat[oi].axis+'::'+hcFlat[oi].tag])hcOwned++;}
 
   h+='<div class="report-cards-section" style="border:var(--border-w) solid var(--ink);background:var(--bg-card);box-shadow:var(--shadow);padding:0 0 20px;margin-bottom:20px;">';
-  h+='<div style="display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:var(--acc-mint);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">판단하는 힘 — 인간중심 역량 카드<span style="font-size:13px;font-weight:600;color:var(--ink-mute);">'+hcOwned+' / '+hcFlat.length+'</span></div>';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:var(--acc-mint);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">'+_t('final_report.delegation_header','판단하는 힘 — 인간중심 역량 카드')+'<span style="font-size:13px;font-weight:600;color:var(--ink-mute);">'+hcOwned+' / '+hcFlat.length+'</span></div>';
   h+='<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding:14px 16px;">';
   for(var ci=0;ci<hcFlat.length;ci++){
     var card=hcFlat[ci];
@@ -15787,9 +15973,9 @@ function showFinalReport(){
 
   h+='</div>';
   h+='<div class="report-cards-section" style="border:var(--border-w) solid var(--ink);background:var(--bg-card);box-shadow:var(--shadow);padding:0 0 20px;margin-bottom:20px;">';
-  h+='<div style="display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:var(--acc-cyan);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">아는것의 힘 — 도메인 역량 카드<span style="font-size:13px;font-weight:600;color:var(--ink-mute);">'+domOwned.length+'장</span></div>';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:var(--acc-cyan);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">'+_t('final_report.knowledge_header','아는것의 힘 — 도메인 역량 카드')+'<span style="font-size:13px;font-weight:600;color:var(--ink-mute);">'+domOwned.length+'장</span></div>';
   if(domOwned.length===0){
-    h+='<div style="font-size:13px;color:#888;padding:14px 16px;">이번 학기는 도메인 역량 카드를 받지 못했어요.</div>';
+    h+='<div style="font-size:13px;color:#888;padding:14px 16px;">'+_t('final_report.no_domain_cards','이번 학기는 도메인 역량 카드를 받지 못했어요.')+'</div>';
   }else{
     h+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px 16px;">';
     for(var dk=0;dk<domOwned.length;dk++){
@@ -15829,7 +16015,7 @@ function showFinalReport(){
     var reflection=(fin&&fin.reportReflection)||'';
     if(reflection){
       h+='<div style="margin:10px 14px 4px;padding:8px 12px;background:var(--bg-soft);border:2px solid var(--ink);font-size:12px;line-height:1.6;color:var(--ink-mute);">';
-      h+='<b>핵심 돌아보기</b> — '+_esc(reflection);
+      h+='<b>'+_t('game_flow.reflection_label','핵심 돌아보기')+'</b> — '+_esc(reflection);
       h+='</div>';
     }
 
@@ -15847,7 +16033,7 @@ function showFinalReport(){
   });
   h+='</div>';
 
-  h+='<button class="start-btn" onclick="backToStartScreen()">시작 화면 돌아가기</button>';
+  h+='<button class="start-btn" onclick="backToStartScreen()">'+_t('game_flow.buttons.back_to_start','시작 화면 돌아가기')+'</button>';
   h+='</div></div>';
   container.innerHTML=h;
 }
@@ -15879,7 +16065,7 @@ function _renderGrowthReport(hist, compType, inventory){
   var typeText=_typeText(compType);
   var patText=(GR.patterns||{})[pattern]||'';
   h+='<div style="margin-bottom:20px;padding:16px 18px;background:var(--bg-soft);border:var(--border-w) solid var(--ink);">';
-  h+='<div style="font-size:11px;color:var(--ink-soft);font-weight:700;letter-spacing:1.5px;margin-bottom:4px;">학습자 유형</div>';
+  h+='<div style="font-size:11px;color:var(--ink-soft);font-weight:700;letter-spacing:1.5px;margin-bottom:4px;">'+_t('final_report.learner_type_label','학습자 유형')+'</div>';
   h+='<div style="font-size:18px;font-weight:800;margin-bottom:8px;">'+_esc(typeName)+'</div>';
   if(typeText)h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);margin-bottom:8px;">'+typeText+'</div>';
   if(patText)h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);">'+_esc(patText)+'</div>';
@@ -15887,7 +16073,7 @@ function _renderGrowthReport(hist, compType, inventory){
 
   // (6) 시나리오별 선택 경로 + 결과 메시지
   h+='<div style="margin-bottom:20px;">';
-  h+='<div style="font-size:16px;font-weight:700;margin-bottom:12px;">시나리오별 결과</div>';
+  h+='<div style="font-size:16px;font-weight:700;margin-bottom:12px;">'+_t('final_report.scenario_results_title','시나리오별 결과')+'</div>';
   for(var j=0;j<hist.length;j++){
     var r=hist[j];
     var sc=SCENARIOS[r.scenarioId];
@@ -15916,15 +16102,15 @@ function _renderGrowthReport(hist, compType, inventory){
   }
   if(hasRecovery||hasChallengeCard){
     h+='<div style="margin-bottom:20px;padding:14px 16px;background:var(--acc-yellow-soft);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);">';
-    h+='<div style="font-size:15px;font-weight:700;margin-bottom:8px;">성장 카드</div>';
+    h+='<div style="font-size:15px;font-weight:700;margin-bottom:8px;">'+_t('final_report.growth_cards_title','성장 카드')+'</div>';
     if(hasRecovery){
       h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);margin-bottom:6px;">';
-      h+='<b>회복력</b> — 결과가 아쉬웠지만 포기하지 않았다. 다시 도전할 수 있는 힘이 생겼다.';
+      h+='<b>'+_t('recovery.title','회복력')+'</b> — '+_t('recovery.report_recovery','결과가 아쉬웠지만 포기하지 않았다. 다시 도전할 수 있는 힘이 생겼다.');
       h+='</div>';
     }
     if(hasChallengeCard){
       h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);">';
-      h+='<b>도전력</b> — 같은 시나리오에 다시 도전해서 더 나은 결과를 만들었다. 실패에서 배우는 힘이다.';
+      h+='<b>도전력</b> — '+_t('recovery.report_challenge','같은 시나리오에 다시 도전해서 더 나은 결과를 만들었다. 실패에서 배우는 힘이다.');
       h+='</div>';
     }
     h+='</div>';
@@ -16297,7 +16483,7 @@ function renderInventory(){
   var html='';
   // 인간중심 역량
   if(hc.length){
-    html+='<div style="font-size:11px;font-weight:700;color:#888;letter-spacing:1.2px;margin-bottom:10px;padding-bottom:4px;border-bottom:1.5px solid #ddd;">인간중심 역량</div>';
+    html+='<div style="font-size:11px;font-weight:700;color:#888;letter-spacing:1.2px;margin-bottom:10px;padding-bottom:4px;border-bottom:1.5px solid #ddd;">'+_t('inventory_labels.section_human_centric','인간중심 역량')+'</div>';
     var axisGroups={};
     for(var i=0;i<hc.length;i++){var a=hc[i].axis||'기타';if(!axisGroups[a])axisGroups[a]=[];axisGroups[a].push(hc[i]);}
     Object.keys(axisGroups).forEach(function(axis){
@@ -16320,7 +16506,7 @@ function renderInventory(){
   }
   // 도메인 역량
   if(dc.length){
-    html+='<div style="font-size:13px;font-weight:700;color:#333;margin:12px 0 8px;border-bottom:1px solid #ddd;padding-bottom:4px;">도메인 역량</div>';
+    html+='<div style="font-size:13px;font-weight:700;color:#333;margin:12px 0 8px;border-bottom:1px solid #ddd;padding-bottom:4px;">'+_t('inventory_labels.section_domain','도메인 역량')+'</div>';
     var domainCounts={};
     for(var i=0;i<dc.length;i++){var l=dc[i].label;domainCounts[l]=(domainCounts[l]||0)+1;}
     Object.keys(domainCounts).sort(function(a,b){return domainCounts[b]-domainCounts[a];}).forEach(function(label){
@@ -16335,7 +16521,7 @@ function renderInventory(){
   }
   // 성장 역량
   if(gc.length){
-    html+='<div style="font-size:13px;font-weight:700;color:#333;margin:12px 0 8px;border-bottom:1px solid #ddd;padding-bottom:4px;">성장 역량</div>';
+    html+='<div style="font-size:13px;font-weight:700;color:#333;margin:12px 0 8px;border-bottom:1px solid #ddd;padding-bottom:4px;">'+_t('inventory_labels.section_growth','성장 역량')+'</div>';
     var growthCounts={};
     for(var i=0;i<gc.length;i++){var l=gc[i].label;growthCounts[l]=(growthCounts[l]||0)+1;}
     Object.keys(growthCounts).forEach(function(label){
@@ -16350,7 +16536,7 @@ function renderInventory(){
   }
   // 레거시 (v0.8 이전 카드, 있을 때만)
   if(oldCards.length){
-    html+='<div style="font-size:11px;color:#aaa;margin-top:16px;">이전 버전 카드 '+oldCards.length+'장</div>';
+    html+='<div style="font-size:11px;color:#aaa;margin-top:16px;">'+_t('inventory_labels.legacy_prefix','이전 버전 카드')+' '+oldCards.length+'장</div>';
   }
   list.innerHTML=html;
 }
@@ -16450,14 +16636,14 @@ function playCardRewardSequential(cards,note){
         card.style.boxShadow='0 4px 0 '+am.color;
         var tagData=(TEXTS&&TEXTS.humanCentricCards&&TEXTS.humanCentricCards[axisPrefix[1]]&&TEXTS.humanCentricCards[axisPrefix[1]].tags&&TEXTS.humanCentricCards[axisPrefix[1]].tags[axisPrefix[2]])||{};
         shortDesc=tagData.short||'';
-        card.innerHTML='<div class="card-reward-tag" style="color:rgba(255,255,255,0.7);">인간중심 역량</div>'+
+        card.innerHTML='<div class="card-reward-tag" style="color:rgba(255,255,255,0.7);">'+_t('inventory_labels.track_human_centric','인간중심 역량')+'</div>'+
           '<div class="card-reward-label" style="color:#fff;"><b>'+_invEscapeHTML(axisPrefix[1])+'</b> — '+_invEscapeHTML(axisPrefix[2])+'</div>'+
           (shortDesc?'<div style="font-size:11px;color:rgba(255,255,255,0.85);line-height:1.5;margin-bottom:12px;">'+_invEscapeHTML(shortDesc)+'</div>':'')+
           '<button class="card-reward-confirm" id="'+btnId+'" style="background:rgba(255,255,255,0.95);color:'+am.color+';border-color:rgba(255,255,255,0.5);">'+_invEscapeHTML(btnLabel)+'</button>';
       }else{
         card.style.borderLeftColor=color;
         var isGrowth=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthCards&&TEXTS.growthCards[label]);
-        var trackName=isGrowth?'성장 역량':'도메인 역량';
+        var trackName=isGrowth?_t('inventory_labels.track_growth','성장 역량'):_t('inventory_labels.track_domain','도메인 역량');
         var td=isGrowth?(TEXTS.growthCards[label]||{}):(TEXTS&&TEXTS.domainCards&&TEXTS.domainCards[label]||{});
         shortDesc=td.short||'';
         var growthSymbol=(label==='도전력')?'↑':(label==='회복력')?'↺':'';
@@ -16489,10 +16675,10 @@ function showRecoveryCardModal(scid){
     var td=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthCards&&TEXTS.growthCards['회복력'])||{};
     overlay.innerHTML='<div class="recovery-card">'+
       '<div class="growth-symbol">↺</div>'+
-      '<div class="recovery-card-title">회복력</div>'+
+      '<div class="recovery-card-title">'+_t('recovery.title','회복력')+'</div>'+
       '<div class="recovery-card-desc">'+(td.short||'낮은 결과에서 비어 있던 과정을 알아차리고 다시 세우는 힘')+'</div>'+
-      '<button class="recovery-card-btn primary" id="recovery-use-btn">회복역량 사용해 시간 되돌리기<br><span style="font-size:12px;font-weight:400;opacity:0.8;">시나리오 다시 도전</span></button>'+
-      '<button class="recovery-card-btn secondary" id="recovery-skip-btn">다음 시나리오로 →</button>'+
+      '<button class="recovery-card-btn primary" id="recovery-use-btn">'+_t('recovery.btn_use','회복역량 사용해 시간 되돌리기')+'<br><span style="font-size:12px;font-weight:400;opacity:0.8;">'+_t('recovery.btn_use_sub','시나리오 다시 도전')+'</span></button>'+
+      '<button class="recovery-card-btn secondary" id="recovery-skip-btn">'+_t('recovery.btn_skip','다음 시나리오로 →')+'</button>'+
     '</div>';
     document.getElementById('recovery-use-btn').onclick=function(){
       overlay.classList.add('hidden');overlay.innerHTML='';
@@ -16531,6 +16717,55 @@ function _applyStaticTexts(){
     if(list && list.children.length===1 && list.firstElementChild && list.firstElementChild.classList.contains('inv-empty')){
       list.firstElementChild.innerHTML=inv.empty;
     }
+  }
+  // HUD (상단 패널)
+  var hud=TEXTS.hud||{};
+  var _hudMap={
+    'resource-bar':'resource_title','res-time':'','res-energy':'',
+    'stat-delegation':'','stat-name-knowledge':''
+  };
+  var _rbTitle=document.querySelector('#resource-bar .panel-title');
+  if(_rbTitle && hud.resource_title)_rbTitle.textContent=hud.resource_title;
+  var _sbTitle=document.querySelector('#stats-bar .panel-title');
+  if(_sbTitle && hud.competency_title)_sbTitle.textContent=hud.competency_title;
+  var _resNames=document.querySelectorAll('.resource-name');
+  if(_resNames.length>=2){
+    if(hud.time)_resNames[0].textContent=hud.time;
+    if(hud.energy)_resNames[1].textContent=hud.energy;
+  }
+  var _statNames=document.querySelectorAll('.stat-name');
+  if(_statNames.length>=1 && hud.delegation)_statNames[0].textContent=hud.delegation;
+  var _knlEl=document.getElementById('stat-name-knowledge');
+  if(_knlEl && hud.knowledge)_knlEl.textContent=hud.knowledge;
+  // 모달 — 레벨업
+  var ml=TEXTS.modals&&TEXTS.modals.levelup||{};
+  var _lvBadge=document.querySelector('.lvup-badge');
+  if(_lvBadge && ml.badge)_lvBadge.textContent=ml.badge;
+  var _lvEffLabel=document.querySelector('.lvup-effect-label');
+  if(_lvEffLabel && ml.token_bonus_label)_lvEffLabel.textContent=ml.token_bonus_label;
+  var _lvBtn=document.getElementById('lvup-confirm');
+  if(_lvBtn && ml.btn_confirm)_lvBtn.textContent=ml.btn_confirm;
+  // 모달 — RP 분배
+  var mr=TEXTS.modals&&TEXTS.modals.rp_distribution||{};
+  var rpModal=document.getElementById('rp-modal');
+  if(rpModal){
+    var rpT=rpModal.querySelector('.modal-title');
+    if(rpT && mr.title)rpT.textContent=mr.title;
+    var rpS=rpModal.querySelector('.modal-subtitle');
+    if(rpS && mr.subtitle){
+      rpS.innerHTML=mr.subtitle+(mr.subtitle_hint?'<br><span style="font-size:11px;color:#888;">'+mr.subtitle_hint+'</span>':'');
+    }
+    var rpBL=rpModal.querySelector('.rp-bal-label');
+    if(rpBL && mr.remaining_label)rpBL.textContent=mr.remaining_label;
+    var rpBkLabels=rpModal.querySelectorAll('.rp-bucket-label');
+    if(rpBkLabels.length>=2){
+      if(hud.time)rpBkLabels[0].textContent=hud.time;
+      if(hud.energy)rpBkLabels[1].textContent=hud.energy;
+    }
+    var rpPrev=document.getElementById('rp-preview');
+    if(rpPrev && mr.preview_empty)rpPrev.textContent=mr.preview_empty;
+    var rpConf=document.getElementById('rp-confirm');
+    if(rpConf && mr.btn_confirm)rpConf.textContent=mr.btn_confirm;
   }
   // reset confirm 모달 — id 없는 부분은 querySelector로
   var rc=U.reset_confirm||{};

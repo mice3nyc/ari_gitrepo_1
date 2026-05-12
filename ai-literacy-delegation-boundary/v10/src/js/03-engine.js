@@ -110,7 +110,7 @@ function applyReview(rid){
     for(var gi=0;gi<gc.length;gi++){if(gc[gi].scenario===gameState.currentScenarioId&&gc[gi].label==='회복력'){hasRecovery=true;break;}}
     if(!hasRecovery){
       if(!gameState.inventory.growthCards)gameState.inventory.growthCards=[];
-      gameState.inventory.growthCards.push({label:'회복력',scenario:gameState.currentScenarioId,leaf:leaf,note:'이번 결과를 바탕으로 다시 시도할 수 있는 회복력 카드가 생겼어요.'});
+      gameState.inventory.growthCards.push({label:'회복력',scenario:gameState.currentScenarioId,leaf:leaf,note:_t('recovery.note','이번 결과를 바탕으로 다시 시도할 수 있는 회복력 카드가 생겼어요.')});
     }
   }
   var resourcePenalty=calcResourcePenalty(gameState.resources);

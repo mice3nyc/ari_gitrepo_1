@@ -78,7 +78,7 @@ function renderInventory(){
   var html='';
   // 인간중심 역량
   if(hc.length){
-    html+='<div style="font-size:11px;font-weight:700;color:#888;letter-spacing:1.2px;margin-bottom:10px;padding-bottom:4px;border-bottom:1.5px solid #ddd;">인간중심 역량</div>';
+    html+='<div style="font-size:11px;font-weight:700;color:#888;letter-spacing:1.2px;margin-bottom:10px;padding-bottom:4px;border-bottom:1.5px solid #ddd;">'+_t('inventory_labels.section_human_centric','인간중심 역량')+'</div>';
     var axisGroups={};
     for(var i=0;i<hc.length;i++){var a=hc[i].axis||'기타';if(!axisGroups[a])axisGroups[a]=[];axisGroups[a].push(hc[i]);}
     Object.keys(axisGroups).forEach(function(axis){
@@ -101,7 +101,7 @@ function renderInventory(){
   }
   // 도메인 역량
   if(dc.length){
-    html+='<div style="font-size:13px;font-weight:700;color:#333;margin:12px 0 8px;border-bottom:1px solid #ddd;padding-bottom:4px;">도메인 역량</div>';
+    html+='<div style="font-size:13px;font-weight:700;color:#333;margin:12px 0 8px;border-bottom:1px solid #ddd;padding-bottom:4px;">'+_t('inventory_labels.section_domain','도메인 역량')+'</div>';
     var domainCounts={};
     for(var i=0;i<dc.length;i++){var l=dc[i].label;domainCounts[l]=(domainCounts[l]||0)+1;}
     Object.keys(domainCounts).sort(function(a,b){return domainCounts[b]-domainCounts[a];}).forEach(function(label){
@@ -116,7 +116,7 @@ function renderInventory(){
   }
   // 성장 역량
   if(gc.length){
-    html+='<div style="font-size:13px;font-weight:700;color:#333;margin:12px 0 8px;border-bottom:1px solid #ddd;padding-bottom:4px;">성장 역량</div>';
+    html+='<div style="font-size:13px;font-weight:700;color:#333;margin:12px 0 8px;border-bottom:1px solid #ddd;padding-bottom:4px;">'+_t('inventory_labels.section_growth','성장 역량')+'</div>';
     var growthCounts={};
     for(var i=0;i<gc.length;i++){var l=gc[i].label;growthCounts[l]=(growthCounts[l]||0)+1;}
     Object.keys(growthCounts).forEach(function(label){
@@ -131,7 +131,7 @@ function renderInventory(){
   }
   // 레거시 (v0.8 이전 카드, 있을 때만)
   if(oldCards.length){
-    html+='<div style="font-size:11px;color:#aaa;margin-top:16px;">이전 버전 카드 '+oldCards.length+'장</div>';
+    html+='<div style="font-size:11px;color:#aaa;margin-top:16px;">'+_t('inventory_labels.legacy_prefix','이전 버전 카드')+' '+oldCards.length+'장</div>';
   }
   list.innerHTML=html;
 }
@@ -231,14 +231,14 @@ function playCardRewardSequential(cards,note){
         card.style.boxShadow='0 4px 0 '+am.color;
         var tagData=(TEXTS&&TEXTS.humanCentricCards&&TEXTS.humanCentricCards[axisPrefix[1]]&&TEXTS.humanCentricCards[axisPrefix[1]].tags&&TEXTS.humanCentricCards[axisPrefix[1]].tags[axisPrefix[2]])||{};
         shortDesc=tagData.short||'';
-        card.innerHTML='<div class="card-reward-tag" style="color:rgba(255,255,255,0.7);">인간중심 역량</div>'+
+        card.innerHTML='<div class="card-reward-tag" style="color:rgba(255,255,255,0.7);">'+_t('inventory_labels.track_human_centric','인간중심 역량')+'</div>'+
           '<div class="card-reward-label" style="color:#fff;"><b>'+_invEscapeHTML(axisPrefix[1])+'</b> — '+_invEscapeHTML(axisPrefix[2])+'</div>'+
           (shortDesc?'<div style="font-size:11px;color:rgba(255,255,255,0.85);line-height:1.5;margin-bottom:12px;">'+_invEscapeHTML(shortDesc)+'</div>':'')+
           '<button class="card-reward-confirm" id="'+btnId+'" style="background:rgba(255,255,255,0.95);color:'+am.color+';border-color:rgba(255,255,255,0.5);">'+_invEscapeHTML(btnLabel)+'</button>';
       }else{
         card.style.borderLeftColor=color;
         var isGrowth=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthCards&&TEXTS.growthCards[label]);
-        var trackName=isGrowth?'성장 역량':'도메인 역량';
+        var trackName=isGrowth?_t('inventory_labels.track_growth','성장 역량'):_t('inventory_labels.track_domain','도메인 역량');
         var td=isGrowth?(TEXTS.growthCards[label]||{}):(TEXTS&&TEXTS.domainCards&&TEXTS.domainCards[label]||{});
         shortDesc=td.short||'';
         var growthSymbol=(label==='도전력')?'↑':(label==='회복력')?'↺':'';
@@ -270,10 +270,10 @@ function showRecoveryCardModal(scid){
     var td=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthCards&&TEXTS.growthCards['회복력'])||{};
     overlay.innerHTML='<div class="recovery-card">'+
       '<div class="growth-symbol">↺</div>'+
-      '<div class="recovery-card-title">회복력</div>'+
+      '<div class="recovery-card-title">'+_t('recovery.title','회복력')+'</div>'+
       '<div class="recovery-card-desc">'+(td.short||'낮은 결과에서 비어 있던 과정을 알아차리고 다시 세우는 힘')+'</div>'+
-      '<button class="recovery-card-btn primary" id="recovery-use-btn">회복역량 사용해 시간 되돌리기<br><span style="font-size:12px;font-weight:400;opacity:0.8;">시나리오 다시 도전</span></button>'+
-      '<button class="recovery-card-btn secondary" id="recovery-skip-btn">다음 시나리오로 →</button>'+
+      '<button class="recovery-card-btn primary" id="recovery-use-btn">'+_t('recovery.btn_use','회복역량 사용해 시간 되돌리기')+'<br><span style="font-size:12px;font-weight:400;opacity:0.8;">'+_t('recovery.btn_use_sub','시나리오 다시 도전')+'</span></button>'+
+      '<button class="recovery-card-btn secondary" id="recovery-skip-btn">'+_t('recovery.btn_skip','다음 시나리오로 →')+'</button>'+
     '</div>';
     document.getElementById('recovery-use-btn').onclick=function(){
       overlay.classList.add('hidden');overlay.innerHTML='';
