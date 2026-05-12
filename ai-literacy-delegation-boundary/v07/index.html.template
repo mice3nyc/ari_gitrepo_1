@@ -556,9 +556,9 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 <div class="panel-row" id="panel-row">
   <!-- 좌측: 자원 게이지 (시간/에너지) -->
   <div class="resource-bar" id="resource-bar">
-    <div class="panel-title">자원</div>
-    <div class="resource-item" id="res-time"><div class="resource-change-indicator" id="rdelta-time"></div><div class="resource-header"><span class="resource-name">시간</span><span class="resource-num" id="rnum-time">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-time" style="width:100%"></div></div></div>
-    <div class="resource-item" id="res-energy"><div class="resource-change-indicator" id="rdelta-energy"></div><div class="resource-header"><span class="resource-name">에너지</span><span class="resource-num" id="rnum-energy">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-energy" style="width:100%"></div></div></div>
+    <div class="panel-title" id="panel-title-resource">자원</div>
+    <div class="resource-item" id="res-time"><div class="resource-change-indicator" id="rdelta-time"></div><div class="resource-header"><span class="resource-name" id="res-time-name">시간</span><span class="resource-num" id="rnum-time">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-time" style="width:100%"></div></div></div>
+    <div class="resource-item" id="res-energy"><div class="resource-change-indicator" id="rdelta-energy"></div><div class="resource-header"><span class="resource-name" id="res-energy-name">에너지</span><span class="resource-num" id="rnum-energy">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-energy" style="width:100%"></div></div></div>
   </div>
   <!-- 중앙: LV + SCORE + XP -->
   <div class="score-display" id="score-display">
@@ -584,10 +584,10 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
   </div>
   <!-- 우측: 역량(양방향 바) + 진행 -->
   <div class="stats-bar" id="stats-bar">
-    <div class="panel-title">역량</div>
+    <div class="panel-title" id="panel-title-competency">역량</div>
     <div class="stat" id="stat-delegation">
       <div class="stat-change-indicator" id="delta-delegation"></div>
-      <div class="stat-header"><span class="stat-name">위임 판단력</span><span class="stat-num" id="num-delegation">0</span></div>
+      <div class="stat-header"><span class="stat-name" id="stat-name-delegation">위임 판단력</span><span class="stat-num" id="num-delegation">0</span></div>
       <div class="pending-dots" id="pending-dots-delegation" aria-label="이번 시나리오 위임 판단력 변화"><div class="pending-dots-neg" id="pending-dots-delegation-neg"></div><div class="pending-dots-pos" id="pending-dots-delegation-pos"></div></div>
       <div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-delegation"></div></div>
       <div class="bipolar-labels"><span>-10</span><span>+20</span></div>
@@ -622,7 +622,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 <!-- Phase 8.10b — 레벨업 이벤트 팝업 (DECISIONS §10.11) -->
 <div id="levelup-modal" class="modal-overlay hidden">
   <div class="modal-card">
-    <div class="lvup-badge">LEVEL UP</div>
+    <div class="lvup-badge" id="lvup-badge">LEVEL UP</div>
     <div class="lvup-transition">
       <span class="lvup-from" id="lvup-from">Lv.1</span>
       <span class="lvup-arrow">→</span>
@@ -630,11 +630,11 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
     </div>
     <div class="lvup-effects">
       <div class="lvup-effect">
-        <span class="lvup-effect-label">자원 메터 max 증가</span>
+        <span class="lvup-effect-label" id="lvup-meter-label">자원 메터 max 증가</span>
         <span class="lvup-effect-val" id="lvup-meter-delta">시간 +10 / 에너지 +10</span>
       </div>
       <div class="lvup-effect">
-        <span class="lvup-effect-label">자원토큰 보너스</span>
+        <span class="lvup-effect-label" id="lvup-token-label">자원토큰 보너스</span>
         <span class="lvup-effect-val" id="lvup-token-bonus">+20</span>
       </div>
     </div>
@@ -673,15 +673,15 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
 <!-- Phase 8.10a — 자원토큰 분배 팝업 (DECISIONS §10.5) -->
 <div id="rp-modal" class="modal-overlay hidden">
   <div class="modal-card">
-    <div class="modal-title">자원토큰 분배</div>
-    <div class="modal-subtitle">받은 토큰을 시간과 에너지에 나눠 담으세요. 남은 토큰이 0이 되면 다음 시나리오로 넘어갑니다.</div>
+    <div class="modal-title" id="rp-title">자원토큰 분배</div>
+    <div class="modal-subtitle" id="rp-subtitle">받은 토큰을 시간과 에너지에 나눠 담으세요. 남은 토큰이 0이 되면 다음 시나리오로 넘어갑니다.</div>
     <div class="rp-bal">
-      <div class="rp-bal-label">남은 자원토큰</div>
+      <div class="rp-bal-label" id="rp-bal-label">남은 자원토큰</div>
       <div class="rp-bal-num" id="rp-bal-num">0</div>
     </div>
     <div class="rp-buckets">
       <div class="rp-bucket" data-axis="time">
-        <div class="rp-bucket-label">시간</div>
+        <div class="rp-bucket-label" id="rp-bucket-time-label">시간</div>
         <div class="rp-bucket-meter">
           <div class="rp-bucket-fill" id="rp-bucket-time-fill" style="width:0%"></div>
           <div class="rp-bucket-overlay" id="rp-bucket-time-overlay" style="width:0%; left:0%"></div>
@@ -694,7 +694,7 @@ body { font-family: 'Paperlogy', -apple-system, 'Noto Sans KR', sans-serif; back
         </div>
       </div>
       <div class="rp-bucket" data-axis="energy">
-        <div class="rp-bucket-label">에너지</div>
+        <div class="rp-bucket-label" id="rp-bucket-energy-label">에너지</div>
         <div class="rp-bucket-meter">
           <div class="rp-bucket-fill" id="rp-bucket-energy-fill" style="width:0%"></div>
           <div class="rp-bucket-overlay" id="rp-bucket-energy-overlay" style="width:0%; left:0%"></div>
@@ -1284,7 +1284,8 @@ function showLevelUpModal(prevLevel,newLevel,prevMax,newMax,tokenBonus){
     document.getElementById('lvup-from').textContent='Lv.'+prevLevel;
     document.getElementById('lvup-to').textContent='Lv.'+newLevel;
     var dT=newMax.time-prevMax.time, dE=newMax.energy-prevMax.energy;
-    document.getElementById('lvup-meter-delta').textContent='시간 +'+dT+' / 에너지 +'+dE;
+    var _lvT=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.levelup_modal&&TEXTS.levelup_modal.meter_format)||'시간 +{time} / 에너지 +{energy}';
+    document.getElementById('lvup-meter-delta').textContent=_lvT.replace('{time}',dT).replace('{energy}',dE);
     document.getElementById('lvup-token-bonus').textContent='+'+tokenBonus;
     modal.classList.remove('hidden');
     requestAnimationFrame(function(){modal.classList.add('visible');});
@@ -1827,36 +1828,28 @@ function showTitleScreen(){
     if(saved&&saved.clearedScenarios){gameState=saved;}
     else{gameState=createInitialState();saveGame();}
   }
+  var T=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.title_screen)||{};
+  var tut=T.tutorial||[];
   var h='<div class="title-frame">';
-  // 제목: 피터공 캐논 한 줄 (직접 명제, 슬로건·메타포 X)
-  h+='<h1>위임의 경계 — AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가</h1>';
-  // 캐논 도입 (큰 화두): v0.6 무드 복구
-  h+='<div class="intro-text">';
-  h+='딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>';
-  h+='누구나 할 수 있다면, 누구인가가 중요하다.';
-  h+='</div>';
-  // 진행자 무드 (분위기): 큰 화두만, 메카닉 반복 X (튜토리얼이 짊어짐)
+  h+='<h1>'+(T.heading||'위임의 경계 — AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가')+'</h1>';
+  h+='<div class="intro-text">'+(T.intro||'딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>누구나 할 수 있다면, 누구인가가 중요하다.')+'</div>';
   h+='<div class="host-text">';
-  h+='<div class="host-q">무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지.<br>당신은 구별할 수 있을까?</div>';
-  h+='<div class="host-call">AI 리터러시, 위임의 경계!</div>';
+  h+='<div class="host-q">'+(T.host_question||'무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지.<br>당신은 구별할 수 있을까?')+'</div>';
+  h+='<div class="host-call">'+(T.host_call||'AI 리터러시, 위임의 경계!')+'</div>';
   h+='</div>';
-  // 튜토리얼 4문장 (학생 톤 §11.5)
   h+='<ol class="tutorial-list">';
-  h+='<li>시나리오마다 선택지를 고른다. 각 선택은 <span class="kw-time">시간</span>과 <span class="kw-energy">에너지</span>를 쓴다.</li>';
-  h+='<li>어떤 선택을 하느냐에 따라 결과물의 점수가 달라지고, <span class="kw-delegation">위임판단력</span>과 <span class="kw-knowledge">도메인지식</span>이 자란다.</li>';
-  h+='<li>결과물 점수에 따라 등급이 매겨지고, 다음 시나리오의 <span class="kw-time">시간</span>·<span class="kw-energy">에너지</span>가 충전된다.</li>';
-  h+='<li>쌓인 <span class="kw-delegation">위임판단력</span>·<span class="kw-knowledge">도메인지식</span>은 다음 선택의 <span class="kw-time">시간</span>·<span class="kw-energy">에너지</span> 비용을 깎아준다. (할인 효과)</li>';
+  if(tut.length){for(var i=0;i<tut.length;i++)h+='<li>'+tut[i]+'</li>';}
+  else{
+    h+='<li>시나리오마다 선택지를 고른다. 각 선택은 <span class="kw-time">시간</span>과 <span class="kw-energy">에너지</span>를 쓴다.</li>';
+    h+='<li>어떤 선택을 하느냐에 따라 결과물의 점수가 달라지고, <span class="kw-delegation">위임판단력</span>과 <span class="kw-knowledge">도메인지식</span>이 자란다.</li>';
+    h+='<li>결과물 점수에 따라 등급이 매겨지고, 다음 시나리오의 <span class="kw-time">시간</span>·<span class="kw-energy">에너지</span>가 충전된다.</li>';
+    h+='<li>쌓인 <span class="kw-delegation">위임판단력</span>·<span class="kw-knowledge">도메인지식</span>은 다음 선택의 <span class="kw-time">시간</span>·<span class="kw-energy">에너지</span> 비용을 깎아준다. (할인 효과)</li>';
+  }
   h+='</ol>';
-  // 버튼 두 개: 게임 시작 / 튜토리얼 다시 보기
   h+='<div class="title-actions">';
-  h+='<button class="start-btn-large" onclick="enterFromTitle()">게임 시작</button>';
-  h+='<button class="tutorial-link" onclick="showTitleScreen()">튜토리얼 다시 보기</button>';
+  h+='<button class="start-btn-large" onclick="enterFromTitle()">'+(T.btn_start||'게임 시작')+'</button>';
+  h+='<button class="tutorial-link" onclick="showTitleScreen()">'+(T.btn_tutorial||'튜토리얼 다시 보기')+'</button>';
   h+='</div>';
-  // 캐논 도입·진행자 톤은 별도 자리로 이동 (README 또는 ending). v0.7.x 결정 자리.
-  // 폐기 카피 (참고용 주석):
-  //   "딸깍하면 누구나 할 수 있는 AI 시대라고 한다. 누구나 할 수 있다면, 누구인가가 중요하다."
-  //   "무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지. 당신은 구별할 수 있을까?"
-  //   "AI 리터러시, 위임의 경계! 상황에 따른 당신의 선택이 결과물의 점수를 바꾼다. 높은 점수, 역량 레벨업!"
   h+='</div>';
   container.innerHTML=h;
   trackEvent('title_viewed',{tutorialSeenBefore:!!gameState.tutorialSeen});
@@ -1883,12 +1876,14 @@ function showStartScreen(){
   for(var i=0;i<order.length;i++){if(cleared.indexOf(order[i])<0){nextId=order[i];break;}}
   var allDone=(nextId===null);
   var pct=Math.round((cleared.length/order.length)*100);
+  var SS=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.start_screen)||{};
+  var RF=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.report)||{};
   var h='<div class="semester-frame">';
-  h+='<h1>AI 리터러시: 위임의 경계</h1>';
-  h+='<div class="subtitle">이건 AI한테 맡겨도 돼?</div>';
-  h+='<div class="vtag">v0.7 — 한 학생의 한 학기</div>';
+  h+='<h1>'+(SS.heading||'AI 리터러시: 위임의 경계')+'</h1>';
+  h+='<div class="subtitle">'+(SS.subtitle||'이건 AI한테 맡겨도 돼?')+'</div>';
+  h+='<div class="vtag">'+(SS.version_tag||'v0.7 — 한 학생의 한 학기')+'</div>';
   h+='<div class="progress-wrap">';
-  h+='<div class="progress-head"><span class="progress-label">학기 진행</span><span class="progress-count">'+cleared.length+' / '+order.length+'</span></div>';
+  h+='<div class="progress-head"><span class="progress-label">'+(SS.progress_label||'학기 진행')+'</span><span class="progress-count">'+cleared.length+' / '+order.length+'</span></div>';
   h+='<div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div>';
   h+='<div class="progress-dots">';
   order.forEach(function(sid){
@@ -1899,7 +1894,8 @@ function showStartScreen(){
   });
   h+='</div></div>';
   if(allDone){
-    h+='<div class="semester-final"><h2>한 학기를 모두 통과했다.</h2><p>다섯 결정이 누적되어 한 학생의 한 학기가 되었다.<br>처음부터 다시 시작하면 새 학생이 같은 결정을 마주한다.</p></div>';
+    var sf=RF.semester_final||{};
+    h+='<div class="semester-final"><h2>'+(sf.title||'한 학기를 모두 통과했다.')+'</h2><p>'+(sf.body||'다섯 결정이 누적되어 한 학생의 한 학기가 되었다.<br>처음부터 다시 시작하면 새 학생이 같은 결정을 마주한다.')+'</p></div>';
   }
   h+='<div class="scenario-list">';
   order.forEach(function(sid,idx){
@@ -1909,7 +1905,7 @@ function showStartScreen(){
     var cls='scenario-card';
     if(isCleared)cls+=' cleared';
     if(isNext)cls+=' next';
-    var mark=isCleared?'클리어':(isNext?'다음 추천 →':'자유 선택');
+    var mark=isCleared?(SS.mark_cleared||'클리어'):(isNext?(SS.mark_next||'다음 추천 →'):(SS.mark_free||'자유 선택'));
     var clickAttr=isCleared?'':' onclick="startScenario(\''+sid+'\')"';
     h+='<button class="'+cls+'" type="button"'+clickAttr+'>';
     h+='<span class="sc-num">'+(idx+1)+'</span>';
@@ -1918,23 +1914,19 @@ function showStartScreen(){
     h+='</button>';
   });
   h+='</div>';
-  // §13 (5/3 세션278) — 메인 액션 가운데 큰 버튼 + 좌측 학기 처음부터 (보조)
   h+='<div class="semester-actions">';
-  // 학기 처음부터 (cleared 1+ 또는 allDone일 때만)
   if(cleared.length>0||allDone){
-    h+='<button class="action-secondary" onclick="confirmReset()">학기 처음부터</button>';
+    h+='<button class="action-secondary" onclick="confirmReset()">'+(SS.btn_restart||'학기 처음부터')+'</button>';
   }
-  // 메인 액션 — 진행 중 / 다음 시나리오 / 종합 리포트
   if(allDone){
-    h+='<button class="action-main" onclick="showFinalReport()">학기 종합 리포트</button>';
+    h+='<button class="action-main" onclick="showFinalReport()">'+(SS.btn_report||'학기 종합 리포트')+'</button>';
   }else if(hasSave()&&gameState.currentScenarioId&&!gameState.completed){
-    h+='<button class="action-main" onclick="continueGame()">이어서 진행</button>';
+    h+='<button class="action-main" onclick="continueGame()">'+(SS.btn_continue||'이어서 진행')+'</button>';
   }else if(nextId){
-    h+='<button class="action-main" onclick="startScenario(\''+nextId+'\')">다음 시나리오</button>';
+    h+='<button class="action-main" onclick="startScenario(\''+nextId+'\')">'+(SS.btn_next||'다음 시나리오')+'</button>';
   }
   h+='</div>';
-  // 튜토리얼 다시 보기 (§11)
-  h+='<button class="tutorial-link" onclick="showTitleScreen()">튜토리얼 다시 보기</button>';
+  h+='<button class="tutorial-link" onclick="showTitleScreen()">'+(SS.btn_tutorial||'튜토리얼 다시 보기')+'</button>';
   h+='</div>';
   container.innerHTML=h;
 }
@@ -3000,7 +2992,8 @@ function showFinalReport(){
   var dv=gameState.competencies.delegationChoice.value;
   var kv=gameState.competencies.knowledge.value;
   var compType=getCompetencyType(dv,kv);
-  var compText=(CONFIG.resultTextsByType||{})[compType]||'';
+  var _rt=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.result_texts&&TEXTS.result_texts.types)||CONFIG.resultTextsByType||{};
+  var compText=_rt[compType]||'';
   function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
   // texts.yaml — report 섹션 텍스트
@@ -3577,11 +3570,10 @@ function playCardRewardSequential(cards,note){
 // =====================================================
 // 13. Initialization
 // =====================================================
-// 5/3 — 정적 HTML 텍스트(GAME OVER 모달, 인벤토리 탭/패널, reset confirm) → texts.yaml inject
 function _applyStaticTexts(){
   if(typeof TEXTS==='undefined' || !TEXTS) return;
-  var U=TEXTS.ui_messages||{};
   function _set(id,val){var el=document.getElementById(id); if(el && val!=null) el.innerHTML=val;}
+  var U=TEXTS.ui_messages||{};
   // GAME OVER 모달
   var go=U.game_over||{};
   _set('gameover-title',go.title);
@@ -3601,7 +3593,7 @@ function _applyStaticTexts(){
       list.firstElementChild.innerHTML=inv.empty;
     }
   }
-  // reset confirm 모달 — id 없는 부분은 querySelector로
+  // reset confirm 모달
   var rc=U.reset_confirm||{};
   var rcModal=document.getElementById('reset-confirm-modal');
   if(rcModal){
@@ -3614,6 +3606,30 @@ function _applyStaticTexts(){
     if(rcCancel && rc.btn_cancel)rcCancel.innerHTML=rc.btn_cancel;
     if(rcDestructive && rc.btn_destructive)rcDestructive.innerHTML=rc.btn_destructive;
   }
+  // 패널 라벨 (좌/우 패널)
+  var PL=TEXTS.panel_labels||{};
+  _set('panel-title-resource',PL.resource_title);
+  _set('res-time-name',PL.time);
+  _set('res-energy-name',PL.energy);
+  _set('panel-title-competency',PL.competency_title);
+  _set('stat-name-delegation',PL.delegation);
+  _set('stat-name-knowledge',PL.knowledge);
+  // 레벨업 모달
+  var LV=TEXTS.levelup_modal||{};
+  _set('lvup-badge',LV.badge);
+  _set('lvup-meter-label',LV.meter_label);
+  _set('lvup-token-label',LV.token_label);
+  _set('lvup-confirm',LV.btn_confirm);
+  // 자원토큰 분배 모달
+  var RP=TEXTS.rp_modal||{};
+  _set('rp-title',RP.title);
+  _set('rp-subtitle',RP.subtitle);
+  _set('rp-bal-label',RP.balance_label);
+  _set('rp-bucket-time-label',RP.time_label);
+  _set('rp-bucket-energy-label',RP.energy_label);
+  // 페이지 타이틀
+  var TS=TEXTS.title_screen||{};
+  if(TS.page_title)document.title=TS.page_title;
 }
 _applyStaticTexts();
 

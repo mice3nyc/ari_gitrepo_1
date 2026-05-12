@@ -52,7 +52,9 @@ def main():
         sys.exit("cuts.yaml: 'default' 키 누락")
 
     # texts.yaml 최소 구조 검증 — 누락 시 코드의 fallback에 의존하므로 경고만
-    required_text_keys = ['cards', 'narrative', 'ui_messages', 'report']
+    required_text_keys = ['cards', 'narrative', 'ui_messages', 'report',
+                          'title_screen', 'start_screen', 'panel_labels',
+                          'levelup_modal', 'rp_modal', 'result_texts']
     missing = [k for k in required_text_keys if k not in (texts or {})]
     if missing:
         print(f"[warn] texts.yaml 누락 키: {missing} — 코드 fallback 사용")
@@ -82,10 +84,10 @@ def main():
     print(f"  scenarios: {len(scenarios)} keys ({', '.join(keys)})")
     print(f"  cuts.default: {len(cut_default)} entries")
     if texts:
-        print(f"  texts: cards={len((texts.get('cards') or {}))}, "
-              f"narrative.types={len(((texts.get('narrative') or {}).get('types') or {}))}, "
-              f"ui_messages={len((texts.get('ui_messages') or {}))}, "
-              f"report keys={len((texts.get('report') or {}))}")
+        sections = list((texts or {}).keys())
+        print(f"  texts: {len(sections)} sections ({', '.join(sections)})")
+        print(f"    cards={len((texts.get('cards') or {}))}, "
+              f"ui_messages={len((texts.get('ui_messages') or {}))}")
 
 
 if __name__ == '__main__':
