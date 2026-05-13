@@ -5,7 +5,7 @@
 **라이브 URL**: https://mice3nyc.github.io/ari_gitrepo_1/ai-literacy-delegation-boundary/v11/
 **리포**: https://github.com/mice3nyc/ari_gitrepo_1
 
-> v1.0 핸드오프 내용 + v1.1 변경사항. v1.0 → v1.1는 분기 + 성장 리포트 PDF 저장 기능 추가. **현재 서버사이드 구축은 보류**(클라이언트 단독 빌드).
+> v1.0에서 분기. 성장 리포트 PDF 저장 기능 추가. 클라이언트 단독 빌드.
 
 ---
 
@@ -38,11 +38,10 @@
 |------|------|
 | **storageKey** | `ai-literacy-delegation-boundary-v10` → `ai-literacy-delegation-boundary-v11` |
 | **version** | v1.0 → v1.1 |
-| **신규 기능** | 성장 리포트 PDF 저장 버튼 (window.print() 기반) |
+| **신규 기능** | 성장 리포트 PDF 저장 버튼 (window.print 기반) |
 | **신규 파일** | `src/styles/11-print.css` — 인쇄 전용 CSS |
 | **신규 함수** | `11-report.js` 안 `printReport()`, `extractReportData()` |
-| **리포트 하단 UI** | [리포트 저장 (PDF)] (노랑) + [시작 화면 돌아가기] (핑크) 2개 버튼 |
-| **참고 보존** | `pdf-test/` 폴더 — 폐기된 PDF 라이브러리 프로토타입 (jsPDF/pdfmake) |
+| **리포트 하단 UI** | [리포트 저장 (PDF)] + [시작 화면 돌아가기] 2개 버튼 |
 
 기능/밸런스/데이터 구조/디자인은 v1.0 그대로. v1.0 SPEC을 계승.
 
@@ -104,11 +103,7 @@ v11/
 ├── texts_to_csv.py         ← texts.yaml → CSV 추출
 ├── csv_to_texts.py         ← CSV → texts.yaml 복원
 │
-├── pdf-test/               ← ★ 참고 보존 (폐기된 시도, SPEC §13.3.3)
-│   ├── jspdf-test.html     ← jsPDF 자동 다운로드 프로토타입 (폐기)
-│   └── pdfmake-test.html   ← pdfmake 자동 다운로드 프로토타입 (폐기)
-│
-├── SPEC.md                 ← 디자인 상세 명세 (+ §13 성장 리포트 독립화)
+├── SPEC.md                 ← 디자인 상세 명세 (+ §13 성장 리포트 PDF 저장)
 ├── PLAN.md                 ← 개발 단계 계획
 ├── TASKS.md                ← 작업 체크리스트
 ├── DESIGN-REGISTRY.md      ← Neo-Brutalism 디자인 레지스트리
@@ -222,7 +217,7 @@ round-trip 검증: CSV→YAML→CSV 변환 후 원본과 diff 비교. `--verify`
 - 카툰 시나리오별 `page-break-inside: avoid`
 - 배경색·그림자 인쇄 활성화: `-webkit-print-color-adjust: exact`
 
-**`extractReportData()` 함수**: gameState에서 리포트 데이터를 평탄한 객체로 추출. 현재 호출되지 않으나, 추후 서버사이드 PDF 또는 외부 시스템 연동 시 사용 예정.
+**`extractReportData()` 함수**: gameState에서 리포트 데이터를 평탄한 객체로 추출. 현재 PDF 출력 흐름에서는 호출되지 않음.
 
 상세 명세: `SPEC.md` §13.
 
@@ -275,31 +270,19 @@ https://mice3nyc.github.io/ari_gitrepo_1/ai-literacy-delegation-boundary/v11/
 | 역량 카드 시스템 | ✅ 완료 | 인간중심 12종 + 도메인 10종 + 성장 12종 |
 | 할인 쿠폰 UX | ✅ 완료 | 무신사 쿠폰 모델, 수동 적용 |
 | 이미지 | ✅ 130개 webp | 5시나리오 × 컷별 이미지 |
-| **PDF 저장** | ✅ 완료 (v1.1) | window.print() 기반. 학생 수동 "PDF로 저장" |
-| 5시나리오 완주 플테 | ⬜ 미완료 | 전체 흐름 통합 테스트 필요 |
-| 모바일 뷰포트 | ⬜ 미점검 | 반응형 대응 확인 필요 |
-| 서버사이드 저장 | ⬜ 보류 | Phase 2 (놀공 서버). 본 빌드 범위 외 |
+| PDF 저장 | ✅ 완료 (v1.1) | window.print 기반 |
+| 5시나리오 완주 플테 | ⬜ 미완료 | 전체 흐름 통합 테스트 |
+| 모바일 뷰포트 | ⬜ 미점검 | 반응형 대응 확인 |
 
 ---
 
-### 12. 알려진 제약 + 폐기 결정
+### 12. 알려진 제약
 
 1. **클라이언트 전용**: 서버 없음. 모든 데이터가 브라우저 localStorage에 저장. 기기 변경/브라우저 초기화 시 데이터 손실.
 2. **단일 HTML**: 빌드 산출물이 ~864KB 단일 파일. 이미지만 외부 참조.
 3. **데이터 노출**: 시나리오 정답/점수가 클라이언트 코드에 포함됨. 의도적으로 보안하지 않음 (교육 콘텐츠).
 4. **이벤트 로그**: `08-event-log.js`가 플레이 이벤트를 localStorage에 기록. 서버로 전송하는 구조 없음.
-5. **PDF 저장 한계**: 학생이 print 다이얼로그에서 "PDF로 저장"을 수동 선택해야 함. 원클릭 자동 다운로드 아님.
-
-**폐기된 시도** (참고용 — `pdf-test/` 폴더와 SPEC §13.3.3):
-
-| 시도 | 폐기 사유 |
-|------|----------|
-| html2pdf.js (canvas) | 출력 품질 미달, 이미지·레이아웃 무너짐 |
-| jsPDF + Paperlogy ttf | 한글 글리프 빈 출력 |
-| jsPDF + NanumBarunGothic 4MB | 본 게임 통합 시 한글 출력 실패 |
-| jsPDF/pdfmake + 폰트 임베딩 없음 | 한글 깨짐. OS별 시스템 폰트 차이로 통일 불가 |
-
-**근본 결론**: 클라이언트 라이브러리는 폰트 임베딩 필요·라이브러리별 글리프 매핑 실패·OS 폰트 차이로 통일된 한글 출력 어려움. 원클릭 자동 다운로드는 서버사이드 렌더링(Puppeteer 등)이 깔끔. **현재 본 빌드에서는 보류**.
+5. **PDF 저장**: 학생이 print 다이얼로그에서 "PDF로 저장"을 수동 선택. 원클릭 자동 다운로드 아님.
 
 ---
 
@@ -321,7 +304,7 @@ https://mice3nyc.github.io/ari_gitrepo_1/ai-literacy-delegation-boundary/v11/
 - `SCENARIOS[시나리오ID]` — 시나리오 데이터
 - `TEXTS` — UI 텍스트 (`_t('경로.키', '폴백')` 헬퍼로 접근)
 - `gameState` — 런타임 게임 상태
-- `extractReportData()` — gameState → 평탄한 리포트 객체 (현재 미호출, 추후 사용 예정)
+- `extractReportData()` — gameState → 평탄한 리포트 객체
 
 ---
 
@@ -329,7 +312,7 @@ https://mice3nyc.github.io/ari_gitrepo_1/ai-literacy-delegation-boundary/v11/
 
 | 문서 | 내용 |
 |------|------|
-| `SPEC.md` | v1.0 디자인 상세 + §13 성장 리포트 독립화 (v1.1 추가) |
+| `SPEC.md` | v1.0 디자인 상세 + §13 성장 리포트 PDF 저장 (v1.1 추가) |
 | `DESIGN-REGISTRY.md` | Neo-Brutalism 디자인 원칙 + 체크리스트 |
 | `SCENARIO-GUIDELINES.md` | 시나리오 콘텐츠 가이드 (분기 구조, 점수 철학) |
 | `src/README.md` | 소스 레이아웃 요약 |
@@ -343,8 +326,8 @@ https://mice3nyc.github.io/ari_gitrepo_1/ai-literacy-delegation-boundary/v11/
 
 동현공이 살펴보면 좋을 부분:
 
-1. **`11-report.js`의 `printReport()` + `extractReportData()`** — v1.1 신규. 단순한 구조지만 `extractReportData()`는 추후 외부 연동을 가정해 작성.
+1. **`11-report.js`의 `printReport()` + `extractReportData()`** — v1.1 신규.
 2. **`11-print.css`** — print 출력 시 보일/안 보일 요소 선택. `.no-print` 클래스 적용 규칙.
 3. **`07-storage.js`** — storageKey 한 키에 전체 gameState 직렬화. 데이터 손실 시나리오 검토 가치.
-4. **`08-event-log.js`** — 현재 localStorage 한 키에만 누적. 추후 서버 전송 가능성.
-5. **빌드 파이프라인** (`build.py` / `update.py`) — Python + YAML + CSV 다단계 파이프라인. 단일 HTML 산출.
+4. **`08-event-log.js`** — 현재 localStorage 한 키에만 누적.
+5. **빌드 파이프라인** (`build.py` / `update.py`) — Python + YAML + CSV 다단계. 단일 HTML 산출.
