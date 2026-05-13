@@ -480,32 +480,7 @@ var reportData = {
 - 카툰 시나리오별 page-break-inside: avoid
 - 배경색·그림자 인쇄 활성화 (`-webkit-print-color-adjust: exact`)
 
-###### 13.3.3 클라이언트 자동 PDF 다운로드 — 전체 폐기 결정 (세션342)
-
-원클릭 자동 PDF 다운로드를 위해 3가지 라이브러리 시도. 모두 폐기. 자동 다운로드 + 영구 URL은 **Phase 2 서버사이드**(놀공 서버)로 이전.
-
-**시도와 결과:**
-
-| # | 라이브러리 | 시도 내용 | 결과 |
-|---|-----------|----------|------|
-| 1 | **html2pdf.js** (html2canvas + jsPDF 번들) | 리포트 DOM을 canvas로 캡처 후 PDF 자동 다운로드 | 출력물 품질 미달 — 이미지·레이아웃 무너짐. 폐기 |
-| 2 | **jsPDF + Paperlogy ttf** | 게임 본 폰트(Paperlogy 679KB) 임베딩 후 텍스트·이미지 출력 | 한글 글리프가 빈 텍스트로 출력. PDF에 텍스트 빠짐 |
-| 3 | **jsPDF + NanumBarunGothic ttf (4MB)** | 검증된 한글 본문 폰트로 재시도 | 단일 프로토타입(minimal scope)에서만 검증. 본 게임 통합 시점에 한글 출력 여전히 실패 |
-| 4 | **jsPDF + pdfmake (폰트 없이)** | 폰트 임베딩 폐기, helvetica/Roboto 기본 폰트 + 박스·이미지·숫자 | 한글 깨짐. OS별(Windows/Android/iOS) 시스템 폰트 차이로 클라이언트 통일 어려움 |
-
-**근본적 결론:**
-- 클라이언트 라이브러리(jsPDF/pdfmake)는 자기완결적 PDF를 만들기 위해 폰트를 PDF에 임베딩해야 함
-- 한글 폰트 임베딩이 라이브러리별로 처리 방식이 다르고 글리프 매핑 실패 사례 다수
-- OS별 시스템 한글 폰트 차이로 클라이언트 단에서 통일된 출력 불가
-- 게임 본 폰트(Paperlogy)와 시각 일관성 유지하면서 자동 다운로드까지 보장하는 길은 **서버사이드 PDF 렌더링** (Puppeteer 등)
-
-**폐기 정리:**
-- `pdf-test/jspdf-test.html`, `pdf-test/pdfmake-test.html` 프로토타입 → 참고용으로 보존
-- 본 게임 통합 코드(`downloadReportPDF_jsPDF`, `downloadReportPDF_pdfmake`, `_buildPDF_*`, `_pdfFetch*`) → 제거 (세션342)
-- shell HTML의 jsPDF/pdfmake CDN → 제거
-- `extractReportData()` 함수는 유지 — Phase 2 서버 POST 페이로드용
-
-###### 13.3.4 Phase 1 사용자 흐름
+###### 13.3.3 사용자 흐름
 
 1. 학생 게임 완료 → 성장 리포트 화면
 2. [리포트 저장 (PDF)] 클릭
@@ -513,90 +488,7 @@ var reportData = {
 4. 대상: **"PDF로 저장"** 선택 → 저장 위치 지정 → 저장
 5. 한 단계 추가는 있지만 출력 품질 깔끔, 학생 한글 정상, 게임 폰트 그대로
 
-##### 13.4 Phase 2 — 독립 HTML + 서버 저장
 
-###### 13.4.1 흐름
+##### 13.4 Phase 2 — 보류
 
-```
-[게임 완료] → [리포트 화면]
-                 ├─ [PDF 저장] → window.print()
-                 └─ [링크 생성] → POST reportData → 서버
-                                    ↓
-                              서버가 static HTML 생성
-                              reports/{id}.html 저장
-                                    ↓
-                              URL 반환 → 학생에게 표시
-                              (복사/공유 가능)
-```
-
-###### 13.4.2 서버 API 인터페이스
-
-```
-POST /api/reports
-Content-Type: application/json
-Body: { reportData }
-
-Response 201:
-{ "url": "https://서버도메인/reports/abc123.html" }
-
-Response 400:
-{ "error": "Invalid report data" }
-```
-
-- `{id}`: 서버에서 생성하는 짧은 고유 ID (nanoid 등)
-- 중복 방지: 같은 학생+같은 게임 세션 → 같은 ID 반환
-
-###### 13.4.3 독립 report HTML 구조
-
-서버가 생성하는 `reports/{id}.html`은 자기완결적 단일 HTML 파일.
-
-내장 요소:
-- reportData (JSON, `<script>` 태그로 embed)
-- 렌더링 로직 (showFinalReport 계열 함수 — 게임 코드에서 추출)
-- CSS (리포트 관련 스타일만)
-- TEXTS 데이터 (narrative 텍스트 — texts.yaml에서 report/narrative/cards 섹션)
-
-외부 참조:
-- 카툰 이미지: 절대 URL로 참조 (`https://서버도메인/images/s01_c1.webp`)
-- 폰트: CDN 또는 서버 호스팅
-
-구현 옵션:
-- **A. 서버 사이드 템플릿**: 서버가 HTML 템플릿에 reportData를 주입해서 파일 생성
-- **B. 클라이언트 렌더 + 서버 저장**: 클라이언트가 완성된 HTML string을 POST, 서버는 그대로 저장
-
-→ **B 채택**: 렌더링 로직이 이미 클라이언트에 있다. 서버는 파일 저장만 하면 됨. 서버 의존도 최소화.
-
-###### 13.4.4 클라이언트 → 서버 전송 데이터 (B 방식)
-
-```javascript
-POST /api/reports
-Body: {
-  id: null,           // 서버가 생성 (or 클라이언트 제안)
-  html: "<!DOCTYPE html>...",  // 완성된 HTML string
-  meta: {             // 인덱싱/관리용 메타
-    version: "1.1",
-    timestamp: "...",
-    playerName: "...",
-    totalScore: 350,
-    grade: "B"
-  }
-}
-```
-
-###### 13.4.5 이미지 경로 결정
-
-리포트 HTML 안의 카툰 이미지 경로는 놀공 서버의 이미지 호스팅 경로로. 빌드 시 또는 HTML 생성 시 BASE_URL 설정 필요.
-
-```javascript
-var REPORT_IMAGE_BASE = 'https://서버도메인/ai-literacy/images/';
-// 게임 빌드 시 CONFIG에 추가, report 생성 시 참조
-```
-
-##### 13.5 결정 대기
-
-| # | 결정 사항 | 현재 값 | 대기 이유 |
-|---|----------|---------|----------|
-| 1 | 놀공 서버 도메인/경로 | 미정 | 서버 담당 확인 |
-| 2 | 이미지 호스팅 경로 | 미정 | 위와 연동 |
-| 3 | 리포트 보관 기간/정책 | 미정 | 서비스 운영 판단 |
-| 4 | 교사 조회 기능 여부 | 미정 | 학기 운영 방식에 따라 |
+서버사이드 PDF/HTML 저장 + 영구 URL은 현재 본 빌드 범위 외. 필요 발생 시 별도 결정. 결정 기록은 [[DECISIONS.md]] 참조.
