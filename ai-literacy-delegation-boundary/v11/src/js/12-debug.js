@@ -7,46 +7,46 @@ document.addEventListener('click',function(e){if(!dbgOn)return;var p=document.ge
 function renderDebug(){
   if(!dbgOn)return;
   var p=document.getElementById('debug-panel'),logs=getEvents(),last=logs.length?logs[logs.length-1]:null;
-  var h='<div class="debug-section"><div class="debug-label">State</div>';
+  var h='<div class="debug-section"><div class="debug-label">상태</div>';
   if(gameState){
-    h+='<div>scenario:'+gameState.currentScenarioId+'</div>';
-    h+='<div>tier:'+gameState.currentTier+' | t1:'+gameState.selectedTier1+' t2:'+gameState.selectedTier2+' rv:'+gameState.selectedReview+'</div>';
-    h+='<div>leaf:'+(getLeafPath()||'-')+'</div>';
-    h+='<div>delegation:'+gameState.competencies.delegationChoice.value+' (h:'+gameState.competencies.delegationChoice.history.length+')</div>';
-    h+='<div>knowledge:'+gameState.competencies.knowledge.value+' (h:'+gameState.competencies.knowledge.history.length+')</div>';
-    h+='<div>score:'+gameState.score+' / total:'+gameState.totalScore+'</div>';
-    h+='<div>items:'+gameState.itemsCollected.length+' '+(gameState.itemsCollected.join(', ')||'-')+'</div>';
-    h+='<div>cards:'+(((gameState.inventory&&gameState.inventory.competencyCards)||[]).length)+' (inventory)</div>';
+    h+='<div>시나리오: '+gameState.currentScenarioId+'</div>';
+    h+='<div>tier: '+gameState.currentTier+' | t1: '+gameState.selectedTier1+' t2: '+gameState.selectedTier2+' rv: '+gameState.selectedReview+'</div>';
+    h+='<div>leaf: '+(getLeafPath()||'-')+'</div>';
+    h+='<div>판단하는 힘: '+gameState.competencies.delegationChoice.value+' (이력: '+gameState.competencies.delegationChoice.history.length+')</div>';
+    h+='<div>아는것의 힘: '+gameState.competencies.knowledge.value+' (이력: '+gameState.competencies.knowledge.history.length+')</div>';
+    h+='<div>점수: '+gameState.score+' / 총점: '+gameState.totalScore+'</div>';
+    h+='<div>아이템: '+gameState.itemsCollected.length+' '+(gameState.itemsCollected.join(', ')||'-')+'</div>';
+    h+='<div>카드: '+(((gameState.inventory&&gameState.inventory.competencyCards)||[]).length)+' (인벤토리)</div>';
     if(gameState.resources){
       var rt=gameState.resources.time,re=gameState.resources.energy;
-      h+='<div>time:'+rt.current+'/'+rt.max+' | energy:'+re.current+'/'+re.max+'</div>';
+      h+='<div>시간: '+rt.current+'/'+rt.max+' | 에너지: '+re.current+'/'+re.max+'</div>';
     }
     if(gameState.exp){
-      h+='<div>exp:'+gameState.exp.current+' | level:'+gameState.exp.level+'</div>';
+      h+='<div>경험치: '+gameState.exp.current+' | 레벨: '+gameState.exp.level+'</div>';
     }
     if(gameState.rp){
-      h+='<div>rp balance:'+gameState.rp.balance+' (h:'+(gameState.rp.history?gameState.rp.history.length:0)+')</div>';
+      h+='<div>자원토큰: '+gameState.rp.balance+' (이력: '+(gameState.rp.history?gameState.rp.history.length:0)+')</div>';
     }
     var _t=getCompetencyType(gameState.competencies.delegationChoice.value,gameState.competencies.knowledge.value);
-    h+='<div>compType:'+_t+' | history:'+(gameState.scenarioHistory?gameState.scenarioHistory.length:0)+'</div>';
-    h+='<div>hint:'+(gameState.hintEnabled?'ON':'OFF')+'</div>';
+    h+='<div>유형: '+_t+' | 회기 이력: '+(gameState.scenarioHistory?gameState.scenarioHistory.length:0)+'</div>';
+    h+='<div>힌트: '+(gameState.hintEnabled?'켜짐':'꺼짐')+'</div>';
   }else{
-    h+='<div>no game</div>';
+    h+='<div>게임 없음</div>';
   }
   h+='</div>';
-  h+='<div class="debug-section"><div class="debug-label">Events: '+logs.length+'</div>';
-  if(last)h+='<div>last: '+last.type+'</div>';
+  h+='<div class="debug-section"><div class="debug-label">이벤트: '+logs.length+'</div>';
+  if(last)h+='<div>마지막: '+last.type+'</div>';
   h+='</div>';
-  h+='<div class="debug-section"><div class="debug-label">Jump (시나리오 점프 / 컷)</div>';
+  h+='<div class="debug-section"><div class="debug-label">컷 점프</div>';
   h+='<div class="debug-buttons">';
-  h+='<button class="debug-btn" onclick="dbgJumpCut(1)">Cut1</button>';
-  h+='<button class="debug-btn" onclick="dbgJumpCut(2)">Cut2 (1차)</button>';
-  h+='<button class="debug-btn" onclick="dbgJumpCut(5)">Cut5 (검토)</button>';
-  h+='<button class="debug-btn" onclick="dbgJumpCut(6)">Cut6 (최종)</button>';
+  h+='<button class="debug-btn" onclick="dbgJumpCut(1)">컷1</button>';
+  h+='<button class="debug-btn" onclick="dbgJumpCut(2)">컷2 (1차)</button>';
+  h+='<button class="debug-btn" onclick="dbgJumpCut(5)">컷5 (검토)</button>';
+  h+='<button class="debug-btn" onclick="dbgJumpCut(6)">컷6 (최종)</button>';
   h+='</div></div>';
-  h+='<div class="debug-section"><div class="debug-label">Hint (토글)</div>';
+  h+='<div class="debug-section"><div class="debug-label">힌트 토글</div>';
   h+='<div class="debug-buttons">';
-  h+='<button class="debug-btn" onclick="toggleHint()">'+(gameState && gameState.hintEnabled?'ON → OFF':'OFF → ON')+'</button>';
+  h+='<button class="debug-btn" onclick="toggleHint()">'+(gameState && gameState.hintEnabled?'켜짐 → 꺼짐':'꺼짐 → 켜짐')+'</button>';
   h+='</div></div>';
   h+='<div class="debug-section"><div class="debug-label">인간중심 카드 (강제 추가)</div>';
   h+='<div class="debug-buttons" style="flex-wrap:wrap">';
@@ -62,44 +62,44 @@ function renderDebug(){
     h+='<button class="debug-btn" onclick="dbgAddDomain(\''+_domDbg[_di]+'\')">'+_domDbg[_di]+'</button>';
   }
   h+='</div></div>';
-  h+='<div class="debug-section"><div class="debug-label">Level (강제 점프)</div>';
+  h+='<div class="debug-section"><div class="debug-label">레벨 (강제 점프)</div>';
   h+='<div class="debug-buttons">';
-  h+='<button class="debug-btn" onclick="dbgSetLevel(1)">L1</button>';
-  h+='<button class="debug-btn" onclick="dbgSetLevel(3)">L3</button>';
-  h+='<button class="debug-btn" onclick="dbgSetLevel(5)">L5</button>';
+  h+='<button class="debug-btn" onclick="dbgSetLevel(1)">Lv.1</button>';
+  h+='<button class="debug-btn" onclick="dbgSetLevel(3)">Lv.3</button>';
+  h+='<button class="debug-btn" onclick="dbgSetLevel(5)">Lv.5</button>';
   h+='</div></div>';
-  h+='<div class="debug-section"><div class="debug-label">Resources (강제 설정)</div>';
+  h+='<div class="debug-section"><div class="debug-label">자원 (강제 설정)</div>';
   h+='<div class="debug-buttons">';
-  h+='<button class="debug-btn" onclick="dbgSetResources(100,100)">Full</button>';
-  h+='<button class="debug-btn" onclick="dbgSetResources(0,0)">Zero</button>';
-  h+='<button class="debug-btn" onclick="dbgSetResources(-20,-20)">Neg</button>';
+  h+='<button class="debug-btn" onclick="dbgSetResources(100,100)">최대</button>';
+  h+='<button class="debug-btn" onclick="dbgSetResources(0,0)">0</button>';
+  h+='<button class="debug-btn" onclick="dbgSetResources(-20,-20)">마이너스</button>';
   h+='</div></div>';
-  // 8.11 — 위/도 4유형 강제
-  h+='<div class="debug-section"><div class="debug-label">위/도 4유형 (강제)</div>';
+  // 위/도 4유형 강제
+  h+='<div class="debug-section"><div class="debug-label">판단/지식 4유형 (강제)</div>';
   h+='<div class="debug-buttons">';
-  h+='<button class="debug-btn" onclick="dbgSetType(\'pp\')">위+ 도+ (pp)</button>';
-  h+='<button class="debug-btn" onclick="dbgSetType(\'pn\')">위+ 도- (pn)</button>';
-  h+='<button class="debug-btn" onclick="dbgSetType(\'np\')">위- 도+ (np)</button>';
-  h+='<button class="debug-btn" onclick="dbgSetType(\'nn\')">위- 도- (nn)</button>';
-  h+='<button class="debug-btn" onclick="dbgSetType(\'mid\')">mid (0,0)</button>';
+  h+='<button class="debug-btn" onclick="dbgSetType(\'pp\')">판단+ 지식+ (pp)</button>';
+  h+='<button class="debug-btn" onclick="dbgSetType(\'pn\')">판단+ 지식- (pn)</button>';
+  h+='<button class="debug-btn" onclick="dbgSetType(\'np\')">판단- 지식+ (np)</button>';
+  h+='<button class="debug-btn" onclick="dbgSetType(\'nn\')">판단- 지식- (nn)</button>';
+  h+='<button class="debug-btn" onclick="dbgSetType(\'mid\')">중간 (0,0)</button>';
   h+='</div>';
   h+='<div class="debug-buttons" style="margin-top:4px">';
-  h+='<button class="debug-btn" onclick="dbgAdjComp(\'d\',1)">위 +1</button>';
-  h+='<button class="debug-btn" onclick="dbgAdjComp(\'d\',-1)">위 -1</button>';
-  h+='<button class="debug-btn" onclick="dbgAdjComp(\'k\',1)">도 +1</button>';
-  h+='<button class="debug-btn" onclick="dbgAdjComp(\'k\',-1)">도 -1</button>';
+  h+='<button class="debug-btn" onclick="dbgAdjComp(\'d\',1)">판단 +1</button>';
+  h+='<button class="debug-btn" onclick="dbgAdjComp(\'d\',-1)">판단 -1</button>';
+  h+='<button class="debug-btn" onclick="dbgAdjComp(\'k\',1)">지식 +1</button>';
+  h+='<button class="debug-btn" onclick="dbgAdjComp(\'k\',-1)">지식 -1</button>';
   h+='</div></div>';
-  // 8.11 — 자원토큰 RP 강제
-  h+='<div class="debug-section"><div class="debug-label">RP 자원토큰 (강제)</div>';
+  // 자원토큰 RP 강제
+  h+='<div class="debug-section"><div class="debug-label">자원토큰 (강제)</div>';
   h+='<div class="debug-buttons">';
-  h+='<button class="debug-btn" onclick="dbgSetRP(0)">RP=0</button>';
-  h+='<button class="debug-btn" onclick="dbgSetRP(20)">RP=20</button>';
-  h+='<button class="debug-btn" onclick="dbgSetRP(50)">RP=50</button>';
+  h+='<button class="debug-btn" onclick="dbgSetRP(0)">토큰=0</button>';
+  h+='<button class="debug-btn" onclick="dbgSetRP(20)">토큰=20</button>';
+  h+='<button class="debug-btn" onclick="dbgSetRP(50)">토큰=50</button>';
   h+='<button class="debug-btn" onclick="dbgAddRP(5)">+5</button>';
   h+='<button class="debug-btn" onclick="dbgAddRP(-5)">-5</button>';
   h+='</div></div>';
-  // 8.11 — 학기 종합 리포트 강제 호출 (4유형 × 5등급 빠른 점검)
-  h+='<div class="debug-section"><div class="debug-label">Final Report (5 시나리오 모두 등급 X)</div>';
+  // 학기 종합 리포트 강제 호출
+  h+='<div class="debug-section"><div class="debug-label">학기 종합 리포트 (5 시나리오 모두 등급 X)</div>';
   h+='<div class="debug-buttons">';
   h+='<button class="debug-btn" onclick="dbgShowReport(\'S\')">S</button>';
   h+='<button class="debug-btn" onclick="dbgShowReport(\'A\')">A</button>';
@@ -107,18 +107,18 @@ function renderDebug(){
   h+='<button class="debug-btn" onclick="dbgShowReport(\'C\')">C</button>';
   h+='<button class="debug-btn" onclick="dbgShowReport(\'D\')">D</button>';
   h+='</div>';
-  h+='<div style="font-size:9px;color:#888;margin-top:3px">위/도 먼저 세팅 후 등급 클릭</div>';
+  h+='<div style="font-size:9px;color:#888;margin-top:3px">판단/지식 먼저 세팅 후 등급 클릭</div>';
   h+='</div>';
-  // 8.11 — 모달 강제 호출
-  h+='<div class="debug-section"><div class="debug-label">Modals (강제 호출)</div>';
+  // 모달 강제 호출
+  h+='<div class="debug-section"><div class="debug-label">모달 (강제 호출)</div>';
   h+='<div class="debug-buttons">';
-  h+='<button class="debug-btn" onclick="dbgShowLevelUpModal()">LV Up 모달</button>';
-  h+='<button class="debug-btn" onclick="dbgShowRPModal()">RP 분배 모달</button>';
+  h+='<button class="debug-btn" onclick="dbgShowLevelUpModal()">레벨업 모달</button>';
+  h+='<button class="debug-btn" onclick="dbgShowRPModal()">자원토큰 분배 모달</button>';
   h+='</div></div>';
   h+='<div class="debug-section"><div class="debug-buttons">';
-  h+='<button class="debug-btn" onclick="resetGame();renderDebug()">Reset</button>';
-  h+='<button class="debug-btn" onclick="clearGame();clearEvents();renderDebug()">Clear All</button>';
-  h+='<button class="debug-btn" onclick="downloadLog()">Log DL</button>';
+  h+='<button class="debug-btn" onclick="resetGame();renderDebug()">초기화</button>';
+  h+='<button class="debug-btn" onclick="clearGame();clearEvents();renderDebug()">전부 삭제</button>';
+  h+='<button class="debug-btn" onclick="downloadLog()">로그 다운로드</button>';
   h+='</div></div>';
   p.innerHTML=h;
 }
