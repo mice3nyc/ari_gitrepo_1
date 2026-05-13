@@ -1,0 +1,31 @@
+/* ===== 선택지 비용 표시 — 4박스 그리드 (DECISIONS §10.6 4/30 세션257) ===== */
+.choice-cost { display:flex; gap:0; margin-top:1px; padding-top:10px; border-top:1px dashed #ddd; }
+.cost-group { display:flex; gap:10px; flex:1; align-items:flex-end; justify-content:center; padding:0 8px; }
+.cost-group:not(:last-child) { border-right:1px solid #ddd; }
+.cost-cell { display:flex; flex-direction:column; align-items:center; gap:4px; }
+.cost-cell-label { font-size:9px; color:#666; letter-spacing:0.3px; font-weight:600; line-height:1; white-space:nowrap; }
+.cost-box-main { width:38px; height:36px; border:2px solid var(--acc-pink-deep); background:var(--acc-pink-soft); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; color:var(--ink); line-height:1; }
+.cost-box-effect { width:34px; height:32px; border:2px solid var(--acc-mint-deep); background:var(--acc-mint-soft); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:var(--ink); line-height:1; }
+.cost-box-effect.penalty { border-color:var(--acc-pink-deep); background:var(--acc-pink-soft); color:var(--ink); }
+.cost-box-effect.zero { border:2px dashed var(--ink-soft); background:transparent; color:var(--ink-soft); font-weight:400; }
+.cost-simple { display:flex; gap:12px; justify-content:center; padding:3px 8px; font-size:11px; color:#555; font-weight:600; border-top:1px dashed #ddd; }
+/* v0.8 §3.4 — 공식형 박스 두 줄 라벨 분리 */
+.cost-formula-box { display:flex; flex-direction:row; gap:0; padding:3px 12px 4px; border-top:1px dashed #ddd; }
+.cost-formula-line { display:flex; align-items:flex-end; justify-content:center; gap:3px; font-size:10px; flex:1; }
+.cost-formula-line:first-child { border-right:1px solid #ccc; margin-right:4px; padding-right:4px; }
+.cost-formula-cell { display:flex; flex-direction:column; align-items:center; gap:3px; }
+.cost-formula-label { color:#888; font-size:8px; font-weight:600; letter-spacing:0.3px; line-height:1; white-space:nowrap; }
+.cost-formula-val { display:inline; font-size:12px; font-weight:700; line-height:1; }
+.cost-formula-raw { color:#111; }
+.cost-formula-discount { color:var(--acc-mint-deep); }
+.cost-formula-discount.zero { color:var(--ink-soft); font-weight:400; }
+.cost-formula-discount.penalty { color:var(--acc-pink-deep); }
+.cost-formula-final { color:var(--acc-pink-deep); }
+.cost-formula-final b { font-size:14px; color:var(--acc-pink-deep); font-weight:800; }
+.cost-formula-op { font-size:10px; color:#999; font-weight:600; padding:0 1px; padding-bottom:6px; }
+.cost-energy-col { display:flex; flex-direction:column; flex:1; align-items:stretch; }
+.cost-card-chips { display:flex; flex-wrap:wrap; gap:3px; justify-content:center; margin-bottom:2px; }
+.cost-card-chips .card-chip { font-size:9px; color:var(--ink); font-weight:600; padding:1px 5px; background:var(--acc-mint-soft); border:2px solid var(--ink); border-radius:0; white-space:nowrap; }
+.cost-blink { animation:costBlink 0.8s steps(1); }
+@keyframes costBlink { 0%,100%{opacity:1;} 20%,60%{opacity:0;} 40%,80%{opacity:1;} }
+

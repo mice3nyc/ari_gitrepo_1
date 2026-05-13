@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 리터러시: 위임의 경계 v1.1</title>
+<style>/* __CSS_INJECT__ */</style>
+</head>
+<body>
+<!-- 좌/우 패널 (sticky) — 좌:자원 / 우:역량+점수+진행 -->
+<div class="panel-row" id="panel-row">
+  <!-- 좌측: 자원 게이지 (시간/에너지) -->
+  <div class="resource-bar" id="resource-bar">
+    <div class="panel-title">자원</div>
+    <div class="panel-content">
+      <div class="resource-item" id="res-time"><div class="resource-change-indicator" id="rdelta-time"></div><div class="resource-header"><span class="resource-name">시간</span><span class="resource-num" id="rnum-time">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-time" style="width:100%"></div></div></div>
+      <div class="panel-divider"></div>
+      <div class="resource-item" id="res-energy"><div class="resource-change-indicator" id="rdelta-energy"></div><div class="resource-header"><span class="resource-name">에너지</span><span class="resource-num" id="rnum-energy">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-energy" style="width:100%"></div></div></div>
+    </div>
+  </div>
+  <!-- 중앙: LV + SCORE + XP -->
+  <div class="score-display" id="score-display">
+    <div class="score-display-row">
+      <div class="score-block">
+        <span class="display-label">LV</span>
+        <span class="display-num" id="lv-num">1</span>
+      </div>
+      <div class="score-vsep"></div>
+      <div class="score-block">
+        <span class="display-label">SCORE</span>
+        <span class="display-num" id="score-num">0</span>
+      </div>
+    </div>
+    <!-- XP 진행 바 (LV/SCORE 아래) -->
+    <div class="exp-display" id="exp-display">
+      <div class="exp-header">
+        <span class="exp-level" id="exp-level">XP</span>
+        <span class="exp-num" id="exp-num">0/20</span>
+      </div>
+      <div class="exp-bar"><div class="exp-bar-fill" id="exp-bar-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+  <!-- 우측: 역량(양방향 바) + 진행 -->
+  <div class="stats-bar" id="stats-bar">
+    <div class="panel-title">역량</div>
+    <div class="panel-content">
+      <div class="stat" id="stat-delegation">
+        <div class="stat-change-indicator" id="delta-delegation"></div>
+        <div class="stat-header"><span class="stat-name">판단하는 힘</span><span class="stat-num" id="num-delegation">0</span></div>
+        <div class="gauge-with-pending"><div class="pending-dots" id="pending-dots-delegation" aria-label="이번 시나리오 판단하는 힘 변화"><div class="pending-dots-neg" id="pending-dots-delegation-neg"></div><div class="pending-dots-pos" id="pending-dots-delegation-pos"></div></div><div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-delegation"></div></div></div>
+        <div class="bipolar-labels"><span>-10</span><span>+10</span></div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="stat" id="stat-knowledge">
+        <div class="stat-change-indicator" id="delta-knowledge"></div>
+        <div class="stat-header"><span class="stat-name" id="stat-name-knowledge">아는것의 힘</span><span class="stat-num" id="num-knowledge">0</span></div>
+        <div class="gauge-with-pending"><div class="pending-dots" id="pending-dots-knowledge" aria-label="이번 시나리오 아는것의 힘 변화"><div class="pending-dots-neg" id="pending-dots-knowledge-neg"></div><div class="pending-dots-pos" id="pending-dots-knowledge-pos"></div></div><div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-knowledge"></div></div></div>
+        <div class="bipolar-labels"><span>-10</span><span>+10</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container" id="main-container"></div>
+<!-- 역량 카드 인벤토리 탭 (우측 가장자리 고정 / texts.yaml inject — 초기값은 fallback) -->
+<button class="inv-tab" id="inv-tab" onclick="toggleInventory()" aria-label="역량 카드 인벤토리 열기"><span class="inv-tab-name" id="inv-tab-name">역량 카드</span><span class="inv-tab-desc" id="inv-tab-desc">모은 카드 보기</span><span class="inv-tab-badge hidden" id="inv-tab-badge"></span></button>
+<div class="inv-panel-backdrop" id="inv-panel-backdrop" onclick="toggleInventory(false)"></div>
+<aside class="inv-panel" id="inv-panel" aria-hidden="true">
+  <div class="inv-panel-header">
+    <span class="inv-panel-title" id="inv-panel-title">역량 카드</span>
+    <button class="inv-panel-close" onclick="toggleInventory(false)" aria-label="닫기">×</button>
+  </div>
+  <div class="inv-panel-body" id="inv-list">
+    <div class="inv-empty">아직 획득한 카드가 없어요.<br>시나리오 끝에 카드를 받을 수 있습니다.</div>
+  </div>
+</aside>
+<div class="card-reward-overlay hidden" id="card-reward-overlay"></div>
+<div class="recovery-overlay hidden" id="recovery-overlay"></div>
+<button class="debug-toggle" onclick="toggleDebug()">DEBUG</button>
+<div class="debug-panel" id="debug-panel"></div>
+<div class="version" id="version-label">v1.1</div>
+
+<!-- Phase 8.10b — 레벨업 이벤트 팝업 (DECISIONS §10.11) -->
+<div id="levelup-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="lvup-badge">LEVEL UP</div>
+    <div class="lvup-transition">
+      <span class="lvup-from" id="lvup-from">Lv.1</span>
+      <span class="lvup-arrow">→</span>
+      <span class="lvup-to" id="lvup-to">Lv.2</span>
+    </div>
+    <div class="lvup-effects">
+      <div class="lvup-effect">
+        <span class="lvup-effect-label">자원토큰 보너스</span>
+        <span class="lvup-effect-val" id="lvup-token-bonus">+20</span>
+      </div>
+    </div>
+    <button id="lvup-confirm" class="lvup-confirm" type="button">확인 →</button>
+  </div>
+</div>
+
+<!-- GAME OVER 모달 (5/3 정정 — 자원 부족 시 / texts.yaml inject) -->
+<div id="gameover-modal" class="gameover-overlay hidden">
+  <div class="gameover-card">
+    <div class="gameover-title" id="gameover-title">자원이 부족!</div>
+    <div class="gameover-body" id="gameover-body">자원이 부족해서 더 이상 진행할 수 없습니다.</div>
+    <div class="gameover-resources">
+      <div class="gameover-resource"><span class="gameover-resource-label" id="gameover-time-label">시간</span><span class="gameover-resource-num" id="gameover-time">0</span></div>
+      <div class="gameover-resource"><span class="gameover-resource-label" id="gameover-energy-label">에너지</span><span class="gameover-resource-num" id="gameover-energy">0</span></div>
+    </div>
+    <div class="gameover-actions">
+      <button class="gameover-report" id="gameover-btn-report" onclick="gameOverShowReport()">AI 리터러시 성장 리포트</button>
+      <button class="gameover-restart" id="gameover-btn-restart" onclick="gameOverRestart()">처음부터 다시 시작하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 학기 처음부터 확인 모달 (5/3 세션278) -->
+<div id="reset-confirm-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-title">학기를 처음부터 시작할까요?</div>
+    <div class="modal-subtitle">지금까지 진행한 학기가 모두 사라지고 새 학생으로 다시 시작합니다.</div>
+    <div class="confirm-actions">
+      <button class="confirm-cancel" onclick="closeResetConfirm()">계속하기</button>
+      <button class="confirm-destructive" onclick="confirmResetDo()">다시 시작</button>
+    </div>
+  </div>
+</div>
+
+<!-- Phase 8.10a — 자원토큰 분배 팝업 (DECISIONS §10.5) -->
+<div id="rp-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-title">자원토큰 분배</div>
+    <div class="modal-subtitle">받은 토큰을 시간과 에너지에 나눠 담으세요.<br><span style="font-size:11px;color:#888;">시간과 에너지는 알아서 돌아오지 않습니다. 여기서 넣는 만큼만 충전됩니다.</span></div>
+    <div class="rp-bal">
+      <div class="rp-bal-label">남은 자원토큰</div>
+      <div class="rp-bal-num" id="rp-bal-num">0</div>
+    </div>
+    <div class="rp-buckets">
+      <div class="rp-bucket" data-axis="time">
+        <div class="rp-bucket-label">시간</div>
+        <div class="rp-bucket-meter">
+          <div class="rp-bucket-fill" id="rp-bucket-time-fill" style="width:0%"></div>
+          <div class="rp-bucket-overlay" id="rp-bucket-time-overlay" style="width:0%; left:0%"></div>
+        </div>
+        <div class="rp-bucket-num" id="rp-bucket-time-num">0/100</div>
+        <div class="rp-bucket-controls">
+          <button class="rp-btn rp-minus" data-axis="time" type="button">−</button>
+          <span class="rp-allocate" id="rp-allocate-time">+0</span>
+          <button class="rp-btn rp-plus" data-axis="time" type="button">+</button>
+        </div>
+      </div>
+      <div class="rp-bucket" data-axis="energy">
+        <div class="rp-bucket-label">에너지</div>
+        <div class="rp-bucket-meter">
+          <div class="rp-bucket-fill" id="rp-bucket-energy-fill" style="width:0%"></div>
+          <div class="rp-bucket-overlay" id="rp-bucket-energy-overlay" style="width:0%; left:0%"></div>
+        </div>
+        <div class="rp-bucket-num" id="rp-bucket-energy-num">0/100</div>
+        <div class="rp-bucket-controls">
+          <button class="rp-btn rp-minus" data-axis="energy" type="button">−</button>
+          <span class="rp-allocate" id="rp-allocate-energy">+0</span>
+          <button class="rp-btn rp-plus" data-axis="energy" type="button">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="rp-preview empty" id="rp-preview">토큰을 시간/에너지에 분배하세요</div>
+    <button id="rp-confirm" class="rp-confirm" type="button" disabled>분배 완료 →</button>
+  </div>
+</div>
+
+<script>// __JS_INJECT__</script>
+</body>
+</html>
