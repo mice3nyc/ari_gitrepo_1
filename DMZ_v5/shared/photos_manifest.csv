@@ -1,0 +1,48 @@
+new_filename,old_filename,category,number,source_caption,source_organization,license,extension,used_by_story
+1-2.jpg,1-2_MDL_표식물_1993_USAF.jpg,cat01,1-2,MDL 표식물,USAF,PD,jpg,s0102
+1-3.jpg,1-3_DMZ_위성사진_NASA.jpg,cat01,1-3,DMZ 위성사진,NASA,PD,jpg,s0103
+1-4.jpg,1-4_NNSC건물_JSA_2025_DVIDS9365309.jpg,cat01,1-4,NNSC건물 JSA,DVIDS,PD,jpg,s0104
+1-5.jpg,1-5_JSA_ConferenceRow_2025_DVIDS8830815.jpg,cat01,1-5,JSA Conference Row,DVIDS,PD,jpg,s0105
+1-6.jpg,1-6_벤하이강_히엔르엉다리_CCBYSA3.jpg,cat01,1-6,벤하이강 히엔르엉다리,Wikimedia,CCBYSA3,jpg,s0106
+2-1.jpg,2-1_철원항공사진_1956_CCBY.jpg,cat02,2-1,철원 항공사진 1956,CCBY,CCBY,jpg,s0201
+2-2.png,2-2_DMZ현재풍경_국립수목원.png,cat02,2-2,DMZ 현재풍경,국립수목원,저작권,png,s0202
+2-3.jpg,2-3_두루미_문화재청.jpg,cat02,2-3,두루미,문화재청,KOGL,jpg,s0203
+2-4.jpg,2-4_재두루미_문화재청.jpg,cat02,2-4,재두루미,문화재청,KOGL,jpg,s0204
+2-5.jpeg,2-5_금강초롱꽃_국립백두대간수목원.jpeg,cat02,2-5,금강초롱꽃,국립백두대간수목원,저작권,jpeg,s0205
+2-6.jpg,2-6_수원청개구리_CCBY4.jpg,cat02,2-6,수원청개구리,CCBY4,CCBY4,jpg,s0204
+2-9.jpg,2-6_용늪_문화재청.jpg,cat02,2-9,용늪,문화재청,KOGL,jpg,
+2-7.png,2-7_연천임진강생물권_UNESCO.png,cat02,2-7,연천임진강 생물권,UNESCO,UNESCO,png,s0207
+2-8.png,2-8_강원생태평화생물권_UNESCO.png,cat02,2-8,강원생태평화 생물권,UNESCO,UNESCO,png,s0208
+3-1.jpg,3-1_만월대_CCBYSA4.jpg,cat03,3-1,만월대,Wikimedia,CCBYSA4,jpg,s0301
+3-2.jpg,3-2_경순왕릉_CCBYSA3.jpg,cat03,3-2,경순왕릉,Wikimedia,CCBYSA3,jpg,s0302
+3-3.jpg,3-3_동의보감_PD.jpg,cat03,3-3,동의보감,PD,PD,jpg,s0303
+3-4.jpg,3-4_호로고루_CCBYSA4.jpg,cat03,3-4,호로고루,Wikimedia,CCBYSA4,jpg,s0304
+3-5.jpg,3-5_전곡리주먹도끼_CCBYSA4.jpg,cat03,3-5,전곡리 주먹도끼,Wikimedia,CCBYSA4,jpg,s0305
+3-6.jpg,3-6_철원민통선_철원성터_CCBYSA2.jpg,cat03,3-6,철원민통선 철원성터,Wikimedia,CCBYSA2,jpg,s0306
+4-1.jpg,4-1_대성동전경_CCBY4.jpg,cat04,4-1,대성동 전경,CCBY4,CCBY4,jpg,
+4-2.jpg,4-2_기정동_CCBY4.jpg,cat04,4-2,기정동,CCBY4,CCBY4,jpg,
+4-3.jpg,4-3_철원폐건물_CCBY4.jpg,cat04,4-3,철원 폐건물,CCBY4,CCBY4,jpg,
+4-4.jpg,4-4_대성동졸업식_PD.jpg,cat04,4-4,대성동 졸업식,PD,PD,jpg,
+4-5.jpg,4-5_민통선_CCBY2.jpg,cat04,4-5,민통선,CCBY2,CCBY2,jpg,
+4-6.jpg,4-6_대성동깃대_PD.jpg,cat04,4-6,대성동 깃대,PD,PD,jpg,
+4-7.jpg,4-7_대성동초등학교표지판_PD.jpg,cat04,4-7,대성동초등학교 표지판,PD,PD,jpg,
+4-8.jpg,4-8_대성동자유의마을전경_CCBY4.jpg,cat04,4-8,대성동 자유의마을 전경,CCBY4,CCBY4,jpg,
+5-1.jpg,5-1_DMZ경고판_PD.jpg,cat05,5-1,DMZ 경고판,PD,PD,jpg,
+5-2.jpg,5-2_참수리357_CCBYSA3.jpg,cat05,5-2,참수리 357,Wikimedia,CCBYSA3,jpg,
+5-3.jpg,5-3_JSA경비_PD.jpg,cat05,5-3,JSA 경비,PD,PD,jpg,
+5-4.jpg,5-4_소떼방북_PD.jpg,cat05,5-4,소떼 방북,PD,PD,jpg,
+5-5.jpg,5-5_남북정상회담_KOGL.jpg,cat05,5-5,남북정상회담,KOGL,KOGL,jpg,
+5-6.jpg,5-6_개성공단_CCBYSA3.jpg,cat05,5-6,개성공단,Wikimedia,CCBYSA3,jpg,
+6-1.jpg,06_감호_구선봉_해금강_금강산전망대_한국일보.jpg,cat06,6-1,감호 구선봉 해금강 금강산전망대,한국일보,저작권,jpg,
+6-2.jpg,06_도라전망대_2018_문화일보.jpg,cat06,6-2,도라전망대 2018,문화일보,저작권,jpg,
+6-3.jpg,06_월정리역_전경_한국일보.jpg,cat06,6-3,월정리역 전경,한국일보,저작권,jpg,
+6-4.jpg,06_월정리역_철마는달리고싶다_한국일보.jpg,cat06,6-4,월정리역 철마는달리고싶다,한국일보,저작권,jpg,
+6-5.jpg,06_월정리역_효녀동상_한국관광공사.jpg,cat06,6-5,월정리역 효녀동상,한국관광공사,저작권,jpg,
+6-6.jpg,06_임진각_자유의다리_파주시.jpg,cat06,6-6,임진각 자유의다리,파주시,저작권,jpg,
+6-7.jpg,06_제3땅굴_TNT시추작업_1985_PublicDomain.jpg,cat06,6-7,제3땅굴 TNT시추작업 1985,PD,PD,jpg,
+6-8.jpg,06_제3땅굴_관광시설_파주시관광포털.jpg,cat06,6-8,제3땅굴 관광시설,파주시관광포털,저작권,jpg,
+6-9.jpg,06_제3땅굴_도보이용로_파주시관광포털.jpg,cat06,6-9,제3땅굴 도보이용로,파주시관광포털,저작권,jpg,
+6-10.jpg,06_제3땅굴_미공병단방문_2023_PublicDomain.jpg,cat06,6-10,제3땅굴 미공병단방문 2023,PD,PD,jpg,
+6-11.jpg,06_판문점_T1T2T3_판문각_2023_PublicDomain.jpg,cat06,6-11,판문점 T1T2T3 판문각 2023,PD,PD,jpg,
+01_signing_1953.jpg,01_signing_1953.jpg,resized,01,정전협정 서명 1953,NARA,PD,jpg,s0101
+02_mdl_marker.jpg,02_mdl_marker.jpg,resized,02,MDL 마커,USAF,PD,jpg,s0101
