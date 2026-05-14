@@ -1,4 +1,4 @@
-# DMZ v4 — ARCHITECTURE
+# DMZ v5 — ARCHITECTURE
 
 > 게임 구조도 + 화면 흐름 + offline 분기. mermaid 다이어그램은 GitHub에서 자동 렌더.
 

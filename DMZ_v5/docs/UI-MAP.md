@@ -1,4 +1,4 @@
-# DMZ v4 — UI-MAP
+# DMZ v5 — UI-MAP
 
 > 화면/요소 공식 이름. 소통 시 이 이름을 사용. v3.2 UI-MAP 갱신본.
 
@@ -119,10 +119,51 @@
 </div>
 ```
 
-## 기존 v3.2 → v4 차이
+## 신규 컴포넌트 (sequential 빌드 전용 ★)
 
-| v3.2 | v4 |
-|------|-----|
+### `.source-card.locked` — 자료 잠금 카드
+
+자료 순차 잠금 메카닉에서 미진입 자료 표시. `isSourceUnlocked(story, src.id)` false 시 적용.
+
+스타일:
+```css
+.source-card.locked {
+  opacity: 0.45;
+  filter: grayscale(0.85);
+  pointer-events: none;
+}
+.source-card.locked::after { content: " 🔒"; }
+```
+
+### `.source-card.just-unlocked` — unlock 깜빡
+
+이전 자료 빈칸 모두 풀이 → 다음 자료 활성화 순간 0.55초 × 3회 초록 깜빡. 스토리당 자료별 1회만 (`state.flashedSources` 추적).
+
+### `.modal-source-hint` + `.source-label-highlight` — 빈칸 모달 정답 자료 라벨
+
+빈칸 풀이 모달 상단 노란 박스: "📍 정답은 자료 X — '제목'에서 찾으세요"
+
+```css
+.modal-source-hint {
+  padding: 0.6rem 1rem;
+  background: #fffbe6;
+  border-left: 3px solid var(--accent);
+}
+.source-label-highlight { color: var(--accent); font-weight: bold; }
+```
+
+### `.answer-celebration` — 정답 큰 팝업
+
+화면 중앙 흰 박스 + 초록 굵은 테두리 + 2.6rem 글씨, 1.5초 표시 후 자료 detail 재진입.
+
+### `.blank-slot.just-solved` — 빈칸 정답 강조
+
+scale 1.25 + glow ring, 1.4초.
+
+## 기존 v3.2 → v4·v5 차이
+
+| v3.2 | v4·v5 |
+|------|-------|
 | `#delivery-screen` (봉투 우편 애니메이션) | 제거 |
 | 4-4 올클리어 팝업 | 제거 (대신 `#completion-screen`) |
 | 폰트: 시스템(`-apple-system`) | 픽셀폰트(`Galmuri11`+`DotGothic16`) |
@@ -141,3 +182,5 @@
 | 날짜 | 버전 | 내용 |
 |------|------|------|
 | 2026-04-29 | v4.0-prep | v4 화면 8개, 자료 type 12종, offline 신규 컴포넌트 3종 정의 |
+| 2026-04-30 | v4.1-seq | sequential 빌드 컴포넌트 5종 추가 (locked/just-unlocked/modal-source-hint/answer-celebration/just-solved) |
+| 2026-05-14 | v5.0 | UI-MAP에 sequential 컴포넌트 명시 |

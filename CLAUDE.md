@@ -20,30 +20,33 @@ _dev/
 ├── CLAUDE.md          ← 이 파일
 ├── .github/workflows/ ← GitHub Actions
 ├── DMZ/               ← v3.2 레거시 (보존, 신규 작업 X)
-│   ├── index.html     ← DMZ 다이어리 v3.2
-│   ├── docs/          ← v3.2 시점 문서
-│   ├── dmz_blanks.csv ← 정답표 (12개 빈칸)
-│   ├── dmz_choices.csv
-│   └── media/         ← 이미지 (char{N}_photo{M}.jpg)
-└── DMZ_v4/            ← ★ 신규 작업 위치 (정예공 4/28 빌드 베이스, 두 빌드 fork)
+├── DMZ_v4/            ← v4 보존 (5/26 인턴 베타 빌드 — sequential 포함 3 빌드 완성)
+└── DMZ_v5/            ← ★ 현재 작업 위치 (5/14 v4 통째 분기)
     ├── README.md
     ├── shared/
-    │   ├── index_base.html        ← 단일 source. 모든 작업은 여기서.
-    │   ├── photos/cat01~06/       ← 영문화된 이미지 ({cat}-{N}.{ext})
-    │   ├── photos/resized/        ← s0101 전용
-    │   ├── photos_manifest.csv    ← 영문화 매핑 + 출처/라이선스 보존
-    │   ├── dmz_blanks.csv         ← 정답표 (예정 갱신)
+    │   ├── index_base.html         ← mobile/offline 단일 source
+    │   ├── index_sequential.html   ← sequential 단일 source
+    │   ├── photos/cat01~06/        ← 영문화 이미지 ({cat}-{N}.{ext})
+    │   ├── photos_manifest.csv     ← 영문화 매핑 + 출처/라이선스
+    │   ├── dmz_blanks.csv          ← 정답표 (episode_id, blank_id, ...)
     │   └── dmz_choices.csv
-    ├── mobile/index.html          ← 산출물 (OFFLINE_MODE=false, 인턴 베타 5/26)
-    ├── offline/index.html         ← 산출물 (OFFLINE_MODE=true, 피스트레인 6/12, BD 가림+unlock)
+    ├── mobile/index.html           ← 산출 (OFFLINE_MODE=false)
+    ├── offline/index.html          ← 산출 (OFFLINE_MODE=true, BD 가림+unlock)
+    ├── sequential/index.html       ← 산출 (자료 순차 잠금 + 정답 자료 라벨)
+    ├── scripts/
+    │   ├── build.sh                ← mobile+offline 빌드
+    │   └── build_sequential.sh     ← sequential 빌드 + BLANK_SOURCE_LOOKUP 주입
     └── docs/
-        ├── SPEC.md                ← ★ 시작점. AC/BD 분기 명세
-        ├── BUILD-VARIANTS.md      ← 두 빌드 차이 + 빌드 방법
-        ├── ARCHITECTURE.md        ← 화면 흐름 + 데이터 구조 (mermaid)
-        ├── DATA-SPEC.md           ← 영문화 / STORIES / 빈칸 규칙
-        ├── UI-MAP.md              ← 화면/요소 이름
-        ├── HANDOFF.md             ← 아리공↔아리온 인수인계
-        └── CODE-FORK-POINTS.md    ← 코드 라인별 분기 정찰
+        ├── SPEC.md                 ← ★ mobile/offline 명세, AC/BD 분기
+        ├── SPEC-sequential.md      ← sequential 별도 명세
+        ├── BUILD-VARIANTS.md       ← 3 빌드 차이 + 빌드 방법
+        ├── ARCHITECTURE.md         ← 화면 흐름 + 데이터 구조 (mermaid)
+        ├── DATA-SPEC.md            ← 영문화 / STORIES / 빈칸 규칙
+        ├── UI-MAP.md               ← 화면/요소 이름 (offline + sequential 컴포넌트)
+        ├── HANDOFF.md              ← 아리공↔아리온 인수인계
+        ├── CODE-FORK-POINTS.md     ← 코드 라인별 분기 정찰 (5/14 라인 재정찰)
+        ├── PLAN.md                 ← 개발 계획 (live)
+        └── TASKS.md                ← 진행 작업 (live, 체크리스트)
 ```
 
 ## DMZ 다이어리
@@ -68,17 +71,20 @@ _dev/
 
 | 계층 | 역할 | 업데이트 타이밍 | 위치 |
 |------|------|----------------|------|
-| **개발 계획** | 앱의 목적·의도 + 설계 방향 + 개발이 그것을 어떻게 반영하는지. **Live document** — 항상 "지금 상태" | 방향 전환·주요 결정 시 즉시 | 볼트 프로젝트 폴더 |
-| **진행 작업** | 체크리스트 + 완료 조건 + 현재 단계. 에이전트가 이것만 보고 업무 수행 가능해야 함 | 매 작업 완료 시 즉시 | 볼트 프로젝트 폴더 |
-| **SPEC** | 기술 상세. 에이전트 전달용. 코드와 동기화 | 코드 변경 시 | `_dev/{프로젝트}/` |
+| **개발 계획 (PLAN)** | 앱의 목적·의도 + 설계 방향 + 개발이 그것을 어떻게 반영하는지. **Live document** — 항상 "지금 상태" | 방향 전환·주요 결정 시 즉시 | `_dev/{프로젝트}/` (또는 `docs/PLAN.md`) |
+| **진행 작업 (TASKS)** | 체크리스트 + 완료 조건 + 현재 단계. 에이전트가 이것만 보고 업무 수행 가능해야 함 | 매 작업 완료 시 즉시 | `_dev/{프로젝트}/` (또는 `docs/TASKS.md`) |
+| **SPEC** | 기술 상세. 에이전트 전달용. 코드와 동기화 | **코드 작성 전** (선문후코) | `_dev/{프로젝트}/docs/` |
+
+> 5/14 갱신: AI 리터러시 v06 패턴 / DMZ v5 적용 — PLAN·TASKS도 코드 폴더에 통합. 볼트 다른 폴더(`current_projects/`)에 흩어 두면 stale 위험 ↑. 통일부 회의록·답사 정리 같은 비코드 문서는 `current_projects/`에 유지.
 
 ### 규칙
 
-1. **계획 노트 체크리스트는 완료 즉시 체크.** "나중에" 없다
-2. **방향 전환 시 계획 노트에 즉시 반영.** 전환 이유 + 새 방향 기록. 이전 계획은 취소선
-3. **세션 복귀 시 진행 작업 노트를 먼저 읽는다.** 세션 로그가 아니다
-4. **에이전트 위임 시: 진행 작업 노트 + SPEC만으로 충분해야 한다.** 부족하면 노트를 보강한 뒤 위임
-5. **빌드 완료 시 빌드 히스토리도 업데이트.** 계획·진행·히스토리 세 곳이 동기화
+1. **선문후코**: 변경 요청 → SPEC 먼저 갱신 → 코드 작성 → TASKS 체크 + 빌드. 탐색적 작업(CSS 미세 조정, 밸런스 값 튜닝)은 코드 확정 즉시 같은 턴에서 SPEC 반영. 다음 턴으로 미루지 않는다. (세션313 교훈: 코드 먼저 쓰고 SPEC 나중에 하면 세션 전환 시 누락)
+2. **계획 노트 체크리스트는 완료 즉시 체크.** "나중에" 없다
+3. **방향 전환 시 계획 노트에 즉시 반영.** 전환 이유 + 새 방향 기록. 이전 계획은 취소선
+4. **세션 복귀 시 진행 작업 노트를 먼저 읽는다.** 세션 로그가 아니다
+5. **에이전트 위임 시: 진행 작업 노트 + SPEC만으로 충분해야 한다.** 부족하면 노트를 보강한 뒤 위임
+6. **빌드 완료 시 빌드 히스토리도 업데이트.** 계획·진행·히스토리 세 곳이 동기화
 
 ### 트리거 — 언제 이 규칙이 작동하는가
 
@@ -132,6 +138,8 @@ _dev/
 | v3.1 | 2026-03-12 | 정예공 수정본 3건 반영, DATA-SPEC/CSV 생성, 4/4 올클리어 팝업 |
 | v3.2 | 2026-03-12 | 게임코드 1953→DMZ (대소문자 무관+디엠지), 통일부+놀공 로고, delivery-screen 봉투 애니메이션 |
 | v4.0-prep | 2026-04-29 | 정예공 새 빌드(4/28) 베이스 교체. `_dev/DMZ_v4/` 신설. 두 빌드 fork(mobile/offline) 설계. photos 영문화 47개. 개발 문서 7종. v3.2는 `_dev/DMZ/`에 레거시 보존. |
+| v4.1-seq | 2026-04-30 | 세 번째 빌드 sequential 추가 — 자료 순차 잠금 + 정답 자료 라벨 강조. `shared/index_sequential.html` 별도 베이스. SPEC-sequential.md 신설. v4 작업 완성·푸시 |
+| v5.0 | 2026-05-14 | v5 분기 — v4 통째 복사 (`_dev/DMZ_v5/`). storageKey prefix `dmz_v5_*`로 분리. docs v5 정정 + PLAN/TASKS 코드 폴더 통합 |
 
 ## 현재 게임 상태 (v3.2)
 

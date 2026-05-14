@@ -1,4 +1,4 @@
-# DMZ v4 — SPEC-sequential
+# DMZ v5 — SPEC-sequential
 
 > 세 번째 빌드(`sequential/`) 메카닉 명세. mobile/offline과 다른 게임 디자인 — 자료 순차 잠금 + 정답 자료 라벨 강조. 4/30 플테 후 신설.
 
@@ -12,17 +12,17 @@
 
 **unlock 알고리즘**:
 ```js
-function isSourceUnlocked(storyId, sourceId) {
+function isSourceUnlocked(story, sourceId) {
+  // 시그니처: story 객체를 받음 (storyId 문자열 아님)
   if (sourceId === 'A') return true;
   const order = ['A', 'B', 'C', 'D'];
   const idx = order.indexOf(sourceId);
   if (idx <= 0) return true;
   const prevSourceId = order[idx - 1];
-  const story = STORIES[storyId];
   // 이전 자료의 빈칸 ID 추출 (blank_id가 prev로 시작하는 것)
   const prevBlankIds = Object.keys(story.blanks).filter(bid => bid.charAt(0) === prevSourceId);
   // 이전 자료에 빈칸이 0개면 자동 통과 (재귀)
-  if (prevBlankIds.length === 0) return isSourceUnlocked(storyId, prevSourceId);
+  if (prevBlankIds.length === 0) return isSourceUnlocked(story, prevSourceId);
   // 이전 자료의 모든 빈칸이 풀렸는지
   return prevBlankIds.every(bid => state.solvedBlanks[bid]);
 }
@@ -209,3 +209,4 @@ cp -R shared/photos/* sequential/photos/
 | 날짜 | 내용 |
 |------|------|
 | 2026-04-30 | 신설 — 4/30 플테 후 새 디자인 |
+| 2026-05-14 | v5 분기에 인계. isSourceUnlocked 시그니처 정정(storyId→story 객체), LS_PREFIX `dmz_v5_s_` |

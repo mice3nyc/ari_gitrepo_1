@@ -1,8 +1,10 @@
-# DMZ v4 — CODE-FORK-POINTS
+# DMZ v5 — CODE-FORK-POINTS
 
 > `shared/index_base.html` (160KB / ~2,392줄)에서 두 빌드 분기와 베이스 패치가 발생할 라인 정찰. 실제 작업 시 이 문서 + SPEC.md를 함께 펼쳐 놓고 진행.
 
 ## 핵심 라인 인덱스 (빠른 점프)
+
+> ⚠ 라인 번호는 시점별로 밀린다. 작업 직전 `grep -n` 한 번으로 재정찰 권장. 5/14 v5 분기 시점 라인:
 
 | 라인 | 위치 | 무엇 |
 |------|------|------|
@@ -10,15 +12,19 @@
 | 8 | `@import` Google Fonts | Galmuri11, DotGothic16 |
 | 23 | `body` font-family | 픽셀폰트 적용 |
 | 36, 66, 80, 88, 150 ... | CSS `max-width` | 400~500px 컬럼 패턴 (offline 디바이스 분기 시 핵심) |
-| 517 | `function renderSource()` | ★ BD 가림 분기 1차 후보 |
-| 1895 | localStorage load | `dmz_diary_v2` 읽기 |
-| 1918 | tutorial 분기 | `dmz_diary_tutorial_done` 체크 |
-| 1927 | tutorial 저장 | 첫 완료 시 |
-| 2187 | `function openSource()` | 자료카드 클릭 핸들러 |
-| 2213 | `function openAnswerModal()` | 빈칸 클릭 핸들러 |
-| 2233 | `function submitAnswer()` | ★ 정답 처리 + unlock 트리거 후보 |
-| 2313 | localStorage save | `dmz_diary_v2` 쓰기 |
-| 2386~2387 | `localStorage.removeItem` | reset 처리 |
+| 511 | `const OFFLINE_MODE` | 빌드 토글 (sed로 false↔true) |
+| 514~517 | `LS_PREFIX` + 키 상수 | `dmz_v5_o_`/`dmz_v5_m_` 분기, LS_STATE/TUTORIAL/OFFLINE_UNLOCKS 키 |
+| 543 | `function renderSource()` | ★ BD 가림 분기 1차 후보 |
+| 1921 | localStorage load | `LS_STATE_KEY` 읽기 (v5에서 `dmz_diary_v2`→`LS_PREFIX+'state'` 교체 완료) |
+| 1944 | tutorial 분기 | `LS_TUTORIAL_KEY` 체크 |
+| 1953 | tutorial 저장 | 첫 완료 시 |
+| 2215 | OFFLINE unlock 로드 | `LS_OFFLINE_UNLOCKS_KEY` 사용 |
+| 2220 | `function openSource()` | 자료카드 클릭 핸들러 |
+| 2251 | `function openAnswerModal()` | 빈칸 클릭 핸들러 |
+| 2273 | `function submitAnswer()` | ★ 정답 처리 + unlock 트리거 |
+| 2289~2293 | OFFLINE unlock 저장 | submitAnswer 내부, B/D 정답 시 |
+| 2367 | localStorage save | `LS_STATE_KEY` 쓰기 |
+| 2440~2441 | `localStorage.removeItem` | reset 처리 (state + tutorial) |
 
 ## 분기 1: BD 가림 (offline 빌드 ★ 핵심)
 
@@ -230,3 +236,4 @@ html { font-size: 16px; }
 | 날짜 | 버전 | 내용 |
 |------|------|------|
 | 2026-04-29 | v4.0-prep | 6개 분기 지점 정찰 (BD 가림, unlock, localStorage, normalizeAnswer, altAnswers, 디바이스) |
+| 2026-05-14 | v5.0 | 라인 번호 재정찰 (renderSource 517→543, submitAnswer 2233→2273 등). LS_PREFIX 패턴 적용 완료 — 분기 3·4·5는 v4에서 이미 구현됨 |

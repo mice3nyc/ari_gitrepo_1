@@ -1,4 +1,4 @@
-# DMZ v4 — SPEC
+# DMZ v5 — SPEC
 
 > 두 플레이테스팅 빌드(mobile / offline) 기술 명세. 코드 작업 시 이 문서 + DATA-SPEC.md + BUILD-VARIANTS.md 함께 참조.
 
@@ -6,7 +6,7 @@
 
 - **베이스 코드**: `_dev/DMZ_v5/shared/index_base.html` (정예공 4/28 빌드 + 영문화 패치)
 - **원본 위치**: `Assets/incoming/통일부/dmz_game_jygong.html` (incoming 보존, shared/ 작업본 분리)
-- **v3.2와의 관계**: 베이스 교체 — v3.2 `_dev/DMZ/`(레거시 보존) ↔ v4 `_dev/DMZ_v5/`(신규)
+- **버전 관계**: v3.2 `_dev/DMZ/`(레거시 보존) → v4 `_dev/DMZ_v4/`(보존) → v5 `_dev/DMZ_v5/`(현재 작업)
 
 ## 데이터 구조
 
@@ -56,7 +56,7 @@ const STORIES = {
 ```
 
 ### unlock 상태 저장
-- localStorage key: `dmz_v5_offline_unlocks` (offline 빌드 전용 추가)
+- localStorage key: `dmz_v5_o_unlocks` (실제 코드: `LS_PREFIX + 'unlocks'`, offline 빌드에서 LS_PREFIX=`dmz_v5_o_`)
 - 값: `{ [storyId]: ['B', 'D'] }` 형식 — unlock된 source.id 배열
 - 재진입 시 unlock된 자료는 본문 보임 유지
 
@@ -94,7 +94,7 @@ function renderSource(src, solvedBlanks, allBlanks) {
 
 1. **s0101 D 빈칸 altAnswers 부활** — `'사', '4km', '4킬로미터'` 추가
 2. **`normalizeAnswer` 부활** — 공백/괄호 제거 + 소문자 비교 (4/21 회의 "복수정답=필수" 정신)
-3. **`localStorage` 키 분리** — 기존 `dmz_diary_v2`(고정)을 v4용 `dmz_v4` 또는 플레이어별로 (인턴 24명 동시 플레이 시 덮어쓰기 방지)
+3. **`localStorage` 키 분리** — 기존 `dmz_diary_v2`(고정)을 v5용 `dmz_v4` 또는 플레이어별로 (인턴 24명 동시 플레이 시 덮어쓰기 방지)
 4. **cat02 `2-6_` 번호 충돌 정정** — Phase 1 백도에서 처리 완료(용늪 → 2-9.jpg)
 
 ## 정답 검증
@@ -120,7 +120,14 @@ function checkAnswer(input, blank) {
 
 ## 미해결 (확인 필요)
 
-- cat04~06 콘텐츠 도착 일정 (정예공)
-- localStorage 키 정책 — 플레이어 이름별 vs 단일 (인턴 24명 동시 플레이 환경 고려)
+- cat04~06 콘텐츠 도착 일정 (정예공). cat04~06 STORIES는 현재 빈 배열
+- `twitter` type — renderSource switch에 case 존재하나 STORIES 사용 0건 (dead branch). cat04~06 데이터 확정 시 사용/제거 결정
 - 한글 파일명 NFD/NFC 이슈 → 영문화로 해결됐는지 GitHub Pages 실서버 테스트 필요
 - offline 빌드 디바이스 명세 (몇 인치 화면? 터치/마우스? 자동 reset?)
+
+## 변경 이력
+
+| 날짜 | 버전 | 내용 |
+|------|------|------|
+| 2026-04-29 | v4.0-prep | 베이스 + AC/BD 분기 명세 |
+| 2026-05-14 | v5.0 | v5 분기 인계. unlock 키 문자열 정정(`dmz_v5_offline_unlocks` → `dmz_v5_o_unlocks`), v3.2→v4→v5 관계 명시 |
