@@ -131,6 +131,33 @@ GitHub Pages 자동 배포 — `https://mice3nyc.github.io/ari_gitrepo_1/DMZ_v5/
 - [ ] 4.5.3 정예공/박성렬 합의 — 런칭 정본 결정 (canon vs 현 게임 본문)
 - [ ] 4.5.4 합의 후 일괄 정정 (Phase 4.2와 묶어 진행)
 
+**Phase 5.0 — 런칭 스코프 축소 + 베타 사전 인프라** (5/15 세션354 완료) ✅
+
+> 5/14 회의 결정 반영. 베타 5/26 인턴 대상.
+
+- [x] 5.0.1 런칭 스코프 36 → 24 스토리 축소
+  - cat05 통째 archive (`data/_archive_pre_beta_5_15/`)
+  - cat03 2건(s0303 허준·s0304 병자호란), cat04 2건(s0401 선전마을·s0406 대성동초등학교), cat06 2건(s0603 임진각·s0606 판문점관광) archive
+  - `build_stories_json.py` TOPIC_FILES에서 cat05 제거, `index_base/sequential.html` categories cat05 카드 제거, `dmz_blanks.csv` 48행 삭제(143→95)
+- [x] 5.0.2 자동 수정 (canon 정합)
+  - s0506 B↔C 슬롯 swap (5계층 정합 — archive 분에 적용)
+  - s0205 [B]·[D] 답 + altAnswers, s0602 [D] 답 + altAnswers
+- [x] 5.0.3 SPEC §14 결정 자리 #1/#6/#7 확정 (twitter→A·kakao blockquote·출처 필수)
+- [x] 5.0.4 canon 발견 + 노트 작성
+  - 통일부 docx 2차원고(5/7) + xlsx 정답표(5/14) = canon
+  - `docs/CONTENT-AUDIT-26.0515.md` + `docs/CONTENT-DIVERGENCE-두루미-26.0515.md`
+  - 베타 후 Phase 4.5에서 정합화
+- [x] 5.0.5 **DMZ 픽셀 맵 5 카테고리 × 24 셀 정합** (archive 화면)
+  - `CAT_COLORS` 6→5 entries, map 5행×11열 24셀 재설계 (zones 0:6, 1:6, 2:4, 3:4, 4:4)
+  - `catCounter [0,0,0,0,0,0]` → `[0,0,0,0,0]`
+  - 양 베이스 동일 갱신, SPEC.md §DMZ 픽셀 맵 신설
+- [x] 5.0.6 **디버그 패널** (인턴 베타 자체 테스트 자리)
+  - 우하단 토글, 상태 표시 + 초기화 + 자동 풀이 3종 (현 스토리·카테고리·전체)
+  - URL `?reset=1` 파라미터 로드 시 localStorage clear + reload (Ctrl+Shift+R 대체)
+  - SPEC.md §디버그 패널 신설
+  - 양 베이스(index_base + index_sequential) 동일 갱신
+- [x] 5.0.7 빌드 회귀 — mobile 260,536 / offline 260,535 / sequential 266,591 bytes, JS syntax OK
+
 **Phase 4.3 — 작가 핸드오프** (6/4~)
 
 - [ ] 4.3.1 정예공/박성렬에 폴더 + 마크다운 편집 가이드 (`docs/CONTENT-AUTHORING.md` 신설)

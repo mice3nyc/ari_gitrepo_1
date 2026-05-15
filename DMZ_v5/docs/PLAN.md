@@ -111,13 +111,16 @@ data/topics/
 - Phase 3.2 — 콘텐츠 검수 시트(스프레드시트로 export) — 정예공·박성렬 검수용
 - Phase 3.3 — 정정 round-trip (CSV/yaml → 코드)
 
-### 5/15 세션354 — 런칭 스코프 축소 + canon 비교 발견
+### 5/15 세션354 — 런칭 스코프 축소 + canon 비교 + 베타 사전 인프라
 
 - ✅ 36 → **24 스토리 축소** (5/14 회의 결정): cat05 통삭 + 8 스토리 archive
 - ✅ s0506 B↔C swap (5계층 슬롯 정합), s0205/s0602 답 정정 + altAnswers
 - ✅ 코드 정합 — `build_stories_json.py` TOPIC_FILES에서 cat05 제거, `index_base/sequential.html` categories에서 cat05 카드 제거, `dmz_blanks.csv` 48행 삭제(143→95)
-- ✅ 빌드 회귀 — mobile 255,077 / offline 255,076 / sequential 261,533 bytes, JS syntax OK
+- ✅ **DMZ 픽셀 맵 24셀 5존 재설계** (archive 화면) — `CAT_COLORS` 6→5, map 데이터 6→5 카테고리 정합. SPEC §DMZ 픽셀 맵 신설
+- ✅ **디버그 패널 도입** (인턴 베타 자체 테스트) — 우하단 토글, 상태 표시 + 🧹 초기화 + ⚡ 자동 풀이 3종. URL `?reset=1` 파라미터 (Ctrl+Shift+R 대체). SPEC §디버그 패널 신설. 양 베이스 동일 갱신
+- ✅ 빌드 회귀 — mobile 260,536 / offline 260,535 / sequential 266,591 bytes, JS syntax OK
 - ⚠️ **canon 발견**: 통일부 docx 2차원고(5/7) + xlsx 정답표(5/14)가 현 게임 데이터와 다수 어긋남. 두루미 예시 [[CONTENT-DIVERGENCE-두루미-26.0515]]. 베타는 현 데이터로 진행, 베타 후 정예공/박성렬 합의 → Phase 4.5에서 정합화. 상세 [[CONTENT-AUDIT-26.0515]]
+- **다음 진입점**: 메카닉 변경 (피터공 5/15 세션354 말 — 다음 세션에서 SPEC 갱신 후 코드)
 
 ## 외부화 형식 결정 자리
 

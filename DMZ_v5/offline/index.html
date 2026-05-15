@@ -415,6 +415,21 @@ body {
   background: #fffbe6; border: 1px solid #f1c40f; border-radius: 4px;
   color: #7f6000 !important; font-size: 0.85rem; text-align: center;
 }
+
+/* SPEC §디버그 패널 — 5/15 세션354 신설 */
+.debug-toggle { position:fixed; bottom:10px; right:10px; background:#333; color:#fff; border:none; padding:5px 10px; font-size:11px; cursor:pointer; z-index:9999; font-family:monospace; border-radius:3px; opacity:0.6; }
+.debug-toggle:hover { opacity:1; }
+.debug-panel { display:none; position:fixed; bottom:42px; right:10px; background:#1a1a1a; color:#ddd; padding:10px 12px; font-size:11px; line-height:1.5; font-family:monospace; z-index:9999; max-width:420px; max-height:calc(100vh - 60px); overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,0.4); border-radius:4px; }
+.debug-panel.active { display:block; }
+.debug-section { margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid #333; }
+.debug-section:last-child { border-bottom:none; }
+.debug-label { color:#888; font-size:10px; text-transform:uppercase; margin-bottom:4px; letter-spacing:0.5px; }
+.debug-state { color:#9cd6ff; }
+.debug-buttons { display:flex; flex-wrap:wrap; gap:4px; margin-top:5px; }
+.debug-btn { background:#333; color:#ddd; border:1px solid #555; padding:4px 8px; font-size:10px; cursor:pointer; font-family:monospace; border-radius:2px; }
+.debug-btn:hover { background:#555; }
+.debug-btn.danger { background:#5a2222; border-color:#883333; }
+.debug-btn.danger:hover { background:#883333; }
 </style>
 </head>
 <body>
@@ -4755,6 +4770,106 @@ function resetGame() {
   localStorage.removeItem(LS_TUTORIAL_KEY);
   showScreen('login-screen');
 }
+
+// ===== DEBUG PANEL — SPEC §디버그 패널 (5/15 세션354) =====
+
+// URL ?reset=1 → localStorage clear + reload (Ctrl+Shift+R 대체)
+(function() {
+  const params = new URLSearchParams(location.search);
+  if (params.get('reset') === '1') {
+    Object.keys(localStorage).filter(k => k.startsWith('dmz_v5_')).forEach(k => localStorage.removeItem(k));
+    location.replace(location.pathname);
+  }
+})();
+
+let _dbgOn = false;
+function toggleDebug() {
+  _dbgOn = !_dbgOn;
+  document.getElementById('debug-panel').classList.toggle('active', _dbgOn);
+  if (_dbgOn) renderDebug();
+}
+function renderDebug() {
+  const totalStories = Object.values(STORIES).reduce((s, arr) => s + arr.length, 0);
+  const screen = document.querySelector('.screen.active')?.id || '—';
+  const c = state.archivistCounts;
+  const mode = OFFLINE_MODE ? 'offline' : 'mobile';
+  let h = '';
+  h += '<div class="debug-section"><div class="debug-label">상태</div>';
+  h += `<div class="debug-state">완료: ${state.completedStories.length}/${totalStories}</div>`;
+  h += `<div class="debug-state">아키비스트: A${c.A} B${c.B} C${c.C} D${c.D}</div>`;
+  h += `<div class="debug-state">화면: ${screen}</div>`;
+  h += `<div class="debug-state">모드: ${mode}</div>`;
+  h += `<div class="debug-state">현 스토리: ${state.currentStory || '—'}</div>`;
+  h += '</div>';
+
+  h += '<div class="debug-section"><div class="debug-label">초기화</div>';
+  h += '<div class="debug-buttons">';
+  h += '<button class="debug-btn danger" onclick="debugReset()">🧹 상태 초기화 + 리로드</button>';
+  h += '</div></div>';
+
+  h += '<div class="debug-section"><div class="debug-label">자동 풀이</div>';
+  h += '<div class="debug-buttons">';
+  h += '<button class="debug-btn" onclick="debugSolveCurrentStory()">⚡ 현 스토리 풀이</button>';
+  h += '<button class="debug-btn" onclick="debugCompleteCurrentCategory()">🎯 카테고리 완료</button>';
+  h += '<button class="debug-btn" onclick="debugCompleteAll()">🏁 전체 완료</button>';
+  h += '</div></div>';
+
+  document.getElementById('debug-panel').innerHTML = h;
+}
+function debugReset() {
+  if (!confirm('localStorage dmz_v5_* 전부 삭제하고 리로드합니다.')) return;
+  Object.keys(localStorage).filter(k => k.startsWith('dmz_v5_')).forEach(k => localStorage.removeItem(k));
+  location.reload();
+}
+function debugSolveCurrentStory() {
+  const sid = state.currentStory;
+  if (!sid) { alert('현 스토리 없음. 스토리 진입 후 다시.'); return; }
+  const st = getCurrentStory();
+  if (!st) return;
+  state.solvedBlanks = state.solvedBlanks || {};
+  Object.entries(st.blanks).forEach(([k, b]) => {
+    state.solvedBlanks[k] = b.answer;
+  });
+  renderExploration();
+  renderDebug();
+}
+function debugCompleteCurrentCategory() {
+  const catId = state.currentCategory;
+  if (!catId) { alert('현 카테고리 없음'); return; }
+  (STORIES[catId] || []).forEach(s => {
+    if (!state.completedStories.includes(s.id)) state.completedStories.push(s.id);
+  });
+  saveState();
+  renderDebug();
+  alert(`${catId} 전체 완료 처리됨`);
+}
+function debugCompleteAll() {
+  if (!confirm('24 스토리 전부 완료 처리합니다.')) return;
+  Object.values(STORIES).forEach(arr => arr.forEach(s => {
+    if (!state.completedStories.includes(s.id)) state.completedStories.push(s.id);
+  }));
+  // archivist counts: 각 스토리마다 archivist type 1회 가산. 평균치로 24 분산
+  state.archivistCounts = { A:6, B:6, C:6, D:6 };
+  saveState();
+  renderDebug();
+  alert('24 스토리 완료 + 아키비스트 분산 적용');
+}
+function findStory(sid) {
+  for (const arr of Object.values(STORIES)) {
+    const f = arr.find(s => s.id === sid);
+    if (f) return f;
+  }
+  return null;
+}
+function saveState() {
+  localStorage.setItem(LS_STATE_KEY, JSON.stringify({
+    playerName: state.playerName,
+    archivistCounts: state.archivistCounts,
+    completedStories: state.completedStories,
+  }));
+}
 </script>
+<button class="debug-toggle" onclick="toggleDebug()">디버그</button>
+<div class="debug-panel" id="debug-panel"></div>
 </body>
 </html>
