@@ -555,9 +555,13 @@ stories:
         hint: 백과사전(B)에서 강원도 접경 5개 군에 걸쳐 있는 생물권보전지역 이름을 확인하세요.
         source: B
       B:
-        answer: 연천임진강
+        answer: 연천 임진강
         hint: 블로그(A)에서 연천군 전역과 임진강 유역이 포함된 보전지역 이름을 확인하세요.
         source: A
+        altAnswers:
+          - 연천임진강
+          - 연천임진강 생물권보전지역
+          - 연천 임진강 생물권보전지역
       C:
         answer: 핵심구역
         hint: 백과사전(B)에서 출입이 엄격히 제한되는 구역의 이름을 확인하세요.
@@ -565,12 +569,13 @@ stories:
         altAnswers:
           - Core Area
       D:
-        answer: MAB
-        hint: 백과사전(B)에서 유네스코가 운영하는 프로그램 약자를 확인하세요.
+        answer: 유네스코
+        hint: 백과사전(B)에서 초국경 생물권보전지역 제도를 운영하는 국제기구를 확인하세요.
         source: B
         altAnswers:
           - 유네스코
           - MAB 프로그램
+          - MAB
     choices:
       - id: A
         icon: 📝

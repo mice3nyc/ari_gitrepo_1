@@ -1,6 +1,32 @@
 # DMZ v5 — PLAN
 
-> 개발 계획 (Live document). 방향 전환 시 즉시 갱신. 진행 체크리스트는 [[TASKS|v5 TASKS]] / 기술 명세는 [[SPEC]] / [[SPEC-sequential]].
+> 개발 계획 (Live document). 방향 전환 시 즉시 갱신. 진행 체크리스트는 [[TASKS|v5 TASKS]] / 기술 명세는 [[SPEC]] / [[SPEC-sequential]] / [[SPEC-data-v2]].
+
+## 5/15 5계층 + 마크다운 face — 데이터 구조 v2 (현재 진행)
+
+### 왜
+
+1. **yaml 분리만으로 부족** — 5/14 외부화 후에도 yaml `templateData` 12 type 가변 nested 구조에 콘텐츠가 박힘. cat05·06 사고에서 코드 case ↔ yaml field 다중 매칭 실수 발생.
+2. **콘텐츠 작가 편집 친화** — 정예공/박성렬이 yaml 편집은 부담. md 5 파일 (대분류별) + frontmatter 단순 메타 + 본문 markdown 자유.
+3. **표시 텍스트 본문화** — yaml meta string에 포맷(볼드/줄바꿈/따옴표) 박기 escape 지옥. 본문 통째 markdown → HTML이 자연.
+
+### 무엇
+
+- **5계층 폴더 구조**: `data/sources/cat*/s*/{_meta.md, A·B·C·D-{대분류}.md}` — SPEC-data-v2 §3
+- **§17 마크다운 face**: 텍스트 subtype 9종 frontmatter 표시 메타 폐기, 본문 통째 markdown → HTML. 특수 5종(photo/oral/kakao/text/qna) 기존 분리 유지
+- **파서**: `scripts/md_to_json.py` — frontmatter + body markdown → JSON
+- **렌더**: `if (d.html)` 새 분기 + 옛 yaml 호환 폴백 (Phase 4.2까지 유지)
+
+### 제약
+
+- **5/26 베타 D-11** — 베타 위협 X 작업만. Phase 4.1 파일럿(s0202)까지만 진행, Phase 4.2 일괄 마이그는 베타 후
+- **옛 yaml 35 스토리 호환** — 두 분기 임시 유지. Phase 4.2 일괄 마이그 완료 시 옛 분기 제거
+
+### Phase
+
+- **Phase 4.1 파일럿** (5/15~17) — s0202 두루미 한 자리 5계층 + §17 본문화 ✅
+- **Phase 4.2 일괄** (5/27~6/3, 베타 후) — 나머지 35 스토리 백도 6개 병렬
+- **Phase 4.3 작가 핸드오프** (6/4~) — 정예공/박성렬 가이드
 
 ## 5/14 v5 미션 — STORIES 데이터 외부화
 
@@ -84,6 +110,14 @@ data/topics/
 - Phase 3.1 — 5/26 베타 시나리오 완주 테스트
 - Phase 3.2 — 콘텐츠 검수 시트(스프레드시트로 export) — 정예공·박성렬 검수용
 - Phase 3.3 — 정정 round-trip (CSV/yaml → 코드)
+
+### 5/15 세션354 — 런칭 스코프 축소 + canon 비교 발견
+
+- ✅ 36 → **24 스토리 축소** (5/14 회의 결정): cat05 통삭 + 8 스토리 archive
+- ✅ s0506 B↔C swap (5계층 슬롯 정합), s0205/s0602 답 정정 + altAnswers
+- ✅ 코드 정합 — `build_stories_json.py` TOPIC_FILES에서 cat05 제거, `index_base/sequential.html` categories에서 cat05 카드 제거, `dmz_blanks.csv` 48행 삭제(143→95)
+- ✅ 빌드 회귀 — mobile 255,077 / offline 255,076 / sequential 261,533 bytes, JS syntax OK
+- ⚠️ **canon 발견**: 통일부 docx 2차원고(5/7) + xlsx 정답표(5/14)가 현 게임 데이터와 다수 어긋남. 두루미 예시 [[CONTENT-DIVERGENCE-두루미-26.0515]]. 베타는 현 데이터로 진행, 베타 후 정예공/박성렬 합의 → Phase 4.5에서 정합화. 상세 [[CONTENT-AUDIT-26.0515]]
 
 ## 외부화 형식 결정 자리
 

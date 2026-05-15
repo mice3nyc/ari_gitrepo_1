@@ -102,19 +102,34 @@ GitHub Pages 자동 배포 — `https://mice3nyc.github.io/ari_gitrepo_1/DMZ_v5/
 - [x] 4.1.3 `scripts/md_to_json.py` 파서 v0.1 — 13 subtype 처리, slot/category 일관성 검증, photo/oral/kakao/text/qna 패턴 파서
 - [x] 4.1.4 `scripts/build_stories_json.py`에 md 덮어쓰기 분기 추가(임시) — yaml 35 + md 1 = 36 스토리 합본
 - [x] 4.1.5 빌드 회귀 — mobile 353,288 / offline 353,287 / sequential 360,608 bytes, JS syntax OK, s0202 콘텐츠 본문 유지 확인
-- [ ] 4.1.6 피터공 obsidian에서 `data/sources/cat02-*/s0202-*/` 5 md 열어 사진 미리보기 + 편집 체험
+- [x] 4.1.6 피터공 obsidian에서 `data/sources/cat02-*/s0202-*/` 5 md 열어 사진 미리보기 + 편집 체험 (5/15 세션353)
+- [x] 4.1.7 **SPEC v2 §17 마크다운 face 결정 박힘** (5/15 세션353) — 텍스트 subtype 9종 frontmatter 표시 메타 폐기, 본문 통째 markdown → HTML
+- [x] 4.1.8 `md_to_json.py` v0.2 — TEXT_SUBTYPES, md_block_to_html, extract_h1 폴백, build_template_data 새 분기
+- [x] 4.1.9 s0202 A diary + B newspaper 본문화 패턴 재구성 (H1·em·H2 본문 안)
+- [x] 4.1.10 `index_base.html` + `index_sequential.html` — diary/scholar/newspaper case `if (d.html)` 새 분기 + CSS 셀렉터 매핑 (`.newspaper-paper h1`, `.diary-paper h1` 등)
+- [x] 4.1.11 빌드 회귀 — mobile 355,248 / offline 355,247 / sequential 362,568 bytes, JS syntax OK, 143 blank mappings, 커밋 `4f38e45` push
+- [x] 4.1.12 두루미 본문화 빈칸 작동 검증 — A·B 5 빈칸(시베리아·재두루미·202·203·학) 플테 ✅ 5/15 세션354 피터공 mobile 플테 통과
 
 **Phase 4.2 — 일괄 마이그레이션** (베타 후, 5/27~6/3)
 
 - [ ] 4.2.1 결정 자리 #2~#5 콘텐츠 짝 재배치 (정예공/박성렬 검수)
   - s0102.A qna → 슬롯 D / s0103.D scholar → 슬롯 B / s0506 B·C swap / s0603.C report → 슬롯 B
-- [ ] 4.2.2 35 스토리 일괄 변환 (백도 6개 병렬, 주제별 cat01~06)
+- [ ] 4.2.2 24 스토리 일괄 변환 (백도 5개 병렬, 주제별 cat01~04·cat06)
 - [ ] 4.2.3 renderSource 단순화 — switch 14 case → bodyHtml 주입 + meta 헤더 자동
 - [ ] 4.2.4 빈칸 button UI — md `{{X}}` → `<button>` → 클릭 입력 모달
 - [ ] 4.2.5 dmz_blanks.csv auto-export from _meta.md frontmatter
-- [ ] 4.2.6 36 스토리 회귀 시각 검증
+- [ ] 4.2.6 24 스토리 회귀 시각 검증
 - [ ] 4.2.7 yaml 폐기 — `data/topics/*.yaml` archive
 - [ ] 4.2.8 build_stories_json.py md 분기 정리 → 단일 경로
+
+**Phase 4.5 — 콘텐츠 canon 정합 (베타 후)**
+
+> 5/15 세션354 발견. 통일부 docx 2차원고(5/7) + xlsx 정답표(5/14) = canon. 현 게임 데이터(yaml/md)는 빈칸 위치·답 다수 어긋남. 두루미(s0202) 예시 [[CONTENT-DIVERGENCE-두루미-26.0515]] 참조. 베타 5/26은 현 데이터로 진행.
+
+- [ ] 4.5.1 24 스토리 docx 2차원고 vs 현 yaml 빈칸 위치 자동 비교 스크립트
+- [ ] 4.5.2 cat01·cat02 잔류 ID/제목/답 불일치 정리 (s0103↔s0104 ID swap 등)
+- [ ] 4.5.3 정예공/박성렬 합의 — 런칭 정본 결정 (canon vs 현 게임 본문)
+- [ ] 4.5.4 합의 후 일괄 정정 (Phase 4.2와 묶어 진행)
 
 **Phase 4.3 — 작가 핸드오프** (6/4~)
 

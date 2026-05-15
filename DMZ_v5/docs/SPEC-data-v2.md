@@ -314,13 +314,13 @@ renderMeta는 §6 표 따라 subtype별 헤더 출력. CSS는 기존 `.diary-pap
 
 | # | 결정 자리 | 권고 | 영향 |
 |---|---|---|---|
-| 1 | **twitter 대분류** | A 개인서사자료 (개인 SNS 발화) | s0203.A·s0204.A 정합 |
+| 1 | **twitter 대분류** | ✅ **A 개인서사자료 확정** (5/15 세션354) — 1인 일방향 발화, 편지·일기와 같은 묶음 | s0203.A·s0204.A 정합 |
 | 2 | **s0102.A qna → 슬롯 변경** | 슬롯 D로 이동 (구술증언자료) | 콘텐츠 짝 재배치, blanks.from 정정 |
 | 3 | **s0103.D scholar → 슬롯 변경** | 슬롯 B로 이동 (공식기록자료) | 동일 |
 | 4 | **s0506 B·C 슬롯 swap** | 현 B=photo·C=newspaper → B=newspaper·C=photo | blanks.from 정정 |
 | 5 | **s0603.C report → 슬롯 변경** | 슬롯 B로 이동 | blanks.from 정정 |
-| 6 | **kakao body 마크다운 규약** | `> **이름** [right]: 메시지` blockquote 패턴 | 파서 정규식 |
-| 7 | **scholar.author / scholar.source / report.issuer 필수화** | 필수 — 모든 자료 출처 명시 | 콘텐츠 회수 |
+| 6 | **kakao body 마크다운 규약** | ✅ **blockquote 패턴 확정** (5/15 세션354) — `> **이름** [right]: 메시지` 줄 단위. 정규식 `^>\s*\*\*(.+?)\*\*\s*\[(left\|right)\]:\s*(.+)$` | 파서 정규식 |
+| 7 | **scholar.author / scholar.source / report.issuer 필수화** | ✅ **전부 필수 확정** (5/15 세션354) — 모든 scholar/report 자료 출처 frontmatter 또는 본문 명시 의무 | 콘텐츠 회수 — 정예공/박성렬에 35 스토리 요청 |
 | 8 | **archivist_types 분리 위치** | `data/sources/archivist_types.md` frontmatter | 편집 자리 분리 |
 | 9 | **표시 텍스트 본문화** (5/15 피터공) | 메타 분리 슬롯 폐기. 텍스트 subtype 9종(diary·newspaper·scholar·blog·poster·report·homework·letter·twitter)은 본문 통째 markdown → HTML. frontmatter는 시스템 메타(slot·category·subtype·icon·sub)만. §17 상세 | 파서 + 렌더 코드 대폭 단순화. 옵시디언 편집 자유 100% |
 

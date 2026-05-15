@@ -18,7 +18,6 @@ TOPIC_FILES = {
     "cat02": "02-생태환경.yaml",
     "cat03": "03-국가유산-문화재.yaml",
     "cat04": "04-DMZ의 사람들.yaml",
-    "cat05": "05-갈등과 협력.yaml",
     "cat06": "06-평화 관광.yaml",
 }
 

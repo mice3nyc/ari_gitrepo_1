@@ -210,3 +210,4 @@ cp -R shared/photos/* sequential/photos/
 |------|------|
 | 2026-04-30 | 신설 — 4/30 플테 후 새 디자인 |
 | 2026-05-14 | v5 분기에 인계. isSourceUnlocked 시그니처 정정(storyId→story 객체), LS_PREFIX `dmz_v5_s_` |
+| 2026-05-15 | 게임 코드 1233 (SPEC.md 참조). SPEC-data v2 §17 마크다운 face 분기 추가 (`if (d.html)`) — diary/scholar/newspaper case 옛 yaml 호환 폴백 유지 |

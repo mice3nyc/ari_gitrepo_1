@@ -125,9 +125,16 @@ function checkAnswer(input, blank) {
 - 한글 파일명 NFD/NFC 이슈 → 영문화로 해결됐는지 GitHub Pages 실서버 테스트 필요
 - offline 빌드 디바이스 명세 (몇 인치 화면? 터치/마우스? 자동 reset?)
 
+## 게임 코드 (로그인)
+
+- v3.2~v5.0: `DMZ` (대소문자 무관, `디엠지` 허용)
+- **v5.1 (2026-05-15)**: `1233` (단순 비교, 베타 테스트 입력 간소화)
+- 자리: `shared/index_base.html` + `shared/index_sequential.html` `checkLogin()` 함수
+
 ## 변경 이력
 
 | 날짜 | 버전 | 내용 |
 |------|------|------|
 | 2026-04-29 | v4.0-prep | 베이스 + AC/BD 분기 명세 |
 | 2026-05-14 | v5.0 | v5 분기 인계. unlock 키 문자열 정정(`dmz_v5_offline_unlocks` → `dmz_v5_o_unlocks`), v3.2→v4→v5 관계 명시 |
+| 2026-05-15 | v5.1 | 게임 코드 DMZ → 1233 (베타 테스트 입력 간소화). SPEC-data v2 §17 마크다운 face 결정 박힘 (텍스트 subtype 9종 본문 통째 markdown → HTML). 두루미 s0202 본문화 파일럿 완료 |
