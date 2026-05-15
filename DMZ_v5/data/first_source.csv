@@ -1,0 +1,25 @@
+episode_id,slot,default_reason
+s0101,B,photo=C | owner=B
+s0102,A,photo=C | owner=A
+s0103,A,photo=C | owner=A
+s0104,A,photo=C | owner=A
+s0105,A,photo=C | no_photo_answer_from
+s0106,A,photo=C | no_photo_answer_from
+s0201,A,photo=C | no_photo_answer_from
+s0202,A,photo=C | no_photo_answer_from
+s0203,A,photo=C | no_photo_answer_from
+s0204,A,photo=C | no_photo_answer_from
+s0205,A,photo=C | no_photo_answer_from
+s0206,A,photo=C | no_photo_answer_from
+s0301,A,photo=C | no_photo_answer_from
+s0302,A,photo=C | no_photo_answer_from
+s0305,A,photo=C | no_photo_answer_from
+s0306,A,photo=C | no_photo_answer_from
+s0403,B,photo=C | owner=B
+s0404,B,photo=C | owner=B
+s0405,A,photo=C | owner=A
+s0407,A,photo=C | no_photo_answer_from
+s0601,C,photo=C | owner=C
+s0602,C,photo=C | owner=C
+s0604,C,photo=C | owner=C
+s0605,C,photo=C | owner=C

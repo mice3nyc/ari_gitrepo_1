@@ -158,6 +158,20 @@ GitHub Pages 자동 배포 — `https://mice3nyc.github.io/ari_gitrepo_1/DMZ_v5/
   - 양 베이스(index_base + index_sequential) 동일 갱신
 - [x] 5.0.7 빌드 회귀 — mobile 260,536 / offline 260,535 / sequential 266,591 bytes, JS syntax OK
 
+**Phase 6.0 — pickone 빌드 신설 (5/15 세션355)** ✅
+
+> sequential 형제 빌드. 진입 시 첫 자료 슬롯 데이터에서 지정 가능. 이후 사이클 unlock.
+
+- [x] 6.0.1 디폴트 첫 슬롯 자동 산출 — `dmz_blanks.csv` answer_from=photo 빈칸 owner 슬롯
+- [x] 6.0.2 `data/first_source.csv` 24행 신설 (episode_id, slot, default_reason)
+- [x] 6.0.3 `docs/SPEC-pickone.md` 신설
+- [x] 6.0.4 `shared/index_pickone.html` 신설 — index_sequential.html 복사 + getStoryFirstSlot/getUnlockOrder + isSourceUnlocked 사이클 + closeSource flash 사이클 + LS_PREFIX `dmz_v5_p_` + 디버그 패널 모드 라벨
+- [x] 6.0.5 `scripts/build_pickone.sh` 신설 — STORIES + BLANK_SOURCE_LOOKUP + FIRST_SOURCE_LOOKUP 주입 + JS syntax 검증
+- [x] 6.0.6 빌드 회귀 — pickone 267,564 bytes / 95 blank + 24 first / JS OK
+- [ ] 6.0.7 피터공 브라우저 플테 — 첫 슬롯 활성 + 사이클 unlock 작동 확인
+- [ ] 6.0.8 photo answer_from 누락 13 스토리 검토 (정예공/박성렬)
+- [ ] 6.0.9 커밋·푸시
+
 **Phase 4.3 — 작가 핸드오프** (6/4~)
 
 - [ ] 4.3.1 정예공/박성렬에 폴더 + 마크다운 편집 가이드 (`docs/CONTENT-AUTHORING.md` 신설)

@@ -140,6 +140,8 @@ _dev/
 | v4.0-prep | 2026-04-29 | 정예공 새 빌드(4/28) 베이스 교체. `_dev/DMZ_v4/` 신설. 두 빌드 fork(mobile/offline) 설계. photos 영문화 47개. 개발 문서 7종. v3.2는 `_dev/DMZ/`에 레거시 보존. |
 | v4.1-seq | 2026-04-30 | 세 번째 빌드 sequential 추가 — 자료 순차 잠금 + 정답 자료 라벨 강조. `shared/index_sequential.html` 별도 베이스. SPEC-sequential.md 신설. v4 작업 완성·푸시 |
 | v5.0 | 2026-05-14 | v5 분기 — v4 통째 복사 (`_dev/DMZ_v5/`). storageKey prefix `dmz_v5_*`로 분리. docs v5 정정 + PLAN/TASKS 코드 폴더 통합 |
+| v5.1-data | 2026-05-14 | STORIES 데이터 외부화 — `data/topics/*.yaml` 6개 + archivist_types.yaml. 두 베이스 HTML `// __STORIES_AND_TYPES__` placeholder. `build_stories_json.py` 신설. cat04 6 스토리 yaml 채움(s0401·s0403·s0404·s0405·s0406·s0407) + 사진 일괄 카피 |
+| v5.2-pickone | 2026-05-15 | 네 번째 빌드 `pickone/` 신설 — sequential 룰 + 첫 자료 슬롯 가변. `data/first_source.csv` 24행(편집 가능). `shared/index_pickone.html` + `scripts/build_pickone.sh`. getUnlockOrder 사이클 알고리즘. LS_PREFIX `dmz_v5_p_`. SPEC-pickone.md 신설 |
 
 ## 현재 게임 상태 (v3.2)
 

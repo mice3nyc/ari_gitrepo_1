@@ -111,6 +111,18 @@ data/topics/
 - Phase 3.2 — 콘텐츠 검수 시트(스프레드시트로 export) — 정예공·박성렬 검수용
 - Phase 3.3 — 정정 round-trip (CSV/yaml → 코드)
 
+### 5/15 세션355 — pickone 빌드 신설 (sequential + 첫 자료 가변)
+
+- ✅ 네 번째 빌드 `pickone/` 신설 — sequential 룰 그대로, 진입 시 첫 자료 슬롯만 가변
+- ✅ `data/first_source.csv` 신설 (24행) — 디폴트 자동 산출(photo answer_from owner) + 편집 가능 face
+- ✅ unlock 알고리즘 — 첫 슬롯부터 A·B·C·D 사이클 (예: 첫=B → B→C→D→A)
+- ✅ `shared/index_pickone.html` — index_sequential.html 복사 + getStoryFirstSlot/getUnlockOrder 추가, LS_PREFIX `dmz_v5_p_`
+- ✅ `scripts/build_pickone.sh` — STORIES + BLANK_SOURCE_LOOKUP + FIRST_SOURCE_LOOKUP 주입
+- ✅ `docs/SPEC-pickone.md` — 메카닉 명세
+- ✅ 빌드 회귀 — pickone 267,564 bytes / 95 blank + 24 first / JS syntax OK
+- **24 스토리 디폴트 산출**: B 3건(s0101·s0403·s0404), C 4건(s0601·s0602·s0604·s0605), A 명확 4건, A fallback 13건(photo answer_from 누락 — 정예공/박성렬 검토 자리)
+- **다음 진입점**: 피터공 브라우저 플테 → 4 빌드 중 베타 사용 빌드 결정 → photo answer_from 누락 13 스토리 검토
+
 ### 5/15 세션354 — 런칭 스코프 축소 + canon 비교 + 베타 사전 인프라
 
 - ✅ 36 → **24 스토리 축소** (5/14 회의 결정): cat05 통삭 + 8 스토리 archive

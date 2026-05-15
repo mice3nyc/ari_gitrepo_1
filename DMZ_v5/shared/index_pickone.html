@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>DMZ Archive</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=Galmuri11:wght@400;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #fff;
+  --fg: #000;
+  --gray: #888;
+  --light-gray: #ccc;
+  --border: #000;
+  --green: #000;
+  --red: #000;
+}
+
+body {
+  font-family: 'Galmuri11', 'DotGothic16', monospace;
+  background: var(--bg); color: var(--fg);
+  min-height: 100vh; overflow-x: hidden;
+  image-rendering: pixelated;
+}
+
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+.screen-bg { display: none; }
+.screen > *:not(.screen-bg) { position: relative; z-index: 1; }
+
+/* ===== LOGIN ===== */
+#login-screen { align-items: center; justify-content: center; background: var(--bg); }
+.login-container { text-align: center; padding: 2rem; max-width: 400px; width: 90%; }
+.game-title {
+  font-family: 'Galmuri11', monospace; font-size: 2rem; font-weight: 700;
+  color: var(--fg); letter-spacing: 0.15em; margin-bottom: 0.5rem;
+  border-bottom: 3px solid var(--fg); padding-bottom: 0.5rem; display: inline-block;
+}
+.game-title::after { display: none; }
+.game-subtitle { font-size: 0.75rem; color: var(--gray); margin-bottom: 2rem; margin-top: 0.5rem; }
+.login-field { margin-bottom: 1rem; }
+.login-field label { display: block; color: var(--fg); font-size: 0.7rem; margin-bottom: 0.3rem; text-align: left; }
+.login-field input {
+  width: 100%; padding: 0.6rem 0.8rem; background: var(--bg);
+  border: 2px solid var(--fg); color: var(--fg); font-family: inherit; font-size: 0.9rem; outline: none;
+}
+.login-field input:focus { box-shadow: 4px 4px 0 var(--fg); }
+.login-error { color: var(--fg); font-size: 0.75rem; height: 1.2rem; margin-bottom: 0.3rem; font-weight: 700; }
+.btn-primary {
+  padding: 0.6rem 2rem; background: var(--fg); color: var(--bg);
+  border: 2px solid var(--fg); font-family: inherit; font-size: 0.85rem;
+  cursor: pointer; transition: all 0.1s;
+}
+.btn-primary:hover { box-shadow: 4px 4px 0 var(--gray); }
+.btn-primary:active { box-shadow: none; transform: translate(2px, 2px); }
+.login-hint { font-size: 0.65rem; color: var(--gray); margin-top: 1rem; }
+
+/* ===== CATEGORY SELECT ===== */
+#category-screen { align-items: center; padding: 2rem 1rem; background: var(--bg); }
+.screen-header { text-align: center; margin-bottom: 1.5rem; color: var(--fg); }
+.screen-header h2 { font-size: 1rem; font-weight: 700; }
+.screen-header .player-name { color: var(--gray); font-size: 0.8rem; margin-top: 0.3rem; }
+.category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; width: 100%; max-width: 500px; }
+.cat-card {
+  background: var(--bg); border: 2px solid var(--fg);
+  padding: 1rem; cursor: pointer; text-align: center; transition: all 0.1s;
+}
+.cat-card:hover { box-shadow: 4px 4px 0 var(--fg); }
+.cat-card:active { box-shadow: none; transform: translate(2px, 2px); }
+.cat-card .cat-icon { font-size: 1.5rem; margin-bottom: 0.3rem; }
+.cat-card h3 { color: var(--fg); font-size: 0.8rem; margin-bottom: 0.2rem; }
+.cat-card .cat-progress { color: var(--gray); font-size: 0.7rem; }
+.cat-card.completed { background: var(--fg); color: var(--bg); }
+.cat-card.completed h3 { color: var(--bg); }
+.cat-card.completed .cat-progress { color: var(--light-gray); }
+.cumulative-bar {
+  width: 100%; max-width: 500px; margin-top: 1.5rem; padding: 0.8rem;
+  border: 2px solid var(--fg); font-size: 0.7rem; text-align: center;
+}
+.cumulative-bar .counts { display: flex; justify-content: space-around; margin-top: 0.4rem; }
+.cumulative-bar .counts span { font-weight: 700; }
+
+/* ===== STORY SELECT ===== */
+#story-screen { align-items: center; padding: 2rem 1rem; background: var(--bg); }
+.story-list { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 0.5rem; }
+.story-card {
+  background: var(--bg); border: 2px solid var(--fg);
+  padding: 0.8rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.8rem; transition: all 0.1s;
+}
+.story-card:hover { box-shadow: 4px 4px 0 var(--fg); }
+.story-card .story-num { color: var(--gray); font-size: 0.7rem; min-width: 2rem; }
+.story-card h3 { color: var(--fg); font-size: 0.85rem; flex: 1; }
+.story-card .story-era { color: var(--gray); font-size: 0.7rem; }
+.story-card.completed { background: var(--fg); color: var(--bg); }
+.story-card.completed h3 { color: var(--bg); }
+.story-card.completed h3::after { content: ' ✓'; }
+.story-card.completed .story-num, .story-card.completed .story-era { color: var(--light-gray); }
+.btn-back {
+  background: var(--bg); border: 2px solid var(--fg); color: var(--fg);
+  padding: 0.4rem 1rem; font-family: inherit; font-size: 0.75rem;
+  cursor: pointer; margin-bottom: 1rem; align-self: flex-start;
+}
+.btn-back:hover { background: var(--fg); color: var(--bg); }
+
+/* ===== GAME SCREEN ===== */
+#game-screen { min-height: 100vh; background: var(--bg); }
+.game-header {
+  background: var(--fg); color: var(--bg);
+  padding: 0.6rem 1rem; display: flex; align-items: center; gap: 0.6rem;
+  position: sticky; top: 0; z-index: 100;
+}
+.game-header .btn-header-back {
+  background: none; border: 1px solid var(--bg); color: var(--bg);
+  padding: 0.2rem 0.5rem; font-family: inherit; font-size: 0.7rem;
+  cursor: pointer; flex-shrink: 0;
+}
+.game-header .btn-header-back:hover { background: var(--bg); color: var(--fg); }
+.game-header .location { color: var(--bg); font-size: 0.7rem; flex: 1; }
+.game-header .progress { color: var(--bg); font-size: 0.75rem; flex-shrink: 0; }
+.game-content { flex: 1; padding: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+.phase-banner { text-align: center; padding: 1rem; border: 2px solid var(--fg); margin-bottom: 0.5rem; }
+.phase-banner .phase-era { font-size: 0.7rem; color: var(--gray); }
+.phase-banner h2 { font-size: 1.1rem; font-weight: 700; margin-top: 0.2rem; }
+.phase-banner .phase-desc { font-size: 0.7rem; color: var(--gray); margin-top: 0.4rem; line-height: 1.5; }
+
+/* Source cards */
+.source-card { cursor: pointer; transition: all 0.1s; }
+.source-card .card-header { padding: 0.8rem; display: flex; align-items: center; gap: 0.6rem; }
+.card-icon { font-size: 1.2rem; flex-shrink: 0; }
+.card-title { font-size: 0.85rem; font-weight: 700; color: var(--fg); }
+.card-sub { font-size: 0.65rem; color: var(--gray); margin-top: 0.2rem; }
+.card-status { margin-left: auto; font-size: 0.65rem; padding: 0.2rem 0.5rem; border: 1px solid var(--fg); }
+.card-status.solved { background: var(--fg); color: var(--bg); }
+
+.source-letter, .source-diary, .source-scholar, .source-blog, .source-twitter, .source-report, .source-homework,
+.source-newspaper, .source-photo, .source-oral, .source-kakao, .source-text {
+  background: var(--bg); border: 2px solid var(--fg);
+}
+.source-card:hover { box-shadow: 4px 4px 0 var(--fg); }
+
+/* ===== SOURCE DETAIL ===== */
+.source-detail {
+  display: none; position: fixed; top:0; left:0; right:0; bottom:0; z-index: 200;
+  background: var(--bg); overflow-y: auto;
+}
+.source-detail.active { display: block; }
+.detail-inner { max-width: 500px; margin: 0 auto; padding: 1rem; min-height: 100vh; }
+.detail-close { position: sticky; top: 0; text-align: right; padding: 0.5rem; z-index: 10; background: var(--bg); }
+.detail-close button {
+  background: var(--fg); border: none; color: var(--bg);
+  padding: 0.3rem 0.8rem; cursor: pointer; font-family: inherit; font-size: 0.75rem;
+}
+
+/* All detail paper styles — unified monochrome */
+.letter-paper, .diary-paper, .scholar-paper {
+  border: 2px solid var(--fg); padding: 1.5rem; color: var(--fg);
+  line-height: 1.8; font-size: 0.9rem; font-family: inherit;
+}
+.letter-paper .letter-meta, .scholar-paper .scholar-meta { font-size: 0.7rem; color: var(--gray); margin-bottom: 1rem; border-bottom: 1px dashed var(--light-gray); padding-bottom: 0.6rem; }
+.letter-paper .letter-sign { text-align: right; margin-top: 1rem; }
+.diary-paper .diary-meta { font-size: 0.7rem; color: var(--gray); margin-bottom: 1rem; }
+.letter-paper p+p, .diary-paper p+p, .scholar-paper p+p { margin-top: 0.6rem; }
+
+.newspaper-paper {
+  border: 2px solid var(--fg); padding: 1.2rem; color: var(--fg); font-family: inherit;
+}
+.newspaper-paper .news-header { text-align: center; border-bottom: 3px double var(--fg); padding-bottom: 0.6rem; margin-bottom: 0.8rem; }
+.newspaper-paper .news-name { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.4em; }
+.newspaper-paper .news-date { font-size: 0.65rem; margin-top: 0.2rem; color: var(--gray); }
+.newspaper-paper .news-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.8rem; line-height: 1.4; }
+.newspaper-paper .news-body { font-size: 0.8rem; line-height: 1.7; }
+.newspaper-paper .news-body p+p { margin-top: 0.6rem; }
+
+/* SPEC v2 §17 — markdown face (텍스트 subtype 9종 본문 통째 html) */
+.newspaper-paper h1 { text-align: center; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.4em; border-bottom: 3px double var(--fg); padding-bottom: 0.6rem; margin: 0 0 0.6rem 0; }
+.newspaper-paper h1 + p { text-align: center; margin-bottom: 0.8rem; }
+.newspaper-paper h1 + p em { font-size: 0.65rem; color: var(--gray); font-style: normal; }
+.newspaper-paper h2 { font-size: 1rem; font-weight: 700; margin: 0.6rem 0 0.8rem 0; line-height: 1.4; }
+.newspaper-paper p { font-size: 0.8rem; line-height: 1.7; margin: 0; }
+.newspaper-paper p + p { margin-top: 0.6rem; }
+.newspaper-paper hr { border: 0; border-top: 1px dashed var(--light-gray); margin: 1rem 0; }
+.newspaper-paper hr + p em { font-size: 0.7rem; color: var(--gray); }
+
+.diary-paper h1 { font-size: 1.1rem; font-weight: 700; margin: 0 0 0.4rem 0; }
+.diary-paper h1 + p em { font-size: 0.7rem; color: var(--gray); font-style: normal; }
+.diary-paper h2 { font-size: 0.9rem; font-weight: 700; margin: 1rem 0 0.4rem 0; }
+.diary-paper p { margin: 0 0 0.6rem 0; }
+.diary-paper hr { border: 0; border-top: 1px dashed var(--light-gray); margin: 1rem 0; }
+.diary-paper hr + p em { font-size: 0.7rem; color: var(--gray); }
+
+.scholar-paper h1 { font-size: 1.05rem; font-weight: 700; margin: 0 0 0.4rem 0; }
+.scholar-paper h1 + p em { font-size: 0.7rem; color: var(--gray); font-style: normal; }
+.scholar-paper h2 { font-size: 0.9rem; font-weight: 700; margin: 1rem 0 0.4rem 0; }
+.scholar-paper p { margin: 0 0 0.6rem 0; }
+.scholar-paper hr { border: 0; border-top: 1px dashed var(--light-gray); margin: 1rem 0; }
+.scholar-paper hr + p em { font-size: 0.7rem; color: var(--gray); }
+
+.photo-frame {
+  border: 2px solid var(--fg); padding: 0.8rem; text-align: center; margin-bottom: 0.8rem;
+}
+.photo-frame img { width: 100%; max-height: 280px; object-fit: cover; border: 1px solid var(--fg); }
+.photo-frame .photo-caption { font-size: 0.75rem; color: var(--fg); margin-top: 0.6rem; line-height: 1.5; text-align: left; }
+.photo-frame .photo-source { font-size: 0.6rem; color: var(--gray); margin-top: 0.3rem; text-align: left; }
+
+.oral-player {
+  border: 2px solid var(--fg); padding: 1.2rem; color: var(--fg);
+}
+.oral-player .oral-icon { text-align: center; margin-bottom: 0.6rem; font-size: 1.5rem; }
+.oral-player .oral-meta { font-size: 0.65rem; color: var(--gray); margin-bottom: 0.8rem; padding-bottom: 0.4rem; border-bottom: 1px dashed var(--light-gray); }
+.oral-player .oral-text { font-size: 0.85rem; line-height: 1.8; font-style: italic; }
+.oral-player .oral-text p+p { margin-top: 0.8rem; }
+
+.twitter-thread, .kakao-chat, .blog-post, .report-doc, .homework-paper, .text-message, .qna-post {
+  border: 2px solid var(--fg); padding: 1.2rem; color: var(--fg); font-family: inherit; line-height: 1.7; font-size: 0.85rem;
+}
+.twitter-thread .tweet-header { font-size: 0.7rem; color: var(--gray); margin-bottom: 0.8rem; border-bottom: 1px dashed var(--light-gray); padding-bottom: 0.4rem; }
+.twitter-thread .tweet-body p+p { margin-top: 0.6rem; }
+.kakao-chat .chat-line { margin-bottom: 0.4rem; padding: 0.4rem 0.6rem; border: 1px solid var(--fg); max-width: 85%; }
+.kakao-chat .chat-line.right { margin-left: auto; background: var(--fg); color: var(--bg); }
+.kakao-chat .chat-name { font-size: 0.65rem; color: var(--gray); margin-bottom: 0.1rem; }
+.blog-post .blog-title { font-weight: 700; margin-bottom: 0.4rem; }
+.blog-post .blog-meta { font-size: 0.65rem; color: var(--gray); margin-bottom: 0.8rem; }
+.blog-post .blog-body p+p { margin-top: 0.6rem; }
+.report-doc .report-header { font-weight: 700; margin-bottom: 0.8rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--fg); }
+.report-doc p+p { margin-top: 0.6rem; }
+.homework-paper .hw-title { font-weight: 700; margin-bottom: 0.3rem; }
+.homework-paper .hw-meta { font-size: 0.65rem; color: var(--gray); margin-bottom: 0.8rem; }
+.homework-paper p+p { margin-top: 0.6rem; }
+.text-message .msg-bubble { padding: 0.4rem 0.6rem; border: 1px solid var(--fg); margin-bottom: 0.3rem; max-width: 80%; }
+.text-message .msg-bubble.sent { background: var(--fg); color: var(--bg); margin-left: auto; }
+.qna-post .qna-q { border: 1px solid var(--fg); padding: 0.8rem; margin-bottom: 0.8rem; }
+.qna-post .qna-a { border: 1px solid var(--fg); padding: 0.8rem; border-left: 3px solid var(--fg); }
+.qna-post .qna-label { font-size: 0.65rem; font-weight: 700; margin-bottom: 0.4rem; }
+.qna-post p+p { margin-top: 0.5rem; }
+
+/* ===== BLANK SLOTS ===== */
+.blank-slot {
+  display: inline-block; min-width: 50px; border-bottom: 2px solid var(--fg);
+  padding: 0.1rem 0.3rem; margin: 0 0.1rem; cursor: pointer; background: var(--bg);
+}
+.blank-slot.empty { background: var(--light-gray); animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { background: var(--bg); } }
+.blank-slot.filled { font-weight: 700; background: var(--fg); color: var(--bg); border-color: var(--fg); animation: none; }
+
+/* ===== ANSWER MODAL ===== */
+.modal-backdrop { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.3); z-index: 250; }
+.modal-backdrop.active { display: block; }
+.answer-modal {
+  display: none; position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--bg); border-top: 3px solid var(--fg);
+  padding: 1.2rem; z-index: 300; max-width: 500px; margin: 0 auto;
+}
+.answer-modal.active { display: block; }
+.answer-modal .modal-label { color: var(--fg); font-size: 0.7rem; margin-bottom: 0.4rem; font-weight: 700; }
+.answer-modal .modal-hint { color: var(--gray); font-size: 0.75rem; margin-bottom: 0.8rem; line-height: 1.5; }
+.answer-modal input {
+  width: 100%; padding: 0.6rem; background: var(--bg);
+  border: 2px solid var(--fg); color: var(--fg);
+  font-family: inherit; font-size: 0.9rem; outline: none; margin-bottom: 0.6rem;
+}
+.answer-modal input:focus { box-shadow: 3px 3px 0 var(--fg); }
+.answer-modal .modal-btns { display: flex; gap: 0.6rem; }
+.answer-modal .modal-btns button { flex: 1; padding: 0.5rem; font-family: inherit; font-size: 0.8rem; cursor: pointer; }
+.btn-submit { background: var(--fg); color: var(--bg); border: 2px solid var(--fg); }
+.btn-cancel { background: var(--bg); color: var(--fg); border: 2px solid var(--fg); }
+
+/* ===== ARCHIVE SELECTION ===== */
+.archive-prompt {
+  border: 2px solid var(--fg); padding: 1rem; text-align: center; margin-bottom: 1rem;
+}
+.archive-prompt h3 { font-size: 0.9rem; margin-bottom: 0.3rem; }
+.archive-prompt p { font-size: 0.75rem; color: var(--gray); }
+.archive-option {
+  border: 2px solid var(--fg); padding: 0.8rem; margin-bottom: 0.5rem; cursor: pointer;
+  display: flex; align-items: center; gap: 0.8rem; transition: all 0.1s;
+}
+.archive-option:hover { box-shadow: 4px 4px 0 var(--fg); }
+.archive-option.selected { background: var(--fg); color: var(--bg); }
+.archive-option .opt-icon { font-size: 1.2rem; }
+.archive-option .opt-title { font-size: 0.85rem; }
+.archive-option .opt-meaning { font-size: 0.65rem; color: var(--gray); margin-top: 0.2rem; }
+.archive-option.selected .opt-meaning { color: var(--light-gray); }
+.btn-confirm {
+  display: block; width: 100%; max-width: 400px; margin: 0.8rem auto 0; padding: 0.6rem;
+  background: var(--fg); color: var(--bg); border: 2px solid var(--fg);
+  font-family: inherit; font-size: 0.85rem; cursor: pointer;
+}
+.btn-confirm:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ===== COMPLETION SCREEN ===== */
+#completion-screen { align-items: center; justify-content: center; text-align: center; padding: 2rem; background: var(--bg); }
+.completion-box { max-width: 400px; }
+.completion-box h2 { font-size: 1rem; margin-bottom: 1rem; border-bottom: 2px solid var(--fg); padding-bottom: 0.5rem; display: inline-block; }
+.completion-box .comp-records { font-size: 0.85rem; line-height: 1.8; margin-bottom: 1rem; }
+.completion-box .comp-counts { font-size: 0.75rem; color: var(--gray); margin-bottom: 0.8rem; }
+.completion-box .comp-counts .count-bar { display: flex; justify-content: space-around; margin-top: 0.4rem; }
+.completion-box .comp-counts .count-bar span { font-weight: 700; color: var(--fg); }
+.comp-progress { font-size: 0.7rem; color: var(--gray); margin-bottom: 1.2rem; }
+
+/* ===== ARCHIVE SCREEN ===== */
+#archive-screen { align-items: center; padding: 2rem 1rem; background: var(--bg); }
+.archive-container { width: 100%; max-width: 500px; }
+.archive-header { text-align: center; margin-bottom: 1.5rem; }
+.archive-header h2 { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+.archive-header .archive-player { font-size: 0.8rem; color: var(--gray); }
+
+.archive-section { margin-bottom: 1.5rem; }
+.archive-section-title {
+  font-size: 0.7rem; color: var(--gray); margin-bottom: 0.6rem;
+  border-bottom: 1px dashed var(--light-gray); padding-bottom: 0.3rem;
+}
+
+/* DMZ Pixel Map */
+.dmz-map-wrap { border: 2px solid var(--fg); padding: 1rem; }
+.dmz-map-labels { display: flex; justify-content: space-between; font-size: 0.6rem; color: var(--gray); margin-bottom: 0.4rem; }
+.dmz-pixel-map { display: flex; justify-content: center; margin-bottom: 0.6rem; }
+.dmz-pixel-map svg { width: 100%; max-width: 400px; image-rendering: pixelated; }
+.dmz-map-legend { display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center; margin-top: 0.6rem; }
+.dmz-map-legend .legend-item { font-size: 0.6rem; display: flex; align-items: center; gap: 0.2rem; }
+.dmz-map-legend .legend-box { width: 10px; height: 10px; border: 1px solid var(--fg); }
+.dmz-map-status { text-align: center; font-size: 0.75rem; color: var(--fg); margin-top: 0.6rem; font-weight: 700; }
+
+/* Tendency bars */
+.tendency-wrap { border: 2px solid var(--fg); padding: 1rem; }
+.tendency-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+.tendency-row:last-child { margin-bottom: 0; }
+.tendency-label { font-size: 0.7rem; min-width: 5.5rem; }
+.tendency-bar-bg { flex: 1; height: 12px; border: 1px solid var(--fg); background: var(--bg); }
+.tendency-bar-fill { height: 100%; background: var(--fg); transition: width 0.3s; }
+.tendency-value { font-size: 0.7rem; font-weight: 700; min-width: 1.5rem; text-align: right; }
+
+/* Archivist preview */
+.archivist-preview {
+  border: 2px solid var(--fg); padding: 1rem; text-align: center;
+}
+.archivist-preview .preview-label { font-size: 0.7rem; color: var(--gray); margin-bottom: 0.3rem; }
+.archivist-preview .preview-type { font-size: 1.1rem; font-weight: 700; }
+.archivist-preview .preview-desc { font-size: 0.75rem; color: var(--gray); margin-top: 0.4rem; line-height: 1.5; }
+
+/* Category header button */
+.cat-header-row { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 500px; margin-bottom: 1rem; }
+.cat-header-row .header-left { text-align: left; }
+.cat-header-row h2 { font-size: 1rem; font-weight: 700; }
+.cat-header-row .player-name { color: var(--gray); font-size: 0.8rem; margin-top: 0.3rem; }
+.btn-archive {
+  background: var(--bg); border: 2px solid var(--fg); color: var(--fg);
+  padding: 0.3rem 0.6rem; font-family: inherit; font-size: 0.75rem;
+  cursor: pointer; display: flex; align-items: center; gap: 0.3rem;
+}
+.btn-archive:hover { background: var(--fg); color: var(--bg); }
+
+/* ===== RESULT SCREEN ===== */
+#result-screen { align-items: center; justify-content: center; text-align: center; padding: 2rem; background: var(--bg); }
+.result-box { max-width: 400px; }
+.result-box h2 { font-size: 0.8rem; margin-bottom: 0.3rem; color: var(--gray); }
+.result-type-name { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.8rem; border: 3px solid var(--fg); padding: 0.5rem 1rem; display: inline-block; }
+.result-type-desc { font-size: 0.8rem; line-height: 1.8; margin-bottom: 1.5rem; }
+.result-stat {
+  border: 2px solid var(--fg); padding: 0.8rem; margin-bottom: 0.5rem;
+  display: flex; justify-content: space-between;
+}
+.result-stat .stat-label { font-size: 0.75rem; }
+.result-stat .stat-value { font-weight: 700; }
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background: var(--bg); color: var(--fg); padding: 1.2rem 1.5rem;
+  z-index: 400; text-align: center; border: 3px solid var(--fg); max-width: 280px;
+}
+.toast .toast-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+.toast .toast-text { font-size: 0.8rem; line-height: 1.5; }
+
+/* ===== SOUND NOTE ===== */
+.sound-note { font-size: 0.6rem; color: var(--gray); margin-top: 0.4rem; }
+
+/* ===== TUTORIAL ===== */
+#tutorial-screen { align-items: center; padding: 2rem 1rem; background: var(--bg); }
+.tutorial-container { width: 100%; max-width: 500px; }
+.tutorial-container h2 { text-align: center; font-size: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--fg); padding-bottom: 0.5rem; display: inline-block; }
+.tutorial-step {
+  border: 2px solid var(--fg); padding: 1rem; margin-bottom: 0.8rem;
+  display: flex; align-items: flex-start; gap: 0.8rem;
+}
+.tutorial-step .step-num { font-size: 0.7rem; font-weight: 700; min-width: 1.4rem; height: 1.4rem; border: 2px solid var(--fg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.tutorial-step .step-icon { font-size: 1.2rem; flex-shrink: 0; }
+.tutorial-step .step-body h3 { font-size: 0.85rem; margin-bottom: 0.3rem; }
+.tutorial-step .step-body p { font-size: 0.75rem; color: var(--gray); line-height: 1.5; }
+.tutorial-step .step-example {
+  margin-top: 0.5rem; padding: 0.4rem 0.6rem; border: 1px dashed var(--light-gray);
+  font-size: 0.7rem; color: var(--gray);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 600px) {
+  .game-title { font-size: 2.5rem; }
+  .category-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+/* ===== SEQUENTIAL — 자료 순차 잠금 ===== */
+.source-card.locked { opacity: 0.45; cursor: not-allowed; pointer-events: none; filter: grayscale(0.85); }
+.source-card.locked .card-status::after { content: " 🔒"; }
+.source-card.locked .card-status { background: var(--light-gray) !important; color: var(--fg) !important; }
+
+/* ===== SEQUENTIAL — 빈칸 모달 정답 자료 라벨 ===== */
+.modal-source-hint {
+  padding: 0.6rem 0.8rem; margin-bottom: 0.8rem;
+  background: #fffbe6; border-left: 3px solid #f1c40f; border-radius: 4px;
+  font-size: 0.85rem; line-height: 1.5;
+}
+.source-label-highlight { color: #c0392b; font-weight: bold; }
+
+/* ===== SEQUENTIAL — unlock 효과 ===== */
+@keyframes blank-pop-green {
+  0%   { background: var(--fg); transform: scale(1); box-shadow: none; }
+  20%  { background: #2ecc71; transform: scale(1.25); box-shadow: 0 0 0 8px rgba(46,204,113,0.45); }
+  60%  { background: #27ae60; transform: scale(1.1); box-shadow: 0 0 0 4px rgba(46,204,113,0.25); }
+  100% { background: var(--fg); transform: scale(1); box-shadow: none; }
+}
+.blank-slot.filled.just-solved {
+  animation: blank-pop-green 1.4s ease-out;
+}
+@keyframes card-unlock-flash {
+  0%, 100% { background: var(--bg); border-color: var(--fg); box-shadow: 2px 2px 0 var(--fg); }
+  25%, 75% { background: rgba(46,204,113,0.3); border-color: #27ae60; box-shadow: 4px 4px 0 #27ae60; }
+}
+.source-card.just-unlocked {
+  animation: card-unlock-flash 0.55s ease-in-out 3;
+}
+.source-card.just-unlocked .card-status {
+  background: #27ae60 !important; color: white !important; font-weight: bold;
+}
+
+/* ===== SEQUENTIAL — 큰 정답 팝업 ===== */
+.answer-celebration {
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: white; border: 5px solid #27ae60;
+  padding: 1.6rem 2.8rem; border-radius: 10px;
+  font-size: 2.6rem; font-weight: 900;
+  color: #1e8449; letter-spacing: 0.05em;
+  box-shadow: 0 0 60px rgba(46,204,113,0.55), 8px 8px 0 #1e8449;
+  z-index: 10000; opacity: 0; pointer-events: none;
+  text-align: center; min-width: 200px; max-width: 90vw;
+  white-space: nowrap;
+}
+.answer-celebration.show {
+  animation: answer-pop 1.4s ease-out forwards;
+}
+@keyframes answer-pop {
+  0%   { transform: translate(-50%, -50%) scale(0) rotate(-8deg); opacity: 0; }
+  18%  { transform: translate(-50%, -50%) scale(1.18) rotate(3deg); opacity: 1; }
+  38%  { transform: translate(-50%, -50%) scale(1) rotate(-1deg); opacity: 1; }
+  78%  { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(0.92) rotate(0deg); opacity: 0; }
+}
+.answer-celebration .ac-label {
+  display: block; font-size: 0.85rem; color: #888;
+  letter-spacing: 0.2em; margin-bottom: 0.4rem; font-weight: 700;
+}
+
+/* SPEC §디버그 패널 — 5/15 세션354 신설 */
+.debug-toggle { position:fixed; bottom:10px; right:10px; background:#333; color:#fff; border:none; padding:5px 10px; font-size:11px; cursor:pointer; z-index:9999; font-family:monospace; border-radius:3px; opacity:0.6; }
+.debug-toggle:hover { opacity:1; }
+.debug-panel { display:none; position:fixed; bottom:42px; right:10px; background:#1a1a1a; color:#ddd; padding:10px 12px; font-size:11px; line-height:1.5; font-family:monospace; z-index:9999; max-width:420px; max-height:calc(100vh - 60px); overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,0.4); border-radius:4px; }
+.debug-panel.active { display:block; }
+.debug-section { margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid #333; }
+.debug-section:last-child { border-bottom:none; }
+.debug-label { color:#888; font-size:10px; text-transform:uppercase; margin-bottom:4px; letter-spacing:0.5px; }
+.debug-state { color:#9cd6ff; }
+.debug-buttons { display:flex; flex-wrap:wrap; gap:4px; margin-top:5px; }
+.debug-btn { background:#333; color:#ddd; border:1px solid #555; padding:4px 8px; font-size:10px; cursor:pointer; font-family:monospace; border-radius:2px; }
+.debug-btn:hover { background:#555; }
+.debug-btn.danger { background:#5a2222; border-color:#883333; }
+.debug-btn.danger:hover { background:#883333; }
+</style>
+</head>
+<body>
+
+<!-- ===== SCREENS ===== -->
+<div id="login-screen" class="screen active">
+  <div class="screen-bg"></div>
+  <div class="login-container">
+    <h1 class="game-title">DMZ Archive</h1>
+    <p class="game-subtitle">DMZ를 기록하는 방법</p>
+    <div class="login-field"><label>이름</label><input type="text" id="input-name" placeholder="이름을 입력하세요" autocomplete="off"></div>
+    <div class="login-field"><label>게임 코드</label><input type="text" id="input-code" placeholder="게임 코드를 입력하세요" autocomplete="off"></div>
+    <div class="login-error" id="login-error"></div>
+    <button class="btn-primary" onclick="handleLogin()">입장</button>
+    <p class="login-hint">DMZ의 기록을 탐색합니다</p>
+  </div>
+</div>
+
+<div id="tutorial-screen" class="screen">
+  <div class="screen-bg"></div>
+  <div class="tutorial-container">
+    <h2>기록 탐색 안내</h2>
+    <div class="tutorial-step">
+      <span class="step-num">1</span>
+      <span class="step-icon">📄</span>
+      <div class="step-body">
+        <h3>자료 탐색</h3>
+        <p>각 스토리에는 4개의 자료가 있습니다. 편지, 신문, 사진, 인터뷰 등 다양한 형태의 기록을 읽어보세요.</p>
+      </div>
+    </div>
+    <div class="tutorial-step">
+      <span class="step-num">2</span>
+      <span class="step-icon">✏️</span>
+      <div class="step-body">
+        <h3>빈칸 복원</h3>
+        <p>각 자료에는 빈칸이 있습니다. 빈칸을 클릭하면 정답을 입력할 수 있어요.</p>
+        <div class="step-example">정답은 <strong>다른 자료</strong>에서 찾아야 합니다!</div>
+      </div>
+    </div>
+    <div class="tutorial-step">
+      <span class="step-num">3</span>
+      <span class="step-icon">🗂️</span>
+      <div class="step-body">
+        <h3>기록 선택</h3>
+        <p>모든 빈칸을 복원하면, 후대에 남길 기록 <strong>2개</strong>를 선택합니다.</p>
+      </div>
+    </div>
+    <div class="tutorial-step">
+      <span class="step-num">4</span>
+      <span class="step-icon">🏷️</span>
+      <div class="step-body">
+        <h3>아키비스트 유형</h3>
+        <p>모든 스토리를 완료하면 당신의 기록 성향이 분석되어 아키비스트 유형이 결정됩니다.</p>
+      </div>
+    </div>
+    <button class="btn-primary" style="width:100%;margin-top:1rem;" onclick="completeTutorial()">탐색 시작하기 →</button>
+  </div>
+</div>
+
+<div id="category-screen" class="screen">
+  <div class="screen-bg"></div>
+  <div class="cat-header-row">
+    <div class="header-left"><h2>카테고리 선택</h2><p class="player-name" id="cat-player-name"></p></div>
+    <button class="btn-archive" onclick="showArchive()">📦 보관소</button>
+  </div>
+  <div class="category-grid" id="category-grid"></div>
+</div>
+
+<div id="archive-screen" class="screen">
+  <div class="screen-bg"></div>
+  <button class="btn-back" onclick="showScreen('category-screen'); renderCategories();">← 돌아가기</button>
+  <div class="archive-container" id="archive-container"></div>
+</div>
+
+<div id="story-screen" class="screen">
+  <div class="screen-bg"></div>
+  <button class="btn-back" onclick="showScreen('category-screen'); renderCategories();">← 카테고리</button>
+  <div class="screen-header"><h2 id="story-screen-title"></h2></div>
+  <div class="story-list" id="story-list"></div>
+</div>
+
+<div id="game-screen" class="screen">
+  <div class="screen-bg"></div>
+  <div class="game-header">
+    <button class="btn-header-back" onclick="exitToStoryList()">←</button>
+    <span class="location" id="game-location"></span>
+    <span class="progress" id="game-progress"></span>
+  </div>
+  <div class="game-content" id="game-content"></div>
+</div>
+
+<div id="completion-screen" class="screen">
+  <div class="screen-bg"></div>
+  <div class="completion-box" id="completion-box"></div>
+</div>
+
+<div id="result-screen" class="screen">
+  <div class="screen-bg"></div>
+  <div class="result-box" id="result-box"></div>
+</div>
+
+<!-- Modals -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="closeAnswerModal()"></div>
+<div class="answer-modal" id="answer-modal">
+  <div class="modal-label" id="modal-label"></div>
+  <div class="modal-source-hint" id="modal-source-hint" style="display:none;">
+    📍 정답은 <strong class="source-label-highlight" id="modal-source-label"></strong>에서 찾으세요
+  </div>
+  <div class="modal-hint" id="modal-hint"></div>
+  <input type="text" id="modal-input" placeholder="정답을 입력하세요" autocomplete="off">
+  <div class="modal-btns">
+    <button class="btn-cancel" onclick="closeAnswerModal()">취소</button>
+    <button class="btn-submit" onclick="submitAnswer()">확인</button>
+  </div>
+</div>
+<div class="source-detail" id="source-detail"><div class="detail-inner" id="detail-inner"></div></div>
+<div class="answer-celebration" id="answer-celebration"></div>
+
+<script>
+// ===== BUILD: PICKONE =====
+// sequential + 첫 자료 슬롯 가변 (data/first_source.csv)
+const LS_PREFIX = 'dmz_v5_p_';
+const LS_STATE_KEY = LS_PREFIX + 'state';
+const LS_TUTORIAL_KEY = LS_PREFIX + 'tutorial';
+
+// 빈칸 ID → 정답이 있는 자료 ID 매핑 (CSV answer_from 기반, 빌드 주입)
+const BLANK_SOURCE_LOOKUP = /* __BLANK_SOURCE_LOOKUP__ */ {};
+// 스토리 ID → 첫 자료 슬롯 (data/first_source.csv 기반, 빌드 주입)
+const FIRST_SOURCE_LOOKUP = /* __FIRST_SOURCE_LOOKUP__ */ {};
+
+// ===== GAME DATA =====
+// 데이터 로딩 중 메시지를 표시하기 위해 별도 파일로 분리 가능하지만,
+// 단일 HTML 파일 유지를 위해 인라인으로 포함합니다.
+
+const CATEGORIES = [
+  { id: 'cat01', name: 'DMZ 기본정보', icon: '🗺️' },
+  { id: 'cat02', name: '생태환경', icon: '🌿' },
+  { id: 'cat03', name: '국가유산·문화재', icon: '🏛️' },
+  { id: 'cat04', name: 'DMZ의 사람들', icon: '👥' },
+  { id: 'cat06', name: '평화 관광', icon: '🕊️' },
+];
+
+// insertBlanks: {{A}}, {{A1}}, {{C2}} 등 마커를 빈칸 슬롯으로 변환
+function insertBlanks(text, blanks) {
+  return text.replace(/\{\{([A-D]\d?)\}\}/g, (match, key) => {
+    if (blanks[key]) {
+      const justSolved = (window.__lastSolvedBlankId === key) ? ' just-solved' : '';
+      return `<span class="blank-slot filled${justSolved}" data-blank-id="${key}">${blanks[key]}</span>`;
+    }
+    return `<span class="blank-slot empty" data-blank-id="${key}" onclick="event.stopPropagation();openAnswerModal('${key}')">[${key}]</span>`;
+  });
+}
+
+// 각 소스의 HTML을 생성하는 템플릿 함수
+function renderSource(src, solvedBlanks, allBlanks) {
+  const blanks = {};
+  for (const key of Object.keys(allBlanks)) {
+    blanks[key] = solvedBlanks[key] || null;
+  }
+
+  const ib = (text) => insertBlanks(text, blanks);
+  const d = src.templateData;
+
+  switch(src.type) {
+    case 'letter':
+      return `<div class="letter-paper">
+        <div class="letter-meta src-heading"><strong>${d.heading}</strong><br>${d.meta}</div>
+        ${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}
+        ${d.sign ? `<p class="letter-sign">${d.sign}</p>` : ''}
+        ${d.soundNote ? `<p class="sound-note">🔊 ${d.soundNote}</p>` : ''}
+      </div>`;
+
+    case 'diary':
+      // SPEC v2 §17 — markdown face 새 분기 (d.html 통째)
+      if (d.html) return `<div class="diary-paper">${ib(d.html)}</div>`;
+      return `<div class="diary-paper">
+        <div class="diary-meta src-heading">${d.meta}</div>
+        ${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}
+        ${d.soundNote ? `<p class="sound-note">🔊 ${d.soundNote}</p>` : ''}
+      </div>`;
+
+    case 'scholar':
+      if (d.html) return `<div class="scholar-paper">${ib(d.html)}</div>`;
+      return `<div class="scholar-paper">
+        <div class="scholar-meta src-heading"><strong>${d.heading}</strong><br>${d.meta}</div>
+        ${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}
+        ${d.soundNote ? `<p class="sound-note">🔊 ${d.soundNote}</p>` : ''}
+      </div>`;
+
+    case 'newspaper':
+      if (d.html) return `<div class="newspaper-paper">${ib(d.html)}</div>`;
+      return `<div class="newspaper-paper">
+        <div class="news-header src-heading"><div class="news-name">${d.paperName}</div><div class="news-date">${d.date}</div></div>
+        <div class="news-title">${ib(d.headline)}</div>
+        <div class="news-body">${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}</div>
+      </div>`;
+
+    case 'photo':
+      return d.photos.map(function(ph) {
+        var imgTag = ph.src ? '<img src="' + ph.src + '" alt="' + (ph.alt || '') + '">' : '';
+        return '<div class="photo-frame">' +
+          imgTag +
+          '<div class="photo-caption">' + ib(ph.caption) + '</div>' +
+          '<div class="photo-source">출처: ' + ph.credit + '</div>' +
+          '</div>';
+      }).join('');
+
+    case 'oral':
+      return `<div class="oral-player">
+        <div class="oral-icon src-heading">🎙️</div>
+        <div class="oral-meta src-heading">${d.meta}</div>
+        <div class="oral-text">${d.quotes.map(q => `<p>${ib(q)}</p>`).join('')}</div>
+        ${d.soundNote ? `<p class="sound-note">🔊 ${d.soundNote}</p>` : ''}
+      </div>`;
+
+    case 'twitter':
+      return `<div class="twitter-thread">
+        <div class="tweet-header src-heading">${d.handle} · ${d.date}</div>
+        <div class="tweet-body">${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}</div>
+      </div>`;
+
+    case 'kakao':
+      return `<div class="kakao-chat">
+        ${d.messages.map(m => `<div class="chat-line ${m.align || 'left'}">
+          ${m.name ? `<div class="chat-name src-heading">${m.name}</div>` : ''}
+          ${ib(m.text)}
+        </div>`).join('')}
+      </div>`;
+
+    case 'blog':
+      return `<div class="blog-post">
+        <div class="blog-title src-heading">${d.title}</div>
+        <div class="blog-meta src-heading">${d.meta}</div>
+        <div class="blog-body">${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}</div>
+      </div>`;
+
+    case 'poster':
+      return `<div class="poster-paper">
+        <div class="poster-title src-heading">${d.title}</div>
+        <div class="poster-meta src-heading">${d.meta}</div>
+        <div class="poster-body">${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}</div>
+      </div>`;
+
+    case 'report':
+      return `<div class="report-doc">
+        <div class="report-header src-heading">${d.header}</div>
+        ${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}
+      </div>`;
+
+    case 'homework':
+      return `<div class="homework-paper">
+        <div class="hw-title src-heading">${d.title}</div>
+        <div class="hw-meta src-heading">${d.meta}</div>
+        ${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}
+      </div>`;
+
+    case 'text':
+      return `<div class="text-message">
+        ${d.messages.map(m => `<div class="msg-bubble ${m.sent ? 'sent' : 'received'}">${ib(m.text)}</div>`).join('')}
+      </div>`;
+
+    case 'qna':
+      return `<div class="qna-post">
+        <div class="qna-q"><div class="qna-label src-heading">Q.</div>${d.question.map(p => `<p>${ib(p)}</p>`).join('')}</div>
+        <div class="qna-a"><div class="qna-label src-heading">A. 채택된 답변</div>${d.answer.map(p => `<p>${ib(p)}</p>`).join('')}</div>
+      </div>`;
+
+    default:
+      return `<div class="letter-paper">${d.paragraphs ? d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('') : ''}</div>`;
+  }
+}
+
+// ===== STORY DATA =====
+// 각 카테고리별 스토리 데이터
+// 데이터가 매우 방대하여 별도 JS 파일로 분리하는 것이 이상적이지만,
+// 단일 HTML 요구사항에 따라 인라인으로 포함합니다.
+
+// __STORIES_AND_TYPES__ (data/topics/*.yaml에서 빌드 시 주입)
+
+// ===== GAME STATE =====
+const state = {
+  playerName: null,
+  currentCategory: null,
+  currentStory: null,
+  solvedBlanks: {},
+  viewedSources: [],
+  selectedRecords: [],
+  archivistCounts: { A: 0, B: 0, C: 0, D: 0 },
+  completedStories: []
+};
+
+// Load saved state
+try {
+  const saved = JSON.parse(localStorage.getItem(LS_STATE_KEY));
+  if (saved) {
+    state.archivistCounts = saved.archivistCounts || { A:0, B:0, C:0, D:0 };
+    state.completedStories = saved.completedStories || [];
+    state.playerName = saved.playerName;
+  }
+} catch(e) {}
+
+// ===== SCREEN MANAGEMENT =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ===== LOGIN =====
+function handleLogin() {
+  const name = document.getElementById('input-name').value.trim();
+  const code = document.getElementById('input-code').value.trim();
+  const err = document.getElementById('login-error');
+  if (!name) { err.textContent = '이름을 입력해주세요.'; return; }
+  if (code !== '1233') { err.textContent = '게임 코드가 올바르지 않습니다.'; return; }
+  state.playerName = name;
+  if (localStorage.getItem(LS_TUTORIAL_KEY)) {
+    showScreen('category-screen');
+    renderCategories();
+  } else {
+    showScreen('tutorial-screen');
+  }
+}
+
+function completeTutorial() {
+  localStorage.setItem(LS_TUTORIAL_KEY, '1');
+  showScreen('category-screen');
+  renderCategories();
+}
+document.getElementById('input-code').addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); });
+document.getElementById('input-name').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('input-code').focus(); });
+
+// ===== CATEGORY SCREEN =====
+function renderCategories() {
+  document.getElementById('cat-player-name').textContent = `아키비스트 ${state.playerName}`;
+  const grid = document.getElementById('category-grid');
+  grid.innerHTML = CATEGORIES.map(cat => {
+    const stories = STORIES[cat.id] || [];
+    const completed = stories.filter(s => state.completedStories.includes(s.id)).length;
+    const total = stories.length;
+    const isDone = total > 0 && completed === total;
+    return `<div class="cat-card ${isDone ? 'completed' : ''}" onclick="selectCategory('${cat.id}')">
+      <div class="cat-icon">${cat.icon}</div>
+      <h3>${cat.name}</h3>
+      <div class="cat-progress">${completed}/${total} 완료</div>
+    </div>`;
+  }).join('');
+}
+
+// ===== ARCHIVE SCREEN =====
+function showArchive() {
+  showScreen('archive-screen');
+  renderArchive();
+}
+
+function getArchivistType() {
+  const c = state.archivistCounts;
+  const total = c.A + c.B + c.C + c.D;
+  if (total === 0) return null;
+  const sorted = Object.entries(c).sort((a, b) => b[1] - a[1]);
+  let typeKey;
+  if (sorted[0][1] === sorted[3][1]) {
+    typeKey = 'BALANCED';
+  } else if (sorted[0][1] === sorted[1][1] && sorted[1][1] === sorted[2][1]) {
+    typeKey = [sorted[0][0], sorted[1][0]].sort().join('');
+  } else {
+    typeKey = [sorted[0][0], sorted[1][0]].sort().join('');
+  }
+  return ARCHIVIST_TYPES[typeKey] || ARCHIVIST_TYPES['BALANCED'];
+}
+
+// 5 카테고리 정합 (cat01·cat02·cat03·cat04·cat06). SPEC §DMZ 픽셀 맵 참조.
+const CAT_COLORS = ['#3B82F6', '#22C55E', '#A855F7', '#EF4444', '#06B6D4'];
+
+function buildDmzMapSvg() {
+  // DMZ pixel map: 24 cells = 런칭 스코프 (6+6+4+4+4)
+  // 1 pixel = 1 story, DMZ 곡선 형태 (서쪽 넓고 중부 남하, 동쪽 상승)
+  // 0=cat01(6) 1=cat02(6) 2=cat03(4) 3=cat04(4) 4=cat06(4)
+  // SPEC §DMZ 픽셀 맵 참조. 2026-05-15 세션354 갱신.
+  const map = [
+    [-1,-1,-1,-1,-1,-1,-1,-1,-1, 4, 4],
+    [-1,-1,-1,-1,-1, 2, 3, 3, 3, 4, 4],
+    [ 0, 0, 1, 1, 2, 2, 2, 3,-1,-1,-1],
+    [ 0, 0, 1, 1, 1,-1,-1,-1,-1,-1,-1],
+    [ 0, 0, 1,-1,-1,-1,-1,-1,-1,-1,-1],
+  ];
+
+  // 각 카테고리별 완료된 스토리 수
+  const catCompleted = CATEGORIES.map((cat) => {
+    const stories = STORIES[cat.id] || [];
+    return stories.filter(s => state.completedStories.includes(s.id)).length;
+  });
+
+  // 각 카테고리별 등장 순서 카운터 (맵 왼→오, 위→아래)
+  const catCounter = [0, 0, 0, 0, 0];
+
+  const px = 18;
+  const cols = map[0].length;
+  const rows = map.length;
+  let cells = '';
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const zone = map[r][c];
+      if (zone === -1) continue;
+      const idx = catCounter[zone]++;
+      const done = idx < catCompleted[zone];
+      const fill = done ? CAT_COLORS[zone] : '#e5e5e5';
+      const stroke = done ? CAT_COLORS[zone] : '#ccc';
+      cells += `<rect x="${c*px}" y="${r*px}" width="${px-1}" height="${px-1}" rx="2" fill="${fill}" stroke="${stroke}" stroke-width="0.5"/>`;
+    }
+  }
+
+  return `<svg viewBox="0 0 ${cols*px} ${rows*px}" xmlns="http://www.w3.org/2000/svg">${cells}</svg>`;
+}
+
+function renderArchive() {
+  const c = state.archivistCounts;
+  const maxCount = Math.max(c.A, c.B, c.C, c.D, 1);
+  const totalCompleted = state.completedStories.length;
+  const totalStories = Object.values(STORIES).reduce((sum, arr) => sum + arr.length, 0);
+
+  let statusText = 'DMZ의 기록을 탐색하세요';
+  if (totalCompleted > 0 && totalCompleted < totalStories) {
+    statusText = `${totalCompleted}건의 기록 복원 완료`;
+  } else if (totalCompleted === totalStories && totalStories > 0) {
+    statusText = 'DMZ 전 구역 복원 완료';
+  }
+
+  const archType = getArchivistType();
+  const archSection = archType ? `
+    <div class="archive-section">
+      <div class="archive-section-title">아키비스트 유형</div>
+      <div class="archivist-preview">
+        <div class="preview-label">현재 당신의 유형</div>
+        <div class="preview-type">${archType.name}</div>
+        <div class="preview-desc">${archType.desc}</div>
+      </div>
+    </div>` : `
+    <div class="archive-section">
+      <div class="archive-section-title">아키비스트 유형</div>
+      <div class="archivist-preview">
+        <div class="preview-label">스토리를 완료하면 유형이 나타납니다</div>
+      </div>
+    </div>`;
+
+  document.getElementById('archive-container').innerHTML = `
+    <div class="archive-header">
+      <h2>📦 기록 보관소</h2>
+      <div class="archive-player">아키비스트 ${state.playerName}</div>
+    </div>
+
+    <div class="archive-section">
+      <div class="archive-section-title">DMZ 지도 — ${totalCompleted}/${totalStories}건 복원</div>
+      <div class="dmz-map-wrap">
+        <div class="dmz-map-labels"><span>서해 임진강</span><span>동해 고성</span></div>
+        <div class="dmz-pixel-map">${buildDmzMapSvg()}</div>
+        <div class="dmz-map-legend">
+          ${CATEGORIES.map((cat, i) => `<span class="legend-item"><span class="legend-box" style="background:${CAT_COLORS[i]};border-color:${CAT_COLORS[i]}"></span>${cat.name}</span>`).join('')}
+        </div>
+        <div class="dmz-map-status">${statusText}</div>
+      </div>
+    </div>
+
+    <div class="archive-section">
+      <div class="archive-section-title">기록 선택 성향</div>
+      <div class="tendency-wrap">
+        <div class="tendency-row">
+          <span class="tendency-label">개인서사 (A)</span>
+          <div class="tendency-bar-bg"><div class="tendency-bar-fill" style="width:${(c.A/maxCount)*100}%"></div></div>
+          <span class="tendency-value">${c.A}</span>
+        </div>
+        <div class="tendency-row">
+          <span class="tendency-label">공식기록 (B)</span>
+          <div class="tendency-bar-bg"><div class="tendency-bar-fill" style="width:${(c.B/maxCount)*100}%"></div></div>
+          <span class="tendency-value">${c.B}</span>
+        </div>
+        <div class="tendency-row">
+          <span class="tendency-label">시각자료 (C)</span>
+          <div class="tendency-bar-bg"><div class="tendency-bar-fill" style="width:${(c.C/maxCount)*100}%"></div></div>
+          <span class="tendency-value">${c.C}</span>
+        </div>
+        <div class="tendency-row">
+          <span class="tendency-label">구술증언 (D)</span>
+          <div class="tendency-bar-bg"><div class="tendency-bar-fill" style="width:${(c.D/maxCount)*100}%"></div></div>
+          <span class="tendency-value">${c.D}</span>
+        </div>
+      </div>
+    </div>
+
+    ${archSection}
+  `;
+}
+
+// ===== STORY SELECT =====
+function selectCategory(catId) {
+  state.currentCategory = catId;
+  const cat = CATEGORIES.find(c => c.id === catId);
+  document.getElementById('story-screen-title').textContent = `${cat.icon} ${cat.name}`;
+  const stories = STORIES[catId] || [];
+  const list = document.getElementById('story-list');
+  if (stories.length === 0) {
+    list.innerHTML = '<p style="color:var(--accent);text-align:center;padding:2rem;">스토리 준비 중입니다.</p>';
+  } else {
+    list.innerHTML = stories.map((s, i) => {
+      const done = state.completedStories.includes(s.id);
+      return `<div class="story-card ${done ? 'completed' : ''}" onclick="${done ? '' : `startStory('${s.id}')`}">
+        <div class="story-num">${i+1}</div>
+        <h3>${s.title}</h3>
+        <div class="story-era">${s.era}</div>
+      </div>`;
+    }).join('');
+  }
+  showScreen('story-screen');
+}
+
+// ===== GAME =====
+function exitToStoryList() {
+  closeSource();
+  closeAnswerModal();
+  state.currentStory = null;
+  state.solvedBlanks = {};
+  state.viewedSources = [];
+  state.flashedSources = [];
+  state.selectedRecords = [];
+  selectCategory(state.currentCategory);
+}
+
+function startStory(storyId) {
+  const stories = STORIES[state.currentCategory] || [];
+  const story = stories.find(s => s.id === storyId);
+  if (!story) return;
+  state.currentStory = storyId;
+  state.solvedBlanks = {};
+  state.viewedSources = [];
+  state.flashedSources = [];
+  state.selectedRecords = [];
+  showScreen('game-screen');
+  renderExploration();
+}
+
+function getCurrentStory() {
+  const stories = STORIES[state.currentCategory] || [];
+  return stories.find(s => s.id === state.currentStory);
+}
+
+function getBlankKeysForSource(story, sourceId) {
+  // 해당 소스에 속한 빈칸 키 목록 반환 (A, A1, A2 등)
+  return Object.keys(story.blanks).filter(k => k.charAt(0) === sourceId);
+}
+
+function renderExploration() {
+  const story = getCurrentStory();
+  if (!story) return;
+  document.getElementById('game-location').textContent = `📍 ${story.location}`;
+  updateProgress();
+  const totalBlanks = Object.keys(story.blanks).length;
+  const solvedCount = Object.keys(state.solvedBlanks).length;
+  const content = document.getElementById('game-content');
+  content.innerHTML = `
+    <div class="phase-banner">
+      <div class="phase-era">${story.era}</div>
+      <h2>${story.title}</h2>
+      <div class="phase-desc">${story.sources.length}개의 자료를 탐색하고, 자료 간 교차 참조로 빈칸을 복원하세요.</div>
+      ${story.soundNote ? `<p class="sound-note">🔊 ${story.soundNote}</p>` : ''}
+    </div>
+    ${story.sources.map((src, i) => {
+      const blankKeys = getBlankKeysForSource(story, src.id);
+      const solvedKeys = blankKeys.filter(k => state.solvedBlanks[k]);
+      const allSolved = blankKeys.length > 0 && solvedKeys.length === blankKeys.length;
+      const locked = !isSourceUnlocked(story, src.id);
+      const justUnlocked = (state.justUnlockedSourceId === src.id);
+      const statusText = locked ? '잠김' : (justUnlocked ? '🔓 NEW' : (allSolved ? '복원 완료' : (blankKeys.length > 1 ? `빈칸 ${blankKeys.length}개` : (blankKeys.length === 1 ? '빈칸 1개' : '읽기'))));
+      const cardCls = `source-card ${src.styleClass}${locked ? ' locked' : ''}${justUnlocked ? ' just-unlocked' : ''}`;
+      return `<div class="${cardCls}" onclick="openSource('${src.id}')" style="animation-delay:${i*0.1}s">
+        <div class="card-header">
+          <span class="card-icon">${src.icon}</span>
+          <div><div class="card-title">${src.title}</div><div class="card-sub">${src.sub}</div></div>
+          <span class="card-status ${allSolved ? 'solved' : ''}">${statusText}</span>
+        </div>
+      </div>`;
+    }).join('')}
+    ${(() => { if (state.justUnlockedSourceId) setTimeout(() => { state.justUnlockedSourceId = null; }, 1700); return ''; })()}
+    ${solvedCount === totalBlanks ? `<button class="btn-confirm" onclick="goToArchive()">모든 빈칸 복원 완료 — 기록 선택으로 →</button>` : ''}
+  `;
+}
+
+function updateProgress() {
+  const story = getCurrentStory();
+  const total = story ? Object.keys(story.blanks).length : 4;
+  const solved = Object.keys(state.solvedBlanks).length;
+  document.getElementById('game-progress').textContent = `빈칸 복원 ${solved}/${total}`;
+}
+
+// ===== SOURCE DETAIL =====
+const SOURCE_ORDER = ['A', 'B', 'C', 'D'];
+
+function isSourceCompleted(story, sourceId) {
+  if (!story || !story.blanks) return false;
+  const blankIds = Object.keys(story.blanks).filter(bid => bid.charAt(0) === sourceId);
+  if (blankIds.length === 0) {
+    // 빈칸 없는 자료 — 한 번 열어보면 완료
+    return (state.viewedSources || []).includes(sourceId);
+  }
+  // 빈칸 있는 자료 — 다 풀어야 완료
+  return blankIds.every(bid => state.solvedBlanks[bid]);
+}
+
+function getStoryFirstSlot(storyId) {
+  return FIRST_SOURCE_LOOKUP[storyId] || 'A';
+}
+
+function getUnlockOrder(storyId) {
+  const first = getStoryFirstSlot(storyId);
+  const idx = SOURCE_ORDER.indexOf(first);
+  if (idx <= 0) return SOURCE_ORDER.slice();
+  return SOURCE_ORDER.slice(idx).concat(SOURCE_ORDER.slice(0, idx));
+}
+
+function isSourceUnlocked(story, sourceId) {
+  const order = getUnlockOrder(story.id);
+  if (sourceId === order[0]) return true;
+  const idx = order.indexOf(sourceId);
+  if (idx <= 0) return true;
+  const prevSourceId = order[idx - 1];
+  return isSourceCompleted(story, prevSourceId);
+}
+
+let currentDetailSourceId = null;
+
+function openSource(sourceId) {
+  const story = getCurrentStory();
+  if (!isSourceUnlocked(story, sourceId)) return;
+  currentDetailSourceId = sourceId;
+  const src = story.sources.find(s => s.id === sourceId);
+  const detail = document.getElementById('source-detail');
+  const inner = document.getElementById('detail-inner');
+  var rendered;
+  try {
+    rendered = renderSource(src, state.solvedBlanks, story.blanks);
+  } catch(e) {
+    rendered = '<pre style="color:red;">ERROR: ' + e.message + '\n' + e.stack + '</pre>';
+  }
+  detail.classList.add('active');
+  inner.innerHTML = '<div class="detail-close"><button onclick="closeSource()">닫기 ✕</button></div>' +
+    rendered;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSource() {
+  const closingSourceId = currentDetailSourceId;
+  if (closingSourceId) {
+    state.viewedSources = state.viewedSources || [];
+    if (!state.viewedSources.includes(closingSourceId)) {
+      state.viewedSources.push(closingSourceId);
+    }
+    // 다음 자료가 unlock 상태이고 아직 깜빡 보여준 적 없으면 깜빡 (pickone: 사이클)
+    const story = getCurrentStory();
+    const order = story ? getUnlockOrder(story.id) : SOURCE_ORDER;
+    const idx = order.indexOf(closingSourceId);
+    const nextSourceId = order[idx + 1];
+    if (nextSourceId) {
+      state.flashedSources = state.flashedSources || [];
+      if (story && isSourceUnlocked(story, nextSourceId) && !state.flashedSources.includes(nextSourceId)) {
+        state.justUnlockedSourceId = nextSourceId;
+        state.flashedSources.push(nextSourceId);
+      }
+    }
+  }
+  currentDetailSourceId = null;
+  document.getElementById('source-detail').classList.remove('active');
+  document.body.style.overflow = '';
+  renderExploration();
+}
+
+// ===== ANSWER MODAL =====
+let currentBlankId = null;
+
+function openAnswerModal(blankId) {
+  currentBlankId = blankId;
+  const story = getCurrentStory();
+  const blank = story.blanks[blankId];
+  document.getElementById('modal-label').textContent = `빈칸 [${blankId}]`;
+
+  // 정답 자료 라벨 (CSV in_source 매핑)
+  const inSourceId = BLANK_SOURCE_LOOKUP[story.id + '_' + blankId];
+  const sourceHintEl = document.getElementById('modal-source-hint');
+  const sourceLabelEl = document.getElementById('modal-source-label');
+  if (inSourceId && sourceHintEl && sourceLabelEl) {
+    const src = story.sources.find(s => s.id === inSourceId);
+    if (src) {
+      sourceLabelEl.textContent = src.docTitle
+        ? `자료 ${inSourceId}: ${src.title} [${src.docTitle}]`
+        : `자료 ${inSourceId}: ${src.title}`;
+      sourceHintEl.style.display = 'block';
+    } else {
+      sourceHintEl.style.display = 'none';
+    }
+  } else if (sourceHintEl) {
+    sourceHintEl.style.display = 'none';
+  }
+
+  document.getElementById('modal-hint').textContent = blank.hint;
+  document.getElementById('modal-input').value = '';
+  document.getElementById('modal-backdrop').classList.add('active');
+  document.getElementById('answer-modal').classList.add('active');
+  setTimeout(() => document.getElementById('modal-input').focus(), 100);
+}
+
+function closeAnswerModal() {
+  document.getElementById('modal-backdrop').classList.remove('active');
+  document.getElementById('answer-modal').classList.remove('active');
+  currentBlankId = null;
+}
+
+document.getElementById('modal-input').addEventListener('keydown', e => { if (e.key === 'Enter') submitAnswer(); });
+
+function normalizeAnswer(str) { return (str || '').trim().replace(/\s+/g, '').replace(/[()（）]/g, '').toLowerCase(); }
+
+function submitAnswer() {
+  if (!currentBlankId) return;
+  const story = getCurrentStory();
+  const blank = story.blanks[currentBlankId];
+  const input = document.getElementById('modal-input').value.trim();
+  if (!input) return;
+  const norm = normalizeAnswer(input);
+  const correct = norm === normalizeAnswer(blank.answer) || (blank.altAnswers && blank.altAnswers.some(alt => norm === normalizeAnswer(alt)));
+  if (correct) {
+    const solvedId = currentBlankId;
+    const sourceId = solvedId.charAt(0); // A1→A, C2→C
+    state.solvedBlanks[solvedId] = blank.answer;
+    window.__lastSolvedBlankId = solvedId;
+    closeAnswerModal();
+    showAnswerCelebration(blank.answer);
+    setTimeout(() => {
+      openSource(sourceId);
+      setTimeout(() => { window.__lastSolvedBlankId = null; }, 1600);
+    }, 1300);
+  } else {
+    showToast('incorrect', '다시 확인해보세요', '다른 자료를 교차 참조하여 정답을 찾아보세요.');
+  }
+}
+
+function showAnswerCelebration(text) {
+  const el = document.getElementById('answer-celebration');
+  if (!el) return;
+  el.innerHTML = '<span class="ac-label">✅ 정답</span>' + text;
+  el.classList.remove('show');
+  void el.offsetWidth; // reflow → 애니메이션 재시작
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 1500);
+}
+
+function showToast(type, title, text) {
+  const existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<div class="toast-icon">${type === 'correct' ? '✓' : '✗'}</div><div class="toast-text"><strong>${title}</strong><br>${text}</div>`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 2000);
+}
+
+// ===== ARCHIVE SELECTION =====
+function goToArchive() {
+  closeSource();
+  const story = getCurrentStory();
+  state.selectedRecords = [];
+  const content = document.getElementById('game-content');
+  content.innerHTML = `
+    <div class="archive-prompt">
+      <h3>당신은 아키비스트입니다.</h3>
+      <p>이 기록에 대해 후대에 남길 자료 <strong>2개</strong>를 선택하십시오.</p>
+    </div>
+    ${story.choices.map((c, i) => `
+      <div class="archive-option" id="arch-opt-${i}" onclick="toggleArchive(${i})">
+        <span class="opt-icon">${c.icon}</span>
+        <div><div class="opt-title">${c.title}</div><div class="opt-meaning">${c.meaning}</div></div>
+      </div>
+    `).join('')}
+    <button class="btn-confirm" id="btn-confirm-archive" disabled onclick="confirmArchive()">기록 선택 완료 (0/2)</button>
+  `;
+  document.getElementById('game-progress').textContent = '기록 선택';
+}
+
+function toggleArchive(idx) {
+  const el = document.getElementById(`arch-opt-${idx}`);
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+    state.selectedRecords = state.selectedRecords.filter(i => i !== idx);
+  } else {
+    if (state.selectedRecords.length >= 2) return;
+    el.classList.add('selected');
+    state.selectedRecords.push(idx);
+  }
+  const btn = document.getElementById('btn-confirm-archive');
+  btn.textContent = `기록 선택 완료 (${state.selectedRecords.length}/2)`;
+  btn.disabled = state.selectedRecords.length !== 2;
+}
+
+function confirmArchive() {
+  if (state.selectedRecords.length !== 2) return;
+  const story = getCurrentStory();
+
+  // 아키비스트 카운트 누적
+  state.selectedRecords.forEach(idx => {
+    const choiceId = story.choices[idx].id;
+    state.archivistCounts[choiceId]++;
+  });
+
+  state.completedStories.push(state.currentStory);
+
+  // 저장
+  try {
+    localStorage.setItem(LS_STATE_KEY, JSON.stringify({
+      archivistCounts: state.archivistCounts,
+      completedStories: state.completedStories,
+      playerName: state.playerName
+    }));
+  } catch(e) {}
+
+  showCompletion();
+}
+
+// ===== COMPLETION SCREEN =====
+function showCompletion() {
+  const story = getCurrentStory();
+  const selected = state.selectedRecords.map(i => story.choices[i].title).join(', ');
+  const c = state.archivistCounts;
+  const totalStories = Object.values(STORIES).reduce((sum, arr) => sum + arr.length, 0);
+  const allDone = state.completedStories.length >= totalStories && totalStories > 0;
+
+  showScreen('completion-screen');
+  document.getElementById('completion-box').innerHTML = `
+    <h2>기록이 완료되었습니다</h2>
+    <div class="comp-records">
+      <strong>${state.playerName}</strong> 아키비스트가 선택한 기록:<br>
+      <em>${selected}</em>
+    </div>
+    <div class="comp-counts">
+      누적 기록 선택 현황
+      <div class="count-bar">
+        <span>A: ${c.A}</span> <span>B: ${c.B}</span> <span>C: ${c.C}</span> <span>D: ${c.D}</span>
+      </div>
+    </div>
+    <div class="comp-progress">완료된 기록: ${state.completedStories.length}/${totalStories}</div>
+    ${allDone
+      ? `<button class="btn-primary" onclick="showResult()">아키비스트 유형 확인 →</button>`
+      : `<button class="btn-primary" onclick="showScreen('category-screen'); renderCategories();">다른 기록 탐색하기</button>`
+    }
+  `;
+}
+
+// ===== RESULT SCREEN =====
+function showResult() {
+  const c = state.archivistCounts;
+  const sorted = Object.entries(c).sort((a, b) => b[1] - a[1]);
+
+  let typeKey;
+  if (sorted[0][1] === sorted[3][1]) {
+    typeKey = 'BALANCED';
+  } else if (sorted[0][1] === sorted[1][1] && sorted[1][1] === sorted[2][1]) {
+    // 3개 이상 동점 — 마지막 스토리 선택 우선 (간단히 상위 2개 사용)
+    typeKey = [sorted[0][0], sorted[1][0]].sort().join('');
+  } else {
+    typeKey = [sorted[0][0], sorted[1][0]].sort().join('');
+  }
+
+  const type = ARCHIVIST_TYPES[typeKey] || ARCHIVIST_TYPES['BALANCED'];
+
+  showScreen('result-screen');
+  document.getElementById('result-box').innerHTML = `
+    <h2>당신의 아키비스트 유형</h2>
+    <div class="result-type-name">${type.name}</div>
+    <div class="result-type-desc">${type.desc}</div>
+    <div class="result-stat"><span class="stat-label">개인 서사 (A)</span><span class="stat-value">${c.A}회</span></div>
+    <div class="result-stat"><span class="stat-label">공식 기록 (B)</span><span class="stat-value">${c.B}회</span></div>
+    <div class="result-stat"><span class="stat-label">시각 자료 (C)</span><span class="stat-value">${c.C}회</span></div>
+    <div class="result-stat"><span class="stat-label">구술 증언 (D)</span><span class="stat-value">${c.D}회</span></div>
+    <button class="btn-primary" style="margin-top:2rem;" onclick="resetGame()">처음부터 다시하기</button>
+  `;
+}
+
+function resetGame() {
+  state.archivistCounts = { A:0, B:0, C:0, D:0 };
+  state.completedStories = [];
+  state.playerName = null;
+  localStorage.removeItem(LS_STATE_KEY);
+  localStorage.removeItem(LS_TUTORIAL_KEY);
+  showScreen('login-screen');
+}
+
+// ===== DEBUG PANEL — SPEC §디버그 패널 (5/15 세션354) =====
+
+(function() {
+  const params = new URLSearchParams(location.search);
+  if (params.get('reset') === '1') {
+    Object.keys(localStorage).filter(k => k.startsWith('dmz_v5_')).forEach(k => localStorage.removeItem(k));
+    location.replace(location.pathname);
+  }
+})();
+
+let _dbgOn = false;
+function toggleDebug() {
+  _dbgOn = !_dbgOn;
+  document.getElementById('debug-panel').classList.toggle('active', _dbgOn);
+  if (_dbgOn) renderDebug();
+}
+function renderDebug() {
+  const totalStories = Object.values(STORIES).reduce((s, arr) => s + arr.length, 0);
+  const screen = document.querySelector('.screen.active')?.id || '—';
+  const c = state.archivistCounts;
+  let h = '';
+  h += '<div class="debug-section"><div class="debug-label">상태</div>';
+  h += `<div class="debug-state">완료: ${state.completedStories.length}/${totalStories}</div>`;
+  h += `<div class="debug-state">아키비스트: A${c.A} B${c.B} C${c.C} D${c.D}</div>`;
+  h += `<div class="debug-state">화면: ${screen}</div>`;
+  h += `<div class="debug-state">모드: pickone</div>`;
+  if (state.currentStory) {
+    h += `<div class="debug-state">첫 자료: ${getStoryFirstSlot(state.currentStory)}</div>`;
+  }
+  h += `<div class="debug-state">현 스토리: ${state.currentStory || '—'}</div>`;
+  h += '</div>';
+
+  h += '<div class="debug-section"><div class="debug-label">초기화</div>';
+  h += '<div class="debug-buttons">';
+  h += '<button class="debug-btn danger" onclick="debugReset()">🧹 상태 초기화 + 리로드</button>';
+  h += '</div></div>';
+
+  h += '<div class="debug-section"><div class="debug-label">자동 풀이</div>';
+  h += '<div class="debug-buttons">';
+  h += '<button class="debug-btn" onclick="debugSolveCurrentStory()">⚡ 현 스토리 풀이</button>';
+  h += '<button class="debug-btn" onclick="debugCompleteCurrentCategory()">🎯 카테고리 완료</button>';
+  h += '<button class="debug-btn" onclick="debugCompleteAll()">🏁 전체 완료</button>';
+  h += '</div></div>';
+
+  document.getElementById('debug-panel').innerHTML = h;
+}
+function debugReset() {
+  if (!confirm('localStorage dmz_v5_* 전부 삭제하고 리로드합니다.')) return;
+  Object.keys(localStorage).filter(k => k.startsWith('dmz_v5_')).forEach(k => localStorage.removeItem(k));
+  location.reload();
+}
+function debugSolveCurrentStory() {
+  const sid = state.currentStory;
+  if (!sid) { alert('현 스토리 없음. 스토리 진입 후 다시.'); return; }
+  const st = getCurrentStory();
+  if (!st) return;
+  state.solvedBlanks = state.solvedBlanks || {};
+  Object.entries(st.blanks).forEach(([k, b]) => {
+    state.solvedBlanks[k] = b.answer;
+  });
+  renderExploration();
+  renderDebug();
+}
+function debugCompleteCurrentCategory() {
+  const catId = state.currentCategory;
+  if (!catId) { alert('현 카테고리 없음'); return; }
+  (STORIES[catId] || []).forEach(s => {
+    if (!state.completedStories.includes(s.id)) state.completedStories.push(s.id);
+  });
+  debugSaveState();
+  renderDebug();
+  alert(`${catId} 전체 완료 처리됨`);
+}
+function debugCompleteAll() {
+  if (!confirm('24 스토리 전부 완료 처리합니다.')) return;
+  Object.values(STORIES).forEach(arr => arr.forEach(s => {
+    if (!state.completedStories.includes(s.id)) state.completedStories.push(s.id);
+  }));
+  state.archivistCounts = { A:6, B:6, C:6, D:6 };
+  debugSaveState();
+  renderDebug();
+  alert('24 스토리 완료 + 아키비스트 분산 적용');
+}
+function debugSaveState() {
+  localStorage.setItem(LS_STATE_KEY, JSON.stringify({
+    playerName: state.playerName,
+    archivistCounts: state.archivistCounts,
+    completedStories: state.completedStories,
+  }));
+}
+</script>
+<button class="debug-toggle" onclick="toggleDebug()">디버그</button>
+<div class="debug-panel" id="debug-panel"></div>
+</body>
+</html>
