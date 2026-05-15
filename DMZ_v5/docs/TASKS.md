@@ -178,6 +178,24 @@ GitHub Pages 자동 배포 — `https://mice3nyc.github.io/ari_gitrepo_1/DMZ_v5/
 - [ ] 4.3.2 vscode/obsidian 셋업 안내
 - [ ] 4.3.3 검수 round-trip — md 수정 → 빌드 → 시각 확인
 
+### Phase 6 — 비주얼 디자인 v1 (5/15 도입)
+
+> 통일부 디자이너 샘플 9장 + 자료 타입 아이콘 4종 + SD 카드 타이틀 + Paperlogy 폰트.
+> SPEC: [[SPEC-ui-design]]. 파일럿 = pickone. 피터공 OK 후 mobile/offline/sequential propagate.
+
+- [x] 6.1 자산 통합 — `assets/{icons,fonts,images}/` 신설. 아이콘 9개 + SD카드 + Paperlogy 3 weight
+- [x] 6.2 SPEC §UI-design 신설 — 컬러 토큰 6 카테고리 + 폰트 시스템 + 자료 type↔icon 매핑 + 화면별 컴포넌트
+- [x] 6.3 pickone 파일럿 — 로그인(SD카드)·튜토리얼(핑크/cyan)·카테고리(폴더격자)·스토리(폴더격자)·자료 리스트(핑크 카드+이미지 아이콘)·자료 본문 모달(핑크 헤더)·빈칸(cyan)
+- [x] 6.4 게임 코드 검증 OFF (5/15 임시) — `code !== '1233'` 제거. 아무거나 입력 통과
+- [x] 6.5 빌드 + JS syntax OK (282,075 bytes) + 브라우저 플테 합격
+- [ ] 6.6 mobile / offline / sequential propagate — pickone OK 확정 후
+- [ ] 6.7 잔여 화면 다듬기 — completion / result / archive / 자료 paper 스타일(letter·diary·newspaper 등 B&W → 새 톤)
+- [ ] 6.8 카카오 자료 본문 새 디자인 — 분홍/회색 말풍선 + 캐릭터 아바타
+- [ ] 6.9 카테고리 6 vs 5 — 디자이너 갱신 또는 cat05 복원
+- [ ] 6.10 타이머 기능 활성 — 현재 placeholder만(30:00 고정 표시)
+- [ ] 6.11 자료 타입별 폰트 변주 — letter 손글씨·poster 임팩트 등 도입
+- [ ] 6.12 Kr/En 토글 동작
+
 ### Phase 3 — 검수·베타 (5/26 전)
 
 - [ ] **Phase 3.1** — cat01~06 36 스토리(+α) 전체 완주 테스트

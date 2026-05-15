@@ -62,6 +62,10 @@ PYEOF
 rm -rf pickone/photos
 cp -R shared/photos pickone/photos
 
+# assets 동기화 (icons, fonts, images)
+rm -rf pickone/assets
+cp -R assets pickone/assets
+
 # JS syntax 검증
 node -e "new Function(require('fs').readFileSync('pickone/index.html','utf8').match(/<script>([\s\S]*?)<\/script>/)[1])" \
   && echo "JS syntax OK" \

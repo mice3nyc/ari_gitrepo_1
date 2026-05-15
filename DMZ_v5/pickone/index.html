@@ -5,25 +5,62 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>DMZ Archive</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=Galmuri11:wght@400;700&display=swap');
+/* DMZ v5 비주얼 디자인 v1 — SPEC-ui-design.md (5/15) */
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('assets/fonts/Paperlogy-4Regular.ttf') format('truetype');
+  font-weight: 400; font-display: swap;
+}
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('assets/fonts/Paperlogy-7Bold.ttf') format('truetype');
+  font-weight: 700; font-display: swap;
+}
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('assets/fonts/Paperlogy-9Black.ttf') format('truetype');
+  font-weight: 900; font-display: swap;
+}
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --bg: #fff;
-  --fg: #000;
-  --gray: #888;
-  --light-gray: #ccc;
-  --border: #000;
-  --green: #000;
-  --red: #000;
+  /* 메인 컬러 */
+  --c-pink-primary: #FF1493;
+  --c-pink-soft: #FFB6D9;
+  --c-pink-pale: #FFE4F0;
+  --c-cyan: #3FE0DC;
+  --c-cyan-soft: #B8F0EE;
+  --c-navy: #1a2b4a;
+  --c-gray-locked: #B8B8B8;
+  --c-gray-card: #E8E8E8;
+  --c-gray-text: #6E6E6E;
+  --c-white: #FFFFFF;
+  --c-bg: #F0F0F0;
+
+  /* 카테고리 컬러 (디자인 225.png) */
+  --cat-01: #FF6FB8;
+  --cat-02: #C8E532;
+  --cat-03: #A8D5F0;
+  --cat-04: #FFA84D;
+  --cat-05: #C49EE8;
+  --cat-06: #FFD84D;
+
+  /* 레거시 토큰 (기존 코드 호환) */
+  --bg: var(--c-white);
+  --fg: var(--c-navy);
+  --gray: var(--c-gray-text);
+  --light-gray: var(--c-gray-card);
+  --border: var(--c-navy);
+  --green: #27ae60;
+  --red: var(--c-pink-primary);
 }
 
 body {
-  font-family: 'Galmuri11', 'DotGothic16', monospace;
-  background: var(--bg); color: var(--fg);
+  font-family: 'Paperlogy', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+  background: var(--c-bg); color: var(--c-navy);
   min-height: 100vh; overflow-x: hidden;
-  image-rendering: pixelated;
+  font-weight: 400;
 }
 
 .screen { display: none; min-height: 100vh; }
@@ -31,127 +68,345 @@ body {
 .screen-bg { display: none; }
 .screen > *:not(.screen-bg) { position: relative; z-index: 1; }
 
-/* ===== LOGIN ===== */
-#login-screen { align-items: center; justify-content: center; background: var(--bg); }
-.login-container { text-align: center; padding: 2rem; max-width: 400px; width: 90%; }
-.game-title {
-  font-family: 'Galmuri11', monospace; font-size: 2rem; font-weight: 700;
-  color: var(--fg); letter-spacing: 0.15em; margin-bottom: 0.5rem;
-  border-bottom: 3px solid var(--fg); padding-bottom: 0.5rem; display: inline-block;
+/* ===== LOGIN — SD 카드 타이틀 (디자인 224.png) ===== */
+#login-screen { align-items: center; justify-content: center; background: var(--c-bg); padding: 1.5rem; }
+.login-container { text-align: center; max-width: 360px; width: 100%; }
+.sd-card-image {
+  width: 100%; max-width: 320px; height: auto; margin: 0 auto 1.5rem;
+  display: block; cursor: pointer; transition: transform 0.15s;
 }
-.game-title::after { display: none; }
-.game-subtitle { font-size: 0.75rem; color: var(--gray); margin-bottom: 2rem; margin-top: 0.5rem; }
-.login-field { margin-bottom: 1rem; }
-.login-field label { display: block; color: var(--fg); font-size: 0.7rem; margin-bottom: 0.3rem; text-align: left; }
-.login-field input {
-  width: 100%; padding: 0.6rem 0.8rem; background: var(--bg);
-  border: 2px solid var(--fg); color: var(--fg); font-family: inherit; font-size: 0.9rem; outline: none;
+.sd-card-image:hover { transform: scale(1.02); }
+.sd-card-image:active { transform: scale(0.98); }
+.game-title { display: none; }
+.game-subtitle { display: none; }
+.lang-toggle {
+  display: inline-flex; gap: 0.3rem; align-items: center;
+  font-size: 0.85rem; font-weight: 700; margin: 1rem 0;
 }
-.login-field input:focus { box-shadow: 4px 4px 0 var(--fg); }
-.login-error { color: var(--fg); font-size: 0.75rem; height: 1.2rem; margin-bottom: 0.3rem; font-weight: 700; }
-.btn-primary {
-  padding: 0.6rem 2rem; background: var(--fg); color: var(--bg);
-  border: 2px solid var(--fg); font-family: inherit; font-size: 0.85rem;
-  cursor: pointer; transition: all 0.1s;
+.lang-toggle .lang-active {
+  background: var(--c-pink-primary); color: var(--c-white);
+  border-radius: 999px; padding: 0.2rem 0.7rem;
 }
-.btn-primary:hover { box-shadow: 4px 4px 0 var(--gray); }
-.btn-primary:active { box-shadow: none; transform: translate(2px, 2px); }
-.login-hint { font-size: 0.65rem; color: var(--gray); margin-top: 1rem; }
+.lang-toggle .lang-inactive { color: var(--c-gray-text); padding: 0.2rem 0.4rem; }
+.lang-toggle .lang-sep { color: var(--c-navy); }
 
-/* ===== CATEGORY SELECT ===== */
-#category-screen { align-items: center; padding: 2rem 1rem; background: var(--bg); }
-.screen-header { text-align: center; margin-bottom: 1.5rem; color: var(--fg); }
-.screen-header h2 { font-size: 1rem; font-weight: 700; }
-.screen-header .player-name { color: var(--gray); font-size: 0.8rem; margin-top: 0.3rem; }
-.category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; width: 100%; max-width: 500px; }
-.cat-card {
-  background: var(--bg); border: 2px solid var(--fg);
-  padding: 1rem; cursor: pointer; text-align: center; transition: all 0.1s;
+.login-fields-wrap {
+  background: var(--c-white); border-radius: 16px;
+  padding: 1.5rem 1.2rem; margin-top: 0.5rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
 }
-.cat-card:hover { box-shadow: 4px 4px 0 var(--fg); }
-.cat-card:active { box-shadow: none; transform: translate(2px, 2px); }
-.cat-card .cat-icon { font-size: 1.5rem; margin-bottom: 0.3rem; }
-.cat-card h3 { color: var(--fg); font-size: 0.8rem; margin-bottom: 0.2rem; }
-.cat-card .cat-progress { color: var(--gray); font-size: 0.7rem; }
-.cat-card.completed { background: var(--fg); color: var(--bg); }
-.cat-card.completed h3 { color: var(--bg); }
-.cat-card.completed .cat-progress { color: var(--light-gray); }
+.login-field { margin-bottom: 0.8rem; text-align: left; }
+.login-field label {
+  display: block; color: var(--c-navy); font-size: 0.75rem;
+  font-weight: 700; margin-bottom: 0.3rem;
+}
+.login-field input {
+  width: 100%; padding: 0.7rem 0.9rem; background: var(--c-bg);
+  border: 2px solid transparent; border-radius: 10px;
+  color: var(--c-navy); font-family: inherit; font-size: 0.9rem; outline: none;
+  transition: border-color 0.15s;
+}
+.login-field input:focus { border-color: var(--c-pink-primary); }
+.login-error { color: var(--c-pink-primary); font-size: 0.75rem; height: 1.2rem; margin-bottom: 0.3rem; font-weight: 700; }
+.btn-primary {
+  padding: 0.75rem 2rem; background: var(--c-pink-primary); color: var(--c-white);
+  border: none; border-radius: 999px;
+  font-family: inherit; font-size: 0.9rem; font-weight: 700;
+  cursor: pointer; transition: all 0.15s;
+  box-shadow: 0 4px 12px rgba(255,20,147,0.25);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(255,20,147,0.35); }
+.btn-primary:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(255,20,147,0.2); }
+.login-hint { font-size: 0.7rem; color: var(--c-gray-text); margin-top: 1rem; }
+
+/* ===== APP HEADER (공통, 225·226·219.png) ===== */
+.app-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.7rem 1rem; background: var(--c-bg);
+  width: 100%; max-width: 500px;
+  position: sticky; top: 0; z-index: 90;
+}
+.app-header .timer-placeholder {
+  background: var(--c-pink-soft); color: var(--c-navy);
+  font-weight: 700; font-size: 0.85rem;
+  padding: 0.3rem 0.9rem; border-radius: 999px;
+  letter-spacing: 0.05em;
+}
+.app-header .app-logo {
+  font-family: 'Paperlogy', sans-serif; font-weight: 900;
+  font-size: 1.1rem; letter-spacing: -0.02em;
+}
+.app-header .app-logo .logo-dmz { color: var(--c-navy); }
+.app-header .app-logo .logo-archive { color: var(--c-pink-primary); }
+.app-header .app-profile {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--c-navy); color: var(--c-white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 700; cursor: pointer;
+}
+
+/* ===== CATEGORY SELECT (디자인 225.png 폴더 격자) ===== */
+#category-screen { align-items: center; padding: 0; background: var(--c-bg); }
+.cat-page {
+  width: 100%; max-width: 500px; padding: 0 1rem 2rem;
+}
+.cat-page-title {
+  font-size: 1.6rem; font-weight: 900; color: var(--c-navy);
+  margin: 0.4rem 0 0.2rem;
+}
+.cat-page-sub {
+  font-size: 0.8rem; color: var(--c-gray-text); margin-bottom: 1.2rem;
+}
+.screen-header { text-align: left; margin-bottom: 1.2rem; color: var(--c-navy); padding: 0 0.2rem; }
+.screen-header h2 { font-size: 1.3rem; font-weight: 900; }
+.screen-header .player-name { color: var(--c-gray-text); font-size: 0.8rem; margin-top: 0.3rem; }
+
+.category-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%; }
+.cat-card {
+  background: transparent; border: none;
+  padding: 0; cursor: pointer; text-align: center;
+  transition: transform 0.15s;
+}
+.cat-card:hover { transform: translateY(-2px); }
+.cat-card:active { transform: translateY(0); }
+
+.cat-card .folder-shape {
+  position: relative; width: 100%; aspect-ratio: 1.15 / 1;
+  background: var(--cat-color, var(--c-pink-soft));
+  border-radius: 12px 12px 14px 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.cat-card .folder-shape::before {
+  content: ''; position: absolute; top: -6px; left: 0; width: 45%; height: 14px;
+  background: var(--cat-color, var(--c-pink-soft));
+  border-radius: 12px 12px 0 0;
+}
+.cat-card .folder-shape::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+  background: rgba(255,255,255,0.45); border-radius: 12px 12px 0 0;
+}
+
+.cat-card .cat-label-row {
+  display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+  margin-top: 0.6rem;
+}
+.cat-card h3 {
+  color: var(--c-navy); font-size: 0.95rem; font-weight: 700;
+  margin: 0;
+}
+.cat-card .cat-count {
+  background: var(--c-white); color: var(--c-gray-text);
+  border-radius: 999px; padding: 0.05rem 0.55rem;
+  font-size: 0.75rem; font-weight: 700;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.cat-card.completed .folder-shape { opacity: 0.55; }
+.cat-card.completed h3::after { content: ' ✓'; color: var(--green); }
+
+/* 카테고리 컬러 매핑 (data-cat 속성으로 적용) */
+.cat-card[data-cat="01"] .folder-shape { background: var(--cat-01); }
+.cat-card[data-cat="02"] .folder-shape { background: var(--cat-02); }
+.cat-card[data-cat="03"] .folder-shape { background: var(--cat-03); }
+.cat-card[data-cat="04"] .folder-shape { background: var(--cat-04); }
+.cat-card[data-cat="05"] .folder-shape { background: var(--cat-05); }
+.cat-card[data-cat="06"] .folder-shape { background: var(--cat-06); }
+.cat-card[data-cat="01"] .folder-shape::before { background: var(--cat-01); }
+.cat-card[data-cat="02"] .folder-shape::before { background: var(--cat-02); }
+.cat-card[data-cat="03"] .folder-shape::before { background: var(--cat-03); }
+.cat-card[data-cat="04"] .folder-shape::before { background: var(--cat-04); }
+.cat-card[data-cat="05"] .folder-shape::before { background: var(--cat-05); }
+.cat-card[data-cat="06"] .folder-shape::before { background: var(--cat-06); }
+
 .cumulative-bar {
   width: 100%; max-width: 500px; margin-top: 1.5rem; padding: 0.8rem;
-  border: 2px solid var(--fg); font-size: 0.7rem; text-align: center;
+  background: var(--c-white); border-radius: 12px;
+  font-size: 0.75rem; text-align: center; color: var(--c-gray-text);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 .cumulative-bar .counts { display: flex; justify-content: space-around; margin-top: 0.4rem; }
-.cumulative-bar .counts span { font-weight: 700; }
+.cumulative-bar .counts span { font-weight: 700; color: var(--c-navy); }
 
-/* ===== STORY SELECT ===== */
-#story-screen { align-items: center; padding: 2rem 1rem; background: var(--bg); }
-.story-list { width: 100%; max-width: 500px; display: flex; flex-direction: column; gap: 0.5rem; }
+/* ===== STORY SELECT (카테고리 안 스토리 격자, 디자인 226.png) ===== */
+#story-screen { align-items: center; padding: 0; background: var(--c-bg); }
+.story-page { width: 100%; max-width: 500px; padding: 0 1rem 2rem; }
+
+.story-cat-banner {
+  background: var(--cat-color, var(--c-pink-primary));
+  color: var(--c-white); font-weight: 900; font-size: 1.3rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 14px 14px 0 0;
+  display: inline-block;
+  margin-bottom: 0;
+}
+.story-page-body {
+  background: var(--c-white); border-radius: 0 14px 14px 14px;
+  padding: 1rem; padding-top: 1.2rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+.story-page-sub { font-size: 0.75rem; color: var(--c-gray-text); margin-bottom: 1rem; }
+
+.story-list {
+  width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+}
 .story-card {
-  background: var(--bg); border: 2px solid var(--fg);
-  padding: 0.8rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.8rem; transition: all 0.1s;
+  background: transparent; border: none;
+  padding: 0; cursor: pointer; text-align: center;
+  transition: transform 0.15s; display: block;
 }
-.story-card:hover { box-shadow: 4px 4px 0 var(--fg); }
-.story-card .story-num { color: var(--gray); font-size: 0.7rem; min-width: 2rem; }
-.story-card h3 { color: var(--fg); font-size: 0.85rem; flex: 1; }
-.story-card .story-era { color: var(--gray); font-size: 0.7rem; }
-.story-card.completed { background: var(--fg); color: var(--bg); }
-.story-card.completed h3 { color: var(--bg); }
-.story-card.completed h3::after { content: ' ✓'; }
-.story-card.completed .story-num, .story-card.completed .story-era { color: var(--light-gray); }
-.btn-back {
-  background: var(--bg); border: 2px solid var(--fg); color: var(--fg);
-  padding: 0.4rem 1rem; font-family: inherit; font-size: 0.75rem;
-  cursor: pointer; margin-bottom: 1rem; align-self: flex-start;
-}
-.btn-back:hover { background: var(--fg); color: var(--bg); }
+.story-card:hover { transform: translateY(-2px); }
 
-/* ===== GAME SCREEN ===== */
-#game-screen { min-height: 100vh; background: var(--bg); }
+.story-card .story-folder {
+  position: relative; width: 100%; aspect-ratio: 1.15 / 1;
+  background: var(--cat-color, var(--c-pink-soft));
+  border-radius: 12px 12px 14px 14px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+.story-card .story-folder::before {
+  content: ''; position: absolute; top: -6px; left: 0; width: 45%; height: 14px;
+  background: var(--cat-color, var(--c-pink-soft));
+  border-radius: 12px 12px 0 0;
+}
+.story-card .story-folder::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+  background: rgba(255,255,255,0.45); border-radius: 12px 12px 0 0;
+}
+.story-card .story-num {
+  display: none;
+}
+.story-card h3 {
+  color: var(--c-navy); font-size: 0.85rem; font-weight: 700;
+  margin: 0.5rem 0 0; line-height: 1.3;
+}
+.story-card .story-era {
+  color: var(--c-gray-text); font-size: 0.7rem; margin-top: 0.2rem;
+}
+.story-card.completed .story-folder { opacity: 0.55; }
+.story-card.completed h3::after { content: ' ✓'; color: var(--green); }
+
+.btn-back {
+  background: transparent; border: none; color: var(--c-navy);
+  padding: 0.4rem 0; font-family: inherit; font-size: 0.85rem; font-weight: 700;
+  cursor: pointer; margin-bottom: 0.8rem; align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 0.3rem;
+}
+.btn-back:hover { color: var(--c-pink-primary); }
+
+/* ===== GAME SCREEN (스토리 안 자료 리스트, 디자인 219·240.png) ===== */
+#game-screen { min-height: 100vh; background: var(--c-bg); }
 .game-header {
-  background: var(--fg); color: var(--bg);
-  padding: 0.6rem 1rem; display: flex; align-items: center; gap: 0.6rem;
+  background: var(--c-bg); color: var(--c-navy);
+  padding: 0.7rem 1rem; display: flex; align-items: center; gap: 0.6rem;
   position: sticky; top: 0; z-index: 100;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 .game-header .btn-header-back {
-  background: none; border: 1px solid var(--bg); color: var(--bg);
-  padding: 0.2rem 0.5rem; font-family: inherit; font-size: 0.7rem;
+  background: transparent; border: none; color: var(--c-navy);
+  padding: 0.2rem 0.5rem; font-family: inherit; font-size: 1.1rem; font-weight: 700;
   cursor: pointer; flex-shrink: 0;
 }
-.game-header .btn-header-back:hover { background: var(--bg); color: var(--fg); }
-.game-header .location { color: var(--bg); font-size: 0.7rem; flex: 1; }
-.game-header .progress { color: var(--bg); font-size: 0.75rem; flex-shrink: 0; }
-.game-content { flex: 1; padding: 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
-.phase-banner { text-align: center; padding: 1rem; border: 2px solid var(--fg); margin-bottom: 0.5rem; }
-.phase-banner .phase-era { font-size: 0.7rem; color: var(--gray); }
-.phase-banner h2 { font-size: 1.1rem; font-weight: 700; margin-top: 0.2rem; }
-.phase-banner .phase-desc { font-size: 0.7rem; color: var(--gray); margin-top: 0.4rem; line-height: 1.5; }
+.game-header .btn-header-back:hover { color: var(--c-pink-primary); }
+.game-header .location { color: var(--c-navy); font-size: 0.85rem; font-weight: 700; flex: 1; }
+.game-header .progress { color: var(--c-gray-text); font-size: 0.75rem; flex-shrink: 0; font-weight: 700; }
 
-/* Source cards */
-.source-card { cursor: pointer; transition: all 0.1s; }
-.source-card .card-header { padding: 0.8rem; display: flex; align-items: center; gap: 0.6rem; }
-.card-icon { font-size: 1.2rem; flex-shrink: 0; }
-.card-title { font-size: 0.85rem; font-weight: 700; color: var(--fg); }
-.card-sub { font-size: 0.65rem; color: var(--gray); margin-top: 0.2rem; }
-.card-status { margin-left: auto; font-size: 0.65rem; padding: 0.2rem 0.5rem; border: 1px solid var(--fg); }
-.card-status.solved { background: var(--fg); color: var(--bg); }
+.game-content { flex: 1; padding: 0.8rem 1rem 2rem; display: flex; flex-direction: column; gap: 0.8rem; max-width: 500px; width: 100%; margin: 0 auto; }
+
+.phase-banner {
+  position: relative;
+  background: var(--c-white);
+  border-radius: 14px;
+  padding: 0.9rem 1rem 0.6rem;
+  margin-bottom: 0.3rem;
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.phase-banner .phase-cat-tab {
+  display: inline-block;
+  background: var(--c-gray-card); color: var(--c-navy);
+  padding: 0.2rem 0.7rem; border-radius: 8px 8px 0 0;
+  font-size: 0.75rem; font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+.phase-banner h2 {
+  color: var(--cat-color, var(--c-pink-primary));
+  font-size: 1.3rem; font-weight: 900; margin-top: 0.2rem;
+  text-align: right;
+}
+.phase-banner .phase-era { font-size: 0.7rem; color: var(--c-gray-text); }
+.phase-banner .phase-desc { font-size: 0.7rem; color: var(--c-gray-text); margin-top: 0.4rem; line-height: 1.5; }
+
+/* Source cards (자료 카드) */
+.source-card {
+  cursor: pointer; transition: all 0.15s;
+  background: var(--c-pink-soft); border: none;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.source-card .card-header {
+  padding: 1rem 1.2rem; display: flex; align-items: center; gap: 0.6rem;
+  position: relative; min-height: 100px;
+}
+.source-card .card-info { flex: 1; z-index: 1; }
+.card-icon {
+  display: none; /* 텍스트 이모지 숨김 — img 아이콘으로 교체 */
+}
+.card-icon-img {
+  position: absolute; right: 0.8rem; bottom: 0; width: 90px; height: auto;
+  opacity: 0.95;
+}
+.card-title { font-size: 1.05rem; font-weight: 700; color: var(--c-navy); }
+.card-sub { font-size: 0.75rem; color: var(--c-gray-text); margin-top: 0.25rem; }
+.card-status {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  font-size: 0.7rem; font-weight: 700;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px; border: none;
+  background: var(--c-cyan); color: var(--c-navy);
+  margin-bottom: 0.4rem;
+}
+.card-status::before { content: '⊙ '; }
+.card-status.solved {
+  background: var(--c-white); color: var(--c-navy);
+}
+.card-status.solved::before { content: '✓ '; color: var(--green); }
 
 .source-letter, .source-diary, .source-scholar, .source-blog, .source-twitter, .source-report, .source-homework,
 .source-newspaper, .source-photo, .source-oral, .source-kakao, .source-text {
-  background: var(--bg); border: 2px solid var(--fg);
+  background: var(--c-pink-soft);
 }
-.source-card:hover { box-shadow: 4px 4px 0 var(--fg); }
+.source-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
 
-/* ===== SOURCE DETAIL ===== */
+/* ===== SOURCE DETAIL (자료 본문 모달, 디자인 261·262·266·267.png) ===== */
 .source-detail {
   display: none; position: fixed; top:0; left:0; right:0; bottom:0; z-index: 200;
-  background: var(--bg); overflow-y: auto;
+  background: var(--c-bg); overflow-y: auto;
 }
 .source-detail.active { display: block; }
-.detail-inner { max-width: 500px; margin: 0 auto; padding: 1rem; min-height: 100vh; }
-.detail-close { position: sticky; top: 0; text-align: right; padding: 0.5rem; z-index: 10; background: var(--bg); }
+.detail-inner { max-width: 500px; margin: 0 auto; padding: 0; min-height: 100vh; }
+.detail-modal-header {
+  background: var(--c-pink-primary); color: var(--c-white);
+  padding: 1.1rem 1.3rem; border-radius: 0 0 16px 16px;
+  margin-bottom: 1rem;
+}
+.detail-modal-title {
+  font-size: 1.15rem; font-weight: 900; margin-bottom: 0.3rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.detail-modal-title .modal-close-x {
+  background: transparent; border: none; color: var(--c-white);
+  font-size: 1.4rem; cursor: pointer; line-height: 1; padding: 0;
+}
+.detail-modal-hint {
+  font-size: 0.78rem; opacity: 0.95; line-height: 1.5;
+}
+.detail-modal-hint strong { font-weight: 700; }
+.detail-body-wrap {
+  padding: 0 1rem 2rem;
+}
+.detail-close { position: sticky; top: 0; text-align: right; padding: 0.5rem; z-index: 10; background: transparent; display: none; }
 .detail-close button {
-  background: var(--fg); border: none; color: var(--bg);
-  padding: 0.3rem 0.8rem; cursor: pointer; font-family: inherit; font-size: 0.75rem;
+  background: var(--c-pink-primary); border: none; color: var(--c-white);
+  padding: 0.3rem 0.8rem; cursor: pointer; font-family: inherit; font-size: 0.75rem; border-radius: 999px;
 }
 
 /* All detail paper styles — unified monochrome */
@@ -236,36 +491,55 @@ body {
 .qna-post .qna-label { font-size: 0.65rem; font-weight: 700; margin-bottom: 0.4rem; }
 .qna-post p+p { margin-top: 0.5rem; }
 
-/* ===== BLANK SLOTS ===== */
+/* ===== BLANK SLOTS (디자인 266·267.png — cyan highlight) ===== */
 .blank-slot {
-  display: inline-block; min-width: 50px; border-bottom: 2px solid var(--fg);
-  padding: 0.1rem 0.3rem; margin: 0 0.1rem; cursor: pointer; background: var(--bg);
+  display: inline-block; min-width: 56px;
+  border: none; border-radius: 6px;
+  padding: 0.1rem 0.5rem; margin: 0 0.15rem;
+  cursor: pointer; background: var(--c-cyan);
+  color: var(--c-navy); font-weight: 700;
+  vertical-align: baseline;
 }
-.blank-slot.empty { background: var(--light-gray); animation: blink 1s steps(1) infinite; }
-@keyframes blink { 50% { background: var(--bg); } }
-.blank-slot.filled { font-weight: 700; background: var(--fg); color: var(--bg); border-color: var(--fg); animation: none; }
+.blank-slot.empty {
+  background: var(--c-cyan); animation: blank-pulse 1.4s ease-in-out infinite;
+}
+@keyframes blank-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.blank-slot.filled {
+  font-weight: 700; background: var(--c-cyan); color: var(--c-navy);
+  animation: none;
+}
+.blank-slot.filled::before { content: '✓ '; color: var(--c-navy); }
 
 /* ===== ANSWER MODAL ===== */
-.modal-backdrop { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.3); z-index: 250; }
+.modal-backdrop { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(26,43,74,0.4); z-index: 250; }
 .modal-backdrop.active { display: block; }
 .answer-modal {
   display: none; position: fixed; bottom: 0; left: 0; right: 0;
-  background: var(--bg); border-top: 3px solid var(--fg);
-  padding: 1.2rem; z-index: 300; max-width: 500px; margin: 0 auto;
+  background: var(--c-white); border-radius: 20px 20px 0 0;
+  padding: 1.4rem; z-index: 300; max-width: 500px; margin: 0 auto;
+  box-shadow: 0 -8px 24px rgba(0,0,0,0.12);
 }
 .answer-modal.active { display: block; }
-.answer-modal .modal-label { color: var(--fg); font-size: 0.7rem; margin-bottom: 0.4rem; font-weight: 700; }
-.answer-modal .modal-hint { color: var(--gray); font-size: 0.75rem; margin-bottom: 0.8rem; line-height: 1.5; }
+.answer-modal .modal-label { color: var(--c-pink-primary); font-size: 0.8rem; margin-bottom: 0.5rem; font-weight: 900; }
+.answer-modal .modal-hint { color: var(--c-gray-text); font-size: 0.8rem; margin-bottom: 1rem; line-height: 1.5; }
 .answer-modal input {
-  width: 100%; padding: 0.6rem; background: var(--bg);
-  border: 2px solid var(--fg); color: var(--fg);
-  font-family: inherit; font-size: 0.9rem; outline: none; margin-bottom: 0.6rem;
+  width: 100%; padding: 0.75rem 0.9rem; background: var(--c-bg);
+  border: 2px solid transparent; border-radius: 10px;
+  color: var(--c-navy); font-family: inherit; font-size: 0.95rem;
+  outline: none; margin-bottom: 0.8rem;
+  transition: border-color 0.15s;
 }
-.answer-modal input:focus { box-shadow: 3px 3px 0 var(--fg); }
+.answer-modal input:focus { border-color: var(--c-pink-primary); }
 .answer-modal .modal-btns { display: flex; gap: 0.6rem; }
-.answer-modal .modal-btns button { flex: 1; padding: 0.5rem; font-family: inherit; font-size: 0.8rem; cursor: pointer; }
-.btn-submit { background: var(--fg); color: var(--bg); border: 2px solid var(--fg); }
-.btn-cancel { background: var(--bg); color: var(--fg); border: 2px solid var(--fg); }
+.answer-modal .modal-btns button {
+  flex: 1; padding: 0.7rem; font-family: inherit; font-size: 0.9rem;
+  font-weight: 700; cursor: pointer; border-radius: 999px; border: none;
+}
+.btn-submit { background: var(--c-pink-primary); color: var(--c-white); }
+.btn-cancel { background: var(--c-gray-card); color: var(--c-navy); }
 
 /* ===== ARCHIVE SELECTION ===== */
 .archive-prompt {
@@ -377,22 +651,67 @@ body {
 /* ===== SOUND NOTE ===== */
 .sound-note { font-size: 0.6rem; color: var(--gray); margin-top: 0.4rem; }
 
-/* ===== TUTORIAL ===== */
-#tutorial-screen { align-items: center; padding: 2rem 1rem; background: var(--bg); }
-.tutorial-container { width: 100%; max-width: 500px; }
-.tutorial-container h2 { text-align: center; font-size: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--fg); padding-bottom: 0.5rem; display: inline-block; }
+/* ===== TUTORIAL (디자인 v1 — 핑크 강조 카드형) ===== */
+#tutorial-screen { align-items: center; padding: 0; background: var(--c-bg); }
+.tutorial-container {
+  width: 100%; max-width: 500px;
+  padding: 0 1rem 2rem;
+}
+.tutorial-title-wrap {
+  text-align: center; padding: 1.2rem 0 1rem;
+}
+.tutorial-container h2 {
+  display: inline-block; text-align: center;
+  font-size: 1.5rem; font-weight: 900;
+  color: var(--c-navy);
+  background: var(--c-pink-soft);
+  padding: 0.4rem 1.3rem;
+  border-radius: 999px;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
 .tutorial-step {
-  border: 2px solid var(--fg); padding: 1rem; margin-bottom: 0.8rem;
-  display: flex; align-items: flex-start; gap: 0.8rem;
+  background: var(--c-white);
+  border: none;
+  border-radius: 16px;
+  padding: 1.1rem 1.2rem;
+  margin-bottom: 0.8rem;
+  display: flex; align-items: flex-start; gap: 0.9rem;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  transition: transform 0.15s;
 }
-.tutorial-step .step-num { font-size: 0.7rem; font-weight: 700; min-width: 1.4rem; height: 1.4rem; border: 2px solid var(--fg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.tutorial-step .step-icon { font-size: 1.2rem; flex-shrink: 0; }
-.tutorial-step .step-body h3 { font-size: 0.85rem; margin-bottom: 0.3rem; }
-.tutorial-step .step-body p { font-size: 0.75rem; color: var(--gray); line-height: 1.5; }
+.tutorial-step:hover { transform: translateY(-2px); }
+.tutorial-step .step-num {
+  font-size: 0.95rem; font-weight: 900;
+  min-width: 2rem; height: 2rem;
+  border: none; border-radius: 50%;
+  background: var(--c-pink-primary); color: var(--c-white);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 3px 8px rgba(255,20,147,0.25);
+}
+.tutorial-step .step-icon {
+  font-size: 1.6rem; flex-shrink: 0; line-height: 1;
+  margin-top: 0.05rem;
+}
+.tutorial-step .step-body h3 {
+  font-size: 1rem; font-weight: 700; color: var(--c-navy);
+  margin-bottom: 0.35rem;
+}
+.tutorial-step .step-body p {
+  font-size: 0.8rem; color: var(--c-gray-text); line-height: 1.55;
+}
+.tutorial-step .step-body p strong {
+  color: var(--c-pink-primary); font-weight: 700;
+}
 .tutorial-step .step-example {
-  margin-top: 0.5rem; padding: 0.4rem 0.6rem; border: 1px dashed var(--light-gray);
-  font-size: 0.7rem; color: var(--gray);
+  margin-top: 0.6rem; padding: 0.5rem 0.8rem;
+  background: var(--c-cyan-soft);
+  border: none; border-radius: 8px;
+  font-size: 0.75rem; color: var(--c-navy);
+  font-weight: 700;
 }
+.tutorial-step .step-example strong { color: var(--c-pink-primary); }
 
 /* ===== RESPONSIVE ===== */
 @media (min-width: 600px) {
@@ -400,17 +719,25 @@ body {
   .category-grid { grid-template-columns: 1fr 1fr 1fr; }
 }
 
-/* ===== SEQUENTIAL — 자료 순차 잠금 ===== */
-.source-card.locked { opacity: 0.45; cursor: not-allowed; filter: grayscale(0.85); }
-.source-card.locked:hover { opacity: 0.55; }
+/* ===== SEQUENTIAL — 자료 순차 잠금 (디자인 219.png 회색 카드) ===== */
+.source-card.locked {
+  background: var(--c-gray-card) !important;
+  cursor: not-allowed;
+}
+.source-card.locked .card-title,
+.source-card.locked .card-sub { color: var(--c-gray-text); }
+.source-card.locked .card-icon-img { opacity: 0.35; filter: grayscale(0.85); }
 .source-card.locked-shake { animation: locked-shake 0.4s ease-in-out; }
 @keyframes locked-shake {
   0%, 100% { transform: translateX(0); }
   20%, 60% { transform: translateX(-6px); }
   40%, 80% { transform: translateX(6px); }
 }
-.source-card.locked .card-status::after { content: " 🔒"; }
-.source-card.locked .card-status { background: var(--light-gray) !important; color: var(--fg) !important; }
+.source-card.locked .card-status::before { content: '🔒 '; }
+.source-card.locked .card-status {
+  background: var(--c-gray-locked) !important;
+  color: var(--c-white) !important;
+}
 
 /* ===== SEQUENTIAL — 빈칸 모달 정답 자료 라벨 ===== */
 .modal-source-hint {
@@ -491,20 +818,29 @@ body {
 <div id="login-screen" class="screen active">
   <div class="screen-bg"></div>
   <div class="login-container">
-    <h1 class="game-title">DMZ Archive</h1>
-    <p class="game-subtitle">DMZ를 기록하는 방법</p>
-    <div class="login-field"><label>이름</label><input type="text" id="input-name" placeholder="이름을 입력하세요" autocomplete="off"></div>
-    <div class="login-field"><label>게임 코드</label><input type="text" id="input-code" placeholder="게임 코드를 입력하세요" autocomplete="off"></div>
-    <div class="login-error" id="login-error"></div>
-    <button class="btn-primary" onclick="handleLogin()">입장</button>
+    <img class="sd-card-image" src="assets/images/sd_card_title.png" alt="DMZ Archive — GAME START" onclick="document.getElementById('input-name').focus()">
+    <div class="lang-toggle">
+      <span class="lang-active">Kr</span><span class="lang-sep">/</span><span class="lang-inactive">En</span>
+    </div>
+    <div class="login-fields-wrap">
+      <div class="login-field"><label>이름</label><input type="text" id="input-name" placeholder="이름을 입력하세요" autocomplete="off"></div>
+      <div class="login-field"><label>게임 코드</label><input type="text" id="input-code" placeholder="게임 코드를 입력하세요" autocomplete="off"></div>
+      <div class="login-error" id="login-error"></div>
+      <button class="btn-primary" onclick="handleLogin()">입장</button>
+    </div>
     <p class="login-hint">DMZ의 기록을 탐색합니다</p>
   </div>
 </div>
 
 <div id="tutorial-screen" class="screen">
   <div class="screen-bg"></div>
+  <header class="app-header">
+    <span class="timer-placeholder">30:00</span>
+    <span class="app-logo"><span class="logo-dmz">DMZ </span><span class="logo-archive">Archive</span></span>
+    <span class="app-profile">👤</span>
+  </header>
   <div class="tutorial-container">
-    <h2>기록 탐색 안내</h2>
+    <div class="tutorial-title-wrap"><h2>기록 탐색 안내</h2></div>
     <div class="tutorial-step">
       <span class="step-num">1</span>
       <span class="step-icon">📄</span>
@@ -544,11 +880,16 @@ body {
 
 <div id="category-screen" class="screen">
   <div class="screen-bg"></div>
-  <div class="cat-header-row">
-    <div class="header-left"><h2>카테고리 선택</h2><p class="player-name" id="cat-player-name"></p></div>
-    <button class="btn-archive" onclick="showArchive()">📦 보관소</button>
+  <header class="app-header">
+    <span class="timer-placeholder">30:00</span>
+    <span class="app-logo"><span class="logo-dmz">DMZ </span><span class="logo-archive">Archive</span></span>
+    <span class="app-profile" onclick="showArchive()" title="보관소">👤</span>
+  </header>
+  <div class="cat-page">
+    <h1 class="cat-page-title">주제</h1>
+    <p class="cat-page-sub">카테고리 선택 관련 안내문구</p>
+    <div class="category-grid" id="category-grid"></div>
   </div>
-  <div class="category-grid" id="category-grid"></div>
 </div>
 
 <div id="archive-screen" class="screen">
@@ -559,13 +900,28 @@ body {
 
 <div id="story-screen" class="screen">
   <div class="screen-bg"></div>
-  <button class="btn-back" onclick="showScreen('category-screen'); renderCategories();">← 카테고리</button>
-  <div class="screen-header"><h2 id="story-screen-title"></h2></div>
-  <div class="story-list" id="story-list"></div>
+  <header class="app-header">
+    <span class="timer-placeholder">30:00</span>
+    <span class="app-logo"><span class="logo-dmz">DMZ </span><span class="logo-archive">Archive</span></span>
+    <span class="app-profile">👤</span>
+  </header>
+  <div class="story-page">
+    <button class="btn-back" onclick="showScreen('category-screen'); renderCategories();">← 카테고리</button>
+    <div class="story-cat-banner" id="story-cat-banner">카테고리</div>
+    <div class="story-page-body">
+      <p class="story-page-sub" id="story-screen-title"></p>
+      <div class="story-list" id="story-list"></div>
+    </div>
+  </div>
 </div>
 
 <div id="game-screen" class="screen">
   <div class="screen-bg"></div>
+  <header class="app-header">
+    <span class="timer-placeholder">30:00</span>
+    <span class="app-logo"><span class="logo-dmz">DMZ </span><span class="logo-archive">Archive</span></span>
+    <span class="app-profile">👤</span>
+  </header>
   <div class="game-header">
     <button class="btn-header-back" onclick="exitToStoryList()">←</button>
     <span class="location" id="game-location"></span>
@@ -4444,10 +4800,9 @@ function showScreen(id) {
 // ===== LOGIN =====
 function handleLogin() {
   const name = document.getElementById('input-name').value.trim();
-  const code = document.getElementById('input-code').value.trim();
   const err = document.getElementById('login-error');
   if (!name) { err.textContent = '이름을 입력해주세요.'; return; }
-  if (code !== '1233') { err.textContent = '게임 코드가 올바르지 않습니다.'; return; }
+  // 게임 코드 검증 — 5/15 피터공 결정: 디자인 파일럿 단계에서 임시 OFF (아무거나 입력 OK)
   state.playerName = name;
   if (localStorage.getItem(LS_TUTORIAL_KEY)) {
     showScreen('category-screen');
@@ -4467,17 +4822,20 @@ document.getElementById('input-name').addEventListener('keydown', e => { if (e.k
 
 // ===== CATEGORY SCREEN =====
 function renderCategories() {
-  document.getElementById('cat-player-name').textContent = `아키비스트 ${state.playerName}`;
   const grid = document.getElementById('category-grid');
   grid.innerHTML = CATEGORIES.map(cat => {
     const stories = STORIES[cat.id] || [];
     const completed = stories.filter(s => state.completedStories.includes(s.id)).length;
     const total = stories.length;
     const isDone = total > 0 && completed === total;
-    return `<div class="cat-card ${isDone ? 'completed' : ''}" onclick="selectCategory('${cat.id}')">
-      <div class="cat-icon">${cat.icon}</div>
-      <h3>${cat.name}</h3>
-      <div class="cat-progress">${completed}/${total} 완료</div>
+    // cat.id 예: "cat01" → "01"
+    const catNum = (cat.id || '').replace(/^cat/, '').padStart(2, '0');
+    return `<div class="cat-card ${isDone ? 'completed' : ''}" data-cat="${catNum}" onclick="selectCategory('${cat.id}')">
+      <div class="folder-shape"></div>
+      <div class="cat-label-row">
+        <h3>${cat.name}</h3>
+        <span class="cat-count">${total}</span>
+      </div>
     </div>`;
   }).join('');
 }
@@ -4630,18 +4988,24 @@ function renderArchive() {
 function selectCategory(catId) {
   state.currentCategory = catId;
   const cat = CATEGORIES.find(c => c.id === catId);
-  document.getElementById('story-screen-title').textContent = `${cat.icon} ${cat.name}`;
+  const catNum = (cat.id || '').replace(/^cat/, '').padStart(2, '0');
+  const catColorVar = `var(--cat-${catNum})`;
+  document.getElementById('story-screen-title').textContent = '카테고리 선택 관련 안내문구';
+  document.getElementById('story-cat-banner').textContent = cat.name;
+  // 카테고리 컬러를 story-page에 적용
+  const storyPage = document.querySelector('#story-screen .story-page');
+  if (storyPage) storyPage.style.setProperty('--cat-color', catColorVar);
   const stories = STORIES[catId] || [];
   const list = document.getElementById('story-list');
   if (stories.length === 0) {
-    list.innerHTML = '<p style="color:var(--accent);text-align:center;padding:2rem;">스토리 준비 중입니다.</p>';
+    list.innerHTML = '<p style="color:var(--c-gray-text);text-align:center;padding:2rem;grid-column:1/-1;">스토리 준비 중입니다.</p>';
   } else {
     list.innerHTML = stories.map((s, i) => {
       const done = state.completedStories.includes(s.id);
-      return `<div class="story-card ${done ? 'completed' : ''}" onclick="${done ? '' : `startStory('${s.id}')`}">
-        <div class="story-num">${i+1}</div>
+      return `<div class="story-card ${done ? 'completed' : ''}" style="--cat-color:${catColorVar}" onclick="${done ? '' : `startStory('${s.id}')`}">
+        <div class="story-folder"></div>
         <h3>${s.title}</h3>
-        <div class="story-era">${s.era}</div>
+        ${s.era ? `<div class="story-era">${s.era}</div>` : ''}
       </div>`;
     }).join('');
   }
@@ -4687,19 +5051,39 @@ function getBlankKeysForSource(story, sourceId) {
   return Object.keys(story.blanks).filter(k => k.charAt(0) === sourceId);
 }
 
+// 자료 styleClass → 아이콘 이미지 매핑 (SPEC-ui-design §3)
+const SOURCE_ICON_MAP = {
+  'source-letter': 'personal_tab', 'source-diary': 'personal_tab',
+  'source-blog': 'personal_tab', 'source-homework': 'personal_tab',
+  'source-twitter': 'personal_tab', 'source-text': 'personal_tab',
+  'source-kakao': 'personal_tab',
+  'source-newspaper': 'news_tab', 'source-scholar': 'news_tab',
+  'source-report': 'news_tab', 'source-poster': 'news_tab',
+  'source-photo': 'photo_tab',
+  'source-oral': 'oral_tab'
+};
+function getSourceIconImg(styleClass) {
+  const key = SOURCE_ICON_MAP[styleClass] || 'personal_tab';
+  return `assets/icons/${key}.png`;
+}
+
 function renderExploration() {
   const story = getCurrentStory();
   if (!story) return;
-  document.getElementById('game-location').textContent = `📍 ${story.location}`;
+  document.getElementById('game-location').textContent = story.location || '';
   updateProgress();
   const totalBlanks = Object.keys(story.blanks).length;
   const solvedCount = Object.keys(state.solvedBlanks).length;
+  // 카테고리 컬러
+  const cat = CATEGORIES.find(c => c.id === state.currentCategory);
+  const catNum = ((cat && cat.id) || '').replace(/^cat/, '').padStart(2, '0');
+  const catColor = `var(--cat-${catNum})`;
   const content = document.getElementById('game-content');
   content.innerHTML = `
-    <div class="phase-banner">
-      <div class="phase-era">${story.era}</div>
+    <div class="phase-banner" style="--cat-color:${catColor}">
+      <span class="phase-cat-tab">${cat ? cat.name : ''}</span>
       <h2>${story.title}</h2>
-      <div class="phase-desc">${story.sources.length}개의 자료를 탐색하고, 자료 간 교차 참조로 빈칸을 복원하세요.</div>
+      ${story.era ? `<div class="phase-era">${story.era}</div>` : ''}
       ${story.soundNote ? `<p class="sound-note">🔊 ${story.soundNote}</p>` : ''}
     </div>
     ${story.sources.map((src, i) => {
@@ -4708,13 +5092,17 @@ function renderExploration() {
       const allSolved = blankKeys.length > 0 && solvedKeys.length === blankKeys.length;
       const locked = !isSourceUnlocked(story, src.id);
       const justUnlocked = (state.justUnlockedSourceId === src.id);
-      const statusText = locked ? '잠김' : (justUnlocked ? '🔓 NEW' : (allSolved ? '복원 완료' : (blankKeys.length > 1 ? `빈칸 ${blankKeys.length}개` : (blankKeys.length === 1 ? '빈칸 1개' : '읽기'))));
+      const statusText = locked ? '잠김' : (allSolved ? '복원 완료' : '복구 필요');
       const cardCls = `source-card ${src.styleClass}${locked ? ' locked' : ''}${justUnlocked ? ' just-unlocked' : ''}`;
+      const iconImg = getSourceIconImg(src.styleClass);
       return `<div class="${cardCls}" onclick="openSource('${src.id}')" style="animation-delay:${i*0.1}s">
         <div class="card-header">
-          <span class="card-icon">${src.icon}</span>
-          <div><div class="card-title">${src.title}</div><div class="card-sub">${src.sub}</div></div>
-          <span class="card-status ${allSolved ? 'solved' : ''}">${statusText}</span>
+          <div class="card-info">
+            <span class="card-status ${allSolved ? 'solved' : ''}">${statusText}</span>
+            <div class="card-title">${src.title}</div>
+            <div class="card-sub">${src.sub}</div>
+          </div>
+          <img class="card-icon-img" src="${iconImg}" alt="">
         </div>
       </div>`;
     }).join('')}
@@ -4798,8 +5186,26 @@ function openSource(sourceId) {
     rendered = '<pre style="color:red;">ERROR: ' + e.message + '\n' + e.stack + '</pre>';
   }
   detail.classList.add('active');
-  inner.innerHTML = '<div class="detail-close"><button onclick="closeSource()">닫기 ✕</button></div>' +
-    rendered;
+  // 빈칸 정답 자료 안내 (sequential / pickone: dmz_blanks.csv answer_from)
+  const blankKeys = getBlankKeysForSource(story, src.id);
+  let answerHintHTML = '';
+  if (blankKeys.length > 0) {
+    const sources = (BLANK_SOURCE_LOOKUP && BLANK_SOURCE_LOOKUP[`${story.id}_${blankKeys[0]}`]) || '';
+    const slotName = { A: '편지', B: '신문', C: '사진', D: '구술' };
+    const fromSlot = sources ? sources.charAt(0) : '';
+    const hintBody = fromSlot ? `자료 ${fromSlot}${slotName[fromSlot] ? `(${slotName[fromSlot]})` : ''}를 읽어보세요.` : '다른 자료에서 확인할 수 있습니다.';
+    answerHintHTML = `<div class="detail-modal-hint">빈칸 정답은 다른 자료에서 확인할 수 있습니다.<br><strong>${hintBody}</strong></div>`;
+  }
+  inner.innerHTML = `
+    <div class="detail-modal-header">
+      <div class="detail-modal-title">
+        <span>빈칸 복원하기</span>
+        <button class="modal-close-x" onclick="closeSource()" aria-label="닫기">✕</button>
+      </div>
+      ${answerHintHTML}
+    </div>
+    <div class="detail-body-wrap">${rendered}</div>
+  `;
   document.body.style.overflow = 'hidden';
 }
 
