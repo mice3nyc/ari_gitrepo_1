@@ -93,7 +93,27 @@ const LS_PREFIX = 'dmz_v5_p_';   // pickone
 
 mobile(`dmz_v5_m_*`), offline(`dmz_v5_o_*`), sequential(`dmz_v5_s_*`)과 완전 분리.
 
-### 6. BLANK_SOURCE_LOOKUP
+### 6. 진입 시 첫 자료 깜빡 + 잠긴 자료 토스트 (5/15 세션355 추가)
+
+#### 진입 시 첫 자료 깜빡
+
+`startStory(storyId)` 안 — `getStoryFirstSlot(storyId)` 슬롯을 `state.justUnlockedSourceId`에 넣어 첫 렌더 시 `.just-unlocked` 클래스 적용. `card-unlock-flash` 키프레임 3회 반복(0.55s × 3 = 1.65s). 1700ms 후 `state.justUnlockedSourceId` null로 자동 해제. `flashedSources`에 미리 push해서 중복 깜빡 방지.
+
+#### 잠긴 자료 클릭 → 토스트
+
+기존 sequential 베이스는 `pointer-events: none`으로 클릭 자체 차단. pickone은 차단 해제 + `openSource` 안에서 잠김 분기:
+
+```js
+if (!isSourceUnlocked(story, sourceId)) {
+  // 해당 카드 흔들기 + 토스트
+  showToast('locked', '🔒 잠긴 자료', '자료 X의 빈칸을 먼저 풀어야 열립니다');
+  return;
+}
+```
+
+토스트 type `locked` 추가 — 아이콘 🔒, 기존 토스트 CSS 재활용. 카드는 `.locked-shake` 클래스로 0.4s 좌우 흔들기.
+
+### 7. BLANK_SOURCE_LOOKUP
 
 sequential과 동일. `dmz_blanks.csv`의 `answer_from` → 모달 정답 자료 라벨.
 

@@ -401,7 +401,14 @@ body {
 }
 
 /* ===== SEQUENTIAL — 자료 순차 잠금 ===== */
-.source-card.locked { opacity: 0.45; cursor: not-allowed; pointer-events: none; filter: grayscale(0.85); }
+.source-card.locked { opacity: 0.45; cursor: not-allowed; filter: grayscale(0.85); }
+.source-card.locked:hover { opacity: 0.55; }
+.source-card.locked-shake { animation: locked-shake 0.4s ease-in-out; }
+@keyframes locked-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
 .source-card.locked .card-status::after { content: " 🔒"; }
 .source-card.locked .card-status { background: var(--light-gray) !important; color: var(--fg) !important; }
 
@@ -1012,6 +1019,10 @@ function startStory(storyId) {
   state.viewedSources = [];
   state.flashedSources = [];
   state.selectedRecords = [];
+  // pickone: 진입 시 첫 자료 슬롯에 깜빡 효과
+  const firstSlot = getStoryFirstSlot(storyId);
+  state.justUnlockedSourceId = firstSlot;
+  state.flashedSources.push(firstSlot);
   showScreen('game-screen');
   renderExploration();
 }
@@ -1107,7 +1118,25 @@ let currentDetailSourceId = null;
 
 function openSource(sourceId) {
   const story = getCurrentStory();
-  if (!isSourceUnlocked(story, sourceId)) return;
+  if (!isSourceUnlocked(story, sourceId)) {
+    // 잠긴 자료 — 토스트 + 흔들기
+    const cards = document.querySelectorAll('.source-card.locked');
+    cards.forEach(c => {
+      if (c.getAttribute('onclick') && c.getAttribute('onclick').includes("'" + sourceId + "'")) {
+        c.classList.remove('locked-shake');
+        void c.offsetWidth;
+        c.classList.add('locked-shake');
+      }
+    });
+    const order = getUnlockOrder(story.id);
+    const idx = order.indexOf(sourceId);
+    const prev = idx > 0 ? order[idx - 1] : null;
+    const msg = prev
+      ? `자료 ${prev}의 빈칸을 먼저 풀어야 열립니다`
+      : '아직 열리지 않은 자료입니다';
+    showToast('locked', '🔒 잠긴 자료', msg);
+    return;
+  }
   currentDetailSourceId = sourceId;
   const src = story.sources.find(s => s.id === sourceId);
   const detail = document.getElementById('source-detail');
@@ -1233,7 +1262,8 @@ function showToast(type, title, text) {
   if (existing) existing.remove();
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
-  toast.innerHTML = `<div class="toast-icon">${type === 'correct' ? '✓' : '✗'}</div><div class="toast-text"><strong>${title}</strong><br>${text}</div>`;
+  const iconChar = type === 'correct' ? '✓' : (type === 'locked' ? '🔒' : '✗');
+  toast.innerHTML = `<div class="toast-icon">${iconChar}</div><div class="toast-text"><strong>${title}</strong><br>${text}</div>`;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 2000);
 }
