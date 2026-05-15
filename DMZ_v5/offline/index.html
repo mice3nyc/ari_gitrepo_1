@@ -174,6 +174,30 @@ body {
 .newspaper-paper .news-body { font-size: 0.8rem; line-height: 1.7; }
 .newspaper-paper .news-body p+p { margin-top: 0.6rem; }
 
+/* SPEC v2 §17 — markdown face (텍스트 subtype 9종 본문 통째 html) */
+.newspaper-paper h1 { text-align: center; font-size: 1.2rem; font-weight: 700; letter-spacing: 0.4em; border-bottom: 3px double var(--fg); padding-bottom: 0.6rem; margin: 0 0 0.6rem 0; }
+.newspaper-paper h1 + p { text-align: center; margin-bottom: 0.8rem; }
+.newspaper-paper h1 + p em { font-size: 0.65rem; color: var(--gray); font-style: normal; }
+.newspaper-paper h2 { font-size: 1rem; font-weight: 700; margin: 0.6rem 0 0.8rem 0; line-height: 1.4; }
+.newspaper-paper p { font-size: 0.8rem; line-height: 1.7; margin: 0; }
+.newspaper-paper p + p { margin-top: 0.6rem; }
+.newspaper-paper hr { border: 0; border-top: 1px dashed var(--light-gray); margin: 1rem 0; }
+.newspaper-paper hr + p em { font-size: 0.7rem; color: var(--gray); }
+
+.diary-paper h1 { font-size: 1.1rem; font-weight: 700; margin: 0 0 0.4rem 0; }
+.diary-paper h1 + p em { font-size: 0.7rem; color: var(--gray); font-style: normal; }
+.diary-paper h2 { font-size: 0.9rem; font-weight: 700; margin: 1rem 0 0.4rem 0; }
+.diary-paper p { margin: 0 0 0.6rem 0; }
+.diary-paper hr { border: 0; border-top: 1px dashed var(--light-gray); margin: 1rem 0; }
+.diary-paper hr + p em { font-size: 0.7rem; color: var(--gray); }
+
+.scholar-paper h1 { font-size: 1.05rem; font-weight: 700; margin: 0 0 0.4rem 0; }
+.scholar-paper h1 + p em { font-size: 0.7rem; color: var(--gray); font-style: normal; }
+.scholar-paper h2 { font-size: 0.9rem; font-weight: 700; margin: 1rem 0 0.4rem 0; }
+.scholar-paper p { margin: 0 0 0.6rem 0; }
+.scholar-paper hr { border: 0; border-top: 1px dashed var(--light-gray); margin: 1rem 0; }
+.scholar-paper hr + p em { font-size: 0.7rem; color: var(--gray); }
+
 .photo-frame {
   border: 2px solid var(--fg); padding: 0.8rem; text-align: center; margin-bottom: 0.8rem;
 }
@@ -559,6 +583,8 @@ function renderSource(src, solvedBlanks, allBlanks) {
       </div>`;
 
     case 'diary':
+      // SPEC v2 §17 — markdown face 새 분기 (d.html 통째)
+      if (d.html) return `<div class="diary-paper">${ib(d.html)}</div>`;
       return `<div class="diary-paper">
         <div class="diary-meta src-heading">${d.meta}</div>
         ${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}
@@ -566,6 +592,7 @@ function renderSource(src, solvedBlanks, allBlanks) {
       </div>`;
 
     case 'scholar':
+      if (d.html) return `<div class="scholar-paper">${ib(d.html)}</div>`;
       return `<div class="scholar-paper">
         <div class="scholar-meta src-heading"><strong>${d.heading}</strong><br>${d.meta}</div>
         ${d.paragraphs.map(p => `<p>${ib(p)}</p>`).join('')}
@@ -573,6 +600,7 @@ function renderSource(src, solvedBlanks, allBlanks) {
       </div>`;
 
     case 'newspaper':
+      if (d.html) return `<div class="newspaper-paper">${ib(d.html)}</div>`;
       return `<div class="newspaper-paper">
         <div class="news-header src-heading"><div class="news-name">${d.paperName}</div><div class="news-date">${d.date}</div></div>
         <div class="news-title">${ib(d.headline)}</div>
@@ -1752,40 +1780,18 @@ const STORIES = {
           "sub": "올해도 돌아왔습니다",
           "styleClass": "source-diary",
           "templateData": {
-            "meta": "2025년 10월 ~ 2026년 3월 · 작성자: 이름 없는 두루미 한 마리",
-            "paragraphs": [
-              "<strong>10월 3일</strong>",
-              "{{A}}의 바람이 차가워졌습니다. 출발할 시간입니다. 올해도 남쪽으로 갑니다. 수천 킬로미터를 날아서, 매년 같은 곳으로. 나의 할머니도, 할머니의 할머니도 그곳에 갔습니다.",
-              "<strong>11월 18일</strong>",
-              "드디어 철원 평야에 도착했습니다. 하늘에서 내려다보면 이상한 곳입니다. 남쪽은 건물과 도로로 빽빽하고, 북쪽은 어둡고 고요합니다. 그 사이에 가느다란 초록색 띠가 있습니다. 사람들은 거기를 DMZ라고 부른다고 합니다.",
-              "<strong>12월 15일</strong>",
-              "들판에 내려앉으면 철조망이 보입니다. 사람들은 이쪽과 저쪽을 나누어 놓았습니다. 하지만 저에게는 경계가 없습니다. 바람이 부는 대로, 먹이가 있는 대로 날아갑니다. 70년 넘게 사람이 오지 않은 이 땅은, 저에게는 세상에서 가장 안전한 식탁입니다.",
-              "<strong>1월 20일</strong>",
-              "올해는 동료가 많이 왔습니다. 나와 같은 두루미 친구들은 1,500마리가 넘고, 재두루미는 몇 배는 더 되는 것 같습니다. 새벽에 함께 날아오르면 하늘을 하얗게 뒤덮곤 합니다. 사람들이 아래에서 올려다봅니다. 총을 쏘지 않는 사람들입니다.",
-              "<strong>3월 5일</strong>",
-              "다시 북쪽으로 떠날 시간입니다. 내년에도 이 들판이 있을까요? 이 고요가 있을까요? 사람들의 일은 모르겠습니다. 다만 저는 올해도, 내년에도, 그다음 해에도 돌아올 것입니다."
-            ]
+            "html": "<h1>두루미의 일기</h1>\n<p><em>2025년 10월 ~ 2026년 3월</em></p>\n<h2>10월 3일</h2>\n<p>{{A}}의 바람이 차가워졌습니다. 출발할 시간입니다. 올해도 남쪽으로 갑니다. 수천 킬로미터를 날아서, 매년 같은 곳으로. 나의 할머니도, 할머니의 할머니도 그곳에 갔습니다.</p>\n<h2>11월 18일</h2>\n<p>드디어 철원 평야에 도착했습니다. 하늘에서 내려다보면 이상한 곳입니다. 남쪽은 건물과 도로로 빽빽하고, 북쪽은 어둡고 고요합니다. 그 사이에 가느다란 초록색 띠가 있습니다. 사람들은 거기를 DMZ라고 부른다고 합니다.</p>\n<h2>12월 15일</h2>\n<p>들판에 내려앉으면 철조망이 보입니다. 사람들은 이쪽과 저쪽을 나누어 놓았습니다. 하지만 저에게는 경계가 없습니다. 바람이 부는 대로, 먹이가 있는 대로 날아갑니다. 70년 넘게 사람이 오지 않은 이 땅은, 저에게는 세상에서 가장 안전한 식탁입니다.</p>\n<h2>1월 20일</h2>\n<p>올해는 동료가 많이 왔습니다. 나와 같은 두루미 친구들은 1,500마리가 넘고, 재두루미는 몇 배는 더 되는 것 같습니다. 새벽에 함께 날아오르면 하늘을 하얗게 뒤덮곤 합니다. 사람들이 아래에서 올려다봅니다. 총을 쏘지 않는 사람들입니다.</p>\n<h2>3월 5일</h2>\n<p>다시 북쪽으로 떠날 시간입니다. 내년에도 이 들판이 있을까요? 이 고요가 있을까요? 사람들의 일은 모르겠습니다. 다만 저는 올해도, 내년에도, 그다음 해에도 돌아올 것입니다.</p>\n<hr />\n<p><em>작성자: 이름 없는 두루미 한 마리</em></p>"
           }
         },
         {
           "id": "B",
           "type": "newspaper",
           "icon": "📰",
-          "title": "뉴스 보도",
+          "title": "통 일 뉴 스",
           "sub": "통일뉴스 2026.1.20",
           "styleClass": "source-newspaper",
           "templateData": {
-            "paperName": "통 일 뉴 스",
-            "date": "2026년 1월 20일",
-            "headline": "\"시베리아에서 철원까지 3,000km\"… 두루미들의 대장정, 올겨울도 이어지다",
-            "paragraphs": [
-              "올겨울에도 철원 평야에 두루미와 재두루미가 찾아왔다. 두루미(학명 Grus japonensis, 천연기념물 제202호·멸종위기 야생생물 I급)는 약 1,500마리, {{B}}(학명 Antigone vipio, 천연기념물 제203호·멸종위기 야생생물 Ⅱ급)는 약 5,000마리 이상이 관찰되었다.",
-              "이들의 여정은 시베리아와 중국 동북부의 번식지에서 시작된다. 매년 9월 하순이면 북쪽의 찬바람을 신호 삼아 남하를 시작해, 중국 동북부 습지를 경유하고 북한 상공을 통과하여 약 2,000~3,000km를 날아 10월 하순에 철원·연천·파주 일대에 도착한다.",
-              "[두루미·재두루미 이동 경로]",
-              "두루미와 재두루미의 이동 경로는 조금 다르다. 두루미 대륙 이동 개체군은 러시아 극동과 중국 동북부에서 번식한 뒤 한반도 DMZ 일대에 집중적으로 월동한다. 전 세계 두루미 약 4,600마리 중 대륙 이동 개체군 대부분이 한반도를 찾는다.",
-              "재두루미는 몽골 동부·러시아·중국 동북부 등 더 넓은 지역에서 번식하며, 월동지도 한반도·일본 이즈미(가고시마현)·중국 포양호 등 3개국에 분산된다. 크게 두 무리로 나뉘어 이동하는데, 동쪽 무리는 한반도와 일본으로, 서쪽 무리는 중국 내륙으로 향한다.",
-              "전문가들은 \"70여 년간 인간의 접근이 제한된 DMZ 일대의 농경지와 습지가 훼손되지 않아 핵심 서식지 역할을 하고 있다\"라고 분석한다."
-            ]
+            "html": "<h1>통 일 뉴 스</h1>\n<p><em>2026년 1월 20일</em></p>\n<h2>\"시베리아에서 철원까지 3,000km\"… 두루미들의 대장정, 올겨울도 이어지다</h2>\n<p><strong>올겨울에도 철원 평야에 두루미와 재두루미가 찾아왔다.</strong></p>\n<p>두루미(학명 Grus japonensis, 천연기념물 제202호·멸종위기 야생생물 I급)는 약 1,500마리, {{B}}(학명 Antigone vipio, 천연기념물 제203호·멸종위기 야생생물 Ⅱ급)는 약 5,000마리 이상이 관찰되었다.</p>\n<p><strong>이들의 여정은 시베리아와 중국 동북부의 번식지에서 시작된다.</strong></p>\n<p>매년 9월 하순이면 북쪽의 찬바람을 신호 삼아 남하를 시작해, 중국 동북부 습지를 경유하고 북한 상공을 통과하여 약 2,000~3,000km를 날아 10월 하순에 철원·연천·파주 일대에 도착한다.</p>\n<p>[두루미·재두루미 이동 경로]</p>\n<p><strong>두루미와 재두루미의 이동 경로는 조금 다르다.</strong></p>\n<p>두루미 대륙 이동 개체군은 러시아 극동과 중국 동북부에서 번식한 뒤 한반도 DMZ 일대에 집중적으로 월동한다. 전 세계 두루미 약 4,600마리 중 대륙 이동 개체군 대부분이 한반도를 찾는다.</p>\n<p>재두루미는 몽골 동부·러시아·중국 동북부 등 더 넓은 지역에서 번식하며, 월동지도 한반도·일본 이즈미(가고시마현)·중국 포양호 등 3개국에 분산된다. 크게 두 무리로 나뉘어 이동하는데, 동쪽 무리는 한반도와 일본으로, 서쪽 무리는 중국 내륙으로 향한다.</p>\n<p>전문가들은 \"<strong>70여 년간 인간의 접근이 제한된 DMZ 일대의 농경지와 습지가 훼손되지 않아 핵심 서식지 역할을 하고 있다</strong>\"라고 분석한다.</p>\n<hr />\n<p><em>출처: 뉴스 보도 재구성 (문화재청 보도자료, International Crane Foundation 참고)</em></p>"
           }
         },
         {
@@ -5860,7 +5866,7 @@ function handleLogin() {
   const code = document.getElementById('input-code').value.trim();
   const err = document.getElementById('login-error');
   if (!name) { err.textContent = '이름을 입력해주세요.'; return; }
-  if (code.toUpperCase() !== 'DMZ') { err.textContent = '게임 코드가 올바르지 않습니다.'; return; }
+  if (code !== '1233') { err.textContent = '게임 코드가 올바르지 않습니다.'; return; }
   state.playerName = name;
   if (localStorage.getItem(LS_TUTORIAL_KEY)) {
     showScreen('category-screen');

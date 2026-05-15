@@ -35,6 +35,23 @@ ALLOWED_SUBTYPES = {
     "D": {"oral", "kakao", "text", "qna"},
 }
 
+# 표시 텍스트 본문화 패턴 (SPEC v2 §17, 5/15 피터공 결정)
+# 본문 통째 markdown → HTML. frontmatter 표시 메타 폐기.
+TEXT_SUBTYPES = {"diary", "newspaper", "scholar", "blog", "poster", "report", "homework", "letter", "twitter"}
+
+H1_RE = re.compile(r"^#\s+(.+)$", re.MULTILINE)
+
+
+def md_block_to_html(body: str) -> str:
+    """본문 통째 markdown → HTML. 빈칸 마커 {{X}}는 그대로 보존."""
+    return markdown.markdown(body.strip(), extensions=["extra"])
+
+
+def extract_h1(body: str) -> str:
+    """본문 첫 H1 추출 (title 폴백용)."""
+    m = H1_RE.search(body.strip())
+    return m.group(1).strip() if m else ""
+
 
 def md_inline(text: str) -> str:
     """단일 문단 마크다운을 인라인 HTML로 변환 (외곽 <p> 제거)."""
@@ -158,6 +175,10 @@ def parse_kakao(body: str) -> list:
 def build_template_data(subtype: str, fm_meta: dict, body: str, errors: list, ctx: str):
     """frontmatter meta + body → templateData (기존 yaml 스키마 호환)."""
     m = fm_meta or {}
+
+    # SPEC v2 §17 — 텍스트 subtype 9종 본문화 패턴
+    if subtype in TEXT_SUBTYPES:
+        return {"html": md_block_to_html(body)}
 
     if subtype == "diary":
         meta_str = " · ".join(filter(None, [m.get("date"), m.get("credit")]))
@@ -308,6 +329,10 @@ def parse_source_md(path: Path, errors: list) -> dict:
         errors.append(f"{ctx} subtype {subtype}이 slot {slot}에 허용 안 됨")
 
     template_data = build_template_data(subtype, fm.get("meta"), fm.content, errors, ctx)
+
+    # SPEC v2 §17 — 텍스트 subtype은 title을 본문 첫 H1에서 폴백 추출
+    if subtype in TEXT_SUBTYPES and not title:
+        title = extract_h1(fm.content)
 
     return {
         "id": slot,

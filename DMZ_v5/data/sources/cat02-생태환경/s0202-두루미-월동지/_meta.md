@@ -43,3 +43,4 @@ choices:
     title: 구술 인터뷰
     meaning: 주민의 경험을 기록한다
 ---
+강

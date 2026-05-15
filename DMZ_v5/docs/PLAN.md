@@ -23,37 +23,61 @@
 - **5/26 인턴 베타까지 안정성** — D-12. 큰 구조 변경이 베타를 깨면 안 됨.
 - **회의 전 2시간 안에 PLAN+SPEC 골격**, 코드 진입은 회의 후.
 
-## 후보 형식 — 외부화 어떻게
+## 외부화 형식 — 결정 (5/14)
 
-> 백도 정밀 분석 회수 후 확정. 현재 시점 1차 비교:
+### 큰 방향 (확정)
 
-| 형식 | 사람 편집 | nested 구조 | round-trip | 빌드 |
-|------|---------|----------|----------|------|
-| **단일 yaml** | ◎ 가장 직관 | ◎ 깊은 nested 지원 (templateData paragraphs 등) | python yaml 라이브러리 | yaml → JSON 인젝션 |
-| **단일 JSON** | △ 따옴표·escape 부담 | ◎ | 직접 JSON.parse | 그대로 인젝션 |
-| **복수 CSV** | ◎ 스프레드시트 편집 | × nested 표현 어려움 (paragraphs 배열, photos[] 등) | 여러 CSV → 조립 코드 필요 | csv 파싱 후 인젝션 |
-| **혼합 (CSV + yaml 본문)** | ◎ 메타·정답은 CSV, 본문은 yaml | ◎ | 분리 round-trip | 두 단계 인젝션 |
+**인간 face = CSV, 중간 = yaml, 빌드 = JSON 주입.** AI 리터러시 v06 패턴(`csv_to_yaml.py` round-trip) 차용.
 
-**1차 추천**: 단일 yaml. 이유 — Story 객체가 깊은 nested(templateData paragraphs/quotes/photos 배열), 가변 빈칸 키, 12 type 다양성을 한 파일에서 표현 가능. 정혜공/정예공 등 비개발 협업자가 텍스트 에디터로 편집 가능. csv는 평면 데이터(빈칸 정답 정합 검증 등 보조)에 유지.
+```
+인간 편집(CSV) → csv_to_yaml.py → data/topics/*.yaml → build_stories_json.py → 빌드 주입
+```
 
-(백도 분석 회수 후 확정/조정)
+### 왜 (피터공 5/14 결정)
+
+- **인간 face CSV** — 정예공·박성렬이 스프레드시트로 익숙하게 편집. AI 리터러시가 검증된 패턴.
+- **주제별 분할** — 한 파일에 36+ 스토리 다 몰지 않기. 한 주제 단위로 쪼개면 인간이 한 번에 보는 양이 적고, 아리공 처리(변환·검증·diff)도 작은 호흡.
+- **자료 type별 다름 인정** — 12 type 각각 nested 구조 다름(paragraphs 배열·photos[]·kakao messages 등). 평면 한 CSV로 다 표현 못 함. 자료별로 다른 구조로 처리.
+- **yaml은 중간 형식** — CSV로 표현 어려운 nested 본문은 yaml에서 자연. 빌드도 yaml 단계에서 주입.
+
+### 결정 자리 (회의 후 첫 자리)
+
+CSV 단위 두 후보 중 결정:
+
+| 안 | 구조 | 인간 편집 모양 |
+|----|------|--------------|
+| **두 CSV 분리** | `stories.csv` (메타·blanks·choices) + `sources.csv` (자료 본문, type별 컬럼) | 한 스토리 = stories 1행 + sources 4행 인접 |
+| **type별 CSV 분리** | `stories.csv` + `letters.csv`·`newspapers.csv`·`photos.csv`... 12개 | 한 type 집중 편집 가능, 한 스토리는 여러 파일에 흩어짐 |
+
+빌드 산출 yaml 구조는 결정 무관 — 아래 SPEC-data 스키마.
+
+### yaml 구조 (빌드 중간 형식)
+
+```
+data/topics/
+  01-{주제명}.yaml     # 한 주제 5~6 스토리
+  02-{주제명}.yaml
+  ...
+  06-{주제명}.yaml
+  archivist_types.yaml
+```
 
 ## Phase
 
-### Phase 1 — 분리 (회의 후 진입)
+### Phase 1 — 분리 ✅ (5/14 완료, 1.2 + 1.10~13만 회의 후)
 
-- Phase 1.1 — 베이스 HTML L655~ STORIES 인라인 추출 → `data/stories.yaml`
-- Phase 1.2 — 빌드 스크립트(`scripts/build.sh`)에 yaml → JSON 인젝션 단계 추가 (BLANK_SOURCE_LOOKUP 주입 패턴 확장)
-- Phase 1.3 — 베이스 HTML에 `// __STORIES__` placeholder 신설
-- Phase 1.4 — 빌드 + 시각 검증(cat01~03 18 스토리 회귀 테스트)
-- Phase 1.5 — sequential 빌드도 같은 데이터 사용 (`shared/index_sequential.html`도 placeholder)
+- Phase 1.1~1.9: 외부화 파이프라인 + 회귀 검증 완료. data/topics/*.yaml 6개 + archivist_types + build_stories_json.py + 두 베이스 HTML placeholder + build.sh/build_sequential.sh 갱신. cat01~03 18 스토리 1:1 일치 회귀 통과.
+- Phase 1.2: **CSV 단위 결정 보류** — 5/14 결정: 인간 face는 일단 미루고 아리공 직도로 cat04~06 채움 우선. CSV face는 cat04~06 완료 후 진입.
+- Phase 1.10~1.13: yaml_to_csv·csv_to_yaml·round-trip·validate — Phase 1.2 결정 후
 
-### Phase 2 — 외부 데이터 변환기 (분리 작업 후)
+### Phase 2 — cat04~06 yaml 채우기 (아리공 직도)
 
-- Phase 2.1 — `최종 원고/` 폴더 자료 형식 정밀 분석 (백도)
-- Phase 2.2 — 변환 스크립트 `scripts/import_jygong.py` — 정예공 자료 → `stories.yaml` 갱신본
-- Phase 2.3 — 검증: 빈칸 정합(in_source/answer_from), 자료 type 매핑, photo 경로 확인
-- Phase 2.4 — cat04~06 통합
+5/14 방향 전환: 자동 파서 대신 docx 텍스트 dump → 백도 yaml 작성 → 메인 통합 빌드. 사진은 정예공 폴더에서 일괄 카피.
+
+- Phase 2.1~2.4: ✅ cat04 완료 (6 스토리: s0401 선전마을 / s0403 기정동 / s0404 사라진마을들 / s0405 UN과 대성동 / s0406 대성동 초등학교 / s0407 민통선 마을). 사용된 자료 type: blog/diary/scholar/report/newspaper/photo/oral/kakao. 5/14
+- Phase 2.5: 피터공 cat04 브라우저 플테
+- Phase 2.6~2.7: cat05·cat06 같은 패턴 (회의 후)
+- Phase 2.8: cat01~03 갱신본 통합 (정예공 신착 vs 인라인 diff) — 후순위
 
 ### Phase 3 — 검수 & 베타 (5/26 전)
 
@@ -63,15 +87,16 @@
 
 ## 외부화 형식 결정 자리
 
-- [ ] 백도 분석 회수 후 단일 yaml vs 혼합 형식 결정 (피터공)
+- [x] 큰 방향 — 인간 CSV face + 중간 yaml + 빌드 주입, 주제별 분할 (5/14)
+- [ ] CSV 단위 — 두 CSV 분리 vs type별 CSV 분리 (회의 후 첫 자리)
 - [ ] sequential 빌드도 같은 데이터 공유 vs 별도 — 같이가 자연 (cat04~06 동일 콘텐츠)
 - [ ] 변환기 자동화 정도 — 100% 자동 vs 변환 후 수동 다듬기 (외부 자료 형식 자유도에 따라 결정)
 
 ## 미해결
 
+- CSV 단위 결정 (위)
 - 최종 원고 폴더가 cat01~03 갱신본도 포함하는지 (덮어쓰기 여부)
-- 검수 시트 포맷 (스프레드시트 컬럼 설계)
-- 정혜공/박성렬 검수 워크플로우 — yaml 직접 편집 vs 스프레드시트 → yaml 변환
+- 정혜공/박성렬 검수 워크플로우 — CSV 편집 후 csv_to_yaml.py 돌리는 주체(아리공 vs 자동화)
 
 ## React 마이그레이션 — 나중 결정 (5/14 합의)
 

@@ -322,6 +322,7 @@ renderMeta는 §6 표 따라 subtype별 헤더 출력. CSS는 기존 `.diary-pap
 | 6 | **kakao body 마크다운 규약** | `> **이름** [right]: 메시지` blockquote 패턴 | 파서 정규식 |
 | 7 | **scholar.author / scholar.source / report.issuer 필수화** | 필수 — 모든 자료 출처 명시 | 콘텐츠 회수 |
 | 8 | **archivist_types 분리 위치** | `data/sources/archivist_types.md` frontmatter | 편집 자리 분리 |
+| 9 | **표시 텍스트 본문화** (5/15 피터공) | 메타 분리 슬롯 폐기. 텍스트 subtype 9종(diary·newspaper·scholar·blog·poster·report·homework·letter·twitter)은 본문 통째 markdown → HTML. frontmatter는 시스템 메타(slot·category·subtype·icon·sub)만. §17 상세 | 파서 + 렌더 코드 대폭 단순화. 옵시디언 편집 자유 100% |
 
 > 결정 자리 2~5는 콘텐츠 짝 재배치 — 정예공/박성렬 검수 짝지어야 함. 단순 mv 아님. 베타 후 권고.
 
@@ -347,8 +348,122 @@ renderMeta는 §6 표 따라 subtype별 헤더 출력. CSS는 기존 `.diary-pap
 - [ ] 3.2 vscode/obsidian 셋업 안내
 - [ ] 3.3 검수 round-trip — md 수정 → 빌드 → 확인
 
+## 17. 표시 텍스트 본문화 패턴 (피터공 5/15 결정)
+
+**문제**: yaml frontmatter `meta.headline`, `meta.heading`, `meta.title` 등에 포맷 필요한 표시 텍스트(볼드·이탤릭·줄바꿈·따옴표) 박혀 있으면:
+- 옵시디언 본문에서 편집 X — yaml 영역은 plain text
+- yaml 따옴표 escape 지옥
+- 콘텐츠 작가 핸드오프 시 markdown 자유 못 살림
+
+**결정**: 텍스트 subtype 9종은 frontmatter 표시 메타 제거, 본문 통째 markdown.
+
+### 17.1 frontmatter 단순화
+
+**시스템 메타만**:
+- `slot` (A/B/C/D)
+- `category` (개인서사자료 등)
+- `subtype` (diary 등)
+- `icon` (📓)
+- `sub` (자료 카드 라벨 — 스토리 화면 자료 카드용. 본문 진입 전)
+
+**제거**: `title`, `meta.{date, credit, paperName, headline, author, heading, source, issuer, sign, ...}` 모두 본문 안 markdown으로.
+
+### 17.2 본문 markdown 패턴 (텍스트 subtype 9종)
+
+```markdown
+# {자료 타이틀 / 헤딩}
+
+*{날짜, 출처, 저자 등 부메타}*
+
+## {큰 헤드라인 / 부제목} (선택)
+
+**본문 시작.** 단락 1...
+
+단락 2.
+
+---
+*출처: {credit}*
+```
+
+- **H1** (`# `) → 자료 타이틀 / 신문사명 / 일기 제목
+- **em** italic 첫 줄 → 날짜, 부메타
+- **H2** (`## `) → 신문 헤드라인 / 일기 날짜 헤더
+- **본문** → 자유 markdown
+- **`---` + em** → credit / 출처 (선택)
+
+### 17.3 CSS 셀렉터 매핑
+
+기존 분리 슬롯(`.news-name`, `.news-date`, `.news-title`) 폐기. 컨테이너 안 마크다운 셀렉터로:
+
+```css
+.newspaper-paper h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: 0.4em; text-align: center; }
+.newspaper-paper h1 + p em { font-size: 0.65rem; color: var(--gray); }  /* 날짜 */
+.newspaper-paper h2 { font-size: 1rem; font-weight: 700; }
+.newspaper-paper p { font-size: 0.8rem; line-height: 1.7; }
+.newspaper-paper hr { border: 0; border-top: 1px solid var(--border); }
+.newspaper-paper hr + p em { font-size: 0.7rem; color: var(--gray); }  /* credit */
+```
+
+비슷하게 `.diary-paper h1/h2/em`, `.scholar-paper h1/em`, `.twitter-thread h1/em` 등.
+
+### 17.4 특수 subtype 유지 (5종)
+
+본문화 적용 X — 데이터 구조 자체가 분리 필수:
+
+- **photo**: `![](){}` 시퀀스 + 캡션 짝
+- **oral**: `> 인용문` blockquote
+- **kakao**: `> **이름** [left|right]: 메시지`
+- **text**: `> [sent]/[received] 메시지`
+- **qna**: `**Q.**` / `**A.**` 단락
+
+### 17.5 파서 출력 — `templateData` 단순화
+
+**텍스트 subtype 9종**:
+```python
+templateData = {"sub": fm.get("sub", ""), "html": markdown_to_html(body)}
+```
+
+**특수 5종**: 기존 분리 데이터 구조 유지.
+
+### 17.6 렌더 코드 통합
+
+`shared/index_base.html` switch case 14 → 텍스트 9종 통합 + 특수 5종 분리:
+
+```javascript
+const TEXT_SUBTYPES = ['diary','newspaper','scholar','blog','poster','report','homework','letter','twitter'];
+if (TEXT_SUBTYPES.includes(src.type)) {
+  return `<div class="${src.styleClass}">${d.html}</div>`;
+}
+// 특수 5종은 기존 case 유지
+switch (src.type) {
+  case 'photo': ...
+  case 'oral': ...
+  case 'kakao': ...
+  case 'text': ...
+  case 'qna': ...
+}
+```
+
+### 17.7 옛 yaml 호환 — 임시 두 분기
+
+Phase 4.1 (s0202 파일럿) ~ Phase 4.2 (일괄 마이그) 사이:
+- 새 md 패턴: `d.html` 있음 → 통합 분기
+- 옛 yaml 패턴: `d.paperName`/`d.headline`/`d.paragraphs` 있음 → 기존 분리 분기
+
+Phase 4.2 후 옛 분기 제거.
+
+### 17.8 진행
+
+- [x] Phase 4.1 s0202 yaml → md 5계층 완료 (5/15 12:00)
+- [ ] §17 결정 박힘 후 s0202 5 md 재구성 (본문화 패턴)
+- [ ] 파서 v0.2 — 텍스트 9종 html 통째
+- [ ] 렌더 코드 + CSS 매핑 (newspaper/diary 먼저)
+- [ ] 빌드 + 피터공 두루미 편집 체험
+- [ ] Phase 4.2 일괄 마이그 시 옛 분기 제거
+
 ## 16. 변경 이력
 
 | 날짜 | 버전 | 내용 |
 |---|---|---|
 | 2026-05-15 | v2.0-draft | 5계층 + 마크다운 face + JSON 중간 + 빈칸 button + 파서 명세. SPEC-data v1(yaml templateData) 대체 예정. 피터공 결정 자리 8건 박음. |
+| 2026-05-15 | v2.1 | §14 #9 + §17 — 표시 텍스트 본문화 결정. yaml meta 분리 슬롯 폐기, 텍스트 subtype 9종 본문 통째 markdown. 옵시디언 편집 자유 100%. 옛 yaml 호환 임시 두 분기 유지(Phase 4.2까지). |
