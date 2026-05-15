@@ -1,0 +1,734 @@
+topic: cat01
+topic_name: DMZ 기본정보
+stories:
+  - id: s0101
+    title: DMZ의 탄생
+    era: 1953년 7월 27일
+    location: 판문점, 중부전선, DMZ 일대
+    soundNote: 포성이 줄어들다 침묵 → 벌레 소리, 바람 소리
+    sources:
+      - id: A
+        type: letter
+        icon: ✉️
+        title: 군인의 편지
+        docTitle: 총소리가 멈춘 밤에
+        sub: DMZ에서 발견된 편지
+        styleClass: source-letter
+        templateData:
+          heading: 총소리가 멈춘 밤에
+          meta: '1953년 7월 27일 · 보내는 이: 국군 병장 박진우 · 받는 이: 어머니'
+          paragraphs:
+            - 어머니, 총소리가 멈췄습니다.
+            - |-
+              오늘 밤 열 시를 기해 모든 총성이 그쳤습니다. 아침에 {{A}}이라는 곳에서 정전협정이 체결되었다고 합니다. 서명에 단 10분밖에 걸리지 않았다 합니다. 3년이 넘는 전쟁을 그렇게 매듭짓다니.
+            - 이것은 평화가 아닙니다. '정전'이라 합니다. 총을 내려놓은 것이지 악수를 한 것이 아닙니다.
+            - |-
+              72시간 안에 우리는 2킬로미터를 물러납니다. 그 사이 빈 땅이 생기고, 군사분계선을 따라 1,292개의 표지판이 세워진다 합니다. 김 상병의 고향 마을도 그 안에 들어갑니다. 그는 오늘 밤 한마디도 하지 않았습니다.
+            - 달이 밝습니다. 이 전쟁은 멈추었지만, 끝나지 않았습니다.
+          sign: 아들 진우 올림
+          soundNote: 포성이 줄어들며… 침묵. 벌레 소리, 바람 소리.
+      - id: B
+        type: newspaper
+        icon: 📰
+        title: 신문 보도
+        docTitle: 정전협정 체결 — 판문점에서 쌍방 서명 완료
+        sub: 통일뉴스 1953년 7월 28일
+        styleClass: source-newspaper
+        templateData:
+          paperName: 통 일 뉴 스
+          date: 1953년 7월 28일 (화)
+          headline: 정전협정 체결 — 판문점에서 쌍방 서명 완료
+          paragraphs:
+            - |-
+              유엔군대표단 측 수석대표 미육군대장 {{B}}와 조선인민군 및 중국인민지원군대표단 수석대표 조선인민군대장 남일이 대표로 참석해 27일 오전 10시에 정전협정에 서명했다. 양측은 일체의 발언 없이 서명만을 교환하였다.
+            - |-
+              협정에 따라 발효 후 72시간 이내에 쌍방 군사력은 군사분계선으로부터 각 2킬로미터씩 후퇴하여야 한다. 이로써 서해 강화도에서 강원 고성까지 약 248킬로미터에 걸친 비무장지대가 설치된다.
+      - id: C
+        type: photo
+        icon: 📷
+        title: 사진 자료
+        docTitle: 정전협정 서명식
+        sub: 정전협정 서명식 · 군사분계선 표지판
+        styleClass: source-photo
+        templateData:
+          photos:
+            - src: photos/resized/01_signing_1953.jpg
+              alt: 정전협정 서명식
+              caption: |-
+                [사진 1] 1953년 7월 27일 오전 10시, 판문점. 유엔군대표단 수석대표 미육군대장 해리슨 2세(왼쪽 테이블)가 정전협정문에 서명하고 있다. 반대쪽에는 조선인민군 및 중국인민지원군대표단 수석대표 {{C}} 대장이 앉아 있다.
+              credit: 미국 국립문서기록관리청(NARA)
+            - src: photos/resized/02_mdl_marker.jpg
+              alt: 군사분계선 표지판
+              caption: '[사진 2] 판문점 DMZ 내 군사분계선 표지판. 서해 강화도에서 동해 고성까지 약 248킬로미터 구간에 총 1,292개가 설치되었다.'
+              credit: 미국 공군(USAF)
+      - id: D
+        type: oral
+        icon: 🎙️
+        title: 구술 인터뷰
+        docTitle: 정전협정 당일 기억
+        sub: 참전용사 김영수 (2010년 채록)
+        styleClass: source-oral
+        templateData:
+          meta: '구술자: 김영수 (1933년생, 당시 이등병) · 채록: 2010년 6월<br>주제: 정전협정 당일 기억'
+          quotes:
+            - '"그날 밤 열 시에 총소리가 딱 멈추니까, 세상이 쥐 죽은 듯이 조용해졌어. 근데 아무도 안 웃었어. 울지도 않고. 그냥 멍했지."'
+            - |-
+              "72시간 안에 물러나라 그래서, 3년 지킨 참호를 제 손으로 허물었어. 2킬로씩 물러나니까 폭이 {{D}}킬로짜리 빈 땅이 생기는 거야. 거기가 비무장지대가 된 거지."
+            - '"우리 부대에 연천 사람이 하나 있었는데, 그 친구 고향이 딱 그 안에 들어갔어. 그 친구는 그날 밤새 북쪽만 보고 있었어."'
+          soundNote: 먼 곳의 침묵… 벌레 소리, 바람 소리
+    blanks:
+      A:
+        answer: 판문점
+        hint: 이 편지 속 장소는 다른 자료에서 확인할 수 있습니다. 자료 B(신문)를 읽어보세요.
+        source: B
+      B:
+        answer: 해리슨 2세
+        hint: 이 인물은 사진 자료에서 확인할 수 있습니다. 자료 C(사진)의 캡션을 읽어보세요.
+        source: C
+        altAnswers:
+          - 해리슨
+      C:
+        answer: 남일
+        hint: 공산군 측 수석대표의 이름은 자료 B(신문)에서 확인할 수 있습니다.
+        source: B
+      D:
+        answer: '4'
+        hint: 각 2킬로미터씩 후퇴하면 총 폭은? 자료 B(신문)를 참고하세요.
+        source: B
+        altAnswers:
+          - 사
+          - 4km
+          - 4킬로미터
+    choices:
+      - id: A
+        icon: ✉️
+        title: 군인의 편지
+        meaning: 개인의 감정과 체험을 기록으로 남긴다
+      - id: B
+        icon: 📰
+        title: 신문 보도
+        meaning: 공식적 사실 기록을 남긴다
+      - id: C
+        icon: 📷
+        title: 사진
+        meaning: 시각적 증거를 남긴다
+      - id: D
+        icon: 🎙️
+        title: 구술 인터뷰
+        meaning: 살아있는 목소리를 기록으로 남긴다
+  - id: s0102
+    title: DMZ 명칭의 의미
+    era: 1953년 정전협정 ~ 현재
+    location: 판문점, DMZ, 민간인통제구역
+    sources:
+      - id: A
+        type: qna
+        icon: ❓
+        title: 지식인 Q&A
+        docTitle: DMZ가 뭔지 알려주세요!!
+        sub: DMZ가 뭔지 알려주세요!! (내공 100)
+        styleClass: source-qna
+        templateData:
+          source: 온라인 Q&A 게시판에서 발견된 질문과 답변
+          question:
+            - Q. DMZ가 뭔지 알려주세요!! (내공 100)
+            - '질문자: 민지 (2025.07.15)'
+            - |-
+              안녕하세요. 초등학교 5학년인데요. 여름방학 숙제로 DMZ를 조사해 오라고 했는데 너무 어려워요.ㅠㅠ 휴전선이랑 DMZ랑 같은 건가요? 민통선은 또 뭔가요? 쉽게 설명해 주실 분 있나요??
+          answer:
+            - A. 채택된 답변
+            - '답변자: 교육학과 대학생(2025.07.15)'
+            - 안녕하세요. 채택 부탁드립니다.
+            - 1. 휴전선은 사실 정식 명칭이 아니에요.
+            - |-
+              정식 이름은 군사분계선(MDL)이에요. 1953년에 전쟁이 멈추고 나서, 그때 양쪽 군대가 서 있던 자리에 말뚝을 1,292개 세웠어요. 서해안 {{A1}} 하구에서 동해안 {{A2}}까지요. 그 말뚝들을 이은 가상의 선이
+            - 2. 비무장지대(DMZ)는 그 선 주변의 빈 공간이에요.
+            - |-
+              군사분계선에서 남쪽으로 2킬로미터, 북쪽으로 2킬로미터씩 물러나서 만든 빈 공간이 DMZ에요. 총 폭이 4km인 띠 모양이죠. 여기엔 군인도 못 들어가고 무기도 설치하면 안 됩니다. DMZ의 남쪽 끝을 남방한계선(SLL), 북쪽 끝을 북방한계선이라고 불러요.
+            - 3. 민간인통제선(CACL)은 DMZ와 다른 거예요!
+            - |-
+              DMZ 남쪽의 SLL 밖에 있는 통제 구역이에요. DMZ는 정전협정으로 만들어진 거지만, 민간인통제선은 1954년 2월 미 육군 제8군단사령관이 민간인의 귀농을 규제하기 위해 만들었어요. 그래서 귀농선이라고 불렀지만
+      - id: B
+        type: scholar
+        icon: 📜
+        title: 정전협정 원문 인용
+        docTitle: 「한국 군사정전에 관한 협정」 원문
+        sub: 정전협정 제1조 · 한국민족문화대백과사전
+        styleClass: source-scholar
+        templateData:
+          heading: 정전협정 원문 인용
+          meta: 「한국 군사정전에 관한 협정」 원문 (1953.7.27, 외교부 소장본) 및 한국민족문화대백과사전
+          paragraphs:
+            - '[정전협정 제1조 제1항]'
+            - |-
+              "A military demarcation line shall be fixed and both sides shall withdraw two 2kilometers from this line so as to establish a demilitarized zone between the opposing forces."
+            - '"한 개의 군사분계선을 확정하고 쌍방이 이 선으로부터 각기 2킬로미터씩 후퇴함으로써 적대 군대 간에 한 개의 비무장지대를 설정한다."'
+            - '[한국민족문화대백과사전 — 비무장지대]'
+            - |-
+              비무장지대란 국제적인 조약이나 협정에 의해 무장이 금지된 지역으로, 무력 충돌 방지를 위해 군 병력의 주둔, 무기의 배치, 군사시설의 설치가 금지된 완충지대이다.
+            - '[민간인통제구역의 법적 근거]'
+            - |-
+              민간인통제구역은 정전협정에 근거하지 않는다. 1954년 미 육군 제8군단사령관이 군사시설 보안 및 민간인 귀농 규제를 목적으로 설정한 {{B}}에서 유래하며, 현재는 「군사기지 및 군사시설 보호법」 제5조에 따라 국방부장관이 군사분계선 이남 10킬로미터 범위 이내에서 지정한다.
+      - id: C
+        type: photo
+        icon: 📷
+        title: 사진 자료
+        docTitle: 판문점 DMZ 내 군사분계선(MDL) 표식물
+        sub: MDL 표식물
+        styleClass: source-photo
+        templateData:
+          photos:
+            - src: photos/cat01/1-2.jpg
+              alt: 군사분계선 표식물
+              caption: |-
+                판문점 비무장지대 내 군사분계선(MDL) 표식물. 1953년 정전협정 직후 서해안 임진강 하구에서 동해안 고성까지 총 1,292개가 설치되었다. 이 표식물들이 만들어낸 가상의 선이 곧 {{C}}이며, 이 선을 기준으로 남북 각 2km씩 후퇴하여 설정된 완충지대가 비무장지대이다.
+              credit: |-
+                Tech. Sgt. Scott Stewart, 미 공군(USAF), 1993년 7월 1일 촬영. Public Domain (미국 연방정부 저작물)
+      - id: D
+        type: kakao
+        icon: 💬
+        title: 카카오톡 대화
+        docTitle: 사회 수업 후 학생이 선생님에게 보낸 카카오톡 질문과 답변
+        sub: 학생과 선생님의 대화
+        styleClass: source-kakao
+        templateData:
+          source: 사회 수업 후 학생이 선생님에게 보낸 카카오톡 질문과 답변 (가상 자료)
+          messages:
+            - name: 민지
+              text: 선생님! 오늘 수업에서 DMZ 남쪽 끝이 남방한계선이라고 하셨잖아요. 근데 북방한계선은 DMZ 북쪽 끝인 건가요?
+            - name: 선생님
+              text: 맞아요. 민지! 군사분계선에서 남쪽 2킬로미터가 남방한계선, 북쪽 2킬로미터가 북방한계선이에요. 그 사이 {{D}}킬로미터가 DMZ고요
+              align: right
+            - name: 민지
+              text: 아 그리고 민통선은 DMZ랑 같은 건가요?
+            - name: 선생님
+              text: 아니에요! 민통선은 DMZ 바깥이에요. 군사기지 및 군사시설 보호법에 따라 국방부장관이 정하는 건데, 옛날에는 귀농선이라고 불렀어요.
+              align: right
+            - name: 민지
+              text: 귀농선이요? 왜 그런 이름이에요?
+            - name: 선생님
+              text: 1954년에 미 8군단이 전쟁 끝나고 농민들이 함부로 올라가지 못하게 만든 게 시초예요. 농사짓는 걸 통제한다는 뜻에서 귀농선이라고 했대요.
+              align: right
+            - name: 민지
+              text: 감사합니다 선생님!! 이제 이해가 돼요. ㅎㅎ
+    blanks:
+      A1:
+        answer: 임진강
+        hint: 사진 자료(C)의 캡션에서 서쪽 출발점을 확인하세요.
+        source: C
+      A2:
+        answer: 고성
+        hint: 사진 자료(C)의 캡션에서 동쪽 끝점을 확인하세요.
+        source: C
+      B:
+        answer: 귀농선
+        hint: 이 용어는 카카오톡 대화(D)에서 선생님이 언급합니다.
+        source: D
+      C:
+        answer: 군사분계선
+        hint: 지식인 Q&A(A)의 답변에서 이 선의 정식 명칭을 확인하세요.
+        source: A
+        altAnswers:
+          - MDL
+      D:
+        answer: '4'
+        hint: 지식인 Q&A(A)의 요약에서 DMZ의 총 폭을 확인하세요.
+        source: A
+    choices:
+      - id: A
+        icon: ❓
+        title: 지식인 Q&A
+        meaning: 누구나 이해할 수 있는 쉬운 설명을 남긴다
+      - id: B
+        icon: 📜
+        title: 정전협정 원문
+        meaning: 법적 근거를 정확히 기록한다
+      - id: C
+        icon: 📷
+        title: 사진
+        meaning: 시각적 증거를 남긴다
+      - id: D
+        icon: 💬
+        title: 카카오톡 대화
+        meaning: 일상 속 대화로 지식을 전달한다
+  - id: s0103
+    title: DMZ의 지리적 위치
+    era: 1953년 정전협정 ~ 2019년 논문
+    location: 서해 임진강 하구 ~ 동해 고성
+    sources:
+      - id: A
+        type: diary
+        icon: 📓
+        title: 중학생 일기
+        docTitle: 방학숙제 때문에 DMZ를 찾아봤다
+        sub: 방학숙제 때문에 DMZ를 찾아봤다
+        styleClass: source-diary
+        templateData:
+          heading: 방학숙제 때문에 DMZ를 찾아봤다
+          meta: 2025년 8월 2일 토요일 · 중학교 2학년 서하 (가상)
+          paragraphs:
+            - 방학 숙제로 'DMZ의 지리적 위치'를 조사하게 됐다. 우리 집이 김포인데, 조금만 올라가면 DMZ라 주제가 딱 맞았다.
+            - |-
+              DMZ는 서쪽 {{A}}에서 동쪽 고성까지 싹 이어진다고 한다. 길이는 239km, 면적은 약 904km². 서울보다 1.5배나 되는 넓은 땅인데 아무도 못 들어간다니 신기하다.
+            - |-
+              DMZ랑 닿아 있는 동네는 8개라고 한다. 경기도에서는 김포, 파주, 연천. 강원도에서는 철원, 화천, 양구, 인제, 고성. 서쪽에서 동쪽으로 쭉 이어진다. 내가 사는 김포도 들어있어서 괜히 뿌듯했다.
+            - 내일은 도서관에서 더 찾아봐야지. 쓸 게 너무 많다.
+      - id: B
+        type: scholar
+        icon: 📄
+        title: 논문 직접 인용
+        docTitle: 김창환(2019), "비무장지대 및 군사분계선의 길이에 관한 연구"
+        sub: 김창환(2019) · 김창환(2007)
+        styleClass: source-scholar
+        templateData:
+          heading: 논문 직접 인용
+          meta: 김창환(2019), "비무장지대 및 군사분계선의 길이에 관한 연구" · 김창환(2007), "DMZ의 공간적 범위에 관한 연구"
+          paragraphs:
+            - '[군사분계선 길이 — 시·도별]'
+            - |-
+              "본 연구는 비무장지대 및 군사분계선의 길이를 측정한 것이다. 정전협정문 첨부지도 9개 도엽을 ArcGIS의 지오레퍼런싱 기능을 사용하여 좌표를 부여하고 군사분계선을 디지타이징하였다."
+            - |-
+              "그 길이를 측정한 결과는 239.42km(148.77mile)이다. 이는 현재 비무장지대와 관련된 연구나 보고서 그리고 대중 매체에서 표기하는 '155마일 휴전선' 또는 '248km 비무장지대'라는 표현의 부적합을 의미하는 것이다."
+            - |-
+              [표] 구분: 강원도 / 경기도 / 합계 — km: 157.96 / 81.46 / 239.42 — mile: 98.15 / 50.62 / 148.77
+            - — 김창환(2019), 비무장지대 및 군사분계선의 길이에 관한 연구에서 발췌
+            - '[DMZ 면적]'
+            - |-
+              "DMZ의 면적은 약 903.8km²이다. 선행 연구들은 '248km × 4km = 992km²'로 단순 계산하였으나, 군사분계선이 직선이 아니므로 실측 값은 이보다 작다."
+            - |-
+              "DMZ는 동해안 고성군 명호리로부터 중부의 양구, 화천, 철원을 거쳐 개성 남쪽의 판문점을 지나 서쪽의 임진강 하구에 이르는 군사분계선을 따라 남북 방향으로 각각 2km씩 설정된 완충지대이다."
+            - — 김창환(2019), DMZ의 공간적 범위에 관한 연구에서 발췌
+      - id: C
+        type: photo
+        icon: 📷
+        title: 사진 자료
+        docTitle: NASA 위성이 촬영한 DMZ
+        sub: NASA 위성 사진
+        styleClass: source-photo
+        templateData:
+          photos:
+            - src: photos/cat01/1-3.jpg
+              alt: NASA 위성에서 본 DMZ
+              caption: |-
+                NASA 위성이 촬영한 한반도 중부. 남북 사이로 녹색 띠가 선명하게 보인다. 서쪽 한강하구에서 동쪽 고성까지 이어지는 비무장지대로, 총 면적은 약 {{C}}km²다.
+              credit: |-
+                Jesse Allen, NASA Earth Observatory, Landsat 4 & 5 위성 모자이크 (1989-1991). Public Domain (미국 연방정부 저작물)
+      - id: D
+        type: scholar
+        icon: 📄
+        title: 강의록
+        docTitle: DMZ는 어디에 있을까?
+        sub: 청소년 대상 DMZ 특강
+        styleClass: source-scholar
+        templateData:
+          heading: DMZ는 어디에 있을까?
+          meta: '강연자: 지리학 교수 (가상 재구성) · 대상: 청소년 대상 DMZ 특강'
+          paragraphs:
+            - 여러분, DMZ가 어디에 있는지 지도에서 찾아볼까요?
+            - |-
+              서쪽 한강하구에서 시작해서 동쪽 고성 해안까지, 한반도 허리를 가로지르는 선이 군사분계선이에요. 길이는 239.42km입니다. 248km라고 배운 분도 있죠? 그건 1952년 전쟁 중에 나온 추정치예요. 정확하지 않아요.
+            - |-
+              이 선을 중심으로 남북 각 2km, 합쳐서 폭 4km가 비무장지대, DMZ입니다. 면적은 약 903.8km². 서울이 605km²니까, 서울보다 1.5배 넓은 땅이네요.
+            - |-
+              자, DMZ에 맞닿은 지역을 서쪽부터 따라가 볼게요. 경기도에는 김포, 파주, 연천이 있고요. 강원도로 넘어가면 철원, 화천, 양구, 인제, 고성까지 이어집니다. 총 {{D}}개 시군이 DMZ와 닿아 있어요.
+            - 이 중 강원도 구간이 157.96km로 전체의 66%를 차지해요. 산악 지형을 따라 구불구불 이어지니까 경기도 구간보다 훨씬 길지요.
+    blanks:
+      A:
+        answer: 임진강
+        hint: 사진 자료(C)의 캡션에서 서쪽 시작점을 확인하세요.
+        source: C
+      C:
+        answer: '904'
+        hint: 일기(A)에서 DMZ 면적을 확인하세요.
+        source: A
+        altAnswers:
+          - '903.8'
+      D:
+        answer: '8'
+        hint: 일기(A)에서 DMZ에 닿아 있는 시군의 수를 세어보세요.
+        source: A
+    choices:
+      - id: A
+        icon: 📓
+        title: 중학생 일기
+        meaning: 또래의 시선으로 DMZ를 기록한다
+      - id: B
+        icon: 📄
+        title: 학술 논문
+        meaning: 과학적 측정 결과를 기록한다
+      - id: C
+        icon: 📷
+        title: 위성 사진
+        meaning: 우주에서 본 증거를 남긴다
+      - id: D
+        icon: 📄
+        title: 강의록
+        meaning: 전문가의 쉬운 설명을 기록한다
+  - id: s0104
+    title: DMZ의 관리체계
+    era: 1953년 정전협정 ~ 현재
+    location: 판문점(NNSC 본부), DMZ, 민간인통제구역
+    sources:
+      - id: A
+        type: letter
+        icon: ✉️
+        title: NNSC 장교의 편지
+        docTitle: 세상에서 가장 긴 임무
+        sub: 스웨덴 소령 에릭 린드그렌
+        styleClass: source-letter
+        templateData:
+          heading: 세상에서 가장 긴 임무
+          meta: '2026년 1월 15일 · 보내는 이: 에릭 린드그렌(가상), 스웨덴 육군 소령 · 받는 이: 아내 안나'
+          paragraphs:
+            - 사랑하는 안나에게.
+            - 판문점에 온 지 석 달이 지났다. 스톡홀름에서 여기까지 8,000km. 아이들은 잘 지내고 있지?
+            - |-
+              나는 중립국감독위원회(NNSC)의 스웨덴 대표단으로 이곳에 있어. 우리 임무는 1953년 정전협정이 제대로 지켜지고 있는지 감시하는 거야. 한반도에 새로운 무기나 추가 병력이 들어오지 않는지 확인하지.
+            - |-
+              NNSC는 원래 4개국이었어. 스웨덴과 {{A}}가 유엔군사령부(UNC) 측 지명이고, 폴란드와 체코가 북한 측 지명. 지금은 체코가 빠지고 폴란드도 상주하지 않아. 스웨덴 5명, 스위스 5명. 이렇게 10명이 세계에서
+            - |-
+              여기서 가장 인상 깊은 건 아침이야. 해가 뜰 때 DMZ 너머로 새소리가 들려. 세상에서 가장 무거운 침묵과 세상에서 가장 맑은 새소리가 공존하는 곳. 그게 이곳이야.
+            - 아이들에게 아빠가 보고 싶어 한다고 전해줘. 금방 갈게.
+          sign: 사랑을 담아, 에릭
+      - id: B
+        type: newspaper
+        icon: 📰
+        title: 신문 기획보도
+        docTitle: DMZ는 누가 어떻게 관리하나
+        sub: 통일뉴스 2026.3.12
+        styleClass: source-newspaper
+        templateData:
+          paperName: 통 일 뉴 스
+          date: 2026년 3월 12일
+          headline: '[기획] DMZ는 누가 어떻게 관리하나 — 정전협정·국내법·국제기구의 중첩 구조'
+          paragraphs:
+            - DMZ의 관리 체계는 단일 기관이 아닌 복수의 국제, 국내 기관이 중층적으로 관여하는 구조다.
+            - |-
+              DMZ 자체의 관할은 정전협정에 따라 유엔군사령부(UNC)가 담당하며 DMZ 남쪽 민간인통제구역은 국방부, DMZ의 평화적 이용 정책은 통일부, 접경지역 발전은 행정안정부가 담당한다. 따라서 DMZ 내 출입은 UNC의 허가가 필요하며 동시 입장 인원은 {{B}}명 이하로 제한된다.
+            - '[DMZ 거버넌스 구조]'
+            - 역할 구분 / 관할 영역 / 담당 / 근거
+            - DMZ 관할 / 군사분계선 남·북 각 2km / 유엔사 (UNC) / 정전협정 (1953)
+            - 민간인통제구역 관리 / DMZ 남방 약 5~10km / 국방부 / 관할부대장 / 군사기지 및 군사시설 보호법
+            - 남북교류협력 정책 / DMZ 평화적 이용, 남북 교류 / 통일부 / 남북교류협력에 관한 법률
+            - 접경지역 발전 / 민간인통제구역 이남 접경 시·군 / 행정안전부 / 15개 시·군 / 접경지역 지원 특별법
+      - id: C
+        type: photo
+        icon: 📷
+        title: 사진 자료
+        docTitle: 판문점 공동경비구역(JSA) 내 중립국감독위원회(NNSC) 건물
+        sub: 판문점 JSA 내 NNSC 건물
+        styleClass: source-photo
+        templateData:
+          photos:
+            - src: photos/cat01/1-4.jpg
+              alt: NNSC 건물
+              caption: |-
+                스웨덴 대표단의 판문점 공동경비구역(JSA) 방문 시 {{C}}(NNSC) 건물 앞에서 미군과 한국군이 경비를 서고 있다. NNSC는 1953년 정전협정에 따라 설립되어 정전 이행을 중립적으로 감시하며, 현재 스웨덴과 스위스 각 5명이 판문점에 상주한다.
+              credit: |-
+                Cpl. Joseph Liggio, 8th Army (2025.10.15). DVIDS #9365309. Public Domain (미국 연방정부 저작물)
+      - id: D
+        type: kakao
+        icon: 💬
+        title: 카카오톡 대화
+        docTitle: DMZ 출입 경험자와 후배의 카카오톡 대화 (가상 자료)
+        sub: DMZ 출입 경험자와 후배의 대화
+        styleClass: source-kakao
+        templateData:
+          source: DMZ 출입 경험자와 후배의 카카오톡 대화 (가상 자료)
+          messages:
+            - name: 유진
+              text: 선배 저 DMZ 관련 리서치 중인데요, 출입 절차가 어떻게 되는 거예요?
+            - name: 동현
+              text: DMZ에 들어가려면 {{D}} 허가를 받아야 해.
+              align: right
+            - name: 유진
+              text: 아 유엔사한테 허가를 받는 거예요?
+            - name: 동현
+              text: ㅇㅇ 정전협정 제1조 제10항에 있어. 그리고 입장 제한 인원도 있어. 1,000명이 넘으면 안 돼.
+              align: right
+            - name: 유진
+              text: 민통선은요?
+            - name: 동현
+              text: 거긴 별개야. 관할 부대장한테 출입허가신청서 내는 거야
+              align: right
+    blanks:
+      A:
+        answer: 스위스
+        hint: 사진 자료(C)의 캡션에서 NNSC의 구성을 확인하세요.
+        source: C
+      B:
+        answer: 1,000
+        hint: 카카오톡 대화(D)에서 동현이 언급하는 인원 제한을 확인하세요.
+        source: D
+        altAnswers:
+          - '1000'
+      C:
+        answer: 중립국감독위원회
+        hint: 편지(A)에서 NNSC의 한국어 명칭을 확인하세요.
+        source: A
+        altAnswers:
+          - NNSC
+      D:
+        answer: 유엔사
+        hint: 신문 기획보도(B)에서 DMZ 관할 담당 기관을 확인하세요.
+        source: B
+        altAnswers:
+          - 유엔군사령부
+          - UNC
+    choices:
+      - id: A
+        icon: ✉️
+        title: NNSC 장교의 편지
+        meaning: 중립국 감시자의 시선을 기록한다
+      - id: B
+        icon: 📰
+        title: 신문 기획보도
+        meaning: 복잡한 관리 체계를 정리한다
+      - id: C
+        icon: 📷
+        title: 사진
+        meaning: 현장의 증거를 남긴다
+      - id: D
+        icon: 💬
+        title: 카카오톡 대화
+        meaning: 실무 경험자의 지식을 전달한다
+  - id: s0105
+    title: JSA와 판문점
+    era: 2018년 비무장화 ~ 2023년 재무장
+    location: 판문점, 공동경비구역(JSA)
+    sources:
+      - id: A
+        type: letter
+        icon: ✉️
+        title: 군인의 편지
+        docTitle: 판문점에서 보내는 마지막 밤
+        sub: JSA 근무 병장 최준혁
+        styleClass: source-letter
+        templateData:
+          heading: 판문점에서 보내는 마지막 밤
+          meta: '2026년 1월 20일 · 보내는 이: 육군 병장 최준혁(가상) · 받는 이: 동생 최민혁'
+          paragraphs:
+            - 민혁아,
+            - 네가 JSA에 지원하고 싶다고 했을 때 솔직히 놀랐어. 형이 근무하는 거 보고 멋있어서 지원하고 싶다니, 기특하면서도 걱정이 된다.
+            - |-
+              지원 조건부터 말해 줄게. 키 174cm 이상, 체중 65kg 이상, 교정시력 1.0 이상이어야 해. 병무청에서 전문 특기병으로 모집하는데, 1차 서류심사 통과하면 2차에서 체력 평가랑 면접을 봐. 팔굽혀펴기, 윗몸일으키기, 달리기.
+            - |-
+              합격하면 훈련소 수료 후 카투사 교육대에서 미군 기초 군사교육을 받아. 그 다음 유엔사 경비대대(UNCSB-JSA) 소속으로 배치돼. 한국군 신분인데 유엔사 지휘를 받는 독특한 구조야.
+            - |-
+              나는 주로 T2에서 근무해. 파란색 T2 건물 알지? 거기 안에 긴 탁자가 있는데, 그 탁자 중심선이 군사분계선이야. 탁자 건너편에는 북한 쪽 판문각이 보여. 겨우 발자국 거리인데, 세상에서 가장 먼 곳이야.
+            - |-
+              {{A1}}년에는 남북이 합의해서 이 안에서 무기를 다 치웠대. 양쪽 35명씩, 노란 완장만 차고 근무했다고 해. 잠깐이었지만 그때 여기서 남북 군인들이 자유롭게 오갔대. 근데 {{A2}}년에 북한이 다시 무장하면서, 지금은 원래대로야.
+            - 이제 곧 전역이다. 엄마한테 형이 된장찌개 먹고 싶어 한다고 전해줘.
+          sign: 형 준혁이가.
+      - id: B
+        type: report
+        icon: 📋
+        title: 보도자료
+        docTitle: 공동경비구역(JSA)의 무장 경비 상태 변화
+        sub: 9.19 합의 타임라인
+        styleClass: source-report
+        templateData:
+          header: '[타임라인] 공동경비구역(JSA)의 무장 경비 상태 변화 — 통일뉴스 2026년 3월 15일'
+          meta: 뉴스 보도 재구성 (정책브리핑·VOA·Korea Herald 참고)
+          paragraphs:
+            - '■ 2018.09.19: 평양에서 9.19 군사합의 서명. JSA 비무장화 합의.'
+            - '■ 2018.10.01~20: JSA 내 지뢰 제거 작업 완료.'
+            - |-
+              ■ 2018.10.25: 남북 초소 철수(남측 4곳·북측 5곳), 화기·탄약·병력 철수 완료. 이후 남북에서는 각 35명이 비무장 상태로 노란 완장("판문점 민사경찰") 착용 후 근무.
+            - |-
+              ■ 2018.10.26~27: 남과 북, 그리고 {{B}}가 공동으로 JSA 내 9개 초소의 지뢰 제거, 화기·탄약 철수, 경비인원 조정 상태를 현장 확인. 1953년 JSA 설정 이후 65년 만의 비무장화 확인.
+            - '■ 2023.11.22: 북한, 9.19 군사합의 파기 선언. 이후 북한군 경비병이 권총을 착용한 것을 확인'
+            - '■ 2023.12.19: 유엔사, 북한군 무장에 대응하여 유엔사 측 JSA 근무자에게 재무장 승인'
+            - '■ 2024.06.04: 대한민국 정부, 국무회의 의결로 9.19 군사합의 전체 효력 정지'
+            - 현재 JSA는 2018년 이전의 무장 경비 상태로 복귀했다.
+      - id: C
+        type: photo
+        icon: 📷
+        title: 사진 자료
+        docTitle: 남측에서 바라본 JSA Conference Row
+        sub: JSA Conference Row
+        styleClass: source-photo
+        templateData:
+          photos:
+            - src: photos/cat01/1-5.jpg
+              alt: JSA Conference Row
+              caption: |-
+                남측에서 바라본 공동경비구역(JSA). 군사분계선 위에 놓인 파란색 유엔 회담장 건물 3동(T1, T2, T3)이 보인다. [T2] 내부 긴 탁자의 중심선이 곧 군사분계선이다. 뒤로 보이는 건물은 북측 판문각이다.
+              credit: |-
+                Lt.Cmdr. Brendan Trembath, United Nations Command (2025.1.7). DVIDS #8830815. Public Domain (미국 연방정부 저작물)
+      - id: D
+        type: text
+        icon: 💬
+        title: 문자 메시지
+        docTitle: 판문점 견학 전 학생과 선생님의 문자 메시지
+        sub: 판문점 견학 전 학생과 선생님
+        styleClass: source-text
+        templateData:
+          source: 판문점 견학 전 학생과 선생님의 문자 메시지 (가상 자료)
+          messages:
+            - text: 선생님! 내일 판문점 견학인데 궁금한 거 있어요. 판문점이랑 판문각이 같은 건가요?
+              sent: false
+            - text: 아니에요! 둘은 달라요. 판문점은 동네 이름이고, 판문각은 북한 쪽 건물 이름이에요.
+              sent: true
+            - text: 이름이 왜 이렇게 비슷한 거예요?
+              sent: false
+            - text: |-
+                판문점은 원래 '널문리'라는 마을 이름에서 왔어요. 널빤지 대문이 많은 마을이었는데, 정전회담 때 미국과 중국이 한자로 옮기면서 판문점(板門店)이 된 거예요.
+              sent: true
+            - text: 그럼 판문각은요?
+              sent: false
+            - text: 판문각은 북한이 판문점 안에 세운 건물이에요. T2 회담장 안에서 탁자 건너편을 보면 보이는 큰 건물이 바로 {{D}}이에요
+              sent: true
+            - text: 아~ 판문점 안에 판문각이 있는 거네요!
+              sent: false
+            - text: 맞아요. 판문점은 구역, 판문각은 건물! 헷갈리지 마세요.
+              sent: true
+    blanks:
+      A1:
+        answer: '2018'
+        hint: 보도자료(B)의 타임라인에서 JSA 비무장화 합의 연도를 확인하세요.
+        source: B
+      A2:
+        answer: '2023'
+        hint: 보도자료(B)의 타임라인에서 북한이 합의를 파기한 연도를 확인하세요.
+        source: B
+      B:
+        answer: 유엔사
+        hint: 편지(A)에서 JSA 경비대대의 지휘 체계를 확인하세요.
+        source: A
+        altAnswers:
+          - 유엔사령부
+          - UNC
+      D:
+        answer: 판문각
+        hint: 편지(A)에서 탁자 건너편 북측 건물 이름을 확인하세요.
+        source: A
+    choices:
+      - id: A
+        icon: ✉️
+        title: 군인의 편지
+        meaning: 현장 군인의 생생한 체험을 기록한다
+      - id: B
+        icon: 📋
+        title: 보도자료 타임라인
+        meaning: 역사적 변화를 시간순으로 정리한다
+      - id: C
+        icon: 📷
+        title: 사진
+        meaning: 현장의 모습을 시각적으로 남긴다
+      - id: D
+        icon: 💬
+        title: 문자 메시지
+        meaning: 일상 속 대화로 정보를 전달한다
+  - id: s0106
+    title: 세계사 속의 DMZ
+    era: 2026년 현재 · 세계 비무장지대 비교
+    location: 독일 그뤼네스 반트, 베트남, 키프로스, 남극, 한반도 DMZ
+    sources:
+      - id: A
+        type: diary
+        icon: 📓
+        title: 생태학자의 일기
+        docTitle: 죽음의 띠가 생명의 띠가 되기까지
+        sub: 죽음의 띠가 생명의 띠가 되기까지
+        styleClass: source-diary
+        templateData:
+          heading: 죽음의 띠가 생명의 띠가 되기까지
+          meta: '2025년 9월 15일 · 쓰는 이: 박소연 연구원, DMZ 생태연구소'
+          paragraphs:
+            - 오늘 독일의 {{A}}를 걸었다.
+            - 여러 희귀 동식물이 이곳에 산다. 동독과 서독으로 나눠진 동안 사람의 발길이 닿지 않아서 생긴 일이다. 무려 41년이나 말이다.
+            - |-
+              옛 동독 국경경비대의 순찰로를 걷는데, 발밑에 꽃이 피어 있었다. 감시탑이 있던 자리에는 새가 둥지를 틀었다. 총구가 향하던 곳에 이제는 나비가 날고 있다.
+            - |-
+              우리의 DMZ는 어느덧 73년이다. 독일보다 30년이 넘는 시간이 지났다. 누군가 말했다. DMZ는 세계에서 가장 슬픈 이유로 만들어진, 가장 아름다운 자연이라고.
+            - 언젠가 한국의 DMZ도 누구나 드나드는 생태 길이 되어서 학생들과 함께 걷고 싶다.
+      - id: B
+        type: newspaper
+        icon: 📰
+        title: 신문 기획보도
+        docTitle: 세계의 비무장지대 비교
+        sub: 통일뉴스 2026.3.18
+        styleClass: source-newspaper
+        templateData:
+          paperName: 통 일 뉴 스
+          date: 2026년 3월 18일
+          headline: '[기획] 세계의 경계선 — 사라진 것과 남아 있는 것은 무엇인가?'
+          paragraphs:
+            - |-
+              ■ 독일 그뤼네스 반트: 길이 약 1,393km, 면적 약 177km2. 1949~1990년(41년). 통일 후 생태 회랑으로 전환. 2024년 유네스코 세계유산 잠정목록 등재
+            - |-
+              ■ 베트남 DMZ: 길이 약 100km. {{B}}강을 따라 남북 각 최대 5km. 1954~1976년(22년). 1954년 제네바 협정으로 설치. 1976년 7월 2일 통일 선포로 소멸되어 현재 관광지로 사용
+            - |-
+              ■ 터키 키프로스 그린라인: 길이 약 180km. 1974년부터 현재까지. 유엔평화유지군이 관리 중이며 2003년부터 민간 통행을 허용하고 있음. 현재 9개 검문소 운영 중
+            - |-
+              ■ 남극: 남극 대륙 전체. 1959년부터 현재. 세계 최초 비무장화 대륙. 군사기지, 훈련, 무기실험 금지. 과학연구 목적의 인력과 장비는 허용
+            - '■ 한반도 DMZ: 길이 약 248km, 면적 약 907km2. 1953년부터 현재까지. 현존하는 비무장 지대 중 최장 기간 지속 중'
+      - id: C
+        type: photo
+        icon: 📷
+        title: 사진 자료
+        docTitle: 베트남 DMZ — 벤하이강의 히엔르엉 다리
+        sub: 베트남 DMZ — 벤하이강의 히엔르엉 다리
+        styleClass: source-photo
+        templateData:
+          photos:
+            - src: photos/cat01/1-6.jpg
+              alt: 베트남 벤하이강 히엔르엉 다리
+              caption: |-
+                베트남 벤하이강의 히엔르엉 다리. 1954년 제네바 협정에 따라 이 강을 경계로 비무장지대가 설정되었다. {{C}}년간 베트남을 남북으로 가르던 이 다리는 통일 이후 유적지로 보존되고 있다.
+              credit: Rolf Müller, Wikimedia Commons, CC BY-SA 3.0
+      - id: D
+        type: oral
+        icon: 🎙️
+        title: 구술 인터뷰
+        docTitle: 한정호(가상), 통일연구원 선임연구위원
+        sub: 통일연구원 선임연구위원
+        styleClass: source-oral
+        templateData:
+          meta: '구술자: 한정호(가상), 통일연구원 선임연구위원 · 채록 일시: 2025년 12월<br>주제: 세계 분단국가 비교 연구'
+          quotes:
+            - |-
+              "세계에서 DMZ라 불리는 곳을 다 가봤어요. 독일, 베트남, 키프로스. 세 곳 다 공통점이 있는데, 분단이 끝났거나 최소한 민간 통행이 가능해졌다는 거예요."
+            - |-
+              "베트남은 1954년에 제네바 협정으로 벤하이강에 DMZ를 만들었는데, 남북 각 5km씩이라 우리보다 넓었어요. 22년 만에 통일되면서 지금은 관광지가 됐죠."
+            - |-
+              "키프로스 그린라인은 {{D}}이 관리하는데, 2003년부터 검문소를 통해 남북 이동이 가능해졌어요. 완충지대 안에 만 명 이상이 거주하고 있어요. 우리하고는 차원이 다르죠."
+    blanks:
+      A:
+        answer: 그뤼네스 반트
+        hint: 신문 기획보도(B)에서 독일의 생태 회랑 이름을 확인하세요.
+        source: B
+        altAnswers:
+          - 그뤼네스반트
+      B:
+        answer: 벤하이
+        hint: 구술 인터뷰(D)에서 베트남 DMZ의 강 이름을 확인하세요.
+        source: D
+      C:
+        answer: '22'
+        hint: 신문 기획보도(B)에서 베트남 DMZ 존속 기간을 확인하세요.
+        source: B
+      D:
+        answer: 유엔평화유지군
+        hint: 신문 기획보도(B)에서 키프로스 그린라인 관리 기관을 확인하세요.
+        source: B
+        altAnswers:
+          - UNFICYP
+    choices:
+      - id: A
+        icon: 📓
+        title: 생태학자의 일기
+        meaning: 개인의 감동과 희망을 기록한다
+      - id: B
+        icon: 📰
+        title: 신문 기획보도
+        meaning: 세계적 비교를 통해 객관적 분석을 남긴다
+      - id: C
+        icon: 📷
+        title: 사진
+        meaning: 변화의 증거를 시각적으로 남긴다
+      - id: D
+        icon: 🎙️
+        title: 구술 인터뷰
+        meaning: 연구자의 현장 경험을 기록한다

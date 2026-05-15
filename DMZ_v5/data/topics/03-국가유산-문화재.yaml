@@ -1,0 +1,593 @@
+topic: cat03
+topic_name: 국가유산-문화재
+stories:
+  - id: s0301
+    title: 고려시대 유산(만월대)
+    era: 918~1392년 고려 · 2007~2018년 발굴
+    location: 개성 만월대
+    sources:
+      - id: A
+        type: diary
+        icon: 📓
+        title: 만월대의 일기
+        sub: 나는 천 년 동안 이 자리에 있었습니다
+        styleClass: source-diary
+        templateData:
+          meta: 만월대 (고려 궁궐터) — 의인화
+          paragraphs:
+            - 나는 만월대입니다. 고려의 정궁. 송악산 남쪽 기슭에서, 나는 약 470년간 이 나라의 중심이었습니다.
+            - 1361년, 홍건적이 들이닥쳤을 때 나는 불탔습니다. 그 뒤로 아무도 나를 다시 세우지 않았습니다.
+            - 2007년, 드디어 남과 북의 사람들이 함께 왔습니다. 내 몸을 파기 시작했습니다. 조심스럽게, 아주 조심스럽게.
+            - 8차례의 발굴 끝에 40여 동의 건물터가 드러났고, {{A}}여 점의 유물이 나왔습니다. 그중에는 금속활자도 있었습니다.
+            - 나는 2013년에 {{B}}이 되었습니다. 세계가 나를 알아본 것입니다.
+            - 하지만 발굴은 멈추었습니다. 남과 북의 사이가 다시 멀어졌기 때문입니다. 나는 기다립니다. 천 년을 기다렸으니, 조금 더 기다릴 수 있습니다.
+      - id: B
+        type: report
+        icon: 📋
+        title: 문화재청 보도자료
+        sub: 만월대 남북공동발굴 성과
+        styleClass: source-report
+        templateData:
+          header: 문화재청 보도자료 — 개성 만월대 남북공동발굴 12년 성과
+          paragraphs:
+            - 2007년부터 2018년까지 8차례에 걸친 남북공동발굴조사 결과, 서부건축군 약 33,000m²를 발굴하여 40여 동의 건물터를 확인했다.
+            - 출토 유물은 약 17,900여 점으로, 2015~2016년 발굴에서는 금속활자 5점이 출토되었다.
+            - |-
+              개성역사유적지구는 만월대, 개성 남대문, 고려 성균관, 선죽교, 왕건왕릉, {{C}} 등 12개 유적으로 구성되며, 2013년 유네스코 세계문화유산에 등재되었다.
+      - id: C
+        type: photo
+        icon: 📷
+        title: 사진 자료
+        sub: 개성 만월대 전경
+        styleClass: source-photo
+        templateData:
+          photos:
+            - src: photos/cat03/3-1.jpg
+              alt: 만월대
+              caption: |-
+                [사진] 개성 송악산 남쪽 기슭의 만월대. 고려 정궁 터로, 약 25만m² 규모이다. 2013년 개성역사유적지구의 일부로 유네스코 세계문화유산에 등재되었다. 개성역사유적지구에는 만월대 외에도 공민왕릉, 왕건왕릉, 선죽교 등 {{C}}개 유적이 포함되어 있다.
+              credit: Eternal and life, 2011. CC BY-SA 4.0
+      - id: D
+        type: oral
+        icon: 🎙️
+        title: 구술 인터뷰
+        sub: 남북공동발굴단 연구원
+        styleClass: source-oral
+        templateData:
+          meta: '구술자: 정승민(가상), 전 남북공동발굴단 연구원'
+          quotes:
+            - '"2007년에 처음 만월대 땅을 밟았을 때요, 손이 떨렸어요. 분단 이후 남쪽 고고학자가 북쪽 땅에서 발굴하는 거잖아요."'
+            - '"북쪽 연구자들이랑 같이 일했는데, 신기한 게 뭐냐면 삽질하는 방법이 같아요. 같은 교과서로 배웠으니까."'
+            - '"{{D}}이 나왔을 때는 진짜 울었어요. 고려시대에 이미 활자를 만들었다는 증거가 수백 년간 이 땅 아래 잠들어 있었던 거잖아요."'
+            - '"발굴이 멈춘 지 벌써 몇 년이에요. 아직 궁성의 핵심 구역은 손도 못 댔어요."'
+    blanks:
+      A:
+        answer: 17,900
+        hint: 보도자료(B)에서 출토 유물 수를 확인하세요.
+        source: B
+        altAnswers:
+          - '17900'
+      B:
+        answer: 세계문화유산
+        hint: 보도자료(B)에서 2013년 등재된 명칭을 확인하세요.
+        source: B
+        altAnswers:
+          - 세계유산
+      C:
+        answer: '12'
+        hint: 보도자료(B)에서 개성역사유적지구의 유적 수를 확인하세요.
+        source: B
+      D:
+        answer: 금속활자
+        hint: 일기(A)에서 유물 중 특별한 발견을 확인하세요.
+        source: A
+    choices:
+      - id: A
+        icon: 📓
+        title: 만월대의 일기
+        meaning: 천 년의 기다림을 기록한다
+      - id: B
+        icon: 📋
+        title: 보도자료
+        meaning: 발굴 성과를 공식 기록한다
+      - id: C
+        icon: 📷
+        title: 사진
+        meaning: 현장의 모습을 남긴다
+      - id: D
+        icon: 🎙️
+        title: 구술 인터뷰
+        meaning: 발굴자의 감동을 기록한다
+  - id: s0302
+    title: 경순왕릉
+    era: 935년 신라 멸망 ~ 현재
+    location: 연천군 장남면 고랑포리
+    sources:
+      - id: A
+        type: letter
+        icon: ✉️
+        title: 경순왕의 편지
+        sub: 경주에 가지 못한 왕
+        styleClass: source-letter
+        templateData:
+          heading: 경주에 가지 못한 왕
+          meta: 시간을 초월하여 · 경순왕 김부 (신라 제56대, 마지막 왕)
+          paragraphs:
+            - 나의 후손들에게,
+            - 나는 {{A}}의 마지막 왕, 김부입니다.
+            - 935년, 나는 신하들과 함께 고려에 나라를 넘겨주기로 했습니다. 더 이상의 피를 보고 싶지 않았습니다.
+            - 979년, 내가 세상을 떠났을 때 장례 행렬은 경주를 향했습니다. 하지만 고랑포에서 고려 조정이 막았습니다.
+            - 그래서 나는 이곳, 임진강이 보이는 언덕에 묻혔습니다. 경주가 아닌 곳에 잠든 유일한 신라의 왕.
+            - 천 년이 흘렀습니다. 나의 무덤 주변에는 {{D}}가 묻혔다고 합니다. 사람이 만든 것 중 가장 잔인한 것이, 나의 잠을 지키고 있습니다.
+          sign: 경순왕 김부 올림
+      - id: B
+        type: newspaper
+        icon: 📰
+        title: 신문 보도
+        sub: 통일뉴스 2026.4.10
+        styleClass: source-newspaper
+        templateData:
+          paperName: 통 일 뉴 스
+          date: 2026년 4월 10일
+          headline: '[르포] 지뢰밭 속의 왕릉 — 경순왕릉을 찾아서'
+          paragraphs:
+            - |-
+              경기도 {{B}} 장남면 고랑포리. 사적 제244호 경순왕릉은 한때 민간인통제구역 안에 있었다. 능 주변 야산에는 미확인 지뢰가 매설되어 있어, 진입로 양쪽에 '지뢰' 표지 울타리가 세워져 있다.
+            - |-
+              경순왕은 신라 마지막 왕(제56대)이다. 935년 고려에 항복한 뒤, 979년 사망 시 장례 행렬이 경주로 향하다가 고랑포에서 고려 조정의 저지를 받았다.
+            - 오랫동안 잊혀져 있다가 조선 영조 때 재확인되었으며, 현재는 민간에 공개되어 누구나 참배할 수 있다.
+      - id: C
+        type: photo
+        icon: 📷
+        title: 사진 자료
+        sub: 경순왕릉
+        styleClass: source-photo
+        templateData:
+          photos:
+            - src: photos/cat03/3-2.jpg
+              alt: 경순왕릉
+              caption: '[사진] 경기도 연천군 소재 경순왕릉. {{C}} 제244호. 신라 마지막 왕의 무덤으로, 한때 민간인통제구역 내에 위치했다.'
+              credit: Altostratus, 2011. CC BY-SA 3.0
+      - id: D
+        type: kakao
+        icon: 💬
+        title: 카카오톡 대화
+        sub: 경순왕릉 방문 후 친구 대화
+        styleClass: source-kakao
+        templateData:
+          messages:
+            - name: 수아
+              text: 오늘 경순왕릉 다녀왔는데 소름 돋았어
+            - name: 민지
+              text: 거기 연천에 있는 거지? 신라 왕 무덤이 왜 거기 있어?
+            - name: 수아
+              text: 경주로 가다가 고려 조정이 막았대. 신라 부흥운동 일어날까 봐
+            - name: 민지
+              text: 헐 그래서 임진강 근처에 묻힌 거야?
+            - name: 수아
+              text: ㅇㅇ 그리고 무덤 주위에 지뢰가 매설돼 있어
+            - name: 민지
+              text: 지뢰?? 진짜??
+            - name: 수아
+              text: 민통선 안에 있었거든. 지금은 공개됐지만 뒤쪽 철책 너머로는 절대 못 가
+            - name: 민지
+              text: 천 년 전 왕을 지뢰가 지키고 있는 거네...
+    blanks:
+      A:
+        answer: 신라
+        hint: 신문 보도(B)에서 경순왕의 왕조를 확인하세요.
+        source: B
+      B:
+        answer: 연천군
+        hint: 카카오톡(D)에서 왕릉 소재지를 확인하세요.
+        source: D
+      C:
+        answer: 사적
+        hint: 신문 보도(B)에서 왕릉의 문화재 지정 유형을 확인하세요.
+        source: B
+      D:
+        answer: 지뢰
+        hint: 신문 보도(B)에서 왕릉 주변에 매설된 것을 확인하세요.
+        source: B
+    choices:
+      - id: A
+        icon: ✉️
+        title: 경순왕의 편지
+        meaning: 천 년 전 왕의 목소리를 기록한다
+      - id: B
+        icon: 📰
+        title: 신문 보도
+        meaning: 현장 르포를 기록한다
+      - id: C
+        icon: 📷
+        title: 사진
+        meaning: 왕릉의 모습을 남긴다
+      - id: D
+        icon: 💬
+        title: 카카오톡 대화
+        meaning: 방문 경험을 기록한다
+  - id: s0303
+    title: 허준의 무덤
+    era: 1537~1615년 허준 · 2009년 세계기록유산
+    location: 파주시 진동면 하포리
+    sources:
+      - id: A
+        type: diary
+        icon: 📓
+        title: 허준 후손의 일기
+        sub: 증조할아버지의 산소를 찾아가는 길
+        styleClass: source-diary
+        templateData:
+          meta: 1616년(광해군 8년) 가을 · 허준의 증손 허영(가상)
+          paragraphs:
+            - 증조할아버지께서 돌아가신 지 한 해가 되었다.
+            - 올해 처음 산소에 성묘를 간다. 임진강을 건너 파주 진동의 산자락.
+            - 증조할아버지는 어의(御醫)이셨다. 임진왜란 때 선조 대왕을 의주까지 수행하셨고, 그 공으로 호성공신 3등에 오르셨다.
+            - |-
+              무엇보다 증조할아버지는 {{A}}을 남기셨다. 25권의 의학서. 선조 대왕이 명하시길 — 백성이 스스로 몸을 돌볼 수 있는 책을 만들라 하셨고, 16년의 연구 끝에 완성하셨다.
+            - 산소는 해발이 높은 곳에 있다. 쌍분으로, 왼쪽이 증조할아버지, 오른쪽이 증조할머니(안동김씨)이시다.
+            - 증조할아버지. 당신이 남기신 책이 백 년 뒤에도, 천 년 뒤에도 사람들을 살리고 있을 것입니다.
+      - id: B
+        type: newspaper
+        icon: 📰
+        title: 신문 보도
+        sub: 통일뉴스 2026.7.31
+        styleClass: source-newspaper
+        templateData:
+          paperName: 통 일 뉴 스
+          date: 2026년 7월 31일
+          headline: '[기획] 동의보감 {{B}} 등재 17주년… 허준 묘는 지금'
+          paragraphs:
+            - |-
+              2009년 7월 31일, 유네스코는 동의보감을 세계기록유산(Memory of the World)으로 등재했다. 의학 서적이 세계기록유산에 오른 것은 세계 최초다.
+            - 허준(1537~1615)의 묘는 경기도 {{C}} 진동면 하포리에 있다. 경기도 기념물 제128호.
+            - |-
+              1991년 재미 고문서연구가가 '양천허씨족보' 기록을 바탕으로 군부대 협조를 얻어 발견했다. 쌍분 형태로 좌측이 허준, 우측이 부인 안동김씨로 추정된다.
+      - id: C
+        type: photo
+        icon: 📷
+        title: 사진 자료
+        sub: 동의보감
+        styleClass: source-photo
+        templateData:
+          photos:
+            - src: photos/cat03/3-3.jpg
+              alt: 동의보감
+              caption: |-
+                [사진] 동의보감 목차 페이지. 허준이 16년간 연구하여 1610년 완성, 1613년 목판 간행한 {{D}}권의 방대한 의학 백과사전이다. 2009년 유네스코 세계기록유산에 등재되었다.
+              credit: 허준 원저(1613). Public Domain
+      - id: D
+        type: oral
+        icon: 🎙️
+        title: 구술 인터뷰
+        sub: 파주시 문화유산 해설사
+        styleClass: source-oral
+        templateData:
+          meta: '구술자: 김종태(가상), 파주시 문화유산 해설사'
+          quotes:
+            - '"허준 묘가 발견된 게 1991년이에요. 임진강 건너 해발 159m 산자락에 있었는데, 족보 기록 보고 군부대 협조 얻어서 찾아간 거예요."'
+            - '"쌍분이에요. 왼쪽이 허준 선생, 오른쪽이 부인. 문인석 두 기가 서 있는데 높이가 203cm."'
+            - '"동의보감이 25권인데, 선조 임금이 명해서 16년 걸려 완성한 거예요. 백성이 스스로 몸을 돌볼 수 있게."'
+            - '"지금은 무료로 누구나 올 수 있어요. 임진각에서 출발하는 관광 코스에 포함돼 있거든요."'
+    blanks:
+      A:
+        answer: 동의보감
+        hint: 신문 보도(B)에서 유네스코에 등재된 의학서 이름을 확인하세요.
+        source: B
+      B:
+        answer: 세계기록유산
+        hint: 구술 인터뷰(D) 또는 사진(C)에서 유네스코 등재 유형을 확인하세요.
+        source: C
+      C:
+        answer: 파주시
+        hint: 구술 인터뷰(D)에서 해설사의 소속 지역을 확인하세요.
+        source: D
+      D:
+        answer: '25'
+        hint: 일기(A) 또는 구술(D)에서 동의보감의 권수를 확인하세요.
+        source: A
+    choices:
+      - id: A
+        icon: 📓
+        title: 후손의 일기
+        meaning: 가족의 기억을 기록한다
+      - id: B
+        icon: 📰
+        title: 신문 보도
+        meaning: 역사적 사실을 기록한다
+      - id: C
+        icon: 📷
+        title: 사진
+        meaning: 문화유산의 모습을 남긴다
+      - id: D
+        icon: 🎙️
+        title: 구술 인터뷰
+        meaning: 해설사의 지식을 기록한다
+  - id: s0304
+    title: 병자호란 감화전투
+    era: 1637년 1월 병자호란
+    location: 철원군 김화읍
+    sources:
+      - id: A
+        type: diary
+        icon: 📓
+        title: 군사의 딸 일기
+        sub: 아버지가 돌아오시면
+        styleClass: source-diary
+        templateData:
+          meta: 1637년(인조 15년) 정월 · 연이(가상, 14세), 평안도 군사의 딸
+          paragraphs:
+            - 아버지가 떠나신 지 열흘이 넘었다.
+            - |-
+              오랑캐가 쳐들어왔다고 했다. {{A}}이라고 했다. 아버지는 새벽에 창을 들고 나가셨다. 남한산성에 임금님이 갇혀 계시다고, 구하러 가야 한다고 하셨다.
+            - 평안도에서 5천 명이 모였다고 들었다. 아버지는 {{B}} 장군 휘하라고 하셨다.
+            - 아버지. 제발 다치지 마세요. 아버지가 돌아오시면, 제가 좋아하는 인절미를 만들어 드릴 거예요.
+            - |-
+              — 아버지는 돌아오지 않으셨다. 김화 백전 전투에서 전사하신 것이다. 마을 사람들이 흩어진 유해를 모아 무덤을 만들었다. 전골총이라 부른다. 가까이에는 {{C}}이라는 무덤도 있다.
+      - id: B
+        type: newspaper
+        icon: 📰
+        title: 신문 보도
+        sub: 통일뉴스 2026.1.28
+        styleClass: source-newspaper
+        templateData:
+          paperName: 통 일 뉴 스
+          date: 2026년 1월 28일
+          headline: '[기획] 병자호란 389주년 — DMZ 속에 잠든 김화 전투의 영웅들'
+          paragraphs:
+            - |-
+              1637년 1월 28일, 병자호란 당시 평안도관찰사 홍명구(1596~1637)가 이끄는 2,000명과 유림의 3,000명, 총 5,000명의 근왕군이 철원 김화에서 청군과 4차례 교전하여 약 3,000명의 적군을 섬멸했다.
+            - 홍명구 장군은 이 전투에서 장렬하게 전사하여 시호 '충렬'을 수여받았다.
+            - |-
+              전사한 병사들의 유해는 마을 주민들이 수습하여 전골총에 안장했다. 전골총은 현재 DMZ 남방한계선 내에 위치하여 현장 조사가 불가능하다. 인근의 매두분(고려 말 홍건적 매장지)도 마찬가지다.
+      - id: C
+        type: photo
+        icon: 📷
+        title: 사진 자료
+        sub: 연천 호로고루
+        styleClass: source-photo
+        templateData:
+          photos:
+            - src: photos/cat03/3-4.jpg
+              alt: 호로고루
+              caption: |-
+                [사진] 연천 호로고루(사적 제467호). 고구려시대 보루로, DMZ 접경지역에 위치한 문화유산의 대표적 사례다. 김화의 전골총과 매두분 역시 접경지역 내 문화유산이지만, {{D}} 남방한계선 안에 위치하여 현장 접근이 불가능하다.
+              credit: Jaehee Jang1, 2015. CC BY-SA 4.0
+      - id: D
+        type: oral
+        icon: 🎙️
+        title: 구술 인터뷰
+        sub: 철원 향토사학자
+        styleClass: source-oral
+        templateData:
+          meta: '구술자: 박종수(가상), 철원 향토사학자'
+          quotes:
+            - '"김화 백전 전투가 병자호란 2대 승첩 중 하나에요. 평안도에서 5천 명이 달려온 거예요."'
+            - '"홍명구 장군이 전사하고, 마을 사람들이 유해를 모아서 전골총을 만들었어요."'
+            - '"그 옆에 매두분이라는 무덤도 있어요. 고려 말 홍건적 시체를 묻은 곳이에요."'
+            - '"문제는 둘 다 DMZ 안이라 가볼 수가 없어요. 389년 된 무덤을 현장 조사조차 못 하고 있는 거예요."'
+    blanks:
+      A:
+        answer: 병자호란
+        hint: 신문 보도(B)에서 전쟁의 이름을 확인하세요.
+        source: B
+      B:
+        answer: 홍명구
+        hint: 신문 보도(B)에서 2,000명을 이끈 장군 이름을 확인하세요.
+        source: B
+      C:
+        answer: 매두분
+        hint: 구술 인터뷰(D)에서 전골총 옆의 무덤 이름을 확인하세요.
+        source: D
+      D:
+        answer: DMZ
+        hint: 구술 인터뷰(D)에서 접근 불가능한 이유를 확인하세요.
+        source: D
+    choices:
+      - id: A
+        icon: 📓
+        title: 군사의 딸 일기
+        meaning: 전쟁 속 가족의 아픔을 기록한다
+      - id: B
+        icon: 📰
+        title: 신문 보도
+        meaning: 역사적 전투를 기록한다
+      - id: C
+        icon: 📷
+        title: 사진
+        meaning: 접경 문화유산의 모습을 남긴다
+      - id: D
+        icon: 🎙️
+        title: 구술 인터뷰
+        meaning: 향토사학자의 지식을 기록한다
+  - id: s0305
+    title: 연천 전곡리 유적
+    era: 1978년 발견 · 약 30만 년 전
+    location: 연천군 전곡읍 한탄강변
+    sources:
+      - id: A
+        type: letter
+        icon: ✉️
+        title: 보웬의 편지
+        sub: 교수님, 이것을 보셔야 합니다
+        styleClass: source-letter
+        templateData:
+          heading: 교수님, 이것을 보셔야 합니다
+          meta: 1978년 가을 · Greg Bowen (동두천 주둔 미군) → François Bordes 교수
+          paragraphs:
+            - Dear Professor Bordes,
+            - 저는 지금 한국의 동두천이라는 곳에 주둔하고 있습니다. 지난 주말, 근처 {{A}}이라는 강변을 걷다가 이상한 돌을 발견했습니다.
+            - 양면이 정교하게 가공되어 있었습니다. 한쪽은 날카롭고, 반대쪽은 손에 쥘 수 있도록 둥글게 다듬어져 있었습니다.
+            - 교수님, 이것은 {{C}} 주먹도끼가 아닌지요?
+            - |-
+              만약 제가 보는 것이 맞다면, 이것은 모비우스 교수님의 이론 — 인도 동쪽에는 이러한 석기가 존재하지 않는다는 — 에 대한 반증이 될 수 있지 않겠습니까.
+          sign: Respectfully, Greg Bowen
+      - id: B
+        type: newspaper
+        icon: 📰
+        title: 신문 보도
+        sub: 통일뉴스 2026.5.10
+        styleClass: source-newspaper
+        templateData:
+          paperName: 통 일 뉴 스
+          date: 2026년 5월 10일
+          headline: 연천 전곡리 유적 발굴 48주년… '세계 구석기 역사를 바꾼 발견'
+          paragraphs:
+            - |-
+              1978년 동두천 주둔 미군 그렉 보웬이 한탄강변에서 석기를 발견한 이래, 사적 제268호로 지정된 연천 전곡리 유적은 약 50년간 22회 이상의 발굴 조사를 거쳤다.
+            - 전곡리에서 출토된 아슐리안형 주먹도끼는 하버드대 {{B}}(Hallam Movius) 교수의 지배적 이론을 근본적으로 뒤집은 세계사적 발견이다.
+            - 보웬은 이 석기를 프랑수와 보르도 교수에게 보냈고, 보르도 교수는 서울대학교 김원룡 교수를 소개했다.
+      - id: C
+        type: photo
+        icon: 📷
+        title: 사진 자료
+        sub: 전곡리 주먹도끼
+        styleClass: source-photo
+        templateData:
+          photos:
+            - src: photos/cat03/3-5.jpg
+              alt: 전곡리 주먹도끼
+              caption: |-
+                [사진] 경기도 연천 전곡리에서 출토된 전기 구석기시대 주먹도끼. 국립중앙박물관 소장. 이 석기의 발견은 모비우스 라인의 {{D}} 구석기 기술 열등설을 뒤집어 세계 구석기 역사를 재평가하게 만든 사건이다.
+              credit: Ismoon, 2018. CC BY-SA 4.0
+      - id: D
+        type: oral
+        icon: 🎙️
+        title: 구술 인터뷰
+        sub: 전곡리 선사박물관 학예사
+        styleClass: source-oral
+        templateData:
+          meta: '구술자: 이현주(가상), 전곡리 선사박물관 학예사'
+          quotes:
+            - '"그렉 보웬이라는 미국인이 한탄강에서 돌을 주웠어요. 그게 시작이에요. 1978년."'
+            - '"모비우스라는 학자가 그은 선이 있었거든요. 인도 동쪽에는 이런 정교한 주먹도끼가 없다는 이론. 전곡리가 그 이론을 완전히 깼어요."'
+            - '"50년 가까이 22번 넘게 발굴했는데, 아직도 새로운 게 나와요. 동아시아 구석기 역사를 다시 쓰게 만든 곳이에요."'
+    blanks:
+      A:
+        answer: 한탄강
+        hint: 신문 보도(B)에서 석기 발견 장소를 확인하세요.
+        source: B
+      B:
+        answer: 모비우스
+        hint: 편지(A)에서 언급된 교수 이름을 확인하세요.
+        source: A
+      C:
+        answer: 아슐리안
+        hint: 신문 보도(B)에서 주먹도끼의 유형명을 확인하세요.
+        source: B
+      D:
+        answer: 동아시아
+        hint: 구술 인터뷰(D)에서 이 발견이 뒤집은 이론의 대상 지역을 확인하세요.
+        source: D
+    choices:
+      - id: A
+        icon: ✉️
+        title: 보웬의 편지
+        meaning: 발견자의 떨림을 기록한다
+      - id: B
+        icon: 📰
+        title: 신문 보도
+        meaning: 학술적 의미를 기록한다
+      - id: C
+        icon: 📷
+        title: 사진
+        meaning: 30만 년 전 석기를 남긴다
+      - id: D
+        icon: 🎙️
+        title: 구술 인터뷰
+        meaning: 박물관 전문가의 설명을 기록한다
+  - id: s0306
+    title: 철원성
+    era: 905년 태봉 ~ 현재
+    location: 철원 평화전망대, 철원성(DMZ 내)
+    sources:
+      - id: A
+        type: diary
+        icon: 📓
+        title: 역사학자의 일기
+        sub: 내가 죽기 전에
+        styleClass: source-diary
+        templateData:
+          meta: 2026년 3월 · 역사학자 박종길(가상, 90세)
+          paragraphs:
+            - 오늘도 평화전망대에 올랐다.
+            - 망원경으로 DMZ 너머를 본다. {{A}}가 905년에 세운 철원성. 군사분계선이 도성 한가운데를 가르고 있다.
+            - 외성 둘레만 12,306m. 내성, 궁성까지 3겹 구조. 우리 쪽에서 볼 수 있는 건 외성 남벽과 동벽 일부뿐이다.
+            - 2007년에 만월대 공동 발굴이 시작됐을 때, 다음은 철원성이라고 기대했다. 하지만 아직이다.
+            - 나이가 아흔이다. 내가 죽기 전에 저 성을 직접 밟아볼 수 있을까.
+      - id: B
+        type: newspaper
+        icon: 📰
+        title: 신문 보도
+        sub: 통일뉴스 2026.3.15
+        styleClass: source-newspaper
+        templateData:
+          paperName: 통 일 뉴 스
+          date: 2026년 3월 15일
+          headline: 태봉 철원성, 남북 공동 발굴 '1순위' 유적으로 재조명
+          paragraphs:
+            - 태봉국(901~918) 궁예가 수도로 삼은 철원성은 외성·내성·궁성의 3겹 구조로, 외성 둘레만 약 12,306m에 달한다.
+            - '{{B}}이 도성 중앙부를 관통하고 있어 완전한 조사에는 남북 공동 작업이 불가피하다.'
+            - 학계에서는 장기간 사람의 손길이 닿지 않아 역설적으로 양호한 보존 상태를 유지하고 있을 것으로 추정한다.
+      - id: C
+        type: photo
+        icon: 📷
+        title: 사진 자료
+        sub: 철원 민통선 일대
+        styleClass: source-photo
+        templateData:
+          photos:
+            - src: photos/cat03/3-6.jpg
+              alt: 철원 민통선 일대 (철원성 터 방향 전경)
+              caption: '[사진] 철원 민통선 일대. 이 일대에 궁예가 세운 태봉의 도성 철원성이 위치해 있다. 외성 둘레는 약 {{C}}m로 추정된다.'
+              credit: 대한민국 국방부, "2012년 전선에 서다" 시리즈 (CC BY-SA 2.0)
+      - id: D
+        type: oral
+        icon: 🎙️
+        title: 구술 인터뷰
+        sub: 철원 향토사학자 최동원
+        styleClass: source-oral
+        templateData:
+          meta: '구술자: 최동원(가상), 철원 향토사학자 · 채록: 2025년 11월'
+          quotes:
+            - |-
+              "철원성이 뭐냐면, 궁예가 나라를 세우고 수도를 만든 곳이에요. 외성, 내성, 궁성 3겹 구조인데, 외성 남벽하고 동벽 일부만 우리 쪽이고, 내성이랑 궁성은 전부 북쪽이에요."
+            - '"참 신기하죠? 군사분계선이 철원성을 거의 정확하게 반으로 가르고 있다고 합니다."'
+            - '"{{D}}에서 망원경으로 보면 성벽 윤곽이 보여요. 70년간 풀숲에 덮여 있지만, 아직 살아있는 거예요."'
+            - '"2007년에 남북이 만월대 공동 발굴을 시작했을 때, 다음은 철원성이라고 했는데… 그 뒤로 소식이 없어요."'
+    blanks:
+      A:
+        answer: 궁예
+        hint: 구술 인터뷰(D)에서 철원성을 세운 인물을 확인하세요.
+        source: D
+      B:
+        answer: 군사분계선
+        hint: 구술 인터뷰(D)에서 철원성을 가르는 선의 이름을 확인하세요.
+        source: D
+      C:
+        answer: 12,306
+        hint: 신문 보도(B)에서 외성 둘레를 확인하세요.
+        source: B
+        altAnswers:
+          - '12306'
+      D:
+        answer: 평화전망대
+        hint: 일기(A)에서 역사학자가 올라간 장소를 확인하세요.
+        source: A
+    choices:
+      - id: A
+        icon: 📓
+        title: 역사학자의 일기
+        meaning: 평생의 소망을 기록한다
+      - id: B
+        icon: 📰
+        title: 신문 보도
+        meaning: 학술적 가치를 기록한다
+      - id: C
+        icon: 📷
+        title: 사진
+        meaning: 현장의 모습을 남긴다
+      - id: D
+        icon: 🎙️
+        title: 구술 인터뷰
+        meaning: 향토사학자의 열정을 기록한다

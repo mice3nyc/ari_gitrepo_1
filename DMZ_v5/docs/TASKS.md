@@ -87,12 +87,40 @@ GitHub Pages 자동 배포 — `https://mice3nyc.github.io/ari_gitrepo_1/DMZ_v5/
   - kakao 6 messages: `sender` → `name`, `time` 제거 (s0606 D)
   - SPEC-data 13 type 표 갱신 + 검증 룰 박음
 - [x] **Phase 2.7.2** — dmz_blanks.csv cat04~06 보충 (5/15) — sequential lock 메카닉 미반영 진단. CSV 71 매핑(cat01~03 18 스토리만) → 143 매핑(36 스토리 전부). yaml `blanks[].source` 회수 후 72행 append. sequential 빌드 재실행 정상(143 mappings, JS OK).
-- [ ] **Phase 2.7.3** — surplus 키 38건 결정 대기 (피터공) — yaml에 있으나 코드 미렌더. 모두 콘텐츠 의미 있음(출처·제목·서명·바이오·빈칸 마커 포함). 두 선택지:
-  - (a) 코드 렌더 추가 — diary.heading 19/report.meta 9/kakao.source 4/newspaper.meta 1/qna.source 1/text.source 1/twitter.bio 1/twitter.source 1/diary.sign 1
-  - (b) yaml 삭제 — 콘텐츠 손실(특히 s0606.B `report.meta` 안 `{{B}}` 빈칸 마커는 게임 기능 영향)
-  - 권고: (a). 패턴은 blog/poster 기존 메타 렌더 그대로
+- [x] **Phase 2.7.3** — surplus 키 38건 진단 완료 (5/15) — 피터공 결정: **5계층 + 마크다운 face 재구조화 진입**. surplus는 새 구조에서 모든 콘텐츠가 body에 박혀 자동 해소. → [[SPEC-data-v2]] / [[../../../../../.claude/plans/1-2-5-dazzling-parrot]]
 - [ ] **Phase 2.8** — cat01~03 갱신본 통합 (정예공 신착 본문 vs 인라인 diff) — 후순위
 - [ ] **Phase 2.9** — `scripts/export_review_csv.py` — 검수 시트 export (Phase 1.10~12 결정 후)
+
+### Phase 4 — 5계층 + 마크다운 face 재구조화 (5/15~ / 베타 후 일괄)
+
+> 피터공 결정 5/15. SPEC: [[SPEC-data-v2]]. Plan: `~/.claude/plans/1-2-5-dazzling-parrot.md`. 결정 자리 8건 모두 확정.
+
+**Phase 4.1 — 파일럿** (5/15~5/17, 베타 위협 X)
+
+- [x] 4.1.1 폴더 구조 생성 `data/sources/cat02-생태환경/s0202-두루미-월동지/`
+- [x] 4.1.2 s0202 yaml → md 5파일 마이그레이션 (_meta.md + A/B/C/D-{대분류}.md)
+- [x] 4.1.3 `scripts/md_to_json.py` 파서 v0.1 — 13 subtype 처리, slot/category 일관성 검증, photo/oral/kakao/text/qna 패턴 파서
+- [x] 4.1.4 `scripts/build_stories_json.py`에 md 덮어쓰기 분기 추가(임시) — yaml 35 + md 1 = 36 스토리 합본
+- [x] 4.1.5 빌드 회귀 — mobile 353,288 / offline 353,287 / sequential 360,608 bytes, JS syntax OK, s0202 콘텐츠 본문 유지 확인
+- [ ] 4.1.6 피터공 obsidian에서 `data/sources/cat02-*/s0202-*/` 5 md 열어 사진 미리보기 + 편집 체험
+
+**Phase 4.2 — 일괄 마이그레이션** (베타 후, 5/27~6/3)
+
+- [ ] 4.2.1 결정 자리 #2~#5 콘텐츠 짝 재배치 (정예공/박성렬 검수)
+  - s0102.A qna → 슬롯 D / s0103.D scholar → 슬롯 B / s0506 B·C swap / s0603.C report → 슬롯 B
+- [ ] 4.2.2 35 스토리 일괄 변환 (백도 6개 병렬, 주제별 cat01~06)
+- [ ] 4.2.3 renderSource 단순화 — switch 14 case → bodyHtml 주입 + meta 헤더 자동
+- [ ] 4.2.4 빈칸 button UI — md `{{X}}` → `<button>` → 클릭 입력 모달
+- [ ] 4.2.5 dmz_blanks.csv auto-export from _meta.md frontmatter
+- [ ] 4.2.6 36 스토리 회귀 시각 검증
+- [ ] 4.2.7 yaml 폐기 — `data/topics/*.yaml` archive
+- [ ] 4.2.8 build_stories_json.py md 분기 정리 → 단일 경로
+
+**Phase 4.3 — 작가 핸드오프** (6/4~)
+
+- [ ] 4.3.1 정예공/박성렬에 폴더 + 마크다운 편집 가이드 (`docs/CONTENT-AUTHORING.md` 신설)
+- [ ] 4.3.2 vscode/obsidian 셋업 안내
+- [ ] 4.3.3 검수 round-trip — md 수정 → 빌드 → 시각 확인
 
 ### Phase 3 — 검수·베타 (5/26 전)
 
