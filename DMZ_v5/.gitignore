@@ -1,1 +1,5 @@
-DMZ_v5/shared/dmz_blanks.csv.bak.*
+shared/*.bak.*
+shared/dmz_blanks.csv.bak.*
+scripts/__pycache__/
+__pycache__/
+*.pyc

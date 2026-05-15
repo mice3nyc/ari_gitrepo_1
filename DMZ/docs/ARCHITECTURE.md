@@ -16,18 +16,29 @@ flowchart TD
     Delivery["<b>전달</b><br>#delivery-screen<br>봉투 애니메이션"]
     Result["<b>결과</b><br>#result-screen<br>점수 + 요약"]
 
+    %% 패딩용 투명 노드
+    pad1[ ]:::hidden
+    pad2[ ]:::hidden
+
     Login -->|"이름+코드 입력<br>handleLogin()"| Select
     Select -->|"캐릭터 클릭<br>selectCharacter()"| Game
     Game --- GameList
-    GameList -->|"자료카드 클릭<br>openSource()"| GameViewer
+
+    %% 뷰어 루프를 좌측, 메인 흐름을 중앙, 패딩을 우측에 배치
     GameViewer -->|"닫기 버튼<br>closeSource()"| GameList
+    GameList -->|"자료카드 클릭<br>openSource()"| GameViewer
     GameViewer -->|"좌우 네비/스와이프<br>navigateSource()"| GameViewer
     GameList -->|"4/4 빈칸 완료<br>올클리어팝업 → goToPhase3()"| Phase3
+    GameList ~~~ pad1
+
     Phase3 -->|"2개 선택 완료<br>confirmArchive()"| Delivery
+    Phase3 ~~~ pad2
+
     Delivery -->|"캐릭터 < 3<br>backToSelect()"| Select
     Delivery -->|"캐릭터 = 3(전체 완료)<br>showResult()"| Result
     Result -->|"처음부터 다시<br>resetGame()"| Login
 
+    classDef hidden display:none
     style Login fill:#fff,stroke:#000,stroke-width:2px
     style Select fill:#fff,stroke:#000,stroke-width:2px
     style Game fill:#f5f5f5,stroke:#000,stroke-width:2px,stroke-dasharray: 5 5
@@ -126,6 +137,7 @@ flowchart TD
     Viewer["게임-뷰어<br>자료 내용 + 빈칸 표시"]
 
     subgraph 빈칸_처리 ["빈칸 처리"]
+        direction TB
         ClickBlank["빈 빈칸 클릭<br>.blank-slot.empty"]
         Modal["답변모달 열림<br>openAnswerModal()<br>힌트 표시"]
         Submit["정답 입력 → 확인<br>submitAnswer()"]
@@ -135,6 +147,7 @@ flowchart TD
     end
 
     subgraph 캐치워드 ["캐치워드 처리"]
+        direction TB
         ClickText["본문 텍스트 클릭"]
         Highlight["형광연두 하이라이트<br>.catchword-highlight"]
         FIFO["최대 3개 유지 (FIFO)<br>4번째 → 가장 오래된 것 해제"]
@@ -147,16 +160,27 @@ flowchart TD
     Confirm["선택 완료<br>confirmArchive()"]
     Delivery["전달 화면<br>봉투 애니메이션"]
 
+    %% 패딩용 투명 노드
+    pad3[ ]:::hidden
+
     Start --> OpenSource
     OpenSource --> Viewer
+
+    %% 빈칸 처리를 좌측, 캐치워드를 우측에 대칭 배치
     Viewer --> ClickBlank
     Viewer --> ClickText
+    Viewer ~~~ pad3
+
     ClickBlank --> Modal
     Modal --> Submit
     Submit --> Check
     Check -->|정답| Correct
     Check -->|오답| Wrong
     Wrong --> Modal
+
+    ClickText --> Highlight
+    Highlight --> FIFO
+
     Correct --> AllClear
     AllClear -->|아니오| Viewer
     AllClear -->|예| Popup
@@ -165,9 +189,7 @@ flowchart TD
     SelectTwo --> Confirm
     Confirm --> Delivery
 
-    ClickText --> Highlight
-    Highlight --> FIFO
-
+    classDef hidden display:none
     style 빈칸_처리 fill:#f9f9f9,stroke:#000,stroke-width:1px
     style 캐치워드 fill:#f9f9f9,stroke:#000,stroke-width:1px
     style Correct fill:#000,color:#fff,stroke:#000
