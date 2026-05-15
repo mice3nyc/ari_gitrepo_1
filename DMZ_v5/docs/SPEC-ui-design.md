@@ -198,8 +198,8 @@ author: 아리공
 
 ### 5. 적용 베이스
 
-- **파일럿**: `pickone/index.html` (가장 최근 빌드, 안전)
-- **propagate 후보**: mobile / offline / sequential — pickone OK 후 동일 face 적용
+- **canonical**: `pickone/index.html` — 5/15 피터공 결정으로 앞으로 디자인·콘텐츠 변경은 pickone만 작업
+- mobile / offline / sequential 세 빌드는 5/15 상태로 동결 (propagate 폐기)
 
 ### 6. 미해결 / 결정 자리
 

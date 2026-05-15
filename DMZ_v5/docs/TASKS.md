@@ -188,7 +188,7 @@ GitHub Pages 자동 배포 — `https://mice3nyc.github.io/ari_gitrepo_1/DMZ_v5/
 - [x] 6.3 pickone 파일럿 — 로그인(SD카드)·튜토리얼(핑크/cyan)·카테고리(폴더격자)·스토리(폴더격자)·자료 리스트(핑크 카드+이미지 아이콘)·자료 본문 모달(핑크 헤더)·빈칸(cyan)
 - [x] 6.4 게임 코드 검증 OFF (5/15 임시) — `code !== '1233'` 제거. 아무거나 입력 통과
 - [x] 6.5 빌드 + JS syntax OK (282,075 bytes) + 브라우저 플테 합격
-- [ ] 6.6 mobile / offline / sequential propagate — pickone OK 확정 후
+- [~] 6.6 mobile / offline / sequential propagate — **폐기 5/15** 피터공 결정: pickone만 계속 업데이트. 나머지 3 빌드는 5/15 상태로 동결
 - [ ] 6.7 잔여 화면 다듬기 — completion / result / archive / 자료 paper 스타일(letter·diary·newspaper 등 B&W → 새 톤)
 - [ ] 6.8 카카오 자료 본문 새 디자인 — 분홍/회색 말풍선 + 캐릭터 아바타
 - [ ] 6.9 카테고리 6 vs 5 — 디자이너 갱신 또는 cat05 복원
