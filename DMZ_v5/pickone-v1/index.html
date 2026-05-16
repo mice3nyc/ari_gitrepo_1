@@ -8,17 +8,17 @@
 /* DMZ v5 비주얼 디자인 v1 — SPEC-ui-design.md (5/15) */
 @font-face {
   font-family: 'Paperlogy';
-  src: url('assets/fonts/Paperlogy-4Regular.ttf') format('truetype');
+  src: url('../pickone/assets/fonts/Paperlogy-4Regular.ttf') format('truetype');
   font-weight: 400; font-display: swap;
 }
 @font-face {
   font-family: 'Paperlogy';
-  src: url('assets/fonts/Paperlogy-7Bold.ttf') format('truetype');
+  src: url('../pickone/assets/fonts/Paperlogy-7Bold.ttf') format('truetype');
   font-weight: 700; font-display: swap;
 }
 @font-face {
   font-family: 'Paperlogy';
-  src: url('assets/fonts/Paperlogy-9Black.ttf') format('truetype');
+  src: url('../pickone/assets/fonts/Paperlogy-9Black.ttf') format('truetype');
   font-weight: 900; font-display: swap;
 }
 
@@ -36,15 +36,15 @@
   --c-gray-card: #E8E8E8;
   --c-gray-text: #6E6E6E;
   --c-white: #FFFFFF;
-  --c-bg: #E7E7E7;
+  --c-bg: #F0F0F0;
 
   /* 카테고리 컬러 (디자인 225.png) */
-  --cat-01: #FF6EC7;
-  --cat-02: #D8E82D;
-  --cat-03: #A9D4FF;
-  --cat-04: #FF9D48;
-  --cat-05: #C77DFF;
-  --cat-06: #FFD556;
+  --cat-01: #FF6FB8;
+  --cat-02: #C8E532;
+  --cat-03: #A8D5F0;
+  --cat-04: #FFA84D;
+  --cat-05: #C49EE8;
+  --cat-06: #FFD84D;
 
   /* 레거시 토큰 (기존 코드 호환) */
   --bg: var(--c-white);
@@ -74,20 +74,9 @@ body {
 .sd-card-image {
   width: 100%; max-width: 320px; height: auto; margin: 0 auto 1.5rem;
   display: block; cursor: pointer; transition: transform 0.15s;
-  animation: sd-card-pop-in 1.05s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 .sd-card-image:hover { transform: scale(1.02); }
 .sd-card-image:active { transform: scale(0.98); }
-
-/* SD 카드 진입 — 아래에서 올라와 살짝 튕기는 "딸깍" */
-@keyframes sd-card-pop-in {
-  0%   { transform: translateY(110vh) scale(0.78); opacity: 0; }
-  55%  { transform: translateY(-14px) scale(1.05); opacity: 1; }
-  72%  { transform: translateY(7px)   scale(0.97); }
-  84%  { transform: translateY(-3px)  scale(1.015); }
-  93%  { transform: translateY(1px)   scale(0.995); }
-  100% { transform: translateY(0)     scale(1); opacity: 1; }
-}
 .game-title { display: none; }
 .game-subtitle { display: none; }
 .lang-toggle {
@@ -139,9 +128,9 @@ body {
 }
 .app-header .timer-placeholder {
   background: var(--c-pink-soft); color: var(--c-navy);
-  font-weight: 800; font-size: 0.9rem;
-  padding: 0.35rem 1rem 0.32rem; border-radius: 999px;
-  letter-spacing: 0.08em;
+  font-weight: 700; font-size: 0.85rem;
+  padding: 0.3rem 0.9rem; border-radius: 999px;
+  letter-spacing: 0.05em;
 }
 .app-header .app-logo {
   font-family: 'Paperlogy', sans-serif; font-weight: 900;
@@ -181,49 +170,35 @@ body {
 .cat-card:hover { transform: translateY(-2px); }
 .cat-card:active { transform: translateY(0); }
 
-/* 마닐라 폴더 카드 — 사방 라운드 본체 + 좌상 사선 탭(::before) + 뒤 흰 layer(::after) + 폴더 위 글씨 */
-.cat-card { isolation: isolate; }
 .cat-card .folder-shape {
-  position: relative; width: 100%; aspect-ratio: 1.3 / 1;
+  position: relative; width: 100%; aspect-ratio: 1.15 / 1;
   background: var(--cat-color, var(--c-pink-soft));
-  border-radius: 0 14px 14px 14px;
-  margin-top: 14px;
-  display: flex; flex-direction: column;
-  justify-content: flex-end;
-  padding: 0.8rem 0.85rem;
+  border-radius: 12px 12px 14px 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
-/* 좌상 사선 탭 */
 .cat-card .folder-shape::before {
-  content: ''; position: absolute;
-  top: -13px; left: 0;
-  width: 52%; height: 14px;
+  content: ''; position: absolute; top: -6px; left: 0; width: 45%; height: 14px;
   background: var(--cat-color, var(--c-pink-soft));
-  clip-path: polygon(0 0, 82% 0, 100% 100%, 0 100%);
-  border-radius: 8px 0 0 0;
+  border-radius: 12px 12px 0 0;
 }
-/* 뒤 layer — 흰 종이 한 장이 폴더 뒤에 살짝 위로 보임 */
 .cat-card .folder-shape::after {
-  content: ''; position: absolute;
-  top: -8px; left: 0; right: 0; bottom: 8px;
-  background: var(--c-white);
-  border-radius: 14px;
-  z-index: -1;
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+  background: rgba(255,255,255,0.45); border-radius: 12px 12px 0 0;
 }
 
 .cat-card .cat-label-row {
-  display: flex; align-items: center; justify-content: space-between; gap: 0.4rem;
-  z-index: 1;
+  display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+  margin-top: 0.6rem;
 }
 .cat-card h3 {
-  color: var(--c-navy); font-size: 0.92rem; font-weight: 800;
+  color: var(--c-navy); font-size: 0.95rem; font-weight: 700;
   margin: 0;
-  text-shadow: 0 1px 2px rgba(255,255,255,0.35);
 }
 .cat-card .cat-count {
-  background: var(--c-white); color: var(--c-navy);
-  border-radius: 999px; padding: 0.1rem 0.55rem;
-  font-size: 0.72rem; font-weight: 800;
-  flex-shrink: 0;
+  background: var(--c-white); color: var(--c-gray-text);
+  border-radius: 999px; padding: 0.05rem 0.55rem;
+  font-size: 0.75rem; font-weight: 700;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 .cat-card.completed .folder-shape { opacity: 0.55; }
 .cat-card.completed h3::after { content: ' ✓'; color: var(--green); }
@@ -252,49 +227,21 @@ body {
 .cumulative-bar .counts span { font-weight: 700; color: var(--c-navy); }
 
 /* ===== STORY SELECT (카테고리 안 스토리 격자, 디자인 226.png) ===== */
-/* 226 — 화면 전체 BG가 카테고리 컬러로 잠김 (마닐라 폴더 안 시점) */
-#story-screen { align-items: center; padding: 0; background: var(--cat-color, var(--c-bg)); transition: background 0.25s; }
-#story-screen .app-header { background: transparent; }
+#story-screen { align-items: center; padding: 0; background: var(--c-bg); }
 .story-page { width: 100%; max-width: 500px; padding: 0 1rem 2rem; }
 
-/* 226 패턴 — 헤더 한 줄: 좌측 돌아가기 라운드 버튼 + 우측 카테고리 탭(우측 정렬, 시트 위로 솟음) */
-.story-folder-header {
-  display: flex; align-items: flex-end; gap: 0.6rem;
-  padding: 0;
-}
-.btn-back-round {
-  background: var(--c-white);
-  color: var(--c-navy);
-  border: none;
-  height: 38px;
-  padding: 0 1rem;
-  border-radius: 999px;
-  font-family: inherit;
-  font-size: 0.85rem; font-weight: 800;
-  cursor: pointer;
-  display: inline-flex; align-items: center; gap: 0.3rem;
-  flex-shrink: 0;
-  margin-bottom: 4px;
-  transition: transform 0.12s;
-  white-space: nowrap;
-}
-.btn-back-round:hover { transform: translateY(-1px); }
-.btn-back-round:active { transform: translateY(0); }
 .story-cat-banner {
-  background: var(--c-white);
-  color: var(--c-navy); font-weight: 900; font-size: 1.3rem;
-  padding: 0.7rem 1.3rem 0.6rem;
-  border-radius: 18px 18px 0 0;
+  background: var(--cat-color, var(--c-pink-primary));
+  color: var(--c-white); font-weight: 900; font-size: 1.3rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 14px 14px 0 0;
   display: inline-block;
-  position: relative; z-index: 2;
   margin-bottom: 0;
-  margin-left: auto;
-  letter-spacing: 0.3px;
 }
 .story-page-body {
-  background: var(--c-white); border-radius: 18px 0 18px 18px;
-  padding: 1.2rem 1rem 1.4rem;
-  position: relative; z-index: 1;
+  background: var(--c-white); border-radius: 0 14px 14px 14px;
+  padding: 1rem; padding-top: 1.2rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
 }
 .story-page-sub { font-size: 0.75rem; color: var(--c-gray-text); margin-bottom: 1rem; }
 
@@ -308,45 +255,30 @@ body {
 }
 .story-card:hover { transform: translateY(-2px); }
 
-/* 226 패턴 — 사방 라운드 본체 + 좌상 사선 탭 + 뒤 흰 layer (피터공 결정: 통일) + 폴더 위 글씨 */
-.story-card { isolation: isolate; }
 .story-card .story-folder {
-  position: relative; width: 100%; aspect-ratio: 1.3 / 1;
+  position: relative; width: 100%; aspect-ratio: 1.15 / 1;
   background: var(--cat-color, var(--c-pink-soft));
-  border-radius: 0 14px 14px 14px;
-  margin-top: 12px;
-  display: flex; flex-direction: column;
-  justify-content: flex-end;
-  padding: 0.7rem 0.8rem;
+  border-radius: 12px 12px 14px 14px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
 }
 .story-card .story-folder::before {
-  content: ''; position: absolute;
-  top: -11px; left: 0;
-  width: 52%; height: 12px;
+  content: ''; position: absolute; top: -6px; left: 0; width: 45%; height: 14px;
   background: var(--cat-color, var(--c-pink-soft));
-  clip-path: polygon(0 0, 82% 0, 100% 100%, 0 100%);
-  border-radius: 8px 0 0 0;
+  border-radius: 12px 12px 0 0;
 }
 .story-card .story-folder::after {
-  content: ''; position: absolute;
-  top: -8px; left: 0; right: 0; bottom: 8px;
-  background: var(--c-white);
-  border-radius: 14px;
-  z-index: -1;
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px;
+  background: rgba(255,255,255,0.45); border-radius: 12px 12px 0 0;
 }
 .story-card .story-num {
   display: none;
 }
 .story-card h3 {
-  color: var(--c-navy); font-size: 0.88rem; font-weight: 800;
-  margin: 0; line-height: 1.25;
-  z-index: 1; position: relative;
-  text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+  color: var(--c-navy); font-size: 0.85rem; font-weight: 700;
+  margin: 0.5rem 0 0; line-height: 1.3;
 }
 .story-card .story-era {
-  color: var(--c-navy); opacity: 0.7;
-  font-size: 0.7rem; margin-top: 0.2rem;
-  z-index: 1; position: relative;
+  color: var(--c-gray-text); font-size: 0.7rem; margin-top: 0.2rem;
 }
 .story-card.completed .story-folder { opacity: 0.55; }
 .story-card.completed h3::after { content: ' ✓'; color: var(--green); }
@@ -360,9 +292,7 @@ body {
 .btn-back:hover { color: var(--c-pink-primary); }
 
 /* ===== GAME SCREEN (스토리 안 자료 리스트, 디자인 219·240.png) ===== */
-/* 자료 화면 BG = 카테고리 컬러 (226에서 이어짐). 흰 시트 안에 카드들 stack */
-#game-screen { min-height: 100vh; background: var(--cat-color, var(--c-bg)); transition: background 0.25s; }
-#game-screen .app-header { background: transparent; }
+#game-screen { min-height: 100vh; background: var(--c-bg); }
 .game-header {
   background: var(--c-bg); color: var(--c-navy);
   padding: 0.7rem 1rem; display: flex; align-items: center; gap: 0.6rem;
@@ -378,103 +308,73 @@ body {
 .game-header .location { color: var(--c-navy); font-size: 0.85rem; font-weight: 700; flex: 1; }
 .game-header .progress { color: var(--c-gray-text); font-size: 0.75rem; flex-shrink: 0; font-weight: 700; }
 
-.game-content { flex: 1; padding: 0.8rem 1rem 2rem; display: flex; flex-direction: column; gap: 0.4rem; max-width: 500px; width: 100%; margin: 0 auto; }
+.game-content { flex: 1; padding: 0.8rem 1rem 2rem; display: flex; flex-direction: column; gap: 0.8rem; max-width: 500px; width: 100%; margin: 0 auto; }
 
-/* 240 패턴 — 좌측 작은 회색 탭(카테고리) + 우측 큰 핑크 탭(스토리), 두 탭이 시트 위로 솟음 */
 .phase-banner {
   position: relative;
-  margin-bottom: 0.4rem;
+  background: var(--c-white);
+  border-radius: 14px;
+  padding: 0.9rem 1rem 0.6rem;
+  margin-bottom: 0.3rem;
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
-/* 카테고리 탭 — 전체 폭 띠, 가장 뒤 layer. 클릭하면 주제 선택으로 돌아감 */
 .phase-banner .phase-cat-tab {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  background: var(--c-gray-card);
-  color: var(--c-navy);
-  padding: 0.4rem 1rem 1rem;
-  border-radius: 14px 14px 0 0;
-  font-size: 0.78rem;
-  font-weight: 700;
-  position: relative; z-index: 1;
-  cursor: pointer;
-  transition: background 0.12s;
+  display: inline-block;
+  background: var(--c-gray-card); color: var(--c-navy);
+  padding: 0.2rem 0.7rem; border-radius: 8px 8px 0 0;
+  font-size: 0.75rem; font-weight: 700;
+  margin-bottom: 0.2rem;
 }
-.phase-banner .phase-cat-tab:hover { background: #c8c8c8; }
-/* 스토리 탭 — absolute 우측 1/2 폭, 시트 상단 라인 위로 솟음 (가장 위 layer) */
-.phase-banner .phase-story-tab {
-  position: absolute;
-  top: 4px;
-  right: 0;
-  width: 50%;
-  box-sizing: border-box;
-  background: var(--c-white);
-  color: var(--c-navy);
-  padding: 0.7rem 1.1rem 0.55rem;
-  border-radius: 16px 16px 0 0;
-  font-size: 1.25rem;
-  font-weight: 900;
-  z-index: 3;
-  text-align: center;
-  letter-spacing: 0.3px;
+.phase-banner h2 {
+  color: var(--cat-color, var(--c-pink-primary));
+  font-size: 1.3rem; font-weight: 900; margin-top: 0.2rem;
+  text-align: right;
 }
-.phase-sheet {
-  background: var(--c-white);
-  border-radius: 14px 14px 14px 14px;
-  padding: 2rem 0.8rem 1.4rem;
-  margin-top: -14px;
-  position: relative; z-index: 2;
-  display: flex; flex-direction: column;
-}
+.phase-banner .phase-era { font-size: 0.7rem; color: var(--c-gray-text); }
+.phase-banner .phase-desc { font-size: 0.7rem; color: var(--c-gray-text); margin-top: 0.4rem; line-height: 1.5; }
 
-/* Source cards (자료 카드) — 240 패턴: 카드들이 겹겹이 쌓여서 하단 라운드가 다음 카드에 가려짐 */
+/* Source cards (자료 카드) */
 .source-card {
-  cursor: pointer; transition: all 0.18s;
-  background: var(--cat-color, var(--c-pink-soft));
-  border: none;
-  border-radius: 18px;
+  cursor: pointer; transition: all 0.15s;
+  background: var(--c-pink-soft); border: none;
+  border-radius: 16px;
   position: relative;
   overflow: hidden;
-  margin-top: -32px;
 }
-.source-card:first-of-type { margin-top: 0; }
 .source-card .card-header {
-  padding: 1.1rem 1.2rem 3rem; display: flex; align-items: center; gap: 0.6rem;
-  position: relative; min-height: 130px;
+  padding: 1rem 1.2rem; display: flex; align-items: center; gap: 0.6rem;
+  position: relative; min-height: 100px;
 }
 .source-card .card-info { flex: 1; z-index: 1; }
 .card-icon {
-  display: none;
+  display: none; /* 텍스트 이모지 숨김 — img 아이콘으로 교체 */
 }
 .card-icon-img {
-  position: absolute; right: 0.6rem; bottom: -2px; width: 96px; height: auto;
+  position: absolute; right: 0.8rem; bottom: 0; width: 90px; height: auto;
   opacity: 0.95;
 }
-.card-title { font-size: 1.08rem; font-weight: 800; color: var(--c-navy); }
-.card-sub { font-size: 0.75rem; color: var(--c-navy); opacity: 0.7; margin-top: 0.3rem; }
+.card-title { font-size: 1.05rem; font-weight: 700; color: var(--c-navy); }
+.card-sub { font-size: 0.75rem; color: var(--c-gray-text); margin-top: 0.25rem; }
 .card-status {
   display: inline-flex; align-items: center; gap: 0.25rem;
   font-size: 0.7rem; font-weight: 700;
-  padding: 0.3rem 0.75rem 0.28rem;
+  padding: 0.25rem 0.7rem;
   border-radius: 999px; border: none;
   background: var(--c-cyan); color: var(--c-navy);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 .card-status::before { content: '⊙ '; }
 .card-status.solved {
-  background: var(--c-white); color: var(--cat-color, var(--c-navy));
+  background: var(--c-white); color: var(--c-navy);
 }
 .card-status.solved::before { content: '✓ '; color: var(--green); }
 
-.source-card.completed { background: var(--c-white); }
-.source-card.completed .card-title,
-.source-card.completed .card-sub { color: var(--c-navy); }
-
 .source-letter, .source-diary, .source-scholar, .source-blog, .source-twitter, .source-report, .source-homework,
 .source-newspaper, .source-photo, .source-oral, .source-kakao, .source-text {
-  background: var(--cat-color, var(--c-pink-soft));
+  background: var(--c-pink-soft);
 }
-.source-card:hover { transform: translateY(-3px); }
+.source-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
 
 /* ===== SOURCE DETAIL (자료 본문 모달, 디자인 261·262·266·267.png) ===== */
 .source-detail {
@@ -857,13 +757,12 @@ body {
 .blank-slot.filled.just-solved {
   animation: blank-pop-green 1.4s ease-out;
 }
-/* unlock 깜빡 — opacity 토글 (반투명 초록 BG 폐기, 빠른 on/off) */
 @keyframes card-unlock-flash {
-  0%, 49%, 100% { opacity: 1; }
-  50%, 99%      { opacity: 0; }
+  0%, 100% { background: var(--bg); border-color: var(--fg); box-shadow: 2px 2px 0 var(--fg); }
+  25%, 75% { background: rgba(46,204,113,0.3); border-color: #27ae60; box-shadow: 4px 4px 0 #27ae60; }
 }
 .source-card.just-unlocked {
-  animation: card-unlock-flash 0.16s steps(1) 4;
+  animation: card-unlock-flash 0.55s ease-in-out 3;
 }
 .source-card.just-unlocked .card-status {
   background: #27ae60 !important; color: white !important; font-weight: bold;
@@ -919,7 +818,7 @@ body {
 <div id="login-screen" class="screen active">
   <div class="screen-bg"></div>
   <div class="login-container">
-    <img class="sd-card-image" src="assets/images/sd_card_title.png" alt="DMZ Archive — GAME START" onclick="document.getElementById('input-name').focus()">
+    <img class="sd-card-image" src="../pickone/assets/images/sd_card_title.png" alt="DMZ Archive — GAME START" onclick="document.getElementById('input-name').focus()">
     <div class="lang-toggle">
       <span class="lang-active">Kr</span><span class="lang-sep">/</span><span class="lang-inactive">En</span>
     </div>
@@ -1007,10 +906,8 @@ body {
     <span class="app-profile">👤</span>
   </header>
   <div class="story-page">
-    <div class="story-folder-header">
-      <button class="btn-back-round" onclick="showScreen('category-screen'); renderCategories();" aria-label="주제선택으로 돌아가기" title="주제선택">← 주제선택</button>
-      <div class="story-cat-banner" id="story-cat-banner">카테고리</div>
-    </div>
+    <button class="btn-back" onclick="showScreen('category-screen'); renderCategories();">← 카테고리</button>
+    <div class="story-cat-banner" id="story-cat-banner">카테고리</div>
     <div class="story-page-body">
       <p class="story-page-sub" id="story-screen-title"></p>
       <div class="story-list" id="story-list"></div>
@@ -4934,11 +4831,10 @@ function renderCategories() {
     // cat.id 예: "cat01" → "01"
     const catNum = (cat.id || '').replace(/^cat/, '').padStart(2, '0');
     return `<div class="cat-card ${isDone ? 'completed' : ''}" data-cat="${catNum}" onclick="selectCategory('${cat.id}')">
-      <div class="folder-shape">
-        <div class="cat-label-row">
-          <h3>${cat.name}</h3>
-          <span class="cat-count">${total}</span>
-        </div>
+      <div class="folder-shape"></div>
+      <div class="cat-label-row">
+        <h3>${cat.name}</h3>
+        <span class="cat-count">${total}</span>
       </div>
     </div>`;
   }).join('');
@@ -5096,9 +4992,7 @@ function selectCategory(catId) {
   const catColorVar = `var(--cat-${catNum})`;
   document.getElementById('story-screen-title').textContent = '카테고리 선택 관련 안내문구';
   document.getElementById('story-cat-banner').textContent = cat.name;
-  // 카테고리 컬러를 story-screen 전체에 적용 (226 BG)
-  const storyScreen = document.getElementById('story-screen');
-  if (storyScreen) storyScreen.style.setProperty('--cat-color', catColorVar);
+  // 카테고리 컬러를 story-page에 적용
   const storyPage = document.querySelector('#story-screen .story-page');
   if (storyPage) storyPage.style.setProperty('--cat-color', catColorVar);
   const stories = STORIES[catId] || [];
@@ -5109,10 +5003,9 @@ function selectCategory(catId) {
     list.innerHTML = stories.map((s, i) => {
       const done = state.completedStories.includes(s.id);
       return `<div class="story-card ${done ? 'completed' : ''}" style="--cat-color:${catColorVar}" onclick="${done ? '' : `startStory('${s.id}')`}">
-        <div class="story-folder">
-          <h3>${s.title}</h3>
-          ${s.era ? `<div class="story-era">${s.era}</div>` : ''}
-        </div>
+        <div class="story-folder"></div>
+        <h3>${s.title}</h3>
+        ${s.era ? `<div class="story-era">${s.era}</div>` : ''}
       </div>`;
     }).join('');
   }
@@ -5185,37 +5078,34 @@ function renderExploration() {
   const cat = CATEGORIES.find(c => c.id === state.currentCategory);
   const catNum = ((cat && cat.id) || '').replace(/^cat/, '').padStart(2, '0');
   const catColor = `var(--cat-${catNum})`;
-  const gameScreen = document.getElementById('game-screen');
-  if (gameScreen) gameScreen.style.setProperty('--cat-color', catColor);
   const content = document.getElementById('game-content');
-  content.style.setProperty('--cat-color', catColor);
   content.innerHTML = `
     <div class="phase-banner" style="--cat-color:${catColor}">
-      <div class="phase-cat-tab" onclick="showScreen('category-screen'); renderCategories();" title="주제 선택으로">${cat ? cat.name : ''}</div>
-      <div class="phase-story-tab">${story.title}</div>
-      <div class="phase-sheet">
-        ${story.sources.map((src, i) => {
-          const blankKeys = getBlankKeysForSource(story, src.id);
-          const solvedKeys = blankKeys.filter(k => state.solvedBlanks[k]);
-          const allSolved = blankKeys.length > 0 && solvedKeys.length === blankKeys.length;
-          const locked = !isSourceUnlocked(story, src.id);
-          const justUnlocked = (state.justUnlockedSourceId === src.id);
-          const statusText = locked ? '잠김' : (allSolved ? '복원 완료' : '복구 필요');
-          const cardCls = `source-card ${src.styleClass}${locked ? ' locked' : ''}${justUnlocked ? ' just-unlocked' : ''}`;
-          const iconImg = getSourceIconImg(src.styleClass);
-          return `<div class="${cardCls}" onclick="openSource('${src.id}')" style="animation-delay:${i*0.1}s; z-index:${i+1}">
-            <div class="card-header">
-              <div class="card-info">
-                <span class="card-status ${allSolved ? 'solved' : ''}">${statusText}</span>
-                <div class="card-title">${src.title}</div>
-                <div class="card-sub">${src.sub}</div>
-              </div>
-              <img class="card-icon-img" src="${iconImg}" alt="">
-            </div>
-          </div>`;
-        }).join('')}
-      </div>
+      <span class="phase-cat-tab">${cat ? cat.name : ''}</span>
+      <h2>${story.title}</h2>
+      ${story.era ? `<div class="phase-era">${story.era}</div>` : ''}
+      ${story.soundNote ? `<p class="sound-note">🔊 ${story.soundNote}</p>` : ''}
     </div>
+    ${story.sources.map((src, i) => {
+      const blankKeys = getBlankKeysForSource(story, src.id);
+      const solvedKeys = blankKeys.filter(k => state.solvedBlanks[k]);
+      const allSolved = blankKeys.length > 0 && solvedKeys.length === blankKeys.length;
+      const locked = !isSourceUnlocked(story, src.id);
+      const justUnlocked = (state.justUnlockedSourceId === src.id);
+      const statusText = locked ? '잠김' : (allSolved ? '복원 완료' : '복구 필요');
+      const cardCls = `source-card ${src.styleClass}${locked ? ' locked' : ''}${justUnlocked ? ' just-unlocked' : ''}`;
+      const iconImg = getSourceIconImg(src.styleClass);
+      return `<div class="${cardCls}" onclick="openSource('${src.id}')" style="animation-delay:${i*0.1}s">
+        <div class="card-header">
+          <div class="card-info">
+            <span class="card-status ${allSolved ? 'solved' : ''}">${statusText}</span>
+            <div class="card-title">${src.title}</div>
+            <div class="card-sub">${src.sub}</div>
+          </div>
+          <img class="card-icon-img" src="${iconImg}" alt="">
+        </div>
+      </div>`;
+    }).join('')}
     ${(() => { if (state.justUnlockedSourceId) setTimeout(() => { state.justUnlockedSourceId = null; }, 1700); return ''; })()}
     ${solvedCount === totalBlanks ? `<button class="btn-confirm" onclick="goToArchive()">모든 빈칸 복원 완료 — 기록 선택으로 →</button>` : ''}
   `;

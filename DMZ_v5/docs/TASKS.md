@@ -172,6 +172,27 @@ GitHub Pages 자동 배포 — `https://mice3nyc.github.io/ari_gitrepo_1/DMZ_v5/
 - [ ] 6.0.8 photo answer_from 누락 13 스토리 검토 (정예공/박성렬)
 - [ ] 6.0.9 커밋·푸시
 
+**Phase 6.x — 비주얼 디자인 v2 마닐라 폴더 패턴 (5/16 세션359)** ✅
+
+> 피터공 피드백 "다이나믹·구체적 면 누락" → 마닐라 폴더 탭 + 네스티드 z-stacking 도입. pickone 파일럿.
+
+- [x] 색 토큰 정정 (SVG 17개에서 hex 직접 추출 — cat-01~06 + bg 6개)
+- [x] 마닐라 폴더 카드 (cat-card·story-card) — border-radius 0/14/14/14 + ::before 좌상 사선 탭(clip-path) + ::after 뒤 흰 layer + 폴더 안 글씨
+- [x] 226 스토리 선택 화면 layout — BG cat-color(헤더까지) + 「← 주제선택」알약 버튼 + 우측 흰 탭 + 흰 시트 + 폴더 격자
+- [x] 240 자료 선택 Z 위계 — z=1 phase-cat-tab(전체 폭 회색 띠, 클릭→주제선택) + z=2 phase-sheet(흰 시트+자료 카드) + z=3 phase-story-tab(우측 50% 흰 BG, 시트 위로 솟음). BG=cat-color
+- [x] 자료 카드 겹겹이 쌓임 — margin-top -32px + JS inline z-index. padding-bottom 3rem
+- [x] drop shadow 전부 off (피터공 "지저분해" 결정)
+- [x] unlock 깜빡 — opacity 1↔0 토글, steps(1), 0.16s × 4
+- [x] SD 카드 진입 애니메이션 — 아래서 튕겨 올라오는 딸깍 cubic-bezier 1.05s
+- [x] era/soundNote 자료 화면에서 제거 (다른 자리 결정 대기)
+- [x] 비교 빌드 pickone-v1/ 신설 — 어제 빌드 사본, `../pickone/assets/` 상대경로
+- [x] 빌드 회귀 — pickone/index.html 285,821 bytes / pickone-v1/index.html 282,119 bytes. JS syntax OK
+- [ ] 일러스트 자산 디자이너 수령 (편지+봉투·메가폰·액자·마이크 4종)
+- [ ] era/soundNote 위치 결정 (자료 본문 모달?)
+- [ ] 226도 240 결로 통일할지 결정
+- [ ] GAME START 화면(224) SD 카드 자체 SVG 재현 정밀화 (현재 PNG 통째)
+- [ ] Figma MCP 세팅 (반복 협업 시)
+
 **Phase 4.3 — 작가 핸드오프** (6/4~)
 
 - [ ] 4.3.1 정예공/박성렬에 폴더 + 마크다운 편집 가이드 (`docs/CONTENT-AUTHORING.md` 신설)

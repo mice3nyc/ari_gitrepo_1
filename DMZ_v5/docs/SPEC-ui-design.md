@@ -215,3 +215,224 @@ author: 아리공
 | 버전 | 날짜 | 내용 |
 |---|---|---|
 | v1 | 2026-05-15 | 신설. 디자인 샘플 9장 + 아이콘 9개 + Paperlogy 적용 명세. pickone 파일럿 결정 |
+| v2 | 2026-05-16 | 마닐라 폴더 패턴 + 색 토큰 정정(SVG에서 추출) + 226·240 BG=cat-color + Z 위계 + 돌아가기 알약 + drop shadow 제거 |
+
+---
+
+## v2 — 마닐라 폴더 패턴 + 정밀화 (2026-05-16)
+
+### v2-1. 색 토큰 정정 (SVG에서 추출한 정확한 hex)
+
+```
+v1 → v2
+--cat-01: #FF6FB8 → #FF6EC7   (DMZ 기본정보 — 핫핑크)
+--cat-02: #C8E532 → #D8E82D   (생태/환경 — 라임)
+--cat-03: #A8D5F0 → #A9D4FF   (국가유산 — 라이트블루)
+--cat-04: #FFA84D → #FF9D48   (DMZ의 사람들 — 오렌지)
+--cat-05: #C49EE8 → #C77DFF   (갈등과 협력 — 퍼플)
+--cat-06: #FFD84D → #FFD556   (평화 관광 — 옐로우)
+--c-bg:   #F0F0F0 → #E7E7E7
+```
+
+> 출처: `Assets/incoming/통일부/UI디자인샘플/figma_svg/225.svg` line 7~10
+
+### v2-2. 마닐라 폴더 카드 (.cat-card .folder-shape / .story-card .story-folder)
+
+피터공 핵심 영감: "탭 형태의 윈도우, 일부는 높고 일부는 낮은 튀어나온 형태. 마닐라 폴더라고 하나? 겹치듯 위로 쌓이고 살짝 아래에 배치되면서 입체감과 꽉찬 화면."
+
+```css
+.folder-shape {
+  /* 본체 사방 라운드 단, 좌상은 직각(탭과 연결) */
+  background: var(--cat-color);
+  border-radius: 0 14px 14px 14px;
+  aspect-ratio: 1.3 / 1;
+  margin-top: 14px;  /* 탭 공간 */
+  padding: 0.8rem 0.85rem;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.folder-shape::before {
+  /* 좌상 사선 탭 — clip-path 사다리꼴 */
+  position: absolute;
+  top: -13px; left: 0;
+  width: 52%; height: 14px;
+  background: var(--cat-color);
+  clip-path: polygon(0 0, 82% 0, 100% 100%, 0 100%);
+  border-radius: 8px 0 0 0;
+}
+.folder-shape::after {
+  /* 뒤 흰 layer — 다른 종이 한 장이 폴더 뒤에 살짝 위로 보임 */
+  position: absolute;
+  top: -8px; left: 0; right: 0; bottom: 8px;
+  background: white;
+  border-radius: 14px;
+  z-index: -1;
+}
+.cat-card, .story-card { isolation: isolate; }  /* z-index -1 동작 보장 */
+```
+
+**폴더 뒤 layer 결정 (5/16)**: 225 SVG는 흰색, 226 SVG는 같은 cat-color opacity 0.3. 피터공 결정 — **둘 다 흰색으로 통일**.
+
+**폴더 위 글씨 (피터공 결정)**: h3와 cat-label-row를 .folder-shape 안에 배치. flex column + justify-content: flex-end로 하단 정렬. 글씨에 `text-shadow: 0 1px 2px rgba(255,255,255,0.3)` 가독성.
+
+### v2-3. 226 스토리 선택 화면 layout
+
+```html
+<div id="story-screen">                          <!-- BG = cat-color -->
+  <header class="app-header">[transparent]       <!-- BG transparent -->
+  <div class="story-page">
+    <div class="story-folder-header">             <!-- flex row, 좌·우 -->
+      <button class="btn-back-round">← 주제선택   <!-- 흰 알약 -->
+      <div class="story-cat-banner">DMZ기본정보   <!-- 흰 탭, 우측 정렬 -->
+    </div>
+    <div class="story-page-body">                  <!-- 흰 시트 -->
+      <div class="story-list">[폴더 카드 격자]
+```
+
+- `#story-screen { background: var(--cat-color); transition: background 0.25s; }`
+- `#story-screen .app-header { background: transparent; }` — 헤더까지 카테고리 컬러
+- `.story-cat-banner`: `background: white`, `color: navy`, `margin-left: auto`, `border-radius: 18px 18px 0 0`
+- `.story-page-body`: `background: white`, `border-radius: 18px 0 18px 18px` (우상 직각 — 탭과 연결)
+- `.btn-back-round`: 흰 알약(`border-radius: 999px`), 네이비 글씨, "← 주제선택"
+- `.story-folder-header padding: 0` — 탭과 시트 우측 edge 정확히 일치 (padding 있으면 어긋남)
+
+### v2-4. 240 자료 선택 화면 Z 위계 (피터공 결정 5/16)
+
+**Z 위계 — 가장 아래(z=1) → 가운데(z=2) → 가장 위(z=3)**:
+
+```html
+<div class="phase-banner">                       <!-- relative -->
+  <div class="phase-cat-tab">DMZ기본정보         <!-- z=1, 전체 폭 띠, 클릭→주제선택 -->
+  <div class="phase-story-tab">DMZ의 탄생         <!-- z=3, 우측 50% 폭, 시트 위로 솟음 -->
+  <div class="phase-sheet">                       <!-- z=2, 흰 시트 (자료 카드 포함) -->
+    [source-card × N]
+```
+
+```css
+.phase-banner { position: relative; }
+.phase-cat-tab {
+  display: block; width: 100%;
+  background: var(--c-gray-card);
+  padding: 0.4rem 1rem 1rem;
+  border-radius: 14px 14px 0 0;
+  z-index: 1;
+  cursor: pointer;  /* 클릭 → showScreen('category-screen') */
+}
+.phase-story-tab {
+  position: absolute; top: 4px; right: 0;
+  width: 50%;
+  background: white;
+  color: var(--c-navy);
+  padding: 0.7rem 1.1rem 0.55rem;
+  border-radius: 16px 16px 0 0;
+  z-index: 3;
+  text-align: center;
+}
+.phase-sheet {
+  background: white;
+  border-radius: 14px 14px 14px 14px;
+  padding: 2rem 0.8rem 1.4rem;  /* padding-top 큼 — 스토리 탭과 안 겹침 */
+  margin-top: -14px;  /* 카테고리 탭 하단 일부 덮음 */
+  z-index: 2;
+}
+```
+
+- **화면 BG = cat-color** (피터공 결정 — 226에서 이어짐. 240 SVG의 회색 BG 디자인 의도와 다름)
+- `#game-screen { background: var(--cat-color); }`
+- `#game-screen .app-header { background: transparent; }`
+- **클릭 동선**: 카테고리 탭 → 주제 선택 / 스토리 탭 → (해당 스토리, 현재 미활용)
+
+### v2-5. 자료 카드 겹겹이 쌓임
+
+```css
+.source-card {
+  background: var(--cat-color);
+  border-radius: 18px;
+  margin-top: -32px;  /* 다음 카드가 위 카드 위로 올라옴 */
+  padding: 1.1rem 1.2rem 3rem;  /* 텍스트 아래 여백 — 한두 줄 분량 */
+  min-height: 130px;
+}
+.source-card:first-of-type { margin-top: 0; }
+/* JS 렌더에 z-index inline — 다음 카드가 위에 */
+return `<div class="${cardCls}" style="z-index:${i+1}; ...">`;
+```
+
+다음 카드의 z-index가 위 카드보다 높음 → 위 카드의 하단 라운드가 다음 카드에 가려짐. layered 입체.
+
+### v2-6. unlock 깜빡 (반투명 BG → opacity 토글)
+
+```css
+@keyframes card-unlock-flash {
+  0%, 49%, 100% { opacity: 1; }
+  50%, 99%      { opacity: 0; }
+}
+.source-card.just-unlocked {
+  animation: card-unlock-flash 0.16s steps(1) 4;
+}
+```
+
+- 반투명 초록 BG/border 전부 폐기 (이상함)
+- on/off 토글, steps(1)로 즉시 전환, 0.16s × 4 사이클 = 0.64s 빠른 깜빡 4회
+
+### v2-7. SD 카드 진입 애니메이션 (224 GAME START)
+
+```css
+@keyframes sd-card-pop-in {
+  0%   { transform: translateY(110vh) scale(0.78); opacity: 0; }
+  55%  { transform: translateY(-14px) scale(1.05); opacity: 1; }
+  72%  { transform: translateY(7px)   scale(0.97); }
+  84%  { transform: translateY(-3px)  scale(1.015); }
+  93%  { transform: translateY(1px)   scale(0.995); }
+  100% { transform: translateY(0)     scale(1); }
+}
+.sd-card-image {
+  animation: sd-card-pop-in 1.05s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+```
+
+아래에서 튕겨 올라와 자리잡는 "딸깍" 효과.
+
+### v2-8. drop shadow 전부 off (피터공 결정 5/16)
+
+"뭔가 지저분해" — 226·240 화면의 box-shadow 모두 제거. layered 효과는 색 대비 + 음수 margin + z-index로만.
+
+제거 위치:
+- `.folder-shape`, `.story-folder` 본체
+- `.folder-shape::after`, `.story-folder::after` 뒤 흰 layer
+- `.cat-count` 알약
+- `.story-cat-banner`, `.story-page-body`
+- `.phase-cat-tab`, `.phase-story-tab`, `.phase-sheet`
+- `.btn-back-round`
+- `.timer-placeholder`
+- `.card-status`, `.source-card`, `.source-card:hover`
+
+### v2-9. 화면 BG 동적 cat-color
+
+JS:
+```js
+const gameScreen = document.getElementById('game-screen');
+if (gameScreen) gameScreen.style.setProperty('--cat-color', catColor);
+const storyScreen = document.getElementById('story-screen');
+if (storyScreen) storyScreen.style.setProperty('--cat-color', catColor);
+```
+
+`selectCategory()` 함수에서 story-screen·game-screen·game-content 모두 cat-color 설정.
+
+### v2-10. 폐기·이동 자리
+
+- **era / soundNote** 자료 화면(`.phase-sheet` 안)에서 제거. 디자이너 의도 아님. 자료 본문 모달 또는 다른 자리로 이동 — 결정 자리.
+
+### v2-11. 비교 빌드 — pickone-v1/
+
+`_dev/DMZ_v5/pickone-v1/index.html` — 5/15 디자인 v1 빌드 사본. assets 경로 `../pickone/assets/`로 sed 정정 → 자산 공유. photos는 직접 참조 X. 로컬·GitHub Pages 모두 작동.
+
+URL:
+- 로컬: `http://localhost:8765/pickone-v1/`
+- GitHub Pages: `https://mice3nyc.github.io/ari_gitrepo_1/DMZ_v5/pickone-v1/`
+
+### v2-12. 미해결 / 결정 자리 (추가)
+
+7. 일러스트 자산(편지+봉투·메가폰·액자·마이크) 디자이너 정식 수령 자리 — 현재 작은 아이콘 png만 있음
+8. 폴더 정확한 SVG path 적용 (현재는 CSS clip-path polygon 사선 탭 + border-radius 라운드 절충 — SVG path는 사방 라운드 + 좌상 사선 통합 가능)
+9. Figma MCP 또는 PAT 세팅 (반복 협업 시) — 현재 SVG export로 충분
+10. 디자이너에게 피드백할 항목: ① 226 화면 돌아가기 버튼 누락 ② 탭 우측 정렬 디자인 의도 ③ era/soundNote 위치
+11. 226 스토리 선택 화면도 240과 같은 결(전체 폭 카테고리 띠 + 우측 솟은 스토리 탭)로 통일할지 — 현재 226은 좌측 알약 + 우측 탭으로 다른 결

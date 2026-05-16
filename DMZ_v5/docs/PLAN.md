@@ -123,6 +123,24 @@ data/topics/
 - **24 스토리 디폴트 산출**: B 3건(s0101·s0403·s0404), C 4건(s0601·s0602·s0604·s0605), A 명확 4건, A fallback 13건(photo answer_from 누락 — 정예공/박성렬 검토 자리)
 - **다음 진입점**: 피터공 브라우저 플테 → 4 빌드 중 베타 사용 빌드 결정 → photo answer_from 누락 13 스토리 검토
 
+### 5/16 세션359 — pickone 디자인 v2 (마닐라 폴더 패턴) ✅
+
+피터공 "다이나믹·구체적 면 누락" 피드백 후 진입. 핵심 결과:
+
+- **색 토큰 정정** — SVG export 17개에서 hex 직접 추출. cat-01~06 + bg 색 6개 정확한 값으로 정정
+- **마닐라 폴더 패턴** — cat-card·story-card 본체 border-radius 0/14/14/14 + `::before` 좌상 사선 탭(clip-path) + `::after` 뒤 흰 layer + 폴더 안 글씨
+- **226 스토리 선택** — BG=cat-color(헤더까지), 좌측 「← 주제선택」알약 버튼 + 우측 흰 탭 + 흰 시트 + 폴더 격자
+- **240 자료 선택 Z 위계** — z=1 phase-cat-tab(전체 폭 회색 띠, 클릭→주제선택) + z=2 phase-sheet(흰 시트+자료 카드) + z=3 phase-story-tab(우측 50% 흰 BG, 시트 위로 솟음). BG=cat-color
+- **자료 카드 겹겹이 쌓임** — margin-top -32px + JS inline z-index. padding-bottom 3rem
+- **drop shadow 전부 off** (피터공 "지저분해" 결정)
+- **unlock 깜빡** — opacity 1↔0 토글, steps(1), 0.16s × 4
+- **SD 카드 진입 애니메이션** — 아래서 튕겨 올라오는 딸깍 cubic-bezier 1.05s
+- **era/soundNote 자료 화면 제거** (다른 자리 결정 자리)
+- **비교 빌드 pickone-v1/** 신설 — 어제 빌드 사본, `../pickone/assets/` 상대경로
+- **빌드**: pickone/index.html 285,821 bytes. JS syntax OK
+
+**잔여 (디자인 v2 정합 우선)**: 일러스트 자산 수령(편지+봉투·메가폰·액자·마이크), era/soundNote 위치 결정, 226·240 결 통일 여부 검토, Figma MCP 세팅.
+
 ### 5/15 세션354 — 런칭 스코프 축소 + canon 비교 + 베타 사전 인프라
 
 - ✅ 36 → **24 스토리 축소** (5/14 회의 결정): cat05 통삭 + 8 스토리 archive

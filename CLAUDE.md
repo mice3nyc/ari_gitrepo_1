@@ -143,6 +143,7 @@ _dev/
 | v5.1-data | 2026-05-14 | STORIES 데이터 외부화 — `data/topics/*.yaml` 6개 + archivist_types.yaml. 두 베이스 HTML `// __STORIES_AND_TYPES__` placeholder. `build_stories_json.py` 신설. cat04 6 스토리 yaml 채움(s0401·s0403·s0404·s0405·s0406·s0407) + 사진 일괄 카피 |
 | v5.2-pickone | 2026-05-15 | 네 번째 빌드 `pickone/` 신설 — sequential 룰 + 첫 자료 슬롯 가변. `data/first_source.csv` 24행(편집 가능). `shared/index_pickone.html` + `scripts/build_pickone.sh`. getUnlockOrder 사이클 알고리즘. LS_PREFIX `dmz_v5_p_`. SPEC-pickone.md 신설 |
 | v5.3-design | 2026-05-15 | 비주얼 디자인 v1 도입(pickone 파일럿) — 통일부 디자이너 샘플 9장 적용. `assets/{icons,fonts,images}/` 신설(아이콘 9개·Paperlogy 3 weight·SD카드 타이틀). SPEC-ui-design.md 신설(컬러 토큰 6 카테고리·자료 type↔icon 매핑·화면별 컴포넌트). 로그인 SD카드·튜토리얼 핑크/cyan·카테고리 폴더격자·스토리 폴더격자·자료 리스트 핑크 카드+이미지 아이콘·자료 본문 모달 핑크 헤더·빈칸 cyan. 게임 코드 검증 임시 OFF. **5/15 결정: pickone canonical — mobile/offline/sequential 동결, 앞으로 pickone만 계속 업데이트** |
+| v5.4-design2 | 2026-05-16 | pickone 디자인 v2 — 마닐라 폴더 패턴(좌상 사선 탭 + 뒤 흰 layer + 폴더 안 글씨) + 색 토큰 SVG 추출 정정 + 226·240 BG cat-color + 240 Z 위계(cat-tab 전체 폭 띠 + sheet + story-tab 우측 솟음) + drop shadow off + SD 카드 진입 애니메이션. 비교 빌드 pickone-v1/ 신설 |
 
 ## 현재 게임 상태 (v3.2)
 
