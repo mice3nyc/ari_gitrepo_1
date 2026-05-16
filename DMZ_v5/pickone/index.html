@@ -313,24 +313,25 @@ body {
 .btn-back-round:hover { transform: translateY(-1px); }
 .btn-back-round:active { transform: translateY(0); }
 .story-cat-banner {
-  /* 5/16 세션361: phase-story-tab과 완전 동일 */
+  /* 5/17 세션362: 상단 회색띠와 동일(top 0, height 64). 시트(z=2)에 아래 15 가려짐 */
   position: absolute; top: 0; right: 0;
   width: 60%;
-  height: 82px;
+  height: 64px;
   box-sizing: border-box;
   background: var(--c-white);
   color: var(--cat-color, var(--c-navy)); font-weight: 600; font-size: 1.25rem;
   padding: 0 1.4rem 0 2.4rem;
   border-radius: 0 16px 0 0;
   clip-path: polygon(18% 0, 100% 0, 100% 100%, 0 100%);
-  z-index: 3;
+  z-index: 1;  /* 5/17 세션362: 시트(z=2)에 의해 가려지도록 z=3→1 */
   letter-spacing: 0.3px;
   display: flex; align-items: center; justify-content: center;
 }
 .story-page-body {
   background: var(--c-white); border-radius: 18px 0 18px 18px;
-  padding: 1.2rem 1rem 1.4rem;
-  position: relative; z-index: 1;
+  padding: 30px 1rem 1.4rem;  /* 5/17 세션362: 시트 padding-top 두 화면 통일 (1.2rem→30px) */
+  margin-top: -15px;  /* 5/17 세션362: 시트가 헤더 위 15 올라와 회색띠·흰탭 아래 15 가림 */
+  position: relative; z-index: 2;  /* 5/17 세션362: 흰 탭·회색 띠(z=1) 위로 (z=1→2) */
 }
 .story-page-sub { font-size: 0.75rem; color: var(--c-gray-text); margin-bottom: 1rem; }
 
@@ -441,10 +442,10 @@ body {
 /* 스토리 탭 — absolute 우측 1/2 폭, 시트 상단 라인 위로 솟음 (가장 위 layer) */
 .phase-banner .phase-story-tab {
   position: absolute;
-  top: 0;
+  top: 0;  /* 5/17 세션362: 상단 회색띠와 동일. 시트(z=2)에 아래 15 가려짐 */
   right: 0;
   width: 60%;
-  height: 82px;  /* 5/16 세션361: 고정 — phase-banner(64)보다 18px 솟음 */
+  height: 64px;
   box-sizing: border-box;
   background: var(--c-white);
   color: var(--cat-color, var(--c-navy));
@@ -454,15 +455,15 @@ body {
   clip-path: polygon(18% 0, 100% 0, 100% 100%, 0 100%);
   font-size: 1.25rem;
   font-weight: 600;
-  z-index: 3;
+  z-index: 1;  /* 5/17 세션362: 시트(z=2)에 의해 가려지도록 z=3→1 */
   text-align: center;
   letter-spacing: 0.3px;
 }
 .phase-sheet {
   background: var(--c-white);
   border-radius: 18px 0 18px 18px;  /* 5/17 세션362: 스토리선택 .story-page-body와 동일 (좌상 라운드, 우상 직각 — 흰 탭과 이어짐) */
-  padding: 2rem 0.8rem 1.4rem;
-  margin-top: 0;  /* 5/17 세션362: 헤더와 자연 이어짐 (-14→0) */
+  padding: 30px 0.8rem 1.4rem;  /* 5/17 세션362: 시트 padding-top 두 화면 통일 (2rem→30px) */
+  margin-top: -15px;  /* 5/17 세션362: 시트가 헤더 위 15 올라와 회색띠·흰탭 아래 15 가림 */
   position: relative; z-index: 2;
   display: flex; flex-direction: column;
 }
@@ -475,7 +476,7 @@ body {
   border-radius: 18px;
   position: relative;
   overflow: hidden;
-  margin-top: -20px;  /* 5/16 세션361: 카드 겹침 줄여 텍스트 아래 가시 여백 16→28px */
+  margin-top: -40px;  /* 5/17 세션362: 카드 하단 겹침 20→40 */
 }
 .source-card:first-of-type { margin-top: 0; }
 .source-card .card-header {
@@ -487,7 +488,7 @@ body {
   display: none;
 }
 .card-icon-img {
-  position: absolute; right: 1.6rem; bottom: -2px; width: 120px; height: auto;
+  position: absolute; right: 1.6rem; bottom: -2px; width: 150px; height: auto;  /* 5/17 세션362: 120→180→150 */
   opacity: 0.95;
 }
 .card-title { font-size: 1.08rem; font-weight: 600; color: var(--c-navy); }
@@ -5266,19 +5267,11 @@ function getBlankKeysForSource(story, sourceId) {
   return Object.keys(story.blanks).filter(k => k.charAt(0) === sourceId);
 }
 
-// 자료 styleClass → 아이콘 이미지 매핑 (SPEC-ui-design §3)
-const SOURCE_ICON_MAP = {
-  'source-letter': 'personal_tab', 'source-diary': 'personal_tab',
-  'source-blog': 'personal_tab', 'source-homework': 'personal_tab',
-  'source-twitter': 'personal_tab', 'source-text': 'personal_tab',
-  'source-kakao': 'personal_tab',
-  'source-newspaper': 'news_tab', 'source-scholar': 'news_tab',
-  'source-report': 'news_tab', 'source-poster': 'news_tab',
-  'source-photo': 'photo_tab',
-  'source-oral': 'oral_tab'
-};
-function getSourceIconImg(styleClass) {
-  const key = SOURCE_ICON_MAP[styleClass] || 'personal_tab';
+// 자료 아이콘 = 위치 기반 (자료 1번=편지/2번=신문/3번=사진/4번=구술). 5/17 세션362
+// type 기반 SOURCE_ICON_MAP 폐기 — 설계상 위치 A~D 고정, 마지막 D는 항상 구술 매체
+const POSITION_ICONS = ['personal_tab', 'news_tab', 'photo_tab', 'oral_tab'];
+function getSourceIconImgByPos(i) {
+  const key = POSITION_ICONS[i] || 'personal_tab';
   return `assets/icons/${key}.png`;
 }
 
@@ -5312,7 +5305,7 @@ function renderExploration() {
           const statusText = locked ? '잠김' : (allSolved ? '복원 완료' : '복구 필요');
           const shadeCls = (i % 2 === 1) ? ' card-shade-alt' : '';
           const cardCls = `source-card ${src.styleClass}${locked ? ' locked' : ''}${locked ? shadeCls : ''}${justUnlocked ? ' just-unlocked' : ''}`;
-          const iconImg = getSourceIconImg(src.styleClass);
+          const iconImg = getSourceIconImgByPos(i);  /* 5/17 세션362: 위치 기반 (i=0:편지/1:신문/2:사진/3:구술) */
           return `<div class="${cardCls}" onclick="openSource('${src.id}')" style="animation-delay:${i*0.1}s; z-index:${i+1}">
             <div class="card-header">
               <div class="card-info">

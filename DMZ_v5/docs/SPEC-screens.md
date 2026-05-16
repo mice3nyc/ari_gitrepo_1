@@ -46,10 +46,9 @@ author: 아리공
 │                                │
 │ ┌──────────────────────────┐   │
 │ │ ⟦주제 띠⟧ DMZ 기본정보     │   │  ← z=1, 전체 폭
-│ │                ┌────────┐│   │
-│ │                │⟦스토리 제목 탭⟧│  ← z=3, 우측 50%, 솟음
-│ │                │DMZ의 탄생 │   │
-│ │ ┌──────────────┴──────┐ │   │
+│ │   DMZ 기본정보  ⟦스토리 제목 탭⟧│  ← 회색 띠와 같은 줄 좌우 분할
+│ │                  DMZ의 탄생  │   │   (z=3, 우측 60%, height 64)
+│ │ ┌─────────────────────┐ │   │
 │ │ │ ⟦시트 — 흰 폴더 박스⟧│ │   │  ← z=2
 │ │ │ ┌──────────────────┐│ │   │
 │ │ │ │자료 1번 (z=1, 위) ││ │   │  ← 자료 카드 묶음
@@ -84,8 +83,8 @@ author: 아리공
 
 코드: `<div class="source-card" style="z-index:${i+1}; margin-top:-32px;">`. `i=0`이 첫 카드(z=1), `i=3`이 마지막(z=4).
 
-**위치 호칭 (정본 — 디자인 자리)**: 자료 1번 / 2번 / 3번 / 4번. Z 위계 그대로.
-**슬롯 호칭 (콘텐츠 자리)**: A(편지) / B(신문) / C(사진) / D(구술). 코드·CSV·`BLANK_SOURCE_LOOKUP`. pickone에서 첫 슬롯은 가변이라 **위치 ≠ 슬롯**.
+**위치 호칭 = 슬롯 호칭 (정본 — 고정 매핑)**: 자료 1번/2번/3번/4번 = A(편지)/B(신문)/C(사진)/D(구술). Z 위계·아이콘 결 모두 위치에 1:1 고정. 5/17 세션362 확정 — 이전 "위치 ≠ 슬롯" 문구는 폐기.
+**pickone에서 "가변"의 자리**: 첫 자료(=unlock 순서의 시작)가 A/B/C/D 중 가변. **표시 위치 자체는 가변 아님** — 화면에 항상 A(자료1)→B(자료2)→C(자료3)→D(자료4) 순으로 쌓임. unlock 순서만 사이클로 변함.
 
 ### 자료 카드 세부 (4장 공통, 7 요소)
 
@@ -95,7 +94,7 @@ author: 아리공
 |---|---|---|
 | 카드 배경 | cat-color 폴더 모양 | `border-radius: 18px`, 시트보다 살짝 진한 음영 |
 | 좌상 사선 탭 | 마닐라 폴더 결 | clip-path 사다리꼴 |
-| 자료 아이콘 | subtype별 (편지/신문/사진/구술) | `assets/icons/{type}_small.png`. 크기 120px, 위치 우하단(right 1.6rem, bottom -2px) — 5/16 세션361 |
+| 자료 아이콘 | **위치별 고정** — 자료 1번=personal_tab(편지) / 2번=news_tab(신문) / 3번=photo_tab(사진) / 4번=oral_tab(구술). type 무관 | `assets/icons/{key}.png` (`POSITION_ICONS[i]`). 크기 150px, 위치 우하단(right 1.6rem, bottom -2px) — 5/17 세션362 (위치 기반으로 정정) |
 | 자료 제목 | 자료의 짧은 식별자 | `.source-card-title` |
 | 메타 정보 | 출처·날짜·문서 제목 | `.source-card-meta` |
 | 잠금 표시 | 🔒 (locked 상태만). 위치 홀수(1·3)는 `--c-gray-card` #E8E8E8, 짝수(2·4)는 `--c-gray-card-alt` #D8D8D8 — 5/16 세션361 짝수/홀수 변주 | `.source-card.locked` / `.card-shade-alt` |
@@ -139,10 +138,21 @@ author: 아리공
 ### 5/17 세션362 추가 적용
 
 - **헤더+시트 결 통일**: 자료선택을 스토리선택 결에 맞춤. `.game-content` padding-top 0.8rem→0 / `.phase-banner` margin-bottom 0.4rem→0 / `.phase-sheet` border-radius 사방 14→`18px 0 18px 18px` (좌상 라운드, 우상 직각 — 흰 탭과 이어짐) + margin-top -14→0 / 흰 탭 padding-right 1.1→1.4rem. 두 화면 모두 헤더와 시트가 한 덩어리로 읽힘
+- **흰 탭 height 통일 (솟음 폐기)**: 회색 띠와 흰 탭 모두 64px. 이전 흰 탭 82px(회색 띠 위로 18px 솟음) → 64px로 회색 띠와 같은 줄에서 좌우 분할되는 결. 두 화면 동일 적용 (`.phase-story-tab` / `.story-cat-banner`)
+- **시트 padding-top 통일**: 두 화면 모두 30px. 이전 자료선택 2rem(32px) / 스토리선택 1.2rem(19.2px) → 30px 통일. 첫 본체(자료 카드 / 폴더)까지 시각 시작점이 두 화면에서 같은 결
+- **시트 라인이 헤더를 가로지르는 결**: 시트가 헤더 박스(0~64) 위 15px 올라옴(`margin-top: -15`, z=2). 회색 띠·흰 탭(둘 다 z=1)의 아래 15px이 시트에 가려짐. 흰 탭은 회색띠와 동일한 박스(`top: 0`, `height: 64px`)에 좌우 분할로 자리. 좌표:
+  - 0~49: 회색 띠·흰 탭 보이는 영역 (좌우 분할, clip-path 사선으로 비킴. width 100% 회색 띠 + width 60% 우측 흰 탭)
+  - 49: 시트 라인 (시트 시작)
+  - 49~64: 회색 띠·흰 탭이 시트에 가려지는 영역 (15px)
+  - 64: 헤더 박스 bottom
+  - 49+30=79: 시트 padding-top 30 뒤 첫 본체 시작
+- **자료 카드 겹침 -20→-40**: 카드 하단이 다음 카드 아래로 40px 들어감(가시 여백 16~20px대로 축소). padding-bottom 3.8rem 유지, card-header padding-top 1.3rem 유지
+- **자료 아이콘 크기**: `.card-icon-img` width 120→180→150. 위치(right 1.6rem, bottom -2px) 유지
+- **자료 아이콘 매핑 = 위치 기반 (type 기반 폐기)**: type 기반 `SOURCE_ICON_MAP`(kakao·text·scholar 등이 잘못 personal_tab으로 떨어지던 자리) 폐기 → `POSITION_ICONS[i]` (0:편지, 1:신문, 2:사진, 3:구술). DMZ 관리체계(s0104) D 위치 카카오톡 대화가 편지 아이콘으로 떠 있던 버그 정정. 영향 7건: s0102·s0103·s0104·s0105·s0203·s0302·s0403
 
 ### 5/16 세션361 디자인 v3 적용 사항
 
-- **헤더 결**: 자료선택·스토리선택 통일 — 전체 폭 회색 띠(`.phase-cat-tab`/`.btn-back-round`) + 우측 60% 솟음 흰 탭(`.phase-story-tab`/`.story-cat-banner`). 헤더 64px, 흰 탭 82px 고정
+- **헤더 결**: 자료선택·스토리선택 통일 — 전체 폭 회색 띠(`.phase-cat-tab`/`.btn-back-round`) + 우측 60% 흰 탭(`.phase-story-tab`/`.story-cat-banner`). ~~헤더 64px, 흰 탭 82px 고정~~ → 5/17 세션362: 둘 다 64px (솟음 폐기)
 - **마닐라 결**: 좌상 탭(라운드 + 우상 안쪽 경사) / mirror(좌측 안쪽 경사 + 우상 라운드). 모두 clip-path polygon
 - **자료 카드**: min-height 160px, padding-bottom 3.8rem, margin-top -20px (카드 사이 가시 여백 28px)
 - **자료 status 아이콘**: mask 방식, 색 코드로 자유 — 잠긴=navy / 활성=흰색 / 완료=cat-color, 크기 1.4em
@@ -158,4 +168,119 @@ author: 아리공
 
 ---
 
-## (다음 화면 — 스토리선택부터 작성 진행)
+## 스토리선택 (HTML: `story-screen` · Figma 226)
+
+### 한 줄 정의
+
+한 주제(카테고리) 안의 스토리들을 마닐라 폴더 격자로 나열한다. 활성 스토리를 클릭하면 자료선택 화면으로 진입한다. 완료된 스토리는 폴더가 흐려지고 제목 끝에 ✓가 붙는다.
+
+### 레이어 구조
+
+| 레이어 | 요소 | 비고 |
+|---|---|---|
+| 배경 | 화면 전체 BG = 카테고리 컬러 | 226 결 — 자료선택까지 이어짐 |
+| 상단바 | 앱 헤더 (타이머·로고·프로필) | 투명 배경 |
+| 본문 | 헤더(다른 주제 선택 + 카테고리명) / 시트 / 스토리 폴더 격자 2열 | story-folder-header + story-page-body |
+| 오버레이 | (없음) | — |
+
+### ASCII 도식
+
+```
+┌────────────────────────────────┐
+│ ⟦상단바: 타이머·로고·프로필⟧     │  ← 배경 = 카테고리 컬러
+│                                │
+│ ┌──────────────────────────┐   │
+│ │ ⟦다른 주제 선택⟧   ⟦카테고리명⟧ │  ← 회색 띠(z=1, 전체 폭) + 흰 탭(z=3, 우측 60%)
+│ │                              │   │   둘 다 height 64 (같은 줄 좌우 분할)
+│ │ ┌─────────────────────┐ │   │
+│ │ │ ⟦시트 — 흰 폴더 박스⟧│ │   │  ← z=2, 좌상 라운드 18, 우상 직각
+│ │ │ ┌────┐ ┌────┐       │ │   │
+│ │ │ │📁 1│ │📁 2│        │ │   │  ← 폴더 격자 2열
+│ │ │ │제목│ │제목│        │ │   │
+│ │ │ └────┘ └────┘       │ │   │
+│ │ │ ┌────┐ ┌────┐       │ │   │
+│ │ │ │📁 3│ │📁 4│        │ │   │
+│ │ │ └────┘ └────┘       │ │   │
+│ │ │ ┌────┐ ┌────┐       │ │   │
+│ │ │ │📁 5│ │📁 6│        │ │   │
+│ │ │ └────┘ └────┘       │ │   │
+│ │ └─────────────────────┘ │   │
+│ └──────────────────────────┘   │
+└────────────────────────────────┘
+```
+
+### 본문 elements (5)
+
+| 요소 | 역할 | 클릭 동작 |
+|---|---|---|
+| 다른 주제 선택 (회색 띠) | 주제 선택 화면으로 복귀 | `showScreen('category-screen') + renderCategories()` |
+| 카테고리명 (흰 탭) | 현재 카테고리 이름 표시. 텍스트 컬러 = cat-color | 미활용 (정보 표시) |
+| 시트 | 흰 폴더 박스. 스토리 카드 격자의 배경 | — |
+| 스토리 카드 (n개, 2열 격자) | 폴더(cat-color 55% 라이트) + 제목 + era. 카드 = 폴더 본체 + 뒷장 + 좌상 사선 탭 | 활성 → `startStory(id)` 자료선택 진입 / 완료 → 비활성 |
+| 폴더 외부 제목·era | 카드 아래(폴더 외부)에 제목 + era 좌측 정렬 | — |
+
+### 스토리 카드 세부 (5 요소)
+
+각 폴더 카드의 공통 구조.
+
+| 요소 | 역할 | 비고 |
+|---|---|---|
+| 폴더 본체 | cat-color 폴더 모양 | `aspect-ratio: 1.625 / 1`, `border-radius: 0 14px 14px 14px` (좌상 사선 탭과 어우러짐) |
+| 좌상 사선 탭 | `::before` 마닐라 폴더 결 | clip-path polygon, width 52%, height 12px, 위 -11px |
+| 폴더 뒷장 | `.folder-back` div, cat-color 55% 라이트 | color-mix |
+| 제목 (`h3`) | 스토리 제목. 폴더 외부 아래 | `color: navy`, `font-size 0.88rem`, `font-weight 600`, 좌측 정렬, 한국어 줄바꿈 (`word-break: keep-all`) |
+| era | 시대·연도 등 부제 (있을 때만) | `font-size 0.7rem`, `opacity 0.7`, 좌측 정렬 |
+| 완료 표시 | `.completed`: 폴더 `opacity: 0.55` + h3에 `✓` 추가 | `.story-card.completed .story-folder` / `h3::after { content: ' ✓' }` |
+
+### 상호작용
+
+| 상태 / 이벤트 | 동작 |
+|---|---|
+| 다른 주제 선택 클릭 | category-screen으로 복귀 |
+| 스토리 카드 (활성) 클릭 | `startStory(id)` — 자료선택 화면 진입 |
+| 스토리 카드 (완료) 클릭 | 비활성 (onclick 빈 문자열) |
+| 카테고리명 탭 클릭 | 미활용 |
+| 카드 hover | `transform: translateY(-2px)` |
+
+### CSS 매핑
+
+```
+배경            → #story-screen { background: var(--cat-color); }
+상단바          → #story-screen .app-header { background: transparent; }
+컨테이너        → .story-page (max-width 500px, padding 0 1rem 2rem)
+헤더 컨테이너   → .story-folder-header (height 64, padding 0)
+회색 띠         → .btn-back-round (height 100%, clip-path 우측 사선)
+흰 탭           → .story-cat-banner (absolute, top 0, height 64, width 60%, z=1, clip-path 좌측 사선)
+시트            → .story-page-body (border-radius 18px 0 18px 18px, padding 1.2rem 1rem 1.4rem)
+스토리 격자     → .story-list (display grid, grid-template-columns 1fr 1fr, gap 1rem)
+스토리 카드     → .story-card (isolation isolate)
+폴더 본체       → .story-card .story-folder (aspect 1.625, border-radius 0 14 14 14)
+좌상 사선 탭    → .story-card .story-folder::before (clip-path polygon)
+폴더 뒷장       → .story-card .story-folder .folder-back
+완료 표시       → .story-card.completed .story-folder { opacity 0.55 } / h3::after { ' ✓' }
+제목            → .story-card h3 (폴더 외부, font 0.88rem/600, 좌측 정렬)
+era             → .story-card .story-era (font 0.7rem, opacity 0.7)
+```
+
+### 결정 자리 / 미해결
+
+1. **카테고리명 탭 클릭 동작** — 자료선택의 "스토리 제목 탭"과 같은 상태(미활용). 두 탭 모두 정보 표시만. 통일된 의미 부여 자리 (예: 탭 클릭 → 상단 안내 토스트?)
+2. **스토리 era 노출 룰** — 일부 스토리만 era 있음. 모든 스토리에 era를 채울지 / 비워둘지 / 표시 자체를 폐기할지
+3. **완료 표시 강도** — 현재 폴더 opacity 0.55 + h3에 ✓. 시각상 약함. 카드 자체에 큰 ✓ 오버레이 / 폴더 색 변경 등 정밀화 자리
+4. **스토리 카드 잠금** — pickone에서 스토리는 모두 unlocked 시작(주제 안에서 어느 스토리든 클릭 가능). 미래에 스토리 순차 잠금 룰 도입 시 빈 상태 / 잠금 비주얼 결정
+5. **격자 gap·카드 사이즈 정밀화** — 현재 `gap: 1rem` + aspect 1.625. 스토리 6개 표시 시 시각 균형 검토
+6. **빈 카테고리 처리** — `'스토리 준비 중입니다.'` 텍스트 1줄. 시각 보강 자리
+
+### 5/17 세션362 결정
+
+- **헤더+시트 결 통일**: 자료선택과 동일 — `.story-page-body`의 `border-radius: 18px 0 18px 18px` (좌상 라운드 18, 우상 직각 — 흰 탭과 자연 이어짐)가 정본. 자료선택의 `.phase-sheet`을 이 결에 맞춤
+- **흰 탭 height 통일**: 회색 띠와 흰 탭 모두 64px. 이전 흰 탭 82px(솟음 18) → 64px. 같은 줄에서 좌우 분할되는 결. 두 화면 동일 적용
+
+### Figma 참조
+
+- `226.svg` — 헤더(다른 주제 선택 + 카테고리명) + 스토리 폴더 격자 layout
+- 디자이너 의도 BG: 회색. 피터공 5/16 결정: BG = cat-color (자료선택까지 이어짐)
+
+---
+
+## (다음 화면 — 주제선택)

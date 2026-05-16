@@ -169,7 +169,7 @@ GitHub Pages 자동 배포 — `https://mice3nyc.github.io/ari_gitrepo_1/DMZ_v5/
 - [x] 6.0.5 `scripts/build_pickone.sh` 신설 — STORIES + BLANK_SOURCE_LOOKUP + FIRST_SOURCE_LOOKUP 주입 + JS syntax 검증
 - [x] 6.0.6 빌드 회귀 — pickone 267,564 bytes / 95 blank + 24 first / JS OK
 - [ ] 6.0.7 피터공 브라우저 플테 — 첫 슬롯 활성 + 사이클 unlock 작동 확인
-- [ ] 6.0.8 photo answer_from 누락 13 스토리 검토 (정예공/박성렬)
+- [ ] 6.0.8 photo answer_from 누락 13~16 스토리 검토 (정예공/박성렬). 예: s0305 연천 전곡리 유적 — 빈칸 4개 answer_from 분포(B·A·B·D)로 photo 없음 → A fallback. 첫 자료 A 정답이 B(신문)로 떨어져 게임 룰("첫 자료 정답은 사진에") 어긋남. 동일 패턴: cat02·cat03 전체 + s0405·s0407·s0105·s0106
 - [ ] 6.0.9 커밋·푸시
 
 **Phase 6.x — 비주얼 디자인 v2 마닐라 폴더 패턴 (5/16 세션359)** ✅
