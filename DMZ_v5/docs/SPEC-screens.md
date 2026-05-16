@@ -128,13 +128,17 @@ author: 아리공
 
 ### 결정 자리 / 미해결
 
-1. **두 화면 헤더 높이 미세 차이** ⚠️ — CSS px(64/82)는 자료선택·스토리선택 동일. 시각상 차이 잔존. 다음 회기 진단
+1. ~~**두 화면 헤더 높이 미세 차이** ⚠️ — CSS px(64/82)는 자료선택·스토리선택 동일. 시각상 차이 잔존~~ → **5/17 세션362 해소**. 시각 차이 원인은 헤더 박스가 아니라 부모/시트 결합 결이었음 — game-content padding-top 0.8→0, phase-banner margin-bottom 0.4→0, phase-sheet border-radius 사방 라운드→`18px 0 18px 18px`(스토리선택과 동일) + margin-top -14→0, 흰 탭 padding-right 1.1→1.4. 두 화면 헤더+시트 한 덩어리 결로 통일
 2. **진행 카운트(0/4) 자리** — 폐기된 game-header에서 표시하던 "빈칸 복원 0/4"를 어디에 둘지. 후보: ① 자료 카드 묶음 상단 라벨 ② 시트 헤더 ③ 스토리 제목 탭 부속 ④ 표시 안 함
 3. **era / soundNote 위치** — phase-sheet에서 제거. 자료 본문 모달 또는 다른 자리 후속 결정
 4. **자료 카드 활성 표시 비주얼** — 추가 정밀화 (현재 status 아이콘만)
 5. **자료 카드 잠금 표시** — status_locked.png + navy mask 적용됨. 위치·크기 후속 조정 자리
 6. **스토리 제목 탭 클릭 동작** — 미활용. 정보 표시만 / 어떤 동작 부여?
 7. **자료 카드 진입 애니메이션** — 현재 `animation-delay: ${i*0.1}s` 순차 fade-in. 정밀화 자리
+
+### 5/17 세션362 추가 적용
+
+- **헤더+시트 결 통일**: 자료선택을 스토리선택 결에 맞춤. `.game-content` padding-top 0.8rem→0 / `.phase-banner` margin-bottom 0.4rem→0 / `.phase-sheet` border-radius 사방 14→`18px 0 18px 18px` (좌상 라운드, 우상 직각 — 흰 탭과 이어짐) + margin-top -14→0 / 흰 탭 padding-right 1.1→1.4rem. 두 화면 모두 헤더와 시트가 한 덩어리로 읽힘
 
 ### 5/16 세션361 디자인 v3 적용 사항
 
