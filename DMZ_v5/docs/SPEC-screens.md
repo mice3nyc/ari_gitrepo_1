@@ -283,4 +283,110 @@ era             → .story-card .story-era (font 0.7rem, opacity 0.7)
 
 ---
 
+## 자료본문 (HTML: `source-detail` · Figma 프레임 샘플 1·2·3·4 = A·B·C·D)
+
+### 한 줄 정의
+
+자료선택 화면에서 활성 자료 카드를 클릭하면 진입한다. 같은 상단바·헤더 유지(자료선택과 연속) + 자료선택의 시트를 **핑크 박스**로 교체하는 결. 핑크 박스 안에 빈칸 복원 안내 + 자료 본문 + 인라인 빈칸 입력. 4 자료 type(A 편지/B 신문/C 사진/D 구술)이 **공통 결** — type별 세부 디테일은 다음 회기.
+
+### 레이어 구조
+
+| 레이어 | 요소 | 비고 |
+|---|---|---|
+| Layer 1 — 배경 | 화면 전체 BG = **cat-color** | 자료선택과 같은 결 |
+| 상단바 | 앱 헤더 (타이머·로고·프로필) | 자료선택과 동일. 흰 로고 (`CAT_COLOR_BG_SCREENS` 포함) |
+| 본문 헤더 | 주제 띠(회색) + 스토리 제목 탭(흰색) | 자료선택과 동일 — `.phase-banner` 재사용. 시트 라인 위 49 + 아래 15 가려짐 동일 |
+| Layer 2 — 흰 시트 wrap | 흰 BG, 라운드 18 0 18 18, margin-top -15 | 자료선택 `.phase-sheet` 결과 좌표 동일 |
+| Layer 3 — 주제색 박스 | cat-color BG, 사방 라운드 14, 흰 시트 안 자리 | 안내 영역(상단) + 본문 카드(아래)를 감싸는 카드 |
+| 안내 영역 | "빈칸 복원하기" + X + 안내문. cat-color 위 흰 텍스트 | 주제색 박스의 상단 |
+| Layer 4 — 본문 흰 카드 | 흰 BG, 사방 라운드 14, padding 1.4/1.2rem | 자료 type별 layout이 자리잡는 본문 프레임 |
+| 오버레이 | 정답 모달 / 토스트 | 빈칸 정답 입력 시 |
+
+### ASCII 도식 (4-layer)
+
+```
+┌────────────────────────────────┐
+│ ⟦상단바: 30:00 · DMZ Archive · 프로필⟧│  ← Layer 1: 화면 BG cat-color
+│                                │
+│ DMZ 기본정보         DMZ의 탄생  │  ← 헤더 (자료선택과 동일)
+│ ━━━━시트 라인━━━━━━━━━━━━━━━━│  ← 49 (margin-top -15)
+│ ┌──────────────────────────┐  │
+│ │ ⟦흰 시트⟧ (Layer 2)        │  │  ← 라운드 18 0 18 18, 흰 BG
+│ │ ┌────────────────────────┐ │  │
+│ │ │ ⟦주제색 박스⟧ (Layer 3) │ │  │  ← cat-color, 라운드 14
+│ │ │  빈칸 복원하기      X  │ │  │  ← 상단 안내 (흰 텍스트)
+│ │ │  빈칸 정답은 다른…      │ │  │
+│ │ │ ┌──────────────────┐  │ │  │
+│ │ │ │ ⟦흰 카드⟧ (Layer 4)│  │ │  │  ← 라운드 14, 흰 BG
+│ │ │ │  자료 type별 본문 │  │ │  │
+│ │ │ └──────────────────┘  │ │  │
+│ │ └────────────────────────┘ │  │
+│ └──────────────────────────┘  │
+└────────────────────────────────┘
+```
+
+### 본문 elements (공통 결 5종)
+
+| 요소 | 역할 | 비고 |
+|---|---|---|
+| 핑크 박스 헤더 | 핑크 BG. "빈칸 복원하기" 제목 + X 닫기 우상단 | 사방 라운드 또는 좌상 라운드 (시트 결과 합) |
+| 안내문 | "빈칸 정답은 다른 자료에서 확인할 수 있습니다. 자료 X(...)를 읽어보세요." | 다른 자료 type 안내 자동 생성 |
+| 흰 시트 | 자료 본문의 배경 박스 | 핑크 박스 안쪽 — 자료선택 phase-sheet 결 유지 |
+| 자료 본문 | type별 layout (제목·메타·본문) | A·B·C·D 4종 다른 layout — 공통 결 우선, 세부 다음 |
+| 인라인 빈칸 | 본문 안에 빈칸 [____] 입력 자리 | 클릭 → 정답 입력 모달 |
+
+### 자료 type별 결 (A·B·C·D)
+
+> 5/17 세션362: **공통 shell 우선** — 4종 모두 같은 헤더·핑크 박스·시트 결 사용. 본문 layout(제목·메타 위치, 본문 형식)도 일단 같은 결로 통일. type별 세부 디테일(편지 형식 보낸이/받는이, 신문 출처/매체, 사진 캡션, 구술 대화 말풍선)은 다음 회기 정밀화.
+
+| 자료 | Figma 샘플 | 본문 layout (다음 회기 정밀화 자리) |
+|---|---|---|
+| A 편지 | 프레임 샘플 1 | 제목 + 날짜 + 보낸이/받는이 + 편지 본문 (letter-paper) |
+| B 신문 | 프레임 샘플 2 | 헤드라인 + 출처 + 매체+날짜 + 기사 본문 (newspaper-paper) |
+| C 사진 | 프레임 샘플 3 | 사진 이미지 + 캡션·메타 (photo-paper) |
+| D 구술 | 프레임 샘플 4 | 인터뷰 형식 — 화자/대답 또는 말풍선 (oral-paper) |
+
+### 상호작용
+
+| 상태 / 이벤트 | 동작 |
+|---|---|
+| 자료선택에서 활성 카드 클릭 | 모달 진입 (`openSource(sourceId)`) |
+| X 닫기 클릭 | 자료선택으로 복귀 (`closeSource()`) |
+| 인라인 빈칸 [____] 클릭 | 정답 입력 모달 진입 |
+| 정답 정확 입력 | 빈칸 채워짐 + 다음 자료 unlock + 진입 깜빡 큐 등록 |
+| 빈칸 모두 풀이 완료 | 자료 status "복원 완료" → 닫고 다음 자료 진입 |
+
+### CSS 매핑 (현재 코드)
+
+```
+화면 (L1)       → #source-detail-screen (BG cat-color, screen 패턴, CAT_COLOR_BG_SCREENS 포함)
+content 컨테이너 → .source-detail-content (max-width 500, padding 0 1rem 2rem, gap 0.4rem)
+헤더            → .phase-banner (자료선택과 같은 결 — 회색 띠 + 흰 탭)
+흰 시트 (L2)    → .detail-white-sheet (BG white, border-radius 18 0 18 18, margin-top -15, padding 30 0.8 1.4)
+주제색 박스 (L3) → .detail-topic-card (BG cat-color, border-radius 14, padding 1.2 1, color white)
+안내 영역       → .detail-modal-header (transparent BG, 카드 상단에 자리)
+제목 + X        → .detail-modal-title / .modal-close-x (흰 텍스트)
+안내문          → .detail-modal-hint (흰 텍스트)
+본문 프레임     → .detail-body-wrap (BG white, border-radius 14, padding 1.4rem 1.2rem, color navy)
+자료 type 본문  → .letter-paper / .diary-paper / .scholar-paper / 등 (본문 프레임 안에 자리)
+```
+
+### 결정 자리 / 미해결
+
+1. ~~**모달 자리 결 — fixed 100vh vs page-level** ⚠️~~ → **5/17 세션362 해소** — page-level로 정정. `#source-detail-screen` 별도 screen으로 분리. 자료선택과 같은 결(배경 cat-color + 상단바 + `.phase-banner` 헤더 + 핑크 시트). HTML 구조·CSS·JS(openSource/closeSource) 모두 page-level 결로 교체. `SCREEN_LABELS`·`CAT_COLOR_BG_SCREENS`에 자료본문 추가
+2. **핑크 박스 헤더 라운드** — 현재 `0 0 16 16` (하단만). SVG 시트 결(좌상 라운드 18 + 우상 직각)과 통일?
+3. **자료 type별 본문 layout 정밀화 (다음 회기)** — 편지 보낸이/받는이, 신문 출처/매체, 사진 캡션, 구술 대화. Figma 샘플 1·2·3·4 디자이너 의도와 비교
+4. **인라인 빈칸 결** — 현재 paper styles에 자리잡고 있음. 공통 결로 추출하거나 type별 유지 자리
+5. **스크롤 결** — 자료 본문 길이가 화면보다 길 때 스크롤 자리. 현재 `.source-detail { overflow-y: auto }` (모달 전체 스크롤). page-level 가면 시트만 스크롤로 변경 자리
+
+### Figma 참조
+
+- `프레임 샘플 1.svg` = A 편지 본문 (393×1315)
+- `프레임 샘플 2.svg` = B 신문 본문 (393×1357)
+- `프레임 샘플 3.svg` = C 사진 본문 (393×903)
+- `프레임 샘플 4.svg` = D 구술 본문 (393×1097)
+- 위치: `Assets/incoming/통일부/UI디자인샘플/figma_svg/`
+
+---
+
 ## (다음 화면 — 주제선택)

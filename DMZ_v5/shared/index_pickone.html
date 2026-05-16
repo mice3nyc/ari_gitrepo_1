@@ -531,19 +531,42 @@ body {
 .source-card:hover { transform: translateY(-3px); }
 
 /* ===== SOURCE DETAIL (자료 본문 모달, 디자인 261·262·266·267.png) ===== */
-.source-detail {
-  display: none; position: fixed; top:0; left:0; right:0; bottom:0; z-index: 200;
-  background: var(--c-bg); overflow-y: auto;
+/* ===== SOURCE DETAIL — page-level screen (5/17 세션362) ===== */
+/* 4-layer: 화면(cat-color) → 흰 시트 → 주제색 박스 → 본문 흰 카드 */
+#source-detail-screen { min-height: 100vh; background: var(--cat-color, var(--c-bg)); transition: background 0.25s; }
+#source-detail-screen .app-header { background: transparent; }
+.source-detail-content {
+  padding: 0 1rem 2rem;
+  display: flex; flex-direction: column;
+  gap: 0.4rem;
+  max-width: 500px; width: 100%; margin: 0 auto;
 }
-.source-detail.active { display: block; }
-.detail-inner { max-width: 500px; margin: 0 auto; padding: 0; min-height: 100vh; }
+/* Layer 2 — 흰 시트 wrap (자료선택 .phase-sheet와 같은 결: 라운드 18 0 18 18, margin-top -15) */
+.detail-white-sheet {
+  background: var(--c-white);
+  border-radius: 18px 0 18px 18px;
+  margin-top: -15px;
+  padding: 30px 0.8rem 1.4rem;
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column;
+}
+/* Layer 3 — 주제색 박스 (흰 시트 안 카드) */
+.detail-topic-card {
+  background: var(--cat-color, var(--c-pink-soft));
+  border-radius: 14px;
+  padding: 1.2rem 1rem;
+  display: flex; flex-direction: column;
+  color: var(--c-white);
+}
+/* 안내 영역 — 주제색 박스 상단 */
 .detail-modal-header {
-  background: var(--c-pink-primary); color: var(--c-white);
-  padding: 1.1rem 1.3rem; border-radius: 0 0 16px 16px;
-  margin-bottom: 1rem;
+  background: transparent; color: var(--c-white);
+  padding: 0 0.2rem 1rem;
+  border-radius: 0;
+  margin-bottom: 0;
 }
 .detail-modal-title {
-  font-size: 1.15rem; font-weight: 600; margin-bottom: 0.3rem;
+  font-size: 1.15rem; font-weight: 600; margin-bottom: 0.4rem;
   display: flex; align-items: center; justify-content: space-between;
 }
 .detail-modal-title .modal-close-x {
@@ -554,13 +577,12 @@ body {
   font-size: 0.78rem; opacity: 0.95; line-height: 1.5;
 }
 .detail-modal-hint strong { font-weight: 600; }
+/* Layer 4 — 본문 흰 카드 (주제색 박스 안, 자료 type별 layout 자리) */
 .detail-body-wrap {
-  padding: 0 1rem 2rem;
-}
-.detail-close { position: sticky; top: 0; text-align: right; padding: 0.5rem; z-index: 10; background: transparent; display: none; }
-.detail-close button {
-  background: var(--c-pink-primary); border: none; color: var(--c-white);
-  padding: 0.3rem 0.8rem; cursor: pointer; font-family: inherit; font-size: 0.75rem; border-radius: 999px;
+  background: var(--c-white);
+  border-radius: 14px;
+  padding: 1.4rem 1.2rem;
+  color: var(--c-navy);
 }
 
 /* All detail paper styles — unified monochrome */
@@ -1128,7 +1150,15 @@ body {
     <button class="btn-submit" onclick="submitAnswer()">확인</button>
   </div>
 </div>
-<div class="source-detail" id="source-detail"><div class="detail-inner" id="detail-inner"></div></div>
+<div id="source-detail-screen" class="screen">
+  <div class="screen-bg"></div>
+  <header class="app-header">
+    <span class="timer-placeholder">30:00</span>
+    <span class="app-logo"><img src="assets/images/title_logo_cat01.png" alt="DMZ Archive" id="source-detail-logo"></span>
+    <span class="app-profile"></span>
+  </header>
+  <div class="source-detail-content" id="source-detail-content"></div>
+</div>
 <div class="answer-celebration" id="answer-celebration"></div>
 
 <div id="screen-label">타이틀</div>
@@ -1323,6 +1353,7 @@ const SCREEN_LABELS = {
   'category-screen': '주제선택',
   'story-screen': '스토리선택',
   'game-screen': '자료선택',
+  'source-detail-screen': '자료본문',
   'archive-screen': '보관소',
   'completion-screen': '스토리완료',
   'result-screen': '결과',
@@ -1334,7 +1365,7 @@ function updateScreenLabel(text) {
 }
 
 // 화면 배경이 카테고리 컬러인 화면 — 로고는 white. 회색/흰 배경 화면은 현재 카테고리 색 로고
-const CAT_COLOR_BG_SCREENS = new Set(['story-screen', 'game-screen']);
+const CAT_COLOR_BG_SCREENS = new Set(['story-screen', 'game-screen', 'source-detail-screen']);
 const CAT_LOGO_SUFFIX = { cat01: 'cat01', cat02: 'cat02', cat03: 'cat03', cat04: 'cat04', cat06: 'cat06' };
 function updateLogo() {
   let src;
@@ -1741,15 +1772,12 @@ function openSource(sourceId) {
   }
   currentDetailSourceId = sourceId;
   const src = story.sources.find(s => s.id === sourceId);
-  const detail = document.getElementById('source-detail');
-  const inner = document.getElementById('detail-inner');
   var rendered;
   try {
     rendered = renderSource(src, state.solvedBlanks, story.blanks);
   } catch(e) {
     rendered = '<pre style="color:red;">ERROR: ' + e.message + '\n' + e.stack + '</pre>';
   }
-  detail.classList.add('active');
   // 빈칸 정답 자료 안내 (sequential / pickone: dmz_blanks.csv answer_from)
   const blankKeys = getBlankKeysForSource(story, src.id);
   let answerHintHTML = '';
@@ -1760,18 +1788,33 @@ function openSource(sourceId) {
     const hintBody = fromSlot ? `자료 ${fromSlot}${slotName[fromSlot] ? `(${slotName[fromSlot]})` : ''}를 읽어보세요.` : '다른 자료에서 확인할 수 있습니다.';
     answerHintHTML = `<div class="detail-modal-hint">빈칸 정답은 다른 자료에서 확인할 수 있습니다.<br><strong>${hintBody}</strong></div>`;
   }
-  inner.innerHTML = `
-    <div class="detail-modal-header">
-      <div class="detail-modal-title">
-        <span>빈칸 복원하기</span>
-        <button class="modal-close-x" onclick="closeSource()" aria-label="닫기">✕</button>
-      </div>
-      ${answerHintHTML}
+  // 5/17 세션362: 자료본문 = 별도 screen. 자료선택과 같은 헤더(phase-banner) 사용
+  const cat = CATEGORIES.find(c => c.id === state.currentCategory);
+  const catNum = ((cat && cat.id) || '').replace(/^cat/, '').padStart(2, '0');
+  const catColor = `var(--cat-${catNum})`;
+  const detailScreen = document.getElementById('source-detail-screen');
+  if (detailScreen) detailScreen.style.setProperty('--cat-color', catColor);
+  const content = document.getElementById('source-detail-content');
+  content.style.setProperty('--cat-color', catColor);
+  content.innerHTML = `
+    <div class="phase-banner" style="--cat-color:${catColor}">
+      <div class="phase-cat-tab" onclick="exitToStoryList()" title="스토리 선택으로 돌아가기">${cat ? cat.name : ''}</div>
+      <div class="phase-story-tab">${story.title}</div>
     </div>
-    <div class="detail-body-wrap">${rendered}</div>
+    <div class="detail-white-sheet">
+      <div class="detail-topic-card">
+        <div class="detail-modal-header">
+          <div class="detail-modal-title">
+            <span>빈칸 복원하기</span>
+            <button class="modal-close-x" onclick="closeSource()" aria-label="닫기">✕</button>
+          </div>
+          ${answerHintHTML}
+        </div>
+        <div class="detail-body-wrap">${rendered}</div>
+      </div>
+    </div>
   `;
-  document.body.style.overflow = 'hidden';
-  updateScreenLabel('자료본문');
+  showScreen('source-detail-screen');
 }
 
 function closeSource() {
@@ -1795,10 +1838,11 @@ function closeSource() {
     }
   }
   currentDetailSourceId = null;
-  document.getElementById('source-detail').classList.remove('active');
-  document.body.style.overflow = '';
+  // 5/17 세션362: page-level screen 전환 — 자료선택으로 복귀
+  if (currentScreenId === 'source-detail-screen') {
+    showScreen('game-screen');
+  }
   renderExploration();
-  updateScreenLabel(SCREEN_LABELS[currentScreenId] || currentScreenId);
 }
 
 // ===== ANSWER MODAL =====
