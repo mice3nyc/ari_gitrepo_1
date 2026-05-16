@@ -17,6 +17,26 @@ author: 아리공
 - 폰트 — `assets/fonts/Paperlogy-{4Regular,7Bold,9Black}.ttf`
 - 피터공 5/15 결정 — Paperlogy 기본, 자료 타입별 변주 가능. 타이머 자리 잡되 기능은 나중.
 
+### 0.5. 화면 명칭 정본 (5/16 결정)
+
+작업·대화·문서에서 화면을 부를 때 정본은 **한글 명칭**. 좌하단 개발용 라벨도 한글만 표시.
+Figma 번호는 디자인 검토 시 참조용이며 호칭 아님. HTML id는 코드 내부 좌표.
+
+| 한글 명칭 (정본) | HTML id | Figma 참조 | 종류 |
+|---|---|---|---|
+| 타이틀 | `login-screen` | 224 | 진입 |
+| 튜토리얼 | `tutorial-screen` | 220 | 안내 |
+| 주제선택 | `category-screen` | 225 | 선택 |
+| 스토리선택 | `story-screen` | 226 | 선택 |
+| 자료선택 | `game-screen` | 240 | 선택·플레이 |
+| 자료본문 | (modal `#source-detail`) | 261·262·266·267 | 모달 |
+| 보관소 | `archive-screen` | — | 부수 (DMZ 픽셀 맵) |
+| 스토리완료 | `completion-screen` | — | 자료선택 종료 상태 |
+| 결과 | `result-screen` | 245? | 자료선택 종료 상태 |
+
+- "스토리완료"·"결과"는 자료선택(게임 화면) 종료 시 등장하는 상태 화면 (피터공 5/16 분류 코멘트)
+- 좌하단 라벨은 `index_pickone.html`의 `SCREEN_LABELS` 객체에서 관리. 화면 추가 시 동시 갱신
+
 ### 1. 컬러 토큰
 
 ```
@@ -42,6 +62,10 @@ author: 아리공
 > ⚠️ **결정 자리 1**: 세션354에서 cat05 통삭 + 24 스토리 결정. 디자인 샘플은 cat05 포함 6 카테고리 = 34 스토리. 디자이너 갱신 요청 또는 cat05 복원 결정 대기. **잠정**: 5 카테고리(cat01·02·03·04·06)로 빌드하되 컬러 토큰은 6 모두 정의해둠.
 
 ### 2. 폰트 시스템
+
+> **5/16 세션361 결정**: 두꺼운 폰트 weight(700·800·900·bold) 60개 자리를 일괄 **600**으로 변경. Paperlogy-7Bold 자산을 `font-weight: 600`에 매핑 → 600 호출 시 7Bold 사용. 9Black 자산은 비활성(코드 사용 자리 없음). 시각 효과: 가장 두꺼운 자리(9Black 렌더)가 7Bold 렌더로 한 단계 얇아짐. 700→600은 자산 매핑상 동일 글리프지만 의미 정합.
+
+
 
 ```css
 @font-face {
@@ -216,6 +240,7 @@ author: 아리공
 |---|---|---|
 | v1 | 2026-05-15 | 신설. 디자인 샘플 9장 + 아이콘 9개 + Paperlogy 적용 명세. pickone 파일럿 결정 |
 | v2 | 2026-05-16 | 마닐라 폴더 패턴 + 색 토큰 정정(SVG에서 추출) + 226·240 BG=cat-color + Z 위계 + 돌아가기 알약 + drop shadow 제거 |
+| v3 | 2026-05-16 | 화면 명칭 정본화 + SPEC-screens.md 신설. PNG 자산 통합(로고 6장·프로필·status 3종). 폰트 weight 600 일괄. 폴더 높이 20% 감소 + 레이블 외부 + 뒷장 마닐라 모양 + 색. 두 화면 헤더 결 통일(자료선택·스토리선택). 마닐라 mirror·좌상 탭 clip-path polygon. 자료 카드 박스 height 증가 + status 아이콘 mask |
 
 ---
 
@@ -312,13 +337,14 @@ v1 → v2
 .phase-cat-tab {
   display: block; width: 100%;
   background: var(--c-gray-card);
-  padding: 0.4rem 1rem 1rem;
+  padding: 0.8rem 1rem 2rem;  /* 5/16 세션361: 높이 2배(0.4·1·1 → 0.8·1·2) */
   border-radius: 14px 14px 0 0;
   z-index: 1;
-  cursor: pointer;  /* 클릭 → showScreen('category-screen') */
+  cursor: pointer;  /* 클릭 → exitToStoryList() — 스토리선택으로 */
 }
 .phase-story-tab {
-  position: absolute; top: 4px; right: 0;
+  position: absolute; top: 0; right: 0;  /* 5/16 세션361: 주제 띠 상단과 같은 높이(4px → 0) */
+  /* padding-bottom 0.55 → 2rem (5/16 세션361): 박스를 더 길게 → 시트 안으로 자연스럽게 들어감 */
   width: 50%;
   background: white;
   color: var(--c-navy);
@@ -339,7 +365,8 @@ v1 → v2
 - **화면 BG = cat-color** (피터공 결정 — 226에서 이어짐. 240 SVG의 회색 BG 디자인 의도와 다름)
 - `#game-screen { background: var(--cat-color); }`
 - `#game-screen .app-header { background: transparent; }`
-- **클릭 동선**: 카테고리 탭 → 주제 선택 / 스토리 탭 → (해당 스토리, 현재 미활용)
+- **클릭 동선 (5/16 정정)**: 주제 띠(`.phase-cat-tab`, "DMZ 기본정보") → **스토리선택**(`exitToStoryList()`) / 스토리 제목 탭(`.phase-story-tab`, "DMZ의 탄생") → (현재 미활용)
+- **`.game-header` 폐기 (5/16 결정)**: 상단바와 phase-banner 사이의 ← + 위치 + "빈칸 복원 0/4" 한 줄은 제거. 뒤로 가는 길은 주제 띠가 담당. 진행 카운트(0/4)는 다른 자리(자료 카드 그룹 또는 시트 헤더 등) 후속 결정 자리.
 
 ### v2-5. 자료 카드 겹겹이 쌓임
 

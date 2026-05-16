@@ -141,6 +141,50 @@ data/topics/
 
 **잔여 (디자인 v2 정합 우선)**: 일러스트 자산 수령(편지+봉투·메가폰·액자·마이크), era/soundNote 위치 결정, 226·240 결 통일 여부 검토, Figma MCP 세팅.
 
+### 5/16 세션361 — 화면 명칭 체계 + 자료선택 세부 명세 ✅
+
+피터공 "디자인 수정 대화의 정확한 호칭이 필요" → 화면 명칭 정본화 + 화면별 세부 명세 문서 신설. 디자인 수정 진입 직전 인프라 정비.
+
+- **좌하단 화면 라벨 도입** — 한글 정본 9종: 타이틀·튜토리얼·주제선택·스토리선택·자료선택·자료본문·보관소·스토리완료·결과. Figma 번호는 검토 참조용, 호칭 아님
+- **SPEC-ui-design.md §0.5** — 한글 명칭 ↔ HTML id ↔ Figma 매핑 표
+- **SPEC-screens.md 신설** — 화면별 세부 명세. 공통 레이어 4종(배경·상단바·본문·오버레이) + 화면별 elements + ASCII 도식 + 상호작용 + CSS 매핑 + 결정 자리. 자료선택 § 우선 완성
+- **자료선택 화면 정합** — `game-header` 한 줄 폐기(← + 위치 + "빈칸 복원 0/4"). 뒤로 가는 길은 주제 띠(`.phase-cat-tab`) 클릭 → 스토리선택(`exitToStoryList()`). phase-cat-tab onclick 변경(category-screen → exitToStoryList)
+- **빌드**: pickone/index.html 286,948 bytes. JS syntax OK
+
+**자료선택 화면 호칭 체계 (디자인 수정 시 정본)**:
+- 본문 elements: 주제 띠 / 스토리 제목 탭 / 시트 / 자료 카드 묶음(4)
+- 자료 카드 묶음 위치 호칭: 자료 1번(z=1, 위) ~ 자료 4번(z=4, 아래)
+- 자료 카드 슬롯 호칭: A(편지)·B(신문)·C(사진)·D(구술) — 콘텐츠 자리
+- 카드 세부 7요소: 카드 배경·좌상 탭·아이콘·제목·메타·잠금·활성
+
+**다음 진입점**: 자료선택 디자인 수정(피터공 지시 자리). 진행 카운트(0/4) 위치 결정 / 카드 활성·잠금 표시 정밀화 / 스토리 제목 탭 동작 등.
+
+### 5/16 세션361 후반 — 자료선택·스토리선택 디자인 v3 ✅
+
+호칭 체계 정본화 후 피터공 지시로 디자인 미세 조정 다수.
+
+- **폰트 weight 일괄 600** — Paperlogy-7Bold 자산을 `font-weight: 600`에 매핑. 700/800/900/bold 60자리 → 600. 9Black 비활성. 시각 한 단계 얇아짐
+- **PNG 자산 통합** — 통일부 디자이너 export. 상단바 로고 6장(cat01·02·03·04·06 + white) + 프로필 + 자료 status 3종(locked·partial·solved). 모두 alpha 채널, mask로 색 자유
+- **자료 카드 status 아이콘** — mask + 색: 잠긴 navy / 활성 흰색 / 완료 cat-color. 크기 1.4em
+- **상단바 로고 동적 매핑** — game·story 화면(cat-color BG) = white, 나머지 = 현재 카테고리 색. `showScreen()` 호출 시 `updateLogo()` 자동
+- **상단바 프로필** — navy 원형 배경 + mask 흰색 아이콘
+- **폴더 카드 결 정합** — aspect-ratio 1.3→1.625 (높이 20% 감소). 레이블 텍스트 폴더 외부(아래)로 + width 100% + 한국어 word-break
+- **폴더 뒷장 마닐라 모양** — `.folder-back` div 신설 (좌상 탭 포함). 주제선택 흰색 / 스토리선택 cat-color 55% 라이트(color-mix)
+- **마닐라 mirror 탭** — `.phase-story-tab`·`.story-cat-banner` 좌측 안쪽 경사 + 우상 라운드 (clip-path polygon)
+- **마닐라 좌상 탭 결** — `.btn-back-round`·`.phase-cat-tab` 좌상 라운드 + 우상 경사
+- **두 화면 헤더 layout 통일** — 자료선택·스토리선택 모두 `[전체 폭 회색 띠 + 우측 60% 솟음 흰 탭]` 결. story-folder-header layout 자료선택 phase-banner와 동일하게 재작성
+- **헤더 고정 높이** — phase-banner/story-folder-header 64px, 흰 탭 82px
+- **자료 카드 박스** — min-height 160 + padding-bottom 3.8rem + 카드 사이 가시 여백 28px
+- **텍스트** — "← 주제선택" → "다른 주제 선택"
+- **스토리선택 안내문구 제거** — placeholder 텍스트 삭제, 두 화면 본문 시작 정합
+- **빌드** — pickone/index.html ~290KB. JS syntax OK
+
+**미해결**:
+- 두 화면(자료선택·스토리선택) 헤더 높이가 CSS px는 동일하지만 시각상 차이 잔존 → 다음 회기 진단
+- 진행 카운트(0/4) 위치, 카드 활성·잠금 표시 비주얼 추가 정밀화, 스토리 제목 탭 클릭 동작
+
+**SPEC-screens.md 신설**: 화면별 세부 명세 파일. 공통 레이어 4종(배경·상단바·본문·오버레이) + 자료선택 §. 나머지 8 화면 §은 후속.
+
 ### 5/15 세션354 — 런칭 스코프 축소 + canon 비교 + 베타 사전 인프라
 
 - ✅ 36 → **24 스토리 축소** (5/14 회의 결정): cat05 통삭 + 8 스토리 archive

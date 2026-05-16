@@ -193,6 +193,37 @@ GitHub Pages 자동 배포 — `https://mice3nyc.github.io/ari_gitrepo_1/DMZ_v5/
 - [ ] GAME START 화면(224) SD 카드 자체 SVG 재현 정밀화 (현재 PNG 통째)
 - [ ] Figma MCP 세팅 (반복 협업 시)
 
+**Phase 6.y — 화면 명칭 체계 + 자료선택 정합 (5/16 세션361)** ✅
+
+> 디자인 수정 대화의 정확한 호칭. 좌하단 라벨 + SPEC 정본.
+
+- [x] 좌하단 화면 라벨 도입 — 한글 정본(타이틀·튜토리얼·주제선택·스토리선택·자료선택·자료본문·보관소·스토리완료·결과). `SCREEN_LABELS` 객체 + `updateScreenLabel()`. 모달 진입·이탈 시 갱신
+- [x] SPEC-ui-design.md §0.5 화면 명칭 정본 추가 — 한글↔HTML id↔Figma 매핑 표
+- [x] SPEC-screens.md 신설 — 화면별 세부 명세 파일. 공통 레이어 4종(배경·상단바·본문·오버레이) + 자료선택 § 완성
+- [x] 자료선택 game-header 폐기 — `←` + 위치 + "빈칸 복원 0/4" 한 줄 제거. 뒤로 가는 길은 주제 띠가 담당
+- [x] 주제 띠(`.phase-cat-tab`) 클릭 동작 변경 — 주제선택(category-screen) → 스토리선택(`exitToStoryList()`). 한 단계만 뒤로
+- [x] 빌드 회귀 — pickone/index.html ~290KB. JS syntax OK
+- [x] 디자인 v3 적용 (5/16 후반):
+  - 폰트 weight 일괄 600 (700·800·900·bold 60자리 → 600, 7Bold 자산 매핑)
+  - 자료 카드 status 아이콘 (mask + 색 자유) — `assets/icons/status_*.png` (locked·partial·solved), 잠긴=navy / 활성=흰색 / 완료=cat-color, 크기 1.4em
+  - 상단바 로고 PNG 동적 매핑 — cat01·02·03·04·06 + white. game·story 화면(cat-color BG)=white, 나머지=현재 카테고리 색
+  - 상단바 프로필 — navy 원형 + mask 흰색 아이콘
+  - 폴더 카드 (cat/story) aspect-ratio 1.3→1.625 (높이 20% 감소)
+  - 폴더 레이블 텍스트 폴더 외부(아래)로 — width 100% + 한국어 word-break
+  - 폴더 뒷장 마닐라 모양 (`.folder-back` div) — 좌상 탭 포함. 주제선택=흰색 / 스토리선택=cat-color 55% 라이트(color-mix)
+  - 마닐라 mirror clip-path — `.phase-story-tab`·`.story-cat-banner` 좌측 안쪽 경사 + 우상 라운드
+  - 마닐라 좌상 탭 결 — `.btn-back-round`·`.phase-cat-tab` 좌상 라운드 + 우상 경사
+  - 자료선택 ↔ 스토리선택 헤더 layout 통일 — `.btn-back-round` 전체 폭 회색 띠, `.story-cat-banner` absolute 우측 60% (phase-banner와 동일 결)
+  - 헤더 고정 높이 — phase-banner/story-folder-header 64px, 흰 탭 82px
+  - 자료 카드 박스 높이 — min-height 160px + padding-bottom 3.8rem + 카드 사이 가시 여백 28px (margin-top -32→-20)
+  - "← 주제선택" → "다른 주제 선택"
+  - 스토리선택 안내문구 제거 — placeholder 텍스트(`story-page-sub`) 삭제, 두 화면 본문 시작 정합
+- [ ] **두 화면(자료선택·스토리선택) 헤더 높이 미세 차이 잔존** — CSS px는 동일(64/82)하지만 시각상 다름. 부모 padding/margin 또는 다른 요소 영향 추정. 다음 회기 진단
+- [ ] 진행 카운트(0/4) 자리 결정 — 폐기된 game-header 대체 위치
+- [ ] 자료 카드 활성·잠금 표시 비주얼 추가 정밀화
+- [ ] 스토리 제목 탭 클릭 동작 결정 (현재 미활용)
+- [ ] 나머지 화면 § 작성 — 스토리선택·주제선택·자료본문·타이틀·튜토리얼·보관소·스토리완료·결과
+
 **Phase 4.3 — 작가 핸드오프** (6/4~)
 
 - [ ] 4.3.1 정예공/박성렬에 폴더 + 마크다운 편집 가이드 (`docs/CONTENT-AUTHORING.md` 신설)

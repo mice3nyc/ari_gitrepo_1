@@ -144,6 +144,7 @@ _dev/
 | v5.2-pickone | 2026-05-15 | 네 번째 빌드 `pickone/` 신설 — sequential 룰 + 첫 자료 슬롯 가변. `data/first_source.csv` 24행(편집 가능). `shared/index_pickone.html` + `scripts/build_pickone.sh`. getUnlockOrder 사이클 알고리즘. LS_PREFIX `dmz_v5_p_`. SPEC-pickone.md 신설 |
 | v5.3-design | 2026-05-15 | 비주얼 디자인 v1 도입(pickone 파일럿) — 통일부 디자이너 샘플 9장 적용. `assets/{icons,fonts,images}/` 신설(아이콘 9개·Paperlogy 3 weight·SD카드 타이틀). SPEC-ui-design.md 신설(컬러 토큰 6 카테고리·자료 type↔icon 매핑·화면별 컴포넌트). 로그인 SD카드·튜토리얼 핑크/cyan·카테고리 폴더격자·스토리 폴더격자·자료 리스트 핑크 카드+이미지 아이콘·자료 본문 모달 핑크 헤더·빈칸 cyan. 게임 코드 검증 임시 OFF. **5/15 결정: pickone canonical — mobile/offline/sequential 동결, 앞으로 pickone만 계속 업데이트** |
 | v5.4-design2 | 2026-05-16 | pickone 디자인 v2 — 마닐라 폴더 패턴(좌상 사선 탭 + 뒤 흰 layer + 폴더 안 글씨) + 색 토큰 SVG 추출 정정 + 226·240 BG cat-color + 240 Z 위계(cat-tab 전체 폭 띠 + sheet + story-tab 우측 솟음) + drop shadow off + SD 카드 진입 애니메이션. 비교 빌드 pickone-v1/ 신설 |
+| v5.5-design3 | 2026-05-16 | 세션361 — 화면 명칭 정본화(타이틀·튜토리얼·주제선택·스토리선택·자료선택·자료본문·보관소·스토리완료·결과) + 좌하단 라벨. SPEC-screens.md 신설(화면별 세부 명세, 자료선택 § 우선). PNG 자산 통합(상단바 로고 6장 cat01·02·03·04·06+white, 프로필, 자료 status 3종). 자료선택 game-header 폐기 + 주제 띠→스토리선택. 폰트 weight 600 일괄. 폴더 aspect-ratio 1.625 + 레이블 외부 + 뒷장 마닐라 모양(folder-back div) + 색(주제선택 흰색/스토리선택 cat-color 55% 라이트). 마닐라 mirror·좌상 탭 결(clip-path polygon). 두 화면 헤더 layout 통일 + 고정 높이(64/82). 자료 카드 박스 160 + status 아이콘 mask |
 
 ## 현재 게임 상태 (v3.2)
 
