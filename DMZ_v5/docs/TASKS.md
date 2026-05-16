@@ -218,11 +218,27 @@ GitHub Pages 자동 배포 — `https://mice3nyc.github.io/ari_gitrepo_1/DMZ_v5/
   - 자료 카드 박스 높이 — min-height 160px + padding-bottom 3.8rem + 카드 사이 가시 여백 28px (margin-top -32→-20)
   - "← 주제선택" → "다른 주제 선택"
   - 스토리선택 안내문구 제거 — placeholder 텍스트(`story-page-sub`) 삭제, 두 화면 본문 시작 정합
-- [ ] **두 화면(자료선택·스토리선택) 헤더 높이 미세 차이 잔존** — CSS px는 동일(64/82)하지만 시각상 다름. 부모 padding/margin 또는 다른 요소 영향 추정. 다음 회기 진단
+- [x] ~~두 화면 헤더 높이 미세 차이~~ → **5/17 세션362 해소** — 헤더+시트 결 통일(margin·padding·라운드·시트 margin-top). SPEC-screens 결정 자리 #1 해소
 - [ ] 진행 카운트(0/4) 자리 결정 — 폐기된 game-header 대체 위치
 - [ ] 자료 카드 활성·잠금 표시 비주얼 추가 정밀화
 - [ ] 스토리 제목 탭 클릭 동작 결정 (현재 미활용)
-- [ ] 나머지 화면 § 작성 — 스토리선택·주제선택·자료본문·타이틀·튜토리얼·보관소·스토리완료·결과
+- [x] 스토리선택 § 작성 (5/17 세션362)
+- [x] 자료본문 § 작성 (5/17 세션362)
+- [ ] 나머지 화면 § 작성 — 주제선택·타이틀·튜토리얼·보관소·스토리완료·결과
+
+**Phase 6.y — 디자인 v4 + 자료본문 page-level 전환 (5/17 세션362)** ✅
+
+- [x] 자료선택·스토리선택 헤더+시트 결 통일 — game-content padding-top 0.8→0 / phase-banner margin-bottom 0.4→0 / phase-sheet 사방 14→18 0 18 18 + margin-top -14→0 / 흰 탭 padding-right 1.1→1.4
+- [x] 흰 탭 height 82→64→80→64 (회색띠와 동일 박스). 솟음 결 폐기 → 시트 라인이 가로지르는 결
+- [x] 시트 라인 가로지름 — 시트 margin-top -15 + padding-top 30 두 화면 통일. 회색띠·흰탭 모두 아래 15 가려짐
+- [x] 자료 카드 겹침 -20 → -40, 아이콘 120 → 180 → 150
+- [x] 자료 아이콘 매핑 = 위치 기반 정정 — type 기반 `SOURCE_ICON_MAP` 폐기 → `POSITION_ICONS[i]` (0:편지/1:신문/2:사진/3:구술). 7건 정정(s0102·s0103·s0104·s0105·s0203·s0302·s0403)
+- [x] 위치=슬롯 ABCD 고정 룰 확정 — 첫 슬롯만 가변, 표시 위치는 항상 ABCD. SPEC-screens "위치 ≠ 슬롯" 문구 폐기
+- [x] 자료본문 page-level screen 전환 — `<div class="source-detail">` 모달(fixed 100vh) 폐기 → `<div id="source-detail-screen" class="screen">` 별도 screen. openSource/closeSource = showScreen + content.innerHTML. SCREEN_LABELS·CAT_COLOR_BG_SCREENS 추가
+- [x] 자료본문 4-layer 결 — L1 화면 cat-color / L2 흰 시트(.detail-white-sheet, 라운드 18 0 18 18, margin-top -15) / L3 주제색 박스(.detail-topic-card, cat-color, 라운드 14) / L4 본문 흰 카드(.detail-body-wrap, 라운드 14)
+- [x] SPEC-screens 자료본문 § 신설 + 스토리선택 § 신설
+- [x] 커밋 3건 + 푸시 — `556952e`·`30a0387`·`949ff50`
+- [ ] **자료 type별(A·B·C·D) 본문 layout 정밀화** — SVG 프레임 샘플 1·2·3·4 디자이너 의도 반영. A 편지(제목·보낸이·받는이·날짜·본문) / B 신문(헤드라인·출처·매체·기사) / C 사진(이미지·캡션·빈칸) / D 구술(프로필·말풍선·인라인 빈칸). 본문 흰 카드 안 layout만 type별 분기
 
 **Phase 4.3 — 작가 핸드오프** (6/4~)
 
