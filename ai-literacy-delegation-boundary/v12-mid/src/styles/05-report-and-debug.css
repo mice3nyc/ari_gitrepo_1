@@ -1,0 +1,199 @@
+/* v0.8 §6.6.4 — Cut6 결과 패널 단계별 점수 브레이크다운 */
+.score-breakdown { margin-top:10px; padding:9px 12px; border:2px solid #111; background:#fff; }
+.score-breakdown-title { font-size:11px; font-weight:700; color:#111; letter-spacing:0.5px; margin-bottom:6px; padding-bottom:4px; border-bottom:1px solid #ddd; }
+.score-step-row { display:flex; align-items:flex-start; gap:8px; padding:3px 0; font-size:12px; }
+.score-step-label { flex:0 0 64px; font-size:11px; font-weight:700; color:#111; padding-top:1px; }
+.score-step-narr { flex:1; font-size:12px; color:#333; line-height:1.4; }
+.score-step-pts { flex:0 0 48px; font-size:13px; font-weight:700; color:var(--acc-mint-deep); text-align:right; line-height:1.4; }
+.score-breakdown-divider { margin:6px 0 4px; border-top:1px dashed #aaa; }
+.score-breakdown-total { font-size:14px; font-weight:800; color:#111; text-align:right; padding-top:4px; }
+.delegation-tag { display:inline-block; font-size:10px; font-weight:700; padding:1px 5px; margin-top:4px; background:var(--bg-card); border:2px solid var(--ink); color:var(--ink); letter-spacing:0.5px; }
+.review-hint-tag { display:inline-block; font-size:10px; font-weight:700; padding:1px 5px; margin-top:4px; background:var(--bg-card); border:2px solid var(--ink); color:var(--ink); letter-spacing:0.3px; }
+.hint-toggle-wrap { margin-top:14px; padding-top:12px; border-top:1px solid #ddd; text-align:left; }
+.hint-toggle-label { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:#444; cursor:pointer; user-select:none; }
+.hint-toggle-input { width:14px; height:14px; cursor:pointer; }
+.hint-toggle-note { font-size:11px; color:#888; font-weight:400; }
+@keyframes choiceFadeOut { to{opacity:0;transform:translateX(16px) scale(0.96)} }
+.choice-card.fade-out { animation:choiceFadeOut 0.3s ease forwards; pointer-events:none; }
+.choice-card.disabled { opacity:0.45; cursor:not-allowed; pointer-events:none; }
+.choice-card .insufficient-tag { display:none; }
+.choice-card.disabled .insufficient-tag { display:inline-block; margin-left:6px; padding:1px 6px; background:var(--acc-pink); color:var(--ink); font-size:10px; font-weight:700; border-radius:0; vertical-align:middle; }
+
+/* ===== Result Block ===== */
+.result-text { padding:0; background:transparent; font-size:13px; line-height:1.5; margin-bottom:6px; }
+.result-meta { font-size:11px; color:#888; margin-bottom:8px; }
+
+/* ===== Final Block ===== */
+.final-score { text-align:center; padding:8px 0; }
+.final-grade { font-size:48px; font-weight:700; line-height:1; }
+.final-grade.S, .final-grade.A { color:var(--acc-mint-deep); }
+.final-grade.B { color:var(--ink); }
+.final-grade.C { color:var(--acc-yellow-deep); }
+.final-grade.D { color:var(--acc-pink-deep); }
+.final-num { font-size:18px; font-weight:700; margin-top:2px; }
+.final-item { border:2px solid #111; padding:10px 12px; margin:8px 0; text-align:center; background:#fff; }
+.final-item-label { font-size:10px; color:#888; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
+.final-item-name { font-size:14px; font-weight:700; }
+.final-item.empty { background:#f5f5f5; color:#888; border-color:#ccc; }
+.awareness { font-size:13px; line-height:1.7; padding:10px; border:var(--border-w) solid var(--ink); background:var(--bg-soft); margin-top:8px; }
+
+/* ===== Next Button ===== */
+.next-btn-wrap { text-align:center; margin-top:12px; opacity:0; transition:opacity 0.4s; pointer-events:none; }
+.next-btn-wrap.visible { opacity:1; pointer-events:auto; }
+.next-btn { background:var(--acc-yellow); color:var(--ink); border:var(--border-w) solid var(--ink); padding:10px 28px; font-size:13px; font-weight:700; font-family:var(--font-main); cursor:pointer; transition:transform 0.05s, box-shadow 0.05s; box-shadow:var(--shadow); }
+.next-btn:active { box-shadow:var(--shadow-press); transform:translate(2px,2px); }
+
+/* ===== Report ===== */
+.report-overlay { min-height:480px; padding:40px 0; animation:overlayIn 0.5s ease; }
+.report-inner { max-width:540px; width:100%; margin:0 auto; text-align:center; }
+.report-inner h2 { font-size:20px; margin-bottom:14px; }
+.report-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+.report-stat-box { background:#fff; border:2px solid #111; padding:10px 14px; box-shadow:var(--shadow); }
+.report-stat-num { font-size:28px; font-weight:700; }
+.report-stat-label { font-size:13px; font-weight:500; color:#111; margin-top:2px; }
+.report-comment { font-size:14px; line-height:1.5; text-align:left; margin-bottom:14px; padding:12px 14px; background:#fff; border:2px solid #111; box-shadow:var(--shadow); }
+
+/* v0.5 Phase 8.13 — 결과 리포트 재설계 (DECISIONS §10.13) */
+.report-v813 { max-width:1040px; }
+.report-subtitle { text-align:center; color:#666; font-size:13px; margin-bottom:14px; line-height:1.4; }
+.report-grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:10px; }
+.report-grid-4 .report-stat-box { padding:10px 8px; }
+.report-grid-4 .report-stat-num { font-size:24px; }
+.report-comp-type { background:#fff; border:2px solid #111; padding:12px 16px; margin-bottom:16px; box-shadow:var(--shadow); text-align:left; }
+.report-comp-label { font-size:11px; color:#888; letter-spacing:1px; margin-bottom:4px; font-weight:700; }
+.report-comp-text { font-size:14px; line-height:1.5; color:#222; }
+.report-comic { display:flex; flex-direction:column; gap:0; margin-bottom:24px; }
+.comic-scene { display:flex; flex-direction:column; align-items:stretch; padding:24px 0; border-top:1px solid #ddd; }
+.comic-scene:first-child { border-top:none; }
+.comic-scene-title { font-size:14px; font-weight:700; color:#222; margin-bottom:14px; text-align:center; width:100%; }
+.comic-scene-meta { font-weight:400; color:#888; font-size:12px; margin-left:6px; }
+.comic-strip { display:flex; flex-direction:row; flex-wrap:nowrap; gap:5px; overflow-x:auto; align-items:flex-start; padding-bottom:8px; -webkit-overflow-scrolling:touch; justify-content:center; }
+/* 4/30 세션260 — 코믹스트립: 컷마다 이미지+캡션 panel */
+.comic-panel { display:flex; flex-direction:column; gap:6px; flex:0 0 160px; width:160px; }
+.comic-cut { display:block; width:160px; height:auto; }
+/* 5/3 — 시상 panel 2/3 축소 (160 → 107). prize 영역만 좁힘 */
+.comic-panel-prize { flex:0 0 107px; width:107px; }
+.comic-panel-prize .comic-cut.comic-prize { width:107px; }
+.comic-panel-prize .comic-caption { width:107px; }
+.comic-prize { /* 시상도 같은 크기로 strip 말미에 */ }
+.comic-caption { width:160px; font-size:12px; line-height:1.5; color:#333; text-align:left; word-break:keep-all; padding:0 2px; box-sizing:border-box; }
+.comic-caption b { display:block; font-size:13px; font-weight:700; color:#111; margin-bottom:3px; line-height:1.4; }
+.comic-caption-mood { font-weight:600; color:#111; padding-top:4px; border-top:2px solid #111; }
+.comic-scene-summary { font-size:12px; line-height:1.55; color:#555; margin:-8px 0 12px; text-align:center; word-break:keep-all; }
+.comic-scene-summary .seg { white-space:nowrap; }
+.comic-scene-summary .seg + .seg::before { content:" · "; color:#bbb; }
+.comic-scene-summary b { color:#222; font-weight:700; }
+.comic-mood { font-size:14px; line-height:1.6; color:#222; margin-top:12px; padding:10px 16px; background:#fafafa; border-left:3px solid #111; width:100%; text-align:left; box-sizing:border-box; } /* deprecated — 시상 panel caption으로 통합 */
+
+/* 5/3 — 학기 종합 리포트: 카드 누적 리뷰 섹션 (4유형 의미 박스 다음 / 카툰 위) */
+.report-cards-section { background:#fff; border:2px solid #111; padding:18px 20px; margin-bottom:28px; box-shadow:var(--shadow); text-align:left; }
+.report-cards-title { font-size:13px; font-weight:700; color:#111; margin-bottom:12px; letter-spacing:0.3px; }
+/* 5/3 — 3컬럼 grid (19종 다 차도 한 화면). 좌측 색띠 + 카운트 + 라벨 한 줄. */
+.report-cards-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+.report-card-row { display:flex; flex-direction:column; gap:0; background:var(--bg-card); border:var(--border-w) solid var(--ink); border-radius:0; overflow:hidden; }
+.report-card-row-head { display:flex; align-items:stretch; min-height:38px; }
+.report-card-count { font-size:16px; font-weight:800; color:#fff; padding:0 10px; display:flex; align-items:center; justify-content:center; min-width:42px; line-height:1; background:#888; }
+.report-card-label { font-size:13px; font-weight:700; color:#111; padding:8px 10px; flex:1; display:flex; align-items:center; line-height:1.3; word-break:keep-all; }
+.report-card-source { font-size:10px; color:#888; line-height:1.4; word-break:keep-all; padding:6px 10px; border-top:1px dashed #eee; background:#fafafa; max-height:2.8em; overflow:hidden; }
+.report-cards-empty { padding:14px 16px; background:#fafafa; border-left:3px solid #aaa; color:#555; font-size:13px; line-height:1.6; }
+@media (max-width:720px) {
+  .report-cards-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width:480px) {
+  .report-cards-grid { grid-template-columns:1fr; }
+}
+
+/* 5/3 — 리포트 narrative 박스 (4유형 의미 박스 다음, 카드 누적 위) */
+.report-narrative { background:var(--bg-soft); border:var(--border-w) solid var(--ink); padding:18px 20px; margin-bottom:24px; box-shadow:var(--shadow); text-align:left; }
+.report-narrative-block { margin-bottom:14px; }
+.report-narrative-block:last-child { margin-bottom:0; }
+.report-narrative-title { font-size:11px; font-weight:700; color:#888; letter-spacing:1.2px; margin-bottom:8px; text-transform:uppercase; }
+.report-narrative-body { font-size:14px; line-height:1.7; color:#222; word-break:keep-all; }
+.report-narrative-body b { color:#111; font-weight:700; }
+.report-narrative-body .narrative-line { padding:3px 0; border-top:1px dotted transparent; }
+.report-narrative-body .narrative-line + .narrative-line { border-top-color:#eee; padding-top:6px; margin-top:3px; }
+.report-narrative-cardtype { font-size:15px; font-weight:800; color:var(--ink); background:var(--acc-yellow); padding:4px 10px; border-radius:0; letter-spacing:0.3px; display:inline-block; margin-bottom:8px; }
+
+/* ===== Coupon Select (§25) ===== */
+.coupon-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); z-index:200; display:flex; align-items:center; justify-content:center; }
+.coupon-box { background:var(--bg-card); padding:20px 24px; max-width:340px; width:90%; border:var(--border-w) solid var(--ink); box-shadow:8px 8px 0 var(--ink); }
+.coupon-title { font-size:14px; font-weight:700; margin-bottom:14px; color:#111; }
+.coupon-options { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+.coupon-option { display:flex; align-items:center; gap:10px; padding:10px 12px; border:var(--border-w) solid var(--ink); cursor:pointer; transition:border-color 0.15s; }
+.coupon-option:hover { border-color:#888; }
+.coupon-option.selected { border-color:#111; background:#f8f8f8; }
+.coupon-radio { width:16px; height:16px; border:2px solid #999; border-radius:50%; flex-shrink:0; position:relative; }
+.coupon-option.selected .coupon-radio { border-color:#111; }
+.coupon-option.selected .coupon-radio::after { content:''; position:absolute; top:3px; left:3px; width:6px; height:6px; background:#111; border-radius:50%; }
+.coupon-card-name { font-size:13px; font-weight:600; color:#222; flex:1; }
+.coupon-discount-amount { font-size:12px; color:#c0392b; font-weight:600; white-space:nowrap; }
+.coupon-strong-tag { font-size:10px; color:#888; margin-left:4px; }
+.coupon-confirm { width:100%; padding:10px; background:#111; color:#fff; border:none; font-size:13px; font-weight:600; cursor:pointer; }
+.coupon-confirm:hover { background:#333; }
+.cost-coupon-badge { display:block; font-size:12px; color:#fff; font-weight:700; margin-top:6px; padding:6px 12px; border:2px solid #15803d; background:#15803d; text-align:center; cursor:pointer; animation:couponBlink 0.3s step-end 3; }
+.cost-coupon-badge.applied { animation:none; background:#f0fdf4; color:#15803d; border:2px solid #15803d; font-size:11px; cursor:default; }
+@keyframes couponBlink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+
+/* ===== Debug ===== (4/30 세션260: 노안 친화 — font-size 1.4배 + max-width 460px) */
+.debug-toggle { position:fixed; bottom:10px; right:10px; background:#333; color:#fff; border:none; padding:5px 10px; font-size:11px; cursor:pointer; z-index:300; font-family:monospace; }
+.debug-panel { display:none; position:fixed; bottom:38px; right:10px; background:#1a1a1a; color:#ddd; padding:10px 12px; font-size:11px; line-height:1.4; font-family:monospace; z-index:300; max-width:420px; max-height:calc(100vh - 48px); overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
+.debug-panel.active { display:block; }
+.debug-section { margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid #333; }
+.debug-label { color:#aaa; font-size:10px; text-transform:uppercase; margin-bottom:4px; letter-spacing:0.5px; }
+.debug-buttons { display:flex; flex-wrap:wrap; gap:4px; margin-top:5px; }
+.debug-btn { background:#333; color:#ddd; border:1px solid #555; padding:3px 8px; font-size:10px; cursor:pointer; font-family:monospace; }
+.debug-btn:hover { background:#444; }
+.version { position:fixed; bottom:6px; left:12px; font-size:10px; color:#ccc; }
+
+@media (max-width:800px) {
+  .panels-grid { grid-template-columns:1fr; }
+  .panel-row { flex-direction:column; }
+  .score-display { flex-direction:column; min-width:0; padding:6px 12px; }
+  .score-display-row { gap:12px; }
+  .panel-title { font-size:12px; letter-spacing:1.5px; padding:6px 10px; min-width:40px; }
+  .display-num { font-size:28px; }
+}
+
+/* v1.1 Phase 1 — 리포트 하단 PDF 버튼 (3종) + 시작 화면 버튼 색 구분 */
+.report-btn-pdf {
+  font-family: 'Paperlogy', sans-serif;
+  background: var(--acc-yellow);
+  color: var(--ink);
+  border: var(--border-w) solid var(--ink);
+  box-shadow: var(--shadow);
+  padding: 12px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.08s, box-shadow 0.08s;
+  border-radius: 0;
+}
+.report-btn-pdf:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.report-btn-pdf:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-press);
+}
+.report-btn-back {
+  font-family: 'Paperlogy', sans-serif;
+  background: var(--acc-pink);
+  color: var(--ink);
+  border: var(--border-w) solid var(--ink);
+  box-shadow: var(--shadow);
+  padding: 12px 22px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.08s, box-shadow 0.08s;
+  border-radius: 0;
+}
+.report-btn-back:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.report-btn-back:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-press);
+}

@@ -1,0 +1,99 @@
+/* =====================================================
+   11. Print / PDF 출력 — v1.1 Phase 1
+   리포트 화면 → window.print() → PDF 저장
+   ===================================================== */
+
+@media print {
+  /* 색상·배경·그림자 보존 */
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* 페이지 마진 */
+  @page {
+    margin: 10mm 8mm;
+    size: A4;
+  }
+
+  /* body 배경 흰색 */
+  html, body {
+    background: #ffffff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 화면 외 UI 전부 숨김 */
+  .no-print,
+  #inv-tab,
+  #inv-fab,
+  .debug-toggle,
+  #version-label,
+  #hud,
+  .stats-bar,
+  .resource-bar,
+  .top-bar,
+  .top-panel,
+  .resources,
+  .start-btn,
+  .report-actions,
+  button {
+    display: none !important;
+  }
+
+  /* 게임 컨테이너 — 리포트만 보이도록 */
+  #game-container {
+    position: static !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 리포트 오버레이 — 모달이 아니라 단순 흐름으로 */
+  .report-overlay {
+    position: static !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+  }
+
+  .report-inner,
+  .report-inner.report-v813 {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* 시나리오별 카툰 — 한 시나리오는 한 페이지 안에 */
+  .report-comic > div {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 16px !important;
+  }
+
+  /* 카드 섹션도 가급적 분할되지 않게 */
+  .report-cards-section,
+  .report-growth {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* 이미지 — 인쇄 시 적정 크기 */
+  .report-comic img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* 손글씨 캡션 — 너무 큰 px → 인쇄에서 적정 */
+  .report-comic [style*="font-family:var(--font-hand)"] {
+    font-size: 14pt !important;
+  }
+}

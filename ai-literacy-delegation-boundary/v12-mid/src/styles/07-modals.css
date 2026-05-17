@@ -1,0 +1,47 @@
+/* ===== Phase 8.10 — 모달 공통 ===== */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center; z-index:1000; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
+.modal-overlay.visible { opacity:1; pointer-events:auto; }
+.modal-overlay.hidden { display:none; }
+.modal-card { background:var(--bg-card); border:var(--border-w) solid var(--ink); padding:24px 28px; width:min(440px,90vw); box-shadow:8px 8px 0 var(--ink); transform:translateY(8px); transition:transform 0.25s ease; font-family:var(--font-main); }
+.modal-overlay.visible .modal-card { transform:translateY(0); }
+.modal-title { margin:0 0 4px; font-size:18px; font-weight:700; color:#111; line-height:1.3; }
+.modal-subtitle { margin:0 0 16px; font-size:14px; font-weight:700; color:#222; line-height:1.5; }
+
+/* ===== Phase 8.10b — 레벨업 모달 ===== */
+.lvup-badge { text-align:center; font-size:10px; letter-spacing:3px; color:#b58900; font-weight:700; margin-bottom:6px; }
+.lvup-transition { display:flex; align-items:center; justify-content:center; gap:14px; padding:18px 0; border-top:2px solid #fff8d0; border-bottom:2px solid #fff8d0; background:#fffceb; margin:0 -28px 18px; }
+.lvup-from { font-size:22px; color:#999; font-weight:600; }
+.lvup-arrow { font-size:22px; color:#b58900; }
+.lvup-to { font-size:36px; color:#111; font-weight:700; line-height:1; }
+.lvup-effects { display:flex; flex-direction:column; gap:8px; margin-bottom:18px; }
+.lvup-effect { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:#fafafa; border:1px solid #eee; }
+.lvup-effect-label { font-size:11px; color:#666; letter-spacing:0.3px; }
+.lvup-effect-val { font-size:14px; color:#111; font-weight:700; }
+.lvup-confirm { width:100%; padding:11px; background:var(--acc-yellow); color:var(--ink); border:var(--border-w) solid var(--ink); font-size:13px; font-weight:700; font-family:var(--font-main); cursor:pointer; letter-spacing:1px; box-shadow:var(--shadow); transition:transform 0.05s, box-shadow 0.05s; }
+.lvup-confirm:active { box-shadow:var(--shadow-press); transform:translate(2px,2px); }
+
+/* ===== Phase 8.10a — 자원토큰 분배 모달 ===== */
+.rp-bal { text-align:center; padding:14px 0; border-bottom:1px solid #eee; margin-bottom:16px; }
+.rp-bal-label { font-size:10px; color:#888; letter-spacing:1.5px; font-weight:600; }
+.rp-bal-num { font-size:36px; font-weight:700; color:#111; line-height:1.05; }
+.rp-bal-num.zero { color:var(--acc-mint-deep); }
+.rp-buckets { display:flex; gap:14px; margin-bottom:14px; }
+.rp-bucket { flex:1; padding:12px; border:var(--border-w) solid var(--ink); background:var(--bg-soft); }
+.rp-bucket-label { font-size:13px; color:#222; letter-spacing:0.5px; margin-bottom:8px; font-weight:700; }
+.rp-bucket-meter { position:relative; height:22px; background:var(--bg-card); border:2px solid var(--ink); overflow:hidden; margin-bottom:6px; }
+.rp-bucket-fill { position:absolute; left:0; top:0; bottom:0; background:#111; transition:width 0.3s ease; }
+.rp-bucket-overlay { position:absolute; left:0; top:0; bottom:0; background:repeating-linear-gradient(45deg,#bbb 0,#bbb 4px,#999 4px,#999 8px); transition:width 0.3s ease; opacity:0.7; }
+.rp-bucket-num { font-size:11px; color:#444; text-align:right; margin-bottom:8px; font-weight:600; }
+.rp-bucket-num .waste { color:var(--acc-pink-deep); font-weight:700; margin-left:4px; }
+.rp-bucket-controls { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.rp-btn { background:var(--bg-card); border:var(--border-w) solid var(--ink); width:34px; height:34px; font-size:18px; font-weight:700; cursor:pointer; line-height:1; font-family:var(--font-main); transition:transform 0.05s, box-shadow 0.05s; box-shadow:var(--shadow); }
+.rp-btn:active:not(:disabled) { transform:translate(2px,2px); box-shadow:var(--shadow-press); }
+.rp-btn.charging:not(:disabled) { background:var(--acc-yellow); color:var(--ink); transform:translate(2px,2px); box-shadow:var(--shadow-press); }
+.rp-btn:disabled { opacity:0.25; cursor:not-allowed; }
+.rp-allocate { font-size:15px; font-weight:700; color:#111; min-width:30px; text-align:center; }
+.rp-preview { font-size:13px; font-weight:600; color:#222; padding:12px; text-align:center; border:1px dashed #ccc; margin-bottom:14px; min-height:20px; line-height:1.5; }
+.rp-preview .rp-overflow-warn { color:#c44; font-weight:700; font-size:11px; }
+.rp-preview.empty { color:#999; }
+.rp-confirm { width:100%; padding:11px; background:var(--acc-yellow); color:var(--ink); border:var(--border-w) solid var(--ink); font-size:13px; font-weight:700; font-family:var(--font-main); cursor:pointer; letter-spacing:1px; transition:transform 0.05s, box-shadow 0.05s; box-shadow:var(--shadow); }
+.rp-confirm:active:not(:disabled) { box-shadow:var(--shadow-press); transform:translate(2px,2px); }
+.rp-confirm:disabled { background:var(--bg-page); color:var(--ink-soft); cursor:not-allowed; box-shadow:none; }
