@@ -1,6 +1,55 @@
 # 설계 결정 기록
 
-**최종 업데이트**: 2026-04-27
+**최종 업데이트**: 2026-05-17 (v12 초·중등 분기)
+
+---
+
+## v12 초·중등 분기 (2026-05-17, 세션365)
+
+> 요청 노트: [[요청.26.0517.2107-AI리터러시초중등분기빌드]]
+> 이다연 1차 피드백 정리: [[26.0517 AI 리터러시 — 이다연 선생님 1차 피드백 정리]]
+> 부모 빌드: v11 (= v1.1, 2026-05-13 세션342)
+
+### 결정 5건
+
+#### 1. 옵션 A — 두 폴더 사본 분기 (옵션 B 배제)
+
+**옵션 A**: `v12-mid/` + `v12-elem/` 두 폴더 신설. 엔진 코드·데이터 양쪽 통째 사본. 정정은 각자 폴더 안에서.
+**옵션 B**: `v12/`에 두 데이터셋(`data-mid/` + `data-elem/`) + build.py가 인자로 빌드 출력 분기.
+
+**선택**: 옵션 A. 이유 — 이다연 피드백을 보면 시나리오 결 자체가 갈라질 가능성(위임 결 → 일부 시나리오는 AI 윤리 결로). 역량 카드도 "수 줄이고 미리 보여주기"로 구조 변경 잡힘. 초등용은 단순 데이터 교체가 아니라 일부 화면·튜토리얼 흐름이 달라질 수 있어 엔진 분기 압력까지 옴. 옵션 B는 데이터만 갈아끼우는 결인데 본 케이스에는 좁음. 추후 공통 부분 안정화되면 옵션 B로 통합 가능.
+
+#### 2. 명명 안 1 — 접미사형
+
+**선택**: 폴더 `v12-mid` / `v12-elem`, version label `v1.2-mid` / `v1.2-elem`, storageKey `ai-literacy-delegation-boundary-v12-mid` / `-v12-elem`. 라이브 URL `.../v12-mid/` / `.../v12-elem/`. 이유 — 폴더명·storageKey·version label·라이브 URL이 한 결로 정합. grep·디버깅 안전. 안 2(소수점 `v1.2.1`)는 시각 불일치.
+
+#### 3. 좌표 정정 자리 (양쪽 동일 패턴)
+
+- `src/js/00-config.js` — storageKey/eventLogKey/sessionIdKey/version (4줄)
+- `src/index.shell.html` — title + version label (2줄)
+- `HANDOFF.md` — 헤더 + 분기 안내 콜아웃 (본문은 v1.1 시점 그대로 보존)
+- `SPEC.md` — 같음
+- 기타 메타(PLAN/TASKS/DESIGN-REGISTRY/SCENARIO-GUIDELINES/PAPERLOGY-THEME-HANDOFF) — 헤더 안내 콜아웃만
+- `index.html` — build.py 자동 갱신
+
+본문 통째 재작성은 다음 회기 (데이터 변경 후 본문 갱신).
+
+#### 4. v11 운명 — 라이브 유지
+
+**선택**: v11은 그대로 라이브 유지. deprecated 결정은 v12-mid 안정화 확인 후 다음 세션. 이유 — 중등용 데이터·메카닉이 v11 그대로 사본이므로 동작 차이 없음. 동시에 두 빌드 라이브 시 storageKey 분리로 충돌 없음.
+
+#### 5. 데이터·메카닉 변경 다음 회기로 이월
+
+**선택**: 이번 회기는 분기 빌드 세팅만. 시나리오·역량 카드·튜토리얼·어투 정정은 (a) 덱스 시나리오 1차 초안 수신 + (b) 이다연 5 이슈 매핑 후 다음 회기 진입. 이유 — 빌드 분기·데이터 정정 두 결을 한 회기에 묶으면 결정 자리 충돌 위험. 분기 세팅(역할 분리·인프라) 먼저 안정화하고 그 위에 데이터 정정(콘텐츠).
+
+### 빌드 결과
+
+- v12-mid: 867,921 bytes (JS syntax OK, storageKey 정합 OK)
+- v12-elem: 867,927 bytes (차이는 mid/elem 문자열 길이)
+- Git 커밋 `97387fe` (140 파일 신설) + main 푸시 완료
+- 라이브 URL:
+  - https://mice3nyc.github.io/ari_gitrepo_1/ai-literacy-delegation-boundary/v12-mid/
+  - https://mice3nyc.github.io/ari_gitrepo_1/ai-literacy-delegation-boundary/v12-elem/
 
 ---
 

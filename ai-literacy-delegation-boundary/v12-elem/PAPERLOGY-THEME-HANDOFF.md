@@ -1,4 +1,9 @@
-# Paperlogy Reference Theme Handoff
+# Paperlogy Reference Theme Handoff — v12-elem
+
+> [!info] 이 문서는 v12-elem (초등) 빌드 안 — v1.1 시점 본문 그대로
+> 분기 직후 폰트·테마 변경 없음. 초등 대상 폰트 weight·크기 조정 필요 시 데이터 정정 단계에서 본문 갱신. v12 분기 결정은 상위 `DECISIONS.md` 5/17 § 참조.
+
+---
 
 ## Current Branch / Context
 

@@ -1,4 +1,9 @@
-# Paperlogy Reference Theme Handoff
+# Paperlogy Reference Theme Handoff — v12-mid
+
+> [!info] 이 문서는 v12-mid (중등) 빌드 안 — v1.1 시점 본문 그대로
+> 분기 직후 폰트·테마 변경 없음. v12 분기 결정은 상위 `DECISIONS.md` 5/17 § 참조.
+
+---
 
 ## Current Branch / Context
 

@@ -1,4 +1,9 @@
-# SCENARIO-GUIDELINES — v0.5 시나리오·콘텐츠 작업 가이드라인
+# SCENARIO-GUIDELINES — v12-mid (v0.5 본문 계승)
+
+> [!info] 이 문서는 v12-mid (중등) 빌드 안 — v0.5 본문 그대로
+> 중등용은 v11 시나리오 그대로 유지. 시나리오 정정 없음. v12 분기 결정은 상위 `DECISIONS.md` 5/17 § 참조. 초등용 v12-elem은 이다연 선생님 1차 피드백 반영해 시나리오·어투·역량 카드 결을 다음 회기에 갱신 예정.
+
+---
 
 > 작성: 아리공, 2026-05-01
 > 용도: ChatGPT / Claude.ai (클공) / NotebookLM / Gemini 등 **외부 AI 위임 시 핸드오프 1개 문서**.
