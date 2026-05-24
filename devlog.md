@@ -1,5 +1,18 @@
 # devlog
 
+### 2026-05-25 — m2a egogram v0.7 — 손소장 26.0525 수정 5건 + 리포트 정리 (세션375)
+- **출발**: 손소장 새 수정 목록 `Assets/incoming/에고그램/수정 목록 26.0518.md`(오늘 07:03 도착, 이름만 0518) 5개 항목. 코드 대조 후 ①④⑤③ 반영 + 리포트 헤더/마무리 정리
+- **⑤ 역할별 안전구간 (`scoreEngine.SAFE_RANGES`)**: 기존 `getSuccessRange`(그래프 밴드)와 `needsCoaching`(코칭 발동)이 서로 다른 값이던 것을 **하나의 역할×자아상태 테이블로 통합**. 컨설턴트 CP11-16/NP11-16/A14-20/FC11-16/AC8-16, 리더 NP14-20/A14-20/AC8-13, 코치 NP14-20/A11-20/AC11-16. `getSuccessRange(ego, jobType)` + `needsCoaching(ego, score, jobType)`, jobType→role은 `roleFromJobType`
+- **③ CM6 공통 (컨설턴트)**: `cm6_consultant_pending.csv`(좌=타이틀, 우=본문) → `cm6_common_consultant.yaml` 3섹션(거절의 고객 심리·화법 스크립트 코칭·클로징 화법). yaml import + `lookupReport` insurance일 때 `cm6_common` 반환. ReportPage CM6 섹션이 조합 텍스트 유무와 무관하게 렌더 + 하단 공통 블록(`.report-cm6-common`). 점수·조합 무관 전 컨설턴트 공통
+- **④ "코칭"→"조율"**: `ui_texts` s4_title "내 성향의 조율 포인트" / s4_no_coaching "조율을 하지 않아도 되는 성향" (5/18 미결 2번 확정)
+- **① 결과화면**: ResultPage `result-total` + "처음부터 다시" 삭제 (총점 ≠ 성향 우열 / 재시도 = 왜곡). 그래프 경계선 `profile?.jobType` 반영
+- **리포트 정리**: 커버 한 줄 "MIND2ACTION 성향 코칭 리포트"(브랜드 accent span) / closing 이름(손용배) 제거 + `✉  {email}`(레이블 폐기) / 하단 `© 2026 MIND2ACTION` 작은 회색
+- **② 호칭 일원화 — 미반영(보류)**: 검증 결과 옛 호칭 잔존(insurance "설계사" 20·manager "지점장" 331·coach "멘토" 2). 어제 받은 `data_*.csv`는 cm2 데이터였고 호칭본은 별개 — 드라이브 "에고그램 리포트 콘텐츠 데이터"(어제 14:12) 수령 → cm_*.yaml 재변환 필요. v0.6 cm2 작업과 겹침 → 시트 최신본 확인 후
+- **미결 잔존**: 세밀한 코칭 17점 초과 대상(5/18 미결 3·4) 새 문서에도 답 없음, AC 17+ 로직 유지
+- **변경 파일**: scoreEngine.js / cmLookup.js / ReportPage.jsx / ResultPage.jsx / Footer.jsx(v0.7) / package.json(0.7.0) / praxi.css / ui_texts.yaml / cm6_common_consultant.yaml(신규) / SPEC·PLAN·TASKS·ROADMAP·ARCHITECTURE
+- **빌드/배포**: vite OK (index-*.js 1,323kB). `npm run deploy` gh-pages published. 라이브 v0.7 확인 (피터공 육안 확인 완료)
+- **라이브**: https://mice3nyc.github.io/mind2action/egogram/ / admin /#/admin (pw sonson)
+
 ### 2026-05-18 (2차) — m2a egogram 5/18 회의 반영 (도입부·§1·코칭·마무리·리쿠르팅) (세션367)
 - **회의 (피터공·손소장·애련공)**: 보험설계사/코치/지점장 포맷 정리. 클공이 정리한 수정 목록(v2) → 피터공 검토 → 모호한 자리 정정 → 시스템 반영
 - **§1 통합**: 기존 §1(님의 성향, CM1 짧은 한 줄)과 §2(자아상태의 성향과 말투, CM2 본문) 통합. CM1 한 줄 삭제, CM2를 §1 점수 표시 바로 아래로 이동. §2 섹션 폐지. 후속 섹션 번호 -1 시프트
