@@ -1,5 +1,12 @@
 # devlog
 
+### 2026-05-25 — m2a egogram 인쇄 컬러 바 + §4 소제목·cm7 섹션 삭제 (세션378)
+- **인쇄 컬러 바 출력**: 피터공 "그래프 출력하면 컬러 바가 안 나온다". 브라우저 기본값이 배경색 미인쇄 → `@media print`에 `-webkit-print-color-adjust: exact; print-color-adjust: exact`를 `.report-container`(전체 캐스케이드) + `.report-chart-bar`·`.report-chart-success`·`.report-score-cell-label` 명시
+- **§4(성향의 조율) 소제목 삭제**: cm5 블록 h4 두 개("이 성향의 말투와 태도"·"개선이 되는 코칭 내용") 제거. manner 본문 → `.report-cm5-improvement`(margin-top 16) improvement 본문 순서로 흐름. 16px 간격만으로 구분
+- **신인 리크루팅 레벨업(cm7) 섹션 삭제**: `s7_title` 섹션 렌더 폐기(cm7 yaml/lookup 데이터 보존). 항상 마지막 섹션이라 번호 시프트 없음 → 보험설계사 최대 §5(cm6), 코치/리더 최대 §4(cm5)
+- **변경 파일**: ReportPage.jsx / praxi.css / SPEC.md / TASKS.md
+- **빌드/배포**: vite OK (87 모듈). gh-pages published → 피터공 Cmd+P 라이브 확인 대기
+
 ### 2026-05-25 — m2a egogram 인쇄 페이지 나눔 정밀화 — break-inside 작은 단위 (세션378)
 - **출발**: v0.8에서 `@media print`의 섹션 통째 `break-inside: avoid`를 제거(빈 공간 방지)했으나, 이번엔 자아상태 항목·코칭 항목이 페이지 경계에서 쪼개지는 어정쩡한 잘림 발생. 피터공 "inside로 정의하는 구간을 작은 단위로"
 - **변경**: 섹션 통째 avoid 폐기, **원자 단위에만** `break-inside: avoid` — `.report-cover`·`.report-intro`·`.report-chart`·`.report-trait-item`(자아상태 항목)·`.report-strength-badge`·`.report-coaching-item`(코칭 항목)·`.report-coaching-message`·`.report-combination`·`.report-cm6-common-item`(CM6 카드)·`.report-closing`·`.report-footer-bar`. 단위가 작아 남은 공간을 채우므로 빈 공간도 최소화 + 항목은 안 쪼개짐
