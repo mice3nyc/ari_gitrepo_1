@@ -1,5 +1,15 @@
 # devlog
 
+### 2026-05-25 — m2a egogram 인쇄 페이지 나눔 정밀화 — break-inside 작은 단위 (세션378)
+- **출발**: v0.8에서 `@media print`의 섹션 통째 `break-inside: avoid`를 제거(빈 공간 방지)했으나, 이번엔 자아상태 항목·코칭 항목이 페이지 경계에서 쪼개지는 어정쩡한 잘림 발생. 피터공 "inside로 정의하는 구간을 작은 단위로"
+- **변경**: 섹션 통째 avoid 폐기, **원자 단위에만** `break-inside: avoid` — `.report-cover`·`.report-intro`·`.report-chart`·`.report-trait-item`(자아상태 항목)·`.report-strength-badge`·`.report-coaching-item`(코칭 항목)·`.report-coaching-message`·`.report-combination`·`.report-cm6-common-item`(CM6 카드)·`.report-closing`·`.report-footer-bar`. 단위가 작아 남은 공간을 채우므로 빈 공간도 최소화 + 항목은 안 쪼개짐
+- **제목 고립 방지**: `break-after: avoid`를 `.report-section-title`·`.report-intro h2`·`.report-cm5 h4`에 적용(제목이 페이지 맨 아래 홀로 안 남게)
+- **cm5 예외**: 성향의 조합 manner/improvement는 별도 래핑이 없고 길어질 수 있어, 통째 보호하면 빈 공간 재발 위험 → 제목만 붙이고 본문은 흐르게 둠
+- **문단**: `orphans: 2; widows: 2`로 고아·과부 줄 방지
+- **변경 파일**: egogram/src/styles/praxi.css / SPEC.md / TASKS.md
+- **빌드/배포**: vite OK (87 모듈). `npm run deploy` gh-pages published. 커밋 mind2action `2473537`
+- **라이브**: https://mice3nyc.github.io/mind2action/egogram/ → **피터공 인쇄 미리보기(Cmd+P) 라이브 확인 대기**
+
 ### 2026-05-25 — m2a egogram v0.8 — 호칭 본문 업데이트 (Archives xlsx 전체 CM 재변환) (세션377)
 - **출발**: 피터공 "에고그램 호칭 본문 업데이트 진행하자". v0.7까지 옛 호칭 잔존(insurance "설계사" 20·manager "지점장" 331·coach "멘토" 2) = 곧 5/8 옛 변환본 그대로였던 CM3·CM4·CM5 + 코치/리더 CM6 + 컨설턴트 CM7. 손소장 Archives xlsx에 호칭 일원화된 전체 새 데이터 있음 → **전체 재변환 = 호칭 동시 해소** (단순 치환은 지점장 331개 맥락 의존이라 불가)
 - **변환기 `scripts/convert_cm.py` 신설**: `Assets/incoming/에고그램/data/Archives/{코치,리더,컨설턴트}.xlsx` → `cm_*.yaml`. cm1(자아상태 키워드)·cm8(명언, 렌더 폐기)은 xlsx에 시트 없어 기존 yaml 보존, cm2~cm7만 재변환
