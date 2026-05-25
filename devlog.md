@@ -10,7 +10,10 @@
   - **some_coaching 폐기**(5/18, cmLookup.js 미참조): 옛 호칭 잔존 죽은 데이터 → 빈 문자열 처리
 - **결과**: 세 yaml 본문 옛 호칭 0건 (job_label "코치/멘토"·"보험설계사"만 정당 잔존). 키 구조 v0.7과 완전 동일(cm5=60·cm3=20·cm7=60), 텍스트만 손소장 최신본 교체 → 렌더 구조 안 깨짐
 - **§1 점수 뒤 구간 표기 제거** (피터공 라이브 확인 후 요청): `report-trait-ego` `{점수}점 (11-13)` → `{점수}점`. `getScoreRange` import 정리(미사용)
-- **변경 파일**: cm_coach.yaml / cm_manager.yaml / cm_insurance.yaml / ReportPage.jsx / Footer.jsx(v0.8) / package.json(0.8.0) / scripts/convert_cm.py(신규) / SPEC·PLAN·TASKS
+- **리포트 디자인 재배치** (피터공 라이브 확인 반복 조정):
+  - **상단 커버**: 두꺼운 선(위, border-top 3px + margin-top 40 숨통) → `.report-cover-title`(제목, 아래 두꺼운 선 3px) → `.report-cover-id`(이름·소속, 아래 점선) → 본문. MIND2ACTION 브랜드 폰트 800→300(얇게), 뒤 "성향 코칭 리포트"는 굵게 유지
+  - **마무리**: `.report-closing` 인사 한 줄 가운데(좌측정렬·max-width 520 폐지) → `.report-footer-bar`(두꺼운 선 위, flex space-between: 좌 © 2026 MIND2ACTION 굵게 600 / 우 ✉ email). 인사 위 점선은 섹션 border-bottom 하나만(closing 자체 점선 제거로 이중선 해소), closing margin-top -36으로 인사 위/아래 여백 28px 대칭. 세로 나열 contact·`.report-copyright` 단독 div 폐지(인스타·전화 빈 값이라 새 한 줄 레이아웃서 제외)
+- **변경 파일**: cm_coach.yaml / cm_manager.yaml / cm_insurance.yaml / ReportPage.jsx / praxi.css / Footer.jsx(v0.8) / package.json(0.8.0) / scripts/convert_cm.py(신규) / SPEC·PLAN·TASKS
 - **빌드/배포**: vite OK (87 모듈). `npm run deploy` gh-pages published. 피터공 라이브 확인 완료
 - **라이브**: https://mice3nyc.github.io/mind2action/egogram/ / admin /#/admin (pw sonson)
 
