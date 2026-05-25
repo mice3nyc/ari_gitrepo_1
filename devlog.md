@@ -13,6 +13,7 @@
 - **리포트 디자인 재배치** (피터공 라이브 확인 반복 조정):
   - **상단 커버**: 두꺼운 선(위, border-top 3px + margin-top 40 숨통) → `.report-cover-title`(제목, 아래 두꺼운 선 3px) → `.report-cover-id`(이름·소속, 아래 점선) → 본문. MIND2ACTION 브랜드 폰트 800→300(얇게), 뒤 "성향 코칭 리포트"는 굵게 유지
   - **마무리**: `.report-closing` 인사 한 줄 가운데(좌측정렬·max-width 520 폐지) → `.report-footer-bar`(두꺼운 선 위, flex space-between: 좌 © 2026 MIND2ACTION 굵게 600 / 우 ✉ email). 인사 위 점선은 섹션 border-bottom 하나만(closing 자체 점선 제거로 이중선 해소), closing margin-top -36으로 인사 위/아래 여백 28px 대칭. 세로 나열 contact·`.report-copyright` 단독 div 폐지(인스타·전화 빈 값이라 새 한 줄 레이아웃서 제외)
+  - **§1 그래프 아래 박스**: ScoreChart 뒤 점선(`.report-traits-divider`) → 옅은 회색 박스(`.report-traits-box` #fafafa+border)에 자아상태 CM2 카드(흰 배경으로 띄움)
 - **변경 파일**: cm_coach.yaml / cm_manager.yaml / cm_insurance.yaml / ReportPage.jsx / praxi.css / Footer.jsx(v0.8) / package.json(0.8.0) / scripts/convert_cm.py(신규) / SPEC·PLAN·TASKS
 - **빌드/배포**: vite OK (87 모듈). `npm run deploy` gh-pages published. 피터공 라이브 확인 완료
 - **라이브**: https://mice3nyc.github.io/mind2action/egogram/ / admin /#/admin (pw sonson)
