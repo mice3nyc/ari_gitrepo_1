@@ -1,5 +1,19 @@
 # devlog
 
+### 2026-05-25 — m2a egogram v0.8 — 호칭 본문 업데이트 (Archives xlsx 전체 CM 재변환) (세션377)
+- **출발**: 피터공 "에고그램 호칭 본문 업데이트 진행하자". v0.7까지 옛 호칭 잔존(insurance "설계사" 20·manager "지점장" 331·coach "멘토" 2) = 곧 5/8 옛 변환본 그대로였던 CM3·CM4·CM5 + 코치/리더 CM6 + 컨설턴트 CM7. 손소장 Archives xlsx에 호칭 일원화된 전체 새 데이터 있음 → **전체 재변환 = 호칭 동시 해소** (단순 치환은 지점장 331개 맥락 의존이라 불가)
+- **변환기 `scripts/convert_cm.py` 신설**: `Assets/incoming/에고그램/data/Archives/{코치,리더,컨설턴트}.xlsx` → `cm_*.yaml`. cm1(자아상태 키워드)·cm8(명언, 렌더 폐기)은 xlsx에 시트 없어 기존 yaml 보존, cm2~cm7만 재변환
+- **착수 전 구조 대조에서 잡은 함정 4건**:
+  - **행 위치 직군별 상이** → 행 번호 하드코딩 폐기, 라벨 앵커 스캔("구분 TOP 1/2/BOTTOM"·"점수구간"·"에고그램 유형"). 예: CM3 TOP1 행이 코치/리더=행3, 컨설턴트=행5
+  - **시트→yaml키 매핑 직군별 상이**: 코치/리더 CM6(리크루팅)→`cm7` / 컨설턴트 CM6(클로징)→`cm6`·CM7(리크루팅)→`cm7`. CM5 시트명 코치="CM5 코칭 추가"/리더="CM5추가"/컨설턴트="CM5" 접두어 매칭. 컨설턴트만 CM5 본문 2행(manner+improvement)
+  - **CM4-4 AC 이중 컬럼**: 0~7점·17점이상 두 AC 중 트리거 조건(AC=17+) 채택 (기존 yaml·코드 동작과 동일)
+  - **some_coaching 폐기**(5/18, cmLookup.js 미참조): 옛 호칭 잔존 죽은 데이터 → 빈 문자열 처리
+- **결과**: 세 yaml 본문 옛 호칭 0건 (job_label "코치/멘토"·"보험설계사"만 정당 잔존). 키 구조 v0.7과 완전 동일(cm5=60·cm3=20·cm7=60), 텍스트만 손소장 최신본 교체 → 렌더 구조 안 깨짐
+- **§1 점수 뒤 구간 표기 제거** (피터공 라이브 확인 후 요청): `report-trait-ego` `{점수}점 (11-13)` → `{점수}점`. `getScoreRange` import 정리(미사용)
+- **변경 파일**: cm_coach.yaml / cm_manager.yaml / cm_insurance.yaml / ReportPage.jsx / Footer.jsx(v0.8) / package.json(0.8.0) / scripts/convert_cm.py(신규) / SPEC·PLAN·TASKS
+- **빌드/배포**: vite OK (87 모듈). `npm run deploy` gh-pages published. 피터공 라이브 확인 완료
+- **라이브**: https://mice3nyc.github.io/mind2action/egogram/ / admin /#/admin (pw sonson)
+
 ### 2026-05-25 — m2a egogram v0.7 — 손소장 26.0525 수정 5건 + 리포트 정리 (세션375)
 - **출발**: 손소장 새 수정 목록 `Assets/incoming/에고그램/수정 목록 26.0518.md`(오늘 07:03 도착, 이름만 0518) 5개 항목. 코드 대조 후 ①④⑤③ 반영 + 리포트 헤더/마무리 정리
 - **⑤ 역할별 안전구간 (`scoreEngine.SAFE_RANGES`)**: 기존 `getSuccessRange`(그래프 밴드)와 `needsCoaching`(코칭 발동)이 서로 다른 값이던 것을 **하나의 역할×자아상태 테이블로 통합**. 컨설턴트 CP11-16/NP11-16/A14-20/FC11-16/AC8-16, 리더 NP14-20/A14-20/AC8-13, 코치 NP14-20/A11-20/AC11-16. `getSuccessRange(ego, jobType)` + `needsCoaching(ego, score, jobType)`, jobType→role은 `roleFromJobType`
