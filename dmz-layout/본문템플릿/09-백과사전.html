@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>템플릿 — 9.백과사전 (renderedBodyHtml 테스트)</title>
+<style>
+@font-face { font-family:'Paperlogy'; src:url('../assets/fonts/Paperlogy-4Regular.ttf') format('truetype'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Paperlogy'; src:url('../assets/fonts/Paperlogy-7Bold.ttf') format('truetype'); font-weight:600; font-display:swap; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --cat-01:#FF6EC7; --c-cyan:#3FE0DC; --c-navy:#1a2b4a; --c-gray-text:#6E6E6E; --c-white:#FFF; --c-bg:#E7E7E7; --cat-color:var(--cat-01); }
+body { font-family:'Paperlogy', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; background:var(--c-bg); color:var(--c-navy); min-height:100vh; overflow-x:hidden; font-weight:400; padding:1.5rem 1rem 3rem; }
+.stage { max-width:500px; width:100%; margin:0 auto; }
+.detail-topic-card { background:var(--cat-color); border-radius:14px; padding:1.2rem 1rem; display:flex; flex-direction:column; color:var(--c-white); }
+.detail-modal-header { padding:0 0.2rem 1rem; }
+.modal-tags { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.7rem; }
+.modal-tags .tags-left { display:flex; gap:0.4rem; }
+.modal-tag { background:var(--c-white); color:var(--cat-color); font-size:0.72rem; font-weight:600; padding:0.25rem 0.7rem; border-radius:999px; }
+.modal-close-x { background:transparent; border:none; color:var(--c-white); font-size:1.4rem; cursor:pointer; line-height:1; }
+.detail-modal-hint { font-size:0.85rem; opacity:0.97; line-height:1.5; }
+.detail-body-wrap { background:var(--c-white); border-radius:14px; padding:1.4rem 1.2rem; color:var(--c-navy); }
+</style>
+</head>
+
+<body>
+
+<div class="stage">
+  <div class="detail-topic-card">
+
+    <!-- 핑크 헤더: 동현공 chrome (기록 대/소 구분 태그 + 메타데이터). renderedBodyHtml 아님 -->
+    <div class="detail-modal-header">
+      <div class="modal-tags">
+        <div class="tags-left">
+          <span class="modal-tag">공식기록</span>
+          <span class="modal-tag">백과사전</span>
+        </div>
+        <button class="modal-close-x" aria-label="닫기">&times;</button>
+      </div>
+      <div class="detail-modal-hint">출처: 통일부 북한정보포털, 개성특별시 판문구역 항목</div>
+    </div>
+
+    <div class="detail-body-wrap">
+<!-- ========== renderedBodyHtml START (9.백과사전 / 개성특별시 판문구역 평화리) ========== -->
+<div style="font-size:0.95rem; line-height:1.75; color:#1a2b4a; word-break:keep-all;">
+
+  <div style="font-weight:600; font-size:1.18rem; line-height:1.4; padding-bottom:0.8rem; border-bottom:1px solid #E8E8E8; margin-bottom:1rem;">
+    개성특별시 판문구역 평화리
+  </div>
+
+  <div style="display:flex; align-items:baseline; gap:0.45rem; margin-bottom:0.45rem;">
+    <span style="color:#FF6EC7; font-weight:600; font-size:1rem; flex:none;">1.</span>
+    <span style="font-weight:600; font-size:0.98rem;">행정구역 개요</span>
+  </div>
+  <p style="margin-bottom:1rem;">기정동은 북한 행정구역상 조선민주주의인민공화국 개성특별시 판문구역 평화리에 속한다. 2019년 개성시가 개성특별시로 승격되면서 관할이 재편되었다. 마을은 남북을 가르는 군사분계선 북쪽의 비무장지대(DMZ) 안에 위치하며, 남측 경기도 파주시 장단면 도라산리의 도라전망대에서 북서 방향 약 2km 지점에서 관측된다.</p>
+
+  <div style="display:flex; align-items:baseline; gap:0.45rem; margin-bottom:0.45rem;">
+    <span style="color:#FF6EC7; font-weight:600; font-size:1rem; flex:none;">2.</span>
+    <span style="font-weight:600; font-size:0.98rem;">연혁</span>
+  </div>
+  <p style="margin-bottom:1rem;">1953년 7월 27일 정전협정에 따라 비무장지대 내에 남아 있던 분계선마을 가운데 하나로 기정동이 지정되었다. 이후 1976년을 기점으로 현재 모습에 가깝게 대규모 정비가 이루어졌고, 외형 구조는 이 시기 이후로 큰 변화 없이 유지되고 있다.</p>
+
+  <div style="display:flex; align-items:baseline; gap:0.45rem; margin-bottom:0.45rem;">
+    <span style="color:#FF6EC7; font-weight:600; font-size:1rem; flex:none;">3.</span>
+    <span style="font-weight:600; font-size:0.98rem;">별칭 및 특기 사항</span>
+  </div>
+  <p>북측 공식 자료에서는 기정동을 '평화촌' 또는 '판문점협동농장 <span class="dmz-blank" data-blank="B" style="display:inline-block; padding:0 0.5em; background:#3FE0DC; border-radius:4px; color:#1a2b4a; font-weight:600;">[B]</span>'로 표기한다. DMZ 내부에 남아 있는 북측의 유일한 민간 거주지로 기록되어 있으나, 상시 거주 규모에 대한 공개 통계는 존재하지 않는다. 2024년 이후 북측이 DMZ 경계시설 보강에 나서는 흐름 속에서도 기정동 자체의 외형에는 눈에 띄는 변화가 확인되지 않았다.</p>
+
+</div>
+<!-- ========== renderedBodyHtml END ========== -->
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

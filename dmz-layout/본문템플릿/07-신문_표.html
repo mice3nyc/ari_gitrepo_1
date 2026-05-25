@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>템플릿 — 7.신문_표 (renderedBodyHtml 테스트)</title>
+<style>
+@font-face { font-family:'Paperlogy'; src:url('../assets/fonts/Paperlogy-4Regular.ttf') format('truetype'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Paperlogy'; src:url('../assets/fonts/Paperlogy-7Bold.ttf') format('truetype'); font-weight:600; font-display:swap; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --cat-01:#FF6EC7; --c-cyan:#3FE0DC; --c-navy:#1a2b4a; --c-gray-text:#6E6E6E; --c-white:#FFF; --c-bg:#E7E7E7; --cat-color:var(--cat-01); }
+body { font-family:'Paperlogy', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; background:var(--c-bg); color:var(--c-navy); min-height:100vh; overflow-x:hidden; font-weight:400; padding:1.5rem 1rem 3rem; }
+.stage { max-width:500px; width:100%; margin:0 auto; }
+.detail-topic-card { background:var(--cat-color); border-radius:14px; padding:1.2rem 1rem; display:flex; flex-direction:column; color:var(--c-white); }
+.detail-modal-header { padding:0 0.2rem 1rem; }
+.modal-tags { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.7rem; }
+.modal-tags .tags-left { display:flex; gap:0.4rem; }
+.modal-tag { background:var(--c-white); color:var(--cat-color); font-size:0.72rem; font-weight:600; padding:0.25rem 0.7rem; border-radius:999px; }
+.modal-close-x { background:transparent; border:none; color:var(--c-white); font-size:1.4rem; cursor:pointer; line-height:1; }
+.detail-modal-hint { font-size:0.85rem; opacity:0.97; line-height:1.5; }
+.detail-body-wrap { background:var(--c-white); border-radius:14px; padding:1.4rem 1.2rem; color:var(--c-navy); }
+</style>
+</head>
+
+<body>
+
+<div class="stage">
+  <div class="detail-topic-card">
+
+    <!-- 핑크 헤더: 기록대구분/기록소구분 태그 + 메타데이터. renderedBodyHtml 아님 -->
+    <div class="detail-modal-header">
+      <div class="modal-tags">
+        <div class="tags-left">
+          <span class="modal-tag">공식기록</span>
+          <span class="modal-tag">신문 기사</span>
+        </div>
+        <button class="modal-close-x" aria-label="닫기">&times;</button>
+      </div>
+      <div class="detail-modal-hint">DMZ 관리 체계 — 정전협정·국내법·국제기구의 중첩 구조</div>
+    </div>
+
+    <div class="detail-body-wrap">
+<!-- ========== renderedBodyHtml START (7.신문_표 / DMZ는 누가 어떻게 관리하나) ========== -->
+<div style="font-size:0.95rem; line-height:1.75; color:#1a2b4a; word-break:keep-all;">
+
+  <!-- 신문 제목 -->
+  <div style="background:#F0F0F0; border-radius:6px; padding:0.75rem 1rem; text-align:center; font-weight:600; font-size:1.08rem; margin-bottom:1rem;">
+    DMZ는 누가 어떻게 관리하나
+  </div>
+
+  <p>DMZ의 관리 체계는 단일 기관이 아닌 복수의 국제, 국내 기관이 중층적으로 관여하는 구조다.<br>
+  DMZ 자체는 정전협정에 따라 유엔군사령부(UNC)가 담당하며, DMZ 남쪽 <span class="dmz-blank" data-blank="B" style="display:inline-block; padding:0 0.5em; background:#3FE0DC; border-radius:4px; color:#1a2b4a; font-weight:600;">[B]</span>은 국방부, DMZ의 평화적 이용 정책은 통일부, 접경지역 발전은 행정안전부가 담당한다. DMZ 출입은 UNC 산하 군사정전위원회(MAC)의 승인 사항이다.</p>
+
+  <hr style="border:none; border-top:1px solid #E8E8E8; margin:1.1rem 0;">
+
+  <!-- 표 제목 -->
+  <div style="font-weight:600; font-size:0.9rem; margin-bottom:0.7rem;">DMZ 거버넌스 구조</div>
+
+  <!-- 인라인 스타일 표 -->
+  <table style="width:100%; border-collapse:collapse; font-size:0.82rem; line-height:1.5;">
+    <thead>
+      <tr style="background:#1a2b4a; color:#fff;">
+        <th style="padding:0.5rem 0.6rem; text-align:left; font-weight:600; border-radius:0;">담당 기관</th>
+        <th style="padding:0.5rem 0.6rem; text-align:left; font-weight:600;">담당 영역</th>
+        <th style="padding:0.5rem 0.6rem; text-align:left; font-weight:600;">근거</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid #E8E8E8;">
+        <td style="padding:0.55rem 0.6rem; font-weight:600;">유엔사(UNC)</td>
+        <td style="padding:0.55rem 0.6rem;">군사분계선 남·북 각 2km<br>(DMZ 통제)</td>
+        <td style="padding:0.55rem 0.6rem; color:#6E6E6E;">정전협정(1953)</td>
+      </tr>
+      <tr style="border-bottom:1px solid #E8E8E8; background:#FAFAFA;">
+        <td style="padding:0.55rem 0.6rem; font-weight:600;">국방부 / 관할부대장</td>
+        <td style="padding:0.55rem 0.6rem;"><span class="dmz-blank" data-blank="B" style="display:inline-block; padding:0 0.45em; background:#3FE0DC; border-radius:4px; color:#1a2b4a; font-weight:600;">[B]</span> 관리<br>(DMZ 남방 약 5~10km)</td>
+        <td style="padding:0.55rem 0.6rem; color:#6E6E6E;">군사기지 및 군사시설 보호법</td>
+      </tr>
+      <tr style="border-bottom:1px solid #E8E8E8;">
+        <td style="padding:0.55rem 0.6rem; font-weight:600;">통일부</td>
+        <td style="padding:0.55rem 0.6rem;">남북교류협력 정책<br>(DMZ 평화적 이용, 남북 교류)</td>
+        <td style="padding:0.55rem 0.6rem; color:#6E6E6E;">남북교류협력에 관한 법률</td>
+      </tr>
+      <tr>
+        <td style="padding:0.55rem 0.6rem; font-weight:600;">행정안전부 / 17개 시·군</td>
+        <td style="padding:0.55rem 0.6rem;">접경지역 발전<br>(<span class="dmz-blank" data-blank="B" style="display:inline-block; padding:0 0.45em; background:#3FE0DC; border-radius:4px; color:#1a2b4a; font-weight:600;">[B]</span> 이남 접경 시·군)</td>
+        <td style="padding:0.55rem 0.6rem; color:#6E6E6E;">접경지역 지원 특별법</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+<!-- ========== renderedBodyHtml END ========== -->
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>템플릿 — 11.시험지문 (renderedBodyHtml 테스트)</title>
+<style>
+@font-face { font-family:'Paperlogy'; src:url('../assets/fonts/Paperlogy-4Regular.ttf') format('truetype'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Paperlogy'; src:url('../assets/fonts/Paperlogy-7Bold.ttf') format('truetype'); font-weight:600; font-display:swap; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --cat-01:#FF6EC7; --c-cyan:#3FE0DC; --c-navy:#1a2b4a; --c-gray-text:#6E6E6E; --c-white:#FFF; --c-bg:#E7E7E7; --cat-color:var(--cat-01); }
+body { font-family:'Paperlogy', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; background:var(--c-bg); color:var(--c-navy); min-height:100vh; overflow-x:hidden; font-weight:400; padding:1.5rem 1rem 3rem; }
+.stage { max-width:500px; width:100%; margin:0 auto; }
+.detail-topic-card { background:var(--cat-color); border-radius:14px; padding:1.2rem 1rem; display:flex; flex-direction:column; color:var(--c-white); }
+.detail-modal-header { padding:0 0.2rem 1rem; }
+.modal-tags { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.7rem; }
+.modal-tags .tags-left { display:flex; gap:0.4rem; }
+.modal-tag { background:var(--c-white); color:var(--cat-color); font-size:0.72rem; font-weight:600; padding:0.25rem 0.7rem; border-radius:999px; }
+.modal-close-x { background:transparent; border:none; color:var(--c-white); font-size:1.4rem; cursor:pointer; line-height:1; }
+.detail-modal-hint { font-size:0.85rem; opacity:0.97; line-height:1.5; }
+.detail-body-wrap { background:var(--c-white); border-radius:14px; padding:1.4rem 1.2rem; color:var(--c-navy); }
+</style>
+</head>
+
+<body>
+
+<div class="stage">
+  <div class="detail-topic-card">
+
+    <!-- 핑크 헤더: 동현공 chrome (기록 대/소 구분 태그 + 메타데이터). renderedBodyHtml 아님 -->
+    <div class="detail-modal-header">
+      <div class="modal-tags">
+        <div class="tags-left">
+          <span class="modal-tag">공식기록</span>
+          <span class="modal-tag">시험 지문</span>
+        </div>
+        <button class="modal-close-x" aria-label="닫기">&times;</button>
+      </div>
+      <div class="detail-modal-hint">출처: 한국사능력검정시험(심화)</div>
+    </div>
+
+    <div class="detail-body-wrap">
+<!-- ========== renderedBodyHtml START (11.시험지문 / 한국사능력검정시험 심화) ========== -->
+<div style="font-size:0.95rem; line-height:1.75; color:#1a2b4a; word-break:keep-all;">
+
+  <div style="font-weight:600; font-size:1.18rem; text-align:center; padding-bottom:0.8rem; border-bottom:1px solid #E8E8E8; margin-bottom:1rem; line-height:1.4;">
+    한국사능력검정시험 (심화)
+  </div>
+
+  <p style="font-weight:600; margin-bottom:0.7rem;">[1] 다음 글을 읽고 물음에 답하시오.</p>
+
+  <div style="border:1.5px solid #1a2b4a; border-radius:6px; padding:0.9rem 1rem; font-size:0.93rem; line-height:1.8;">
+    <p>만월대는 고려 태조 <span class="dmz-blank" data-blank="B" style="display:inline-block; padding:0 0.5em; background:#3FE0DC; border-radius:4px; color:#1a2b4a; font-weight:600;">[B]</span>이 919년 개경으로 천도한 뒤 세운 정궁이다. 송악산 남쪽 기슭에 자리하며 약 39만m² 규모로, 약 440년간 고려의 중심이었다. 정전인 회경전은 정면 아홉 칸 규모였으며, 이 밖에도 건덕전, 원덕전 등 여러 전각이 산기슭을 따라 배치되어 있었다. 1361년 홍건적의 침입으로 소실된 뒤 재건되지 못했다.</p>
+    <p style="margin-top:0.7rem;">2007년부터 2018년까지 남과 북은 8차례에 걸쳐 공동발굴조사를 실시했다. 서부 건축군(약 33,000m²) 중 약 19,800 m²를 조사하여 40여 동의 건물터를 확인했으며, 금속활자를 포함한 약 17,900여 점의 유물이 출토되었다.</p>
+    <p style="margin-top:0.7rem;">만월대는 개성역사유적지구의 일부로, 고려 성균관, 선죽교, 왕건릉, 공민왕릉 등 12개 유적과 함께 2013년 유네스코 세계문화유산에 등재되었다.</p>
+  </div>
+
+</div>
+<!-- ========== renderedBodyHtml END ========== -->
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

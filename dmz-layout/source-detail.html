@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>자료본문 레이아웃 — DMZ v5 pickone (정적, 본문 포맷팅 무대)</title>
+<style>
+
+/* ===== 폰트 ===== */
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('assets/fonts/Paperlogy-4Regular.ttf') format('truetype');
+  font-weight: 400; font-display: swap;
+}
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('assets/fonts/Paperlogy-7Bold.ttf') format('truetype');
+  font-weight: 600; font-display: swap;
+}
+@font-face {
+  font-family: 'Paperlogy';
+  src: url('assets/fonts/Paperlogy-9Black.ttf') format('truetype');
+  font-weight: 900; font-display: swap;
+}
+
+/* ===== 리셋 + 베이스 ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --c-pink-soft: #FFB6D9;
+  --c-cyan: #3FE0DC;
+  --c-navy: #1a2b4a;
+  --c-gray-text: #6E6E6E;
+  --c-white: #FFFFFF;
+  --c-bg: #E7E7E7;
+
+  /* 카테고리 컬러 */
+  --cat-01: #FF6EC7;
+  --cat-02: #D8E82D;
+  --cat-03: #A9D4FF;
+  --cat-04: #FF9D48;
+  --cat-05: #C77DFF;
+  --cat-06: #FFD556;
+
+  /* 레거시 호환 */
+  --fg: var(--c-navy);
+  --gray: var(--c-gray-text);
+  --light-gray: #E8E8E8;
+
+  /* 이 무대 고정: cat-01 (핑크) */
+  --cat-color: var(--cat-01);
+}
+
+body {
+  font-family: 'Paperlogy', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+  background: var(--c-bg); color: var(--c-navy);
+  min-height: 100vh; overflow-x: hidden;
+  font-weight: 400;
+  padding: 1.5rem 1rem 3rem;
+}
+
+/* ===== 무대 컨테이너 (모바일 폭) ===== */
+.stage {
+  max-width: 500px; width: 100%; margin: 0 auto;
+}
+
+/* =========================================================
+   핑크 바탕 (Layer 3 — 주제색 박스, pickone .detail-topic-card)
+   ========================================================= */
+.detail-topic-card {
+  background: var(--cat-color, var(--c-pink-soft));
+  border-radius: 14px;
+  padding: 1.2rem 1rem;
+  display: flex; flex-direction: column;
+  color: var(--c-white);
+}
+
+/* 안내 영역 — 핑크 박스 상단 (pickone .detail-modal-header) */
+.detail-modal-header {
+  background: transparent; color: var(--c-white);
+  padding: 0 0.2rem 1rem;
+  border-radius: 0;
+  margin-bottom: 0;
+}
+.detail-modal-title {
+  font-size: 1.15rem; font-weight: 600; margin-bottom: 0.4rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.detail-modal-title .modal-close-x {
+  background: transparent; border: none; color: var(--c-white);
+  font-size: 1.4rem; cursor: pointer; line-height: 1; padding: 0;
+}
+.detail-modal-hint {
+  font-size: 0.78rem; opacity: 0.95; line-height: 1.5;
+}
+.detail-modal-hint strong { font-weight: 600; }
+
+/* =========================================================
+   흰색 라운딩 박스 (Layer 4 — 본문 흰 카드, pickone .detail-body-wrap)
+   ★ 이 안에 자료 type별 본문 HTML을 포맷팅한다
+   ========================================================= */
+.detail-body-wrap {
+  background: var(--c-white);
+  border-radius: 14px;
+  padding: 1.4rem 1.2rem;
+  color: var(--c-navy);
+}
+
+/* 빈 박스 표시용 placeholder (본문 채우면 제거) */
+.body-placeholder {
+  min-height: 240px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  border: 2px dashed var(--light-gray);
+  border-radius: 10px;
+  color: var(--c-gray-text);
+  font-size: 0.9rem; line-height: 1.7;
+}
+.body-placeholder small { font-size: 0.75rem; opacity: 0.8; margin-top: 0.4rem; }
+
+</style>
+</head>
+
+<body>
+
+<div class="stage">
+
+  <!-- 핑크 바탕 (주제색 박스) -->
+  <div class="detail-topic-card">
+
+    <!-- 안내 영역 -->
+    <div class="detail-modal-header">
+      <div class="detail-modal-title">
+        빈칸 복원하기
+        <button class="modal-close-x" aria-label="닫기">&times;</button>
+      </div>
+      <div class="detail-modal-hint">
+        빈칸 정답은 다른 자료에서 확인할 수 있습니다.<br>
+        <strong>자료 2번(정전협정 보도)을 읽어보세요.</strong>
+      </div>
+    </div>
+
+    <!-- ★ 흰색 라운딩 박스 — 본문 HTML이 들어갈 자리 -->
+    <div class="detail-body-wrap">
+
+      <!-- ============================================ -->
+      <!-- 여기에 자료 type별 본문 HTML을 포맷팅한다     -->
+      <!-- (A 편지 / B 신문 / C 사진 / D 구술)          -->
+      <!-- ============================================ -->
+
+      <div class="body-placeholder">
+        본문 HTML이 여기 들어갑니다
+        <small>이 흰 박스 안에 자료 type별 본문을 포맷팅</small>
+      </div>
+
+    </div><!-- /.detail-body-wrap -->
+
+  </div><!-- /.detail-topic-card -->
+
+</div><!-- /.stage -->
+
+</body>
+</html>

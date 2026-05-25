@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>템플릿 — 4.메시지_독백 (renderedBodyHtml 테스트)</title>
+<style>
+@font-face { font-family:'Paperlogy'; src:url('../assets/fonts/Paperlogy-4Regular.ttf') format('truetype'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Paperlogy'; src:url('../assets/fonts/Paperlogy-7Bold.ttf') format('truetype'); font-weight:600; font-display:swap; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --cat-01:#FF6EC7; --c-cyan:#3FE0DC; --c-navy:#1a2b4a; --c-gray-text:#6E6E6E; --c-white:#FFF; --c-bg:#E7E7E7; --cat-color:var(--cat-01); }
+body { font-family:'Paperlogy', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; background:var(--c-bg); color:var(--c-navy); min-height:100vh; overflow-x:hidden; font-weight:400; padding:1.5rem 1rem 3rem; }
+.stage { max-width:500px; width:100%; margin:0 auto; }
+.detail-topic-card { background:var(--cat-color); border-radius:14px; padding:1.2rem 1rem; display:flex; flex-direction:column; color:var(--c-white); }
+.detail-modal-header { padding:0 0.2rem 1rem; }
+.modal-tags { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.7rem; }
+.modal-tags .tags-left { display:flex; gap:0.4rem; }
+.modal-tag { background:var(--c-white); color:var(--cat-color); font-size:0.72rem; font-weight:600; padding:0.25rem 0.7rem; border-radius:999px; }
+.modal-close-x { background:transparent; border:none; color:var(--c-white); font-size:1.4rem; cursor:pointer; line-height:1; }
+.detail-modal-hint { font-size:0.85rem; opacity:0.97; line-height:1.6; }
+.detail-body-wrap { background:var(--c-white); border-radius:14px; padding:1.4rem 1.2rem; color:var(--c-navy); }
+</style>
+</head>
+
+<body>
+
+<div class="stage">
+  <div class="detail-topic-card">
+
+    <!-- 핑크 헤더: 동현공 chrome. renderedBodyHtml 아님 -->
+    <div class="detail-modal-header">
+      <div class="modal-tags">
+        <div class="tags-left">
+          <span class="modal-tag">구술증언</span>
+          <span class="modal-tag">구술</span>
+        </div>
+        <button class="modal-close-x" aria-label="닫기">&times;</button>
+      </div>
+      <div class="detail-modal-hint">정전협정 당일 기억</div>
+    </div>
+
+    <div class="detail-body-wrap">
+<!-- ========== renderedBodyHtml START (4.메시지_독백 / 정전협정 당일 기억) ========== -->
+<div style="font-size:0.95rem; line-height:1.7; color:#1a2b4a; word-break:keep-all;">
+
+  <!-- 상단: 화자 프로필 -->
+  <div style="display:flex; flex-direction:column; align-items:center; gap:0.4rem; padding-bottom:1.1rem; border-bottom:1px solid #E8E8E8; margin-bottom:1.2rem;">
+    <div style="width:44px; height:44px; border-radius:50%; background:#E8E8E8; flex:none;"></div>
+    <div style="font-weight:600; font-size:1rem;">정전협정 당일 기억</div>
+  </div>
+
+  <!-- 인용 말풍선 1 -->
+  <div style="background:#F2F2F2; border-radius:14px; padding:0.85rem 1rem; margin-bottom:0.85rem; font-size:0.93rem; line-height:1.7;">
+    "그날 밤 열 시에 총소리가 딱 멈추니까, 세상이 쥐 죽은 듯이 조용해졌어. 근데 아무도 안 웃었어. 울지도 않고. 그냥 멍했지."
+  </div>
+
+  <!-- 인용 말풍선 2 -->
+  <div style="background:#F2F2F2; border-radius:14px; padding:0.85rem 1rem; margin-bottom:0.85rem; font-size:0.93rem; line-height:1.7;">
+    "72시간 안에 물러나라 그래서, 3년 지킨 참호를 제 손으로 허물었어. 2킬로씩 물러나니까 폭이 <span class="dmz-blank" data-blank="D" style="display:inline-block; padding:0 0.5em; background:#3FE0DC; border-radius:4px; color:#1a2b4a; font-weight:600;">[D]</span>킬로짜리 빈 땅이 생기는 거야. 거기가 비무장지대가 된 거지."
+  </div>
+
+  <!-- 인용 말풍선 3 -->
+  <div style="background:#F2F2F2; border-radius:14px; padding:0.85rem 1rem; font-size:0.93rem; line-height:1.7;">
+    "우리 부대에 연천 사람이 하나 있었는데, 그 친구 고향이 딱 그 안에 들어갔어. 그 친구는 그날 밤새 북쪽만 보고 있었어."
+  </div>
+
+</div>
+<!-- ========== renderedBodyHtml END ========== -->
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

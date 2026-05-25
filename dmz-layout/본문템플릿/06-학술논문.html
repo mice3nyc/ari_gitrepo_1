@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>템플릿 — 6.학술논문 (renderedBodyHtml 테스트)</title>
+<style>
+@font-face { font-family:'Paperlogy'; src:url('../assets/fonts/Paperlogy-4Regular.ttf') format('truetype'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Paperlogy'; src:url('../assets/fonts/Paperlogy-7Bold.ttf') format('truetype'); font-weight:600; font-display:swap; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --cat-01:#FF6EC7; --c-cyan:#3FE0DC; --c-navy:#1a2b4a; --c-gray-text:#6E6E6E; --c-white:#FFF; --c-bg:#E7E7E7; --cat-color:var(--cat-01); }
+body { font-family:'Paperlogy', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; background:var(--c-bg); color:var(--c-navy); min-height:100vh; overflow-x:hidden; font-weight:400; padding:1.5rem 1rem 3rem; }
+.stage { max-width:500px; width:100%; margin:0 auto; }
+.detail-topic-card { background:var(--cat-color); border-radius:14px; padding:1.2rem 1rem; display:flex; flex-direction:column; color:var(--c-white); }
+.detail-modal-header { padding:0 0.2rem 1rem; }
+.modal-tags { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.7rem; }
+.modal-tags .tags-left { display:flex; gap:0.4rem; }
+.modal-tag { background:var(--c-white); color:var(--cat-color); font-size:0.72rem; font-weight:600; padding:0.25rem 0.7rem; border-radius:999px; }
+.modal-close-x { background:transparent; border:none; color:var(--c-white); font-size:1.4rem; cursor:pointer; line-height:1; }
+.detail-modal-hint { font-size:0.85rem; opacity:0.97; line-height:1.5; }
+.detail-body-wrap { background:var(--c-white); border-radius:14px; padding:1.4rem 1.2rem; color:var(--c-navy); }
+</style>
+</head>
+
+<body>
+
+<div class="stage">
+  <div class="detail-topic-card">
+
+    <!-- 핑크 헤더: 동현공 chrome (기록 대/소 구분 태그 + 메타데이터). renderedBodyHtml 아님 -->
+    <div class="detail-modal-header">
+      <div class="modal-tags">
+        <div class="tags-left">
+          <span class="modal-tag">공식기록</span>
+          <span class="modal-tag">학술 논문</span>
+        </div>
+        <button class="modal-close-x" aria-label="닫기">&times;</button>
+      </div>
+      <div class="detail-modal-hint">출처: 김창환(2019), 비무장지대 및 군사분계선의 길이에 관한 연구</div>
+    </div>
+
+    <div class="detail-body-wrap">
+<!-- ========== renderedBodyHtml START (6.학술논문 / 비무장지대 및 군사분계선의 길이에 관한 연구) ========== -->
+<div style="font-size:0.95rem; line-height:1.75; color:#1a2b4a; word-break:keep-all;">
+
+  <div style="font-weight:600; font-size:1.18rem; line-height:1.4; padding-bottom:0.8rem; border-bottom:1px solid #E8E8E8; margin-bottom:1rem;">
+    비무장지대 및 군사분계선의<br>길이에 관한 연구
+  </div>
+
+  <div style="font-weight:600; font-size:0.92rem; margin-bottom:0.6rem;">[군사분계선 길이 — 시·도별]</div>
+
+  <p style="margin-bottom:0.75rem;">"본 연구는 비무장지대 및 군사분계선의 길이를 측정한 것이다. 이를 위해 정전협정문 첨부지도를 사용했다. 이 지도들은 9개의 도엽으로, 지도에 표시된 군사분계선을 추출하기 위해 ArcGIS의 지오레퍼런싱 기능을 사용하였다."</p>
+
+  <p style="margin-bottom:0.9rem;">"그 길이를 측정한 결과는 239.42km(148.77mile)이다. 이는 현재 비무장지대와 관련된 연구나 보고서 그리고 대중 매체에서 표기하는 '155마일 휴전선' 또는 '248km 비무장지대' 라는 표현의 부적합을 의미하는 것이다."</p>
+
+  <table style="width:100%; border-collapse:collapse; font-size:0.9rem; margin-bottom:0.85rem;">
+    <thead>
+      <tr style="background:#FF6EC7; color:#fff;">
+        <th style="padding:0.45rem 0.6rem; text-align:center; font-weight:600;">구분</th>
+        <th style="padding:0.45rem 0.6rem; text-align:center; font-weight:600;">강원도</th>
+        <th style="padding:0.45rem 0.6rem; text-align:center; font-weight:600;">경기도</th>
+        <th style="padding:0.45rem 0.6rem; text-align:center; font-weight:600;">합계</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:0.4rem 0.6rem; text-align:center; border-bottom:1px solid #E8E8E8;">km</td>
+        <td style="padding:0.4rem 0.6rem; text-align:center; border-bottom:1px solid #E8E8E8;">157.96</td>
+        <td style="padding:0.4rem 0.6rem; text-align:center; border-bottom:1px solid #E8E8E8;">81.46</td>
+        <td style="padding:0.4rem 0.6rem; text-align:center; border-bottom:1px solid #E8E8E8; font-weight:600;">239.42</td>
+      </tr>
+      <tr>
+        <td style="padding:0.4rem 0.6rem; text-align:center;">mile</td>
+        <td style="padding:0.4rem 0.6rem; text-align:center;">98.15</td>
+        <td style="padding:0.4rem 0.6rem; text-align:center;">50.62</td>
+        <td style="padding:0.4rem 0.6rem; text-align:center; font-weight:600;">148.77</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="font-size:0.8rem; color:#6E6E6E; margin-bottom:1.1rem;">— 김창환(2019), 비무장지대 및 군사분계선의 길이에 관한 연구에서 발췌</div>
+
+  <div style="font-weight:600; font-size:0.92rem; margin-bottom:0.6rem;">[DMZ 면적]</div>
+
+  <p style="margin-bottom:0.75rem;">"DMZ의 면적은 약 903.8km²이다. 이는 우리가 일반적으로 알고 있는 DMZ의 거리 155mile(약 250km)보다 약 7mile(약 12km)이 짧다."</p>
+
+  <p style="margin-bottom:0.85rem;">"DMZ는 동해안 고성군 명호리로부터 중부의 양구, 화천, <span class="dmz-blank" data-blank="B" style="display:inline-block; padding:0 0.5em; background:#3FE0DC; border-radius:4px; color:#1a2b4a; font-weight:600;">[B]</span>을 거쳐 개성 남쪽의 판문점을 지나 서쪽의 임진강 하구에 이르는 군사분계선을 따라 남북 방향으로 각각 2km씩 설정된 완충지대이다."</p>
+
+  <div style="font-size:0.8rem; color:#6E6E6E; margin-bottom:0.3rem;">— 김창환(2007), DMZ의 공간적 범위에 관한 연구에서 발췌</div>
+
+  <hr style="border:none; border-top:1px solid #E8E8E8; margin-top:1rem;">
+
+</div>
+<!-- ========== renderedBodyHtml END ========== -->
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

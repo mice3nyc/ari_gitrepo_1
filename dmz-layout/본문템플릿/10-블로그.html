@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>템플릿 — 10.블로그 (renderedBodyHtml 테스트)</title>
+<style>
+@font-face { font-family:'Paperlogy'; src:url('../assets/fonts/Paperlogy-4Regular.ttf') format('truetype'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Paperlogy'; src:url('../assets/fonts/Paperlogy-7Bold.ttf') format('truetype'); font-weight:600; font-display:swap; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --cat-01:#FF6EC7; --c-cyan:#3FE0DC; --c-navy:#1a2b4a; --c-gray-text:#6E6E6E; --c-white:#FFF; --c-bg:#E7E7E7; --cat-color:var(--cat-01); }
+body { font-family:'Paperlogy', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; background:var(--c-bg); color:var(--c-navy); min-height:100vh; overflow-x:hidden; font-weight:400; padding:1.5rem 1rem 3rem; }
+.stage { max-width:500px; width:100%; margin:0 auto; }
+.detail-topic-card { background:var(--cat-color); border-radius:14px; padding:1.2rem 1rem; display:flex; flex-direction:column; color:var(--c-white); }
+.detail-modal-header { padding:0 0.2rem 1rem; }
+.modal-tags { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.7rem; }
+.modal-tags .tags-left { display:flex; gap:0.4rem; }
+.modal-tag { background:var(--c-white); color:var(--cat-color); font-size:0.72rem; font-weight:600; padding:0.25rem 0.7rem; border-radius:999px; }
+.modal-close-x { background:transparent; border:none; color:var(--c-white); font-size:1.4rem; cursor:pointer; line-height:1; }
+.detail-modal-hint { font-size:0.85rem; opacity:0.97; line-height:1.5; }
+.detail-body-wrap { background:var(--c-white); border-radius:14px; padding:1.4rem 1.2rem; color:var(--c-navy); }
+</style>
+</head>
+
+<body>
+
+<div class="stage">
+  <div class="detail-topic-card">
+
+    <!-- 핑크 헤더: 동현공 chrome (기록 대/소 구분 태그 + 메타데이터). renderedBodyHtml 아님 -->
+    <div class="detail-modal-header">
+      <div class="modal-tags">
+        <div class="tags-left">
+          <span class="modal-tag">개인서사</span>
+          <span class="modal-tag">블로그</span>
+        </div>
+        <button class="modal-close-x" aria-label="닫기">&times;</button>
+      </div>
+      <div class="detail-modal-hint">출처: 개인 블로그 작성자: 김해진(연천 토박이, 임진강 생물다양성 탐사단 3기)</div>
+    </div>
+
+    <div class="detail-body-wrap">
+<!-- ========== renderedBodyHtml START (10.블로그 / 탐사단 첫 활동, 임진강에서 새를 만나다) ========== -->
+<div style="font-size:0.95rem; line-height:1.75; color:#1a2b4a; word-break:keep-all;">
+
+  <div style="font-size:0.8rem; color:#6E6E6E; margin-bottom:0.3rem;">연천 일상</div>
+
+  <div style="font-weight:600; font-size:1.15rem; line-height:1.4; margin-bottom:0.75rem;">
+    탐사단 첫 활동, 임진강에서 새를 만나다
+  </div>
+
+  <div style="display:flex; align-items:center; gap:0.55rem; margin-bottom:0.75rem;">
+    <div style="width:34px; height:34px; border-radius:50%; background:#E8E8E8; flex:none;"></div>
+    <div>
+      <div style="font-weight:600; font-size:0.9rem;">김해진</div>
+      <div style="font-size:0.78rem; color:#6E6E6E;">연천 토박이, 임진강 생물다양성 탐사단 3기</div>
+    </div>
+  </div>
+
+  <hr style="border:none; border-top:1px solid #E8E8E8; margin-bottom:1rem;">
+
+  <div style="text-align:center; line-height:1.9;">
+    <p>드디어 탐사단 첫 활동 다녀왔다!!</p>
+
+    <p style="margin-top:1rem;">연천 임진강 생물다양성 탐사단은 연천군이<br>
+    유네스코 생물권보전지역으로 지정된 이후<br>
+    2023년에 처음 만들어진 프로그램이다.<br>
+    참가 조건이 연천군민이어야 해서 나는 바로 신청했다.</p>
+
+    <p style="margin-top:1rem;">우리 동네가 유네스코<br>
+    생물권보전지역이라는 게 아직도 신기하다.<br>
+    2019년에 지정됐는데, 연천군 전역이랑<br>
+    임진강 유역이 포함된다.<br>
+    같은 해에 강원도에도<br>
+    <span class="dmz-blank" data-blank="A" style="display:inline-block; padding:0 0.5em; background:#3FE0DC; border-radius:4px; color:#1a2b4a; font-weight:600;">[A]</span> 생물권보전지역이 생겼다.</p>
+
+    <p style="margin-top:1rem;">오늘은 차탄천에서 탐조했다.<br>
+    망원경으로 새를 관찰하고,<br>
+    eBird라는 앱에 기록하는 거다.<br>
+    내가 기록한 데이터가 진짜 연구에 쓰인다니까<br>
+    좀 뿌듯하다.</p>
+
+    <p style="margin-top:1rem;">해설사 선생님이 임진강이 깨끗한 건<br>
+    비무장지대에서 흘러나오는 물이라<br>
+    오염이 거의 없기 때문이고 했다.<br>
+    다음 달에는 임진강 북삼교 쪽으로 간다고 한다.<br>
+    무척 기대된다.</p>
+  </div>
+
+  <div style="margin-top:1.1rem; font-size:0.82rem; color:#6E6E6E; display:flex; flex-wrap:wrap; gap:0.3rem;">
+    <span>#임진강</span>
+    <span>#생물다양성탐사단</span>
+    <span>#유네스코</span>
+    <span>#생물권보전지역</span>
+    <span>#탐조</span>
+  </div>
+
+  <hr style="border:none; border-top:1px solid #E8E8E8; margin:0.9rem 0;">
+
+  <div style="display:flex; gap:1.2rem; font-size:0.85rem; color:#6E6E6E; align-items:center;">
+    <span style="display:flex; align-items:center; gap:0.3rem;">
+      <span style="color:#FF6EC7; font-size:1rem;">&#10084;</span> 103
+    </span>
+    <span style="display:flex; align-items:center; gap:0.3rem;">
+      <span style="font-size:1rem;">&#128172;</span> 47
+    </span>
+    <span style="display:flex; align-items:center; gap:0.3rem;">
+      <span style="font-size:1rem;">&#10148;</span> 1
+    </span>
+  </div>
+
+</div>
+<!-- ========== renderedBodyHtml END ========== -->
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

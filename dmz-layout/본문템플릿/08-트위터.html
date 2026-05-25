@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>템플릿 — 8.트위터 (renderedBodyHtml 테스트)</title>
+<style>
+@font-face { font-family:'Paperlogy'; src:url('../assets/fonts/Paperlogy-4Regular.ttf') format('truetype'); font-weight:400; font-display:swap; }
+@font-face { font-family:'Paperlogy'; src:url('../assets/fonts/Paperlogy-7Bold.ttf') format('truetype'); font-weight:600; font-display:swap; }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --cat-01:#FF6EC7; --c-cyan:#3FE0DC; --c-navy:#1a2b4a; --c-gray-text:#6E6E6E; --c-white:#FFF; --c-bg:#E7E7E7; --cat-color:var(--cat-01); }
+body { font-family:'Paperlogy', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif; background:var(--c-bg); color:var(--c-navy); min-height:100vh; overflow-x:hidden; font-weight:400; padding:1.5rem 1rem 3rem; }
+.stage { max-width:500px; width:100%; margin:0 auto; }
+.detail-topic-card { background:var(--cat-color); border-radius:14px; padding:1.2rem 1rem; display:flex; flex-direction:column; color:var(--c-white); }
+.detail-modal-header { padding:0 0.2rem 1rem; }
+.modal-tags { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.7rem; }
+.modal-tags .tags-left { display:flex; gap:0.4rem; }
+.modal-tag { background:var(--c-white); color:var(--cat-color); font-size:0.72rem; font-weight:600; padding:0.25rem 0.7rem; border-radius:999px; }
+.modal-close-x { background:transparent; border:none; color:var(--c-white); font-size:1.4rem; cursor:pointer; line-height:1; }
+.detail-modal-hint { font-size:0.85rem; opacity:0.97; line-height:1.5; }
+.detail-body-wrap { background:var(--c-white); border-radius:14px; padding:1.4rem 1.2rem; color:var(--c-navy); }
+</style>
+</head>
+
+<body>
+
+<div class="stage">
+  <div class="detail-topic-card">
+
+    <!-- 핑크 헤더: 기록대구분/기록소구분 태그 + 메타데이터. renderedBodyHtml 아님 -->
+    <div class="detail-modal-header">
+      <div class="modal-tags">
+        <div class="tags-left">
+          <span class="modal-tag">개인서사</span>
+          <span class="modal-tag">트위터(X)</span>
+        </div>
+        <button class="modal-close-x" aria-label="닫기">&times;</button>
+      </div>
+      <div class="detail-modal-hint">출처: 국립생태원 직원의 트위터(X) 스레드</div>
+    </div>
+
+    <div class="detail-body-wrap">
+<!-- ========== renderedBodyHtml START (8.트위터 / DMZ 일원 야생생물 모니터링) ========== -->
+<div style="font-size:0.92rem; line-height:1.65; color:#1a2b4a; word-break:keep-all;">
+
+  <!-- 프로필 헤더 영역 -->
+  <div style="border-bottom:1px solid #E8E8E8; padding-bottom:0.85rem; margin-bottom:0.75rem;">
+    <div style="display:flex; justify-content:flex-end; margin-bottom:0.55rem;">
+      <button style="display:inline-flex; align-items:center; gap:0.3rem; background:#1a2b4a; color:#fff; border:none; border-radius:999px; padding:0.3rem 0.9rem; font-size:0.78rem; font-weight:600; cursor:pointer;">
+        팔로우 하기
+      </button>
+    </div>
+    <div style="display:flex; align-items:center; gap:0.75rem;">
+      <!-- 프로필 아바타 -->
+      <div style="width:46px; height:46px; border-radius:50%; background:#E8E8E8; flex:none; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#b0b0b0"/><ellipse cx="12" cy="18" rx="7" ry="4" fill="#b0b0b0"/></svg>
+      </div>
+      <div>
+        <div style="font-weight:600; font-size:0.88rem;">@nie_ecological_fieldsurvey_team_official</div>
+        <div style="font-size:0.78rem; color:#6E6E6E; margin-top:0.2rem;">국립생태원 생태조사팀 | DMZ 일원 야생생물 모니터링 | 무인카메라 약 90여 대 운영 중</div>
+        <div style="font-size:0.78rem; color:#6E6E6E; margin-top:0.3rem;">
+          <span><b>1,024</b> 팔로잉</span>
+          <span style="margin-left:0.8rem;"><b>1,283</b> 팔로워</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 탭 바 -->
+  <div style="display:flex; gap:1.2rem; border-bottom:1px solid #E8E8E8; margin-bottom:0.8rem;">
+    <div style="font-size:0.82rem; font-weight:600; padding-bottom:0.4rem; border-bottom:2px solid #1a2b4a; color:#1a2b4a;">게시물</div>
+    <div style="font-size:0.82rem; color:#6E6E6E; padding-bottom:0.4rem;">답글</div>
+    <div style="font-size:0.82rem; color:#6E6E6E; padding-bottom:0.4rem;">하이라이트</div>
+    <div style="font-size:0.82rem; color:#6E6E6E; padding-bottom:0.4rem;">미디어</div>
+  </div>
+
+  <!-- 트윗 스레드 -->
+
+  <!-- 트윗 1 -->
+  <div style="display:flex; gap:0.6rem; padding-bottom:0.85rem; border-bottom:1px solid #F0F0F0; margin-bottom:0.75rem;">
+    <div style="display:flex; flex-direction:column; align-items:center; flex:none;">
+      <div style="width:32px; height:32px; border-radius:50%; background:#E8E8E8; flex:none; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#b0b0b0"/><ellipse cx="12" cy="18" rx="7" ry="4" fill="#b0b0b0"/></svg>
+      </div>
+      <div style="width:1px; background:#E8E8E8; flex:1; margin-top:4px;"></div>
+    </div>
+    <div style="flex:1; min-width:0;">
+      <div style="font-weight:600; font-size:0.82rem; margin-bottom:0.25rem;">@nie_ecological_fieldsurvey_team_official</div>
+      <p>오늘 DMZ 무인 카메라 영상을 확인하다가 소리를 질렀다. (1/5)</p>
+      <div style="display:flex; gap:1.1rem; margin-top:0.45rem; color:#6E6E6E; font-size:0.78rem;">
+        <span>&#x1F4AC; 5</span>
+        <span>&#x1F504; 368</span>
+        <span>&#x2665; 896</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 트윗 2 -->
+  <div style="display:flex; gap:0.6rem; padding-bottom:0.85rem; border-bottom:1px solid #F0F0F0; margin-bottom:0.75rem;">
+    <div style="display:flex; flex-direction:column; align-items:center; flex:none;">
+      <div style="width:32px; height:32px; border-radius:50%; background:#E8E8E8; flex:none; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#b0b0b0"/><ellipse cx="12" cy="18" rx="7" ry="4" fill="#b0b0b0"/></svg>
+      </div>
+      <div style="width:1px; background:#E8E8E8; flex:1; margin-top:4px;"></div>
+    </div>
+    <div style="flex:1; min-width:0;">
+      <div style="font-weight:600; font-size:0.82rem; margin-bottom:0.25rem;">@nie_ecological_fieldsurvey_team_official</div>
+      <p>우리 팀은 2014년부터 DMZ 일원에 무인 카메라 90여 대를 설치해서 야생동물을 모니터링하고 있다. 카메라를 설치하거나 회수할 때는 군 동행이 필수다. (2/5)</p>
+      <div style="display:flex; gap:1.1rem; margin-top:0.45rem; color:#6E6E6E; font-size:0.78rem;">
+        <span>&#x1F4AC; 2</span>
+        <span>&#x1F504; 253</span>
+        <span>&#x2665; 735</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 트윗 3 -->
+  <div style="display:flex; gap:0.6rem; padding-bottom:0.85rem; border-bottom:1px solid #F0F0F0; margin-bottom:0.75rem;">
+    <div style="display:flex; flex-direction:column; align-items:center; flex:none;">
+      <div style="width:32px; height:32px; border-radius:50%; background:#E8E8E8; flex:none; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#b0b0b0"/><ellipse cx="12" cy="18" rx="7" ry="4" fill="#b0b0b0"/></svg>
+      </div>
+      <div style="width:1px; background:#E8E8E8; flex:1; margin-top:4px;"></div>
+    </div>
+    <div style="flex:1; min-width:0;">
+      <div style="font-weight:600; font-size:0.82rem; margin-bottom:0.25rem;">@nie_ecological_fieldsurvey_team_official</div>
+      <p>회수한 SD카드 영상을 돌려보는 게 내 일이다. 대부분 고라니, 멧돼지, 고라니, 또 멧돼지. 그래도 매번 기대하면서 재생 버튼을 누른다. (3/5)</p>
+      <div style="display:flex; gap:1.1rem; margin-top:0.45rem; color:#6E6E6E; font-size:0.78rem;">
+        <span>&#x1F4AC; 3</span>
+        <span>&#x1F504; 103</span>
+        <span>&#x2665; 285</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 트윗 4 -->
+  <div style="display:flex; gap:0.6rem; padding-bottom:0.85rem; border-bottom:1px solid #F0F0F0; margin-bottom:0.75rem;">
+    <div style="display:flex; flex-direction:column; align-items:center; flex:none;">
+      <div style="width:32px; height:32px; border-radius:50%; background:#E8E8E8; flex:none; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#b0b0b0"/><ellipse cx="12" cy="18" rx="7" ry="4" fill="#b0b0b0"/></svg>
+      </div>
+      <div style="width:1px; background:#E8E8E8; flex:1; margin-top:4px;"></div>
+    </div>
+    <div style="flex:1; min-width:0;">
+      <div style="font-weight:600; font-size:0.82rem; margin-bottom:0.25rem;">@nie_ecological_fieldsurvey_team_official</div>
+      <p>10월 영상. 반달가슴곰. 어린 개체 한 마리가 카메라를 똑바로 쳐다보고 있었다. 손이 떨렸다. 남한의 야생에서 반달가슴곰이 찍힌 건 이게 처음이다. 지리산 방사 곰이 아니다. DMZ에 살던 야생 개체로 추정된다. (4/5)</p>
+      <div style="display:flex; gap:1.1rem; margin-top:0.45rem; color:#6E6E6E; font-size:0.78rem;">
+        <span>&#x1F4AC; 5</span>
+        <span>&#x1F504; 393</span>
+        <span>&#x2665; 945</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 트윗 5 -->
+  <div style="display:flex; gap:0.6rem; padding-bottom:0.85rem; border-bottom:1px solid #F0F0F0; margin-bottom:0.75rem;">
+    <div style="display:flex; flex-direction:column; align-items:center; flex:none;">
+      <div style="width:32px; height:32px; border-radius:50%; background:#E8E8E8; flex:none; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#b0b0b0"/><ellipse cx="12" cy="18" rx="7" ry="4" fill="#b0b0b0"/></svg>
+      </div>
+      <div style="width:1px; background:#E8E8E8; flex:1; margin-top:4px;"></div>
+    </div>
+    <div style="flex:1; min-width:0;">
+      <div style="font-weight:600; font-size:0.82rem; margin-bottom:0.25rem;">@nie_ecological_fieldsurvey_team_official</div>
+      <p>이후에도 같은 구역에서 추가 촬영이 이어졌다. 같은 카메라에 천연기념물 제216호인 <span class="dmz-blank" data-blank="A" style="display:inline-block; padding:0 0.5em; background:#3FE0DC; border-radius:4px; color:#1a2b4a; font-weight:600;">[A]</span>도 여러 번 찍혔다. (5/5)</p>
+      <div style="display:flex; gap:1.1rem; margin-top:0.45rem; color:#6E6E6E; font-size:0.78rem;">
+        <span>&#x1F4AC; 3</span>
+        <span>&#x1F504; 83</span>
+        <span>&#x2665; 379</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 트윗 해시태그 -->
+  <div style="display:flex; gap:0.6rem;">
+    <div style="display:flex; flex-direction:column; align-items:center; flex:none;">
+      <div style="width:32px; height:32px; border-radius:50%; background:#E8E8E8; flex:none; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#b0b0b0"/><ellipse cx="12" cy="18" rx="7" ry="4" fill="#b0b0b0"/></svg>
+      </div>
+    </div>
+    <div style="flex:1; min-width:0;">
+      <div style="font-weight:600; font-size:0.82rem; margin-bottom:0.25rem;">@nie_ecological_fieldsurvey_team_official</div>
+      <p style="color:#1a2b4a;">#DMZ #반달가슴곰 #멸종위기 #무인카메라 #국립생태원 #보람</p>
+      <div style="display:flex; gap:1.1rem; margin-top:0.45rem; color:#6E6E6E; font-size:0.78rem;">
+        <span>&#x1F4AC; 1</span>
+        <span>&#x1F504; 203</span>
+        <span>&#x2665; 639</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- ========== renderedBodyHtml END ========== -->
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,5 +1,15 @@
 # devlog
 
+### 2026-05-25 — dmz-layout 92자료 renderedBodyHtml 변환 파이프라인 완성 (세션381)
+- **산출물**: 마스터 CSV `Assets/incoming/통일부/본문 데이터 HTML/사진링크용_본문채움.csv` 본문 컬럼 92/92 채움
+- **파이프라인**: 세션380 완성 14종 HTML 템플릿 → clean MD 5개(base64 이미지 제거) → 백도 5개(sonnet) 병렬 변환 → `out_*.html`(ITEM 구분자) → `merge.py` CSV fill
+- **매칭 키**: 주제+타이틀 조합. 스토리명은 백도 MD와 CSV 표기가 달라 제외
+- **사진 치환**: `{{PHOTO_URL}}` → `res.nolgong.com/dmz-archive/` CDN prefix 일괄 치환
+- **신규 스크립트 4개**: `_dev/dmz-layout/scripts/{preview,merge,preview_csv,verify}.py`
+- **백도 공유 스펙**: `_dev/dmz-layout/본문템플릿/_변환SPEC.md` (14종 변환 규칙 명세)
+- **검증**: `verify.py` 전건 통과 — 행 순서·중복 0·빈본문 0·사진수 정합·placeholder 잔재 0
+- **문서**: SPEC/PLAN/TASKS/요청노트/devlog 일괄 갱신
+
 ### 2026-05-25 — m2a egogram CM6 재정정 (손소장 새 파일) (세션378)
 - **요청**: 손소장 "CM6번만 구글드라이브 올라온 것으로. 가장 최근에 문장 정정했는데 그것만 반영 안 됨". 새 파일 `Assets/incoming/에고그램/data/컨설턴트로 수정 - 손소장.xlsx`(379KB, 11:11) — CM6 시트 + **CM6 공통적용 시트 신규 추가**(기존 Archives엔 없던 시트)
 - **CM6 클로징 조합(cm6)**: convert_cm.py `parse_combo_single`로 CM6 시트 변환 → cm_insurance.yaml의 cm6만 교체. 20조합 중 **9조합 정정**(CP_NP·CP_A·CP_FC·CP_AC·NP_CP·NP_A·NP_FC·NP_AC·A_CP). 정정 결: "고객님은 마음속으로~" → "이 상황에서 컨설턴트는~" 화자/표현 정정
