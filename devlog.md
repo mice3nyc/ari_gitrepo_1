@@ -1,5 +1,14 @@
 # devlog
 
+### 2026-05-25 — m2a egogram CM6 재정정 (손소장 새 파일) (세션378)
+- **요청**: 손소장 "CM6번만 구글드라이브 올라온 것으로. 가장 최근에 문장 정정했는데 그것만 반영 안 됨". 새 파일 `Assets/incoming/에고그램/data/컨설턴트로 수정 - 손소장.xlsx`(379KB, 11:11) — CM6 시트 + **CM6 공통적용 시트 신규 추가**(기존 Archives엔 없던 시트)
+- **CM6 클로징 조합(cm6)**: convert_cm.py `parse_combo_single`로 CM6 시트 변환 → cm_insurance.yaml의 cm6만 교체. 20조합 중 **9조합 정정**(CP_NP·CP_A·CP_FC·CP_AC·NP_CP·NP_A·NP_FC·NP_AC·A_CP). 정정 결: "고객님은 마음속으로~" → "이 상황에서 컨설턴트는~" 화자/표현 정정
+- **CM6 공통적용(cm6_common)**: cm6_common_consultant.yaml 재생성. 피터공 안내 "좌열=소제목, 우열=본문" → 소제목을 시트 좌열로 교체(거절의 고객 심리→고객의 실제 심리 해석 / 화법 스크립트 코칭→재질문 및 재결정 유도 / 클로징 화법→최종 진행 멘트), 본문 2섹션 갱신(3섹션째는 동일)
+- **검증**: 새 파일로 cm6 외 전 시트 파싱 → cm2·cm3·cm4_1·cm4_4·cm5·cm7 현재 yaml과 **완전 동일**(헤더 행 구조 차이는 라벨 앵커 스캔 덕에 본문 무영향). cm_insurance.yaml git diff = cm6 9조합만. 손소장 "CM6만" 요청과 일치
+- **별도 발견 (반영 보류)**: ① cm4_2 2셀(17-20.A·14-16.A) "코칭이 필요없는 구간"→"조율이 필요없는 구간" — 전체 코칭→조율 방향 일치, 반영 추천하나 손소장 "CM6만"이라 피터공 확인 대기 ② Archives/컨설턴트.xlsx는 CM6 옛 버전 — 다음 전체 재변환 대비 새 파일로 교체 여부 확인 대기
+- **변경 파일**: cm_insurance.yaml(cm6) / cm6_common_consultant.yaml / SPEC.md / TASKS.md
+- **빌드/배포**: vite OK (87 모듈). gh-pages published → 피터공 라이브 확인 대기
+
 ### 2026-05-25 — m2a egogram 인쇄 컬러 바 + §4 소제목·cm7 섹션 삭제 (세션378)
 - **인쇄 컬러 바 출력**: 피터공 "그래프 출력하면 컬러 바가 안 나온다". 브라우저 기본값이 배경색 미인쇄 → `@media print`에 `-webkit-print-color-adjust: exact; print-color-adjust: exact`를 `.report-container`(전체 캐스케이드) + `.report-chart-bar`·`.report-chart-success`·`.report-score-cell-label` 명시
 - **§4(성향의 조율) 소제목 삭제**: cm5 블록 h4 두 개("이 성향의 말투와 태도"·"개선이 되는 코칭 내용") 제거. manner 본문 → `.report-cm5-improvement`(margin-top 16) improvement 본문 순서로 흐름. 16px 간격만으로 구분
