@@ -1,0 +1,52 @@
+flowchart TD
+    classDef black fill:#000,color:#fff,stroke:#000,font-weight:bold
+    classDef white fill:#fff,color:#000,stroke:#000,stroke-width:2px
+    classDef grey fill:#f5f5f5,color:#000,stroke:#000,stroke-width:1px
+    classDef dday fill:#000,color:#fff,stroke:#000,stroke-width:3px
+
+    TITLE["Re: NJP 5년 계획<br/>2027 — 2032"]:::black
+
+    TITLE --> Y1
+    TITLE --> FUND
+
+    subgraph Y1 ["Year 1 · 출발 (2027~28)"]
+        direction TB
+        Y1A["축 5 — Tine 질문 지도<br/>채워야 할 빈 자리 확정"]:::white
+        Y1B["파트너 컨소시엄 구축<br/>MfK · 슈테델 · 모바일 아카데미<br/>· 백남준아트센터"]:::grey
+        Y1A --> Y1B
+    end
+
+    subgraph Y2 ["Year 2 · 개념 (2028~29)"]
+        direction TB
+        Y2A["축 1 — Good Morning Mr. Paik<br/>공식 선언"]:::white
+        Y2B["파일럿 이벤트 1~2개<br/>1~2주 랩 단위 (Tine 제안)"]:::grey
+        Y2A --> Y2B
+    end
+
+    subgraph Y3 ["Year 3 · 윤리 (2029~30)"]
+        direction TB
+        Y3A["축 2 — Relevance<br/>해석의 여지"]:::white
+        Y3B["축 3 — NJP Mindset<br/>출판물 · 심포지엄"]:::white
+        Y3A ---|병행| Y3B
+    end
+
+    subgraph Y4 ["Year 4 · 실현 (2030~31)"]
+        Y4A["본 프로그램 기획<br/>전시 · 퍼포먼스 · 커뮤니티<br/>통합 구조"]:::white
+    end
+
+    subgraph Y5 ["Year 5 · 런칭 (2031~32)"]
+        DDAY["2032-07-20<br/>NJP 탄생 100주년<br/>피터공 60세"]:::dday
+    end
+
+    Y1 --> Y2 --> Y3 --> Y4 --> Y5
+
+    FUND["축 4 — 펀딩 전략<br/>5년 분산 구조<br/>Eigenmittel + 외교부 (Tine 주도)"]:::white
+
+    FUND -.->|"Year 1~5 전 기간"| Y1
+    FUND -.-> Y2
+    FUND -.-> Y3
+    FUND -.-> Y4
+    FUND -.-> Y5
+
+    ANCHOR["Ken Hakuta<br/>100주년 전시는 한국에서"]:::grey
+    ANCHOR -.-> DDAY

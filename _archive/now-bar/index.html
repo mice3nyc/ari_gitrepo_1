@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Now Bar</title>
+<style>
+  :root {
+    --ink:#161616; --sub:#7d7d7d; --faint:#a8a8a8; --line:#dcdcdc; --bg:#ffffff;
+    --accent:#1100ff;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; }
+  body {
+    font-family:-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Helvetica Neue", sans-serif;
+    background:var(--bg); color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    user-select:none;
+    display:flex; align-items:flex-start; justify-content:center;
+    padding:16px;
+  }
+  .bar {
+    width:520px;
+    border:1px dashed var(--line);
+    padding:16px 20px 18px;
+  }
+  /* 머리글 — 작게 */
+  .head {
+    display:flex; align-items:baseline; justify-content:space-between;
+    font-size:13px; color:var(--sub);
+    padding-bottom:12px; margin-bottom:14px;
+    border-bottom:1px dashed var(--line);
+  }
+  .head .clock { font-variant-numeric:tabular-nums; letter-spacing:.5px; }
+
+  /* 지금 하는 일 — 주인공 */
+  .now-label { font-size:11px; color:var(--faint); letter-spacing:2px; margin-bottom:7px; }
+  .now-headline { font-size:21px; font-weight:600; line-height:1.4; color:var(--ink); }
+  .now-detail { font-size:13.5px; color:var(--sub); line-height:1.55; margin-top:6px; }
+  .now-elapsed { font-size:12.5px; color:var(--accent); margin-top:10px; font-variant-numeric:tabular-nums; }
+
+  /* 그 전까지 한 일 — 옅게 */
+  .past { margin-top:16px; padding-top:14px; border-top:1px dashed var(--line); }
+  .past-label { font-size:11px; color:var(--faint); letter-spacing:2px; margin-bottom:8px; }
+  .past-row {
+    display:grid; grid-template-columns:48px 1fr; gap:12px;
+    font-size:13px; color:var(--sub); line-height:1.95;
+  }
+  .past-row .pt { font-variant-numeric:tabular-nums; color:var(--faint); }
+  .past-row .ph { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .empty { font-size:14px; color:var(--faint); }
+</style>
+</head>
+<body>
+  <div class="bar">
+    <div class="head">
+      <span class="clock" id="clock">--:--:--</span>
+      <span id="date">&mdash;</span>
+    </div>
+    <div class="now">
+      <div class="now-label">지금 하는 일</div>
+      <div class="now-headline" id="headline">활동 대기 중…</div>
+      <div class="now-detail" id="detail"></div>
+      <div class="now-elapsed" id="elapsed"></div>
+    </div>
+    <div class="past" id="past" style="display:none;">
+      <div class="past-label">그 전까지</div>
+      <div id="pastRows"></div>
+    </div>
+  </div>
+
+<script>
+  const WD = ['일','월','화','수','목','금','토'];
+  let statuses = [];  // 시간순 (오래된 → 최신)
+
+  const pad = n => String(n).padStart(2,'0');
+  const todayStr = () => { const d=new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; };
+  const esc = s => String(s||'').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+  async function loadStatus(){
+    try {
+      const res = await fetch(`now_status.jsonl?t=${Date.now()}`, {cache:'no-store'});
+      if(!res.ok){ statuses=[]; return; }
+      const text = await res.text();
+      statuses = text.trim().split('\n').filter(Boolean)
+        .map(l => { try { return JSON.parse(l); } catch(e){ return null; } })
+        .filter(Boolean)
+        .sort((a,b) => new Date(a.ts) - new Date(b.ts));
+    } catch(e){ statuses = []; }
+  }
+
+  function elapsed(ts){
+    const min = Math.floor((Date.now() - new Date(ts)) / 60000);
+    if(min < 1) return '방금 시작';
+    if(min < 60) return `${min}분째`;
+    const h = Math.floor(min/60), m = min%60;
+    return m > 0 ? `${h}시간 ${m}분째` : `${h}시간째`;
+  }
+
+  function renderClock(){
+    const d = new Date();
+    document.getElementById('clock').textContent =
+      `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    document.getElementById('date').textContent =
+      `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${WD[d.getDay()]}`;
+    // 경과도 매초 갱신
+    if(statuses.length){
+      document.getElementById('elapsed').textContent = '· ' + elapsed(statuses[statuses.length-1].ts);
+    }
+  }
+
+  function renderStatus(){
+    const hEl = document.getElementById('headline');
+    const dEl = document.getElementById('detail');
+    const eEl = document.getElementById('elapsed');
+    const past = document.getElementById('past');
+    const pastRows = document.getElementById('pastRows');
+
+    if(statuses.length === 0){
+      hEl.textContent = '활동 대기 중…';
+      hEl.classList.add('empty');
+      dEl.textContent = ''; eEl.textContent = '';
+      past.style.display = 'none';
+      return;
+    }
+    hEl.classList.remove('empty');
+    const cur = statuses[statuses.length-1];
+    hEl.textContent = cur.headline || '—';
+    dEl.textContent = cur.detail || '';
+    eEl.textContent = '· ' + elapsed(cur.ts);
+
+    const prev = statuses.slice(0, -1).reverse();  // 최신순
+    if(prev.length === 0){ past.style.display = 'none'; return; }
+    past.style.display = 'block';
+    pastRows.innerHTML = prev.map(s => {
+      const t = (s.ts||'').substring(11,16);  // HH:MM
+      return `<div class="past-row"><span class="pt">${t}</span><span class="ph">${esc(s.headline)}</span></div>`;
+    }).join('');
+  }
+
+  async function refresh(){ await loadStatus(); renderClock(); renderStatus(); }
+
+  refresh();
+  setInterval(renderClock, 1000);   // 시각·경과 매초
+  setInterval(refresh, 8000);       // status 8초마다
+</script>
+</body>
+</html>

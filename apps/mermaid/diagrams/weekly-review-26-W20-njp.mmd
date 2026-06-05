@@ -1,0 +1,63 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#ffffff', 'primaryBorderColor': '#000000', 'primaryTextColor': '#000000', 'lineColor': '#000000', 'secondaryColor': '#f5f5f5', 'tertiaryColor': '#ffffff', 'fontFamily': 'sans-serif'}}}%%
+
+graph TD
+
+    %% ===== META-STATEMENT (top) =====
+    META["<b>W20 한 호흡</b><br/>인간이 생각하고 싶어한다 → 회로 안에서만 실체<br/><i>5/11 확산 · 5/14 수렴 · 5/15 환기 · 5/16 정밀화</i>"]
+    style META fill:#000000,stroke:#000000,color:#ffffff,stroke-width:3px
+
+    %% ===== 5/11 월 — 확산 =====
+    D11["<b>5/11 월 — 확산</b><br/>Reverse Psychology · 슈퍼맨<br/><br/>PX 탐구 3편 (추론 욕구 · 명령 거부 · 정보 부재)<br/>Choice vs Agency<br/>Perspective Taking 재발견 (찰라)<br/>판단기준 설계 — 홍대 10주차<br/><br/><i>인간이 생각하고 싶어한다</i>"]
+    style D11 fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% 5/11 옆가지 — 매체 비판 =====
+    D11_BJP["<b>5/11 옆가지 — 매체수명역전</b><br/>백남준 + 벤야민<br/>흔들리는 아우라<br/><br/><i>매체가 먼저 죽는 시대</i>"]
+    style D11_BJP fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+
+    %% 5/11 옆가지 — 아리공 시각 표현 =====
+    D11_VIS["<b>5/11 옆가지 — 아리공 시각</b><br/>별자리 + 실타래<br/><br/><i>존재는 보이는 것을 조건으로 하지 않는다</i>"]
+    style D11_VIS fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+
+    %% ===== 5/14 목 — 수렴 =====
+    D14["<b>5/14 목 — 수렴</b><br/>선언된 가치 vs 작동 조건<br/><b>ZK5061</b><br/><br/>전제의 문제 — Just in time → 하이터치<br/>지유의 크리스천 관심<br/>성대 디자이너중심 10주차 아하<br/><br/><i>회로 안에서만 실체가 된다</i>"]
+    style D14 fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== 5/15 금 — 환기 =====
+    D15["<b>5/15 금 — 외부 환기</b><br/>클리핑 5편<br/><br/>성경 1946 '동성애자' 오역<br/>AI와 학생 글쓰기<br/>학부 프로그램 보상<br/>여성 침묵 / 프랑스혁명 통신<br/><br/><i>끼어든 것에 대한 의심</i>"]
+    style D15 fill:#f5f5f5,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+
+    %% ===== 5/16 토 — 정밀화 =====
+    D16["<b>5/16 토 — 재확산·정밀화</b><br/>압축 · 요약 · 함축 분리 (ZK3161 정정 + ZK5087/5088)<br/>Game is Space of Possibilities<br/>인간성에 대한 과대망상<br/>에고그램 다섯 유형 (손소장 확인)<br/>NYT — Games Company가 된 신문<br/><br/><i>개념을 다시 정밀화</i>"]
+    style D16 fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== LABELS =====
+    LBL_DIVERGE["확산 Diverge"]
+    style LBL_DIVERGE fill:#000000,stroke:#000000,color:#ffffff
+    LBL_CONVERGE["수렴 Converge"]
+    style LBL_CONVERGE fill:#000000,stroke:#000000,color:#ffffff
+    LBL_REFINE["정밀화 Refine"]
+    style LBL_REFINE fill:#000000,stroke:#000000,color:#ffffff
+
+    %% ===== CONNECTIONS =====
+
+    %% Meta → 메인 흐름 진입
+    META ---|"한 주를 관통하는 흐름"| D11
+
+    %% Labels
+    LBL_DIVERGE -.- D11
+    LBL_CONVERGE -.- D14
+    LBL_REFINE -.- D16
+
+    %% 시간축 (메인 흐름)
+    D11 ==>|"PX 본질 응축"| D14
+    D14 ==>|"한 호흡 비우기"| D15
+    D15 ==>|"재진입"| D16
+
+    %% 5/11 옆가지 연결
+    D11 -.- D11_BJP
+    D11 -.- D11_VIS
+
+    %% 횡단 연결 (점선)
+    D11_BJP -.-|"매체수명 · 기술 비판"| D16
+    D16 -.-|"응축의 결 · 같은 자리"| D14
+    D11 -.-|"공간으로서의 PX"| D16

@@ -1,0 +1,43 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#ffffff', 'primaryTextColor': '#000000', 'primaryBorderColor': '#000000', 'lineColor': '#000000', 'secondaryColor': '#f5f5f5', 'tertiaryColor': '#ffffff', 'noteBkgColor': '#f9f9f9', 'noteBorderColor': '#333333'}}}%%
+
+flowchart TD
+    classDef hub fill:#000,color:#fff,stroke:#000,stroke-width:2px
+    classDef visited fill:#fff,color:#000,stroke:#000,stroke-width:2px
+    classDef heavy fill:#fff,color:#000,stroke:#000,stroke-width:3px
+    classDef seed fill:#f5f5f5,color:#000,stroke:#000,stroke-width:1px,stroke-dasharray:5 5
+
+    HUB["🛫 허브 노트<br/>26.04 독일 출장 정리"]:::hub
+
+    %% 1차 이동: 허브 → 주요 노트
+    HUB -->|"② 2차 휴룹"| MFK_REVIEW["MfK 미팅 — 아리공 회고<br/>(직백아리)<br/>② 코멘트 5건"]:::heavy
+    HUB -->|"10건 코멘트"| MFK_SEEDS["MfK 미팅 — 씨앗과<br/>탐구 가능성<br/>코멘트 10건"]:::heavy
+    HUB -->|"② 휴룹"| ETHIC["◇ 백남준의 Ethic<br/>— 다섯 원칙<br/>② 1건"]:::visited
+    HUB -->|"휴룹했어"| DIALOG_LOG["피터공·애련공<br/>대화 로그<br/>코멘트 2건"]:::visited
+    HUB -->|"2차 휴룹"| PROJECT_HUB["백남준 답사 이후<br/>— 프로젝트 허브<br/>1건"]:::visited
+
+    %% 2차 이동: MfK 회고에서 파생
+    MFK_REVIEW -->|"celebrated events"| ETHIC
+    MFK_REVIEW -->|"작품=아이디어?"| RECREATION["Recreation vs Copy<br/>— 원본성 질문"]:::seed
+    MFK_REVIEW -->|"비동기 아이디어<br/>② 했나요?"| GMPK["◇ Good Morning Mr. Paik<br/>— 비동기 시대의 인사<br/>(본체 초안)"]:::visited
+    MFK_REVIEW -->|"펀딩 전략"| FUNDING["백남준 프로젝트<br/>펀딩 전략 v2"]:::seed
+    MFK_REVIEW -->|"슈테델 연계"| STADEL["슈테델+MfK<br/>큰 그림"]:::seed
+
+    %% 2차 이동: 씨앗에서 파생
+    MFK_SEEDS -->|"Manifestia+비동기"| MANIFESTIA["_Manifestia허브"]:::visited
+    MFK_SEEDS -->|"윤리 = 태도의 일관성"| ETHIC
+    MFK_SEEDS -->|"NJP 5년 계획!"| TIMELINE["2032 백남준 100주년<br/>+ 피터공 60세<br/>5년 로드맵"]:::seed
+    MFK_SEEDS -->|"Pre Bell Man<br/>브랜딩 조사"| PREBELLMAN["Pre Bell Man<br/>프랑크푸르트 상징 가치"]:::seed
+    MFK_SEEDS -->|"매체 유한성"| MEDIUM["매체의 유한성과<br/>인간의 영속성"]:::visited
+
+    %% 피터공의 핵심 사유 흐름 (점선)
+    ETHIC -.-|"왜 윤리인가?"| MFK_SEEDS
+    GMPK -.-|"Manifestia 합류?"| MANIFESTIA
+    TIMELINE -.-|"2027~2032"| PROJECT_HUB
+
+    %% 범례
+    subgraph legend [" "]
+        direction LR
+        L1["━ 실선: 피터공 직접 이동"]:::visited
+        L2["┄ 점선: 사유 연결"]:::seed
+        L3["굵은 테두리: 코멘트 다수"]:::heavy
+    end

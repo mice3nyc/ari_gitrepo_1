@@ -1,0 +1,70 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#ffffff', 'primaryBorderColor': '#000000', 'primaryTextColor': '#000000', 'lineColor': '#000000', 'secondaryColor': '#f5f5f5', 'tertiaryColor': '#ffffff', 'fontFamily': 'sans-serif'}}}%%
+
+graph TD
+
+    %% ===== META-STATEMENT (top) =====
+    META["<b>NJP Mindset</b><br/>경험 디자인 = 결과 통제 없이 구조 설계<br/><i>Experience design = designing structure<br/>without controlling outcomes</i>"]
+    style META fill:#000000,stroke:#000000,color:#ffffff,stroke-width:3px
+
+    %% ===== FOUNDATION =====
+    P1["<b>1. 기술 앞에 사람이 먼저다</b><br/>People before technology<br/><i>TV Buddha, TV Garden</i>"]
+    style P1 fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== METHOD =====
+    P2["<b>2. 하나의 매체에 갇히지 않는다</b><br/>Not confined to one medium<br/><i>TV Cello, Paik-Abe Synthesizer</i>"]
+    style P2 fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== PARTICIPATION CLUSTER (3, 4, 5) =====
+    P3["<b>3. 관객을 초대한다, 지시하지 않는다</b><br/>Invite, don't instruct<br/><i>Participation Pieces</i>"]
+    style P3 fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    P4["<b>4. Telling이 아니라 Playing 초대</b><br/>Not storytelling but storyplaying<br/><i>TV Buddha = viewer sees themselves</i>"]
+    style P4 fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    P5["<b>5. 결과를 예측할 수 없는 구조를 만든다</b><br/>Build unpredictable structures<br/><i>Fluxus event scores</i>"]
+    style P5 fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== 6th CANDIDATE (dashed) =====
+    P6["<b>+1 환대 Hospitality</b><br/>환대로 시작하고<br/>대화 상대를 끌어올린다<br/><i>후보 — Fluxus 검증 대기</i>"]
+    style P6 fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+
+    %% ===== LABELS =====
+    LBL_FOUND["토대 Foundation"]
+    style LBL_FOUND fill:#000000,stroke:#000000,color:#ffffff
+    LBL_METHOD["방법 Method"]
+    style LBL_METHOD fill:#000000,stroke:#000000,color:#ffffff
+    LBL_CLUSTER["참여+비예측 클러스터"]
+    style LBL_CLUSTER fill:#000000,stroke:#000000,color:#ffffff
+
+    %% ===== CONNECTIONS =====
+
+    %% Meta -> Foundation & Method
+    META ---|"모든 원칙을 관통하는 정의"| P1
+    META --- P2
+
+    %% Foundation label
+    LBL_FOUND -.- P1
+
+    %% Method label
+    LBL_METHOD -.- P2
+
+    %% Foundation feeds into everything
+    P1 -->|"출발점"| P3
+    P1 -->|"출발점"| P4
+
+    %% Method enables the cluster
+    P2 -->|"매체 자유가 초대를 가능케 한다"| P3
+
+    %% Cluster label
+    LBL_CLUSTER -.- P3
+    LBL_CLUSTER -.- P4
+    LBL_CLUSTER -.- P5
+
+    %% Cluster internal relationships
+    P3 <-->|"초대의 두 얼굴"| P4
+    P3 <-->|"뭘 할 수 있는지는 선명히<br/>결과를 예측할 수 없게"| P5
+    P4 <-->|"Playing = 비예측 구조"| P5
+
+    %% 6th candidate connections (dashed)
+    P6 -.-|"사람 중심"| P1
+    P6 -.-|"초대의 전제"| P3

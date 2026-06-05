@@ -1,0 +1,12 @@
+{"ts":"2026-06-02T08:57:00","short":"동물발표 시나리오","headline":"이다연샘 동물발표 시나리오 — 피드백 정리","detail":"한 문장 메카닉이 장르와 안 맞는 문제, 설득말하기 전환 제안","tag":"AI리터러시"}
+{"ts":"2026-06-02T09:05:00","short":"사과문 시나리오","headline":"이다연샘 사과문 시나리오 — 회의 메인 포인트 정리","detail":"토닥토닥 허용과 대필 금지의 공존, 점수 구조","tag":"AI리터러시"}
+{"ts":"2026-06-02T10:24:00","short":"Now Bar 만들기","headline":"Now Bar 모니터링 도구 만들기 시작","detail":"내 창에서 지금 뭐 하는지 보는 작은 현재형 창","tag":"now-bar"}
+{"ts":"2026-06-02T11:06:00","short":"Now Bar 메뉴바판","headline":"Now Bar 메뉴바 버전 만들기","detail":"SwiftBar로 화면 맨 위에 한 줄, 트리거 시각과 누적 시간","tag":"now-bar"}
+{"ts":"2026-06-02T11:41:00","short":"세션 정리","headline":"세션414 정리 — 메멘토","detail":"동물발표·사과문·now-bar 진행 저장하고 context 정리","tag":"세션"}
+{"ts":"2026-06-02T14:22:00","short":"캐릭터 시나리오 작업","headline":"AI리터러시 v12-elem 우리반 캐릭터 시나리오 작업 (덱스와)","detail":"동물발표·사과문 거쳐 캐릭터 차례. 끝나면 받아서 요청노트에 누적","tag":"AI리터러시"}
+{"ts":"2026-06-02T14:32:10","short":"now.sh 헬퍼 검증","headline":"now-bar 적기 헬퍼 스크립트 동작 확인","detail":"허가 마찰 줄이는 단기 보강","tag":"now-bar"}
+{"ts":"2026-06-02T14:33:11","short":"now-bar 적기 자동화","headline":"now-bar status 적기 허가 마찰 제거 — 헬퍼 스크립트 + 권한 추가","detail":"다음부터 묻지 않고 now.sh 한 줄로 기록","tag":"now-bar"}
+{"ts":"2026-06-02T14:41:07","short":"오늘 할 일 바 구상","headline":"today-todo 메뉴바 앱 아이디어 논의 — now-bar의 계획축 짝","detail":"굿모닝 세팅·active 카운팅·굿바이 이월. DN 관계가 핵심 질문","tag":"now-bar"}
+{"ts":"2026-06-02T14:52:53","short":"todoy-bar 개발 착수","headline":"todoy-bar 만들기 — 오늘 할 일 체크리스트 메뉴바 앱 (now-bar 짝)","detail":"SPEC부터. now-bar 패턴 재활용, SwiftBar 플러그인+jsonl","tag":"todoy-bar"}
+{"ts":"2026-06-02T15:12:09","short":"todoy-bar v1 완성","headline":"todoy-bar v1 완성 — 헤드리스 검증 통과, 오늘 할 일 세팅","detail":"SwiftBar 표시 확인 + 굿모닝/굿바이 연동 남음","tag":"todoy-bar"}
+{"ts":"2026-06-02T15:17:12","short":"todoy-bar 점검","headline":"todoy-bar와 now-bar 구분 — 메뉴바 아이콘/진행률 개선","detail":"✓ N/M 체크리스트 정체성. now-bar는 흐름, todoy는 오늘 할 일","tag":"todoy-bar"}

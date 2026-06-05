@@ -1,0 +1,56 @@
+flowchart TB
+    classDef black fill:#000,color:#fff,stroke:#000,font-weight:bold
+    classDef white fill:#fff,color:#000,stroke:#000,stroke-width:2px
+    classDef grey fill:#f5f5f5,color:#000,stroke:#000,stroke-width:1px
+    classDef upcoming fill:#fff,color:#000,stroke:#000,stroke-width:2px,stroke-dasharray: 5 5
+    classDef expected fill:#fff,color:#999,stroke:#999,stroke-dasharray: 3 3
+
+    TITLE["독일 출장 미팅 → 산출물 흐름도<br/>4/9 도착 — 4/17 귀국"]:::black
+
+    TITLE --> M1
+    TITLE --> M2
+    TITLE --> M3
+    TITLE --> M4
+
+    subgraph M1S [" "]
+        M1["4/10 MfK Frankfurt<br/>Dr. Corinna Engel + Tine Nowak<br/>녹취 3,278줄 → 노트 13건"]:::white
+        O1A["Recreation 프레임 발견"]:::grey
+        O1B["Good Morning Mr. Paik 첫 외부 발화"]:::grey
+        O1C["Corinna — classical artist 검증"]:::grey
+        O1D["Pre Bell Man 카탈로그 수령"]:::grey
+        O1E["외교부 펀딩 리드 — Tine 경유"]:::grey
+        O1F["medium-neutral ethic 개념"]:::grey
+        M1 --> O1A & O1B & O1C & O1D & O1E & O1F
+    end
+
+    subgraph M2S [" "]
+        M2["4/11 Stadel Frankfurt<br/>Anne Vieth<br/>녹취 3건 처리"]:::white
+        O2A["10년 관계 웜업 — Chantal 2016"]:::grey
+        O2B["Digitorial 큐레이션 분석"]:::grey
+        O2C["NJP 교차점 — 매체 유한성 + 비동기성"]:::grey
+        O2D["Stadel+MfK 컨소시엄 아이디어"]:::grey
+        M2 --> O2A & O2B & O2C & O2D
+    end
+
+    subgraph M3S [" "]
+        M3["4/13 Kunstakademie Dusseldorf<br/>Matthias Neuenhofer 14:00"]:::upcoming
+        O3A["Fluxus 원점 확보"]:::expected
+        O3B["환대 6번째 원칙 검증"]:::expected
+        O3C["NJP 아카이브 — Miriam Muller"]:::expected
+        O3D["Beuys/Fluxus 맥락"]:::expected
+        M3 --> O3A & O3B & O3C & O3D
+    end
+
+    subgraph M4S [" "]
+        M4["4/15-16 AdK Berlin<br/>Archive + Johanna Keller"]:::upcoming
+        O4A["NJP 문서 열람 — 5축 자료"]:::expected
+        O4B["자료 주문 5건 — D-1"]:::expected
+        O4C["Johanna — 기관 경로 브리핑"]:::expected
+        O4D["펀딩/제도 지형 파악"]:::expected
+        M4 --> O4A & O4B & O4C & O4D
+    end
+
+    O1D -.->|"컨소시엄"| O2D
+    O1F -.->|"Ethic → Fluxus 접지"| M3
+    O1E -.->|"펀딩 → 기관 경로"| M4
+    O2D -.->|"관계 → 자료 주문"| O4B

@@ -1,0 +1,90 @@
+---
+title: 26-W20 주간 회고 — 사유의 확산·수렴·연결 (5/11~5/16)
+---
+flowchart TB
+    classDef day fill:#fff,stroke:#000,stroke-width:2px,color:#000,font-weight:bold
+    classDef diverge fill:#fff,stroke:#888,stroke-dasharray:4 2,color:#333
+    classDef converge fill:#fff,stroke:#000,stroke-width:1.5px,color:#000
+    classDef external fill:#f4f4f4,stroke:#aaa,color:#555
+    classDef refine fill:#fff,stroke:#333,color:#222
+
+    %% ============ 5/11 월 — 확산 ============
+    M["`**5/11 월 — 확산**
+    Reverse Psychology · 슈퍼맨
+    *인간이 생각하고 싶어한다*`"]:::day
+
+    M --> M_PX["`**PX 탐구 3편**
+    추론 욕구
+    명령 거부
+    정보 부재`"]:::diverge
+
+    M_PX --> M_CvA["`**Choice vs Agency**
+    클공과 다르게 풀린 방향`"]:::diverge
+
+    M_CvA --> M_PT["`**Perspective Taking 재발견** (찰라)
+    → 판단기준 설계 · 홍대 10주차`"]:::diverge
+
+    M_PT --> M_BJP["`**백남준 + 벤야민**
+    매체수명역전 · 흔들리는 아우라`"]:::diverge
+
+    M_BJP --> M_VIS["`**아리공 시각 표현**
+    별자리 + 실타래
+    *존재는 보이는 것을 조건으로 하지 않는다*`"]:::diverge
+
+    %% ============ 5/14 목 — 수렴 ============
+    M_VIS ==> T
+
+    T["`**5/14 목 — 수렴**
+    선언된 가치 vs 작동 조건
+    **ZK5061**
+    *회로 안에서만 실체가 된다*`"]:::day
+
+    T --> T_PJM["`**전제의 문제**
+    Just in time → 하이터치`"]:::converge
+
+    T_PJM --> T_JIYU["`**지유의 크리스천 관심**
+    같은 결 — 작동 조건의 자리`"]:::converge
+
+    T_JIYU --> T_SKKU["`**성대 디자이너중심 10주차**
+    아하 모먼트`"]:::converge
+
+    %% ============ 5/15 금 — 외부 환기 ============
+    T_SKKU ==> F
+
+    F["`**5/15 금 — 외부 환기**
+    클리핑 5편
+    *끼어든 것에 대한 의심*`"]:::day
+
+    F --> F_LIST["`성경 1946 '동성애자' 오역
+    AI와 학생 글쓰기
+    학부 프로그램의 보상
+    여성을 침묵시키는 남자들
+    프랑스혁명 통신 장치`"]:::external
+
+    %% ============ 5/16 토 — 재확산·정밀화 ============
+    F_LIST ==> S
+
+    S["`**5/16 토 — 재확산·정밀화**
+    개념을 다시 정밀화`"]:::day
+
+    S --> S_CMP["`**압축 · 요약 · 함축 분리**
+    ZK3161 정정 + ZK5087/5088
+    *피터공 코멘트로 시작*`"]:::refine
+
+    S_CMP --> S_GAME["`**Game is Space of Possibilities**
+    게임의 본질 구체화`"]:::refine
+
+    S_GAME --> S_HUM["`**인간성에 대한 과대망상**`"]:::refine
+
+    S_HUM --> S_NYT["`**NYT — Games Company가 된 신문**`"]:::refine
+
+    S_NYT --> S_EGO["`**에고그램 다섯 유형**
+    손소장 확인`"]:::refine
+
+    %% ============ 횡단 연결 ============
+    M_PX -.PX 본질 응축.-> T
+    M_PT -.판단기준 → 회로.-> T
+    S_CMP -.응축의 결.-> T
+    M_BJP -.매체수명.-> S_NYT
+    M_BJP -.기술·매체 비판.-> S_HUM
+    S_GAME -.공간으로서의 PX.-> T

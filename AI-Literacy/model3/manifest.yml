@@ -1,0 +1,62 @@
+# manifest.yml — 에이전트의 자기 위치 지도
+# 에이전트가 "지금 어디에 있고, 어떤 파일을 읽어야 하는지" 아는 구조
+
+project: AI 리터러시 모델3
+codename: "Signal Futures"
+phase: setup  # setup → probes → runs → final
+
+documents:
+  # === CANON (기준 — 루프 안에서 성장함) ===
+  - path: canon/constitution.md
+    role: constitution
+    status: draft  # draft → stable
+    description: "저자 헌법. 동력/필터/판정/선언. 콘텐츠가 거부할 것이 절반."
+
+  - path: canon/premise.md
+    role: premise
+    status: draft
+    description: "콘텐츠 구조. 직업군 캐릭터 + 분기 딜레마 + 역량 축."
+
+  - path: canon/arc.md
+    role: arc
+    status: empty  # 아직 미작성
+    description: "사용자 경험 흐름. 인트로→딜레마→선택→결과→성찰."
+
+  - path: canon/completion.md
+    role: completion
+    status: empty
+    description: "통과 기준. probe/라운드/최종 각각의 평가 기준."
+
+  # === PROCESS (진행 절차) ===
+  - path: process/loop_guide.md
+    role: process
+    status: active
+    description: "루프 진행 가이드. 에이전트가 매 단계마다 따르는 체크리스트."
+
+  # === STATE (현재 상태) ===
+  - path: state/scratch_pad.md
+    role: state
+    status: active
+    description: "현재 상태. 매 라운드 후 갱신."
+
+  # === RUNS (라운드 기록) ===
+  - path: runs/run_0_seed.md
+    role: seed
+    status: done
+    description: "Run 0. 단발 위임 에이전트의 초기 결과. 루프 이전 씨앗."
+
+  # === PROBES (본문 전 검증) ===
+  # probe 파일들은 루프 중에 생성됨
+
+  # === REFERENCE (볼트 참조 노트) ===
+  references:
+    - path: /Users/p.air15/Neo-Obsi-Sync/current_notes/26.0324 AI 리터러시 모델3 — 콘텐츠 기획 루프 결과.md
+      description: "Run 0 결과 노트 (볼트)"
+    - path: /Users/p.air15/Neo-Obsi-Sync/current_projects/경기도교육청 하이러닝/AI 리터러시 콘텐츠 기획 — 전담 노트.md
+      description: "피터공 코멘트가 있는 전담 기획 노트"
+    - path: /Users/p.air15/Neo-Obsi-Sync/current_notes/하이러닝 - AI 레퍼런스 - 신기헌 - Design's Future.md
+      description: "Design Futures 구조 분석"
+    - path: /Users/p.air15/Neo-Obsi-Sync/current_notes/26.0324 승준님 루프실험 — 피터공×아리공 논의.md
+      description: "루프 모델 원본 논의"
+    - path: /Users/p.air15/Neo-Obsi-Sync/_dev/AI-Literacy/model2/canon/constitution.md
+      description: "모델2 constitution (참고용, 수집 메카닉 부분은 버린다)"

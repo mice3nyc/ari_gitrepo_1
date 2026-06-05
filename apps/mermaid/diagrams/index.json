@@ -1,9 +1,86 @@
 [
   {
+    "id": "weekly-review-26-W20-njp",
+    "name": "26-W20 주간 회고 (NJP 스타일) — 사유의 확산·수렴·연결",
+    "file": "weekly-review-26-W20-njp.mmd",
+    "favorite": true,
+    "updatedAt": 1779495000
+  },
+  {
+    "id": "weekly-review-26-W20",
+    "name": "26-W20 주간 회고 — 사유의 확산·수렴·연결 (5/11~5/16)",
+    "file": "weekly-review-26-W20.mmd",
+    "favorite": true,
+    "updatedAt": 1779494400
+  },
+  {
     "id": "mfk-hueloop-expansion",
     "name": "MfK 휴룹확산 — 요청 전체 맵",
     "file": "mfk-hueloop-expansion.mmd",
     "favorite": true,
     "updatedAt": 1744531200
+  },
+  {
+    "id": "germany-trip-meetings",
+    "name": "독일 출장 미팅 → 산출물 흐름도",
+    "file": "germany-trip-meetings.mmd",
+    "favorite": true,
+    "updatedAt": 1744540000
+  },
+  {
+    "id": "njp-5year-plan",
+    "name": "Re: NJP 5년 계획 — 5축 × 5년 타임라인",
+    "file": "njp-5year-plan.mmd",
+    "favorite": true,
+    "updatedAt": 1744540001
+  },
+  {
+    "id": "njp-mindset-principles",
+    "name": "NJP Mindset — 5(+1) 원칙 관계도",
+    "file": "njp-mindset-principles.mmd",
+    "favorite": true,
+    "updatedAt": 1744531202
+  },
+  {
+    "id": "hueloop-flight-path",
+    "name": "비행기 휴룹 — 피터공의 이동 경로",
+    "file": "hueloop-flight-path.mmd",
+    "favorite": true,
+    "updatedAt": 1744991640
+  },
+  {
+    "id": "scenario-eorinwangja-tree-full",
+    "name": "어린왕자 1 — 전체 트리 (1→3→9 풀)",
+    "file": "scenario-eorinwangja-tree-full.mmd",
+    "favorite": true,
+    "updatedAt": 1777334956
+  },
+  {
+    "id": "scenario-eorinwangja-tree-A",
+    "name": "어린왕자 2A — A 갈래 27 leaf 풀 (B·C 9까지 실선)",
+    "file": "scenario-eorinwangja-tree-A.mmd",
+    "favorite": true,
+    "updatedAt": 1777334956
+  },
+  {
+    "id": "scenario-eorinwangja-tree-B",
+    "name": "어린왕자 2B — B 갈래 27 leaf 풀 (B2R3 ⭐모범, A·C 9까지)",
+    "file": "scenario-eorinwangja-tree-B.mmd",
+    "favorite": true,
+    "updatedAt": 1777334956
+  },
+  {
+    "id": "scenario-eorinwangja-tree-C",
+    "name": "어린왕자 2C — C 갈래 27 leaf 풀 (C3R1 ⚠️최약, A·B 9까지)",
+    "file": "scenario-eorinwangja-tree-C.mmd",
+    "favorite": true,
+    "updatedAt": 1777334956
+  },
+  {
+    "id": "scenario-eorinwangja-review-impact",
+    "name": "어린왕자 3 — 검토 효과 (1→3→9 컨텍스트 + B1 분기)",
+    "file": "scenario-eorinwangja-review-impact.mmd",
+    "favorite": true,
+    "updatedAt": 1777334956
   }
 ]

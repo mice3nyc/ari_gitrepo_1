@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Context Hop Bar</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #FAFAF8;
+    --text: #1A1A1A;
+    --sub: #8C8C8C;
+    --line: #E0E0E0;
+    --font: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    font-family: var(--font);
+    color: var(--text);
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .bar {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    min-height: 100px;
+    padding: 0;
+  }
+
+  /* === 상단 헤더 === */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--line);
+    flex-shrink: 0;
+    height: 36px;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--text);
+  }
+
+  .header-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text);
+    opacity: 0.4;
+  }
+
+  .header-dot.active {
+    opacity: 1;
+    background: #4A6741;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--sub);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .header-right .label {
+    color: var(--sub);
+    opacity: 0.6;
+  }
+
+  .header-right .value {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* === 프로젝트 블록 영역 === */
+  .projects {
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    padding: 8px 16px;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .project-block {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    cursor: pointer;
+    transition: opacity 0.6s ease, background 0.3s ease;
+    border-radius: 3px;
+    position: relative;
+    min-width: 0;
+  }
+
+  .project-block:hover {
+    background: rgba(0,0,0,0.03);
+  }
+
+  .project-block .bar-fill {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    transition: background 0.3s ease, opacity 0.3s ease;
+  }
+
+  .project-block .name {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--text) !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .project-block .deep-marker {
+    font-size: 7px;
+    line-height: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .project-block .deep-marker.visible {
+    opacity: 1;
+  }
+
+  /* 확장된 파일 목록 */
+  .project-block .file-list {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 6px 8px;
+    z-index: 100;
+    min-width: 200px;
+    max-width: 320px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .project-block .file-list.open {
+    display: block;
+  }
+
+  .project-block .file-list .file-item {
+    font-size: 9px;
+    color: var(--sub);
+    padding: 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .project-block .file-list .file-item:first-child {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .project-block .file-list .file-header {
+    font-size: 8px;
+    color: var(--sub);
+    opacity: 0.6;
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 3px;
+  }
+
+  /* === 타임라인 === */
+  .timeline {
+    border-top: 1px solid var(--line);
+    padding: 4px 14px 6px;
+    flex-shrink: 0;
+    height: 32px;
+    position: relative;
+  }
+
+  .timeline canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* === 상태 표시 === */
+  .status-idle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-size: 11px;
+    color: var(--sub);
+    letter-spacing: 0.03em;
+  }
+</style>
+</head>
+<body>
+
+<div class="bar" id="app">
+  <div class="header">
+    <div class="header-left">
+      <div class="header-dot" id="statusDot"></div>
+      <span>Context Hop Bar</span>
+    </div>
+    <div class="header-right">
+      <span><span class="label">hop</span> <span class="value" id="hopCount">0</span></span>
+      <span><span class="label">dur</span> <span class="value" id="hopDuration">0.0M</span></span>
+      <span class="value" id="clock">--:--</span>
+    </div>
+  </div>
+
+  <div class="projects" id="projectsContainer"></div>
+
+  <div class="timeline">
+    <canvas id="timelineCanvas"></canvas>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // === 프로젝트 정의 ===
+  const PROJECT_DEFS = [
+    { id: 'AI리터러시', name: 'AI Lit',   color: '#2979FF' },
+    { id: 'PX책',      name: 'PX책',    color: '#FF6D00' },
+    { id: 'words',     name: 'words',   color: '#AA00FF' },
+    { id: 'DMZ',       name: 'DMZ',     color: '#00C853' },
+    { id: '슈테델',    name: '슈테델',   color: '#E040FB' },
+    { id: 'SKKU',      name: 'SKKU',    color: '#FF3D00' },
+    { id: '커넥천',    name: '커넥천',   color: '#00E5FF' },
+    { id: '글쓰기',    name: '글쓰기',   color: '#FFD600' },
+    { id: '탐구',      name: '탐구',    color: '#FF6E40' },
+    { id: '휴룹',      name: '휴룹',    color: '#00C853' },
+    { id: '수업준비',  name: '수업',    color: '#FF9100' },
+    { id: '메시지',    name: '메시지',   color: '#FF1744' },
+    { id: 'Inkblot',   name: 'Inkblot', color: '#7C4DFF' },
+    { id: 'GWS',       name: 'GWS',    color: '#00BFA5' },
+    { id: '자막처리',  name: '자막',    color: '#FFAB00' },
+    { id: 'ContextHop',name: 'CHop',   color: '#546E7A' },
+    { id: '코멘트',    name: '코멘트',  color: '#F50057' },
+    { id: 'Admin',     name: 'Admin',   color: '#78909C' },
+    { id: '기타',      name: '기타',    color: '#000000' },
+  ];
+
+  // === 상태 ===
+  let hops = [];        // 전체 (actor 무관) — 현재 세션만
+  let userHops = [];    // 피터공만 — 현재 세션만
+  let allDayHops = [];      // 전체 — 하루 전체 (trim 전)
+  let allDayUserHops = [];  // 피터공만 — 하루 전체 (trim 전)
+  let lastFetchSize = 0;
+  let openFileList = null;
+
+  // === 초기 렌더 ===
+  const container = document.getElementById('projectsContainer');
+  PROJECT_DEFS.forEach(def => {
+    const block = document.createElement('div');
+    block.className = 'project-block';
+    block.dataset.id = def.id;
+    block.innerHTML = `
+      <div class="hop-stats" style="display:flex;align-items:baseline;justify-content:center;gap:4px;min-height:16px;">
+        <span class="hop-count" style="font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;color:#1A1A1A;"></span>
+        <span class="hop-sep" style="font-size:10px;color:var(--line);font-weight:300;display:none;">|</span>
+        <span class="hop-dur" style="font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;color:#1A1A1A;"></span>
+      </div>
+      <div class="bar-fill"></div>
+      <div class="name"><span class="color-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${def.color};margin-right:3px;vertical-align:middle;"></span>${def.name}</div>
+      <div class="deep-marker">●</div>
+      <div class="file-list">
+        <div class="file-header">최근 파일</div>
+      </div>
+    `;
+    block.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleFileList(def.id);
+    });
+    container.appendChild(block);
+  });
+
+  document.addEventListener('click', () => {
+    if (openFileList) {
+      closeAllFileLists();
+    }
+  });
+
+  // === 시계 ===
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('clock').textContent = `${h}:${m}`;
+  }
+  updateClock();
+  setInterval(updateClock, 10000);
+
+  // === 데이터 fetch ===
+  async function fetchLog() {
+    try {
+      const resp = await fetch('context_hop_log.jsonl?t=' + Date.now());
+      if (!resp.ok) return;
+      const text = await resp.text();
+      if (!text.trim()) {
+        hops = [];
+        return;
+      }
+      const lines = text.trim().split('\n');
+      const now = new Date();
+      const today = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+      hops = [];
+      userHops = [];
+      for (const line of lines) {
+        try {
+          const entry = JSON.parse(line);
+          // 오늘 데이터만
+          if (entry.ts && entry.ts.startsWith(today)) {
+            hops.push(entry);
+            // actor 필드가 없거나 "피터공"이면 피터공 hop
+            if (!entry.actor || entry.actor === '피터공') {
+              userHops.push(entry);
+            }
+          }
+        } catch (e) { /* skip malformed */ }
+      }
+
+      // === 하루 전체 hops 보존 (duration 누적 계산용) ===
+      allDayHops = hops.slice();
+      allDayUserHops = userHops.slice();
+
+      // === 세션 경계 감지 ===
+      // 30분 이상 공백이 있으면 새 세션으로 간주, 이전 엔트리 제거
+      // (전날 세션이 자정을 넘긴 경우 대응 — 2026-04-03 발견)
+      hops = trimToCurrentSession(hops);
+      if (hops.length > 0) {
+        const sessionStartTs = hops[0].ts;
+        userHops = userHops.filter(h => h.ts >= sessionStartTs);
+      } else {
+        userHops = [];
+      }
+
+    } catch (e) {
+      // 파일 없거나 네트워크 에러 — 조용히 무시
+    }
+  }
+
+  // 30분 이상 갭 뒤의 마지막 세션만 남기기
+  function trimToCurrentSession(arr) {
+    if (arr.length < 2) return arr;
+    let sessionStart = 0;
+    for (let i = 1; i < arr.length; i++) {
+      const prev = new Date(arr[i - 1].ts);
+      const curr = new Date(arr[i].ts);
+      if ((curr - prev) > 30 * 60000) {
+        sessionStart = i;
+      }
+    }
+    return sessionStart > 0 ? arr.slice(sessionStart) : arr;
+  }
+
+  // === hop 카운트 (피터공만, 하루 전체) ===
+  function countHops() {
+    if (allDayUserHops.length < 2) return 0;
+    let count = 0;
+    for (let i = 1; i < allDayUserHops.length; i++) {
+      if (allDayUserHops[i].project !== allDayUserHops[i-1].project) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  // === hop duration (하루 전체 누적, 30분+ 갭은 비활동으로 제외) ===
+  function getHopDuration() {
+    if (allDayUserHops.length === 0) return '0.0M';
+    const GAP_THRESHOLD = 30 * 60000; // 30분
+    let totalMs = 0;
+    let segStart = new Date(allDayUserHops[0].ts);
+
+    for (let i = 1; i < allDayUserHops.length; i++) {
+      const prev = new Date(allDayUserHops[i - 1].ts);
+      const curr = new Date(allDayUserHops[i].ts);
+      if ((curr - prev) > GAP_THRESHOLD) {
+        // 이전 세그먼트 종료, 새 세그먼트 시작
+        totalMs += (prev - segStart);
+        segStart = curr;
+      }
+    }
+
+    // 마지막 세그먼트: 5분 이내면 now까지, 아니면 마지막 hop까지
+    const last = new Date(allDayUserHops[allDayUserHops.length - 1].ts);
+    const now = new Date();
+    const end = (now - last < 300000) ? now : last;
+    totalMs += (end - segStart);
+
+    return (totalMs / 60000).toFixed(1) + 'M';
+  }
+
+  // === 프로젝트별 hop-in 카운트 (피터공만, 하루 전체) ===
+  function countHopIns() {
+    const counts = {};
+    if (allDayUserHops.length === 0) return counts;
+    let prevProject = null;
+    for (const hop of allDayUserHops) {
+      if (hop.project !== prevProject) {
+        counts[hop.project] = (counts[hop.project] || 0) + 1;
+        prevProject = hop.project;
+      }
+    }
+    return counts;
+  }
+
+  // === 프로젝트별 체류 시간 (피터공만, 하루 전체, 30분+ 갭 제외) ===
+  function getProjectDurations() {
+    const durations = {};
+    const src = allDayUserHops;
+    const GAP_THRESHOLD = 30 * 60000;
+    if (src.length < 2) {
+      if (src.length === 1) {
+        const proj = src[0].project;
+        const start = new Date(src[0].ts);
+        const now = new Date();
+        durations[proj] = (now - start) / 60000;
+      }
+      return durations;
+    }
+
+    let runStart = 0;
+    for (let i = 1; i <= src.length; i++) {
+      const isEnd = (i === src.length);
+      const projChange = !isEnd && src[i].project !== src[runStart].project;
+      // 30분+ 갭이면 현재 구간을 갭 직전까지만 기록하고 새 구간 시작
+      const isGap = !isEnd && ((new Date(src[i].ts) - new Date(src[i-1].ts)) > GAP_THRESHOLD);
+
+      if (isEnd || projChange || isGap) {
+        const proj = src[runStart].project;
+        const startTime = new Date(src[runStart].ts);
+        const endTime = isEnd
+          ? new Date()  // 마지막 구간은 현재까지
+          : isGap
+            ? new Date(src[i-1].ts)  // 갭이면 갭 직전까지
+            : new Date(src[i].ts);   // 프로젝트 전환이면 다음 hop까지
+        const diffMin = (endTime - startTime) / 60000;
+        durations[proj] = (durations[proj] || 0) + diffMin;
+        runStart = i;
+      }
+    }
+    return durations;
+  }
+
+  // === 현재 프로젝트 (피터공 기준) ===
+  function getCurrentProject() {
+    if (userHops.length === 0) return null;
+    return userHops[userHops.length - 1].project;
+  }
+
+  function getFocusTime() {
+    if (userHops.length === 0) return null;
+    const current = userHops[userHops.length - 1].project;
+    let startIdx = userHops.length - 1;
+    for (let i = userHops.length - 2; i >= 0; i--) {
+      if (userHops[i].project !== current) break;
+      startIdx = i;
+    }
+    const startTime = new Date(userHops[startIdx].ts);
+    const now = new Date();
+    const diffMs = now - startTime;
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 1) return '<1m';
+    if (diffMin < 60) return `${diffMin}m`;
+    const h = Math.floor(diffMin / 60);
+    const m = diffMin % 60;
+    return `${h}h${m > 0 ? m + 'm' : ''}`;
+  }
+
+  // === 프로젝트별 마지막 접근 시간 (피터공만) ===
+  function getProjectLastAccess() {
+    const map = {};
+    for (const hop of userHops) {
+      map[hop.project] = new Date(hop.ts);
+    }
+    return map;
+  }
+
+  // === 프로젝트별 최근 파일 (피터공만) ===
+  function getProjectFiles(projectId) {
+    const files = [];
+    const seen = new Set();
+    for (let i = userHops.length - 1; i >= 0; i--) {
+      if (userHops[i].project === projectId && userHops[i].path) {
+        const shortPath = shortenPath(userHops[i].path);
+        if (shortPath && !seen.has(shortPath)) {
+          seen.add(shortPath);
+          files.push(shortPath);
+          if (files.length >= 5) break;
+        }
+      }
+    }
+    return files;
+  }
+
+  function shortenPath(path) {
+    if (!path) return null;
+    // 파일명만 추출, 확장자 제거
+    const parts = path.split('/');
+    let name = parts[parts.length - 1];
+    if (name.endsWith('.md')) name = name.slice(0, -3);
+    return name || null;
+  }
+
+  // === deep work 감지 (10분 이상, 피터공만) ===
+  function getDeepWorkProjects() {
+    const deep = new Set();
+    if (userHops.length < 2) return deep;
+
+    let runStart = 0;
+    for (let i = 1; i <= userHops.length; i++) {
+      if (i === userHops.length || userHops[i].project !== userHops[runStart].project) {
+        const startTime = new Date(userHops[runStart].ts);
+        const endTime = i < userHops.length ? new Date(userHops[i].ts) : new Date();
+        const diffMin = (endTime - startTime) / 60000;
+        if (diffMin >= 10) {
+          deep.add(userHops[runStart].project);
+        }
+        runStart = i;
+      }
+    }
+    return deep;
+  }
+
+  // === opacity 계산 ===
+  function getOpacity(lastAccess) {
+    if (!lastAccess) return 0.08;
+    const now = new Date();
+    const diffMin = (now - lastAccess) / 60000;
+    // 즉시 100% → 70%로 확 떨어짐 (0초 이상이면)
+    if (diffMin <= 0) return 1.0;
+    if (diffMin <= 0.1) return 0.70;  // 6초 이내: 확 떨어진 직후
+    // 70% → 30%: 2.5분에 걸쳐 fade (기존 대비 2배 빠름)
+    if (diffMin <= 2.5) return 0.30 + (0.70 - 0.30) * (1 - diffMin / 2.5);
+    // 30% → 15%: 5분에 걸쳐 fade
+    if (diffMin <= 7.5) return 0.15 + (0.30 - 0.15) * (1 - (diffMin - 2.5) / 5);
+    // 15% → 8%: 이후 서서히
+    if (diffMin <= 30) return 0.08 + (0.15 - 0.08) * (1 - (diffMin - 7.5) / 22.5);
+    return 0.08;
+  }
+
+  // === 파일 목록 토글 ===
+  function toggleFileList(projectId) {
+    const blocks = container.querySelectorAll('.project-block');
+    blocks.forEach(b => {
+      const fl = b.querySelector('.file-list');
+      if (b.dataset.id === projectId && !fl.classList.contains('open')) {
+        const files = getProjectFiles(projectId);
+        // 기존 아이템 제거
+        fl.querySelectorAll('.file-item').forEach(el => el.remove());
+        if (files.length === 0) {
+          const item = document.createElement('div');
+          item.className = 'file-item';
+          item.textContent = '(기록 없음)';
+          fl.appendChild(item);
+        } else {
+          files.forEach(f => {
+            const item = document.createElement('div');
+            item.className = 'file-item';
+            item.textContent = f;
+            fl.appendChild(item);
+          });
+        }
+        fl.classList.add('open');
+        openFileList = projectId;
+      } else {
+        fl.classList.remove('open');
+      }
+    });
+    if (openFileList === projectId) {
+      // 이미 열려있던 것을 다시 클릭 → 닫기
+      const target = container.querySelector(`[data-id="${projectId}"] .file-list`);
+      if (!target.classList.contains('open')) {
+        openFileList = null;
+      }
+    }
+  }
+
+  function closeAllFileLists() {
+    container.querySelectorAll('.file-list').forEach(fl => fl.classList.remove('open'));
+    openFileList = null;
+  }
+
+  // === 타임라인 렌더 ===
+  function renderTimeline() {
+    const canvas = document.getElementById('timelineCanvas');
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    const W = rect.width;
+    const H = rect.height;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // 시간 범위: 오늘 06:00 ~ 24:00 (18시간)
+    const today = new Date();
+    const dayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 6, 0, 0);
+    const dayEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 24, 0, 0);
+    const totalMs = dayEnd - dayStart;
+
+    // 시간 눈금
+    ctx.fillStyle = var_sub();
+    ctx.font = '8px Inter, system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    const hours = [6, 9, 12, 15, 18, 21, 24];
+    const labelY = H - 2;
+    const dotY = H - 14;
+
+    for (const h of hours) {
+      const x = ((h - 6) / 18) * (W - 28) + 14;
+      const label = h === 24 ? '00' : String(h).padStart(2, '0') + ':00';
+      ctx.fillStyle = '#1A1A1A';
+      ctx.font = 'bold 12px Inter, system-ui, sans-serif';
+      ctx.fillText(label, x, labelY);
+      // 얇은 눈금선
+      ctx.strokeStyle = 'rgba(224,224,224,0.3)';
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, dotY - 2);
+      ctx.stroke();
+    }
+
+    // hop 도트 — 피터공만 굵게, 아리공은 얇게
+    const projectColors = {};
+    PROJECT_DEFS.forEach(d => { projectColors[d.id] = d.color; });
+
+    // 아리공 hop — 얇은 선으로 배경에
+    for (const hop of hops) {
+      if (hop.actor && hop.actor !== '피터공') {
+        const hopTime = new Date(hop.ts);
+        if (hopTime < dayStart || hopTime > dayEnd) continue;
+        const x = ((hopTime - dayStart) / totalMs) * (W - 28) + 14;
+        ctx.fillStyle = projectColors[hop.project] || '#9E9E9E';
+        ctx.globalAlpha = 0.15;
+        ctx.fillRect(x - 0.5, 4, 1, dotY - 4);
+        ctx.globalAlpha = 1.0;
+      }
+    }
+
+    // 피터공 hop — 굵은 바로 전면에
+    for (const hop of userHops) {
+      const hopTime = new Date(hop.ts);
+      if (hopTime < dayStart || hopTime > dayEnd) continue;
+      const x = ((hopTime - dayStart) / totalMs) * (W - 28) + 14;
+      ctx.fillStyle = projectColors[hop.project] || '#2E7D32';
+      ctx.globalAlpha = 0.8;
+      const barW = 3;
+      const barH = dotY - 4;
+      ctx.fillRect(x - barW / 2, 4, barW, barH);
+      ctx.globalAlpha = 1.0;
+    }
+
+    // 현재 시각 마커
+    const nowX = ((today - dayStart) / totalMs) * (W - 28) + 14;
+    if (nowX > 14 && nowX < W - 14) {
+      ctx.strokeStyle = 'rgba(26,26,26,0.15)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([2, 2]);
+      ctx.beginPath();
+      ctx.moveTo(nowX, 0);
+      ctx.lineTo(nowX, dotY - 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  function var_sub() { return '#8C8C8C'; }
+
+  // === 메인 업데이트 ===
+  function update() {
+    const currentProject = getCurrentProject();
+    const lastAccess = getProjectLastAccess();
+    const deepWork = getDeepWorkProjects();
+    const hopCountVal = countHops();
+    const hopIns = countHopIns();
+    const projDurations = getProjectDurations();
+
+    // 헤더 — hop 카운트 + duration (피터공만)
+    const hopDurationVal = getHopDuration();
+    document.getElementById('hopCount').textContent = hopCountVal;
+    document.getElementById('hopDuration').textContent = hopDurationVal;
+
+    // status dot
+    const dot = document.getElementById('statusDot');
+    if (currentProject) {
+      dot.classList.add('active');
+      const def = PROJECT_DEFS.find(d => d.id === currentProject);
+      dot.style.background = '#2E7D32';
+    } else {
+      dot.classList.remove('active');
+      dot.style.background = '';
+    }
+
+    // 프로젝트 블록
+    const blocks = container.querySelectorAll('.project-block');
+    blocks.forEach(block => {
+      const id = block.dataset.id;
+      const def = PROJECT_DEFS.find(d => d.id === id);
+      if (!def) return;
+
+      const isCurrent = id === currentProject;
+      const la = lastAccess[id];
+      const opacity = isCurrent ? 1.0 : getOpacity(la);
+      const isDeep = deepWork.has(id);
+
+      // 블록 전체 opacity는 건드리지 않음 — 텍스트 항상 검정 유지
+      block.style.opacity = '1';
+
+      const projColor = def.color || '#9E9E9E';
+      const barFill = block.querySelector('.bar-fill');
+      if (isCurrent) {
+        barFill.style.background = projColor;
+        barFill.style.opacity = '1';
+        barFill.style.height = '8px';
+      } else if (la) {
+        barFill.style.background = projColor;
+        barFill.style.opacity = String(Math.max(opacity, 0.15));
+        barFill.style.height = '6px';
+      } else {
+        barFill.style.background = projColor;
+        barFill.style.opacity = '0.15';
+        barFill.style.height = '4px';
+      }
+
+      const nameEl = block.querySelector('.name');
+      nameEl.style.color = '#1A1A1A';
+      nameEl.style.fontWeight = isCurrent ? '700' : '500';
+
+      // hop-in 카운터 + duration
+      const hopNum = block.querySelector('.hop-count');
+      const hopDur = block.querySelector('.hop-dur');
+      const hopInCount = hopIns[id] || 0;
+      const durMin = projDurations[id] || 0;
+      const hopSep = block.querySelector('.hop-sep');
+      if (hopInCount > 0) {
+        hopNum.textContent = hopInCount;
+        hopNum.style.color = projColor;
+        hopDur.textContent = durMin.toFixed(1) + 'M';
+        hopSep.style.display = 'inline';
+      } else {
+        hopNum.textContent = '';
+        hopDur.textContent = '';
+        hopSep.style.display = 'none';
+      }
+
+      const marker = block.querySelector('.deep-marker');
+      marker.style.color = def.color;
+      if (isDeep) {
+        marker.classList.add('visible');
+      } else {
+        marker.classList.remove('visible');
+      }
+    });
+
+    // 타임라인
+    renderTimeline();
+  }
+
+  // === 폴링 루프 ===
+  async function poll() {
+    await fetchLog();
+    update();
+  }
+
+  poll();
+  setInterval(poll, 2000);
+
+  // 리사이즈 대응
+  window.addEventListener('resize', () => {
+    renderTimeline();
+  });
+
+})();
+</script>
+</body>
+</html>
