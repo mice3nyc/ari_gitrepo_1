@@ -39,6 +39,6 @@
 
 ## 4. 배포
 
-- [ ] GitHub Pages 배포
-- [ ] 라이브 동작 확인
-- [ ] 커밋 + 푸시
+- [x] GitHub Pages 배포 — https://mice3nyc.github.io/ari_gitrepo_1/apps/pixelman/
+- [x] 라이브 동작 확인 (HTTP 200 + 콘텐츠 확인)
+- [x] 커밋 + 푸시 (d15b6d2)

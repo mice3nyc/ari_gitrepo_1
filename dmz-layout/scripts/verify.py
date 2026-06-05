@@ -11,8 +11,9 @@
 import csv, re, os
 
 BASE = "/Users/p.air15/Neo-Obsi-Sync/Assets/incoming/통일부/본문 데이터 HTML"
+VERSION = os.environ.get("DMZ_VERSION", "260529")  # merge.py와 동기화 (영문=EN)
 ORIG = os.path.join(BASE, "사진링크용.csv")
-FILLED = os.path.join(BASE, "사진링크용_본문채움.csv")
+FILLED = os.path.join(BASE, f"사진링크용_본문채움_{VERSION}.csv")
 
 def norm(s):
     return re.sub(r"[\s/·・|,]", "", (s or "")).strip()

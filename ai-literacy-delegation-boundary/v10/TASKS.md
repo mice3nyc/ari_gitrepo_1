@@ -1,6 +1,6 @@
 ## TASKS — v1.0
 
-**현재 Phase**: Phase 1~4 통합 완료, Phase 5 대기
+**현재 Phase**: Phase 8 완료, 다음 — 5시나리오 플테 + QA
 **v0.9 마지막 커밋**: 928c740
 **v1.0 커밋**: a0915f8 (Phase 0 + Phase 1~4 통합)
 **빌드**: 832,048 bytes
@@ -175,6 +175,33 @@
 - [x] csv_to_texts.py — CSV → YAML (round-trip 검증 통과)
 
 **빌드**: 861,582 bytes (이전 847,291 → +14,291)
+
+---
+
+### Phase 8 — 시나리오 데이터 CSV 편집 워크플로우 ✅
+
+**scenarios.yaml 구조 분석** (세션340)
+- [x] scenarios.yaml 전체 구조 분석 (9,604행, 5 시나리오, 20개 섹션)
+- [x] tier2 포맷 차이 발견: delta 중첩(selfintro/groupwork/eorinwangja) vs 직접 del/know(career/studyplan)
+- [x] reportData = finals 중복 확인 → rebuild 시 자동 재생성
+- [x] 선택적 필드 목록화: earnedCards(100/135), item null(9건), basePoint(3시나리오), hiddenIssues(산발), domainLabel(career 누락), cuts/semesterClosing(시나리오별)
+
+**CSV 스키마 설계 + 스크립트**
+- [x] 3 CSV 분리: scenario_meta(5행×15컬럼) + scenario_choices(75행×32컬럼) + scenario_leaves(135행×45컬럼)
+- [x] scenarios_to_csv.py 작성 — YAML → 3 CSV
+- [x] csv_to_scenarios.py 작성 — 3 CSV → YAML (tier2 두 포맷 자동 판별)
+- [x] round-trip 검증 통과 (deep_compare, 원본과 데이터 동일)
+- [x] 빌드 검증: 861,610 bytes (YAML 포매팅 차이 +28, 데이터 동일)
+
+**통합 빌드 스크립트**
+- [x] update.py 작성 — csv_to_texts + csv_to_scenarios + build.py 한 줄 실행
+- [x] --verify, --skip-texts, --skip-scenarios, -i 옵션
+- [x] 동작 검증 (시나리오 verify 통과, 빌드 성공)
+
+**문서 갱신**
+- [x] SPEC §12 시나리오 CSV 워크플로우 + update.py 워크플로우 추가
+- [x] PLAN Phase 8 + 데이터 소스 목록 추가
+- [x] TASKS Phase 8 체크리스트 추가
 
 ---
 

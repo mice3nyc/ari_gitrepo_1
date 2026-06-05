@@ -111,7 +111,7 @@ yaml.dump(d, open('data/scenarios.yaml', 'w'), allow_unicode=True, default_flow_
 
 ## 8. 참조
 
-- [[26.0502 AI 리터러시 교육 기획서]] — 두 축 척추 명제
+- [[26.0502 AI 리터러시 교육 기획서 - old]] — 두 축 척추 명제
 - [[요청.26.0503.0941-외부LLM시나리오안내]] — 외부 분석 컨텍스트 (5/3 정정본)
 - [[26.0503 시나리오 리뷰 — 1 selfintro]] — selfintro 9 leaf 1차 점검 (백도 selfintro 작업의 출발 자료)
 - `SPEC.md` §6 — 코드 영향 진행 상태

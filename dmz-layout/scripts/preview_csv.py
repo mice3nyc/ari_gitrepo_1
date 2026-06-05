@@ -9,8 +9,10 @@
 import csv, os
 
 BASE = "/Users/p.air15/Neo-Obsi-Sync/Assets/incoming/통일부/본문 데이터 HTML"
-CSV_OUT = os.path.join(BASE, "사진링크용_본문채움.csv")
+VERSION = os.environ.get("DMZ_VERSION", "260529")  # merge.py와 동기화 (영문=EN)
+CSV_OUT = os.path.join(BASE, f"사진링크용_본문채움_{VERSION}.csv")
 CLEAN = os.path.join(BASE, "clean")
+PREVIEW_NAME = "preview_all.html" if VERSION == "260529" else f"preview_{VERSION}.html"
 
 HEAD = """<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -69,7 +71,7 @@ def main():
         parts.append(CARD.format(typ=typ.strip(), story=story, title=title, tags=tags, meta=meta, body=body))
         n += 1
     parts.append("</body></html>")
-    out = os.path.join(CLEAN, "preview_all.html")
+    out = os.path.join(CLEAN, PREVIEW_NAME)
     with open(out, "w", encoding="utf-8") as f:
         f.write("\n".join(parts))
     print(f"{n}건 → {out}")

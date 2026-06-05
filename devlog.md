@@ -1,5 +1,15 @@
 # devlog
 
+### 2026-05-31 — m2a egogram 고객사별 설문 캠페인 시스템 Phase 1 + UI 조정 (세션401)
+- **배경**: 단일 설문 → 고객사별 설문 캠페인 플랫폼. 기존 `LandingPage.jsx` 하드코딩 `VALID_CODES`(코드→그룹) 자리를 Supabase 테이블 + 관리자 + URL로 끌어올림. SPEC: `_dev/mind2action/CAMPAIGNS.md`
+- **데이터**: `campaigns` 테이블 신설(code·client_name·target·status·period_start/end·education_date·memo) + `responses.campaign_id` FK. RLS: 테이블 직접접근 authenticated만 + 설문 진입용 `get_campaign_by_code(code)` RPC(anon, security definer — 전체 고객사 목록 비노출). ⚠️ 피터공 SQL 1차 부분 실행(테이블만)→전체 재실행으로 컬럼·RPC 채움. anon RPC·RLS·컬럼 curl 3중 검증
+- **코드**: `lib/campaigns.js`(CRUD+랜덤코드 발급 혼동문자 제외+unique 재시도+campaignLink) / LandingPage 재작성(`?g=` 파싱→RPC→status active 게이팅) / SurveyApp·storage campaign_id 전달 / AdminDashboard 탭 분리(캠페인 관리/결과 확인) + 동적 colorFor(GROUP_COLORS 하드코딩 폐기) / CampaignManager 신설
+- **링크**: `survey.mind2action.kr/?g={code}` (HashRouter 해시 앞 쿼리, window.location.search 파싱). 링크 전용 + 랜덤코드 + 상태 게이팅(타이핑 코드 중복이라 안 씀)
+- **UI 조정(피터공 피드백)**: 생성폼 3 fieldset(기본/일정/메모)+가시성 안내 / 캠페인 화면 2단(좌 sticky 생성박스 330·우 목록) / 목록 결과·마감 컬럼 분리·참여기간 둘로·중앙정렬 / [설문 결과] 버튼=그 캠페인 필터로 점프 / 결과 필터 드롭다운(일정순) / 샘플 로더가 캠페인 자동생성+연결
+- **브랜딩**: 헤더 MIND2ACTION만(좌정렬)·"에고그램" 노출 전면 제거·EGOGRAM 배지→"소속:{고객사}"·결과 "성향 진단 결과"·타이틀 한 줄. (헤더 weight 100 시도→700 복귀)
+- **커밋**: `49f8543`(도메인 이전) → `1473ead`(캠페인 Phase1) → `eb2ce68`·`8bf949d`·`8c3503f`·`ebe2971`(UI) → `c673f4f`(브랜딩) → `015282f`(로고 복귀). 매 단계 `npm run deploy` published, survey.mind2action.kr 라이브
+- **다음(Phase 2)**: 참여기간 자동 차단 / 진행상황 대시보드 / 캠페인 수정 폼 / 단체별 리포트 일괄 PDF
+
 ### 2026-05-25 — dmz-layout 92자료 renderedBodyHtml 변환 파이프라인 완성 (세션381)
 - **산출물**: 마스터 CSV `Assets/incoming/통일부/본문 데이터 HTML/사진링크용_본문채움.csv` 본문 컬럼 92/92 채움
 - **파이프라인**: 세션380 완성 14종 HTML 템플릿 → clean MD 5개(base64 이미지 제거) → 백도 5개(sonnet) 병렬 변환 → `out_*.html`(ITEM 구분자) → `merge.py` CSV fill

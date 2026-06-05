@@ -290,4 +290,4 @@ GitHub Pages 자동 배포 — `https://mice3nyc.github.io/ari_gitrepo_1/DMZ_v5/
   - GitHub Pages URL (자동, 폴더 이름만 다름)
   - 문서 내 경로 인용 ✅
 
-→ [[PLAN|v4 PLAN]] / [[TASKS-sequential|v4 sequential TASKS]] / [[2026-05-14]]
+→ [[PLAN|v4 PLAN]] / [[TASKS-sequential|v4 sequential TASKS]] / [[2026-05-14 (목)]]

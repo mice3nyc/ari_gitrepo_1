@@ -10,18 +10,24 @@
 import csv, re, os
 
 BASE = "/Users/p.air15/Neo-Obsi-Sync/Assets/incoming/통일부/본문 데이터 HTML"
-CSV_IN = os.path.join(BASE, "사진링크용.csv")
-CSV_OUT = os.path.join(BASE, "사진링크용_본문채움.csv")
+# 버전/모드 변수화 (선문후코):
+#  한글: 기본값 그대로 (python3 merge.py)
+#  영문: DMZ_VERSION=EN DMZ_OUT_SUFFIX=_en python3 merge.py
+#        → out_{주제}_en.html 읽어 사진링크용_본문채움_EN.csv 산출. 매칭키(주제+타이틀)는 한글 그대로.
+VERSION = os.environ.get("DMZ_VERSION", "260529")      # 입력 데이터 버전. SPEC §입력과 동기
+OUT_SUFFIX = os.environ.get("DMZ_OUT_SUFFIX", "")        # out 파일 접미어(영문='_en')
+CSV_IN = os.path.join(BASE, "사진링크용.csv")                       # 마스터(타이틀·사진·순서 source of truth)
+CSV_OUT = os.path.join(BASE, f"사진링크용_본문채움_{VERSION}.csv")  # 버전 suffix로 이전본 보존
 CLEAN = os.path.join(BASE, "clean")
 PHOTO_BASE = "https://res.nolgong.com/dmz-archive/"
 
-# out 파일 → 주제명 (CSV 주제 컬럼과 매칭)
+# out 파일 base → 주제명 (CSV 주제 컬럼과 매칭). 실제 파일 = out_{base}{OUT_SUFFIX}.html
 FILES = {
-    "out_basic.html": "DMZ 기본정보",
-    "out_ecology.html": "생태/환경",
-    "out_heritage.html": "국가유산/문화재",
-    "out_people.html": "DMZ의 사람들",
-    "out_tourism.html": "평화 관광",
+    f"out_basic{OUT_SUFFIX}.html": "DMZ 기본정보",
+    f"out_ecology{OUT_SUFFIX}.html": "생태/환경",
+    f"out_heritage{OUT_SUFFIX}.html": "국가유산/문화재",
+    f"out_people{OUT_SUFFIX}.html": "DMZ의 사람들",
+    f"out_tourism{OUT_SUFFIX}.html": "평화 관광",
 }
 
 def norm(s):

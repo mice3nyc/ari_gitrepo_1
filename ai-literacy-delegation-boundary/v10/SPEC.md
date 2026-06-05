@@ -347,3 +347,64 @@ python3 csv_to_texts.py           # csv → texts.yaml 복원
 python3 csv_to_texts.py --verify  # round-trip 검증
 python3 build.py                  # 빌드
 ```
+
+---
+
+#### 12. 시나리오 데이터 CSV 편집 워크플로우 (Phase 8)
+
+`data/scenarios.yaml` (9,604행, 5 시나리오)의 콘텐츠를 3 CSV로 분리해 스프레드시트 편집 가능하게 한다.
+
+##### 12.1 CSV 구조
+
+| CSV 파일 | 행 수 | 컬럼 수 | 내용 |
+|----------|------|---------|------|
+| `scenario_meta.csv` | 5 | 15 | 시나리오 메타 (제목, 상황 텍스트, domainPool, cuts 등) |
+| `scenario_choices.csv` | 75 | 32 | tier1(15) + tier2(45) + review(15) 선택지, 텍스트, 밸런스, 비용, 결과 |
+| `scenario_leaves.csv` | 135 | 45 | leaf별 전체 데이터 (finals, 리포트, 비용, 카드, axisDelta) |
+
+**합계**: 215행, 3 CSV
+
+##### 12.2 tier2 포맷 차이
+
+| 시나리오 | tier2 방향성 표현 |
+|----------|------------------|
+| selfintro, groupwork, eorinwangja | `delta.afterA/B/C.delegation/knowledge` (중첩) |
+| career, studyplan | 직접 `delegation`, `knowledge` 필드 |
+
+CSV에서 두 포맷 공존: `delta_afterA_del` 등 6컬럼 + `delegation`/`knowledge` 2컬럼. rebuild 시 어느 쪽이 채워져 있는지로 자동 판별.
+
+##### 12.3 특수 필드 처리
+
+- **리스트 → 세미콜론(;) 구분**: domainPool, competencyCards, domainCards, matchGroups 등
+- **cuts (dict)**: `1:상황 제시;2:1차 선택지;...` key:value 쌍
+- **reportData**: finals 필드에서 자동 재생성 (중복 저장 X)
+- **axisDelta**: leaf당 최대 1건. 해당 leaf 행에 requireCard/bonusPoint/note 컬럼
+- **finals.item**: null 가능 (CSV 빈 셀 → YAML null)
+- **finals.earnedCards**: 선택적 (CSV 빈 셀 → YAML에서 키 생략)
+
+##### 12.4 워크플로우
+
+```bash
+# CSV 추출
+python3 scenarios_to_csv.py              # scenarios.yaml → 3 CSV (data/ 폴더)
+python3 scenarios_to_csv.py -o ~/Downloads/  # 지정 폴더로 출력
+
+# Google Sheets에서 편집 → CSV 다운로드
+
+# 통합 업데이트 (CSV → YAML → 빌드 한 번에)
+python3 update.py                        # 텍스트 + 시나리오 CSV 전부 → 빌드
+python3 update.py -i ~/Downloads/        # 덱스가 보낸 CSV 폴더 지정
+python3 update.py --skip-texts           # 시나리오만
+python3 update.py --verify               # 검증만 (빌드 안 함)
+```
+
+개별 실행도 가능:
+```bash
+python3 csv_to_scenarios.py              # 3 CSV → scenarios.yaml
+python3 csv_to_texts.py                  # ui_texts.csv → texts.yaml
+python3 build.py                         # 빌드
+```
+
+##### 12.5 v0.7 CSV와의 관계
+
+v0.7에 있던 `yaml_to_csv.py`/`csv_to_yaml.py`는 `texts.yaml` 전용이었고, `data/exports/` 135행/45행 CSV는 읽기 전용 밸런스 검수용이었다. v1.0 Phase 8은 **양방향 round-trip** 편집 워크플로우로, scenarios.yaml 전체를 커버한다.
