@@ -1,3 +1,20 @@
 words/
 .DS_Store
 beingfaust_values/references/
+
+# 독립 저장소 (자체 remote — 부모 repo에 넣지 않음)
+mind2action/
+mind2action-home/
+
+# 빌드 산물 / 의존성
+*.app/
+**/node_modules/
+
+# 런타임 로그·상태
+context-hop-bar/logs/
+context-hop-bar/data/
+context-hop-bar/*.db
+context-hop-bar/*.jsonl
+
+# 마이그레이션 백업 스냅샷
+*.before-v*-migration
