@@ -1,12 +1,17 @@
 // =====================================================
-// 15. 카드 선택별 획득 — 파일럿 (6/11, SPEC-card-per-choice.md)
-// 끝(결말) 몰아주기 → 선택 직후 획득. 대상: PILOT_PER_CHOICE.scenarios만.
+// 15. 카드 선택별 획득 — Phase 2 전체 적용 (6/11, SPEC-card-per-choice.md §5)
+// 끝(결말) 몰아주기 → 선택 직후 획득. 대상: 5종 전체.
 // 지급 규칙은 데이터 도출(discountTags + delta 부호) — scenarios.yaml 무수정.
+// 축→태그 맵: selfintro=파일럿 승인 맵 / 나머지=finals 최빈 태그(동률이면 S등급 경로).
 // =====================================================
 var PILOT_PER_CHOICE={
-  scenarios:['selfintro'],
+  scenarios:['selfintro','groupwork','eorinwangja','career','studyplan'],
   axisTagMap:{
-    selfintro:{'중심잡기':'주체성','융합하기':'통합적 사고','성찰하기':'성찰적 사고'}
+    selfintro:{'중심잡기':'주체성','융합하기':'통합적 사고','성찰하기':'성찰적 사고'},
+    groupwork:{'중심잡기':'주체성','융합하기':'통합적 사고','성찰하기':'사회·관계적 사고'},
+    eorinwangja:{'중심잡기':'주체성','융합하기':'맥락적 사고','성찰하기':'윤리적 사고'},
+    career:{'중심잡기':'주체성','융합하기':'창의적 사고','성찰하기':'비판적 사고'},
+    studyplan:{'중심잡기':'주체성','융합하기':'문제해결적 사고','성찰하기':'성찰적 사고'}
   }
 };
 function pilotPerChoiceActive(scid){

@@ -557,6 +557,8 @@ var reportData = {
 
 결말 135개의 출력(등급·점수·델타·카드)이 전부 수기 대응표라 섞인 경로에서 일관성이 샌다. 이 절은 **합성 규칙을 기계 검사 가능한 형태로 명세**하고, 린터(`scripts/check_consistency.py`)가 이 절을 그대로 구현한다. 결정 배경: `PLAN-logic-balance.md` Phase 0(D-1 카드=선택 기준, D-2 검토 차등, D-3 6/19 범위) + 볼트 [[26.0610 AI리터러시 최종 빌드 — 기획 수정 결정 로그]].
 
+> ⚠️ 6/11 카드 선택별 획득 전체 적용(SPEC-card-per-choice.md §5) 이후 **역량카드 런타임 지급은 finals가 아니라 선택 시점 규칙 엔진**이 한다. finals의 카드 필드(humanCentric*/domainCards)는 데이터 기준치로 유지되며 R3·R4 검사는 계속 유효. 회복력·도전력만 결말 지급.
+
 ##### 16.1 용어와 검사 대상
 
 - **경로(leaf)**: tier1(A/B/C) × tier2(1/2/3) × review(R1/R2/R3) = 시나리오당 27, 전체 135. leaf ID 예: `B2R3` = tier1 B → tier2 B2 → 검토 R3.
