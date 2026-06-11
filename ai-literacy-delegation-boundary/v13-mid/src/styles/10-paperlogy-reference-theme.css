@@ -643,9 +643,16 @@ button,
 .debug-toggle {
   position:fixed;
   bottom:12px;
-  right:12px;
-  left:auto;
+  left:12px; /* §17.1 6/11 — 좌측 하단 (피터공 정정) */
+  right:auto;
   z-index:1300; /* §17.1 — 카드 독(180)·inv-tab(1200) 위. 그룹 z-index:1 강등이 클릭을 막던 원인 */
+  background:var(--ink);
+  border:2px solid var(--ink);
+  box-shadow:3px 3px 0 rgba(0,0,0,.25);
+}
+
+/* §17.2 — 시나리오 나가기 (좌측 상단, 검정) */
+.scenario-exit {
   background:var(--ink);
   border:2px solid var(--ink);
   box-shadow:3px 3px 0 rgba(0,0,0,.25);

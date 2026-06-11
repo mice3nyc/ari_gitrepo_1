@@ -51,9 +51,9 @@
       </div>
     </div>
   </div>
-  <!-- §17.2 — 시나리오 나가기 (HUD에 묶여 시나리오 진행 화면에서만 보임) -->
-  <button class="scenario-exit" id="scenario-exit" onclick="exitScenario()" aria-label="시나리오 나가기">나가기</button>
 </div>
+<!-- §17.2 — 시나리오 나가기 (전체 윈도우 좌측 상단 코너 고정, 검정. panel-row.visible ~ 셀렉터로 시나리오 진행 화면에서만 표시) -->
+<button class="scenario-exit" id="scenario-exit" onclick="exitScenario()" aria-label="시나리오 나가기">나가기</button>
 <div class="container" id="main-container"></div>
 <!-- 역량 카드 인벤토리 탭 (우측 가장자리 고정 / texts.yaml inject — 초기값은 fallback) -->
 <button class="inv-tab" id="inv-tab" onclick="toggleInventory()" aria-label="역량 카드 인벤토리 열기"><span class="inv-tab-name" id="inv-tab-name">역량 카드</span><span class="inv-tab-desc" id="inv-tab-desc">모은 카드 보기</span><span class="inv-tab-badge hidden" id="inv-tab-badge"></span></button>

@@ -132,15 +132,16 @@
 .coupon-confirm:hover { background:#333; }
 
 /* ===== Debug ===== (4/30 세션260: 노안 친화 — font-size 1.4배 + max-width 460px) */
-.debug-toggle { position:fixed; bottom:10px; right:10px; background:#333; color:#fff; border:none; padding:5px 10px; font-size:11px; cursor:pointer; z-index:300; font-family:monospace; }
-.debug-panel { display:none; position:fixed; bottom:38px; right:10px; background:#1a1a1a; color:#ddd; padding:10px 12px; font-size:11px; line-height:1.4; font-family:monospace; z-index:300; max-width:420px; max-height:calc(100vh - 48px); overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
+/* §17.1 6/11 — 좌측 하단으로 이동 (피터공). version 라벨과 자리 스왑 */
+.debug-toggle { position:fixed; bottom:10px; left:10px; background:#333; color:#fff; border:none; padding:5px 10px; font-size:11px; cursor:pointer; z-index:300; font-family:monospace; }
+.debug-panel { display:none; position:fixed; bottom:38px; left:10px; background:#1a1a1a; color:#ddd; padding:10px 12px; font-size:11px; line-height:1.4; font-family:monospace; z-index:300; max-width:420px; max-height:calc(100vh - 48px); overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
 .debug-panel.active { display:block; }
 .debug-section { margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid #333; }
 .debug-label { color:#aaa; font-size:10px; text-transform:uppercase; margin-bottom:4px; letter-spacing:0.5px; }
 .debug-buttons { display:flex; flex-wrap:wrap; gap:4px; margin-top:5px; }
 .debug-btn { background:#333; color:#ddd; border:1px solid #555; padding:3px 8px; font-size:10px; cursor:pointer; font-family:monospace; }
 .debug-btn:hover { background:#444; }
-.version { position:fixed; bottom:6px; left:12px; font-size:10px; color:#ccc; }
+.version { position:fixed; bottom:6px; right:12px; font-size:10px; color:#ccc; }
 
 @media (max-width:800px) {
   .panels-grid { grid-template-columns:1fr; }

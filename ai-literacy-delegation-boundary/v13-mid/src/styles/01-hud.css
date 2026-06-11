@@ -101,6 +101,10 @@
 .lv-compact.pulsing { animation:numPulse 0.5s ease; }
 
 
-/* §17.2 — 시나리오 나가기 버튼 (HUD 우측 끝, 시나리오 진행 화면 전용) */
-.scenario-exit { flex:0 0 auto; align-self:center; padding:5px 10px; font-size:11px; font-weight:700; font-family:inherit; color:#555; background:#fff; border:2px solid #c9c4b8; border-radius:10px; cursor:pointer; line-height:1; white-space:nowrap; }
-.scenario-exit:hover { color:#111; border-color:#111; }
+/* §17.2 — 시나리오 나가기 버튼 (전체 윈도우 좌측 상단 코너 고정, 검정. 시나리오 진행 화면 전용) */
+/* DOM에서 panel-row 바로 다음이라 ~ 셀렉터로 HUD 표시에 자동 연동 — JS 토글 불필요 */
+.scenario-exit { display:none; position:fixed; top:12px; left:12px; z-index:1000; padding:7px 13px; font-size:12px; font-weight:700; font-family:inherit; color:#fff; background:#111; border:2px solid #111; border-radius:10px; cursor:pointer; line-height:1; white-space:nowrap; }
+.scenario-exit:hover { background:#333; }
+.panel-row.visible ~ .scenario-exit { display:block; }
+/* 버튼이 HUD 좌측 끝(시간 게이지)과 겹치지 않게 자원 바를 오른쪽으로 비킴 */
+.panel-row.visible .resource-bar { padding-left:76px; }
