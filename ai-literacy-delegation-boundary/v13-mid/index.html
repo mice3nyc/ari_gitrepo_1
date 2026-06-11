@@ -543,8 +543,9 @@ button, input, select, textarea { font-family: inherit; }
 .rt-tutorial { max-width:620px; margin:0 auto 36px; text-align:left; display:flex; flex-direction:column; gap:12px; padding:0; list-style:none; counter-reset:rtut; }
 .rt-tutorial li { position:relative; padding:14px 16px 14px 54px; border:2px solid #fff; background:rgba(255,255,255,0.07); color:#fff; font-size:15px; font-weight:600; line-height:1.8; counter-increment:rtut; }
 .rt-tutorial li::before { content:counter(rtut); position:absolute; left:14px; top:15px; width:26px; height:26px; background:var(--acc-yellow); border:2px solid var(--ink); color:var(--ink); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; }
-/* §4i-9 — 위임 정의 블록 + 마무리 한 줄 */
-.rt-delegation { max-width:620px; margin:0 auto 20px; padding:16px 20px; border:3px solid var(--acc-yellow); background:rgba(255,255,255,0.07); text-align:left; }
+/* §4i-9 — 위임 정의 블록 + 마무리 한 줄. v2.1 — 위임 대형 글자 빵 + 박스 차별화(핑크 하드 섀도) */
+.rt-delegation { max-width:620px; margin:0 auto 28px; padding:24px 24px 20px; border:3px solid var(--acc-yellow); background:rgba(255,222,89,0.10); box-shadow:8px 8px 0 var(--acc-pink-deep); text-align:center; }
+.rt-delegation-word { display:block; font-family:var(--font-pixel); font-weight:400; font-size:clamp(46px,7vw,78px); line-height:1.1; color:var(--acc-yellow); text-shadow:5px 5px 0 var(--acc-pink-deep); margin:0 0 14px; opacity:0; transform:scale(0.25); animation:rtPop 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.1s forwards; }
 .rt-delegation p { margin:0 0 8px; color:#fff; font-size:16px; font-weight:600; line-height:1.7; }
 .rt-delegation p:last-child { margin-bottom:0; }
 .rt-delegation b { color:var(--acc-yellow); }
@@ -13450,8 +13451,9 @@ var TEXTS = {
   },
   "tutorial_screen": {
     "heading": "게임 안내",
+    "delegation_word": "위임",
     "delegation_intro": [
-      "<b>위임</b>? 내 일을 다른 누군가에게 맡기는 것!",
+      "내 일을 다른 누군가에게 맡기는 것!",
       "이 게임에서는, <b>내 일을 AI에게 시키는 것</b>이 위임이다.",
       "\"위임할까, 말까?\" = \"AI에게 시킬까, 내가 직접 할까?\""
     ],
@@ -14900,7 +14902,7 @@ function showTutorialScreen(){
   hideStats();
   var _tu=_t('tutorial_screen',{});
   var _intro=_tu.delegation_intro||[
-    '<b>위임</b>? 내 일을 다른 누군가에게 맡기는 것!',
+    '내 일을 다른 누군가에게 맡기는 것!',
     '이 게임에서는, <b>내 일을 AI에게 시키는 것</b>이 위임이다.',
     '"위임할까, 말까?" = "AI에게 시킬까, 내가 직접 할까?"'
   ];
@@ -14916,8 +14918,9 @@ function showTutorialScreen(){
   var h='<div class="retro-title"><div class="rt-scanlines" aria-hidden="true"></div><div class="rt-inner">';
   h+=buildGameTitleHead();
   h+='<h1 class="rt-tutorial-heading">'+(_tu.heading||'게임 안내')+'</h1>';
-  // §4i-9 — 위임 정의 블록 (자문 선생님 4학년 검증 문구)
+  // §4i-9 — 위임 정의 블록 (자문 선생님 4학년 검증 문구), v2.1 대형 글자 빵
   h+='<div class="rt-delegation">';
+  h+='<span class="rt-delegation-word">'+(_tu.delegation_word||'위임')+'</span>';
   for(var di=0;di<_intro.length;di++)h+='<p>'+_intro[di]+'</p>';
   h+='</div>';
   h+='<ol class="rt-tutorial">';

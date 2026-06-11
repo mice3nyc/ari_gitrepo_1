@@ -526,8 +526,10 @@ title_screen:
 tutorial_screen:
   heading: "게임 안내"
   # §4i-9 위임 정의 블록 — 자문 선생님 4학년 실전 검증 문구 기반 (6/11)
+  # v2.1: 위임을 대형 글자로 빵 (delegation_word), 1행에서 "위임?" 제거
+  delegation_word: "위임"
   delegation_intro:
-  - '<b>위임</b>? 내 일을 다른 누군가에게 맡기는 것!'
+  - '내 일을 다른 누군가에게 맡기는 것!'
   - '이 게임에서는, <b>내 일을 AI에게 시키는 것</b>이 위임이다.'
   - '"위임할까, 말까?" = "AI에게 시킬까, 내가 직접 할까?"'
   tutorial:

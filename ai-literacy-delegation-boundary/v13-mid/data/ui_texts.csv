@@ -164,7 +164,8 @@ title_screen,title_screen.sub_title_2,"AI 리터러시, 위임의 경계!"
 title_screen,title_screen.host_text,"딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>누구나 할 수 있다면, 누구인가가 중요하다.<br>무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지. 당신은 구별할 수 있을까?"
 title_screen,title_screen.btn_start,시작하기
 tutorial_screen,tutorial_screen.heading,게임 안내
-tutorial_screen,tutorial_screen.delegation_intro.0,<b>위임</b>? 내 일을 다른 누군가에게 맡기는 것!
+tutorial_screen,tutorial_screen.delegation_word,위임
+tutorial_screen,tutorial_screen.delegation_intro.0,내 일을 다른 누군가에게 맡기는 것!
 tutorial_screen,tutorial_screen.delegation_intro.1,"이 게임에서는, <b>내 일을 AI에게 시키는 것</b>이 위임이다."
 tutorial_screen,tutorial_screen.delegation_intro.2,"""위임할까, 말까?"" = ""AI에게 시킬까, 내가 직접 할까?"""
 tutorial_screen,tutorial_screen.tutorial.0,"시나리오마다 묻는다. ""내가 할까? AI에게 시킬까?"" 선택할 때마다 <span class=""hl hl--c"">시간</span>과 <span class=""hl hl--p"">에너지</span>를 쓴다."
