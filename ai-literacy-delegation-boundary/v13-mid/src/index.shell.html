@@ -9,13 +9,12 @@
 <body>
 <!-- 좌/우 패널 (sticky) — 좌:자원 / 우:역량+점수+진행 -->
 <div class="panel-row" id="panel-row">
-  <!-- 좌측: 자원 게이지 (시간/에너지) -->
+  <!-- 좌측: 자원 게이지 (시간/에너지) — 6/11 HUD 개편: 타이틀 제거, 아이콘+큰 레이블+두툼한 바+바 위 수치 -->
   <div class="resource-bar" id="resource-bar">
-    <div class="panel-title">자원</div>
     <div class="panel-content">
-      <div class="resource-item" id="res-time"><div class="resource-change-indicator" id="rdelta-time"></div><div class="resource-header"><span class="resource-name">시간</span><span class="resource-num" id="rnum-time">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-time" style="width:100%"></div></div></div>
+      <div class="resource-item" id="res-time"><div class="resource-change-indicator" id="rdelta-time"></div><span class="resource-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.513 7.119c.958-1.143 1.487-2.577 1.487-4.036v-3.083h-16v3.083c0 1.459.528 2.892 1.487 4.035l3.087 3.68c.566.677.57 1.625.009 2.306l-3.13 3.794c-.937 1.136-1.453 2.555-1.453 3.995v3.107h16v-3.107c0-1.44-.517-2.858-1.453-3.994l-3.13-3.794c-.562-.681-.558-1.629.009-2.306l3.087-3.68zm-.513-4.12c0 1.101-.363 2.05-1.02 2.834l-.978 1.167h-8.004l-.978-1.167c-.66-.785-1.02-1.736-1.02-2.834h12zm-.996 15.172c.652.791.996 1.725.996 2.829h-1.061c-1.939-2-4.939-2-4.939-2s-3 0-4.939 2h-1.061c0-1.104.344-2.039.996-2.829l3.129-3.793c.342-.415.571-.886.711-1.377h.164v1h2v-1h.163c.141.491.369.962.711 1.376l3.13 3.794zm-6.004-1.171h2v1h-2v-1zm0-2h2v1h-2v-1z"/></svg></span><span class="resource-name">시간</span><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-time" style="width:100%"></div><span class="resource-num" id="rnum-time">100</span></div></div>
       <div class="panel-divider"></div>
-      <div class="resource-item" id="res-energy"><div class="resource-change-indicator" id="rdelta-energy"></div><div class="resource-header"><span class="resource-name">에너지</span><span class="resource-num" id="rnum-energy">100</span></div><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-energy" style="width:100%"></div></div></div>
+      <div class="resource-item" id="res-energy"><div class="resource-change-indicator" id="rdelta-energy"></div><span class="resource-icon rotated" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 19h21v-14h-21v14zm9.298-7.21v-3.79l8.535 6.248-5.878-1.728v3.48l-8.789-5.984 6.132 1.774zm14.702-2.54v4.5c0 .69-.56 1.25-1.25 1.25h-.75v-7h.75c.69 0 1.25.56 1.25 1.25z"/></svg></span><span class="resource-name">에너지</span><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-energy" style="width:100%"></div><span class="resource-num" id="rnum-energy">100</span></div></div>
     </div>
   </div>
   <!-- 중앙: LV + SCORE + XP -->
@@ -40,22 +39,16 @@
       <div class="exp-bar"><div class="exp-bar-fill" id="exp-bar-fill" style="width:0%"></div></div>
     </div>
   </div>
-  <!-- 우측: 역량(양방향 바) + 진행 -->
+  <!-- 우측: 역량 (원 7개 미터 — 6/11 HUD 개편: 타이틀·숫자·양방향 바 제거, 기본 3개 채움 = 기존 0) -->
   <div class="stats-bar" id="stats-bar">
-    <div class="panel-title">역량</div>
     <div class="panel-content">
       <div class="stat" id="stat-delegation">
-        <div class="stat-change-indicator" id="delta-delegation"></div>
-        <div class="stat-header"><span class="stat-name">판단하는 힘</span><span class="stat-num" id="num-delegation">0</span></div>
-        <div class="gauge-with-pending"><div class="pending-dots" id="pending-dots-delegation" aria-label="이번 시나리오 판단하는 힘 변화"><div class="pending-dots-neg" id="pending-dots-delegation-neg"></div><div class="pending-dots-pos" id="pending-dots-delegation-pos"></div></div><div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-delegation"></div></div></div>
-        <div class="bipolar-labels"><span>-10</span><span>+10</span></div>
+        <!-- v3 6/11 — pending 세모 마커 제거 (pending 로직은 유지, 흡수 시 원 미터 갱신) -->
+        <div class="stat-row"><span class="stat-name">선택</span><div class="circle-meter" id="meter-delegation" role="img" aria-label="선택 3/7"></div></div>
       </div>
       <div class="panel-divider"></div>
       <div class="stat" id="stat-knowledge">
-        <div class="stat-change-indicator" id="delta-knowledge"></div>
-        <div class="stat-header"><span class="stat-name" id="stat-name-knowledge">아는것의 힘</span><span class="stat-num" id="num-knowledge">0</span></div>
-        <div class="gauge-with-pending"><div class="pending-dots" id="pending-dots-knowledge" aria-label="이번 시나리오 아는것의 힘 변화"><div class="pending-dots-neg" id="pending-dots-knowledge-neg"></div><div class="pending-dots-pos" id="pending-dots-knowledge-pos"></div></div><div class="bipolar-gauge"><div class="bipolar-zero"></div><div class="bipolar-fill" id="gauge-knowledge"></div></div></div>
-        <div class="bipolar-labels"><span>-10</span><span>+10</span></div>
+        <div class="stat-row"><span class="stat-name" id="stat-name-knowledge">능력</span><div class="circle-meter" id="meter-knowledge" role="img" aria-label="능력 3/7"></div></div>
       </div>
     </div>
   </div>

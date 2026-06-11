@@ -16,6 +16,7 @@ function startScenario(scid){
   if(btnGuard('startScenario'))return;
   if(!SCENARIOS[scid])return;
   _couponSelections={};
+  if(typeof railClear==='function')railClear(); // §2b — 이전 시나리오 레일 잔여물 정리
   if(!gameState||!gameState.clearedScenarios){gameState=createInitialState();}
   if(gameState.clearedScenarios.indexOf(scid)>=0)return; // 1회 제한 (리플레이는 replayScenario 사용)
   // v0.8 — 리플레이용 자원 스냅샷 저장
@@ -54,6 +55,7 @@ function startScenario(scid){
 function replayScenario(scid){
   if(!SCENARIOS[scid])return;
   if(!gameState||!gameState.clearedScenarios){return;}
+  if(typeof railClear==='function')railClear(); // §2b — 컷6에서 리플레이 진입 시 레일 정리 (비행 생략 경로)
 
   // [1] 해당 시나리오 역량/점수/EXP 롤백 (scenarioHistory에서 찾아서 역산)
   var hist=gameState.scenarioHistory||[];
@@ -134,14 +136,11 @@ function replayScenario(scid){
   renderCut1();
 }
 
-// 시나리오별 도메인 지식 라벨 갱신 — yaml domainLabel 또는 domainPool 첫 요소
+// v2 6/11 — 도메인 괄호 표기 제거 (피터공: 특정 능력 표시는 카드가 담당). 순수 레이블만.
 function updateDomainLabel(){
-  var sc=getScenario();
   var el=document.getElementById('stat-name-knowledge');
-  if(!sc||!el)return;
-  var _knlName=_t('hud.knowledge','아는것의 힘');
-  var label=sc.domainLabel||(sc.domainPool&&sc.domainPool[0])||_knlName;
-  el.textContent=_knlName+' ('+label+')';
+  if(!el)return;
+  el.textContent=_t('hud.knowledge','능력');
 }
 
 function goNextScenario(){
@@ -255,6 +254,7 @@ function onTier1(t1id){
     animateResource('time',prevTime,nowTime);
     animateResource('energy',prevEnergy,nowEnergy);
     updateStats();
+    pilotAwardAndShow('tier1',t1id); // 6/11 파일럿 — 선택 직후 카드 획득 (SPEC-card-per-choice)
   });
 }
 
@@ -285,6 +285,7 @@ function onTier2(t2id){
     animateResource('time',prevTime,nowTime);
     animateResource('energy',prevEnergy,nowEnergy);
     updateStats();
+    pilotAwardAndShow('tier2',t2id); // 6/11 파일럿 — 선택 직후 카드 획득
   });
 }
 
@@ -320,6 +321,7 @@ function onReview(rid){
     animateResource('time',prevTime,nowTime);
     animateResource('energy',prevEnergy,nowEnergy);
     updateStats();
+    pilotAwardAndShow('review',rid); // 6/11 §2b — 검토 카드도 선택 직후 획득 (컷6 일괄에서 이동)
     var sn=document.getElementById('score-num');
     if(sn){sn.classList.add('pulsing');setTimeout(function(){sn.classList.remove('pulsing');},600);}
   });
@@ -329,6 +331,7 @@ function onNext(){/* placeholder — overridden in goCut6 */}
 
 function resetGame(){
   trackEvent('session_reset',{});
+  if(typeof railClear==='function')railClear(); // §2b
   clearGame();
   resetSid();
   gameState=null;currentRow=null;
@@ -354,6 +357,7 @@ function confirmResetDo(){
 }
 
 function backToStartScreen(){
+  if(typeof railClear==='function')railClear(); // §2b
   var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='';
   var debugBtn=document.querySelector('.debug-toggle');if(debugBtn)debugBtn.style.display='';
   var verLabel=document.getElementById('version-label');if(verLabel)verLabel.style.display='';

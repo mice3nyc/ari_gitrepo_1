@@ -72,6 +72,10 @@ function _getChoiceDiscountTags(stageType,choiceId){
   }
   return null;
 }
+// 6/11 — 선택별 획득 카드(perChoice)는 획득한 그 시나리오 안에서는 쿠폰 불가, 다음 시나리오부터 (SPEC-card-per-choice)
+function _cardUsableForDiscount(entry){
+  return !(entry&&entry.perChoice&&gameState&&entry.scenario===gameState.currentScenarioId);
+}
 function _calculateCardEnergyDiscount(discountTags){
   if(!discountTags||!gameState||!gameState.inventory)return {total:0,details:[]};
   var inv=gameState.inventory;
@@ -80,7 +84,7 @@ function _calculateCardEnergyDiscount(discountTags){
   if(hcTag){
     var hcCards=inv.humanCentricCards||[];
     for(var i=0;i<hcCards.length;i++){
-      if(hcCards[i].axis===hcTag&&!used['hc:'+hcTag]){
+      if(_cardUsableForDiscount(hcCards[i])&&hcCards[i].axis===hcTag&&!used['hc:'+hcTag]){
         used['hc:'+hcTag]=true;
         var amt=2;total+=amt;
         details.push({type:'humanCentric',tag:hcTag,display:hcCards[i].tag||hcTag,amount:amt});
@@ -96,10 +100,10 @@ function _calculateCardEnergyDiscount(discountTags){
   for(var i=0;i<domainTags.length;i++){
     var dt=domainTags[i];if(used['dom:'+dt])continue;
     for(var j=0;j<domCards.length;j++){
-      if(domCards[j].label===dt){
+      if(_cardUsableForDiscount(domCards[j])&&domCards[j].label===dt){
         used['dom:'+dt]=true;
         var amt=strongSet[dt]?3:2;total+=amt;
-        details.push({type:'domain',tag:dt,display:dt,amount:amt});
+        details.push({type:'domain',tag:dt,display:_cardDisplayName(dt),amount:amt});
         break;
       }
     }

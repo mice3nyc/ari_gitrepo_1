@@ -113,7 +113,7 @@ function renderInventory(){
       var td=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.domainCards&&TEXTS.domainCards[label])||{};
       var color=td.color||'#333';
       html+='<div style="margin-bottom:6px;padding:6px 8px;background:#f4f1ea;border:3px solid #000;border-radius:0;">';
-      html+='<span style="font-weight:600;">'+_invEscapeHTML(label)+'</span>';
+      html+='<span style="font-weight:600;">'+_invEscapeHTML(_cardDisplayName(label))+'</span>';
       if(domainCounts[label]>1)html+=' <span style="color:#888;">×'+domainCounts[label]+'</span>';
       if(td.short)html+='<div style="font-size:11px;color:#888;margin-top:2px;">'+_invEscapeHTML(td.short)+'</div>';
       html+='</div>';
@@ -236,8 +236,9 @@ function playCardRewardSequential(cards,note){
         card.style.boxShadow='0 4px 0 '+am.color;
         var tagData=(TEXTS&&TEXTS.humanCentricCards&&TEXTS.humanCentricCards[axisPrefix[1]]&&TEXTS.humanCentricCards[axisPrefix[1]].tags&&TEXTS.humanCentricCards[axisPrefix[1]].tags[axisPrefix[2]])||{};
         shortDesc=tagData.short||'';
-        card.innerHTML='<div class="card-reward-tag" style="color:rgba(255,255,255,0.7);">'+_t('inventory_labels.track_human_centric','인간중심 역량')+'</div>'+
-          '<div class="card-reward-label" style="color:#fff;"><b>'+_invEscapeHTML(axisPrefix[1])+'</b> — '+_invEscapeHTML(axisPrefix[2])+'</div>'+
+        // v2 6/11 — 한 줄 "인간중심 역량-축"(앞 보통·축 볼드) + 아래 큰 글씨 태그
+        card.innerHTML='<div class="card-reward-tag hc-line" style="color:rgba(255,255,255,0.85);">'+_invEscapeHTML(_t('inventory_labels.track_human_centric','인간중심 역량'))+'-<b>'+_invEscapeHTML(axisPrefix[1])+'</b></div>'+
+          '<div class="card-reward-label hc-big" style="color:#fff;">'+_invEscapeHTML(axisPrefix[2])+'</div>'+
           (shortDesc?'<div style="font-size:11px;color:rgba(255,255,255,0.85);line-height:1.5;margin-bottom:12px;">'+_invEscapeHTML(shortDesc)+'</div>':'')+
           '<button class="card-reward-confirm" id="'+btnId+'" style="background:rgba(255,255,255,0.95);color:'+am.color+';border-color:rgba(255,255,255,0.5);">'+_invEscapeHTML(btnLabel)+'</button>';
       }else{
@@ -247,9 +248,10 @@ function playCardRewardSequential(cards,note){
         var td=isGrowth?(TEXTS.growthCards[label]||{}):(TEXTS&&TEXTS.domainCards&&TEXTS.domainCards[label]||{});
         shortDesc=td.short||'';
         var growthSymbol=(label==='도전력')?'↑':(label==='회복력')?'↺':'';
+        // v2 6/11 — 도메인 카드는 "도메인 역량" 트랙 라벨 제거 + 능력형 표시명. 성장 카드 라벨 유지.
         card.innerHTML=(growthSymbol?'<div class="growth-symbol">'+growthSymbol+'</div>':'')+
-          '<div class="card-reward-tag">'+_invEscapeHTML(trackName)+'</div>'+
-          '<div class="card-reward-label" style="color:'+color+'">'+_invEscapeHTML(label)+'</div>'+
+          (isGrowth?'<div class="card-reward-tag">'+_invEscapeHTML(trackName)+'</div>':'')+
+          '<div class="card-reward-label" style="color:'+color+'">'+_invEscapeHTML(_cardDisplayName(label))+'</div>'+
           (shortDesc?'<div class="card-reward-divider"></div><div class="card-reward-note">'+_invEscapeHTML(shortDesc)+'</div>':'')+
           '<button class="card-reward-confirm" id="'+btnId+'">'+_invEscapeHTML(btnLabel)+'</button>';
       }
@@ -277,8 +279,11 @@ function showRecoveryCardModal(scid){
       '<div class="growth-symbol">↺</div>'+
       '<div class="recovery-card-title">'+_t('recovery.title','회복력')+'</div>'+
       '<div class="recovery-card-desc">'+(td.short||'낮은 결과에서 비어 있던 과정을 알아차리고 다시 세우는 힘')+'</div>'+
-      '<button class="recovery-card-btn primary" id="recovery-use-btn">'+_t('recovery.btn_use','회복역량 사용해 시간 되돌리기')+'<br><span style="font-size:12px;font-weight:400;opacity:0.8;">'+_t('recovery.btn_use_sub','시나리오 다시 도전')+'</span></button>'+
-      '<button class="recovery-card-btn secondary" id="recovery-skip-btn">'+_t('recovery.btn_skip','다음 시나리오로 →')+'</button>'+
+      // v4 6/11 — 두 버튼 동일 위계 (재시도 강조 제거, SPEC-ui-hud §4d-3)
+      '<div class="recovery-btn-row">'+
+      '<button class="recovery-card-btn" id="recovery-use-btn">'+_t('recovery.btn_use','다시 도전')+'</button>'+
+      '<button class="recovery-card-btn" id="recovery-skip-btn">'+_t('recovery.btn_skip','다음 시나리오')+'</button>'+
+      '</div>'+
     '</div>';
     document.getElementById('recovery-use-btn').onclick=function(){
       overlay.classList.add('hidden');overlay.innerHTML='';

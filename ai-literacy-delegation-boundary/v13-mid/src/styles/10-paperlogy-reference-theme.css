@@ -321,8 +321,14 @@ button,
   padding-top:128px;
 }
 
+/* v3 6/11 — 자원/역량 중간 박스 제거 (panel-row 바깥 테두리만 남김) */
 .resource-bar,
-.stats-bar,
+.stats-bar {
+  border:0;
+  background:transparent;
+  box-shadow:none;
+}
+
 .score-display,
 .scenario-progress-strip {
   border:var(--border-w) solid var(--ink);
@@ -330,33 +336,29 @@ button,
   box-shadow:5px 5px 0 var(--ink);
 }
 
-.panel-title {
-  background:var(--acc-yellow);
-  color:var(--ink);
-  font-weight:700;
-  border-right:var(--border-w) solid var(--ink);
-}
-
+/* 6/11 HUD 개편 — panel-title 제거, bipolar → circle-meter */
 .score-display {
   background:var(--acc-cyan);
 }
 
 .display-label,
-.resource-name,
-.bipolar-labels,
 .exp-num {
   color:var(--ink-soft);
   font-weight:700;
 }
 
+.resource-name,
+.stat-name {
+  color:var(--ink);
+  font-weight:800;
+}
+
 .display-num,
-.resource-num,
-.stat-num {
+.resource-num {
   font-weight:700;
 }
 
 .resource-gauge,
-.bipolar-gauge,
 .exp-bar {
   border:2px solid var(--ink);
   background:#fff;
@@ -367,12 +369,16 @@ button,
   background:var(--ink);
 }
 
-.bipolar-fill.positive {
-  background:var(--acc-mint-deep);
+.circle-meter .cm-dot {
+  border:2px solid var(--ink);
 }
 
-.bipolar-fill.negative {
-  background:var(--acc-pink-deep);
+.circle-meter .cm-dot.filled {
+  background:#f08c2e;
+}
+
+.circle-meter .cm-dot.filled.high {
+  background:var(--acc-mint-deep);
 }
 
 .scenario-progress-strip {
@@ -700,11 +706,6 @@ button,
   .resource-bar,
   .stats-bar {
     flex-direction:column;
-  }
-
-  .panel-title {
-    border-right:0;
-    border-bottom:var(--border-w) solid var(--ink);
   }
 
   .panel {

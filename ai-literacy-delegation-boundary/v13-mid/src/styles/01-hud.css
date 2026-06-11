@@ -16,13 +16,15 @@
 @keyframes flashLevelUp { 0%{background-color:#fff8d0} 50%{background-color:#fff3a0} 100%{background-color:#fff} }
 .resource-bar.flash-levelup { animation:flashLevelUp 0.8s ease; }
 
-/* ===== 좌측 패널 — 자원 게이지 (단방향) ===== */
-.resource-bar { flex:1; display:flex; flex-direction:row; gap:0; padding:0; border:var(--border-w) solid var(--ink); background:var(--bg-card); box-shadow:var(--shadow); overflow:hidden; }
-.resource-item { display:flex; flex-direction:column; padding:8px 12px; position:relative; transition:background-color 0.3s; }
-.resource-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:4px; }
-.resource-name { font-size:11px; color:#555; font-weight:600; letter-spacing:0.5px; }
-.resource-num { font-size:15px; font-weight:700; line-height:1; transition:color 0.3s, transform 0.3s; }
-.resource-gauge { height:8px; width:100%; background:var(--bg-page); border:2px solid var(--ink); overflow:hidden; }
+/* ===== 좌측 패널 — 자원 게이지 (단방향) — 6/11 HUD 개편: 아이콘+큰 레이블+두툼한 바+바 위 수치 ===== */
+.resource-bar { flex:1; display:flex; flex-direction:row; gap:0; padding:0; border:0; background:transparent; box-shadow:none; overflow:hidden; } /* v3 6/11 — 중간 박스 제거 */
+.resource-item { flex:1; display:flex; flex-direction:row; align-items:center; gap:8px; padding:8px 12px; position:relative; transition:background-color 0.3s; }
+.resource-icon { flex:0 0 auto; display:flex; align-items:center; }
+.resource-icon svg { width:22px; height:22px; fill:var(--ink); display:block; }
+.resource-icon.rotated svg { transform:rotate(270deg); }
+.resource-name { font-size:17px; font-weight:800; color:var(--ink); letter-spacing:0.5px; flex:0 0 auto; min-width:60px; }
+.resource-num { position:absolute; left:6px; top:0; bottom:0; display:flex; align-items:center; font-size:14px; font-weight:800; color:var(--ink); line-height:1; z-index:1; transition:color 0.3s; } /* v3 6/11 좌정렬 */
+.resource-gauge { position:relative; flex:1; height:22px; background:var(--bg-page); border:2px solid var(--ink); overflow:hidden; }
 .resource-gauge-fill { height:100%; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1), background-color 0.6s ease; background:#555; }
 .resource-change-indicator { font-size:12px; font-weight:700; position:absolute; top:50%; right:-4px; transform:translateY(-50%); opacity:0; white-space:nowrap; pointer-events:none; }
 .resource-change-indicator.show { opacity:1; animation:changeFloat 1.8s ease forwards; }
@@ -32,27 +34,26 @@
 .resource-item.flash-down { animation:flashGray 0.8s ease; }
 @keyframes flashGray { 0%{background-color:rgba(80,80,80,0.10)} 100%{background-color:transparent} }
 
-/* ===== 우측 패널 — 역량(양방향) + 점수 (5/3 — 컷/아이템은 중앙 progress-strip로 분리) ===== */
-.stats-bar { flex:1; display:flex; flex-direction:row; gap:0; padding:0; border:var(--border-w) solid var(--ink); background:var(--bg-card); box-shadow:var(--shadow); overflow:hidden; }
-.stat { display:flex; flex-direction:column; padding:6px 10px; position:relative; transition:background-color 0.3s; }
-.stat-header { display:flex; align-items:center; justify-content:space-between; gap:6px; margin-bottom:2px; }
-.stat-name { font-size:11px; color:#111; font-weight:700; }
-.stat-num { font-size:16px; font-weight:700; line-height:1; transition:color 0.3s, transform 0.3s; }
+/* ===== 우측 패널 — 역량 (5/3 — 컷/아이템은 중앙 progress-strip로 분리) ===== */
+.stats-bar { flex:1; display:flex; flex-direction:row; gap:0; padding:0; border:0; background:transparent; box-shadow:none; overflow:visible; } /* v3 6/11 — 중간 박스 제거, 오버플로 링 잘림 방지 */
+.stat { flex:1; display:flex; flex-direction:column; justify-content:center; padding:8px 12px; position:relative; transition:background-color 0.3s; } /* v3 6/11 — 좌우 박스 행 높이 정렬 */
+.stat-row { display:flex; flex-direction:row; align-items:center; gap:12px; }
+.stat-name { font-size:18px; font-weight:800; color:#111; flex:0 0 auto; }
 
-/* === 양방향 바 (Diverging Bar) — 위임 판단 / 문해력 전용 === */
-.bipolar-gauge { position:relative; height:8px; width:100%; background:var(--bg-card); border:2px solid var(--ink); overflow:hidden; }
-.bipolar-zero { position:absolute; left:50%; top:-2px; bottom:-2px; width:1px; background:#111; z-index:2; }
-.bipolar-fill { position:absolute; top:0; bottom:0; width:0; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1), left 0.3s ease, right 0.3s ease, background-color 0.6s ease; }
-.bipolar-fill.positive { left:50%; right:auto; background:var(--acc-mint-deep); }
-.bipolar-fill.negative { right:50%; left:auto; background:var(--acc-pink-deep); }
-.bipolar-labels { display:flex; justify-content:space-between; font-size:8px; color:#aaa; margin-top:1px; line-height:1; letter-spacing:0.3px; }
-.stat-num.positive { color:var(--acc-mint-deep); }
-.stat-num.negative { color:var(--acc-pink-deep); }
+/* === 원 채움 미터 (Circle Meter) — 6/11 HUD 개편: 양방향 바 대체. 7개 중 기본 3개 채움 = 기존 0 === */
+/* v2: 채움 1~3 주황(시작 상태) / 4~7 초록(획득분). 7 초과는 .cm-overflow 깜빡임 마커. */
+.circle-meter { position:relative; display:flex; flex-direction:row; align-items:center; gap:6px; }
+.circle-meter .cm-dot { width:18px; height:18px; border-radius:50%; border:2px solid var(--ink); background:transparent; box-sizing:border-box; transition:background-color 0.25s ease; }
+.circle-meter .cm-dot.filled { background:#f08c2e; }
+.circle-meter .cm-dot.filled.high { background:var(--acc-mint-deep); }
+.circle-meter .cm-dot.pop { animation:cmPop 0.4s ease; }
+/* v3 6/11 — 오버플로 링: 별도 원이 아니라 7번째 원을 둘러싸는 초록 링 깜빡임 */
+.circle-meter .cm-overflow { display:none; position:absolute; top:50%; right:-4px; transform:translateY(-50%); width:26px; height:26px; border-radius:50%; border:2px solid var(--acc-mint-deep); background:transparent; box-sizing:border-box; pointer-events:none; }
+.circle-meter .cm-overflow.show { display:block; animation:cmBlink 1.1s ease-in-out infinite; }
+@keyframes cmPop { 0%{transform:scale(1)} 40%{transform:scale(1.45)} 100%{transform:scale(1)} }
+@keyframes cmBlink { 0%,100%{opacity:1} 50%{opacity:0.15} }
 
-.stat-change-indicator { font-size:13px; font-weight:700; position:absolute; top:50%; right:-4px; transform:translateY(-50%); opacity:0; white-space:nowrap; pointer-events:none; }
-.stat-change-indicator.show { opacity:1; animation:changeFloat 1.8s ease forwards; }
-.stat-change-indicator.up { color:#1a8c1a; }
-.stat-change-indicator.down { color:#c44; }
+/* v2 6/11 — .stat-change-indicator(선택/능력 ±N float) 제거. changeFloat은 자원 인디케이터가 계속 사용. */
 @keyframes changeFloat { 0%{opacity:0;transform:translateY(-50%) translateX(0)} 15%{opacity:1;transform:translateY(-50%) translateX(8px)} 70%{opacity:1} 100%{opacity:0;transform:translateY(-50%) translateX(16px)} }
 @keyframes numPulse { 0%{transform:scale(1)} 30%{transform:scale(1.4)} 100%{transform:scale(1)} }
 .stat-num.pulsing { animation:numPulse 0.5s ease; }
@@ -74,7 +75,7 @@
 /* ===== 중앙 LV·SCORE 큰 디스플레이 ===== */
 .score-display { flex:0 0 auto; display:flex; flex-direction:column; align-items:stretch; gap:8px; padding:8px 18px; border:var(--border-w) solid var(--ink); background:var(--bg-card); box-shadow:var(--shadow); min-width:180px; }
 .score-display-row { display:flex; flex-direction:row; align-items:center; gap:18px; justify-content:center; }
-.panel-title { display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:#111; letter-spacing:3px; padding:8px 14px; border-right:1.5px solid #111; min-width:52px; }
+/* 6/11 HUD 개편 — panel-title([자원]/[역량] 세로 타이틀) 제거 */
 .panel-content { flex:1; display:flex; flex-direction:column; }
 .panel-divider { height:1px; background:#ddd; }
 .score-block { display:flex; flex-direction:column; align-items:center; gap:3px; min-width:54px; }

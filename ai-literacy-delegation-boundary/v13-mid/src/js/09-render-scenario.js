@@ -155,13 +155,10 @@ function updateStats(){
   if(!gameState)return;
   var dlg=gameState.competencies.delegationChoice.value;
   var knl=gameState.competencies.knowledge.value;
-  var dlgE=effectiveCompetency(dlg);
-  var knlE=effectiveCompetency(knl);
-  document.getElementById('num-delegation').textContent=(dlgE>0?'+':'')+dlgE;
-  document.getElementById('num-knowledge').textContent=(knlE>0?'+':'')+knlE;
-  // 양방향 바 — raw 기준 대칭 (raw -10/+10 → ±50%). 라벨은 effective(-10/+20).
-  setBipolar('gauge-delegation','num-delegation',dlg);
-  setBipolar('gauge-knowledge','num-knowledge',knl);
+  // 6/11 HUD 개편 — 원 7개 미터. filled = clamp(3 + raw, 0, 7). 3개 = 기존 raw 0 기준점.
+  // 내부 점수(raw)·effectiveCompetency·비용 식은 불변, 표시만 교체 (SPEC-ui-hud.md).
+  setCircleMeter('meter-delegation',dlg);
+  setCircleMeter('meter-knowledge',knl);
   // §12 pending 원 마커
   if(gameState.pending){
     renderPendingDots('pending-dots-delegation',gameState.pending.delegation||0,_prevPending.delegation);
@@ -176,17 +173,30 @@ function updateStats(){
   updateExpUI();
 }
 
-function setBipolar(fillId,numId,value){
-  var fill=document.getElementById(fillId);
-  var num=document.getElementById(numId);
-  if(!fill||!num)return;
-  // raw 기준 대칭 게이지: raw ±10 → ±50%. 단위당 5%. 라벨은 effective(-10/+20).
-  var pct=Math.min(50,Math.abs(value)*5);
-  fill.style.width=pct+'%';
-  fill.classList.remove('positive','negative');
-  num.classList.remove('positive','negative');
-  if(value>0){fill.classList.add('positive');num.classList.add('positive');}
-  else if(value<0){fill.classList.add('negative');num.classList.add('negative');}
+function setCircleMeter(meterId,value){
+  var meter=document.getElementById(meterId);
+  if(!meter)return;
+  var filled=Math.max(0,Math.min(7,3+value));
+  var over=(3+value)>7;
+  // 8번째 자식 = 오버플로 마커 (초록 테두리 깜빡임, raw > +4일 때만 표시)
+  if(meter.children.length!==8){
+    meter.innerHTML='';
+    for(var i=0;i<7;i++){var d=document.createElement('div');d.className='cm-dot';meter.appendChild(d);}
+    var o=document.createElement('div');o.className='cm-overflow';meter.appendChild(o);
+  }
+  for(var j=0;j<7;j++){
+    var dot=meter.children[j];
+    var want=j<filled;
+    if(want!==dot.classList.contains('filled')){
+      dot.classList.toggle('filled',want);
+      dot.classList.remove('pop');void dot.offsetWidth;dot.classList.add('pop');
+    }
+    // v2: 1~3번째 주황(시작 상태), 4번째부터 초록(획득분)
+    dot.classList.toggle('high',want&&j>=3);
+  }
+  meter.children[7].classList.toggle('show',over);
+  var label=meterId==='meter-delegation'?'선택':'능력';
+  meter.setAttribute('aria-label',label+' '+filled+'/7'+(over?' (초과)':''));
 }
 
 function getCurrentCutNum(){
@@ -200,17 +210,11 @@ function getCurrentCutNum(){
 
 function animateStat(which,oldVal,newVal){
   var diff=newVal-oldVal;if(diff===0)return;
-  var st=document.getElementById('stat-'+which),nm=document.getElementById('num-'+which),dl=document.getElementById('delta-'+which);
+  var st=document.getElementById('stat-'+which);
   st.classList.add(diff>0?'flash-up':'flash-down');
-  // 표시는 effective. delta도 effective(newE-oldE)로 — 학생 일관 직관.
-  var newE=effectiveCompetency(newVal);
-  var oldE=effectiveCompetency(oldVal);
-  var diffE=newE-oldE;
-  nm.textContent=(newE>0?'+':'')+newE;
-  nm.classList.add('pulsing');
-  dl.textContent=(diffE>0?'+':'')+diffE;
-  dl.className='stat-change-indicator show '+(diff>0?'up':'down');
-  setTimeout(function(){st.classList.remove('flash-up','flash-down');nm.classList.remove('pulsing');dl.className='stat-change-indicator';},2000);
+  // v2 6/11 — ±N float 인디케이터 제거 (피터공). 원 미터 갱신이 변화를 보여줌.
+  setCircleMeter('meter-'+which,newVal);
+  setTimeout(function(){st.classList.remove('flash-up','flash-down');},2000);
 }
 
 // 타이틀+튜토리얼 화면 (§11, v0.8 §11.5 5/4 세션287 정정)
@@ -659,7 +663,7 @@ function showReviewChoices(){
     var badge=afford?getCouponBadge('review',leafKey):'';
     var tag=afford?'':'<span class="insufficient-tag">'+_t('game_flow.insufficient','자원 부족')+'</span>';
     var leafLabel=(sc.reviewLabels&&sc.reviewLabels[leafKey])||r.label;
-    card.innerHTML='<div class="choice-header"><span class="choice-num">'+r.id+'</span><span class="choice-text">'+leafLabel+tag+'</span></div>'+costHTML+badge;
+    card.innerHTML='<div class="choice-header"><span class="choice-num">'+r.id.replace(/^R/,'')+'</span><span class="choice-text">'+leafLabel+tag+'</span></div>'+costHTML+badge;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
@@ -676,7 +680,7 @@ function showCut5Summary(){
   var rvLabelLeaf=(sc.reviewLabels&&sc.reviewLabels[leaf])||rvObj.label;
   setPanelImage(5,_t('game_flow.panel_labels.review','검토'));
   var panel=activatePanel(5);
-  panel.querySelector('.panel-body').innerHTML='<div class="chosen-summary"><div class="chosen-label">'+_t('game_flow.chosen_labels.review','검토 선택')+'</div><div class="chosen-title">'+rvObj.id+'. '+rvLabelLeaf+'</div>'+(supplement?'<div class="chosen-way">'+supplement+'</div>':'')+'</div>';
+  panel.querySelector('.panel-body').innerHTML='<div class="chosen-summary"><div class="chosen-label">'+_t('game_flow.chosen_labels.review','검토 선택')+'</div><div class="chosen-title">'+rvObj.id.replace(/^R/,'')+'. '+rvLabelLeaf+'</div>'+(supplement?'<div class="chosen-way">'+supplement+'</div>':'')+'</div>';
 }
 
 // 컷 6: 최종 점수 + 아이템 + 자각 + 경험치/레벨업 (Phase 4 통합)
@@ -852,7 +856,9 @@ function goCut6(){
   // 결과 패널 1.4초 보여주고 → [0] pending 흡수 → [1] 카드 → [1.5] 회복력 특별 UI(B 이하) → [2] 에너지 회복 애니메이션 → [3] 레벨업 → 다음 버튼
   var _v8CardLabels=[];
   var _hasRecoveryCard=false;
-  if(fin&&fin.cardEarned){
+  // 6/11 파일럿 — 선택별 획득 시나리오: 검토 카드는 onReview에서 즉시 지급·레일 표시(§2b). 결말 일괄 지급 없음.
+  var _pilotPC=(typeof pilotPerChoiceActive==='function')&&pilotPerChoiceActive(scid);
+  if(!_pilotPC&&fin&&fin.cardEarned){
     if(fin.humanCentricAxis&&fin.humanCentricTag)_v8CardLabels.push('['+fin.humanCentricAxis+'] '+fin.humanCentricTag);
     if(fin.domainCards)for(var _di=0;_di<fin.domainCards.length;_di++)_v8CardLabels.push(fin.domainCards[_di]);
   }
@@ -881,6 +887,10 @@ function goCut6(){
     // [3] v0.9 세션322 — RP 직접 배분 (학기 끝 아닐 때만)
     if(!willBeAllDone){
       chain=chain.then(function(){return showRPDistributionModal();});
+    }
+    // [3.5] §2b — 레일 카드 → 역량카드 버튼 비행 (레일 비면 no-op, 비파일럿 영향 없음)
+    if(typeof railFlyToInventory==='function'){
+      chain=chain.then(function(){return railFlyToInventory();});
     }
     chain.then(function(){
       var c6body=currentRow.querySelector('[data-cut="6"] .panel-body');

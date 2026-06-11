@@ -2,15 +2,25 @@ section,key,value
 humanCentricCards,humanCentricCards.중심잡기.short,AI 시대에 자기 기준과 목표를 붙잡는 힘
 humanCentricCards,humanCentricCards.융합하기.short,AI와 내 생각을 엮어 문제를 풀거나 새 결과를 만드는 힘
 humanCentricCards,humanCentricCards.성찰하기.short,AI 결과와 나의 선택을 다시 확인하고 책임 있게 고치는 힘
+domainCards,domainCards.자기이해.display,자기이해 능력
 domainCards,domainCards.자기이해.short,내 경험·관심·약점·기준을 알아차리는 힘
+domainCards,domainCards.표현력.display,표현 능력
 domainCards,domainCards.표현력.short,내 생각을 글이나 말로 풀어내는 힘
+domainCards,domainCards.문해력.display,문해 능력
 domainCards,domainCards.문해력.short,글과 자료를 직접 읽고 의미를 길어올리는 힘
+domainCards,domainCards.분석력.display,분석 능력
 domainCards,domainCards.분석력.short,정보나 문제를 비교하고 따져보는 힘
+domainCards,domainCards.검토력.display,검토 능력
 domainCards,domainCards.검토력.short,결과를 다시 확인하고 고치는 힘
+domainCards,domainCards.자료판단력.display,자료판단 능력
 domainCards,domainCards.자료판단력.short,출처·근거·신뢰도를 보고 자료를 고르는 힘
+domainCards,domainCards.소통력.display,소통 능력
 domainCards,domainCards.소통력.short,상대의 생각과 맥락을 읽고 맞추는 힘
+domainCards,domainCards.협업력.display,협업 능력
 domainCards,domainCards.협업력.short,팀 안에서 역할과 흐름을 맞추는 힘
+domainCards,domainCards.학습력.display,학습 능력
 domainCards,domainCards.학습력.short,내가 모르는 것을 찾고 공부를 설계하는 힘
+domainCards,domainCards.탐색력.display,탐색 능력
 domainCards,domainCards.탐색력.short,관심과 가능성을 찾아 넓히는 힘
 growthCards,growthCards.회복력.short,낮은 결과에서 비어 있던 과정을 알아차리고 다시 세우는 힘
 growthCards,growthCards.도전력.short,같은 시나리오를 다시 시도하며 더 나은 선택을 해보는 힘
@@ -81,6 +91,8 @@ ui_messages,ui_messages.inventory.section_domain,도메인 역량
 ui_messages,ui_messages.inventory.section_growth,성장 역량
 ui_messages,ui_messages.card_reward.btn_acquire,획득
 ui_messages,ui_messages.card_reward.tag_format,역량 카드 획득 · {idx}/{total}
+ui_messages,ui_messages.card_reward.popup_choice_format,「{label}」 선택
+ui_messages,ui_messages.card_reward.popup_earn_format,{cards} 획득!
 ui_messages,ui_messages.scenario_result.no_card_notice,이번엔 역량 카드를 받지 못했어요.
 ui_messages,ui_messages.scenario_result.growth_card_notice,다시 도전하면 도전력 카드를 얻을 수 있어요.
 ui_messages,ui_messages.scenario_result.replay_btn,이 시나리오 다시 해보기
@@ -195,12 +207,10 @@ cost_labels,cost_labels.energy_cost,에너지 비용
 cost_labels,cost_labels.discount,할인
 cost_labels,cost_labels.final_time,최종 시간
 cost_labels,cost_labels.final_energy,최종 에너지
-hud,hud.resource_title,자원
 hud,hud.time,시간
 hud,hud.energy,에너지
-hud,hud.competency_title,역량
-hud,hud.delegation,판단하는 힘
-hud,hud.knowledge,아는것의 힘
+hud,hud.delegation,선택
+hud,hud.knowledge,능력
 modals,modals.levelup.badge,LEVEL UP
 modals,modals.levelup.token_bonus_label,자원토큰 보너스
 modals,modals.levelup.btn_confirm,확인 →
@@ -221,9 +231,8 @@ coupon,coupon.btn_confirm,적용하고 진행 →
 coupon,coupon.badge_available,역량카드 할인가능 – 할인 적용하기
 coupon,coupon.badge_applied_format,{card} 역량카드 효과: -{amount} 할인
 recovery,recovery.title,회복력
-recovery,recovery.btn_use,회복역량 사용해 시간 되돌리기
-recovery,recovery.btn_use_sub,시나리오 다시 도전
-recovery,recovery.btn_skip,다음 시나리오로 →
+recovery,recovery.btn_use,다시 도전
+recovery,recovery.btn_skip,다음 시나리오
 recovery,recovery.note,이번 결과를 바탕으로 다시 시도할 수 있는 회복력 카드가 생겼어요.
 recovery,recovery.report_recovery,결과가 아쉬웠지만 포기하지 않았다. 다시 도전할 수 있는 힘이 생겼다.
 recovery,recovery.report_challenge,같은 시나리오에 다시 도전해서 더 나은 결과를 만들었다. 실패에서 배우는 힘이다.

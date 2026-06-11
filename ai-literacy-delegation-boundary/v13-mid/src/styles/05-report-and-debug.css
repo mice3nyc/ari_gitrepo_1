@@ -150,7 +150,6 @@
   .panel-row { flex-direction:column; }
   .score-display { flex-direction:column; min-width:0; padding:6px 12px; }
   .score-display-row { gap:12px; }
-  .panel-title { font-size:12px; letter-spacing:1.5px; padding:6px 10px; min-width:40px; }
   .display-num { font-size:28px; }
 }
 

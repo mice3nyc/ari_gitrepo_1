@@ -116,7 +116,7 @@ function _reportCardsByScenario(){
   var inv=gameState.inventory;
   function add(arr,labelFn){if(!arr)return;for(var i=0;i<arr.length;i++){var c=arr[i],sid=c.scenario;if(!groups[sid])groups[sid]=[];groups[sid].push(labelFn(c));}}
   add(inv.humanCentricCards,function(c){return '['+c.axis+'] '+c.tag;});
-  add(inv.domainCards,function(c){return c.label;});
+  add(inv.domainCards,function(c){return _cardDisplayName(c.label);});
   add(inv.growthCards,function(c){return c.label;});
   add(inv.competencyCards,function(c){return c.label;});
   return groups;
@@ -440,7 +440,7 @@ function showFinalReport(){
       var dc=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.domainCards)?TEXTS.domainCards[dlbl]:null;
       var dcolor=(dc&&dc.color)||'var(--ink)';
       h+='<div style="border:var(--border-w) solid var(--ink);background:var(--bg-card);padding:12px 8px;text-align:center;box-shadow:var(--shadow);">';
-      h+='<div style="font-size:14px;font-weight:700;color:'+dcolor+';">'+_esc(dlbl)+'</div>';
+      h+='<div style="font-size:14px;font-weight:700;color:'+dcolor+';">'+_esc(_cardDisplayName(dlbl))+'</div>';
       if(dc&&dc.short)h+='<div style="font-size:11px;color:var(--ink-soft);margin-top:4px;line-height:1.4;">'+_esc(dc.short)+'</div>';
       h+='</div>';
     }

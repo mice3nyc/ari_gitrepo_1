@@ -25,16 +25,8 @@ function _applyStaticTexts(){
       list.firstElementChild.innerHTML=inv.empty;
     }
   }
-  // HUD (상단 패널)
+  // HUD (상단 패널) — 6/11 개편: panel-title([자원]/[역량]) 제거됨
   var hud=TEXTS.hud||{};
-  var _hudMap={
-    'resource-bar':'resource_title','res-time':'','res-energy':'',
-    'stat-delegation':'','stat-name-knowledge':''
-  };
-  var _rbTitle=document.querySelector('#resource-bar .panel-title');
-  if(_rbTitle && hud.resource_title)_rbTitle.textContent=hud.resource_title;
-  var _sbTitle=document.querySelector('#stats-bar .panel-title');
-  if(_sbTitle && hud.competency_title)_sbTitle.textContent=hud.competency_title;
   var _resNames=document.querySelectorAll('.resource-name');
   if(_resNames.length>=2){
     if(hud.time)_resNames[0].textContent=hud.time;

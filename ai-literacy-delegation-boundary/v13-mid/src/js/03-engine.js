@@ -86,7 +86,9 @@ function applyReview(rid){
   gameState.score=calculateFinalScore(leaf,rid);
   if(fin&&fin.item)gameState.itemsCollected.push(fin.item);
   // v0.8 — 3트랙 카드 지급 (finals에서 직접 읽음)
-  if(fin&&fin.cardEarned){
+  // 6/11 파일럿 — 선택별 획득 시나리오는 결말 일괄 지급 스킵 (회복력·도전력은 아래 블록 그대로). SPEC-card-per-choice.md
+  var _pilotPC=(typeof pilotPerChoiceActive==='function')&&pilotPerChoiceActive(gameState.currentScenarioId);
+  if(fin&&fin.cardEarned&&!_pilotPC){
     if(fin.humanCentricAxis&&fin.humanCentricTag){
       if(!gameState.inventory.humanCentricCards)gameState.inventory.humanCentricCards=[];
       gameState.inventory.humanCentricCards.push({axis:fin.humanCentricAxis,tag:fin.humanCentricTag,scenario:gameState.currentScenarioId,leaf:leaf});
