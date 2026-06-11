@@ -1,24 +1,63 @@
 // =====================================================
-// 16. 카드 레일 — 획득 팝업 + 우측 스택 + 종료 비행 (SPEC-card-per-choice §2b)
-// 선택 직후: 우측 팝업("「선택」 → ○○ 획득!") → 닫으면 레일에 팝 등장 →
-// 시나리오 종료(컷6 체인 끝)에 역량카드 버튼으로 순차 비행.
+// 16. 카드 독 — 우측 상시 컬렉션 (SPEC-card-per-choice §2d)
+// 획득 팝업(컷 이미지 위, §2c) → 회전 비행 → 독 pending → 시나리오 완료 시 철컥 고정.
+// 호환: railClear = 팝업 정리 + 독 재렌더 / railFlyToInventory = 철컥 (§2b 호출처 유지)
 // =====================================================
-function _railEl(){
-  var rail=document.getElementById('card-rail');
-  if(!rail){
-    rail=document.createElement('div');
-    rail.id='card-rail';
-    document.body.appendChild(rail);
+function _dockEl(){
+  var dock=document.getElementById('card-dock');
+  if(!dock){
+    dock=document.createElement('div');
+    dock.id='card-dock';
+    dock.innerHTML='<div class="dock-sec"><div class="dock-sec-title">'+_t('inventory_labels.section_human_centric','인간중심 역량')+'</div><div class="dock-list" id="dock-list-hc"></div></div>'
+      +'<div class="dock-sec"><div class="dock-sec-title">'+_t('inventory_labels.section_ability','능력 카드')+'</div><div class="dock-list" id="dock-list-ab"></div></div>';
+    // 독 클릭 = 기존 상세 패널(inv-panel) 열기 — "처음부터 다시" 풋터 접근 유지
+    dock.onclick=function(){if(typeof toggleInventory==='function')toggleInventory(true);};
+    document.body.appendChild(dock);
   }
-  return rail;
+  return dock;
+}
+function dockShow(on){_dockEl().classList.toggle('on',!!on);}
+// 임시(pending) 판정 — 현재 시나리오에서 선택으로 획득, 아직 미클리어
+function _dockIsPending(entry){
+  if(!entry||!entry.perChoice||!gameState)return false;
+  if(entry.scenario!==gameState.currentScenarioId)return false;
+  return (gameState.clearedScenarios||[]).indexOf(entry.scenario)<0;
+}
+// 독 칩 DOM — c: {kind:'hc',axis,tag} | {kind:'domain'|'growth',name}
+function _dockChip(c,pending){
+  var el=document.createElement('div');
+  el.className='dock-card '+(pending?'pending':'locked');
+  if(c.kind==='hc'){
+    var am=_axisMeta(c.axis);
+    el.style.background=am.color;
+    el.innerHTML='<div class="dc-sub" style="color:rgba(255,255,255,0.8);">'+_invEscapeHTML(c.axis)+'</div>'+
+      '<div class="dc-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>';
+  }else{
+    el.style.borderLeft='6px solid '+_cardColor(c.name);
+    el.innerHTML='<div class="dc-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>';
+  }
+  return el;
+}
+function _dockListFor(c){return document.getElementById(c.kind==='hc'?'dock-list-hc':'dock-list-ab');}
+// 인벤토리 → 독 전체 재렌더 (읽기 전용 미러, 획득 순서 = 배열 순서)
+function dockRender(){
+  _dockEl();
+  var hcL=document.getElementById('dock-list-hc');
+  var abL=document.getElementById('dock-list-ab');
+  if(!hcL||!abL)return;
+  hcL.innerHTML='';abL.innerHTML='';
+  if(!gameState||!gameState.inventory)return;
+  var inv=gameState.inventory;
+  (inv.humanCentricCards||[]).forEach(function(e){hcL.appendChild(_dockChip({kind:'hc',axis:e.axis,tag:e.tag},_dockIsPending(e)));});
+  (inv.domainCards||[]).forEach(function(e){abL.appendChild(_dockChip({kind:'domain',name:e.label},_dockIsPending(e)));});
+  (inv.growthCards||[]).forEach(function(e){abL.appendChild(_dockChip({kind:'growth',name:e.label},_dockIsPending(e)));});
 }
 function railClear(){
-  var rail=document.getElementById('card-rail');
-  if(rail)rail.innerHTML='';
   var pop=document.getElementById('card-earn-popup');
   if(pop&&pop.parentNode)pop.parentNode.removeChild(pop);
+  dockRender();
 }
-// 미니 카드 DOM — 레일·팝업 미리보기 공용. c: {kind:'hc',axis,tag} | {kind:'domain',name}
+// 미니 카드 DOM — 팝업 미리보기·비행 고스트용 (§2b 시각 유지)
 function _railCardVisual(c){
   var el=document.createElement('div');
   el.className='rail-card';
@@ -33,24 +72,22 @@ function _railCardVisual(c){
   }
   return el;
 }
-function railAddCard(c){
-  var rail=_railEl();
-  var el=_railCardVisual(c);
-  rail.appendChild(el);
-  void el.offsetWidth;
-  el.classList.add('pop-in');
+// §2c v2.2 — 팝업 앵커: offsetLeft 체인(문서 좌표). getBoundingClientRect는 패널 slide-in
+// (translateX 30px→0) 도중 측정되면 우측으로 밀림 — offset 체인은 transform 무관.
+function _docOffset(el){
+  var x=0,y=0;
+  while(el){x+=el.offsetLeft;y+=el.offsetTop;el=el.offsetParent;}
+  return {x:x,y:y};
 }
-// §2c v2 — 팝업 앵커: 방금 선택으로 활성화된 컷의 panel-image. 못 찾으면 null(우측 고정 폴백)
-function _popupAnchorRect(anchorCut){
+function _popupAnchorBox(anchorCut){
   if(!anchorCut||typeof currentRow==='undefined'||!currentRow)return null;
   var img=currentRow.querySelector('[data-cut="'+anchorCut+'"] .panel-image');
-  if(!img)return null;
-  var r=img.getBoundingClientRect();
-  if(r.width<40||r.height<40)return null;
-  return r;
+  if(!img||img.offsetWidth<40||img.offsetHeight<40)return null;
+  var o=_docOffset(img);
+  return {left:o.x,top:o.y,width:img.offsetWidth,height:img.offsetHeight};
 }
-// 획득 팝업 — 컷 이미지 위 오버레이(§2c). 닫기(X·클릭) 또는 4초 자동 닫힘 →
-// 미리보기 카드가 그 자리에서 우측 레일 슬롯으로 비행(0.5s, 장당 0.15s 시간차) → 도착 시 레일 팝.
+// 획득 팝업 — 컷 이미지 하단 중앙(§2c v2.1). 닫기(클릭) 또는 4초 자동 닫힘 →
+// 미리보기 카드 고스트가 회전(540°)하며 독 pending 칩 자리로 비행(§2d).
 function showCardEarnPopup(choiceLabel,cards,anchorCut){
   return new Promise(function(resolve){
     if(!cards||!cards.length){resolve();return;}
@@ -70,46 +107,52 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
     var holder=pop.querySelector('.cep-cards');
     cards.forEach(function(c){holder.appendChild(_railCardVisual(c));});
     document.body.appendChild(pop);
-    var ar=_popupAnchorRect(anchorCut);
-    if(ar){
+    var ab=_popupAnchorBox(anchorCut);
+    if(ab){
       pop.classList.add('over-image');
-      // §2c v2.1 — 이미지 가로 중앙 + 하단부 (바닥에서 14px 위)
       var w=pop.offsetWidth||300;
       var ph=pop.offsetHeight||140;
-      pop.style.left=Math.max(8,Math.round(ar.left+window.scrollX+ar.width/2-w/2))+'px';
-      pop.style.top=Math.max(window.scrollY+8,Math.round(ar.bottom+window.scrollY-ph-14))+'px';
+      pop.style.left=Math.max(8,Math.round(ab.left+ab.width/2-w/2))+'px';
+      pop.style.top=Math.max(window.scrollY+8,Math.round(ab.top+ab.height-ph-14))+'px';
     }
     requestAnimationFrame(function(){pop.classList.add('show');});
     var closed=false;
     function close(){
       if(closed)return;closed=true;
-      // §2c — 미리보기 카드 고스트가 레일 슬롯으로 비행, 도착 시 railAddCard
       var minis=Array.prototype.slice.call(pop.querySelectorAll('.cep-cards .rail-card'));
-      var rail=_railEl();
-      var rr=rail.getBoundingClientRect();
-      var baseCount=rail.children.length;
+      dockShow(true);
       cards.forEach(function(c,i){
+        var list=_dockListFor(c);
+        if(!list){return;}
+        var chip=_dockChip(c,true);
+        chip.style.visibility='hidden';
+        list.appendChild(chip);
         var src=minis[i];
         var sr=src?src.getBoundingClientRect():null;
-        if(sr&&sr.width>0){
+        var tr=chip.getBoundingClientRect();
+        if(sr&&sr.width>0&&tr.width>0){
           var ghost=src.cloneNode(true);
-          ghost.style.cssText+=';position:fixed;left:'+sr.left+'px;top:'+sr.top+'px;width:'+sr.width+'px;margin:0;opacity:1;transform:none;background:var(--bg-card);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--ink);z-index:500;transition:transform 0.5s cubic-bezier(0.45,0,0.55,1),opacity 0.2s ease 0.4s;';
+          ghost.style.cssText+=';position:fixed;left:'+sr.left+'px;top:'+sr.top+'px;width:'+sr.width+'px;margin:0;opacity:1;transform:none;background:var(--bg-card);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--ink);z-index:500;transition:transform 0.55s cubic-bezier(0.45,0,0.55,1),opacity 0.18s ease 0.45s;';
+          if(c.kind==='hc'){var am=_axisMeta(c.axis);ghost.style.background=am.color;}
           document.body.appendChild(ghost);
-          var slotTop=rr.top+(baseCount+i)*(sr.height+10);
-          var tx=(rr.left+rr.width/2)-(sr.left+sr.width/2);
-          var ty=(slotTop+sr.height/2)-(sr.top+sr.height/2);
-          setTimeout(function(){
-            requestAnimationFrame(function(){
-              ghost.style.transform='translate('+tx+'px,'+ty+'px) scale(0.95)';
-              ghost.style.opacity='0';
-            });
+          var tx=tr.left+tr.width/2-(sr.left+sr.width/2);
+          var ty=tr.top+tr.height/2-(sr.top+sr.height/2);
+          var sc=Math.max(0.3,tr.width/sr.width);
+          (function(g,ch,dx,dy,s,idx){
             setTimeout(function(){
-              if(ghost.parentNode)ghost.parentNode.removeChild(ghost);
-              railAddCard(c);
-            },500);
-          },i*150);
+              requestAnimationFrame(function(){
+                g.style.transform='translate('+dx+'px,'+dy+'px) rotate(540deg) scale('+s.toFixed(2)+')';
+                g.style.opacity='0.2';
+              });
+              setTimeout(function(){
+                if(g.parentNode)g.parentNode.removeChild(g);
+                ch.style.visibility='';
+                ch.classList.add('reveal');
+              },560);
+            },idx*150);
+          })(ghost,chip,tx,ty,sc,i);
         }else{
-          setTimeout(function(){railAddCard(c);},250+i*150);
+          chip.style.visibility='';
         }
       });
       pop.classList.remove('show');
@@ -120,65 +163,33 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
     setTimeout(close,4000);
   });
 }
-// 종료 비행 — 레일 카드들이 역량카드 버튼(#inv-tab)으로 순차 비행 + 탭 펄스. 레일 비면 no-op.
-// 획득 팝업이 아직 열려 있으면(모달 없는 S/A 경로) 먼저 닫아 카드를 레일에 안착시킨 뒤 난다.
+// 철컥 — 시나리오 완료(컷6 체인 끝): pending 칩들이 120ms 시간차로 고정(locked).
+// 팝업이 아직 열려 있으면(모달 없는 경로) 먼저 닫아 비행을 마치게 한 뒤 잠근다.
 function railFlyToInventory(){
   var pop=document.getElementById('card-earn-popup');
   if(pop&&pop.onclick){
     pop.onclick();
     return new Promise(function(resolve){
-      setTimeout(function(){_railFlyNow().then(resolve);},900);
+      setTimeout(function(){_dockLockNow().then(resolve);},1000);
     });
   }
-  return _railFlyNow();
+  return _dockLockNow();
 }
-function _railFlyNow(){
+function _dockLockNow(){
   return new Promise(function(resolve){
-    var rail=document.getElementById('card-rail');
-    var items=rail?Array.prototype.slice.call(rail.children):[];
-    if(!items.length){resolve();return;}
-    var tab=document.getElementById('inv-tab');
-    if(!tab){railClear();resolve();return;}
-    var r=tab.getBoundingClientRect();
-    var remaining=items.length;
-    function finishOne(){
-      remaining--;
-      if(remaining<=0){
-        railClear();
-        var panel=document.getElementById('inv-panel');
-        var badge=document.getElementById('inv-tab-badge');
-        if(badge&&panel&&!panel.classList.contains('open'))badge.classList.remove('hidden');
-        renderInventory();
-        resolve();
-      }
-    }
-    items.forEach(function(el,i){
+    var dock=_dockEl();
+    var pend=Array.prototype.slice.call(dock.querySelectorAll('.dock-card.pending'));
+    if(!pend.length){resolve();return;}
+    pend.forEach(function(el,i){
       setTimeout(function(){
-        var cr=el.getBoundingClientRect();
-        // 레일 레이아웃을 유지한 채 fixed 고스트만 비행
-        var ghost=el.cloneNode(true);
-        ghost.classList.remove('pop-in');
-        ghost.style.cssText+=';position:fixed;left:'+cr.left+'px;top:'+cr.top+'px;width:'+cr.width+'px;margin:0;opacity:1;transform:none;z-index:500;transition:transform 0.5s cubic-bezier(0.55,0,0.85,0.3),opacity 0.35s ease-in 0.15s;';
-        document.body.appendChild(ghost);
-        el.style.visibility='hidden';
-        var tx=r.left+r.width/2-(cr.left+cr.width/2);
-        var ty=r.top+r.height/2-(cr.top+cr.height/2);
-        requestAnimationFrame(function(){
-          ghost.style.transform='translate('+tx+'px,'+ty+'px) scale(0.08) rotate(540deg)';
-          ghost.style.opacity='0';
-        });
-        setTimeout(function(){
-          if(ghost.parentNode)ghost.parentNode.removeChild(ghost);
-          tab.style.transition='transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease';
-          tab.style.transform='translateY(-50%) scale(1.15)';
-          tab.style.boxShadow='-3px 3px 0 #111, 0 0 20px rgba(255,220,80,0.6)';
-          setTimeout(function(){
-            tab.style.transform='translateY(-50%) scale(1)';
-            tab.style.boxShadow='-3px 3px 0 #111';
-          },300);
-          finishOne();
-        },550);
-      },i*180);
+        el.classList.remove('pending');
+        el.classList.add('locked','locking');
+        (function(node){setTimeout(function(){node.classList.remove('locking');},450);})(el);
+      },i*120);
     });
+    setTimeout(function(){
+      if(typeof renderInventory==='function')renderInventory();
+      resolve();
+    },pend.length*120+500);
   });
 }

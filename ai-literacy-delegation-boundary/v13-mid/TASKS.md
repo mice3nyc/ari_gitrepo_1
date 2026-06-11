@@ -414,3 +414,13 @@
 - [x] texts.yaml title_screen 개편 + tutorial_screen 신설 + csv 재생성(270항목)
 - [x] 빌드 + 스크린샷 확인 + 3화면 흐름 헤드리스 + 린터 0
 - [ ] 피터공 확인 — 타이틀 임팩트·배지(경기도 하이러닝) 유지 여부·재방문 스킵 필요성
+
+#### 6/11 세션466 — 카드 독 + 팝업 중앙 보정 + UI 전체 물마루 (SPEC-card-per-choice §2d, SPEC-ui-hud §4i-6)
+
+- [x] (1) 팝업 우측 밀림 수정 — 앵커를 rect → offsetLeft 체인(패널 slide-in transform 중 측정 문제)
+- [x] (2) 카드 독 #card-dock — 우측 끝 상시, 인간중심 역량/능력 카드 2섹션, 획득 순서 스택, 클릭=상세 패널
+- [x] 획득 = 팝업에서 회전(540°) 비행 → pending(점선) 칩 / 시나리오 완료 = 철컥(dockClunk) locked 고정
+- [x] inv-tab 버튼 숨김(독 대체), 레일·종료 비행 폐기 (railClear/railFlyToInventory 이름 유지 호환)
+- [x] UI 전체 물마루 — --font-main 1순위 교체 (Paperlogy 폴백)
+- [x] 빌드 + 린터 0 + 헤드리스(독 표시·pending 1·철컥 후 locked) + 스크린샷 확인
+- [ ] 피터공 확인 — 본문 픽셀체 가독성, 성장카드(회복력·도전력) 능력 섹션 배치, 빈 섹션 표시

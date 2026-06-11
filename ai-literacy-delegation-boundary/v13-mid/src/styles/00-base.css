@@ -17,7 +17,7 @@
   --shadow:var(--shadow-offset) var(--shadow-offset) 0 var(--ink);
   --shadow-press:2px 2px 0 var(--ink);
   --radius:0;
-  --font-main:"Paperlogy","Pretendard",system-ui,sans-serif;
+  --font-main:"Mulmaru","Paperlogy","Pretendard",system-ui,sans-serif; /* §4i-6 — UI 전체 물마루 전환 시도 (피터공) */
   --font-hand:"Nanum Pen Script","Caveat",cursive;
   --font-pixel:"Mulmaru","Paperlogy",sans-serif;
 }

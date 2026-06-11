@@ -5,11 +5,14 @@ var container=document.getElementById('main-container');
 
 function showStats(){
   document.getElementById('panel-row').classList.add('visible');
-  var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='block';
+  // §2d — inv-tab 버튼 대신 카드 독. 상세 패널은 독 클릭으로 진입.
+  var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='none';
+  if(typeof dockShow==='function'){dockRender();dockShow(true);}
 }
 function hideStats(){
   document.getElementById('panel-row').classList.remove('visible');
   var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='none';
+  if(typeof dockShow==='function')dockShow(false);
 }
 
 // 자원 게이지 업데이트 (작업 2)

@@ -663,6 +663,7 @@ config_texts:
 # =====================================================
 inventory_labels:
   section_human_centric: "인간중심 역량"
+  section_ability: "능력 카드"
   section_domain: "도메인 역량"
   section_growth: "성장 역량"
   legacy_prefix: "이전 버전 카드"

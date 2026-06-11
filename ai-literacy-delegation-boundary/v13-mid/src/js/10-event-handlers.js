@@ -359,8 +359,8 @@ function confirmResetDo(){
 }
 
 function backToStartScreen(){
-  if(typeof railClear==='function')railClear(); // §2b
-  var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='';
+  if(typeof railClear==='function')railClear(); // §2b→§2d 독 재렌더
+  // §2d — inv-tab은 독으로 대체, 복원하지 않음
   var debugBtn=document.querySelector('.debug-toggle');if(debugBtn)debugBtn.style.display='';
   var verLabel=document.getElementById('version-label');if(verLabel)verLabel.style.display='';
   currentRow=null;
