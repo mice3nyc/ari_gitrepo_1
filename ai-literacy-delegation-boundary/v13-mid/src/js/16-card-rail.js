@@ -40,8 +40,18 @@ function railAddCard(c){
   void el.offsetWidth;
   el.classList.add('pop-in');
 }
-// 획득 팝업 — 닫기(X·클릭) 또는 4초 자동 닫힘 → 카드가 레일로 팝 (여러 장이면 0.15s 시간차)
-function showCardEarnPopup(choiceLabel,cards){
+// §2c v2 — 팝업 앵커: 방금 선택으로 활성화된 컷의 panel-image. 못 찾으면 null(우측 고정 폴백)
+function _popupAnchorRect(anchorCut){
+  if(!anchorCut||typeof currentRow==='undefined'||!currentRow)return null;
+  var img=currentRow.querySelector('[data-cut="'+anchorCut+'"] .panel-image');
+  if(!img)return null;
+  var r=img.getBoundingClientRect();
+  if(r.width<40||r.height<40)return null;
+  return r;
+}
+// 획득 팝업 — 컷 이미지 위 오버레이(§2c). 닫기(X·클릭) 또는 4초 자동 닫힘 →
+// 미리보기 카드가 그 자리에서 우측 레일 슬롯으로 비행(0.5s, 장당 0.15s 시간차) → 도착 시 레일 팝.
+function showCardEarnPopup(choiceLabel,cards,anchorCut){
   return new Promise(function(resolve){
     if(!cards||!cards.length){resolve();return;}
     var old=document.getElementById('card-earn-popup');
@@ -60,13 +70,48 @@ function showCardEarnPopup(choiceLabel,cards){
     var holder=pop.querySelector('.cep-cards');
     cards.forEach(function(c){holder.appendChild(_railCardVisual(c));});
     document.body.appendChild(pop);
+    var ar=_popupAnchorRect(anchorCut);
+    if(ar){
+      pop.classList.add('over-image');
+      var w=pop.offsetWidth||260;
+      pop.style.left=Math.max(8,Math.round(ar.left+window.scrollX+ar.width/2-w/2))+'px';
+      pop.style.top=Math.round(ar.top+window.scrollY+12)+'px';
+    }
     requestAnimationFrame(function(){pop.classList.add('show');});
     var closed=false;
     function close(){
       if(closed)return;closed=true;
+      // §2c — 미리보기 카드 고스트가 레일 슬롯으로 비행, 도착 시 railAddCard
+      var minis=Array.prototype.slice.call(pop.querySelectorAll('.cep-cards .rail-card'));
+      var rail=_railEl();
+      var rr=rail.getBoundingClientRect();
+      var baseCount=rail.children.length;
+      cards.forEach(function(c,i){
+        var src=minis[i];
+        var sr=src?src.getBoundingClientRect():null;
+        if(sr&&sr.width>0){
+          var ghost=src.cloneNode(true);
+          ghost.style.cssText+=';position:fixed;left:'+sr.left+'px;top:'+sr.top+'px;width:'+sr.width+'px;margin:0;opacity:1;transform:none;background:var(--bg-card);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--ink);z-index:500;transition:transform 0.5s cubic-bezier(0.45,0,0.55,1),opacity 0.2s ease 0.4s;';
+          document.body.appendChild(ghost);
+          var slotTop=rr.top+(baseCount+i)*(sr.height+10);
+          var tx=(rr.left+rr.width/2)-(sr.left+sr.width/2);
+          var ty=(slotTop+sr.height/2)-(sr.top+sr.height/2);
+          setTimeout(function(){
+            requestAnimationFrame(function(){
+              ghost.style.transform='translate('+tx+'px,'+ty+'px) scale(0.95)';
+              ghost.style.opacity='0';
+            });
+            setTimeout(function(){
+              if(ghost.parentNode)ghost.parentNode.removeChild(ghost);
+              railAddCard(c);
+            },500);
+          },i*150);
+        }else{
+          setTimeout(function(){railAddCard(c);},250+i*150);
+        }
+      });
       pop.classList.remove('show');
       setTimeout(function(){if(pop.parentNode)pop.parentNode.removeChild(pop);},250);
-      cards.forEach(function(c,i){setTimeout(function(){railAddCard(c);},250+i*150);});
       resolve();
     }
     pop.onclick=close;

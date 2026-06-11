@@ -181,7 +181,11 @@ function updateScoreGraph(){
   var s=(typeof getLiveScore==='function')?getLiveScore():0;
   fill.style.width=s+'%';
   // v6.4 — 초록 채움의 우측 끝 = 노랑 원(40px) 우측 끝. 채움이 원보다 짧으면 좌측 0에 클램프
-  rider.style.left='max(0px, calc('+s+'% - 40px))';
+  // v6.5 §4e-10 — max()/calc() 문자열은 트랜지션 보간이 안 걸려 원이 점프 → px로 계산.
+  // 채움 바와 같은 0.6s 바운스 베지어로 함께 출렁임. 리사이즈 시 다음 갱신까지 px 고정(허용).
+  var track=fill.parentNode;
+  var tw=track?track.clientWidth:0;
+  rider.style.left=Math.max(0,Math.round(tw*s/100-40))+'px';
   // 점수 낮을 땐 숫자를 머리 우측으로 (좌측 채움 공간 없음 — 흰 트랙 위라 ink)
   rider.classList.toggle('num-right',s<25);
   num.textContent=s;

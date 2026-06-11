@@ -122,10 +122,12 @@ function _pilotChoiceLabel(stage,id){
   return '';
 }
 
-// 적립 + 우측 획득 팝업 한 호흡 (tier1/tier2/review 훅용) — §2b 레일 흐름
+// 적립 + 획득 팝업 한 호흡 (tier1/tier2/review 훅용) — §2b 레일 흐름
+// §2c — 팝업 앵커 컷: 선택 요약이 뜨는 컷 (tier1→컷2, tier2→컷3, review→컷5)
+var _stageAnchorCut={tier1:2,tier2:3,review:5};
 function pilotAwardAndShow(stage,id){
   var cards=pilotCardsForChoice(stage,id);
   if(!cards.length)return Promise.resolve();
   pilotAwardCards(cards);
-  return showCardEarnPopup(_pilotChoiceLabel(stage,id),cards);
+  return showCardEarnPopup(_pilotChoiceLabel(stage,id),cards,_stageAnchorCut[stage]);
 }

@@ -671,6 +671,9 @@ button, input, select, textarea { font-family: inherit; }
 .rail-card-name { font-size:14px; font-weight:700; line-height:1.3; }
 .card-earn-popup { position:fixed; top:150px; right:176px; width:260px; background:var(--bg-card); border:2px solid var(--ink); border-radius:16px; box-shadow:4px 4px 0 var(--ink); padding:16px 18px; z-index:420; opacity:0; transform:translateX(24px); transition:opacity 0.25s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); cursor:pointer; }
 .card-earn-popup.show { opacity:1; transform:translateX(0); }
+/* §2c v2 — 컷 이미지 위 오버레이 모드: 문서 좌표(absolute) + scale 등장 (left/top은 JS) */
+.card-earn-popup.over-image { position:absolute; right:auto; transform:translateY(6px) scale(0.85); }
+.card-earn-popup.over-image.show { transform:translateY(0) scale(1); }
 .cep-close { position:absolute; top:8px; right:10px; background:none; border:none; font-size:16px; cursor:pointer; color:var(--ink-soft); line-height:1; }
 .cep-choice { font-size:12px; color:var(--ink-soft); margin-bottom:6px; padding-right:16px; }
 .cep-earn { font-size:16px; margin-bottom:10px; }
@@ -14688,7 +14691,11 @@ function updateScoreGraph(){
   var s=(typeof getLiveScore==='function')?getLiveScore():0;
   fill.style.width=s+'%';
   // v6.4 — 초록 채움의 우측 끝 = 노랑 원(40px) 우측 끝. 채움이 원보다 짧으면 좌측 0에 클램프
-  rider.style.left='max(0px, calc('+s+'% - 40px))';
+  // v6.5 §4e-10 — max()/calc() 문자열은 트랜지션 보간이 안 걸려 원이 점프 → px로 계산.
+  // 채움 바와 같은 0.6s 바운스 베지어로 함께 출렁임. 리사이즈 시 다음 갱신까지 px 고정(허용).
+  var track=fill.parentNode;
+  var tw=track?track.clientWidth:0;
+  rider.style.left=Math.max(0,Math.round(tw*s/100-40))+'px';
   // 점수 낮을 땐 숫자를 머리 우측으로 (좌측 채움 공간 없음 — 흰 트랙 위라 ink)
   rider.classList.toggle('num-right',s<25);
   num.textContent=s;
@@ -17202,12 +17209,14 @@ function _pilotChoiceLabel(stage,id){
   return '';
 }
 
-// 적립 + 우측 획득 팝업 한 호흡 (tier1/tier2/review 훅용) — §2b 레일 흐름
+// 적립 + 획득 팝업 한 호흡 (tier1/tier2/review 훅용) — §2b 레일 흐름
+// §2c — 팝업 앵커 컷: 선택 요약이 뜨는 컷 (tier1→컷2, tier2→컷3, review→컷5)
+var _stageAnchorCut={tier1:2,tier2:3,review:5};
 function pilotAwardAndShow(stage,id){
   var cards=pilotCardsForChoice(stage,id);
   if(!cards.length)return Promise.resolve();
   pilotAwardCards(cards);
-  return showCardEarnPopup(_pilotChoiceLabel(stage,id),cards);
+  return showCardEarnPopup(_pilotChoiceLabel(stage,id),cards,_stageAnchorCut[stage]);
 }
 // =====================================================
 // 16. 카드 레일 — 획득 팝업 + 우측 스택 + 종료 비행 (SPEC-card-per-choice §2b)
@@ -17251,8 +17260,18 @@ function railAddCard(c){
   void el.offsetWidth;
   el.classList.add('pop-in');
 }
-// 획득 팝업 — 닫기(X·클릭) 또는 4초 자동 닫힘 → 카드가 레일로 팝 (여러 장이면 0.15s 시간차)
-function showCardEarnPopup(choiceLabel,cards){
+// §2c v2 — 팝업 앵커: 방금 선택으로 활성화된 컷의 panel-image. 못 찾으면 null(우측 고정 폴백)
+function _popupAnchorRect(anchorCut){
+  if(!anchorCut||typeof currentRow==='undefined'||!currentRow)return null;
+  var img=currentRow.querySelector('[data-cut="'+anchorCut+'"] .panel-image');
+  if(!img)return null;
+  var r=img.getBoundingClientRect();
+  if(r.width<40||r.height<40)return null;
+  return r;
+}
+// 획득 팝업 — 컷 이미지 위 오버레이(§2c). 닫기(X·클릭) 또는 4초 자동 닫힘 →
+// 미리보기 카드가 그 자리에서 우측 레일 슬롯으로 비행(0.5s, 장당 0.15s 시간차) → 도착 시 레일 팝.
+function showCardEarnPopup(choiceLabel,cards,anchorCut){
   return new Promise(function(resolve){
     if(!cards||!cards.length){resolve();return;}
     var old=document.getElementById('card-earn-popup');
@@ -17271,13 +17290,48 @@ function showCardEarnPopup(choiceLabel,cards){
     var holder=pop.querySelector('.cep-cards');
     cards.forEach(function(c){holder.appendChild(_railCardVisual(c));});
     document.body.appendChild(pop);
+    var ar=_popupAnchorRect(anchorCut);
+    if(ar){
+      pop.classList.add('over-image');
+      var w=pop.offsetWidth||260;
+      pop.style.left=Math.max(8,Math.round(ar.left+window.scrollX+ar.width/2-w/2))+'px';
+      pop.style.top=Math.round(ar.top+window.scrollY+12)+'px';
+    }
     requestAnimationFrame(function(){pop.classList.add('show');});
     var closed=false;
     function close(){
       if(closed)return;closed=true;
+      // §2c — 미리보기 카드 고스트가 레일 슬롯으로 비행, 도착 시 railAddCard
+      var minis=Array.prototype.slice.call(pop.querySelectorAll('.cep-cards .rail-card'));
+      var rail=_railEl();
+      var rr=rail.getBoundingClientRect();
+      var baseCount=rail.children.length;
+      cards.forEach(function(c,i){
+        var src=minis[i];
+        var sr=src?src.getBoundingClientRect():null;
+        if(sr&&sr.width>0){
+          var ghost=src.cloneNode(true);
+          ghost.style.cssText+=';position:fixed;left:'+sr.left+'px;top:'+sr.top+'px;width:'+sr.width+'px;margin:0;opacity:1;transform:none;background:var(--bg-card);border:2px solid var(--ink);border-radius:12px;box-shadow:3px 3px 0 var(--ink);z-index:500;transition:transform 0.5s cubic-bezier(0.45,0,0.55,1),opacity 0.2s ease 0.4s;';
+          document.body.appendChild(ghost);
+          var slotTop=rr.top+(baseCount+i)*(sr.height+10);
+          var tx=(rr.left+rr.width/2)-(sr.left+sr.width/2);
+          var ty=(slotTop+sr.height/2)-(sr.top+sr.height/2);
+          setTimeout(function(){
+            requestAnimationFrame(function(){
+              ghost.style.transform='translate('+tx+'px,'+ty+'px) scale(0.95)';
+              ghost.style.opacity='0';
+            });
+            setTimeout(function(){
+              if(ghost.parentNode)ghost.parentNode.removeChild(ghost);
+              railAddCard(c);
+            },500);
+          },i*150);
+        }else{
+          setTimeout(function(){railAddCard(c);},250+i*150);
+        }
+      });
       pop.classList.remove('show');
       setTimeout(function(){if(pop.parentNode)pop.parentNode.removeChild(pop);},250);
-      cards.forEach(function(c,i){setTimeout(function(){railAddCard(c);},250+i*150);});
       resolve();
     }
     pop.onclick=close;
