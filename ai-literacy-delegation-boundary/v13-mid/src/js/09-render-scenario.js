@@ -399,7 +399,7 @@ function renderCut1(){
   var panel=activatePanel(1);
   panel.querySelector('.panel-body').innerHTML=
     '<p class="highlight">'+sc.title+'</p>'+
-    '<p>'+sc.situation.text+'</p>'+
+    '<p class="situation-text">'+sc.situation.text+'</p>'+
     '<div class="advance-wrap"><button class="advance-btn" onclick="showTier1Choices()">'+_t('game_flow.buttons.tier1_advance','어떻게 할까? →')+'</button></div>';
   updateStats();
 }
@@ -499,66 +499,19 @@ function buildCostHTML(cost){
   }
   var energyHtml='';
   var _cl2=_t('cost_labels',{});
-  energyHtml+=_buildCostLine(_cl2.energy_cost||'에너지 비용',d.rawEnergy,_cl2.discount||'할인',totalEnergyDisc,_cl2.final_energy||'최종 에너지',cost.energy);
+  energyHtml+=_buildCostLine(_cl2.energy_cost||'에너지 비용',d.rawEnergy,_cl2.energy_discount||'능력 할인',totalEnergyDisc,_cl2.cost_final||'비용',cost.energy);
   return '<div class="choice-cost cost-formula-box">'+
-    _buildCostLine(_cl2.time_cost||'시간 비용',d.rawTime,_cl2.discount||'할인',d.dlgEffect,_cl2.final_time||'최종 시간',cost.time)+
+    _buildCostLine(_cl2.time_cost||'시간 비용',d.rawTime,_cl2.time_discount||'선택 할인',d.dlgEffect,_cl2.cost_final||'비용',cost.time)+
     '<div class="cost-energy-col">'+energyHtml+'</div>'+
   '</div>';
 }
-function getCouponBadge(stageType,choiceId){
+// §4f — 역량카드 할인 가능 표식 (버튼 아님, 선택 텍스트 끝 초록 박스)
+// 기존 하단 cost-coupon-badge·_updateCouponBadge(적용 후 비용 갱신·blink)는 v7에서 제거 —
+// 모달 확정 즉시 선택으로 바뀌어 적용 후 화면 갱신 자체가 사라짐.
+function getCardDiscountMark(stageType,choiceId){
   var avail=getAvailableCardDiscounts(stageType,choiceId);
-  if(avail.length>0)return '<div class="cost-coupon-badge" data-coupon-id="'+stageType+':'+choiceId+'">'+_t('coupon.badge_available','역량카드 할인가능 – 할인 적용하기')+'</div>';
+  if(avail.length>0)return ' <span class="card-discount-mark">'+_t('coupon.choice_mark','역량카드 할인 가능')+'</span>';
   return '';
-}
-function _updateCouponBadge(areaId,choiceId,selectedCard,stageType){
-  var area=document.getElementById(areaId);if(!area)return;
-  var badges=area.querySelectorAll('.cost-coupon-badge');
-  for(var i=0;i<badges.length;i++){
-    var bid=badges[i].getAttribute('data-coupon-id');
-    if(bid&&bid.indexOf(choiceId)>=0){
-      if(selectedCard){
-        var _badgeTpl=_t('coupon.badge_applied_format','{card} 역량카드 효과: -{amount} 할인');
-        badges[i].textContent=_badgeTpl.replace('{card}',selectedCard.display).replace('{amount}',selectedCard.amount);
-        badges[i].classList.add('applied');
-        var choiceCard=badges[i].closest('.choice-card');
-        if(choiceCard&&stageType){
-          var costEl=choiceCard.querySelector('.choice-cost');
-          if(costEl){
-            var newCost;
-            var costId=bid?bid.split(':')[1]:choiceId;
-            if(stageType==='tier2')newCost=getTier2CostWithCard(costId,selectedCard);
-            else if(stageType==='review')newCost=getReviewCostWithCard(costId,selectedCard);
-            if(newCost){
-              var eCol=costEl.querySelector('.cost-energy-col');
-              var oldDisc=eCol?eCol.querySelector('.cost-formula-discount'):null;
-              var oldFinal=eCol?eCol.querySelector('.cost-formula-final b'):null;
-              if(oldDisc||oldFinal){
-                if(oldDisc)oldDisc.classList.add('cost-blink');
-                if(oldFinal)oldFinal.classList.add('cost-blink');
-                (function(ce,cc,nc){setTimeout(function(){
-                  var tmp=document.createElement('div');tmp.innerHTML=buildCostHTML(nc);
-                  ce.parentNode.replaceChild(tmp.firstChild,ce);
-                  var ne=cc.querySelector('.choice-cost');
-                  if(ne){
-                    var nCol=ne.querySelector('.cost-energy-col');
-                    var nDisc=nCol?nCol.querySelector('.cost-formula-discount'):null;
-                    var nFinal=nCol?nCol.querySelector('.cost-formula-final b'):null;
-                    if(nDisc)nDisc.classList.add('cost-blink');
-                    if(nFinal)nFinal.classList.add('cost-blink');
-                  }
-                },800);})(costEl,choiceCard,newCost);
-              } else {
-                var tmp=document.createElement('div');tmp.innerHTML=buildCostHTML(newCost);
-                costEl.parentNode.replaceChild(tmp.firstChild,costEl);
-              }
-            }
-          }
-        }
-      } else {
-        badges[i].textContent=_t('coupon.badge_available','역량카드 할인가능 – 할인 적용하기');
-      }
-    }
-  }
 }
 
 // §23 — 1차 선택지를 Cut 1 body 아래에 펼침
@@ -620,9 +573,9 @@ function showTier2Choices(){
     card.className='choice-card'+(afford?'':' disabled');
     if(afford)card.onclick=function(){onTier2(c.id);};
     var costHTML=buildCostHTML(costs[i]);
-    var badge=afford?getCouponBadge('tier2',c.id):'';
+    var mark=afford?getCardDiscountMark('tier2',c.id):'';
     var tag=afford?'':'<span class="insufficient-tag">'+_t('game_flow.insufficient','자원 부족')+'</span>';
-    card.innerHTML='<div class="choice-header"><span class="choice-num">'+(i+1)+'</span><span class="choice-text">'+c.label+tag+'</span></div>'+costHTML+badge;
+    card.innerHTML='<div class="choice-header"><span class="choice-num">'+(i+1)+'</span><span class="choice-text">'+c.label+mark+tag+'</span></div>'+costHTML;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
@@ -684,10 +637,10 @@ function showReviewChoices(){
     if(afford)card.onclick=function(){onReview(r.id);};
     var costHTML=buildCostHTML(costs[i]);
     var leafKey=t2cur+r.id;
-    var badge=afford?getCouponBadge('review',leafKey):'';
+    var mark=afford?getCardDiscountMark('review',leafKey):'';
     var tag=afford?'':'<span class="insufficient-tag">'+_t('game_flow.insufficient','자원 부족')+'</span>';
     var leafLabel=(sc.reviewLabels&&sc.reviewLabels[leafKey])||r.label;
-    card.innerHTML='<div class="choice-header"><span class="choice-num">'+r.id.replace(/^R/,'')+'</span><span class="choice-text">'+leafLabel+tag+'</span></div>'+costHTML+badge;
+    card.innerHTML='<div class="choice-header"><span class="choice-num">'+r.id.replace(/^R/,'')+'</span><span class="choice-text">'+leafLabel+mark+tag+'</span></div>'+costHTML;
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });

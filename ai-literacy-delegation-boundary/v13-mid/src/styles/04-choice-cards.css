@@ -13,6 +13,8 @@
 .choice-card-nocost .choice-header { padding:12px 14px; }
 .choice-num { background:var(--acc-yellow); color:var(--ink); width:24px; height:24px; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; border:2px solid var(--ink); }
 .choice-text { font-size:15px; font-weight:700; line-height:1.4; margin-bottom:2px; }
+/* §4f v7 — 역량카드 할인 가능 표식 (버튼 아님, 선택 텍스트 끝) */
+.card-discount-mark { display:inline-block; font-size:10px; font-weight:700; color:#fff; background:#15803d; padding:2px 7px; margin-left:6px; vertical-align:2px; line-height:1.3; white-space:nowrap; }
 .choice-desc { font-size:11px; color:#888; line-height:1.4; margin-top:3px; }
 /* v0.8 §6.6.3 — Cut5 review supplements를 메인 텍스트로 격상 */
 .choice-narrative { font-size:12px; color:#222; line-height:1.4; margin-top:3px; padding:5px 8px; background:#f6f6f6; border-left:2px solid #111; }

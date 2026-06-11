@@ -113,6 +113,14 @@
    - **초록 채움의 우측 끝 = 노랑 원 우측 끝** 일치 — rider left = `max(0px, s% − 40px)`. 0점 부근에선 좌측 0에 클램프(원이 채움보다 클 때).
    - **점수 숫자 흰색** (초록 채움 위). 낮은 점수로 우측 플립(.num-right) 시엔 흰 트랙 위라 ink 유지.
 
+## 4f. v7 — 6/11 시나리오 화면 수정 5건 (피터공 6차)
+
+1. **컷1 상황 텍스트 폰트 확대**: situation.text `<p>`에 `.situation-text` 클래스 — 본문 상속 13px → 15px (제목 .highlight 18px과 위계 유지). `03-overlays-and-board.css`.
+2. **비용 표기 정리**: 라벨 변경 — 시간 줄 `시간 비용 [N] − 선택 할인 [N] = 비용 [N]` / 에너지 줄 `에너지 비용 [N] − 능력 할인 [N] = 비용 [N]`. 할인이 하나도 없으면 기존 기본형(`시간 비용 N / 에너지 비용 N`) 유지. `texts.yaml` cost_labels: `discount` → `time_discount: "선택 할인"`·`energy_discount: "능력 할인"`, `final_time`/`final_energy` → `cost_final: "비용"`. 에너지 할인 숫자는 능력(지식)+역량카드 합산(기존 clampedEnergy 그대로).
+3. **역량카드 할인 표식**: 할인 가능 선택지의 메인 선택 텍스트 끝에 초록 박스+흰 글씨 `역량카드 할인 가능` 표식. 버튼 아님 — 클릭 대상은 선택지 카드 전체. `.card-discount-mark`(04-choice-cards.css), 문구 `texts.yaml` `coupon.choice_mark`.
+4. **모달 확정 = 즉시 선택**: 할인 가능 선택지 클릭 → 쿠폰 모달(기존 역량카드 적용 화면) → 확정 버튼 클릭 시 **바로 그 선택지로 진행**. 기존엔 모달 닫힌 뒤 같은 선택지를 다시 클릭해야 했음. `onTier2`/`onReview`의 showCouponSelect 콜백에서 선택 저장 후 자기 재호출.
+5. **하단 초록 배지 제거**: 비용 박스 아래 `cost-coupon-badge`("역량카드 할인가능 – 할인 적용하기") 렌더 제거. 적용 후 비용 갱신·blink를 담당하던 `_updateCouponBadge`는 즉시 진행으로 불필요 — 삭제. `texts.yaml` `coupon.badge_available`/`badge_applied_format` 제거.
+
 ## 5. 미해결 / 다음 단계
 
 - [ ] 원 7개의 **숫자 로직 정식 설계** — 획득·증감 단위를 7단계 기준으로 재설계 (피터공: "일단은 3개가 기존 0"). 콘텐츠 트랙 밸런스와 엮임.

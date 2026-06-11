@@ -34,6 +34,8 @@
 .panel-place { font-size:10px; color:#999; position:absolute; bottom:4px; right:8px; background:rgba(255,255,255,0.8); padding:1px 6px; }
 .panel-body { flex:1; padding:10px 12px; overflow-y:auto; font-size:13px; line-height:1.5; }
 .panel-body p { margin-bottom:6px; }
+/* §4f v7 — 컷1 상황 텍스트 확대 (본문 13px → 15px) */
+.panel-body .situation-text { font-size:15px; }
 .panel-body .highlight { font-size:15px; font-weight:700; }
 .panel-body .core-q { font-weight:600; font-size:14px; margin:6px 0; padding:6px 0; border-top:1px solid #eee; }
 .advance-wrap { text-align:center; margin-top:10px; }

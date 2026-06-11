@@ -577,9 +577,9 @@ game_flow:
 cost_labels:
   time_cost: "시간 비용"
   energy_cost: "에너지 비용"
-  discount: "할인"
-  final_time: "최종 시간"
-  final_energy: "최종 에너지"
+  time_discount: "선택 할인"
+  energy_discount: "능력 할인"
+  cost_final: "비용"
 
 # =====================================================
 # 9. HUD (상단 패널)
@@ -619,8 +619,7 @@ coupon:
   strong_tag: "강한 매칭"
   energy_discount_format: "에너지 -{amount}"
   btn_confirm: "적용하고 진행 →"
-  badge_available: "역량카드 할인가능 – 할인 적용하기"
-  badge_applied_format: "{card} 역량카드 효과: -{amount} 할인"
+  choice_mark: "역량카드 할인 가능"
 
 # =====================================================
 # 12. 회복력 특별 UI

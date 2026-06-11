@@ -263,9 +263,10 @@ function onTier2(t2id){
   var availCards=getAvailableCardDiscounts('tier2',t2id);
   var couponKey='tier2:'+t2id;
   if(availCards.length>0&&_couponSelections[couponKey]===undefined){
+    // §4f v7 — 모달 확정 = 즉시 선택. 저장 후 자기 재호출로 바로 진행 (재클릭 단계 제거)
     showCouponSelect(availCards,function(selectedCard){
       _couponSelections[couponKey]=selectedCard;
-      _updateCouponBadge('tier2-choices',t2id,selectedCard,'tier2');
+      onTier2(t2id);
     });
     return;
   }
@@ -295,9 +296,10 @@ function onReview(rid){
   var availCards=getAvailableCardDiscounts('review',reviewLeaf);
   var couponKey='review:'+reviewLeaf;
   if(availCards.length>0&&_couponSelections[couponKey]===undefined){
+    // §4f v7 — 모달 확정 = 즉시 선택
     showCouponSelect(availCards,function(selectedCard){
       _couponSelections[couponKey]=selectedCard;
-      _updateCouponBadge('review-choices',reviewLeaf,selectedCard,'review');
+      onReview(rid);
     });
     return;
   }

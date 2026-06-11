@@ -26,6 +26,4 @@
 .cost-energy-col { display:flex; flex-direction:column; flex:1; align-items:stretch; }
 .cost-card-chips { display:flex; flex-wrap:wrap; gap:3px; justify-content:center; margin-bottom:2px; }
 .cost-card-chips .card-chip { font-size:9px; color:var(--ink); font-weight:600; padding:1px 5px; background:var(--acc-mint-soft); border:2px solid var(--ink); border-radius:0; white-space:nowrap; }
-.cost-blink { animation:costBlink 0.8s steps(1); }
-@keyframes costBlink { 0%,100%{opacity:1;} 20%,60%{opacity:0;} 40%,80%{opacity:1;} }
 

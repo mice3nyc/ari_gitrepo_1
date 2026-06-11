@@ -355,3 +355,13 @@
 
 - [x] 피터공 "5번 모두 주체성은 좀" → groupwork 적응성·eorinwangja 호기심·career 호기심 (SPEC-card-per-choice §5 표)
 - [x] 대조표 재생성 (중복 차단 반영, 동일 24/차이 111, 다운로드 사본 갱신)
+
+#### 6/11 세션466 — 시나리오 화면 수정 5건 (SPEC-ui-hud §4f v7)
+
+- [x] (1) 컷1 상황 텍스트 .situation-text 15px (03-overlays CSS)
+- [x] (2) 비용 표기 — 시간 비용 − 선택 할인 = 비용 / 에너지 비용 − 능력 할인 = 비용 (texts.yaml cost_labels 키 개편 + ui_texts.csv 재생성)
+- [x] (3) 할인 가능 선택지 텍스트 끝 초록 표식 .card-discount-mark (버튼 아님, coupon.choice_mark)
+- [x] (4) 쿠폰 모달 확정 = 즉시 선택 진행 — onTier2/onReview 콜백 자기 재호출 (재클릭 단계 제거)
+- [x] (5) 하단 cost-coupon-badge 제거 + _updateCouponBadge·blink CSS·badge 텍스트 키 삭제
+- [x] 빌드 893,260B + 린터 0 + 인코딩 클린 + 헤드리스 검증(라벨 공식·표식 2개·모달 즉시 진행·에너지 소비)
+- [ ] 피터공 브라우저 확인 — 컷1 폰트 크기, 표식 톤, 모달 확정 직행 리듬
