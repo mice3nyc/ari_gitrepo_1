@@ -96,6 +96,15 @@
 @keyframes rtFade { to { opacity:1; } }
 @keyframes rtBlink { 50% { opacity:0; } }
 
+/* §4i-8 — 레트로 튜토리얼 화면 (타이틀 프레임 재사용) */
+.retro-title .gth-main { color:#fff; text-shadow:3px 3px 0 var(--acc-pink-deep); }
+.retro-title .gth-sub { color:var(--acc-cyan); }
+.rt-tutorial-heading { font-family:var(--font-pixel); font-size:28px; font-weight:400; color:var(--acc-yellow); margin:0 0 24px; letter-spacing:3px; }
+.rt-tutorial { max-width:620px; margin:0 auto 36px; text-align:left; display:flex; flex-direction:column; gap:12px; padding:0; list-style:none; counter-reset:rtut; }
+.rt-tutorial li { position:relative; padding:14px 16px 14px 54px; border:2px solid #fff; background:rgba(255,255,255,0.07); color:#fff; font-size:15px; font-weight:600; line-height:1.8; counter-increment:rtut; }
+.rt-tutorial li::before { content:counter(rtut); position:absolute; left:14px; top:15px; width:26px; height:26px; background:var(--acc-yellow); border:2px solid var(--ink); color:var(--ink); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; }
+.rt-start.rt-now { animation-delay:0.25s; }
+
 /* §4i-7 — 공통 타이틀 헤더 (튜토리얼·시나리오 선택 상단) */
 .game-title-head { text-align:center; margin:0 0 28px; }
 .gth-main { font-family:var(--font-pixel); font-size:clamp(22px,3.2vw,32px); font-weight:700; line-height:1.3; color:var(--ink); text-shadow:3px 3px 0 rgba(214,63,122,0.4); letter-spacing:0.5px; }

@@ -285,16 +285,15 @@ function showTutorialScreen(){
     '결과물 점수에 따라 등급이 매겨지고, 받은 토큰을 <span class="hl hl--c">시간</span>이나 <span class="hl hl--p">에너지</span>에 직접 넣는다.',
     '경험이 쌓이면 다음 선택의 <span class="hl hl--c">시간</span>·<span class="hl hl--p">에너지</span> 비용이 줄어든다.'
   ];
-  var h='<div class="title-frame">';
+  // §4i-8 — 타이틀과 같은 레트로 프레임
+  var h='<div class="retro-title"><div class="rt-scanlines" aria-hidden="true"></div><div class="rt-inner">';
   h+=buildGameTitleHead();
-  h+='<h1>'+(_tu.heading||'게임 안내')+'</h1>';
-  h+='<ol class="tutorial-list">';
+  h+='<h1 class="rt-tutorial-heading">'+(_tu.heading||'게임 안내')+'</h1>';
+  h+='<ol class="rt-tutorial">';
   for(var ti=0;ti<_tut.length;ti++)h+='<li>'+_tut[ti]+'</li>';
   h+='</ol>';
-  h+='<div class="title-actions">';
-  h+='<button class="start-btn-large" onclick="enterFromTutorial()">'+(_tu.btn_continue||'계속 →')+'</button>';
-  h+='</div>';
-  h+='</div>';
+  h+='<button class="rt-start rt-now" onclick="enterFromTutorial()">'+(_tu.btn_continue||'계속 →')+'</button>';
+  h+='</div></div>';
   container.innerHTML=h;
   trackEvent('tutorial_viewed',{});
 }
