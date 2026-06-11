@@ -374,3 +374,11 @@
 - [x] (4) 컷3 "위임 깊이: ±N" 제거 + texts delegation_depth 키 삭제·csv 재생성
 - [x] 빌드 + 린터 0 + 인코딩 클린 + 헤드리스 8체크 (미터0·핑크·채움색·바닥0·dot1·깊이제거)
 - [ ] 피터공 브라우저 확인
+
+#### 6/11 세션466 v9 — 자원 미터 라운딩·흰 숫자·테두리 +1px (SPEC-ui-hud §4h)
+
+- [x] 시간·에너지 게이지 알약형(radius 999px) + 채움도 라운딩
+- [x] 게이지 숫자 흰색 (left 6→8px)
+- [x] 알약 미터 테두리 2→3px (resource-gauge·score-graph-track, 테마 exp-bar 그룹 분리)
+- [x] 빌드 + 헤드리스 5체크 (radius·border3·흰숫자·트랙3px·채움radius)
+- [ ] 피터공 확인 — 원 미터 dot(토큰)도 3px로 갈지 (이번엔 알약형 둘만 해석)

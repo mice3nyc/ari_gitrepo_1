@@ -132,6 +132,12 @@
 3. **점수 그래프 초록 = 쨍한 초록 #15803d**: 채움색 --acc-mint-deep(#219b6c) → `#15803d`(구 역량카드 할인 배지 초록).
 4. **컷3 "위임 깊이: ±N" 표기 제거**: 2차 선택 요약(chosen-summary)의 chosen-way 줄 삭제. `texts.yaml` `game_flow.delegation_depth` 키 제거 + ui_texts.csv 재생성. 컷2(1차 선택 desc)·컷5(검토 supplement)의 chosen-way는 유지.
 
+## 4h. v9 — 6/11 자원 미터 라운딩·흰 숫자·테두리 +1px (피터공 8차)
+
+1. **시간·에너지 게이지 양끝 원-라운딩**: `.resource-gauge`·`.resource-gauge-fill` border-radius:999px (점수 그래프 트랙과 같은 알약형).
+2. **게이지 숫자 흰색**: `.resource-num` ink → #fff (핑크 채움 위). 알려진 한계: 잔량이 아주 낮으면 숫자 좌측(6px)이 흰 트랙 위에 걸칠 수 있음 — 발생 시 점수 그래프의 num-right 플립 패턴 이식.
+3. **라운딩(알약) 미터 테두리 +1px**: `.resource-gauge`·`.score-graph-track` 2px → 3px. 테마(10-paperlogy)의 `.resource-gauge,.exp-bar` 그룹에서 resource-gauge 분리(exp-bar는 2px 유지). 원 미터 dot(선택/능력 토큰)·노랑 원 rider는 2px 유지 — "라운딩 미터"를 알약형 둘로 해석, 피터공 확인 포인트.
+
 ## 5. 미해결 / 다음 단계
 
 - [ ] 원 7개의 **숫자 로직 정식 설계** — 획득·증감 단위를 7단계 기준으로 재설계 (피터공: "일단은 3개가 기존 0"). 콘텐츠 트랙 밸런스와 엮임.

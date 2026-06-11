@@ -61,9 +61,9 @@ button, input, select, textarea { font-family: inherit; }
 .resource-icon svg { width:22px; height:22px; fill:var(--ink); display:block; }
 .resource-icon.rotated svg { transform:rotate(270deg); }
 .resource-name { font-size:17px; font-weight:800; color:var(--ink); letter-spacing:0.5px; flex:0 0 auto; min-width:60px; }
-.resource-num { position:absolute; left:6px; top:0; bottom:0; display:flex; align-items:center; font-size:14px; font-weight:800; color:var(--ink); line-height:1; z-index:1; transition:color 0.3s; } /* v3 6/11 좌정렬 */
-.resource-gauge { position:relative; flex:1; height:22px; background:var(--bg-page); border:2px solid var(--ink); overflow:hidden; }
-.resource-gauge-fill { height:100%; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1), background-color 0.6s ease; background:#555; }
+.resource-num { position:absolute; left:8px; top:0; bottom:0; display:flex; align-items:center; font-size:14px; font-weight:800; color:#fff; line-height:1; z-index:1; transition:color 0.3s; } /* §4h v9 — 흰색 (핑크 채움 위) */
+.resource-gauge { position:relative; flex:1; height:22px; background:var(--bg-page); border:3px solid var(--ink); border-radius:999px; overflow:hidden; } /* §4h v9 — 알약형 + 테두리 3px */
+.resource-gauge-fill { height:100%; border-radius:999px; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1), background-color 0.6s ease; background:#555; }
 .resource-change-indicator { font-size:12px; font-weight:700; position:absolute; top:50%; right:-4px; transform:translateY(-50%); opacity:0; white-space:nowrap; pointer-events:none; }
 .resource-change-indicator.show { opacity:1; animation:changeFloat 1.8s ease forwards; }
 .resource-change-indicator.up { color:#1a8c1a; }
@@ -122,7 +122,7 @@ button, input, select, textarea { font-family: inherit; }
 .score-graph-row { display:flex; flex-direction:row; align-items:center; gap:16px; }
 .score-graph { flex:1; min-width:0; }
 /* 알약형 트랙 — 머리 아이콘(34px)이 안에 들어가는 높이 */
-.score-graph-track { position:relative; height:44px; background:var(--bg-card); border:2px solid var(--ink); border-radius:999px; overflow:hidden; }
+.score-graph-track { position:relative; height:44px; background:var(--bg-card); border:3px solid var(--ink); border-radius:999px; overflow:hidden; } /* §4h v9 — 테두리 3px */
 .score-graph-fill { height:100%; width:0%; background:#15803d; border-radius:999px; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1); } /* §4g v8 — 쨍한 초록(구 할인 배지 색) */
 /* 머리 — 노랑 원(바 내부 높이 40px) 위. v6.4 — 초록 채움 우측 끝 = 원 우측 끝 (left는 JS가 max/calc로 클램프) */
 .score-graph-rider { position:absolute; left:0%; top:50%; transform:translateY(-50%); width:40px; height:40px; background:var(--acc-yellow); border:2px solid var(--ink); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:left 0.6s cubic-bezier(0.34,1.56,0.64,1); }
@@ -1055,7 +1055,12 @@ button,
   font-weight:700;
 }
 
-.resource-gauge,
+/* §4h v9 — resource-gauge는 3px 알약형(01-hud), exp-bar만 기존 유지 */
+.resource-gauge {
+  border:3px solid var(--ink);
+  background:#fff;
+}
+
 .exp-bar {
   border:2px solid var(--ink);
   background:#fff;

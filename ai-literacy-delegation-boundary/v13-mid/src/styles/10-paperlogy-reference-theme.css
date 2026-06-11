@@ -359,7 +359,12 @@ button,
   font-weight:700;
 }
 
-.resource-gauge,
+/* §4h v9 — resource-gauge는 3px 알약형(01-hud), exp-bar만 기존 유지 */
+.resource-gauge {
+  border:3px solid var(--ink);
+  background:#fff;
+}
+
 .exp-bar {
   border:2px solid var(--ink);
   background:#fff;
