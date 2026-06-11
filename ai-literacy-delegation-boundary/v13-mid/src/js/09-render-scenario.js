@@ -275,23 +275,35 @@ function buildGameTitleHead(){
   '</div>';
 }
 
-// 튜토리얼/안내 화면 — §4i v10 신설 (타이틀에서 분리)
+// 튜토리얼/안내 화면 — §4i v10 신설 (타이틀에서 분리), §4i-9 문안 v2 (위임 정의 먼저)
 function showTutorialScreen(){
   hideStats();
   var _tu=_t('tutorial_screen',{});
+  var _intro=_tu.delegation_intro||[
+    '<b>위임</b>? 내 일을 다른 누군가에게 맡기는 것!',
+    '이 게임에서는, <b>내 일을 AI에게 시키는 것</b>이 위임이다.',
+    '"위임할까, 말까?" = "AI에게 시킬까, 내가 직접 할까?"'
+  ];
   var _tut=_tu.tutorial||[
-    '시나리오마다 선택지를 고른다. 각 선택은 <span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>를 쓴다.',
-    '어떤 선택을 하느냐에 따라 결과물의 점수가 달라지고, 내가 어떤 힘을 썼는지 역량 카드로 확인할 수 있다.',
-    '결과물 점수에 따라 등급이 매겨지고, 받은 토큰을 <span class="hl hl--c">시간</span>이나 <span class="hl hl--p">에너지</span>에 직접 넣는다.',
-    '경험이 쌓이면 다음 선택의 <span class="hl hl--c">시간</span>·<span class="hl hl--p">에너지</span> 비용이 줄어든다.'
+    '시나리오마다 묻는다. "내가 할까? AI에게 시킬까?" 선택할 때마다 <span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>를 쓴다.',
+    '직접 하면 더 비싸다. 대신 능력이 쌓인다. 능력이 쌓이면 다음 위임이 싸진다!',
+    '그러니 <span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>를 어디에 쓸지가 이 게임의 진짜 승부다.',
+    '제출 전, 마지막 한 번! 어떻게 검토하느냐에 따라 점수가 크게 달라진다.',
+    '점수에 따라 등급과 자원토큰을 받는다. <span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>는 토큰으로 직접 충전해야 한다.',
+    '좋은 선택은 역량 카드로 쌓이고, 모은 카드는 비용을 깎아 준다.'
   ];
   // §4i-8 — 타이틀과 같은 레트로 프레임
   var h='<div class="retro-title"><div class="rt-scanlines" aria-hidden="true"></div><div class="rt-inner">';
   h+=buildGameTitleHead();
   h+='<h1 class="rt-tutorial-heading">'+(_tu.heading||'게임 안내')+'</h1>';
+  // §4i-9 — 위임 정의 블록 (자문 선생님 4학년 검증 문구)
+  h+='<div class="rt-delegation">';
+  for(var di=0;di<_intro.length;di++)h+='<p>'+_intro[di]+'</p>';
+  h+='</div>';
   h+='<ol class="rt-tutorial">';
   for(var ti=0;ti<_tut.length;ti++)h+='<li>'+_tut[ti]+'</li>';
   h+='</ol>';
+  if(_tu.kicker)h+='<p class="rt-tutorial-kicker">'+_tu.kicker+'</p>';
   h+='<button class="rt-start rt-now" onclick="enterFromTutorial()">'+(_tu.btn_continue||'계속 →')+'</button>';
   h+='</div></div>';
   container.innerHTML=h;
