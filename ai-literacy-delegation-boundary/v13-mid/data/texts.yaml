@@ -557,6 +557,7 @@ start_screen:
   btn_continue: "이어서 진행"
   btn_next_scenario: "다음 시나리오"
   btn_tutorial_again: "튜토리얼 다시 보기"
+  btn_title_again: "타이틀 화면"
 
 # =====================================================
 # 7. 게임 흐름 UI

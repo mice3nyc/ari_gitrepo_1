@@ -584,6 +584,7 @@ button, input, select, textarea { font-family: inherit; }
 .tutorial-list li::before { content:counter(tut); position:absolute; left:14px; top:14px; width:24px; height:24px; border:1.5px solid #111; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#111; background:#fff; }
 .start-btn-large { display:block; width:100%; padding:16px; border:var(--border-w) solid var(--ink); background:var(--acc-yellow); color:var(--ink); font-family:inherit; font-size:15px; font-weight:700; letter-spacing:2px; cursor:pointer; transition:transform 0.05s, box-shadow 0.05s; box-shadow:var(--shadow); }
 .start-btn-large:active { transform:translate(2px,2px); box-shadow:var(--shadow-press); }
+.select-footer-links { display:flex; justify-content:center; gap:22px; } /* §4i-10 */
 .tutorial-link { display:block; text-align:center; margin-top:14px; font-size:11px; color:#888; cursor:pointer; text-decoration:underline; background:none; border:none; font-family:inherit; }
 .tutorial-link:hover { color:#444; }
 /* v0.8 §11.5 — 타이틀 화면 직접 명제 정정 + 두 버튼 */
@@ -13498,7 +13499,8 @@ var TEXTS = {
     "btn_report": "AI 리터러시 성장 리포트",
     "btn_continue": "이어서 진행",
     "btn_next_scenario": "다음 시나리오",
-    "btn_tutorial_again": "튜토리얼 다시 보기"
+    "btn_tutorial_again": "튜토리얼 다시 보기",
+    "btn_title_again": "타이틀 화면"
   },
   "game_flow": {
     "panel_labels": {
@@ -14951,14 +14953,17 @@ function showTutorialScreen(){
   container.innerHTML=h;
   trackEvent('tutorial_viewed',{});
 }
-function enterFromTutorial(){
-  if(btnGuard('enterTutorial'))return;
-  // §4j-1 — CRT 부팅 플래시: 레트로(다크)에서 본게임(라이트)으로 넘어가는 경계 연출
+// §4j-1 — CRT 부팅 플래시 헬퍼: 레트로(다크)에서 본게임(라이트)으로 넘어가는 경계 연출
+function bootFlashTo(fn){
   var fl=document.createElement('div');
   fl.className='boot-flash';
   document.body.appendChild(fl);
-  setTimeout(function(){showStartScreen();},380);
+  setTimeout(fn,380);
   setTimeout(function(){if(fl.parentNode)fl.parentNode.removeChild(fl);},760);
+}
+function enterFromTutorial(){
+  if(btnGuard('enterTutorial'))return;
+  bootFlashTo(showStartScreen);
 }
 
 var _btnLock={};
@@ -14967,6 +14972,11 @@ function btnGuard(key){if(_btnLock[key])return true;_btnLock[key]=true;setTimeou
 function enterFromTitle(){
   if(btnGuard('enterTitle'))return;
   if(!gameState)return;
+  // §4i-10 — 재방문(튜토리얼 기시청)은 튜토리얼 생략, 플래시 후 바로 선택 화면
+  if(gameState.tutorialSeen===true){
+    bootFlashTo(showStartScreen);
+    return;
+  }
   gameState.tutorialSeen=true;
   saveGame();
   showTutorialScreen();
@@ -15038,7 +15048,10 @@ function showStartScreen(){
     h+='<button class="action-main" onclick="startScenario(\''+nextId+'\')">'+(_ss.btn_next_scenario||'다음 시나리오')+'</button>';
   }
   h+='</div>';
-  h+='<button class="tutorial-link" onclick="showTutorialScreen()">'+(_ss.btn_tutorial_again||'튜토리얼 다시 보기')+'</button>'; // §4i — 분리 후 안내 화면으로 직행
+  h+='<div class="select-footer-links">'; // §4i-10 — 튜토리얼·타이틀 재방문 링크
+  h+='<button class="tutorial-link" onclick="showTutorialScreen()">'+(_ss.btn_tutorial_again||'튜토리얼 다시 보기')+'</button>';
+  h+='<button class="tutorial-link" onclick="showTitleScreen()">'+(_ss.btn_title_again||'타이틀 화면')+'</button>';
+  h+='</div>';
   h+='</div>';
   container.innerHTML=h;
 }
@@ -17317,8 +17330,8 @@ function _applyStaticTexts(){
 }
 _applyStaticTexts();
 
-// §11 진입 분기 — 새 학기 + 튜토리얼 미시청만 타이틀 화면
-// 진행 중인 학기(구버전 save 포함) 또는 튜토리얼 본 적 있으면 시나리오 선택으로
+// §11 진입 분기 → §4i-10 (피터공): 부팅은 항상 타이틀부터 (레트로 PRESS START 관례)
+// 재방문 라우팅(튜토리얼 생략, 플래시 후 선택 화면)은 enterFromTitle이 처리.
 (function initEntry(){
   var saved=loadGame();
   // v1.3 §14.1 (최서연샘) — 진행 중인 시나리오가 있으면 새로고침 시 그 위치로 자동 복원.
@@ -17327,13 +17340,7 @@ _applyStaticTexts();
     continueGame();
     return;
   }
-  var hasProgress=saved&&((saved.clearedScenarios||[]).length>0);
-  var seen=saved&&saved.tutorialSeen===true;
-  if(seen||hasProgress){
-    showStartScreen();
-  }else{
-    showTitleScreen();
-  }
+  showTitleScreen();
 })();
 // =====================================================
 // 15. 카드 선택별 획득 — Phase 2 전체 적용 (6/11, SPEC-card-per-choice.md §5)

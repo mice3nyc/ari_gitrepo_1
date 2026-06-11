@@ -187,6 +187,7 @@ start_screen,start_screen.btn_report,AI 리터러시 성장 리포트
 start_screen,start_screen.btn_continue,이어서 진행
 start_screen,start_screen.btn_next_scenario,다음 시나리오
 start_screen,start_screen.btn_tutorial_again,튜토리얼 다시 보기
+start_screen,start_screen.btn_title_again,타이틀 화면
 game_flow,game_flow.panel_labels.tier1_choice,1차 선택
 game_flow,game_flow.panel_labels.tier2_choice,2차 선택
 game_flow,game_flow.panel_labels.result,결과

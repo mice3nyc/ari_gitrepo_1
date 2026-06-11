@@ -90,8 +90,8 @@ function _applyStaticTexts(){
 }
 _applyStaticTexts();
 
-// §11 진입 분기 — 새 학기 + 튜토리얼 미시청만 타이틀 화면
-// 진행 중인 학기(구버전 save 포함) 또는 튜토리얼 본 적 있으면 시나리오 선택으로
+// §11 진입 분기 → §4i-10 (피터공): 부팅은 항상 타이틀부터 (레트로 PRESS START 관례)
+// 재방문 라우팅(튜토리얼 생략, 플래시 후 선택 화면)은 enterFromTitle이 처리.
 (function initEntry(){
   var saved=loadGame();
   // v1.3 §14.1 (최서연샘) — 진행 중인 시나리오가 있으면 새로고침 시 그 위치로 자동 복원.
@@ -100,11 +100,5 @@ _applyStaticTexts();
     continueGame();
     return;
   }
-  var hasProgress=saved&&((saved.clearedScenarios||[]).length>0);
-  var seen=saved&&saved.tutorialSeen===true;
-  if(seen||hasProgress){
-    showStartScreen();
-  }else{
-    showTitleScreen();
-  }
+  showTitleScreen();
 })();

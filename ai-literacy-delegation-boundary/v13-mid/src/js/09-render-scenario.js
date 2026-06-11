@@ -310,14 +310,17 @@ function showTutorialScreen(){
   container.innerHTML=h;
   trackEvent('tutorial_viewed',{});
 }
-function enterFromTutorial(){
-  if(btnGuard('enterTutorial'))return;
-  // §4j-1 — CRT 부팅 플래시: 레트로(다크)에서 본게임(라이트)으로 넘어가는 경계 연출
+// §4j-1 — CRT 부팅 플래시 헬퍼: 레트로(다크)에서 본게임(라이트)으로 넘어가는 경계 연출
+function bootFlashTo(fn){
   var fl=document.createElement('div');
   fl.className='boot-flash';
   document.body.appendChild(fl);
-  setTimeout(function(){showStartScreen();},380);
+  setTimeout(fn,380);
   setTimeout(function(){if(fl.parentNode)fl.parentNode.removeChild(fl);},760);
+}
+function enterFromTutorial(){
+  if(btnGuard('enterTutorial'))return;
+  bootFlashTo(showStartScreen);
 }
 
 var _btnLock={};
@@ -326,6 +329,11 @@ function btnGuard(key){if(_btnLock[key])return true;_btnLock[key]=true;setTimeou
 function enterFromTitle(){
   if(btnGuard('enterTitle'))return;
   if(!gameState)return;
+  // §4i-10 — 재방문(튜토리얼 기시청)은 튜토리얼 생략, 플래시 후 바로 선택 화면
+  if(gameState.tutorialSeen===true){
+    bootFlashTo(showStartScreen);
+    return;
+  }
   gameState.tutorialSeen=true;
   saveGame();
   showTutorialScreen();
@@ -397,7 +405,10 @@ function showStartScreen(){
     h+='<button class="action-main" onclick="startScenario(\''+nextId+'\')">'+(_ss.btn_next_scenario||'다음 시나리오')+'</button>';
   }
   h+='</div>';
-  h+='<button class="tutorial-link" onclick="showTutorialScreen()">'+(_ss.btn_tutorial_again||'튜토리얼 다시 보기')+'</button>'; // §4i — 분리 후 안내 화면으로 직행
+  h+='<div class="select-footer-links">'; // §4i-10 — 튜토리얼·타이틀 재방문 링크
+  h+='<button class="tutorial-link" onclick="showTutorialScreen()">'+(_ss.btn_tutorial_again||'튜토리얼 다시 보기')+'</button>';
+  h+='<button class="tutorial-link" onclick="showTitleScreen()">'+(_ss.btn_title_again||'타이틀 화면')+'</button>';
+  h+='</div>';
   h+='</div>';
   container.innerHTML=h;
 }
