@@ -266,6 +266,15 @@ function showTitleScreen(){
   trackEvent('title_viewed',{tutorialSeenBefore:!!gameState.tutorialSeen});
 }
 
+// §4i-7 — 공통 타이틀 헤더 (튜토리얼·시나리오 선택 상단)
+function buildGameTitleHead(){
+  var _ts=_t('title_screen',{});
+  return '<div class="game-title-head">'+
+    '<div class="gth-main">'+(_ts.main_title_1||'내가 할까? 시킬까?')+' '+(_ts.main_title_2||'그것이 문제로다!')+'</div>'+
+    '<div class="gth-sub">'+(_ts.sub_title_2||'AI 리터러시, 위임의 경계!')+'</div>'+
+  '</div>';
+}
+
 // 튜토리얼/안내 화면 — §4i v10 신설 (타이틀에서 분리)
 function showTutorialScreen(){
   hideStats();
@@ -277,6 +286,7 @@ function showTutorialScreen(){
     '경험이 쌓이면 다음 선택의 <span class="hl hl--c">시간</span>·<span class="hl hl--p">에너지</span> 비용이 줄어든다.'
   ];
   var h='<div class="title-frame">';
+  h+=buildGameTitleHead();
   h+='<h1>'+(_tu.heading||'게임 안내')+'</h1>';
   h+='<ol class="tutorial-list">';
   for(var ti=0;ti<_tut.length;ti++)h+='<li>'+_tut[ti]+'</li>';
@@ -319,7 +329,7 @@ function showStartScreen(){
   var allDone=(nextId===null);
   var _ss=_t('start_screen',{});
   var h='<div class="semester-frame">';
-  h+='<h1>'+(_ss.heading||'AI 리터러시: 위임의 경계')+'</h1>';
+  h+=buildGameTitleHead(); // §4i-7 — 기존 h1 대체
   h+='<div class="subtitle">'+(_ss.subtitle||'이건 AI한테 맡겨도 돼?')+'</div>';
   if(allDone){
     h+='<div style="max-width:420px;margin:8px auto 24px;padding:14px 24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);text-align:center;font-family:var(--font-hand);font-size:26px;font-weight:400;color:var(--ink);transform:rotate(-1.5deg);letter-spacing:1px;">'+(_ss.all_done_banner||'AI 리터러시 시나리오를 모두 완료했습니다!')+'</div>';
@@ -363,7 +373,7 @@ function showStartScreen(){
     h+='<button class="action-main" onclick="startScenario(\''+nextId+'\')">'+(_ss.btn_next_scenario||'다음 시나리오')+'</button>';
   }
   h+='</div>';
-  h+='<button class="tutorial-link" onclick="showTitleScreen()">'+(_ss.btn_tutorial_again||'튜토리얼 다시 보기')+'</button>';
+  h+='<button class="tutorial-link" onclick="showTutorialScreen()">'+(_ss.btn_tutorial_again||'튜토리얼 다시 보기')+'</button>'; // §4i — 분리 후 안내 화면으로 직행
   h+='</div>';
   container.innerHTML=h;
 }
