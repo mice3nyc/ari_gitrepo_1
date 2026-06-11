@@ -40,12 +40,11 @@
 .stat-row { display:flex; flex-direction:row; align-items:center; gap:12px; }
 .stat-name { font-size:18px; font-weight:800; color:#111; flex:0 0 auto; }
 
-/* === 원 채움 미터 (Circle Meter) — 6/11 HUD 개편: 양방향 바 대체. 7개 중 기본 3개 채움 = 기존 0 === */
-/* v2: 채움 1~3 주황(시작 상태) / 4~7 초록(획득분). 7 초과는 .cm-overflow 깜빡임 마커. */
+/* === 원 채움 미터 (Circle Meter) — 6/11 HUD 개편: 양방향 바 대체 === */
+/* §4g v8: 0개부터 채워나감, 마이너스 개념 없음. 채움 전부 초록 단일. 7 초과는 .cm-overflow 깜빡임 마커. */
 .circle-meter { position:relative; display:flex; flex-direction:row; align-items:center; gap:6px; }
 .circle-meter .cm-dot { width:18px; height:18px; border-radius:50%; border:2px solid var(--ink); background:transparent; box-sizing:border-box; transition:background-color 0.25s ease; }
-.circle-meter .cm-dot.filled { background:#f08c2e; }
-.circle-meter .cm-dot.filled.high { background:var(--acc-mint-deep); }
+.circle-meter .cm-dot.filled { background:var(--acc-mint-deep); }
 .circle-meter .cm-dot.pop { animation:cmPop 0.4s ease; }
 /* v3 6/11 — 오버플로 링: 별도 원이 아니라 7번째 원을 둘러싸는 초록 링 깜빡임 */
 .circle-meter .cm-overflow { display:none; position:absolute; top:50%; right:-4px; transform:translateY(-50%); width:26px; height:26px; border-radius:50%; border:2px solid var(--acc-mint-deep); background:transparent; box-sizing:border-box; pointer-events:none; }
@@ -86,7 +85,7 @@
 .score-graph { flex:1; min-width:0; }
 /* 알약형 트랙 — 머리 아이콘(34px)이 안에 들어가는 높이 */
 .score-graph-track { position:relative; height:44px; background:var(--bg-card); border:2px solid var(--ink); border-radius:999px; overflow:hidden; }
-.score-graph-fill { height:100%; width:0%; background:var(--acc-mint-deep); border-radius:999px; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+.score-graph-fill { height:100%; width:0%; background:#15803d; border-radius:999px; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1); } /* §4g v8 — 쨍한 초록(구 할인 배지 색) */
 /* 머리 — 노랑 원(바 내부 높이 40px) 위. v6.4 — 초록 채움 우측 끝 = 원 우측 끝 (left는 JS가 max/calc로 클램프) */
 .score-graph-rider { position:absolute; left:0%; top:50%; transform:translateY(-50%); width:40px; height:40px; background:var(--acc-yellow); border:2px solid var(--ink); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:left 0.6s cubic-bezier(0.34,1.56,0.64,1); }
 .score-head-icon { display:block; width:26px; height:26px; }

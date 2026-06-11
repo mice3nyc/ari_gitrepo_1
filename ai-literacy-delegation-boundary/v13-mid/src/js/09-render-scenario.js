@@ -15,10 +15,8 @@ function hideStats(){
 // 자원 게이지 업데이트 (작업 2)
 // 색상 단계: 70%↑ 초록 / 50~70% 노랑 / 30~50% 주황 / <30% 빨강
 function gaugeColorByPct(pct){
-  if(pct>=70)return '#5fbf95';
-  if(pct>=50)return '#ffd93d';
-  if(pct>=30)return '#d9b620';
-  return '#ff6b9d';
+  // §4g v8 — 잔량별 색 변화 폐지, 비용 색(핑크) 고정
+  return 'var(--acc-pink-deep)';
 }
 function updateResourceUI(){
   if(!gameState)return;
@@ -123,9 +121,9 @@ function absorbPending(){
       dots.forEach(function(d){d.classList.add('absorbing');});
     });
     setTimeout(function(){
-      // 누적에 박고 pending 0
-      gameState.competencies.delegationChoice.value+=dlgPending;
-      gameState.competencies.knowledge.value+=knlPending;
+      // 누적 반영 + pending 0 — §4g v8: 0 바닥 (마이너스 개념 없음)
+      gameState.competencies.delegationChoice.value=Math.max(0,gameState.competencies.delegationChoice.value+dlgPending);
+      gameState.competencies.knowledge.value=Math.max(0,gameState.competencies.knowledge.value+knlPending);
       gameState.pending.delegation=0;
       gameState.pending.knowledge=0;
       // dot 클리어 + 게이지 갱신 — sub container(.pending-dots-neg/.pending-dots-pos) 구조는 보존
@@ -155,8 +153,7 @@ function updateStats(){
   if(!gameState)return;
   var dlg=gameState.competencies.delegationChoice.value;
   var knl=gameState.competencies.knowledge.value;
-  // 6/11 HUD 개편 — 원 7개 미터. filled = clamp(3 + raw, 0, 7). 3개 = 기존 raw 0 기준점.
-  // 내부 점수(raw)·effectiveCompetency·비용 식은 불변, 표시만 교체 (SPEC-ui-hud.md).
+  // §4g v8 — 원 7개 미터. filled = clamp(raw, 0, 7). 0개부터 채워나감, 마이너스 개념 없음.
   setCircleMeter('meter-delegation',dlg);
   setCircleMeter('meter-knowledge',knl);
   // §12 pending 원 마커
@@ -200,9 +197,9 @@ function updateScoreGraph(){
 function setCircleMeter(meterId,value){
   var meter=document.getElementById(meterId);
   if(!meter)return;
-  var filled=Math.max(0,Math.min(7,3+value));
-  var over=(3+value)>7;
-  // 8번째 자식 = 오버플로 마커 (초록 테두리 깜빡임, raw > +4일 때만 표시)
+  var filled=Math.max(0,Math.min(7,value));
+  var over=value>7;
+  // 8번째 자식 = 오버플로 마커 (초록 테두리 깜빡임, raw > 7일 때만 표시)
   if(meter.children.length!==8){
     meter.innerHTML='';
     for(var i=0;i<7;i++){var d=document.createElement('div');d.className='cm-dot';meter.appendChild(d);}
@@ -215,8 +212,6 @@ function setCircleMeter(meterId,value){
       dot.classList.toggle('filled',want);
       dot.classList.remove('pop');void dot.offsetWidth;dot.classList.add('pop');
     }
-    // v2: 1~3번째 주황(시작 상태), 4번째부터 초록(획득분)
-    dot.classList.toggle('high',want&&j>=3);
   }
   meter.children[7].classList.toggle('show',over);
   var label=meterId==='meter-delegation'?'선택':'능력';
@@ -589,11 +584,11 @@ function showCut3Summary(){
   var sc=getScenario(),t2=gameState.selectedTier2;
   var t2obj=null;
   ['A','B','C'].forEach(function(g){if(!t2obj&&sc.tier2[g])t2obj=sc.tier2[g].find(function(x){return x.id===t2;});});
-  var t2Delta=getLeafDelta(t2obj,gameState.selectedTier1);
   setPanelImage(3,_t('game_flow.panel_labels.tier2_choice','2차 선택'));
   var panel=activatePanel(3);
+  // §4g v8 — "위임 깊이: ±N" 줄 제거 (피터공)
   panel.querySelector('.panel-body').innerHTML=
-    '<div class="chosen-summary"><div class="chosen-label">'+_t('game_flow.chosen_labels.tier2','2차 선택')+'</div><div class="chosen-title">'+t2+'. '+t2obj.label+'</div><div class="chosen-way">'+_t('game_flow.delegation_depth','위임 깊이: ')+t2Delta.delegation+'</div></div>'+
+    '<div class="chosen-summary"><div class="chosen-label">'+_t('game_flow.chosen_labels.tier2','2차 선택')+'</div><div class="chosen-title">'+t2+'. '+t2obj.label+'</div></div>'+
     '<div class="advance-wrap"><button class="advance-btn" onclick="goCut4()">'+_t('game_flow.buttons.result_advance','결과 확인하기 →')+'</button></div>';
 }
 

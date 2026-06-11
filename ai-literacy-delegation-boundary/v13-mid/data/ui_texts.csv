@@ -194,7 +194,6 @@ game_flow,game_flow.chosen_labels.tier2,2차 선택
 game_flow,game_flow.chosen_labels.review,검토 선택
 game_flow,game_flow.result_prefix,결과 — 
 game_flow,game_flow.result_meta,{summary} (이 행동의 점수 {points}점)
-game_flow,game_flow.delegation_depth,위임 깊이: 
 game_flow,game_flow.insufficient,자원 부족
 game_flow,game_flow.semester_progress,학기 진행 {done} / {total}
 game_flow,game_flow.semester_all_done, — 학기를 모두 통과했다

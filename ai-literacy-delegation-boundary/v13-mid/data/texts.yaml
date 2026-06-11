@@ -562,7 +562,6 @@ game_flow:
     review: "검토 선택"
   result_prefix: "결과 — "
   result_meta: "{summary} (이 행동의 점수 {points}점)"
-  delegation_depth: "위임 깊이: "
   insufficient: "자원 부족"
   semester_progress: "학기 진행 {done} / {total}"
   semester_all_done: " — 학기를 모두 통과했다"

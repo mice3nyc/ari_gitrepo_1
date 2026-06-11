@@ -374,11 +374,8 @@ button,
   border:2px solid var(--ink);
 }
 
+/* §4g v8 — 채움 전부 초록 단일 (주황 시작분·high 구분 폐지) */
 .circle-meter .cm-dot.filled {
-  background:#f08c2e;
-}
-
-.circle-meter .cm-dot.filled.high {
   background:var(--acc-mint-deep);
 }
 
