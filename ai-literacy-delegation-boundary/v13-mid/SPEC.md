@@ -599,3 +599,24 @@ var reportData = {
 - **빌드 연결**: `update.py` 마지막에 린터 실행, 위반 수를 경고로 출력. **빌드 차단은 하지 않는다** (정비 완료 전까지 위반이 존재하는 게 정상 상태).
 - **종료 코드**: 위반 0(예외 제외)이면 0, 있으면 1 — 단독 실행 시 스크립트로 후킹 가능하게.
 - 초등 분기(v13-elem) 데이터 검증에 동일 린터 재사용 예정.
+
+#### 17. 시나리오 나가기 버튼 + 디버그 버튼 클릭 복구 (세션467, 6/11)
+
+##### 17.1 디버그 버튼 클릭 복구 + 코너 고정
+
+- **증상**: 디버그 버튼이 눌리지 않아 초기화 불가 (피터공 6/11).
+- **원인**: 테마 CSS(`10-paperlogy-reference-theme.css`)가 `.debug-toggle`을 `.container/.version` 그룹에 묶어 `z-index:1`로 강등 (기본 css의 `z-index:300`을 캐스케이드로 덮음). 한편 카드 독 `#card-dock`(z-index:180)이 `top:96px ~ bottom:12px; right:10px; width:200px`로 우측 하단 코너까지 덮어 — 시나리오 진행 중 클릭이 독(투명 영역)에 가로채임.
+- **수정**: ① 테마 그룹 셀렉터에서 `.debug-toggle` 제거 ② 테마 `.debug-toggle` 규칙에 `z-index:1300` 추가 (inv-tab 1200 위 — 디버그는 개발 도구라 항상 최상위 접근). 위치는 기존 우측 하단 코너(`bottom:12px; right:12px`) 유지.
+
+##### 17.2 시나리오 나가기 버튼 (#scenario-exit)
+
+- **위치**: HUD(`#panel-row`) 우측 끝, stats-bar 다음의 작은 버튼. HUD 표시/숨김에 자동으로 따라감 → **시나리오 진행 화면(컷1~6)에서만 보임**. 시작 화면·튜토리얼·리포트에는 없음.
+- **동작**: 클릭 → 확인 모달(`#exit-confirm-modal`, reset-confirm 패턴 재사용) → 확인 시 `exitScenario()`:
+  1. 자원을 시나리오 시작 스냅샷(`gameState.replay[scid].resourceSnapshot`)으로 원복
+  2. 이번 시나리오에서 받은 카드 제거 — `c.scenario===scid` 필터, 도전력 제외 (replayScenario [2]와 동일 규칙)
+  3. pending·선택 상태 초기화(`pending 0`, `_prevPending 0`, tier/selected/score/completed 리셋), `currentScenarioId=null`
+  4. `railClear()` + `saveGame()` + `trackEvent('scenario_exited',{scenarioId})` → `showStartScreen()`
+- **§14.5와의 관계**: 나간 시나리오는 클리어되지 않은 상태 그대로 — 순차 진행상 여전히 "다음 카드"라 재진입 가능. 카드를 제거했으므로 재진입 시 같은 카드 재획득은 중복이 아님(`_ownedThisScenario` 충돌 없음).
+- **컷6에서 나가기**: 그 판 통째 버려짐(점수·완료 확정은 `goNextScenario`에서만 일어나므로 자연 롤백). 리플레이 중 나가면 이전 기록은 리플레이 시작 시점에 이미 롤백된 상태 — 시나리오 선택 화면의 재도전(§14.2)으로 다시 진입 가능.
+- **알려진 잔여**: `competencies.*.history`의 `pending:true` 로그 엔트리는 남음 — 값 계산에 쓰이지 않는 로그성 데이터(흡수는 카운터 기준).
+- **텍스트**: `texts.yaml` `game_flow.buttons.exit_scenario`("나가기") + `ui_messages.exit_confirm.{title,subtitle,btn_cancel,btn_destructive}`. JS fallback 내장. ui_texts.csv 재추출 동기 필수.

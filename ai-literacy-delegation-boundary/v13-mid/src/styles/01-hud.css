@@ -100,3 +100,7 @@
 .lv-compact { font-size:12px; font-weight:800; color:#111; line-height:1; display:inline-block; }
 .lv-compact.pulsing { animation:numPulse 0.5s ease; }
 
+
+/* §17.2 — 시나리오 나가기 버튼 (HUD 우측 끝, 시나리오 진행 화면 전용) */
+.scenario-exit { flex:0 0 auto; align-self:center; padding:5px 10px; font-size:11px; font-weight:700; font-family:inherit; color:#555; background:#fff; border:2px solid #c9c4b8; border-radius:10px; cursor:pointer; line-height:1; white-space:nowrap; }
+.scenario-exit:hover { color:#111; border-color:#111; }

@@ -142,6 +142,10 @@ button, input, select, textarea { font-family: inherit; }
 .lv-compact { font-size:12px; font-weight:800; color:#111; line-height:1; display:inline-block; }
 .lv-compact.pulsing { animation:numPulse 0.5s ease; }
 
+
+/* §17.2 — 시나리오 나가기 버튼 (HUD 우측 끝, 시나리오 진행 화면 전용) */
+.scenario-exit { flex:0 0 auto; align-self:center; padding:5px 10px; font-size:11px; font-weight:700; font-family:inherit; color:#555; background:#fff; border:2px solid #c9c4b8; border-radius:10px; cursor:pointer; line-height:1; white-space:nowrap; }
+.scenario-exit:hover { color:#111; border-color:#111; }
 /* ===== 선택지 비용 표시 — 4박스 그리드 (DECISIONS §10.6 4/30 세션257) ===== */
 .choice-cost { display:flex; gap:0; margin-top:1px; padding-top:10px; border-top:1px dashed #ddd; }
 .cost-group { display:flex; gap:10px; flex:1; align-items:flex-end; justify-content:center; padding:0 8px; }
@@ -809,7 +813,6 @@ body {
 body::before { content:none; }
 
 .container,
-.debug-toggle,
 .version {
   position:relative;
   z-index:1;
@@ -1401,6 +1404,7 @@ button,
   bottom:12px;
   right:12px;
   left:auto;
+  z-index:1300; /* §17.1 — 카드 독(180)·inv-tab(1200) 위. 그룹 z-index:1 강등이 클릭을 막던 원인 */
   background:var(--ink);
   border:2px solid var(--ink);
   box-shadow:3px 3px 0 rgba(0,0,0,.25);
@@ -1651,6 +1655,8 @@ button,
       </div>
     </div>
   </div>
+  <!-- §17.2 — 시나리오 나가기 (HUD에 묶여 시나리오 진행 화면에서만 보임) -->
+  <button class="scenario-exit" id="scenario-exit" onclick="exitScenario()" aria-label="시나리오 나가기">나가기</button>
 </div>
 <div class="container" id="main-container"></div>
 <!-- 역량 카드 인벤토리 탭 (우측 가장자리 고정 / texts.yaml inject — 초기값은 fallback) -->
@@ -1714,6 +1720,18 @@ button,
     <div class="confirm-actions">
       <button class="confirm-cancel" onclick="closeResetConfirm()">계속하기</button>
       <button class="confirm-destructive" onclick="confirmResetDo()">다시 시작</button>
+    </div>
+  </div>
+</div>
+
+<!-- §17.2 — 시나리오 나가기 확인 모달 -->
+<div id="exit-confirm-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-title" id="exit-confirm-title">시나리오에서 나갈까요?</div>
+    <div class="modal-subtitle" id="exit-confirm-subtitle">이번 시나리오에서 진행한 선택과 받은 카드는 사라지고, 시간·에너지는 시작 전으로 돌아갑니다.</div>
+    <div class="confirm-actions">
+      <button class="confirm-cancel" id="exit-confirm-stay" onclick="closeExitConfirm()">계속하기</button>
+      <button class="confirm-destructive" id="exit-confirm-go" onclick="confirmExitDo()">나가기</button>
     </div>
   </div>
 </div>
@@ -13320,6 +13338,12 @@ var TEXTS = {
       "subtitle": "지금까지 진행한 학기가 모두 사라지고 새 학생으로 다시 시작합니다.",
       "btn_cancel": "계속하기",
       "btn_destructive": "다시 시작"
+    },
+    "exit_confirm": {
+      "title": "시나리오에서 나갈까요?",
+      "subtitle": "이번 시나리오에서 진행한 선택과 받은 카드는 사라지고, 시간·에너지는 시작 전으로 돌아갑니다.",
+      "btn_cancel": "계속하기",
+      "btn_destructive": "나가기"
     }
   },
   "report": {
@@ -13465,7 +13489,8 @@ var TEXTS = {
       "report": "AI 리터러시 성장 리포트",
       "replay": "이 시나리오 다시 해보기",
       "replay_grade": "다시 도전하기",
-      "back_to_start": "시작 화면 돌아가기"
+      "back_to_start": "시작 화면 돌아가기",
+      "exit_scenario": "나가기"
     },
     "chosen_labels": {
       "tier1": "1차 선택",
@@ -15862,6 +15887,63 @@ function confirmResetDo(){
   setTimeout(function(){resetGame();},150);
 }
 
+// §17.2 — 시나리오 나가기 (세션467, 6/11): 이번 판 롤백 후 시나리오 선택 화면으로
+function exitScenario(){
+  if(btnGuard('exitScenario'))return;
+  if(!gameState||!gameState.currentScenarioId){showStartScreen();return;}
+  var modal=document.getElementById('exit-confirm-modal');
+  if(!modal){confirmExitDo();return;}
+  modal.classList.remove('hidden');
+  requestAnimationFrame(function(){modal.classList.add('visible');});
+}
+function closeExitConfirm(){
+  var modal=document.getElementById('exit-confirm-modal');
+  if(!modal)return;
+  modal.classList.remove('visible');
+  setTimeout(function(){modal.classList.add('hidden');},250);
+}
+function confirmExitDo(){
+  closeExitConfirm();
+  var scid=gameState&&gameState.currentScenarioId;
+  if(!scid){showStartScreen();return;}
+  // [1] 자원 원복 — 시나리오 시작 스냅샷 (startScenario/replayScenario가 저장)
+  var rp=gameState.replay&&gameState.replay[scid];
+  if(rp&&rp.resourceSnapshot){
+    gameState.resources.time.current=rp.resourceSnapshot.time;
+    gameState.resources.energy.current=rp.resourceSnapshot.energy;
+  }
+  // [2] 이번 시나리오에서 받은 카드 제거 (도전력 제외 — replayScenario와 동일 규칙)
+  function _exitDropCards(arr){
+    if(!arr)return[];
+    return arr.filter(function(c){return c.scenario!==scid||c.label==='도전력';});
+  }
+  if(gameState.inventory){
+    gameState.inventory.humanCentricCards=_exitDropCards(gameState.inventory.humanCentricCards);
+    gameState.inventory.domainCards=_exitDropCards(gameState.inventory.domainCards);
+    gameState.inventory.growthCards=_exitDropCards(gameState.inventory.growthCards);
+    gameState.inventory.competencyCards=_exitDropCards(gameState.inventory.competencyCards);
+  }
+  // [3] 시나리오 상태 초기화 — 점수·완료 확정 전이라 pending/선택만 비우면 됨
+  gameState.currentScenarioId=null;
+  gameState.currentTier=1;
+  gameState.selectedTier1=null;
+  gameState.selectedTier2=null;
+  gameState.selectedReview=null;
+  gameState.score=0;
+  gameState.completed=false;
+  gameState._gameOverShown=false;
+  if(!gameState.pending)gameState.pending={delegation:0,knowledge:0};
+  gameState.pending.delegation=0;
+  gameState.pending.knowledge=0;
+  _prevPending.delegation=0;
+  _prevPending.knowledge=0;
+  if(typeof railClear==='function')railClear();
+  saveGame();
+  currentRow=null;
+  trackEvent('scenario_exited',{scenarioId:scid});
+  setTimeout(function(){showStartScreen();},150);
+}
+
 function backToStartScreen(){
   if(typeof railClear==='function')railClear(); // §2b→§2d 독 재렌더
   // §2d — inv-tab은 독으로 대체, 복원하지 않음
@@ -17171,6 +17253,14 @@ function _applyStaticTexts(){
     if(rcCancel && rc.btn_cancel)rcCancel.innerHTML=rc.btn_cancel;
     if(rcDestructive && rc.btn_destructive)rcDestructive.innerHTML=rc.btn_destructive;
   }
+  // §17.2 — 시나리오 나가기 버튼 + 확인 모달 (세션467, 6/11)
+  var gfBtns=TEXTS.game_flow&&TEXTS.game_flow.buttons||{};
+  _set('scenario-exit',gfBtns.exit_scenario);
+  var xc=U.exit_confirm||{};
+  _set('exit-confirm-title',xc.title);
+  _set('exit-confirm-subtitle',xc.subtitle);
+  _set('exit-confirm-stay',xc.btn_cancel);
+  _set('exit-confirm-go',xc.btn_destructive);
 }
 _applyStaticTexts();
 

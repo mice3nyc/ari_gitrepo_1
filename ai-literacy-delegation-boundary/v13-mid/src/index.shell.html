@@ -51,6 +51,8 @@
       </div>
     </div>
   </div>
+  <!-- §17.2 — 시나리오 나가기 (HUD에 묶여 시나리오 진행 화면에서만 보임) -->
+  <button class="scenario-exit" id="scenario-exit" onclick="exitScenario()" aria-label="시나리오 나가기">나가기</button>
 </div>
 <div class="container" id="main-container"></div>
 <!-- 역량 카드 인벤토리 탭 (우측 가장자리 고정 / texts.yaml inject — 초기값은 fallback) -->
@@ -114,6 +116,18 @@
     <div class="confirm-actions">
       <button class="confirm-cancel" onclick="closeResetConfirm()">계속하기</button>
       <button class="confirm-destructive" onclick="confirmResetDo()">다시 시작</button>
+    </div>
+  </div>
+</div>
+
+<!-- §17.2 — 시나리오 나가기 확인 모달 -->
+<div id="exit-confirm-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-title" id="exit-confirm-title">시나리오에서 나갈까요?</div>
+    <div class="modal-subtitle" id="exit-confirm-subtitle">이번 시나리오에서 진행한 선택과 받은 카드는 사라지고, 시간·에너지는 시작 전으로 돌아갑니다.</div>
+    <div class="confirm-actions">
+      <button class="confirm-cancel" id="exit-confirm-stay" onclick="closeExitConfirm()">계속하기</button>
+      <button class="confirm-destructive" id="exit-confirm-go" onclick="confirmExitDo()">나가기</button>
     </div>
   </div>
 </div>

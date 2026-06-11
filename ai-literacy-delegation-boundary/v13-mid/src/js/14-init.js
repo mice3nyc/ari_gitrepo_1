@@ -79,6 +79,14 @@ function _applyStaticTexts(){
     if(rcCancel && rc.btn_cancel)rcCancel.innerHTML=rc.btn_cancel;
     if(rcDestructive && rc.btn_destructive)rcDestructive.innerHTML=rc.btn_destructive;
   }
+  // §17.2 — 시나리오 나가기 버튼 + 확인 모달 (세션467, 6/11)
+  var gfBtns=TEXTS.game_flow&&TEXTS.game_flow.buttons||{};
+  _set('scenario-exit',gfBtns.exit_scenario);
+  var xc=U.exit_confirm||{};
+  _set('exit-confirm-title',xc.title);
+  _set('exit-confirm-subtitle',xc.subtitle);
+  _set('exit-confirm-stay',xc.btn_cancel);
+  _set('exit-confirm-go',xc.btn_destructive);
 }
 _applyStaticTexts();
 

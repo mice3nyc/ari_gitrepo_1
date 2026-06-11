@@ -362,6 +362,63 @@ function confirmResetDo(){
   setTimeout(function(){resetGame();},150);
 }
 
+// §17.2 — 시나리오 나가기 (세션467, 6/11): 이번 판 롤백 후 시나리오 선택 화면으로
+function exitScenario(){
+  if(btnGuard('exitScenario'))return;
+  if(!gameState||!gameState.currentScenarioId){showStartScreen();return;}
+  var modal=document.getElementById('exit-confirm-modal');
+  if(!modal){confirmExitDo();return;}
+  modal.classList.remove('hidden');
+  requestAnimationFrame(function(){modal.classList.add('visible');});
+}
+function closeExitConfirm(){
+  var modal=document.getElementById('exit-confirm-modal');
+  if(!modal)return;
+  modal.classList.remove('visible');
+  setTimeout(function(){modal.classList.add('hidden');},250);
+}
+function confirmExitDo(){
+  closeExitConfirm();
+  var scid=gameState&&gameState.currentScenarioId;
+  if(!scid){showStartScreen();return;}
+  // [1] 자원 원복 — 시나리오 시작 스냅샷 (startScenario/replayScenario가 저장)
+  var rp=gameState.replay&&gameState.replay[scid];
+  if(rp&&rp.resourceSnapshot){
+    gameState.resources.time.current=rp.resourceSnapshot.time;
+    gameState.resources.energy.current=rp.resourceSnapshot.energy;
+  }
+  // [2] 이번 시나리오에서 받은 카드 제거 (도전력 제외 — replayScenario와 동일 규칙)
+  function _exitDropCards(arr){
+    if(!arr)return[];
+    return arr.filter(function(c){return c.scenario!==scid||c.label==='도전력';});
+  }
+  if(gameState.inventory){
+    gameState.inventory.humanCentricCards=_exitDropCards(gameState.inventory.humanCentricCards);
+    gameState.inventory.domainCards=_exitDropCards(gameState.inventory.domainCards);
+    gameState.inventory.growthCards=_exitDropCards(gameState.inventory.growthCards);
+    gameState.inventory.competencyCards=_exitDropCards(gameState.inventory.competencyCards);
+  }
+  // [3] 시나리오 상태 초기화 — 점수·완료 확정 전이라 pending/선택만 비우면 됨
+  gameState.currentScenarioId=null;
+  gameState.currentTier=1;
+  gameState.selectedTier1=null;
+  gameState.selectedTier2=null;
+  gameState.selectedReview=null;
+  gameState.score=0;
+  gameState.completed=false;
+  gameState._gameOverShown=false;
+  if(!gameState.pending)gameState.pending={delegation:0,knowledge:0};
+  gameState.pending.delegation=0;
+  gameState.pending.knowledge=0;
+  _prevPending.delegation=0;
+  _prevPending.knowledge=0;
+  if(typeof railClear==='function')railClear();
+  saveGame();
+  currentRow=null;
+  trackEvent('scenario_exited',{scenarioId:scid});
+  setTimeout(function(){showStartScreen();},150);
+}
+
 function backToStartScreen(){
   if(typeof railClear==='function')railClear(); // §2b→§2d 독 재렌더
   // §2d — inv-tab은 독으로 대체, 복원하지 않음
