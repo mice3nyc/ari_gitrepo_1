@@ -2,6 +2,9 @@
 @import url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
 
+/* §4i v10 — 물마루 픽셀 폰트 (타이틀 전용, OFL 1.1, ../fonts/에 LICENSE 동봉) */
+@font-face { font-family:'Mulmaru'; src:url('../fonts/Mulmaru.woff2') format('woff2'); font-display:swap; }
+
 :root {
   --bg-page:#d0d0d0; --bg-card:#ffffff; --bg-soft:#f4f1ea; --bg-dark:#000000;
   --ink:#000000; --ink-mute:#3c3c3c; --ink-soft:rgba(0,0,0,.55);
@@ -16,6 +19,7 @@
   --radius:0;
   --font-main:"Paperlogy","Pretendard",system-ui,sans-serif;
   --font-hand:"Nanum Pen Script","Caveat",cursive;
+  --font-pixel:"Mulmaru","Paperlogy",sans-serif;
 }
 
 .hl { padding:1px 8px; color:var(--ink); white-space:nowrap; }

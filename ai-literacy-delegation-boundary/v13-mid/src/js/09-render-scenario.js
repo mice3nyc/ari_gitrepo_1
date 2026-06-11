@@ -240,8 +240,8 @@ function animateStat(which,oldVal,newVal){
   setTimeout(function(){st.classList.remove('flash-up','flash-down');},2000);
 }
 
-// 타이틀+튜토리얼 화면 (§11, v0.8 §11.5 5/4 세션287 정정)
-// 진행자 톤 폐기 + 캐논 도입 별도 자리로. 직접 명제 + 한 줄 도입 + 학생 톤 튜토리얼 4문장.
+// 타이틀 화면 — §4i v10: 레트로 + 물마루, 튜토리얼은 별도 화면으로 분리
+// 흐름: showTitleScreen → enterFromTitle → showTutorialScreen → showStartScreen
 function showTitleScreen(){
   hideStats();
   if(!gameState){
@@ -250,31 +250,44 @@ function showTitleScreen(){
     else{gameState=createInitialState();saveGame();}
   }
   var _ts=_t('title_screen',{});
-  var h='<div class="title-frame">';
-  h+='<h1>'+(_ts.heading||'AI 리터러시, 위임의 경계!')+'</h1>';
-  h+='<div class="intro-text">'+(_ts.intro||'AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가')+'</div>';
-  h+='<div class="host-text">'+(_ts.host_text||'딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>누구나 할 수 있다면, 누구인가가 중요하다.<br>무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지. 당신은 구별할 수 있을까?')+'</div>';
-  var _tut=_ts.tutorial||[];
-  h+='<ol class="tutorial-list">';
-  if(_tut.length){for(var ti=0;ti<_tut.length;ti++)h+='<li>'+_tut[ti]+'</li>';}
-  else{
-    h+='<li>시나리오마다 선택지를 고른다. 각 선택은 <span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>를 쓴다.</li>';
-    h+='<li>어떤 선택을 하느냐에 따라 결과물의 점수가 달라지고, 내가 어떤 힘을 썼는지 역량 카드로 확인할 수 있다.</li>';
-    h+='<li>결과물 점수에 따라 등급이 매겨지고, 받은 토큰을 <span class="hl hl--c">시간</span>이나 <span class="hl hl--p">에너지</span>에 직접 넣는다.</li>';
-    h+='<li>경험이 쌓이면 다음 선택의 <span class="hl hl--c">시간</span>·<span class="hl hl--p">에너지</span> 비용이 줄어든다.</li>';
-  }
-  h+='</ol>';
-  h+='<div class="title-actions">';
-  h+='<button class="start-btn-large" onclick="enterFromTitle()">'+(_ts.btn_start||'게임 시작')+'</button>';
-  h+='</div>';
-  // 캐논 도입·진행자 톤은 별도 자리로 이동 (README 또는 ending). v0.8.x 결정 자리.
-  // 폐기 카피 (참고용 주석):
-  //   "딸깍하면 누구나 할 수 있는 AI 시대라고 한다. 누구나 할 수 있다면, 누구인가가 중요하다."
-  //   "무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지. 당신은 구별할 수 있을까?"
-  //   "AI 리터러시, 위임의 경계! 상황에 따른 당신의 선택이 결과물의 점수를 바꾼다. 높은 점수, 역량 레벨업!"
-  h+='</div>';
+  var h='<div class="retro-title">';
+  h+='<div class="rt-scanlines" aria-hidden="true"></div>';
+  h+='<div class="rt-inner">';
+  h+='<div class="rt-badge">'+(_ts.badge||'경기도 하이러닝')+'</div>';
+  h+='<h1 class="rt-main"><span class="rt-line rt-line1">'+(_ts.main_title_1||'내가 할까? 시킬까?')+'</span><span class="rt-line rt-line2">'+(_ts.main_title_2||'그것이 문제로다!')+'</span></h1>';
+  h+='<div class="rt-sub"><span>'+(_ts.sub_title_1||'AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가!')+'</span><span class="rt-sub2">'+(_ts.sub_title_2||'AI 리터러시, 위임의 경계!')+'</span></div>';
+  h+='<div class="rt-host">'+(_ts.host_text||'딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>누구나 할 수 있다면, 누구인가가 중요하다.<br>무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지. 당신은 구별할 수 있을까?')+'</div>';
+  h+='<button class="rt-start" onclick="enterFromTitle()"><span class="rt-start-caret">▶</span> '+(_ts.btn_start||'시작하기')+'</button>';
+  h+='</div></div>';
   container.innerHTML=h;
   trackEvent('title_viewed',{tutorialSeenBefore:!!gameState.tutorialSeen});
+}
+
+// 튜토리얼/안내 화면 — §4i v10 신설 (타이틀에서 분리)
+function showTutorialScreen(){
+  hideStats();
+  var _tu=_t('tutorial_screen',{});
+  var _tut=_tu.tutorial||[
+    '시나리오마다 선택지를 고른다. 각 선택은 <span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>를 쓴다.',
+    '어떤 선택을 하느냐에 따라 결과물의 점수가 달라지고, 내가 어떤 힘을 썼는지 역량 카드로 확인할 수 있다.',
+    '결과물 점수에 따라 등급이 매겨지고, 받은 토큰을 <span class="hl hl--c">시간</span>이나 <span class="hl hl--p">에너지</span>에 직접 넣는다.',
+    '경험이 쌓이면 다음 선택의 <span class="hl hl--c">시간</span>·<span class="hl hl--p">에너지</span> 비용이 줄어든다.'
+  ];
+  var h='<div class="title-frame">';
+  h+='<h1>'+(_tu.heading||'게임 안내')+'</h1>';
+  h+='<ol class="tutorial-list">';
+  for(var ti=0;ti<_tut.length;ti++)h+='<li>'+_tut[ti]+'</li>';
+  h+='</ol>';
+  h+='<div class="title-actions">';
+  h+='<button class="start-btn-large" onclick="enterFromTutorial()">'+(_tu.btn_continue||'계속 →')+'</button>';
+  h+='</div>';
+  h+='</div>';
+  container.innerHTML=h;
+  trackEvent('tutorial_viewed',{});
+}
+function enterFromTutorial(){
+  if(btnGuard('enterTutorial'))return;
+  showStartScreen();
 }
 
 var _btnLock={};
@@ -285,7 +298,7 @@ function enterFromTitle(){
   if(!gameState)return;
   gameState.tutorialSeen=true;
   saveGame();
-  showStartScreen();
+  showTutorialScreen();
 }
 
 function showStartScreen(){
