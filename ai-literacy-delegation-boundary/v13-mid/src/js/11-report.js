@@ -21,6 +21,47 @@ function _renderMiniCircleMeter(value, label){
   return h;
 }
 
+// §4 R3 — 위임 지도 "나의 위임 항로" (인라인 SVG, 인쇄 포함)
+// 행=시나리오(플레이 순서), 가로 3칸=tier1(A직접/B부분/C전체), 노드=검토 깊이(R1○/R2◎/R3◉), 꺾은선=항로
+function _renderDelegationMap(hist){
+  if(!hist||!hist.length)return '';
+  var M=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.report&&TEXTS.report.map)||{};
+  function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  var colIdx={A:0,B:1,C:2};
+  var colXs=[330,470,610];
+  var rowH=64, top=58, W=660;
+  var H=top+hist.length*rowH-20;
+  var pts=[], nodes='', titles='';
+  for(var i=0;i<hist.length;i++){
+    var r=hist[i];
+    var sc=SCENARIOS[r.scenarioId];
+    var ci=colIdx[r.tier1];if(ci===undefined)ci=1;
+    var cx=colXs[ci], cy=top+i*rowH;
+    pts.push(cx+','+cy);
+    // 노드 — 검토 깊이: R1 빈 원 / R2 겹 원 / R3 찬 원
+    var rv=r.review||'R1';
+    nodes+='<circle cx="'+cx+'" cy="'+cy+'" r="11" style="fill:var(--bg-card);stroke:var(--ink);stroke-width:3;"/>';
+    if(rv==='R2')nodes+='<circle cx="'+cx+'" cy="'+cy+'" r="4.5" style="fill:var(--ink);"/>';
+    if(rv==='R3')nodes+='<circle cx="'+cx+'" cy="'+cy+'" r="7" style="fill:var(--ink);"/>';
+    titles+='<text x="20" y="'+(cy+5)+'" style="font-size:14px;font-weight:700;fill:var(--ink);">'+_esc(sc?sc.title:r.scenarioId)+'</text>';
+  }
+  var headers='';
+  var headerLabels=[M.col_direct||'직접',M.col_partial||'부분 위임',M.col_full||'전체 위임'];
+  for(var hx=0;hx<3;hx++){
+    headers+='<text x="'+colXs[hx]+'" y="24" text-anchor="middle" style="font-size:13px;font-weight:700;fill:var(--ink-soft);">'+_esc(headerLabels[hx])+'</text>';
+    headers+='<line x1="'+colXs[hx]+'" y1="36" x2="'+colXs[hx]+'" y2="'+(H-8)+'" style="stroke:var(--ink);stroke-opacity:0.12;stroke-width:1.5;stroke-dasharray:2,5;"/>';
+  }
+  var route=(pts.length>1)?'<polyline points="'+pts.join(' ')+'" style="fill:none;stroke:var(--ink);stroke-width:2.5;stroke-dasharray:7,5;"/>':'';
+  var h='<div class="report-delegation-map" style="margin:0 0 20px;border:var(--border-w) solid var(--ink);background:var(--bg-card);box-shadow:var(--shadow);overflow:hidden;">';
+  h+='<div style="display:flex;align-items:center;min-height:44px;padding:0 16px;background:var(--acc-yellow);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">'+_esc(M.title||'나의 위임 항로')+'</div>';
+  h+='<div style="padding:10px 12px 4px;">';
+  h+='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;display:block;">'+headers+route+nodes+titles+'</svg>';
+  h+='</div>';
+  h+='<div style="padding:0 16px 12px;font-size:12px;color:var(--ink-soft);">'+_esc(M.legend||'◉ 검토 3회 · ◎ 검토 2회 · ○ 검토 1회 — 점을 잇는 선이 나의 항로, 기울기가 곧 패턴')+'</div>';
+  h+='</div>';
+  return h;
+}
+
 function showReport(){
   hideStats();
   trackEvent('final_report_viewed',{totalScore:gameState.totalScore,items:gameState.itemsCollected,history:gameState.scenarioHistory});
@@ -389,6 +430,9 @@ function showFinalReport(){
     h+='<b>'+finalGrade+'</b> — '+_esc(gradeNote);
     h+='</div>';
   }
+
+  // §4 R3 — 위임 지도 "나의 위임 항로" (지도가 패턴 서사의 진입 — 카드 섹션보다 앞)
+  h+=_renderDelegationMap(hist);
 
   ensureInventory();
 

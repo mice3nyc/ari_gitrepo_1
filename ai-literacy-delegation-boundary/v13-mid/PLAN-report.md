@@ -77,10 +77,13 @@ PLAN-report.md(이 문서) + SPEC-report.md 신설. 1차 질문 묶음 발송.
 - [x] 커밋·푸시 + 라이브 확인 — 롤백 지점: 직전 라이브 5a5fc90
 
 ### R2 — 기록 보강
-- [ ] 재도전 시 scenarioHistory 동작 확인 (덮어쓰기/누적) → SPEC §3 확정
-- [ ] 할인 details 적재 + firstAttempt 보존 + 카드 획득 맥락
-- [ ] 기존 세이브 호환 가드 (필드 없으면 안전 폴백)
-- [ ] 빌드 + 헤드리스 검증
+- [x] 재도전 동작 확인: history는 splice 후 덮어쓰기, replay[scid]에 best 기록 이미 존재 → SPEC §3 확정
+- [x] 할인 영수증: consumeStage 단일 후킹(_scDiscounts, 전액 할인 포함) → history.discounts 동봉
+- [x] firstAttempt·attempts를 replay[scid]에 보존 (최초 1회만, 2차 재도전에도 불변)
+- [x] choiceLabel: pilotAwardCards에 획득 맥락 동봉 (perChoice 카드)
+- [x] 곁가지 2건: stale 세이브 replay[scid] TypeError 가드 / 재도전 시 쿠폰 선택 리셋(_couponSelections — 이전 판 선택 자동 적용 버그)
+- [x] 빌드 920,402B + 린터 0 + R2 헤드리스 5체크 PASS + R1 회귀 SMOKE OK + 인코딩 클린
+- [x] 커밋 4b79b1f 푸시 (v1.3-mid-r2) — 라이브 확인 백그라운드
 
 ### R3 — 위임 지도
 - [ ] SPEC §4 작성 (선문후코) → 렌더 구현 → 빌드 + 스크린샷
