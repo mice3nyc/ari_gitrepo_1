@@ -213,6 +213,19 @@ function getReviewPoints(scenario,rId){
   return {points:0,label:'',obj:null};
 }
 
+// v6 6/11 — 중앙 그래프용 실시간 점수 (SPEC-ui-hud §4e).
+// 검토 확정 전 = 단계별 합산(tier1+tier2 points), 확정 후 = gameState.score(CSV 단일 진실로 스냅).
+function getLiveScore(){
+  if(!gameState||!gameState.currentScenarioId)return 0;
+  if(gameState.score)return Math.max(0,Math.min(100,gameState.score));
+  var sc=getScenario();
+  if(!sc)return 0;
+  var s=0;
+  if(gameState.selectedTier1)s+=getTier1Points(sc,gameState.selectedTier1).points;
+  if(gameState.selectedTier2)s+=getTier2Points(sc,gameState.selectedTier2).points;
+  return Math.max(0,Math.min(100,s));
+}
+
 function getGrade(score){
   if(score>=CONFIG.pointThresholds.S)return 'S';
   if(score>=CONFIG.pointThresholds.A)return 'A';

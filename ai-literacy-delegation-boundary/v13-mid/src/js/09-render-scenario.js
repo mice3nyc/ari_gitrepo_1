@@ -166,11 +166,32 @@ function updateStats(){
     _prevPending.delegation=gameState.pending.delegation||0;
     _prevPending.knowledge=gameState.pending.knowledge||0;
   }
-  // 중앙 SCORE 표시 (LV은 updateExpUI가 담당)
+  // 중앙 누적 SCORE 표시 — v6 6/11: totalScore + 확정된 현재 시나리오 점수 (LV은 updateExpUI가 담당)
   var scoreNumEl=document.getElementById('score-num');
-  if(scoreNumEl)scoreNumEl.textContent=gameState.score;
+  if(scoreNumEl)scoreNumEl.textContent=(gameState.totalScore||0)+(gameState.score||0);
+  updateScoreGraph();
   updateResourceUI();
   updateExpUI();
+}
+
+// v6 6/11 — 중앙 실시간 점수 그래프 (SPEC-ui-hud §4e). 채움 폭 + 머리 아이콘 위치 + 숫자.
+var _prevLiveScore=-1;
+function updateScoreGraph(){
+  var fill=document.getElementById('score-graph-fill');
+  var rider=document.getElementById('score-graph-rider');
+  var num=document.getElementById('score-graph-num');
+  if(!fill||!rider||!num)return;
+  var s=(typeof getLiveScore==='function')?getLiveScore():0;
+  fill.style.width=s+'%';
+  rider.style.left=s+'%';
+  num.textContent=s;
+  if(s!==_prevLiveScore&&_prevLiveScore>=0){
+    num.classList.remove('pulsing');
+    void num.offsetWidth;
+    num.classList.add('pulsing');
+    setTimeout(function(){num.classList.remove('pulsing');},600);
+  }
+  _prevLiveScore=s;
 }
 
 function setCircleMeter(meterId,value){
@@ -747,7 +768,7 @@ function goCut6(){
 
   // ① awareness — 결과 설명
   if(awareness){
-    h+='<div class="result-awareness" style="margin-bottom:16px;font-family:var(--font-hand);font-size:22px;line-height:1.6;color:var(--ink-mute);">'+awareness+'</div>';
+    h+='<div class="result-awareness" style="margin-bottom:16px;font-size:16px;line-height:1.6;color:var(--ink-mute);">'+awareness+'</div>';
   }
 
   // ② CUT6 보정 피드백 — 하단 메시지

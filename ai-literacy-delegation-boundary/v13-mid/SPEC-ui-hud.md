@@ -81,8 +81,21 @@
 
 1. **카드 획득 연출 — 우측 팝업 + 레일 + 종료 비행**: [SPEC-card-per-choice.md §2b](SPEC-card-per-choice.md) 참조 (별도 트랙).
 2. **폰트 — 손글씨 빼고 전부 Paperlogy**: `--font-main`은 이미 Paperlogy 1순위. 구멍은 폼 요소(button·input·select·textarea)가 폰트를 상속하지 않는 것 — `00-base.css`에 전역 `button,input,select,textarea{font-family:inherit;}` 추가로 일괄 차단. `--font-hand`(나눔펜) 4곳(완료 배너·awareness·리포트 캡션·피드백)은 유지. debug 패널 monospace는 내부 도구라 유지.
+   - **v5 보강 (6/11 피터공 4차)**: 컷6 awareness(결과 설명, shortFeedback)도 Paperlogy로 전환 — 손글씨 22px → 본문 상속 16px (`09-render-scenario.js` result-awareness에서 font-family 오버라이드 제거). 손글씨 잔존: 완료 배너·리포트 캡션·리포트 피드백 3곳.
 3. **결말 재시도 모달 버튼 동일 위계**: `showRecoveryCardModal`의 primary(노랑 강조)/secondary 차등을 없애고 **같은 스타일 두 버튼을 가로 나란히** — [다시 도전] [다음 시나리오]. 흰 배경+ink 테두리+같은 그림자. `texts.yaml` `recovery.btn_use: "다시 도전"`, `btn_skip: "다음 시나리오"`, `btn_use_sub` 제거 + `ui_texts.csv` 232~234행 동기.
 4. **검토 선택지 번호 표기**: R1~R3 → **1·2·3** (표시만, 내부 id·세이브·린터 무변). 적용 2곳 — 컷4 choice-num(09-render §23), 컷5 chosen-title. 데이터(texts.yaml)에는 R 표기 없음 확인.
+
+## 4e. v6 — 6/11 중앙 실시간 점수 그래프 (피터공 5차)
+
+> 의도: 시나리오 진행 상황을 실시간 점수로 보여줘 이해와 몰입을 높인다.
+
+1. **HUD 3:5:3 분할**: panel-row를 좌(자원 3) : 중앙(그래프 5) : 우(역량 3) flex 비율로. `.resource-bar{flex:3}` `.score-display{flex:5;min-width:0}` `.stats-bar{flex:3}` — 기존 `flex:1`/`flex:0 0 auto;min-width:180px` 대체.
+2. **중앙 메인 = 시나리오 점수 그래프 (0~100)**: 가로 바. 채움 폭 = 현재 시나리오 실시간 점수(%). 선택 결과마다 0.6s 트랜지션으로 늘어남.
+   - **실시간 점수 정의** (`getLiveScore()`, 03-engine.js): 검토 확정 전 = tier1.points + tier2.points 누적(합산 모델 단계값, basePoint+varPoint). 검토 확정 후 = `gameState.score`(CSV fin.score, 단일 진실 — §6.6.1과 일치, 합산치와 다르면 확정 시점에 스냅). 0~100 클램프. 데이터 무변.
+3. **머리 아이콘 + 기어 회전**: 채움 바 우측 상단(트랙 위)에 `icon-schoolhead.svg` (출처: `Assets/incoming/AI리터러시/UIUX/`). 점수가 오르면 채움 끝을 따라 이동(left % + 같은 트랜지션). 원본 SVG는 단일 path(서브패스 4개) — 머리(0·1)/기어 톱니(2)+구멍(3)을 두 path로 분리해 인라인 임베드, 기어만 `<g>`로 감싸 SMIL `animateTransform rotate` 중심 `(11,10)` 4s 무한 회전.
+4. **점수 숫자**: 머리 아이콘 좌측에 현재 시나리오 점수 숫자(실시간). 변동 시 numPulse.
+5. **누적 SCORE**: 그래프 우측 옆 블록에 `SCORE` 라벨 + 전체 누적 점수 = `totalScore + score`(시나리오 총점 확정[applyReview] 시점에 합산돼 보임, goNextScenario에서 totalScore로 흡수 — 표시값 연속). 기존 `#score-num` 재사용(09-render 갱신식만 변경, 컷5 pulse 사이트 유지).
+6. **LV·XP 유지**: 그래프 아래 컴팩트 행(LV 라벨+숫자 + XP 바)으로 이동. 제거 아님.
 
 ## 5. 미해결 / 다음 단계
 

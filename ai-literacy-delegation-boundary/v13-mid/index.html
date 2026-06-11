@@ -55,7 +55,7 @@ button, input, select, textarea { font-family: inherit; }
 .resource-bar.flash-levelup { animation:flashLevelUp 0.8s ease; }
 
 /* ===== 좌측 패널 — 자원 게이지 (단방향) — 6/11 HUD 개편: 아이콘+큰 레이블+두툼한 바+바 위 수치 ===== */
-.resource-bar { flex:1; display:flex; flex-direction:row; gap:0; padding:0; border:0; background:transparent; box-shadow:none; overflow:hidden; } /* v3 6/11 — 중간 박스 제거 */
+.resource-bar { flex:3 1 0; min-width:0; display:flex; flex-direction:row; gap:0; padding:0; border:0; background:transparent; box-shadow:none; overflow:hidden; } /* v3 6/11 — 중간 박스 제거 / v6 6/11 — 3:5:3 분할 (SPEC §4e) */
 .resource-item { flex:1; display:flex; flex-direction:row; align-items:center; gap:8px; padding:8px 12px; position:relative; transition:background-color 0.3s; }
 .resource-icon { flex:0 0 auto; display:flex; align-items:center; }
 .resource-icon svg { width:22px; height:22px; fill:var(--ink); display:block; }
@@ -73,7 +73,7 @@ button, input, select, textarea { font-family: inherit; }
 @keyframes flashGray { 0%{background-color:rgba(80,80,80,0.10)} 100%{background-color:transparent} }
 
 /* ===== 우측 패널 — 역량 (5/3 — 컷/아이템은 중앙 progress-strip로 분리) ===== */
-.stats-bar { flex:1; display:flex; flex-direction:row; gap:0; padding:0; border:0; background:transparent; box-shadow:none; overflow:visible; } /* v3 6/11 — 중간 박스 제거, 오버플로 링 잘림 방지 */
+.stats-bar { flex:3 1 0; min-width:0; display:flex; flex-direction:row; gap:0; padding:0; border:0; background:transparent; box-shadow:none; overflow:visible; } /* v3 6/11 — 중간 박스 제거, 오버플로 링 잘림 방지 / v6 6/11 — 3:5:3 분할 (SPEC §4e) */
 .stat { flex:1; display:flex; flex-direction:column; justify-content:center; padding:8px 12px; position:relative; transition:background-color 0.3s; } /* v3 6/11 — 좌우 박스 행 높이 정렬 */
 .stat-row { display:flex; flex-direction:row; align-items:center; gap:12px; }
 .stat-name { font-size:18px; font-weight:800; color:#111; flex:0 0 auto; }
@@ -111,16 +111,34 @@ button, input, select, textarea { font-family: inherit; }
 .scenario-progress-strip .sps-items.zero { color:#bbb; border-color:#ddd; }
 
 /* ===== 중앙 LV·SCORE 큰 디스플레이 ===== */
-.score-display { flex:0 0 auto; display:flex; flex-direction:column; align-items:stretch; gap:8px; padding:8px 18px; border:var(--border-w) solid var(--ink); background:var(--bg-card); box-shadow:var(--shadow); min-width:180px; }
-.score-display-row { display:flex; flex-direction:row; align-items:center; gap:18px; justify-content:center; }
+.score-display { flex:5 1 0; min-width:0; display:flex; flex-direction:column; align-items:stretch; gap:6px; padding:8px 18px; border:var(--border-w) solid var(--ink); background:var(--bg-card); box-shadow:var(--shadow); } /* v6 6/11 — 3:5:3 분할, 그래프가 메인 (SPEC §4e) */
 /* 6/11 HUD 개편 — panel-title([자원]/[역량] 세로 타이틀) 제거 */
 .panel-content { flex:1; display:flex; flex-direction:column; }
 .panel-divider { height:1px; background:#ddd; }
-.score-block { display:flex; flex-direction:column; align-items:center; gap:3px; min-width:54px; }
 .display-label { font-size:9px; color:#888; letter-spacing:1.5px; line-height:1; font-weight:700; }
 .display-num { font-size:34px; font-weight:700; color:#111; line-height:1; transition:transform 0.3s, color 0.3s; }
 .display-num.pulsing { animation:numPulse 0.5s ease; }
-.score-vsep { width:1px; height:46px; background:#ddd; }
+
+/* ===== v6 6/11 — 중앙 실시간 점수 그래프 (SPEC §4e) ===== */
+.score-graph-row { display:flex; flex-direction:row; align-items:flex-end; gap:16px; }
+.score-graph { flex:1; min-width:0; }
+/* 머리 아이콘 레인 — 트랙 위. 아이콘 중심 = 현재 점수 위치, 숫자는 아이콘 좌측 */
+.score-graph-headzone { position:relative; height:28px; }
+.score-graph-rider { position:absolute; left:0%; bottom:1px; width:26px; height:26px; margin-left:-13px; transition:left 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+.score-head-icon { display:block; width:26px; height:26px; }
+.score-head-icon svg { width:26px; height:26px; fill:var(--ink); display:block; }
+.score-graph-num { position:absolute; right:100%; margin-right:6px; top:50%; transform:translateY(-50%); font-size:17px; font-weight:800; color:var(--ink); line-height:1; }
+.score-graph-num.pulsing { animation:numPulse 0.5s ease; }
+/* 0~100 트랙 — 자원 게이지와 같은 결 */
+.score-graph-track { position:relative; height:18px; background:var(--bg-page); border:2px solid var(--ink); overflow:hidden; }
+.score-graph-fill { height:100%; width:0%; background:var(--acc-mint-deep); transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+/* 누적 SCORE 블록 (그래프 우측) */
+.score-total-block { flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:3px; min-width:54px; }
+/* LV + XP 컴팩트 행 (그래프 아래) */
+.score-sub-row { display:flex; flex-direction:row; align-items:center; gap:8px; }
+.lv-compact { font-size:16px; font-weight:800; color:#111; line-height:1; }
+.lv-compact.pulsing { animation:numPulse 0.5s ease; }
+.score-sub-row .exp-display { flex:1; padding:0 0 0 8px; }
 
 /* ===== 선택지 비용 표시 — 4박스 그리드 (DECISIONS §10.6 4/30 세션257) ===== */
 .choice-cost { display:flex; gap:0; margin-top:1px; padding-top:10px; border-top:1px dashed #ddd; }
@@ -364,7 +382,7 @@ button, input, select, textarea { font-family: inherit; }
   .panels-grid { grid-template-columns:1fr; }
   .panel-row { flex-direction:column; }
   .score-display { flex-direction:column; min-width:0; padding:6px 12px; }
-  .score-display-row { gap:12px; }
+  .score-graph-row { gap:12px; } /* v6 6/11 — score-display-row → score-graph-row (SPEC §4e) */
   .display-num { font-size:28px; }
 }
 
@@ -1534,26 +1552,38 @@ button,
       <div class="resource-item" id="res-energy"><div class="resource-change-indicator" id="rdelta-energy"></div><span class="resource-icon rotated" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 19h21v-14h-21v14zm9.298-7.21v-3.79l8.535 6.248-5.878-1.728v3.48l-8.789-5.984 6.132 1.774zm14.702-2.54v4.5c0 .69-.56 1.25-1.25 1.25h-.75v-7h.75c.69 0 1.25.56 1.25 1.25z"/></svg></span><span class="resource-name">에너지</span><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-energy" style="width:100%"></div><span class="resource-num" id="rnum-energy">100</span></div></div>
     </div>
   </div>
-  <!-- 중앙: LV + SCORE + XP -->
+  <!-- 중앙: 시나리오 실시간 점수 그래프 + 누적 SCORE + LV/XP — 6/11 v6 (SPEC §4e) -->
   <div class="score-display" id="score-display">
-    <div class="score-display-row">
-      <div class="score-block">
-        <span class="display-label">LV</span>
-        <span class="display-num" id="lv-num">1</span>
+    <div class="score-graph-row">
+      <div class="score-graph" id="score-graph">
+        <!-- 머리 아이콘 + 점수 숫자 — 채움 끝을 따라 이동. icon-schoolhead.svg(Assets/incoming/AI리터러시/UIUX) 분리 임베드: 머리/기어 두 패스, 기어만 SMIL 회전(중심 11,10) -->
+        <div class="score-graph-headzone">
+          <div class="score-graph-rider" id="score-graph-rider" style="left:0%">
+            <span class="score-graph-num" id="score-graph-num">0</span>
+            <span class="score-head-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.996 23.999h-12.605s.734-3.931.633-5.686c-.041-.724-.161-1.474-.54-2.104-.645-1-2.636-3.72-2.475-7.43.224-5.209 4.693-8.779 10.126-8.779 5.098 0 8.507 3.001 9.858 7.483.328 1.079.311 1.541-.151 2.607l-.006.013 1.751 2.142c.26.381.413.791.413 1.239 0 .547-.233 1.045-.61 1.399-.368.345-.767.452-1.248.642 0 0-.576 2.592-.873 3.291-.7 1.643-1.97 1.659-2.97 1.849-.394.083-.49.133-.681.681-.208.591-.363 1.435-.622 2.653M11.154 1.999c-4.285.048-7.74 2.548-8.121 6.488-.192 1.991.463 3.986 1.516 5.705.611 1 1.305 1.592 1.464 3.875.091 1.313-.05 2.636-.241 3.932h8.604c.141-.645.35-1.485.687-2.057.449-.766 1.097-1.099 1.926-1.254.838-.148 1.238-.059 1.489-.785.212-.579.612-2.221.831-3.902 1.203-.335.612-.161 1.671-.559-.206-.234-1.918-2.314-2.045-2.6-.336-.759-.046-1.19.225-1.913.086-.251.06-.357-.009-.613-1.049-3.949-3.891-6.317-7.997-6.317"/><g><animateTransform attributeName="transform" type="rotate" from="0 11 10" to="360 11 10" dur="4s" repeatCount="indefinite"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11.674 4.999c.242.684.312 1.122.841 1.341h.001c.53.221.893-.044 1.543-.353l.953.952c-.312.655-.573 1.016-.354 1.544v.001c.219.528.653.597 1.342.841v1.347c-.681.243-1.123.313-1.342.843-.22.529.043.891.354 1.544l-.953.952c-.657-.313-1.014-.574-1.541-.355h-.001c-.531.222-.601.661-.843 1.343h-1.348c-.242-.684-.312-1.122-.841-1.34l-.001-.001c-.529-.221-.892.043-1.544.353l-.952-.952c.305-.643.574-1.011.353-1.545-.22-.529-.661-.599-1.341-.842v-1.347c.681-.242 1.121-.312 1.341-.841.22-.531-.042-.891-.353-1.545l.952-.952c.657.312 1.015.573 1.544.353h.001c.529-.219.599-.661.841-1.341h1.348zM11.0 11.666c-.92 0-1.667-.746-1.667-1.667s.747-1.667 1.667-1.667 1.666.746 1.666 1.667-.746 1.667-1.666 1.667"/></g></svg></span>
+          </div>
+        </div>
+        <div class="score-graph-track">
+          <div class="score-graph-fill" id="score-graph-fill" style="width:0%"></div>
+        </div>
       </div>
-      <div class="score-vsep"></div>
-      <div class="score-block">
+      <!-- 누적 SCORE (totalScore + 확정된 현재 시나리오 점수) -->
+      <div class="score-total-block">
         <span class="display-label">SCORE</span>
         <span class="display-num" id="score-num">0</span>
       </div>
     </div>
-    <!-- XP 진행 바 (LV/SCORE 아래) -->
-    <div class="exp-display" id="exp-display">
-      <div class="exp-header">
-        <span class="exp-level" id="exp-level">XP</span>
-        <span class="exp-num" id="exp-num">0/20</span>
+    <!-- LV + XP 컴팩트 행 (그래프 아래) -->
+    <div class="score-sub-row">
+      <span class="display-label">LV</span>
+      <span class="lv-compact" id="lv-num">1</span>
+      <div class="exp-display" id="exp-display">
+        <div class="exp-header">
+          <span class="exp-level" id="exp-level">XP</span>
+          <span class="exp-num" id="exp-num">0/20</span>
+        </div>
+        <div class="exp-bar"><div class="exp-bar-fill" id="exp-bar-fill" style="width:0%"></div></div>
       </div>
-      <div class="exp-bar"><div class="exp-bar-fill" id="exp-bar-fill" style="width:0%"></div></div>
     </div>
   </div>
   <!-- 우측: 역량 (원 7개 미터 — 6/11 HUD 개편: 타이틀·숫자·양방향 바 제거, 기본 3개 채움 = 기존 0) -->
@@ -13763,6 +13793,19 @@ function getReviewPoints(scenario,rId){
   return {points:0,label:'',obj:null};
 }
 
+// v6 6/11 — 중앙 그래프용 실시간 점수 (SPEC-ui-hud §4e).
+// 검토 확정 전 = 단계별 합산(tier1+tier2 points), 확정 후 = gameState.score(CSV 단일 진실로 스냅).
+function getLiveScore(){
+  if(!gameState||!gameState.currentScenarioId)return 0;
+  if(gameState.score)return Math.max(0,Math.min(100,gameState.score));
+  var sc=getScenario();
+  if(!sc)return 0;
+  var s=0;
+  if(gameState.selectedTier1)s+=getTier1Points(sc,gameState.selectedTier1).points;
+  if(gameState.selectedTier2)s+=getTier2Points(sc,gameState.selectedTier2).points;
+  return Math.max(0,Math.min(100,s));
+}
+
 function getGrade(score){
   if(score>=CONFIG.pointThresholds.S)return 'S';
   if(score>=CONFIG.pointThresholds.A)return 'A';
@@ -14643,11 +14686,32 @@ function updateStats(){
     _prevPending.delegation=gameState.pending.delegation||0;
     _prevPending.knowledge=gameState.pending.knowledge||0;
   }
-  // 중앙 SCORE 표시 (LV은 updateExpUI가 담당)
+  // 중앙 누적 SCORE 표시 — v6 6/11: totalScore + 확정된 현재 시나리오 점수 (LV은 updateExpUI가 담당)
   var scoreNumEl=document.getElementById('score-num');
-  if(scoreNumEl)scoreNumEl.textContent=gameState.score;
+  if(scoreNumEl)scoreNumEl.textContent=(gameState.totalScore||0)+(gameState.score||0);
+  updateScoreGraph();
   updateResourceUI();
   updateExpUI();
+}
+
+// v6 6/11 — 중앙 실시간 점수 그래프 (SPEC-ui-hud §4e). 채움 폭 + 머리 아이콘 위치 + 숫자.
+var _prevLiveScore=-1;
+function updateScoreGraph(){
+  var fill=document.getElementById('score-graph-fill');
+  var rider=document.getElementById('score-graph-rider');
+  var num=document.getElementById('score-graph-num');
+  if(!fill||!rider||!num)return;
+  var s=(typeof getLiveScore==='function')?getLiveScore():0;
+  fill.style.width=s+'%';
+  rider.style.left=s+'%';
+  num.textContent=s;
+  if(s!==_prevLiveScore&&_prevLiveScore>=0){
+    num.classList.remove('pulsing');
+    void num.offsetWidth;
+    num.classList.add('pulsing');
+    setTimeout(function(){num.classList.remove('pulsing');},600);
+  }
+  _prevLiveScore=s;
 }
 
 function setCircleMeter(meterId,value){
@@ -15224,7 +15288,7 @@ function goCut6(){
 
   // ① awareness — 결과 설명
   if(awareness){
-    h+='<div class="result-awareness" style="margin-bottom:16px;font-family:var(--font-hand);font-size:22px;line-height:1.6;color:var(--ink-mute);">'+awareness+'</div>';
+    h+='<div class="result-awareness" style="margin-bottom:16px;font-size:16px;line-height:1.6;color:var(--ink-mute);">'+awareness+'</div>';
   }
 
   // ② CUT6 보정 피드백 — 하단 메시지

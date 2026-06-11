@@ -149,7 +149,7 @@
   .panels-grid { grid-template-columns:1fr; }
   .panel-row { flex-direction:column; }
   .score-display { flex-direction:column; min-width:0; padding:6px 12px; }
-  .score-display-row { gap:12px; }
+  .score-graph-row { gap:12px; } /* v6 6/11 — score-display-row → score-graph-row (SPEC §4e) */
   .display-num { font-size:28px; }
 }
 
