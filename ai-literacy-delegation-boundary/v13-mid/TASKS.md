@@ -382,3 +382,9 @@
 - [x] 알약 미터 테두리 2→3px (resource-gauge·score-graph-track, 테마 exp-bar 그룹 분리)
 - [x] 빌드 + 헤드리스 5체크 (radius·border3·흰숫자·트랙3px·채움radius)
 - [ ] 피터공 확인 — 원 미터 dot(토큰)도 3px로 갈지 (이번엔 알약형 둘만 해석)
+
+#### 6/11 세션466 v9 보강 — 토큰 원 3px + 게이지 높이 26px (SPEC-ui-hud §4h v9 보강)
+
+- [x] cm-dot·cm-overflow 테두리 2→3px (01-hud + 테마)
+- [x] 자원 게이지 높이 22→26px (숫자 14px가 테두리에 닿던 문제)
+- [x] 빌드 + 헤드리스 3체크

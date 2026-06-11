@@ -24,7 +24,7 @@
 .resource-icon.rotated svg { transform:rotate(270deg); }
 .resource-name { font-size:17px; font-weight:800; color:var(--ink); letter-spacing:0.5px; flex:0 0 auto; min-width:60px; }
 .resource-num { position:absolute; left:8px; top:0; bottom:0; display:flex; align-items:center; font-size:14px; font-weight:800; color:#fff; line-height:1; z-index:1; transition:color 0.3s; } /* §4h v9 — 흰색 (핑크 채움 위) */
-.resource-gauge { position:relative; flex:1; height:22px; background:var(--bg-page); border:3px solid var(--ink); border-radius:999px; overflow:hidden; } /* §4h v9 — 알약형 + 테두리 3px */
+.resource-gauge { position:relative; flex:1; height:26px; background:var(--bg-page); border:3px solid var(--ink); border-radius:999px; overflow:hidden; } /* §4h v9 — 알약형 + 테두리 3px + 높이 26px(숫자 여유) */
 .resource-gauge-fill { height:100%; border-radius:999px; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1), background-color 0.6s ease; background:#555; }
 .resource-change-indicator { font-size:12px; font-weight:700; position:absolute; top:50%; right:-4px; transform:translateY(-50%); opacity:0; white-space:nowrap; pointer-events:none; }
 .resource-change-indicator.show { opacity:1; animation:changeFloat 1.8s ease forwards; }
@@ -43,11 +43,11 @@
 /* === 원 채움 미터 (Circle Meter) — 6/11 HUD 개편: 양방향 바 대체 === */
 /* §4g v8: 0개부터 채워나감, 마이너스 개념 없음. 채움 전부 초록 단일. 7 초과는 .cm-overflow 깜빡임 마커. */
 .circle-meter { position:relative; display:flex; flex-direction:row; align-items:center; gap:6px; }
-.circle-meter .cm-dot { width:18px; height:18px; border-radius:50%; border:2px solid var(--ink); background:transparent; box-sizing:border-box; transition:background-color 0.25s ease; }
+.circle-meter .cm-dot { width:18px; height:18px; border-radius:50%; border:3px solid var(--ink); background:transparent; box-sizing:border-box; transition:background-color 0.25s ease; } /* §4h v9 보강 — 3px */
 .circle-meter .cm-dot.filled { background:var(--acc-mint-deep); }
 .circle-meter .cm-dot.pop { animation:cmPop 0.4s ease; }
 /* v3 6/11 — 오버플로 링: 별도 원이 아니라 7번째 원을 둘러싸는 초록 링 깜빡임 */
-.circle-meter .cm-overflow { display:none; position:absolute; top:50%; right:-4px; transform:translateY(-50%); width:26px; height:26px; border-radius:50%; border:2px solid var(--acc-mint-deep); background:transparent; box-sizing:border-box; pointer-events:none; }
+.circle-meter .cm-overflow { display:none; position:absolute; top:50%; right:-4px; transform:translateY(-50%); width:26px; height:26px; border-radius:50%; border:3px solid var(--acc-mint-deep); background:transparent; box-sizing:border-box; pointer-events:none; }
 .circle-meter .cm-overflow.show { display:block; animation:cmBlink 1.1s ease-in-out infinite; }
 @keyframes cmPop { 0%{transform:scale(1)} 40%{transform:scale(1.45)} 100%{transform:scale(1)} }
 @keyframes cmBlink { 0%,100%{opacity:1} 50%{opacity:0.15} }

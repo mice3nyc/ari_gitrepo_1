@@ -136,7 +136,8 @@
 
 1. **시간·에너지 게이지 양끝 원-라운딩**: `.resource-gauge`·`.resource-gauge-fill` border-radius:999px (점수 그래프 트랙과 같은 알약형).
 2. **게이지 숫자 흰색**: `.resource-num` ink → #fff (핑크 채움 위). 알려진 한계: 잔량이 아주 낮으면 숫자 좌측(6px)이 흰 트랙 위에 걸칠 수 있음 — 발생 시 점수 그래프의 num-right 플립 패턴 이식.
-3. **라운딩(알약) 미터 테두리 +1px**: `.resource-gauge`·`.score-graph-track` 2px → 3px. 테마(10-paperlogy)의 `.resource-gauge,.exp-bar` 그룹에서 resource-gauge 분리(exp-bar는 2px 유지). 원 미터 dot(선택/능력 토큰)·노랑 원 rider는 2px 유지 — "라운딩 미터"를 알약형 둘로 해석, 피터공 확인 포인트.
+3. **라운딩(알약) 미터 테두리 +1px**: `.resource-gauge`·`.score-graph-track` 2px → 3px. 테마(10-paperlogy)의 `.resource-gauge,.exp-bar` 그룹에서 resource-gauge 분리(exp-bar는 2px 유지). ~~원 미터 dot(선택/능력 토큰)·노랑 원 rider는 2px 유지~~ → **v9 보강(피터공 9차)**: 토큰 원(cm-dot)·오버플로 링도 3px로 통일. rider(노랑 원)만 2px 유지.
+4. **v9 보강 — 게이지 높이**: `.resource-gauge` 22px → 26px. 숫자(14px)가 3px 테두리에 닿아 보이는 문제 — 안쪽 여유 16→20px.
 
 ## 5. 미해결 / 다음 단계
 
