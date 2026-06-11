@@ -112,10 +112,11 @@ ui_messages,ui_messages.exit_confirm.btn_cancel,계속하기
 ui_messages,ui_messages.exit_confirm.btn_destructive,나가기
 report,report.title,한 학기 활동 리포트
 report,report.subtitle,자기소개 → 모둠 발표 → 어린왕자 → 진로 → 시험 공부<br>다섯 결정이 한 학생의 한 학기를 만들었다.
+report,report.grade_note,"이 등급은 높고 낮음의 서열이 아니라, 네가 선택한 경로의 trade-off 결과야."
 report,report.stat_labels.total,학기 총점
 report,report.stat_labels.level,최종 레벨
-report,report.stat_labels.delegation,판단하는 힘
-report,report.stat_labels.knowledge,아는것의 힘
+report,report.stat_labels.delegation,선택
+report,report.stat_labels.knowledge,능력
 report,report.cards_section.title,한 학기 동안 모은 역량 카드 — 총 {N}장
 report,report.cards_section.empty,이번 학기는 역량 카드를 받지 못했어요. 다시 도전!
 report,report.cards_section.human_centric_title,인간중심 역량
@@ -281,8 +282,8 @@ scenario_report,scenario_report.stat_delegation,위임 선택력
 scenario_report,scenario_report.stat_knowledge,지식
 final_report,final_report.title_bar,AI 리터러시 성장 리포트
 final_report,final_report.subtitle,"한 학기 동안 다섯 시나리오에서 내린 선택과 그 결과를 돌아봅니다.<br>AI에게 무엇을 맡기고 무엇을 직접 했는지, 어떤 역량이 자랐는지 확인하세요."
-final_report,final_report.delegation_header,판단하는 힘 — 인간중심 역량 카드
-final_report,final_report.knowledge_header,아는것의 힘 — 도메인 역량 카드
+final_report,final_report.delegation_header,인간중심 역량 카드
+final_report,final_report.knowledge_header,능력 카드 — 도메인 역량
 final_report,final_report.no_domain_cards,이번 학기는 도메인 역량 카드를 받지 못했어요.
 final_report,final_report.scenario_results_title,시나리오별 결과
 final_report,final_report.growth_cards_title,성장 카드

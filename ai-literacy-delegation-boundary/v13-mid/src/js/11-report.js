@@ -1,6 +1,26 @@
 // =====================================================
 // 11. Report Generator (v0.3 — 두 역량 + 아이템)
 // =====================================================
+
+// 2a: HUD 동형 미니 원 미터 HTML 생성 — setCircleMeter(§4g v8)와 같은 매핑: filled=clamp(raw,0,7), 0개 시작
+// value: raw 역량값 그대로. 표시 전용, 내부 로직 불변.
+function _renderMiniCircleMeter(value, label){
+  var filled=Math.max(0,Math.min(7,Math.round(value)));
+  var h='<div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 8px;">';
+  h+='<div style="display:flex;flex-direction:row;align-items:center;gap:4px;">';
+  for(var i=0;i<7;i++){
+    if(i<filled){
+      h+='<div style="width:14px;height:14px;border-radius:50%;border:2.5px solid var(--ink);background:var(--acc-mint-deep);box-sizing:border-box;"></div>';
+    }else{
+      h+='<div style="width:14px;height:14px;border-radius:50%;border:2.5px solid var(--ink);background:transparent;box-sizing:border-box;"></div>';
+    }
+  }
+  h+='</div>';
+  h+='<div style="font-size:12px;color:var(--ink-soft);font-weight:700;">'+label+'</div>';
+  h+='</div>';
+  return h;
+}
+
 function showReport(){
   hideStats();
   trackEvent('final_report_viewed',{totalScore:gameState.totalScore,items:gameState.itemsCollected,history:gameState.scenarioHistory});
@@ -8,12 +28,12 @@ function showReport(){
   var last=gameState.scenarioHistory[gameState.scenarioHistory.length-1];
   var msg=sc.learningMessage;
   var _sr=_t('scenario_report',{});
+  var gradeNote=((typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.report&&TEXTS.report.grade_note)||'');
   var h='<div class="report-overlay"><div class="report-inner"><h2>'+(_sr.title||'활동 리포트')+'</h2>';
+  // 2d: 위임 선택력/지식 ± 박스 제거 → 점수·등급 2박스 + grade_note
   h+='<div class="report-grid">';
   h+='<div class="report-stat-box"><div class="report-stat-num">'+gameState.score+'</div><div class="report-stat-label">'+(_sr.stat_score||'최종 점수')+'</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+(last?last.grade:'-')+'</div><div class="report-stat-label">'+(_sr.stat_grade||'등급')+'</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+(effectiveCompetency(gameState.competencies.delegationChoice.value)>0?'+':'')+effectiveCompetency(gameState.competencies.delegationChoice.value)+'</div><div class="report-stat-label">'+(_sr.stat_delegation||'위임 선택력')+'</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+(effectiveCompetency(gameState.competencies.knowledge.value)>0?'+':'')+effectiveCompetency(gameState.competencies.knowledge.value)+'</div><div class="report-stat-label">'+(_sr.stat_knowledge||'지식')+'</div></div>';
+  h+='<div class="report-stat-box"><div class="report-stat-num">'+(last?last.grade:'-')+'</div><div class="report-stat-label">'+(_sr.stat_grade||'등급')+'</div>'+(gradeNote?'<div style="font-size:10px;color:var(--ink-soft);margin-top:4px;line-height:1.4;">'+gradeNote+'</div>':'')+'</div>';
   h+='</div>';
   if(last){
     h+='<div class="report-comment"><b>'+_t('game_flow.your_path','너의 경로')+'</b>: '+last.tier1+' → '+last.tier2+' → '+last.review+' ('+last.leaf+')<br><br>';
@@ -118,7 +138,7 @@ function _reportCardsByScenario(){
   add(inv.humanCentricCards,function(c){return '['+c.axis+'] '+c.tag;});
   add(inv.domainCards,function(c){return _cardDisplayName(c.label);});
   add(inv.growthCards,function(c){return c.label;});
-  add(inv.competencyCards,function(c){return c.label;});
+  // 2e: legacy competencyCards 분기 제거
   return groups;
 }
 
@@ -168,7 +188,7 @@ function _reportAllCards(){
   if(inv.humanCentricCards)for(var i=0;i<inv.humanCentricCards.length;i++){var c=inv.humanCentricCards[i];all.push({label:'['+c.axis+'] '+c.tag,scenario:c.scenario,track:'human'});}
   if(inv.domainCards)for(var j=0;j<inv.domainCards.length;j++){var d=inv.domainCards[j];all.push({label:d.label,scenario:d.scenario,track:'domain'});}
   if(inv.growthCards)for(var k=0;k<inv.growthCards.length;k++){var g=inv.growthCards[k];all.push({label:g.label,scenario:g.scenario,track:'growth'});}
-  if(inv.competencyCards)for(var l=0;l<inv.competencyCards.length;l++){var o=inv.competencyCards[l];all.push({label:o.label,scenario:o.scenario,scenarioTitle:o.scenarioTitle,track:'legacy'});}
+  // 2e: legacy competencyCards(track:'legacy') 분기 제거 — 기존 세이브에 있어도 무시, 깨지지 않음
   return all;
 }
 var _COMMON_CARDS={'검수능력':1,'자기검증':1,'자기성찰':1,'비판적 사고':1};
@@ -196,14 +216,7 @@ function _reportNarrative(compType,inventory,history){
   var cdist=(N.card_distribution)||{};
   var noCards=(N.no_cards)||{};
   var html='';
-  // (1) 4유형 패턴 narrative — 라벨 큰 글씨 한 줄 + 본문 단락 + 사이 여백 (5/3 정정)
-  var typeName=_typeLabel(compType);
-  var typeText=_typeText(compType);
-  html+='<div class="report-narrative-block">';
-  html+='<div class="report-narrative-title">'+_esc(titles.type||'학습자 패턴')+'</div>';
-  html+='<div class="report-narrative-cardtype">'+_esc(typeName)+'</div>';
-  html+='<div class="report-narrative-body">'+typeText+'</div>';
-  html+='</div>';
+  // (1) 4유형 패턴 블록 — 2b: 제거 (compType·_typeLabel·_typeText 함수는 보존)
 
   // (2) 카드 누적 인사이트 — v0.8 3트랙 통합
   var cards=_reportAllCards();
@@ -346,30 +359,36 @@ function showFinalReport(){
   var lv=gameState.exp.level;
   var dv=gameState.competencies.delegationChoice.value;
   var kv=gameState.competencies.knowledge.value;
-  var compType=getCompetencyType(dv,kv);
-  var compText=_t('config_texts.result_types.'+compType,'')||(CONFIG.resultTextsByType||{})[compType]||'';
+  // 2b: getCompetencyType 호출 제거 — 함수·데이터 키는 보존(되돌리기 가능)
+  var compType=null;
   function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
   // texts.yaml — report 섹션 텍스트
   var R=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.report) || {};
-  var statL=R.stat_labels||{};
-  var cardsSec=R.cards_section||{};
-  var dvE=effectiveCompetency(dv);
-  var kvE=effectiveCompetency(kv);
+  var gradeNote=R.grade_note||'';
 
   var h='<div class="report-overlay"><div class="report-inner report-v813">';
   var _fr=_t('final_report',{});
   h+='<div style="display:flex;align-items:center;min-height:56px;padding:0 22px;margin-bottom:24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);font-size:20px;font-weight:700;letter-spacing:1px;">'+(_fr.title_bar||'AI 리터러시 성장 리포트')+'</div>';
   h+='<div class="report-subtitle">'+(_fr.subtitle||'한 학기 동안 다섯 시나리오에서 내린 선택과 그 결과를 돌아봅니다.<br>AI에게 무엇을 맡기고 무엇을 직접 했는지, 어떤 역량이 자랐는지 확인하세요.')+'</div>';
 
-  // 상단: 4박스 통계 (총점 + 레벨 + 판단하는 힘 + 아는것의 힘)
-  h+='<div class="report-grid" style="grid-template-columns:repeat(4,1fr);max-width:600px;margin:0 auto 16px;">';
+  // 2a: 상단 4박스 — 총점·레벨 유지 + 판단하는 힘/아는것의 힘 ± 수치 → 원 미터 교체
   var _sl=R.stat_labels||{};
+  var lastHist=hist.length?hist[hist.length-1]:null;
+  var finalGrade=lastHist?lastHist.grade:'';
+  h+='<div class="report-grid" style="grid-template-columns:repeat(4,1fr);max-width:640px;margin:0 auto 16px;">';
   h+='<div class="report-stat-box"><div class="report-stat-num">'+totalScore+'</div><div class="report-stat-label">'+(_sl.total||'학기 총점')+'</div></div>';
   h+='<div class="report-stat-box"><div class="report-stat-num">Lv.'+lv+'</div><div class="report-stat-label">'+(_sl.level||'최종 레벨')+'</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num" style="color:'+(dvE>=0?'var(--acc-mint-deep)':'var(--acc-pink-deep)')+'">'+(dvE>0?'+':'')+dvE+'</div><div class="report-stat-label">'+(_sl.delegation||'판단하는 힘')+'</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num" style="color:'+(kvE>=0?'var(--acc-mint-deep)':'var(--acc-pink-deep)')+'">'+(kvE>0?'+':'')+kvE+'</div><div class="report-stat-label">'+(_sl.knowledge||'아는것의 힘')+'</div></div>';
+  // 선택/능력 원 미터 — HUD setCircleMeter와 동일하게 raw 값 그대로 (clamp는 함수 안에서)
+  h+='<div class="report-stat-box" style="padding:0;">'+_renderMiniCircleMeter(dv,(_sl.delegation||'선택'))+'</div>';
+  h+='<div class="report-stat-box" style="padding:0;">'+_renderMiniCircleMeter(kv,(_sl.knowledge||'능력'))+'</div>';
   h+='</div>';
+  // 2c: 등급 산정 한 줄 (학기 최종 등급 기준)
+  if(finalGrade&&gradeNote){
+    h+='<div style="text-align:center;font-size:12px;color:var(--ink-soft);margin:-8px 0 16px;">';
+    h+='<b>'+finalGrade+'</b> — '+_esc(gradeNote);
+    h+='</div>';
+  }
 
   ensureInventory();
 
@@ -404,7 +423,7 @@ function showFinalReport(){
   for(var oi=0;oi<hcFlat.length;oi++){if(ownedHC[hcFlat[oi].axis+'::'+hcFlat[oi].tag])hcOwned++;}
 
   h+='<div class="report-cards-section" style="border:var(--border-w) solid var(--ink);background:var(--bg-card);box-shadow:var(--shadow);padding:0 0 20px;margin-bottom:20px;">';
-  h+='<div style="display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:var(--acc-mint);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">'+_t('final_report.delegation_header','판단하는 힘 — 인간중심 역량 카드')+'<span style="font-size:13px;font-weight:600;color:var(--ink-mute);">'+hcOwned+' / '+hcFlat.length+'</span></div>';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:var(--acc-mint);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">'+_t('final_report.delegation_header','인간중심 역량 카드')+'<span style="font-size:13px;font-weight:600;color:var(--ink-mute);">'+hcOwned+' / '+hcFlat.length+'</span></div>';
   h+='<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;padding:14px 16px;">';
   for(var ci=0;ci<hcFlat.length;ci++){
     var card=hcFlat[ci];
@@ -430,7 +449,7 @@ function showFinalReport(){
 
   h+='</div>';
   h+='<div class="report-cards-section" style="border:var(--border-w) solid var(--ink);background:var(--bg-card);box-shadow:var(--shadow);padding:0 0 20px;margin-bottom:20px;">';
-  h+='<div style="display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:var(--acc-cyan);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">'+_t('final_report.knowledge_header','아는것의 힘 — 도메인 역량 카드')+'<span style="font-size:13px;font-weight:600;color:var(--ink-mute);">'+domOwned.length+'장</span></div>';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;min-height:44px;padding:0 16px;background:var(--acc-cyan);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">'+_t('final_report.knowledge_header','능력 카드 — 도메인 역량')+'<span style="font-size:13px;font-weight:600;color:var(--ink-mute);">'+domOwned.length+'장</span></div>';
   if(domOwned.length===0){
     h+='<div style="font-size:13px;color:#888;padding:14px 16px;">'+_t('final_report.no_domain_cards','이번 학기는 도메인 역량 카드를 받지 못했어요.')+'</div>';
   }else{
@@ -541,8 +560,8 @@ function extractReportData(){
       return {
         hc:(inv.humanCentricCards||[]).map(function(c){return {axis:c.axis,tag:c.tag,s:c.scenario};}),
         dc:(inv.domainCards||[]).map(function(c){return {label:c.label,s:c.scenario};}),
-        gc:(inv.growthCards||[]).map(function(c){return {label:c.label,s:c.scenario};}),
-        cc:(inv.competencyCards||[]).map(function(c){return {label:c.label,s:c.scenario,st:c.scenarioTitle};})
+        gc:(inv.growthCards||[]).map(function(c){return {label:c.label,s:c.scenario};})
+        // 2e: legacy competencyCards(cc) 제거 — Phase 2 페이로드도 신규 모델만
       };
     })()
   };
@@ -576,14 +595,10 @@ function _renderGrowthReport(hist, compType, inventory){
 
   var h='<div class="report-growth" style="margin:28px 0 20px;padding:22px 20px;background:var(--bg-card);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);">';
 
-  // (5) 학습자 유형 + 패턴 요약 — 하나의 박스
-  var typeName=_typeLabel(compType);
-  var typeText=_typeText(compType);
+  // (5) 2b: 학습자 유형(4분면) 폐지 → 선택 패턴 5종만 노출
   var patText=(GR.patterns||{})[pattern]||'';
   h+='<div style="margin-bottom:20px;padding:16px 18px;background:var(--bg-soft);border:var(--border-w) solid var(--ink);">';
-  h+='<div style="font-size:11px;color:var(--ink-soft);font-weight:700;letter-spacing:1.5px;margin-bottom:4px;">'+_t('final_report.learner_type_label','학습자 유형')+'</div>';
-  h+='<div style="font-size:18px;font-weight:800;margin-bottom:8px;">'+_esc(typeName)+'</div>';
-  if(typeText)h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);margin-bottom:8px;">'+typeText+'</div>';
+  h+='<div style="font-size:11px;color:var(--ink-soft);font-weight:700;letter-spacing:1.5px;margin-bottom:4px;">'+_t('final_report.learner_type_label','선택 패턴')+'</div>';
   if(patText)h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);">'+_esc(patText)+'</div>';
   h+='</div>';
 
