@@ -63,6 +63,15 @@ def main():
     if not args.verify:
         run([sys.executable, "build.py"], "빌드 → index.html")
 
+    # 정합성 린터 (SPEC §16) — 경고만, 빌드 차단 안 함
+    print(f"\n{'─'*50}")
+    print(f"  정합성 검사 (SPEC §16) — 경고 전용")
+    print(f"{'─'*50}")
+    lint = subprocess.run([sys.executable, "scripts/check_consistency.py", "--quiet"],
+                          cwd=str(ROOT))
+    if lint.returncode != 0:
+        print("  ⚠️ 정합성 위반 있음 — scripts/check_consistency.py 로 리포트 생성")
+
     print(f"\n{'═'*50}")
     print(f"  {'검증 완료' if args.verify else '업데이트 완료'}")
     print(f"{'═'*50}")
