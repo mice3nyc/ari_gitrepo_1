@@ -73,9 +73,11 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
     var ar=_popupAnchorRect(anchorCut);
     if(ar){
       pop.classList.add('over-image');
-      var w=pop.offsetWidth||260;
+      // §2c v2.1 — 이미지 가로 중앙 + 하단부 (바닥에서 14px 위)
+      var w=pop.offsetWidth||300;
+      var ph=pop.offsetHeight||140;
       pop.style.left=Math.max(8,Math.round(ar.left+window.scrollX+ar.width/2-w/2))+'px';
-      pop.style.top=Math.round(ar.top+window.scrollY+12)+'px';
+      pop.style.top=Math.max(window.scrollY+8,Math.round(ar.bottom+window.scrollY-ph-14))+'px';
     }
     requestAnimationFrame(function(){pop.classList.add('show');});
     var closed=false;
