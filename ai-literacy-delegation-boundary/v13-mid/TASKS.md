@@ -7,7 +7,7 @@
 - [x] 획득 팝업 v3 — 자동 닫힘(4초)·×·아무데나 클릭 폐지 → **확보 버튼**(노랑) 단일 동선. railFlyToInventory 강제 닫힘은 `_forceClose` 핸들로 유지 — `16-card-rail.js`
 - [x] 팝업 레이아웃 — 카드명 최상단 22px(over-image 24px) 굵게 + 아래 작은 설명 줄("「선택」 선택으로 획득!") — `08-inventory-and-rewards.css`
 - [x] texts.yaml 키 2개(popup_desc_format·popup_btn_acquire) + ui_texts.csv 재추출(287항목)
-- [x] rpRewardByGrade {S:30,A:20,B:15,C:10,D:0} / rpLevelUpBonusByLevel {2:10,3:15,4:20,5:25} — `00-config.js` (D:0 유지, 변경은 피터공 판단)
+- [x] rpRewardByGrade {S:30,A:20,B:15,C:10,D:5} / rpLevelUpBonusByLevel {2:10,3:15,4:20,5:25} — `00-config.js` (D:5는 2차 피터공 결정 "D도 한자리라도 주자")
 - [x] 빌드(917,495B) + 린터 0 + 구문·인코딩 클린
 - [ ] 브라우저 확인 (피터공): 확보 버튼 닫힘→회전 비행 / 카드명 큰 글씨 / 시나리오 완료 토큰 두 자리
 
