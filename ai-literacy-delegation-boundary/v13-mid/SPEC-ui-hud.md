@@ -89,7 +89,7 @@
 
 > 의도: 시나리오 진행 상황을 실시간 점수로 보여줘 이해와 몰입을 높인다.
 
-1. **HUD 3:5:3 분할**: panel-row를 좌(자원 3) : 중앙(그래프 5) : 우(역량 3) flex 비율로. `.resource-bar{flex:3}` `.score-display{flex:5;min-width:0}` `.stats-bar{flex:3}` — 기존 `flex:1`/`flex:0 0 auto;min-width:180px` 대체.
+1. **HUD 3:5:3 분할**: panel-row를 좌(자원 3) : 중앙(그래프 5) : 우(역량 3) flex 비율로. `.resource-bar{flex:3}` `.score-display{flex:5;min-width:0}` `.stats-bar{flex:3}` — 기존 `flex:1`/`flex:0 0 auto;min-width:180px` 대체. 반응형(≤800px) 미디어쿼리의 `.score-display-row`도 `.score-graph-row`로 동기(05-report-and-debug.css).
 2. **중앙 메인 = 시나리오 점수 그래프 (0~100)**: 가로 바. 채움 폭 = 현재 시나리오 실시간 점수(%). 선택 결과마다 0.6s 트랜지션으로 늘어남.
    - **실시간 점수 정의** (`getLiveScore()`, 03-engine.js): 검토 확정 전 = tier1.points + tier2.points 누적(합산 모델 단계값, basePoint+varPoint). 검토 확정 후 = `gameState.score`(CSV fin.score, 단일 진실 — §6.6.1과 일치, 합산치와 다르면 확정 시점에 스냅). 0~100 클램프. 데이터 무변.
 3. **머리 아이콘 + 기어 회전**: 채움 바 우측 상단(트랙 위)에 `icon-schoolhead.svg` (출처: `Assets/incoming/AI리터러시/UIUX/`). 점수가 오르면 채움 끝을 따라 이동(left % + 같은 트랜지션). 원본 SVG는 단일 path(서브패스 4개) — 머리(0·1)/기어 톱니(2)+구멍(3)을 두 path로 분리해 인라인 임베드, 기어만 `<g>`로 감싸 SMIL `animateTransform rotate` 중심 `(11,10)` 4s 무한 회전.
@@ -105,13 +105,13 @@
    - **트랙**: 알약형(pill, radius 999px) + 높이 44px — 머리 아이콘(34px)이 트랙 안에 들어감. 헤드존(트랙 위 레인) 제거.
    - **머리 위치**: 채움 끝, 항상 트랙 안쪽 — `left:calc(s% − s/100×머리폭)`로 0점=좌측 끝 안쪽, 100점=우측 끝 안쪽 클램프.
    - **점수 숫자**: 바 안에서 머리 좌측. 점수가 낮아 좌측 공간이 없으면(<18) 머리 우측으로 플립(`.num-right`).
-8-1. **v6.4 (6/11 피터공)** — 노랑 원 정합:
-   - **노랑 원 = 바 높이** (트랙 내부 40px 꽉 채움).
-   - **초록 채움의 우측 끝 = 노랑 원 우측 끝** 일치 — rider left = `max(0px, s% − 40px)`. 0점 부근에선 좌측 0에 클램프(원이 채움보다 클 때).
-   - **점수 숫자 흰색** (초록 채움 위). 낮은 점수로 우측 플립(.num-right) 시엔 흰 트랙 위라 ink 유지.
 8. **v6.3 (6/11 피터공)** — 머리 정리:
    - **머리를 노랑 원 위에**: rider = 노랑(--acc-yellow) 원 36px + ink 테두리 2px, 머리 아이콘은 그 위 중앙(26px). 머리 뒤로 그래프 채움 경계가 비치는 문제와 라운딩 바 안 위치 애매함 해결.
    - **중앙 박스 drop shadow 진짜 제거**: 10-paperlogy 테마의 `.score-display, .scenario-progress-strip` 그룹 그림자(5px 5px 0)가 v6.2의 `box-shadow:none`을 덮고 있었음 — 그룹에서 score-display 분리.
+9. **v6.4 (6/11 피터공)** — 노랑 원 정합:
+   - **노랑 원 = 바 높이** (트랙 내부 40px 꽉 채움).
+   - **초록 채움의 우측 끝 = 노랑 원 우측 끝** 일치 — rider left = `max(0px, s% − 40px)`. 0점 부근에선 좌측 0에 클램프(원이 채움보다 클 때).
+   - **점수 숫자 흰색** (초록 채움 위). 낮은 점수로 우측 플립(.num-right) 시엔 흰 트랙 위라 ink 유지.
 
 ## 5. 미해결 / 다음 단계
 
