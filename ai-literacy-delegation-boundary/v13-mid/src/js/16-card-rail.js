@@ -10,8 +10,7 @@ function _dockEl(){
     dock.id='card-dock';
     dock.innerHTML='<div class="dock-sec"><div class="dock-sec-title">'+_t('inventory_labels.section_human_centric','인간중심 역량')+'</div><div class="dock-list" id="dock-list-hc"></div></div>'
       +'<div class="dock-sec"><div class="dock-sec-title">'+_t('inventory_labels.section_ability','능력 카드')+'</div><div class="dock-list" id="dock-list-ab"></div></div>';
-    // 독 클릭 = 기존 상세 패널(inv-panel) 열기 — "처음부터 다시" 풋터 접근 유지
-    dock.onclick=function(){if(typeof toggleInventory==='function')toggleInventory(true);};
+    // §2d v2 — inv-panel 폐지: 독은 표시 전용. 리셋은 디버그 패널 초기화로.
     document.body.appendChild(dock);
   }
   return dock;
@@ -24,17 +23,28 @@ function _dockIsPending(entry){
   return (gameState.clearedScenarios||[]).indexOf(entry.scenario)<0;
 }
 // 독 칩 DOM — c: {kind:'hc',axis,tag} | {kind:'domain'|'growth',name}
-function _dockChip(c,pending){
-  var el=document.createElement('div');
-  el.className='dock-card '+(pending?'pending':'locked');
+// §2d v2 — 한 줄 표기. pending = 진한 회색·컬러 없음·점선·깜빡임 / 컬러는 철컥(locked) 때 입힘.
+function _dockChipLabel(c){
+  return (c.kind==='hc')?(_invEscapeHTML(c.axis)+' '+_invEscapeHTML(c.tag)):_invEscapeHTML(_cardDisplayName(c.name));
+}
+function _dockChipApplyLocked(el,c){
   if(c.kind==='hc'){
     var am=_axisMeta(c.axis);
     el.style.background=am.color;
-    el.innerHTML='<div class="dc-sub" style="color:rgba(255,255,255,0.8);">'+_invEscapeHTML(c.axis)+'</div>'+
-      '<div class="dc-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>';
+    el.innerHTML='<div class="dc-name" style="color:#fff;"><span class="dc-axis">'+_invEscapeHTML(c.axis)+'</span> '+_invEscapeHTML(c.tag)+'</div>';
   }else{
     el.style.borderLeft='6px solid '+_cardColor(c.name);
     el.innerHTML='<div class="dc-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>';
+  }
+}
+function _dockChip(c,pending){
+  var el=document.createElement('div');
+  el._cardData=c;
+  el.className='dock-card '+(pending?'pending':'locked');
+  if(pending){
+    el.innerHTML='<div class="dc-name">'+_dockChipLabel(c)+'</div>';
+  }else{
+    _dockChipApplyLocked(el,c);
   }
   return el;
 }
@@ -184,6 +194,7 @@ function _dockLockNow(){
       setTimeout(function(){
         el.classList.remove('pending');
         el.classList.add('locked','locking');
+        if(el._cardData)_dockChipApplyLocked(el,el._cardData); // 철컥과 함께 컬러 입힘 (§2d v2)
         (function(node){setTimeout(function(){node.classList.remove('locking');},450);})(el);
       },i*120);
     });

@@ -424,3 +424,10 @@
 - [x] UI 전체 물마루 — --font-main 1순위 교체 (Paperlogy 폴백)
 - [x] 빌드 + 린터 0 + 헤드리스(독 표시·pending 1·철컥 후 locked) + 스크린샷 확인
 - [ ] 피터공 확인 — 본문 픽셀체 가독성, 성장카드(회복력·도전력) 능력 섹션 배치, 빈 섹션 표시
+
+#### 6/11 세션466 — 카드 독 v2 다듬기 5건 (SPEC-card-per-choice §2d v2 보강)
+
+- [x] inv-tab·inv-panel 폐지 (독 클릭 동작 제거, 리셋=디버그 초기화만)
+- [x] 섹션 레이블 13px / 칩 글씨 14px / 한 줄 표기(nowrap) + 독 폭 200px(≤1320 170)
+- [x] pending = 진한 회색·컬러 없음·점선·깜빡임(dockBlink) → 철컥 때 컬러 입힘(_dockChipApplyLocked)
+- [x] 빌드 + 린터 0 + 스크린샷 (locked 컬러 칩·pending 회색 점선 공존 확인)

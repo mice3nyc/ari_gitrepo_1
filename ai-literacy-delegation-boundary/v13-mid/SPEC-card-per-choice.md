@@ -56,6 +56,7 @@
 - **회전 비행**: 획득 팝업 닫힘 → 독에 pending 칩 자리 생성(숨김) → 팝업 미리보기 카드 고스트가 **rotate(540°)** 돌며 칩 자리로 비행(0.55s) → 도착 시 칩 pop 등장.
 - **데이터 무변**: 인벤토리 구조(humanCentricCards/domainCards/growthCards) 그대로, 독은 읽기 전용 미러. 호환: `railClear`=독 재렌더, `railFlyToInventory`=철컥(이름 유지, 호출처 무변).
 - **§2c 위치 버그 수정 동반**: 팝업 앵커를 getBoundingClientRect → **offsetLeft 체인**(문서 좌표)으로 — 컷 패널 slide-in(translateX 30px→0) 도중 측정돼 우측으로 밀리던 문제.
+- **v2 보강 (피터공 5건)**: ① inv-tab 버튼·inv-panel 상세 패널 완전 폐지(독 클릭 동작 제거. "처음부터 다시" 리셋은 디버그 패널 초기화로만) ② 섹션 레이블 10→13px ③ 칩 한 줄 표기("중심잡기 주체성" — axis+tag 인라인, nowrap) + 독 폭 158→200px(≤1320px 170px) ④ **pending = 진한 회색 글씨·컬러코딩 없음·점선 테두리·깜빡임**(dockBlink 1s step). 컬러(축 배경/도메인 스트라이프)는 철컥 고정 때 입힘 ⑤ 칩 글씨 12→14px.
 
 ## 3. 전체 개편 시 (Phase 2 예고)
 
