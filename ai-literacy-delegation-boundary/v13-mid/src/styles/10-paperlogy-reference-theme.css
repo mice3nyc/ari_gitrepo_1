@@ -337,9 +337,9 @@ button,
 }
 
 /* 6/11 HUD 개편 — panel-title 제거, bipolar → circle-meter */
-/* v6.1 6/11 — 하늘색 칙칙 → 흰색 (SPEC-ui-hud §4e-6) */
+/* v6.2 6/11 — 밝은 하늘색 (SPEC-ui-hud §4e-7. 노랑 전환: #fff6d6) */
 .score-display {
-  background:var(--bg-card);
+  background:#e5f6fc;
 }
 
 .display-label,

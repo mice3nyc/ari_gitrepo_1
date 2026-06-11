@@ -18,7 +18,22 @@ function pilotPerChoiceActive(scid){
   return !!scid && PILOT_PER_CHOICE.scenarios.indexOf(scid)>=0;
 }
 
+// 중복 획득 차단 (6/11 피터공: "이미 받은 것을 또 받지는 않음") — 같은 시나리오 안에서 같은 카드 재지급 금지.
+// 리플레이는 replayScenario가 해당 시나리오 카드를 제거하므로 충돌 없음.
+function _ownedThisScenario(kind,key){
+  if(!gameState||!gameState.inventory)return false;
+  var scid=gameState.currentScenarioId;
+  var arr=(kind==='hc')?(gameState.inventory.humanCentricCards||[]):(gameState.inventory.domainCards||[]);
+  for(var i=0;i<arr.length;i++){
+    if(arr[i].scenario!==scid)continue;
+    if(kind==='hc'&&arr[i].axis===key)return true;
+    if(kind==='domain'&&arr[i].label===key)return true;
+  }
+  return false;
+}
+
 // 규칙 v0 — tier1: delegation +면 인간중심 / tier2: knowledge +면 strongDomain, delegation ++면 인간중심(축 중복 제외) / review: strongDomain 있으면(R2/R3) 그 카드
+// + 중복 차단: 이번 시나리오에서 이미 받은 카드는 제외
 function pilotCardsForChoice(stage,id){
   if(!gameState||!pilotPerChoiceActive(gameState.currentScenarioId))return [];
   var sc=getScenario();if(!sc)return [];
@@ -62,7 +77,14 @@ function pilotCardsForChoice(stage,id){
     var sd2=rv&&rv.discountTags&&rv.discountTags.strongDomain&&rv.discountTags.strongDomain[0];
     var dc2=domCard(sd2);if(dc2)out.push(dc2);
   }
-  return out;
+  // 중복 차단 — 인벤토리(이번 시나리오) + 같은 묶음 내
+  var seen={};
+  return out.filter(function(c){
+    var key=c.kind+':'+(c.kind==='hc'?c.axis:c.name);
+    if(seen[key])return false;
+    seen[key]=true;
+    return !_ownedThisScenario(c.kind,c.kind==='hc'?c.axis:c.name);
+  });
 }
 
 // 인벤토리 적립 (perChoice:true 마킹) — 시각 토스트는 호출부에서 playCardRewardSequential 재사용

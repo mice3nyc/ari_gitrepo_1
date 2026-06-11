@@ -73,7 +73,7 @@
 .scenario-progress-strip .sps-items.zero { color:#bbb; border-color:#ddd; }
 
 /* ===== 중앙 LV·SCORE 큰 디스플레이 ===== */
-.score-display { flex:5 1 0; min-width:0; display:flex; flex-direction:column; align-items:stretch; gap:6px; padding:8px 18px; border:var(--border-w) solid var(--ink); background:var(--bg-card); box-shadow:var(--shadow); } /* v6 6/11 — 3:5:3 분할, 그래프가 메인 (SPEC §4e) */
+.score-display { flex:5 1 0; min-width:0; display:flex; flex-direction:column; align-items:stretch; gap:6px; padding:8px 18px; border:var(--border-w) solid var(--ink); background:var(--bg-card); box-shadow:none; border-radius:16px; } /* v6 6/11 — 3:5:3 분할 / v6.2 — drop shadow 제거 + 라운딩 (SPEC §4e-7) */
 /* 6/11 HUD 개편 — panel-title([자원]/[역량] 세로 타이틀) 제거 */
 .panel-content { flex:1; display:flex; flex-direction:column; }
 .panel-divider { height:1px; background:#ddd; }
@@ -81,19 +81,20 @@
 .display-num { font-size:34px; font-weight:700; color:#111; line-height:1; transition:transform 0.3s, color 0.3s; }
 .display-num.pulsing { animation:numPulse 0.5s ease; }
 
-/* ===== v6 6/11 — 중앙 실시간 점수 그래프 (SPEC §4e) ===== */
-.score-graph-row { display:flex; flex-direction:row; align-items:flex-end; gap:16px; }
+/* ===== v6 6/11 — 중앙 실시간 점수 그래프 (SPEC §4e) / v6.2 — 알약형 트랙 안에 머리 (스케치 IMG_4762) ===== */
+.score-graph-row { display:flex; flex-direction:row; align-items:center; gap:16px; }
 .score-graph { flex:1; min-width:0; }
-/* 머리 아이콘 레인 — 트랙 위. 아이콘 중심 = 현재 점수 위치, 숫자는 아이콘 좌측. v6.1 — 26px → 40px (XP 행 제거 공간 사용) */
-.score-graph-headzone { position:relative; height:42px; }
-.score-graph-rider { position:absolute; left:0%; bottom:1px; width:40px; height:40px; margin-left:-20px; transition:left 0.6s cubic-bezier(0.34,1.56,0.64,1); }
-.score-head-icon { display:block; width:40px; height:40px; }
-.score-head-icon svg { width:40px; height:40px; fill:var(--ink); display:block; }
-.score-graph-num { position:absolute; right:100%; margin-right:7px; top:50%; transform:translateY(-50%); font-size:20px; font-weight:800; color:var(--ink); line-height:1; }
+/* 알약형 트랙 — 머리 아이콘(34px)이 안에 들어가는 높이 */
+.score-graph-track { position:relative; height:44px; background:var(--bg-card); border:2px solid var(--ink); border-radius:999px; overflow:hidden; }
+.score-graph-fill { height:100%; width:0%; background:var(--acc-mint-deep); border-radius:999px; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+/* 머리 — 채움 끝, 항상 트랙 안쪽 (left는 JS가 calc로 클램프) */
+.score-graph-rider { position:absolute; left:0%; top:50%; transform:translateY(-50%); width:34px; height:34px; transition:left 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+.score-head-icon { display:block; width:34px; height:34px; }
+.score-head-icon svg { width:34px; height:34px; fill:var(--ink); display:block; }
+/* 점수 숫자 — 바 안에서 머리 좌측. 좌측 공간이 없으면(.num-right) 머리 우측으로 플립 */
+.score-graph-num { position:absolute; right:100%; margin-right:7px; top:50%; transform:translateY(-50%); font-size:19px; font-weight:800; color:var(--ink); line-height:1; }
+.score-graph-rider.num-right .score-graph-num { right:auto; left:100%; margin-right:0; margin-left:7px; }
 .score-graph-num.pulsing { animation:numPulse 0.5s ease; }
-/* 0~100 트랙 — 자원 게이지와 같은 결 */
-.score-graph-track { position:relative; height:18px; background:var(--bg-page); border:2px solid var(--ink); overflow:hidden; }
-.score-graph-fill { height:100%; width:0%; background:var(--acc-mint-deep); transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1); }
 /* 누적 SCORE 블록 (그래프 우측) — v6.1: LV은 SCORE 숫자 아래 작은 한 줄, XP 바 HUD 표시 제거 */
 .score-total-block { flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:3px; min-width:54px; }
 .score-lv-line { font-size:11px; font-weight:800; color:#888; letter-spacing:1px; line-height:1; }
