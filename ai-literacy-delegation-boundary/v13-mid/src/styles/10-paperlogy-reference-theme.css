@@ -329,7 +329,7 @@ button,
   box-shadow:none;
 }
 
-.score-display,
+/* v6.3 6/11 — score-display는 그림자 없음(§4e-8): 이 그룹에서 분리 */
 .scenario-progress-strip {
   border:var(--border-w) solid var(--ink);
   background:var(--bg-card);
