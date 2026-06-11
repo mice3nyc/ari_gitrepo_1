@@ -289,11 +289,11 @@ function showTutorialScreen(){
     '직접 하면 더 비싸다. 대신 능력이 쌓인다. 능력이 쌓이면 다음 위임이 싸진다!',
     '그러니 <span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>를 어디에 쓸지가 이 게임의 진짜 승부다.',
     '제출 전, 마지막 한 번! 어떻게 검토하느냐에 따라 점수가 크게 달라진다.',
-    '점수에 따라 등급과 자원토큰을 받는다. <span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>는 토큰으로 직접 충전해야 한다.',
+    '점수에 따라 등급과 자원토큰을 받는다.<br><span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>는 토큰으로 직접 충전해야 한다.',
     '좋은 선택은 역량 카드로 쌓이고, 모은 카드는 비용을 깎아 준다.'
   ];
-  // §4i-8 — 타이틀과 같은 레트로 프레임
-  var h='<div class="retro-title"><div class="rt-scanlines" aria-hidden="true"></div><div class="rt-inner">';
+  // §4i-8 — 타이틀과 같은 레트로 프레임 (v2.2: 가로 그리드용 와이드 변형)
+  var h='<div class="retro-title"><div class="rt-scanlines" aria-hidden="true"></div><div class="rt-inner rt-inner--wide">';
   h+=buildGameTitleHead();
   h+='<h1 class="rt-tutorial-heading">'+(_tu.heading||'게임 안내')+'</h1>';
   // §4i-9 — 위임 정의 블록 (자문 선생님 4학년 검증 문구), v2.1 대형 글자 빵
@@ -312,7 +312,12 @@ function showTutorialScreen(){
 }
 function enterFromTutorial(){
   if(btnGuard('enterTutorial'))return;
-  showStartScreen();
+  // §4j-1 — CRT 부팅 플래시: 레트로(다크)에서 본게임(라이트)으로 넘어가는 경계 연출
+  var fl=document.createElement('div');
+  fl.className='boot-flash';
+  document.body.appendChild(fl);
+  setTimeout(function(){showStartScreen();},380);
+  setTimeout(function(){if(fl.parentNode)fl.parentNode.removeChild(fl);},760);
 }
 
 var _btnLock={};

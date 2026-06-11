@@ -258,9 +258,15 @@ button,
   height:42px;
   border:var(--border-w) solid var(--ink);
   border-radius:0;
-  background:var(--acc-cyan);
+  background:var(--acc-yellow); /* §4j-3 — 튜토리얼 번호 칩과 같은 노랑 (레트로 연결 토큰) */
   color:var(--ink);
   font-weight:700;
+}
+
+.scenario-card.locked .sc-num {
+  background:#eee;
+  border-color:#bbb;
+  color:#999;
 }
 
 .scenario-card.next {
