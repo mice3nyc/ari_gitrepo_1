@@ -19,6 +19,10 @@ function startScenario(scid){
   if(typeof railClear==='function')railClear(); // §2b — 이전 시나리오 레일 잔여물 정리
   if(!gameState||!gameState.clearedScenarios){gameState=createInitialState();}
   if(gameState.clearedScenarios.indexOf(scid)>=0)return; // 1회 제한 (리플레이는 replayScenario 사용)
+  // §14.5 — 순차 진행: 미완료 중 다음 시나리오만 진입 가능 (UI 우회 방어)
+  var _order=CONFIG.scenarios,_next=null;
+  for(var _i=0;_i<_order.length;_i++){if(gameState.clearedScenarios.indexOf(_order[_i])<0){_next=_order[_i];break;}}
+  if(_next&&scid!==_next)return;
   // v0.8 — 리플레이용 자원 스냅샷 저장
   if(!gameState.replay)gameState.replay={};
   if(!gameState.replay[scid]){

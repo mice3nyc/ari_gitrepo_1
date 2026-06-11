@@ -532,6 +532,7 @@ start_screen:
   heading: "AI 리터러시: 위임의 경계"
   subtitle: "이건 AI한테 맡겨도 돼?"
   all_done_banner: "AI 리터러시 시나리오를 모두 완료했습니다!"
+  mark_locked: "잠김"
   mark_cleared: "클리어"
   mark_next: "다음 추천 →"
   mark_free: "자유 선택"

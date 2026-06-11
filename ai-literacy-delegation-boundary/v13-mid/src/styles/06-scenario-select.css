@@ -18,6 +18,10 @@
 .scenario-card .sc-meta { font-size:12px; color:#888; }
 .scenario-card .sc-mark { font-size:13px; color:#888; flex-shrink:0; }
 .scenario-card.next { border:2px solid #111; padding:13px 15px; background:#fafafa; }
+/* §14.5 — 순차 진행 잠금 카드 */
+.scenario-card.locked { cursor:default; border-style:dashed; border-color:#bbb; background:#fafafa; box-shadow:none; opacity:0.6; }
+.scenario-card.locked:hover { background:#fafafa; border-color:#bbb; }
+.scenario-card .sc-lock { font-size:12px; font-weight:700; color:#999; border:2px dashed #bbb; padding:3px 10px; letter-spacing:2px; flex-shrink:0; }
 .scenario-card.next .sc-num { background:#111; color:#fff; border-color:#111; }
 .scenario-card.next .sc-mark { color:#111; font-weight:600; }
 /* v1.3 §14.4 (피터공) — 다음 추천 카드의 하늘색 PLAY 배지. 자유선택 라벨은 제거. */

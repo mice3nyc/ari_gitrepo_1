@@ -450,6 +450,10 @@ button, input, select, textarea { font-family: inherit; }
 .scenario-card .sc-meta { font-size:12px; color:#888; }
 .scenario-card .sc-mark { font-size:13px; color:#888; flex-shrink:0; }
 .scenario-card.next { border:2px solid #111; padding:13px 15px; background:#fafafa; }
+/* §14.5 — 순차 진행 잠금 카드 */
+.scenario-card.locked { cursor:default; border-style:dashed; border-color:#bbb; background:#fafafa; box-shadow:none; opacity:0.6; }
+.scenario-card.locked:hover { background:#fafafa; border-color:#bbb; }
+.scenario-card .sc-lock { font-size:12px; font-weight:700; color:#999; border:2px dashed #bbb; padding:3px 10px; letter-spacing:2px; flex-shrink:0; }
 .scenario-card.next .sc-num { background:#111; color:#fff; border-color:#111; }
 .scenario-card.next .sc-mark { color:#111; font-weight:600; }
 /* v1.3 §14.4 (피터공) — 다음 추천 카드의 하늘색 PLAY 배지. 자유선택 라벨은 제거. */
@@ -13428,6 +13432,7 @@ var TEXTS = {
     "heading": "AI 리터러시: 위임의 경계",
     "subtitle": "이건 AI한테 맡겨도 돼?",
     "all_done_banner": "AI 리터러시 시나리오를 모두 완료했습니다!",
+    "mark_locked": "잠김",
     "mark_cleared": "클리어",
     "mark_next": "다음 추천 →",
     "mark_free": "자유 선택",
@@ -14929,13 +14934,20 @@ function showStartScreen(){
       h+='<span class="sc-mark sc-grade">'+gradeTxt+scoreTxt+'</span>';
       h+='<button class="sc-replay-btn" type="button" onclick="replayScenario(\''+sid+'\')">'+(_ss.btn_replay||'재도전')+'</button>';
       h+='</div>';
-    }else{
-      // v1.3 §14.4 (피터공 6/8) — 다음 추천 카드만 하늘색 PLAY 배지. 그 외 미완료는 라벨 없음(자유선택 제거).
+    }else if(isNext){
+      // v1.3 §14.4 (피터공 6/8) — 다음 추천 카드만 하늘색 PLAY 배지.
       h+='<button class="'+cls+'" type="button" onclick="startScenario(\''+sid+'\')">';
       h+='<span class="sc-num">'+(idx+1)+'</span>';
       h+='<div class="sc-body"><div class="sc-title">'+s.title+'</div><div class="sc-meta">'+s.categoryName+'</div></div>';
-      if(isNext)h+='<span class="sc-mark sc-play">'+(_ss.mark_play||'PLAY')+'</span>';
+      h+='<span class="sc-mark sc-play">'+(_ss.mark_play||'PLAY')+'</span>';
       h+='</button>';
+    }else{
+      // §14.5 (피터공 6/11) — 순차 진행: 다음이 아닌 미완료 카드는 잠김 (클릭 불가)
+      h+='<div class="'+cls+' locked">';
+      h+='<span class="sc-num">'+(idx+1)+'</span>';
+      h+='<div class="sc-body"><div class="sc-title">'+s.title+'</div><div class="sc-meta">'+s.categoryName+'</div></div>';
+      h+='<span class="sc-mark sc-lock">'+(_ss.mark_locked||'잠김')+'</span>';
+      h+='</div>';
     }
   });
   h+='</div>';
@@ -15507,6 +15519,10 @@ function startScenario(scid){
   if(typeof railClear==='function')railClear(); // §2b — 이전 시나리오 레일 잔여물 정리
   if(!gameState||!gameState.clearedScenarios){gameState=createInitialState();}
   if(gameState.clearedScenarios.indexOf(scid)>=0)return; // 1회 제한 (리플레이는 replayScenario 사용)
+  // §14.5 — 순차 진행: 미완료 중 다음 시나리오만 진입 가능 (UI 우회 방어)
+  var _order=CONFIG.scenarios,_next=null;
+  for(var _i=0;_i<_order.length;_i++){if(gameState.clearedScenarios.indexOf(_order[_i])<0){_next=_order[_i];break;}}
+  if(_next&&scid!==_next)return;
   // v0.8 — 리플레이용 자원 스냅샷 저장
   if(!gameState.replay)gameState.replay={};
   if(!gameState.replay[scid]){

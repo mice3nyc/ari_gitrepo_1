@@ -353,13 +353,20 @@ function showStartScreen(){
       h+='<span class="sc-mark sc-grade">'+gradeTxt+scoreTxt+'</span>';
       h+='<button class="sc-replay-btn" type="button" onclick="replayScenario(\''+sid+'\')">'+(_ss.btn_replay||'재도전')+'</button>';
       h+='</div>';
-    }else{
-      // v1.3 §14.4 (피터공 6/8) — 다음 추천 카드만 하늘색 PLAY 배지. 그 외 미완료는 라벨 없음(자유선택 제거).
+    }else if(isNext){
+      // v1.3 §14.4 (피터공 6/8) — 다음 추천 카드만 하늘색 PLAY 배지.
       h+='<button class="'+cls+'" type="button" onclick="startScenario(\''+sid+'\')">';
       h+='<span class="sc-num">'+(idx+1)+'</span>';
       h+='<div class="sc-body"><div class="sc-title">'+s.title+'</div><div class="sc-meta">'+s.categoryName+'</div></div>';
-      if(isNext)h+='<span class="sc-mark sc-play">'+(_ss.mark_play||'PLAY')+'</span>';
+      h+='<span class="sc-mark sc-play">'+(_ss.mark_play||'PLAY')+'</span>';
       h+='</button>';
+    }else{
+      // §14.5 (피터공 6/11) — 순차 진행: 다음이 아닌 미완료 카드는 잠김 (클릭 불가)
+      h+='<div class="'+cls+' locked">';
+      h+='<span class="sc-num">'+(idx+1)+'</span>';
+      h+='<div class="sc-body"><div class="sc-title">'+s.title+'</div><div class="sc-meta">'+s.categoryName+'</div></div>';
+      h+='<span class="sc-mark sc-lock">'+(_ss.mark_locked||'잠김')+'</span>';
+      h+='</div>';
     }
   });
   h+='</div>';

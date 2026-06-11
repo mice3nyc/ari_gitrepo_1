@@ -168,6 +168,7 @@ tutorial_screen,tutorial_screen.btn_continue,계속 →
 start_screen,start_screen.heading,AI 리터러시: 위임의 경계
 start_screen,start_screen.subtitle,이건 AI한테 맡겨도 돼?
 start_screen,start_screen.all_done_banner,AI 리터러시 시나리오를 모두 완료했습니다!
+start_screen,start_screen.mark_locked,잠김
 start_screen,start_screen.mark_cleared,클리어
 start_screen,start_screen.mark_next,다음 추천 →
 start_screen,start_screen.mark_free,자유 선택
