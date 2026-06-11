@@ -95,7 +95,11 @@
 3. **머리 아이콘 + 기어 회전**: 채움 바 우측 상단(트랙 위)에 `icon-schoolhead.svg` (출처: `Assets/incoming/AI리터러시/UIUX/`). 점수가 오르면 채움 끝을 따라 이동(left % + 같은 트랜지션). 원본 SVG는 단일 path(서브패스 4개) — 머리(0·1)/기어 톱니(2)+구멍(3)을 두 path로 분리해 인라인 임베드, 기어만 `<g>`로 감싸 SMIL `animateTransform rotate` 중심 `(11,10)` 4s 무한 회전.
 4. **점수 숫자**: 머리 아이콘 좌측에 현재 시나리오 점수 숫자(실시간). 변동 시 numPulse.
 5. **누적 SCORE**: 그래프 우측 옆 블록에 `SCORE` 라벨 + 전체 누적 점수 = `totalScore + score`(시나리오 총점 확정[applyReview] 시점에 합산돼 보임, goNextScenario에서 totalScore로 흡수 — 표시값 연속). 기존 `#score-num` 재사용(09-render 갱신식만 변경, 컷5 pulse 사이트 유지).
-6. **LV·XP 유지**: 그래프 아래 컴팩트 행(LV 라벨+숫자 + XP 바)으로 이동. 제거 아님.
+6. ~~**LV·XP 유지**: 그래프 아래 컴팩트 행(LV 라벨+숫자 + XP 바)으로 이동.~~ → **v6.1 (피터공 라이브 확인 후 4건)**:
+   - **XP 바 HUD 표시 제거** — 산만. exp/레벨업 시스템·로직은 무변, HUD 마크업만 제거 (`updateExpUI`는 lv 갱신을 fill 가드 앞으로 옮겨 null-safe).
+   - **LV은 SCORE 숫자 아래** 작은 한 줄(`LV n`)로.
+   - **중앙 배경 하늘색(--acc-cyan) → 흰색(--bg-card)** — 칙칙함 제거 (10-paperlogy 테마 오버라이드 수정).
+   - **머리 아이콘 26px → 40px** — XP 행 제거로 생긴 공간을 헤드존(40px)에 사용.
 
 ## 5. 미해결 / 다음 단계
 

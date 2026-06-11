@@ -32,22 +32,11 @@
           <div class="score-graph-fill" id="score-graph-fill" style="width:0%"></div>
         </div>
       </div>
-      <!-- 누적 SCORE (totalScore + 확정된 현재 시나리오 점수) -->
+      <!-- 누적 SCORE (totalScore + 확정된 현재 시나리오 점수) + LV — v6.1: XP 바 HUD 표시 제거(시스템 무변), LV은 SCORE 아래 -->
       <div class="score-total-block">
         <span class="display-label">SCORE</span>
         <span class="display-num" id="score-num">0</span>
-      </div>
-    </div>
-    <!-- LV + XP 컴팩트 행 (그래프 아래) -->
-    <div class="score-sub-row">
-      <span class="display-label">LV</span>
-      <span class="lv-compact" id="lv-num">1</span>
-      <div class="exp-display" id="exp-display">
-        <div class="exp-header">
-          <span class="exp-level" id="exp-level">XP</span>
-          <span class="exp-num" id="exp-num">0/20</span>
-        </div>
-        <div class="exp-bar"><div class="exp-bar-fill" id="exp-bar-fill" style="width:0%"></div></div>
+        <span class="score-lv-line">LV <span class="lv-compact" id="lv-num">1</span></span>
       </div>
     </div>
   </div>

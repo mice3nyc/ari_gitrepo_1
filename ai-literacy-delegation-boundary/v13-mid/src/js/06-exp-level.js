@@ -55,6 +55,8 @@ function updateExpUI(){
   var numEl=document.getElementById('exp-num');
   var fillEl=document.getElementById('exp-bar-fill');
   var lvNumEl=document.getElementById('lv-num');
+  // v6.1 6/11 — XP 바는 HUD에서 제거(시스템 무변). LV 갱신을 fill 가드 앞으로 (null-safe)
+  if(lvNumEl)lvNumEl.textContent=lv;
   if(!fillEl)return;
   if(lv>=5){
     if(numEl)numEl.textContent='MAX';
