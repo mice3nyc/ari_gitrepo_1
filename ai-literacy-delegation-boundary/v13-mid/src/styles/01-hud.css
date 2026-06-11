@@ -87,13 +87,13 @@
 /* 알약형 트랙 — 머리 아이콘(34px)이 안에 들어가는 높이 */
 .score-graph-track { position:relative; height:44px; background:var(--bg-card); border:2px solid var(--ink); border-radius:999px; overflow:hidden; }
 .score-graph-fill { height:100%; width:0%; background:var(--acc-mint-deep); border-radius:999px; transition:width 0.6s cubic-bezier(0.34,1.56,0.64,1); }
-/* 머리 — 채움 끝, 항상 트랙 안쪽 (left는 JS가 calc로 클램프). v6.3 — 노랑 원 위에 얹음 (채움 경계 비침 차단) */
-.score-graph-rider { position:absolute; left:0%; top:50%; transform:translateY(-50%); width:36px; height:36px; background:var(--acc-yellow); border:2px solid var(--ink); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:left 0.6s cubic-bezier(0.34,1.56,0.64,1); }
-.score-head-icon { display:block; width:24px; height:24px; }
-.score-head-icon svg { width:24px; height:24px; fill:var(--ink); display:block; }
-/* 점수 숫자 — 바 안에서 머리 좌측. 좌측 공간이 없으면(.num-right) 머리 우측으로 플립 */
-.score-graph-num { position:absolute; right:100%; margin-right:7px; top:50%; transform:translateY(-50%); font-size:19px; font-weight:800; color:var(--ink); line-height:1; }
-.score-graph-rider.num-right .score-graph-num { right:auto; left:100%; margin-right:0; margin-left:7px; }
+/* 머리 — 노랑 원(바 내부 높이 40px) 위. v6.4 — 초록 채움 우측 끝 = 원 우측 끝 (left는 JS가 max/calc로 클램프) */
+.score-graph-rider { position:absolute; left:0%; top:50%; transform:translateY(-50%); width:40px; height:40px; background:var(--acc-yellow); border:2px solid var(--ink); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:left 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+.score-head-icon { display:block; width:26px; height:26px; }
+.score-head-icon svg { width:26px; height:26px; fill:var(--ink); display:block; }
+/* 점수 숫자 — 초록 채움 위 흰색, 머리 좌측. 좌측 공간이 없으면(.num-right) 머리 우측 흰 트랙 위라 ink */
+.score-graph-num { position:absolute; right:100%; margin-right:8px; top:50%; transform:translateY(-50%); font-size:19px; font-weight:800; color:#fff; line-height:1; }
+.score-graph-rider.num-right .score-graph-num { right:auto; left:100%; margin-right:0; margin-left:8px; color:var(--ink); }
 .score-graph-num.pulsing { animation:numPulse 0.5s ease; }
 /* 누적 SCORE 블록 (그래프 우측) — v6.1: LV은 SCORE 숫자 아래 작은 한 줄, XP 바 HUD 표시 제거 */
 .score-total-block { flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:3px; min-width:54px; }

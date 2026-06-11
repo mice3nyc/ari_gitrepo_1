@@ -183,10 +183,10 @@ function updateScoreGraph(){
   if(!fill||!rider||!num)return;
   var s=(typeof getLiveScore==='function')?getLiveScore():0;
   fill.style.width=s+'%';
-  // v6.2 — 머리가 항상 트랙 안쪽: 0점=좌측 끝, 100점=우측 끝 안쪽 (v6.3 노랑 원 36px + 여백 4px 비례 클램프)
-  rider.style.left='calc('+s+'% - '+(s*0.38).toFixed(1)+'px + '+((100-s)*0.02).toFixed(1)+'px)';
-  // 점수 낮을 땐 숫자를 머리 우측으로 (좌측 공간 없음)
-  rider.classList.toggle('num-right',s<18);
+  // v6.4 — 초록 채움의 우측 끝 = 노랑 원(40px) 우측 끝. 채움이 원보다 짧으면 좌측 0에 클램프
+  rider.style.left='max(0px, calc('+s+'% - 40px))';
+  // 점수 낮을 땐 숫자를 머리 우측으로 (좌측 채움 공간 없음 — 흰 트랙 위라 ink)
+  rider.classList.toggle('num-right',s<25);
   num.textContent=s;
   if(s!==_prevLiveScore&&_prevLiveScore>=0){
     num.classList.remove('pulsing');
