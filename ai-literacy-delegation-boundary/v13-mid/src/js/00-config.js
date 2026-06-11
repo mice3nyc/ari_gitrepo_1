@@ -20,7 +20,7 @@ var CONFIG={
   storageKey:'ai-literacy-delegation-boundary-v13-mid',
   eventLogKey:'ai-literacy-delegation-boundary-v13-mid-events',
   sessionIdKey:'ai-literacy-v13-mid-session-id',
-  version:'v1.3-mid-r1',
+  version:'v1.3-mid-r2',
   scenarios:['selfintro','groupwork','eorinwangja','career','studyplan'],
   pointThresholds:{S:95,A:85,B:75,C:60,D:0},
   minResourceCost:1,

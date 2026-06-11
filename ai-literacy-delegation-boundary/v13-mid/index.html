@@ -1724,7 +1724,7 @@ button,
 <div class="recovery-overlay hidden" id="recovery-overlay"></div>
 <button class="debug-toggle" onclick="toggleDebug()">디버그</button>
 <div class="debug-panel" id="debug-panel"></div>
-<div class="version" id="version-label">v1.3-mid-r1</div>
+<div class="version" id="version-label">v1.3-mid-r2</div>
 
 <!-- Phase 8.10b — 레벨업 이벤트 팝업 (DECISIONS §10.11) -->
 <div id="levelup-modal" class="modal-overlay hidden">
@@ -1849,7 +1849,7 @@ var CONFIG={
   storageKey:'ai-literacy-delegation-boundary-v13-mid',
   eventLogKey:'ai-literacy-delegation-boundary-v13-mid-events',
   sessionIdKey:'ai-literacy-v13-mid-session-id',
-  version:'v1.3-mid-r1',
+  version:'v1.3-mid-r2',
   scenarios:['selfintro','groupwork','eorinwangja','career','studyplan'],
   pointThresholds:{S:95,A:85,B:75,C:60,D:0},
   minResourceCost:1,
@@ -14149,7 +14149,14 @@ function showCouponSelect(cards,onConfirm){
 
 // 단계별 소비 — onTier1/onTier2/onReview에서 호출
 function consumeStage(stage,costObj,leafPath){
-  if(!costObj||(costObj.time===0&&costObj.energy===0))return;
+  if(!costObj)return;
+  // §3a R2 — 영수증용 할인 기록 (0비용 = 전액 할인도 기록 대상이라 early return보다 앞)
+  if(costObj._discount&&gameState){
+    var _d=costObj._discount;
+    if(!gameState._scDiscounts)gameState._scDiscounts=[];
+    gameState._scDiscounts.push({stage:stage,rawTime:_d.rawTime||0,rawEnergy:_d.rawEnergy||0,time:costObj.time||0,energy:costObj.energy||0,cardDiscount:_d.cardDiscount||0,cardDetails:(_d.cardDetails||[]).slice(0,4),dlgEffect:_d.dlgEffect||0,knlEffect:_d.knlEffect||0});
+  }
+  if(costObj.time===0&&costObj.energy===0)return;
   var res=gameState.resources;
   var timeBefore=res.time.current;
   var energyBefore=res.energy.current;
@@ -15499,7 +15506,8 @@ function goCut6(){
     dlgDelta:dlgDelta,
     knlDelta:knlDelta,
     dlgTotal:dlgTotal,
-    knlTotal:knlTotal
+    knlTotal:knlTotal,
+    discounts:(gameState._scDiscounts||[]).slice() // §3a R2 — 영수증 재료 (할인 사용 내역)
   });
   gameState.completed=true;
 
@@ -15657,6 +15665,7 @@ function startScenario(scid){
   gameState.score=0;
   gameState.completed=false;
   gameState._gameOverShown=false;
+  gameState._scDiscounts=[]; // §3a R2 — 영수증 기록 리셋
   if(!gameState.pending)gameState.pending={delegation:0,knowledge:0};
   gameState.pending.delegation=0;
   gameState.pending.knowledge=0;
@@ -15706,6 +15715,11 @@ function replayScenario(scid){
           gameState.resources.energy.max=mbl.energy;
         }
       }
+      // §3b R2 — 첫 판 보존 (최초 재도전 때만) + 시도 횟수
+      if(!gameState.replay)gameState.replay={};
+      if(!gameState.replay[scid])gameState.replay[scid]={played:true,improved:false,bestScore:r.finalScore||0,bestGrade:r.grade||''};
+      if(!gameState.replay[scid].firstAttempt)gameState.replay[scid].firstAttempt={score:r.finalScore||0,grade:r.grade||''};
+      gameState.replay[scid].attempts=(gameState.replay[scid].attempts||1)+1;
       // history에서 제거
       hist.splice(i,1);
       break;
@@ -15730,11 +15744,13 @@ function replayScenario(scid){
     gameState.resources.time.current=rp.resourceSnapshot.time;
     gameState.resources.energy.current=rp.resourceSnapshot.energy;
   }
-  // 새 스냅샷 저장
+  // 새 스냅샷 저장 (§3b 가드 — stale 세이브에서 replay[scid] 부재 시 TypeError 방지)
   if(!gameState.replay)gameState.replay={};
+  if(!gameState.replay[scid])gameState.replay[scid]={played:true,improved:false,bestScore:0,bestGrade:''};
   gameState.replay[scid].resourceSnapshot={time:gameState.resources.time.current,energy:gameState.resources.energy.current};
 
   // [4] 시나리오 상태 초기화 (1회 제한 우회)
+  _couponSelections={}; // §3b R2 곁가지 — 이전 판 쿠폰 선택이 재도전에 자동 적용되던 것 교정
   gameState.currentScenarioId=scid;
   gameState.currentTier=1;
   gameState.selectedTier1=null;
@@ -15743,6 +15759,7 @@ function replayScenario(scid){
   gameState.score=0;
   gameState.completed=false;
   gameState._gameOverShown=false;
+  gameState._scDiscounts=[]; // §3a R2 — 영수증 기록 리셋
   if(!gameState.pending)gameState.pending={delegation:0,knowledge:0};
   gameState.pending.delegation=0;
   gameState.pending.knowledge=0;
@@ -17475,7 +17492,8 @@ function pilotCardsForChoice(stage,id){
 }
 
 // 인벤토리 적립 (perChoice:true 마킹) — 시각 토스트는 호출부에서 playCardRewardSequential 재사용
-function pilotAwardCards(cards){
+// §3c R2 — choiceLabel: 어떤 선택으로 받은 카드인지 (optional, 리포트 "행동의 증거" 표시용)
+function pilotAwardCards(cards,choiceLabel){
   if(!cards||!cards.length)return;
   ensureInventory();
   var scid=gameState.currentScenarioId;
@@ -17484,10 +17502,10 @@ function pilotAwardCards(cards){
     var c=cards[i];
     if(c.kind==='hc'){
       if(!gameState.inventory.humanCentricCards)gameState.inventory.humanCentricCards=[];
-      gameState.inventory.humanCentricCards.push({axis:c.axis,tag:c.tag,scenario:scid,leaf:leaf,perChoice:true});
+      gameState.inventory.humanCentricCards.push({axis:c.axis,tag:c.tag,scenario:scid,leaf:leaf,perChoice:true,choiceLabel:choiceLabel||null});
     }else{
       if(!gameState.inventory.domainCards)gameState.inventory.domainCards=[];
-      gameState.inventory.domainCards.push({label:c.name,scenario:scid,leaf:leaf,perChoice:true});
+      gameState.inventory.domainCards.push({label:c.name,scenario:scid,leaf:leaf,perChoice:true,choiceLabel:choiceLabel||null});
     }
   }
   saveGame();
@@ -17515,8 +17533,9 @@ var _stageAnchorCut={tier1:2,tier2:3,review:5};
 function pilotAwardAndShow(stage,id){
   var cards=pilotCardsForChoice(stage,id);
   if(!cards.length)return Promise.resolve();
-  pilotAwardCards(cards);
-  return showCardEarnPopup(_pilotChoiceLabel(stage,id),cards,_stageAnchorCut[stage]);
+  var lbl=_pilotChoiceLabel(stage,id); // §3c R2 — 라벨 1회 계산, 획득 맥락으로 동봉
+  pilotAwardCards(cards,lbl);
+  return showCardEarnPopup(lbl,cards,_stageAnchorCut[stage]);
 }
 // =====================================================
 // 16. 카드 독 — 우측 상시 컬렉션 (SPEC-card-per-choice §2d)

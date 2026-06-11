@@ -829,7 +829,8 @@ function goCut6(){
     dlgDelta:dlgDelta,
     knlDelta:knlDelta,
     dlgTotal:dlgTotal,
-    knlTotal:knlTotal
+    knlTotal:knlTotal,
+    discounts:(gameState._scDiscounts||[]).slice() // §3a R2 — 영수증 재료 (할인 사용 내역)
   });
   gameState.completed=true;
 

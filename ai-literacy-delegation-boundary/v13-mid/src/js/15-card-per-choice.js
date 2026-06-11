@@ -88,7 +88,8 @@ function pilotCardsForChoice(stage,id){
 }
 
 // 인벤토리 적립 (perChoice:true 마킹) — 시각 토스트는 호출부에서 playCardRewardSequential 재사용
-function pilotAwardCards(cards){
+// §3c R2 — choiceLabel: 어떤 선택으로 받은 카드인지 (optional, 리포트 "행동의 증거" 표시용)
+function pilotAwardCards(cards,choiceLabel){
   if(!cards||!cards.length)return;
   ensureInventory();
   var scid=gameState.currentScenarioId;
@@ -97,10 +98,10 @@ function pilotAwardCards(cards){
     var c=cards[i];
     if(c.kind==='hc'){
       if(!gameState.inventory.humanCentricCards)gameState.inventory.humanCentricCards=[];
-      gameState.inventory.humanCentricCards.push({axis:c.axis,tag:c.tag,scenario:scid,leaf:leaf,perChoice:true});
+      gameState.inventory.humanCentricCards.push({axis:c.axis,tag:c.tag,scenario:scid,leaf:leaf,perChoice:true,choiceLabel:choiceLabel||null});
     }else{
       if(!gameState.inventory.domainCards)gameState.inventory.domainCards=[];
-      gameState.inventory.domainCards.push({label:c.name,scenario:scid,leaf:leaf,perChoice:true});
+      gameState.inventory.domainCards.push({label:c.name,scenario:scid,leaf:leaf,perChoice:true,choiceLabel:choiceLabel||null});
     }
   }
   saveGame();
@@ -128,6 +129,7 @@ var _stageAnchorCut={tier1:2,tier2:3,review:5};
 function pilotAwardAndShow(stage,id){
   var cards=pilotCardsForChoice(stage,id);
   if(!cards.length)return Promise.resolve();
-  pilotAwardCards(cards);
-  return showCardEarnPopup(_pilotChoiceLabel(stage,id),cards,_stageAnchorCut[stage]);
+  var lbl=_pilotChoiceLabel(stage,id); // §3c R2 — 라벨 1회 계산, 획득 맥락으로 동봉
+  pilotAwardCards(cards,lbl);
+  return showCardEarnPopup(lbl,cards,_stageAnchorCut[stage]);
 }

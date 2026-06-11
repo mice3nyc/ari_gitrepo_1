@@ -185,7 +185,14 @@ function showCouponSelect(cards,onConfirm){
 
 // 단계별 소비 — onTier1/onTier2/onReview에서 호출
 function consumeStage(stage,costObj,leafPath){
-  if(!costObj||(costObj.time===0&&costObj.energy===0))return;
+  if(!costObj)return;
+  // §3a R2 — 영수증용 할인 기록 (0비용 = 전액 할인도 기록 대상이라 early return보다 앞)
+  if(costObj._discount&&gameState){
+    var _d=costObj._discount;
+    if(!gameState._scDiscounts)gameState._scDiscounts=[];
+    gameState._scDiscounts.push({stage:stage,rawTime:_d.rawTime||0,rawEnergy:_d.rawEnergy||0,time:costObj.time||0,energy:costObj.energy||0,cardDiscount:_d.cardDiscount||0,cardDetails:(_d.cardDetails||[]).slice(0,4),dlgEffect:_d.dlgEffect||0,knlEffect:_d.knlEffect||0});
+  }
+  if(costObj.time===0&&costObj.energy===0)return;
   var res=gameState.resources;
   var timeBefore=res.time.current;
   var energyBefore=res.energy.current;

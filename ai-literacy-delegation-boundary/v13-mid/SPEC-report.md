@@ -38,18 +38,27 @@
 - _reportAllCards·_reportCardsByScenario·extractReportData에서 competencyCards(track:'legacy') 분기 제거
 - 기존 세이브에 legacy 카드가 있어도 무시될 뿐 깨지지 않음을 헤드리스로 확인
 
-## §3. R2 — 기록 보강 (화면 무변)
+## §3. R2 — 기록 보강 (화면 무변) [6/12 확정]
 
-### 3a. scenarioHistory 추가 필드
+### 3a. 할인 사용 기록 — consumeStage 단일 후킹
+모든 자원 소비가 consumeStage(04-resources)를 지나고, cost 객체에 `_discount` 메타(rawTime/rawEnergy/cardDiscount/cardDetails/dlgEffect/knlEffect)가 이미 실려 있다. consumeStage 진입부(0비용 early return보다 앞 — 전액 할인도 영수증 대상)에서 `gameState._scDiscounts[]`에 적재:
 ```
-discounts: [{phase:'tier1'|'tier2'|'review', tag:'검토력', amount:2}]   // 선택 시점 details에서
-firstAttempt: {score, grade}   // 재도전으로 갱신되기 전 첫 판 보존 (§3b 확인 후 확정)
-cardContexts: [{cardLabel, choiceLabel}]   // 어떤 선택으로 받은 카드인지 (perChoice에서)
+{stage, rawTime, rawEnergy, time, energy, cardDiscount, cardDetails(≤4), dlgEffect, knlEffect}
 ```
-### 3b. 재도전 동작 확인 (착수 시 최우선)
-- replayScenario 경로에서 history가 덮어쓰기인지 누적인지 확인 → 누적이면 firstAttempt 불요(이력에서 도출), 덮어쓰기면 필드 추가
-### 3c. 호환 가드
-- 새 필드 부재 시 안전 폴백 (기존 진행 중 세이브 깨지지 않게). 빌드 후 구버전 localStorage로 헤드리스 1회
+- 리셋: startScenario·replayScenario의 상태 초기화 블록에서 `_scDiscounts=[]`
+- 시나리오 완료 시 history push에 `discounts:(gameState._scDiscounts||[]).slice()` 동봉
+
+### 3b. 재도전 — 확인 결과: history는 덮어쓰기(splice 후 재기록)
+- `gameState.replay[scid]`에 {played, improved, bestScore, bestGrade, resourceSnapshot}이 이미 보존됨 (startScenario 생성, 완료 시 갱신) → R6 재료 절반은 존재
+- 추가: replayScenario [1]에서 splice 직전, `replay[scid].firstAttempt={score,grade}` (최초 1회만) + `replay[scid].attempts` 카운트
+- 곁가지 가드: replayScenario 끝의 `replay[scid].resourceSnapshot=` 직전에 replay[scid] 존재 보장 (stale 세이브 TypeError 방지)
+- 곁가지 수정: `_couponSelections` 리셋이 startScenario에만 있고 replayScenario에 없음 → 재도전 시 이전 판 쿠폰 선택이 모달 없이 자동 적용되던 것 교정 (리셋 추가)
+
+### 3c. 카드 획득 맥락
+pilotAwardCards에 choiceLabel 파라미터 추가 (_pilotChoiceLabel을 호출부에서 1회 계산해 전달) → 인벤토리 엔트리에 `choiceLabel` 필드. 컷6 일괄 지급(03-engine)은 leaf가 이미 맥락이라 무변
+
+### 3d. 호환 가드
+- 새 필드 전부 optional — 부재 시 안전 폴백 (기존 진행 중 세이브 깨지지 않게). 헤드리스로 신규 필드 적재·firstAttempt 보존 확인
 
 ## §4. R3 — 위임 지도 [착수 시 작성]
 

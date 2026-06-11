@@ -39,6 +39,7 @@ function startScenario(scid){
   gameState.score=0;
   gameState.completed=false;
   gameState._gameOverShown=false;
+  gameState._scDiscounts=[]; // §3a R2 — 영수증 기록 리셋
   if(!gameState.pending)gameState.pending={delegation:0,knowledge:0};
   gameState.pending.delegation=0;
   gameState.pending.knowledge=0;
@@ -88,6 +89,11 @@ function replayScenario(scid){
           gameState.resources.energy.max=mbl.energy;
         }
       }
+      // §3b R2 — 첫 판 보존 (최초 재도전 때만) + 시도 횟수
+      if(!gameState.replay)gameState.replay={};
+      if(!gameState.replay[scid])gameState.replay[scid]={played:true,improved:false,bestScore:r.finalScore||0,bestGrade:r.grade||''};
+      if(!gameState.replay[scid].firstAttempt)gameState.replay[scid].firstAttempt={score:r.finalScore||0,grade:r.grade||''};
+      gameState.replay[scid].attempts=(gameState.replay[scid].attempts||1)+1;
       // history에서 제거
       hist.splice(i,1);
       break;
@@ -112,11 +118,13 @@ function replayScenario(scid){
     gameState.resources.time.current=rp.resourceSnapshot.time;
     gameState.resources.energy.current=rp.resourceSnapshot.energy;
   }
-  // 새 스냅샷 저장
+  // 새 스냅샷 저장 (§3b 가드 — stale 세이브에서 replay[scid] 부재 시 TypeError 방지)
   if(!gameState.replay)gameState.replay={};
+  if(!gameState.replay[scid])gameState.replay[scid]={played:true,improved:false,bestScore:0,bestGrade:''};
   gameState.replay[scid].resourceSnapshot={time:gameState.resources.time.current,energy:gameState.resources.energy.current};
 
   // [4] 시나리오 상태 초기화 (1회 제한 우회)
+  _couponSelections={}; // §3b R2 곁가지 — 이전 판 쿠폰 선택이 재도전에 자동 적용되던 것 교정
   gameState.currentScenarioId=scid;
   gameState.currentTier=1;
   gameState.selectedTier1=null;
@@ -125,6 +133,7 @@ function replayScenario(scid){
   gameState.score=0;
   gameState.completed=false;
   gameState._gameOverShown=false;
+  gameState._scDiscounts=[]; // §3a R2 — 영수증 기록 리셋
   if(!gameState.pending)gameState.pending={delegation:0,knowledge:0};
   gameState.pending.delegation=0;
   gameState.pending.knowledge=0;
