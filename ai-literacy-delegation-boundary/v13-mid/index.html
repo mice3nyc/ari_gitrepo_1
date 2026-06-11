@@ -143,9 +143,13 @@ button, input, select, textarea { font-family: inherit; }
 .lv-compact.pulsing { animation:numPulse 0.5s ease; }
 
 
-/* §17.2 — 시나리오 나가기 버튼 (HUD 우측 끝, 시나리오 진행 화면 전용) */
-.scenario-exit { flex:0 0 auto; align-self:center; padding:5px 10px; font-size:11px; font-weight:700; font-family:inherit; color:#555; background:#fff; border:2px solid #c9c4b8; border-radius:10px; cursor:pointer; line-height:1; white-space:nowrap; }
-.scenario-exit:hover { color:#111; border-color:#111; }
+/* §17.2 — 시나리오 나가기 버튼 (전체 윈도우 좌측 상단 코너 고정, 검정. 시나리오 진행 화면 전용) */
+/* DOM에서 panel-row 바로 다음이라 ~ 셀렉터로 HUD 표시에 자동 연동 — JS 토글 불필요 */
+.scenario-exit { display:none; position:fixed; top:12px; left:12px; z-index:1000; padding:7px 13px; font-size:12px; font-weight:700; font-family:inherit; color:#fff; background:#111; border:2px solid #111; border-radius:10px; cursor:pointer; line-height:1; white-space:nowrap; }
+.scenario-exit:hover { background:#333; }
+.panel-row.visible ~ .scenario-exit { display:block; }
+/* 버튼이 HUD 좌측 끝(시간 게이지)과 겹치지 않게 자원 바를 오른쪽으로 비킴 */
+.panel-row.visible .resource-bar { padding-left:76px; }
 /* ===== 선택지 비용 표시 — 4박스 그리드 (DECISIONS §10.6 4/30 세션257) ===== */
 .choice-cost { display:flex; gap:0; margin-top:1px; padding-top:10px; border-top:1px dashed #ddd; }
 .cost-group { display:flex; gap:10px; flex:1; align-items:flex-end; justify-content:center; padding:0 8px; }
@@ -373,15 +377,16 @@ button, input, select, textarea { font-family: inherit; }
 .coupon-confirm:hover { background:#333; }
 
 /* ===== Debug ===== (4/30 세션260: 노안 친화 — font-size 1.4배 + max-width 460px) */
-.debug-toggle { position:fixed; bottom:10px; right:10px; background:#333; color:#fff; border:none; padding:5px 10px; font-size:11px; cursor:pointer; z-index:300; font-family:monospace; }
-.debug-panel { display:none; position:fixed; bottom:38px; right:10px; background:#1a1a1a; color:#ddd; padding:10px 12px; font-size:11px; line-height:1.4; font-family:monospace; z-index:300; max-width:420px; max-height:calc(100vh - 48px); overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
+/* §17.1 6/11 — 좌측 하단으로 이동 (피터공). version 라벨과 자리 스왑 */
+.debug-toggle { position:fixed; bottom:10px; left:10px; background:#333; color:#fff; border:none; padding:5px 10px; font-size:11px; cursor:pointer; z-index:300; font-family:monospace; }
+.debug-panel { display:none; position:fixed; bottom:38px; left:10px; background:#1a1a1a; color:#ddd; padding:10px 12px; font-size:11px; line-height:1.4; font-family:monospace; z-index:300; max-width:420px; max-height:calc(100vh - 48px); overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
 .debug-panel.active { display:block; }
 .debug-section { margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid #333; }
 .debug-label { color:#aaa; font-size:10px; text-transform:uppercase; margin-bottom:4px; letter-spacing:0.5px; }
 .debug-buttons { display:flex; flex-wrap:wrap; gap:4px; margin-top:5px; }
 .debug-btn { background:#333; color:#ddd; border:1px solid #555; padding:3px 8px; font-size:10px; cursor:pointer; font-family:monospace; }
 .debug-btn:hover { background:#444; }
-.version { position:fixed; bottom:6px; left:12px; font-size:10px; color:#ccc; }
+.version { position:fixed; bottom:6px; right:12px; font-size:10px; color:#ccc; }
 
 @media (max-width:800px) {
   .panels-grid { grid-template-columns:1fr; }
@@ -754,17 +759,19 @@ button, input, select, textarea { font-family: inherit; }
 @keyframes railPopIn { 0%{opacity:0;transform:scale(0.3);} 60%{opacity:1;transform:scale(1.12);} 100%{opacity:1;transform:scale(1);} }
 .rail-card-sub { font-size:10px; font-weight:700; letter-spacing:0.5px; margin-bottom:2px; color:var(--ink-soft); }
 .rail-card-name { font-size:14px; font-weight:700; line-height:1.3; }
-.card-earn-popup { position:fixed; top:150px; right:176px; width:260px; background:var(--bg-card); border:2px solid var(--ink); border-radius:16px; box-shadow:4px 4px 0 var(--ink); padding:16px 18px; z-index:420; opacity:0; transform:translateX(24px); transition:opacity 0.25s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); cursor:pointer; }
+.card-earn-popup { position:fixed; top:150px; right:176px; width:260px; background:var(--bg-card); border:2px solid var(--ink); border-radius:16px; box-shadow:4px 4px 0 var(--ink); padding:16px 18px; z-index:420; opacity:0; transform:translateX(24px); transition:opacity 0.25s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
 .card-earn-popup.show { opacity:1; transform:translateX(0); }
 /* §2c v2 — 컷 이미지 위 오버레이 모드: 문서 좌표(absolute), left/top은 JS */
 /* v2.1 — 띠용 팝(scale 0.3→1 오버슈트) + 크게(300px·여유 패딩) */
 .card-earn-popup.over-image { position:absolute; right:auto; width:300px; padding:20px 24px; transform:scale(0.3); transition:opacity 0.2s ease, transform 0.45s cubic-bezier(0.34,1.56,0.64,1); }
-.card-earn-popup.over-image .cep-earn { font-size:18px; }
+.card-earn-popup.over-image .cep-title { font-size:24px; }
 .card-earn-popup.over-image.show { transform:scale(1); }
-.cep-close { position:absolute; top:8px; right:10px; background:none; border:none; font-size:16px; cursor:pointer; color:var(--ink-soft); line-height:1; }
-.cep-choice { font-size:12px; color:var(--ink-soft); margin-bottom:6px; padding-right:16px; }
-.cep-earn { font-size:16px; margin-bottom:10px; }
+/* §2e v3 — 카드명 상단 큰 글씨 + 작은 설명 줄 + 확보 버튼 */
+.cep-title { font-size:22px; font-weight:800; line-height:1.25; margin-bottom:4px; }
+.cep-desc { font-size:12px; color:var(--ink-soft); margin-bottom:10px; }
 .cep-cards { display:flex; flex-direction:column; gap:8px; }
+.cep-acquire { display:block; width:100%; margin-top:12px; padding:10px 8px; font-family:inherit; font-size:15px; font-weight:800; border-radius:0; cursor:pointer; background:var(--acc-yellow,#ffdb31); color:var(--ink); border:var(--border-w,3px) solid var(--ink); box-shadow:var(--shadow,4px 4px 0 var(--ink)); transition:transform 0.05s, box-shadow 0.05s; }
+.cep-acquire:active { transform:translate(2px,2px); box-shadow:var(--shadow-press,2px 2px 0 var(--ink)); }
 .cep-cards .rail-card { opacity:1; transform:none; box-shadow:none; }
 @media (max-width:1320px){ #card-dock{width:170px;} .rail-card-name{font-size:12px;} .card-earn-popup{width:220px;right:146px;} .card-earn-popup.over-image{width:260px;} }
 /* ===== GAME OVER 모달 (5/3 정정 — 자원 부족) ===== */
@@ -1429,9 +1436,16 @@ button,
 .debug-toggle {
   position:fixed;
   bottom:12px;
-  right:12px;
-  left:auto;
+  left:12px; /* §17.1 6/11 — 좌측 하단 (피터공 정정) */
+  right:auto;
   z-index:1300; /* §17.1 — 카드 독(180)·inv-tab(1200) 위. 그룹 z-index:1 강등이 클릭을 막던 원인 */
+  background:var(--ink);
+  border:2px solid var(--ink);
+  box-shadow:3px 3px 0 rgba(0,0,0,.25);
+}
+
+/* §17.2 — 시나리오 나가기 (좌측 상단, 검정) */
+.scenario-exit {
   background:var(--ink);
   border:2px solid var(--ink);
   box-shadow:3px 3px 0 rgba(0,0,0,.25);
@@ -1682,9 +1696,9 @@ button,
       </div>
     </div>
   </div>
-  <!-- §17.2 — 시나리오 나가기 (HUD에 묶여 시나리오 진행 화면에서만 보임) -->
-  <button class="scenario-exit" id="scenario-exit" onclick="exitScenario()" aria-label="시나리오 나가기">나가기</button>
 </div>
+<!-- §17.2 — 시나리오 나가기 (전체 윈도우 좌측 상단 코너 고정, 검정. panel-row.visible ~ 셀렉터로 시나리오 진행 화면에서만 표시) -->
+<button class="scenario-exit" id="scenario-exit" onclick="exitScenario()" aria-label="시나리오 나가기">나가기</button>
 <div class="container" id="main-container"></div>
 <!-- 역량 카드 인벤토리 탭 (우측 가장자리 고정 / texts.yaml inject — 초기값은 fallback) -->
 <button class="inv-tab" id="inv-tab" onclick="toggleInventory()" aria-label="역량 카드 인벤토리 열기"><span class="inv-tab-name" id="inv-tab-name">역량 카드</span><span class="inv-tab-desc" id="inv-tab-desc">모은 카드 보기</span><span class="inv-tab-badge hidden" id="inv-tab-badge"></span></button>
@@ -1846,8 +1860,9 @@ var CONFIG={
   // v0.5 Phase 8.7 — 부분 회복 hook 폐기 (DECISIONS §10.1). RP 시스템으로 전환
   // v0.5 Phase 8.8 — 자원토큰(RP) 시스템 (DECISIONS §10.2~10.4)
   // 명칭: 코드는 RP 유지(식별자 길이/i18n), UI 텍스트는 "자원토큰"
-  rpRewardByGrade:{S:5,A:3,B:2,C:1,D:0},
-  rpLevelUpBonusByLevel:{2:3,3:4,4:5,5:6},
+  // v1.4 세션468 — 두 자리 수 상향 (SPEC §18). 상향 후에도 회복 < 소모 유지.
+  rpRewardByGrade:{S:30,A:20,B:15,C:10,D:0},
+  rpLevelUpBonusByLevel:{2:10,3:15,4:20,5:25},
   rpCost:{time:1,energy:1}, // 2축 전용 (DECISIONS §10.4 — 위/도 분배 폐기)
   // v0.8 5/4 세션289 — 비대칭 효과 (mNeg=1 되돌림)
   // 양수 ×2 (잘하면 두 배 보상), 음수 ×1 (잘못해도 한 배만 페널티). 메모리 5/3 세션278 정합.
@@ -13348,7 +13363,9 @@ var TEXTS = {
       "btn_acquire": "획득",
       "tag_format": "역량 카드 획득 · {idx}/{total}",
       "popup_choice_format": "「{label}」 선택",
-      "popup_earn_format": "{cards} 획득!"
+      "popup_earn_format": "{cards} 획득!",
+      "popup_desc_format": "「{label}」 선택으로 획득!",
+      "popup_btn_acquire": "확보!"
     },
     "scenario_result": {
       "no_card_notice": "이번엔 역량 카드를 받지 못했어요.",
@@ -17573,8 +17590,9 @@ function _popupAnchorBox(anchorCut){
   var o=_docOffset(img);
   return {left:o.x,top:o.y,width:img.offsetWidth,height:img.offsetHeight};
 }
-// 획득 팝업 — 컷 이미지 하단 중앙(§2c v2.1). 닫기(클릭) 또는 4초 자동 닫힘 →
-// 미리보기 카드 고스트가 회전(540°)하며 독 pending 칩 자리로 비행(§2d).
+// 획득 팝업 v3 (§2e) — 컷 이미지 하단 중앙(§2c v2.1). 카드명 상단 큰 글씨 + 작은 설명 줄.
+// 자동 닫힘 없음 — 확보 버튼을 눌러야 닫히고, 미리보기 카드 고스트가
+// 회전(540°)하며 독 pending 칩 자리로 비행(§2d).
 function showCardEarnPopup(choiceLabel,cards,anchorCut){
   return new Promise(function(resolve){
     if(!cards||!cards.length){resolve();return;}
@@ -17584,12 +17602,14 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
     var pop=document.createElement('div');
     pop.id='card-earn-popup';
     pop.className='card-earn-popup';
-    var h='<button class="cep-close" aria-label="닫기">×</button>';
+    var h='<div class="cep-title">'+_invEscapeHTML(names.join(' · '))+'</div>';
     if(choiceLabel){
-      h+='<div class="cep-choice">'+_t('ui_messages.card_reward.popup_choice_format','「{label}」 선택').replace('{label}',_invEscapeHTML(choiceLabel))+'</div>';
+      h+='<div class="cep-desc">'+_t('ui_messages.card_reward.popup_desc_format','「{label}」 선택으로 획득!').replace('{label}',_invEscapeHTML(choiceLabel))+'</div>';
+    }else{
+      h+='<div class="cep-desc">'+_t('ui_messages.card_reward.popup_earn_format','{cards} 획득!').replace('{cards}','').trim()+'</div>';
     }
-    h+='<div class="cep-earn">'+_t('ui_messages.card_reward.popup_earn_format','{cards} 획득!').replace('{cards}','<b>'+_invEscapeHTML(names.join(' · '))+'</b>')+'</div>';
     h+='<div class="cep-cards"></div>';
+    h+='<button class="cep-acquire">'+_t('ui_messages.card_reward.popup_btn_acquire','확보!')+'</button>';
     pop.innerHTML=h;
     var holder=pop.querySelector('.cep-cards');
     cards.forEach(function(c){holder.appendChild(_railCardVisual(c));});
@@ -17646,16 +17666,18 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
       setTimeout(function(){if(pop.parentNode)pop.parentNode.removeChild(pop);},250);
       resolve();
     }
-    pop.onclick=close;
-    setTimeout(close,4000);
+    // §2e — 확보 버튼 단일 동선. 자동 닫힘·아무데나 클릭 닫기 폐지.
+    pop._forceClose=close;
+    var btn=pop.querySelector('.cep-acquire');
+    if(btn)btn.onclick=close;
   });
 }
 // 철컥 — 시나리오 완료(컷6 체인 끝): pending 칩들이 120ms 시간차로 고정(locked).
 // 팝업이 아직 열려 있으면(모달 없는 경로) 먼저 닫아 비행을 마치게 한 뒤 잠근다.
 function railFlyToInventory(){
   var pop=document.getElementById('card-earn-popup');
-  if(pop&&pop.onclick){
-    pop.onclick();
+  if(pop&&pop._forceClose){
+    pop._forceClose();
     return new Promise(function(resolve){
       setTimeout(function(){_dockLockNow().then(resolve);},1000);
     });

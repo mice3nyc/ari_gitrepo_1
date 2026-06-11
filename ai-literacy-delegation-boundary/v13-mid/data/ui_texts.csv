@@ -93,6 +93,8 @@ ui_messages,ui_messages.card_reward.btn_acquire,획득
 ui_messages,ui_messages.card_reward.tag_format,역량 카드 획득 · {idx}/{total}
 ui_messages,ui_messages.card_reward.popup_choice_format,「{label}」 선택
 ui_messages,ui_messages.card_reward.popup_earn_format,{cards} 획득!
+ui_messages,ui_messages.card_reward.popup_desc_format,「{label}」 선택으로 획득!
+ui_messages,ui_messages.card_reward.popup_btn_acquire,확보!
 ui_messages,ui_messages.scenario_result.no_card_notice,이번엔 역량 카드를 받지 못했어요.
 ui_messages,ui_messages.scenario_result.growth_card_notice,다시 도전하면 도전력 카드를 얻을 수 있어요.
 ui_messages,ui_messages.scenario_result.replay_btn,이 시나리오 다시 해보기

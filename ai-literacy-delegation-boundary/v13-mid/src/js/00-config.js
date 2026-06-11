@@ -39,8 +39,9 @@ var CONFIG={
   // v0.5 Phase 8.7 — 부분 회복 hook 폐기 (DECISIONS §10.1). RP 시스템으로 전환
   // v0.5 Phase 8.8 — 자원토큰(RP) 시스템 (DECISIONS §10.2~10.4)
   // 명칭: 코드는 RP 유지(식별자 길이/i18n), UI 텍스트는 "자원토큰"
-  rpRewardByGrade:{S:5,A:3,B:2,C:1,D:0},
-  rpLevelUpBonusByLevel:{2:3,3:4,4:5,5:6},
+  // v1.4 세션468 — 두 자리 수 상향 (SPEC §18). 상향 후에도 회복 < 소모 유지.
+  rpRewardByGrade:{S:30,A:20,B:15,C:10,D:0},
+  rpLevelUpBonusByLevel:{2:10,3:15,4:20,5:25},
   rpCost:{time:1,energy:1}, // 2축 전용 (DECISIONS §10.4 — 위/도 분배 폐기)
   // v0.8 5/4 세션289 — 비대칭 효과 (mNeg=1 되돌림)
   // 양수 ×2 (잘하면 두 배 보상), 음수 ×1 (잘못해도 한 배만 페널티). 메모리 5/3 세션278 정합.

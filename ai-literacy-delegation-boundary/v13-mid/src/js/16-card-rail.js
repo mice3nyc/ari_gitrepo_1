@@ -96,8 +96,9 @@ function _popupAnchorBox(anchorCut){
   var o=_docOffset(img);
   return {left:o.x,top:o.y,width:img.offsetWidth,height:img.offsetHeight};
 }
-// 획득 팝업 — 컷 이미지 하단 중앙(§2c v2.1). 닫기(클릭) 또는 4초 자동 닫힘 →
-// 미리보기 카드 고스트가 회전(540°)하며 독 pending 칩 자리로 비행(§2d).
+// 획득 팝업 v3 (§2e) — 컷 이미지 하단 중앙(§2c v2.1). 카드명 상단 큰 글씨 + 작은 설명 줄.
+// 자동 닫힘 없음 — 확보 버튼을 눌러야 닫히고, 미리보기 카드 고스트가
+// 회전(540°)하며 독 pending 칩 자리로 비행(§2d).
 function showCardEarnPopup(choiceLabel,cards,anchorCut){
   return new Promise(function(resolve){
     if(!cards||!cards.length){resolve();return;}
@@ -107,12 +108,14 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
     var pop=document.createElement('div');
     pop.id='card-earn-popup';
     pop.className='card-earn-popup';
-    var h='<button class="cep-close" aria-label="닫기">×</button>';
+    var h='<div class="cep-title">'+_invEscapeHTML(names.join(' · '))+'</div>';
     if(choiceLabel){
-      h+='<div class="cep-choice">'+_t('ui_messages.card_reward.popup_choice_format','「{label}」 선택').replace('{label}',_invEscapeHTML(choiceLabel))+'</div>';
+      h+='<div class="cep-desc">'+_t('ui_messages.card_reward.popup_desc_format','「{label}」 선택으로 획득!').replace('{label}',_invEscapeHTML(choiceLabel))+'</div>';
+    }else{
+      h+='<div class="cep-desc">'+_t('ui_messages.card_reward.popup_earn_format','{cards} 획득!').replace('{cards}','').trim()+'</div>';
     }
-    h+='<div class="cep-earn">'+_t('ui_messages.card_reward.popup_earn_format','{cards} 획득!').replace('{cards}','<b>'+_invEscapeHTML(names.join(' · '))+'</b>')+'</div>';
     h+='<div class="cep-cards"></div>';
+    h+='<button class="cep-acquire">'+_t('ui_messages.card_reward.popup_btn_acquire','확보!')+'</button>';
     pop.innerHTML=h;
     var holder=pop.querySelector('.cep-cards');
     cards.forEach(function(c){holder.appendChild(_railCardVisual(c));});
@@ -169,16 +172,18 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
       setTimeout(function(){if(pop.parentNode)pop.parentNode.removeChild(pop);},250);
       resolve();
     }
-    pop.onclick=close;
-    setTimeout(close,4000);
+    // §2e — 확보 버튼 단일 동선. 자동 닫힘·아무데나 클릭 닫기 폐지.
+    pop._forceClose=close;
+    var btn=pop.querySelector('.cep-acquire');
+    if(btn)btn.onclick=close;
   });
 }
 // 철컥 — 시나리오 완료(컷6 체인 끝): pending 칩들이 120ms 시간차로 고정(locked).
 // 팝업이 아직 열려 있으면(모달 없는 경로) 먼저 닫아 비행을 마치게 한 뒤 잠근다.
 function railFlyToInventory(){
   var pop=document.getElementById('card-earn-popup');
-  if(pop&&pop.onclick){
-    pop.onclick();
+  if(pop&&pop._forceClose){
+    pop._forceClose();
     return new Promise(function(resolve){
       setTimeout(function(){_dockLockNow().then(resolve);},1000);
     });
