@@ -407,6 +407,7 @@ ui_messages:
     popup_earn_format: "{cards} 획득!"
     popup_desc_format: "「{label}」 선택으로 획득!"
     popup_btn_acquire: "확보!"
+    popup_title_format: "{cards} 확보!"
 
   scenario_result:
     no_card_notice: "이번엔 역량 카드를 받지 못했어요."

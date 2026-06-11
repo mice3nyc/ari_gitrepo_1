@@ -280,9 +280,10 @@ function showRecoveryCardModal(scid){
       '<div class="recovery-card-title">'+_t('recovery.title','회복력')+'</div>'+
       '<div class="recovery-card-desc">'+(td.short||'낮은 결과에서 비어 있던 과정을 알아차리고 다시 세우는 힘')+'</div>'+
       // v4 6/11 — 두 버튼 동일 위계 (재시도 강조 제거, SPEC-ui-hud §4d-3)
+      // 세션468 §4k — 다시 도전=하늘색+↺ / 다음 시나리오=노랑+→ (색·아이콘으로 방향성만 구분)
       '<div class="recovery-btn-row">'+
-      '<button class="recovery-card-btn" id="recovery-use-btn">'+_t('recovery.btn_use','다시 도전')+'</button>'+
-      '<button class="recovery-card-btn" id="recovery-skip-btn">'+_t('recovery.btn_skip','다음 시나리오')+'</button>'+
+      '<button class="recovery-card-btn use" id="recovery-use-btn"><span class="rcb-ico">↺</span> '+_t('recovery.btn_use','다시 도전')+'</button>'+
+      '<button class="recovery-card-btn skip" id="recovery-skip-btn">'+_t('recovery.btn_skip','다음 시나리오')+' <span class="rcb-ico">→</span></button>'+
       '</div>'+
     '</div>';
     document.getElementById('recovery-use-btn').onclick=function(){

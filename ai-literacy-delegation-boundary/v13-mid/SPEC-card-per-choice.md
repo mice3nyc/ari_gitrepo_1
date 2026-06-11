@@ -64,6 +64,7 @@
 
 - **닫힘 = 확보 버튼 단일 동선**: 4초 자동 닫힘 폐지, × 버튼·팝업 아무데나 클릭 닫기 폐지. 팝업 하단 **확보 버튼**(`.cep-acquire`, recovery-card-btn 계열 neo-brutalism 스타일 + 물마루 노랑 배경)을 눌러야 닫히고 회전 비행(§2d) 시작. 모달 없는 경로에서 시나리오가 먼저 끝나면 `railFlyToInventory`가 프로그램적으로 강제 닫음(기존 `pop.onclick()` → `pop._forceClose()` 핸들 교체 — onclick은 이제 비어 있으므로).
 - **레이아웃 재배열**: ① 최상단 = **획득 카드명 크게**(`.cep-title`, 22px 굵게. 여러 장이면 `·` 구분 연결) ② 그 아래 = **작은 설명 줄**(`.cep-desc`, 12px 회색): "「{선택 라벨}」 선택으로 획득!" — 기존 cep-choice(상단 작은 줄)+cep-earn(카드명 포함 굵은 줄) 두 줄을 통합·강등 ③ 카드 미리보기(cep-cards) ④ 확보 버튼.
+- **v3.1 (세션468 2차)**: 타이틀 = "{카드명} 확보!"(`popup_title_format`) + 인간중심 미리보기 카드 한 줄 표기 — [SPEC-ui-hud.md §4l](SPEC-ui-hud.md) 참조.
 - **텍스트 키**: `ui_messages.card_reward.popup_desc_format`("「{label}」 선택으로 획득!") + `popup_btn_acquire`("확보!") 신설. 기존 popup_choice_format/popup_earn_format은 라벨 없는 호출 폴백용 존치. ui_texts.csv 재추출 동기 필수.
 
 ## 3. 전체 개편 시 (Phase 2 예고)

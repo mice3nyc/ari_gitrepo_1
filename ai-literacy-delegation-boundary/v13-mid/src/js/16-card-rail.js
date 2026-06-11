@@ -68,14 +68,14 @@ function railClear(){
   dockRender();
 }
 // 미니 카드 DOM — 팝업 미리보기·비행 고스트용 (§2b 시각 유지)
+// §4l — 인간중심은 독 칩과 같은 한 줄 인라인 ("중심잡기 주체성")
 function _railCardVisual(c){
   var el=document.createElement('div');
   el.className='rail-card';
   if(c.kind==='hc'){
     var am=_axisMeta(c.axis);
     el.style.background=am.color;
-    el.innerHTML='<div class="rail-card-sub" style="color:rgba(255,255,255,0.8);">'+_invEscapeHTML(c.axis)+'</div>'+
-      '<div class="rail-card-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>';
+    el.innerHTML='<div class="rail-card-name" style="color:#fff;"><span class="rail-card-axis">'+_invEscapeHTML(c.axis)+'</span> '+_invEscapeHTML(c.tag)+'</div>';
   }else{
     el.style.borderLeft='6px solid '+_cardColor(c.name);
     el.innerHTML='<div class="rail-card-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>';
@@ -108,7 +108,7 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
     var pop=document.createElement('div');
     pop.id='card-earn-popup';
     pop.className='card-earn-popup';
-    var h='<div class="cep-title">'+_invEscapeHTML(names.join(' · '))+'</div>';
+    var h='<div class="cep-title">'+_t('ui_messages.card_reward.popup_title_format','{cards} 확보!').replace('{cards}',_invEscapeHTML(names.join(' · ')))+'</div>';
     if(choiceLabel){
       h+='<div class="cep-desc">'+_t('ui_messages.card_reward.popup_desc_format','「{label}」 선택으로 획득!').replace('{label}',_invEscapeHTML(choiceLabel))+'</div>';
     }else{

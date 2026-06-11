@@ -719,7 +719,8 @@ button, input, select, textarea { font-family: inherit; }
 /* 회복력 중앙 오버레이 */
 .recovery-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:410; display:flex; align-items:center; justify-content:center; animation:fadeIn 0.3s ease; }
 .recovery-overlay.hidden { display:none; }
-.recovery-card { width:300px; padding:28px 24px; border:var(--border-w) dashed var(--ink); background:var(--bg-soft); border-radius:0; text-align:center; box-shadow:var(--shadow); animation:recoveryPopIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; opacity:0; }
+/* 세션468 §4k — 라운딩 코너 윈도우 (버튼도 10px 동반) */
+.recovery-card { width:300px; padding:28px 24px; border:var(--border-w) dashed var(--ink); background:var(--bg-soft); border-radius:20px; text-align:center; box-shadow:var(--shadow); animation:recoveryPopIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; opacity:0; }
 @keyframes recoveryPopIn {
   0%   { opacity:0; transform:scale(0.3); }
   60%  { opacity:1; transform:scale(1.08); }
@@ -730,9 +731,15 @@ button, input, select, textarea { font-family: inherit; }
 .recovery-card-desc { font-size:13px; color:#666; line-height:1.5; margin-bottom:20px; }
 /* v4 6/11 — 두 버튼 동일 위계, 가로 나란히 (SPEC-ui-hud §4d-3) */
 .recovery-btn-row { display:flex; gap:10px; }
-.recovery-card-btn { flex:1; display:block; padding:12px 8px; font-family:inherit; font-size:14px; font-weight:700; border-radius:0; cursor:pointer; transition:transform 0.05s, box-shadow 0.05s; background:var(--bg-card); color:var(--ink); border:var(--border-w) solid var(--ink); box-shadow:var(--shadow); }
+.recovery-card-btn { flex:1; display:block; padding:12px 8px; font-family:inherit; font-size:14px; font-weight:700; border-radius:10px; cursor:pointer; transition:transform 0.05s, box-shadow 0.05s; background:var(--bg-card); color:var(--ink); border:var(--border-w) solid var(--ink); box-shadow:var(--shadow); }
 .recovery-card-btn:hover { background:#f8f8f8; }
 .recovery-card-btn:active { transform:translate(2px,2px); box-shadow:var(--shadow-press); }
+/* 세션468 §4k — 다시 도전=하늘색+↺ / 다음 시나리오=노랑+→ */
+.recovery-card-btn.use { background:var(--acc-cyan,#63d8f1); }
+.recovery-card-btn.use:hover { background:var(--acc-cyan,#63d8f1); filter:brightness(1.05); }
+.recovery-card-btn.skip { background:var(--acc-yellow,#ffdb31); }
+.recovery-card-btn.skip:hover { background:var(--acc-yellow,#ffdb31); filter:brightness(1.05); }
+.rcb-ico { font-weight:800; font-size:16px; line-height:1; }
 .no-card-notice { margin-top:10px; padding:8px 12px; background:var(--bg-soft); border:var(--border-w) solid var(--ink); font-size:12px; color:var(--ink); }
 
 /* ===== 카드 독 (SPEC-card-per-choice §2d) — 우측 상시 컬렉션 ===== */
@@ -757,8 +764,9 @@ button, input, select, textarea { font-family: inherit; }
 /* 팝업 미리보기·비행 고스트용 미니 카드 (§2b 시각 유지) */
 .rail-card { background:var(--bg-card); border:2px solid var(--ink); border-radius:12px; box-shadow:3px 3px 0 var(--ink); padding:10px 12px; }
 @keyframes railPopIn { 0%{opacity:0;transform:scale(0.3);} 60%{opacity:1;transform:scale(1.12);} 100%{opacity:1;transform:scale(1);} }
-.rail-card-sub { font-size:10px; font-weight:700; letter-spacing:0.5px; margin-bottom:2px; color:var(--ink-soft); }
-.rail-card-name { font-size:14px; font-weight:700; line-height:1.3; }
+/* §4l — 인간중심 한 줄 인라인 (독 칩 dc-axis와 같은 결) */
+.rail-card-name { font-size:14px; font-weight:700; line-height:1.3; white-space:nowrap; overflow:hidden; }
+.rail-card-axis { font-weight:600; opacity:0.85; }
 .card-earn-popup { position:fixed; top:150px; right:176px; width:260px; background:var(--bg-card); border:2px solid var(--ink); border-radius:16px; box-shadow:4px 4px 0 var(--ink); padding:16px 18px; z-index:420; opacity:0; transform:translateX(24px); transition:opacity 0.25s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
 .card-earn-popup.show { opacity:1; transform:translateX(0); }
 /* §2c v2 — 컷 이미지 위 오버레이 모드: 문서 좌표(absolute), left/top은 JS */
@@ -13365,7 +13373,8 @@ var TEXTS = {
       "popup_choice_format": "「{label}」 선택",
       "popup_earn_format": "{cards} 획득!",
       "popup_desc_format": "「{label}」 선택으로 획득!",
-      "popup_btn_acquire": "확보!"
+      "popup_btn_acquire": "확보!",
+      "popup_title_format": "{cards} 확보!"
     },
     "scenario_result": {
       "no_card_notice": "이번엔 역량 카드를 받지 못했어요.",
@@ -17239,9 +17248,10 @@ function showRecoveryCardModal(scid){
       '<div class="recovery-card-title">'+_t('recovery.title','회복력')+'</div>'+
       '<div class="recovery-card-desc">'+(td.short||'낮은 결과에서 비어 있던 과정을 알아차리고 다시 세우는 힘')+'</div>'+
       // v4 6/11 — 두 버튼 동일 위계 (재시도 강조 제거, SPEC-ui-hud §4d-3)
+      // 세션468 §4k — 다시 도전=하늘색+↺ / 다음 시나리오=노랑+→ (색·아이콘으로 방향성만 구분)
       '<div class="recovery-btn-row">'+
-      '<button class="recovery-card-btn" id="recovery-use-btn">'+_t('recovery.btn_use','다시 도전')+'</button>'+
-      '<button class="recovery-card-btn" id="recovery-skip-btn">'+_t('recovery.btn_skip','다음 시나리오')+'</button>'+
+      '<button class="recovery-card-btn use" id="recovery-use-btn"><span class="rcb-ico">↺</span> '+_t('recovery.btn_use','다시 도전')+'</button>'+
+      '<button class="recovery-card-btn skip" id="recovery-skip-btn">'+_t('recovery.btn_skip','다음 시나리오')+' <span class="rcb-ico">→</span></button>'+
       '</div>'+
     '</div>';
     document.getElementById('recovery-use-btn').onclick=function(){
@@ -17562,14 +17572,14 @@ function railClear(){
   dockRender();
 }
 // 미니 카드 DOM — 팝업 미리보기·비행 고스트용 (§2b 시각 유지)
+// §4l — 인간중심은 독 칩과 같은 한 줄 인라인 ("중심잡기 주체성")
 function _railCardVisual(c){
   var el=document.createElement('div');
   el.className='rail-card';
   if(c.kind==='hc'){
     var am=_axisMeta(c.axis);
     el.style.background=am.color;
-    el.innerHTML='<div class="rail-card-sub" style="color:rgba(255,255,255,0.8);">'+_invEscapeHTML(c.axis)+'</div>'+
-      '<div class="rail-card-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>';
+    el.innerHTML='<div class="rail-card-name" style="color:#fff;"><span class="rail-card-axis">'+_invEscapeHTML(c.axis)+'</span> '+_invEscapeHTML(c.tag)+'</div>';
   }else{
     el.style.borderLeft='6px solid '+_cardColor(c.name);
     el.innerHTML='<div class="rail-card-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>';
@@ -17602,7 +17612,7 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
     var pop=document.createElement('div');
     pop.id='card-earn-popup';
     pop.className='card-earn-popup';
-    var h='<div class="cep-title">'+_invEscapeHTML(names.join(' · '))+'</div>';
+    var h='<div class="cep-title">'+_t('ui_messages.card_reward.popup_title_format','{cards} 확보!').replace('{cards}',_invEscapeHTML(names.join(' · ')))+'</div>';
     if(choiceLabel){
       h+='<div class="cep-desc">'+_t('ui_messages.card_reward.popup_desc_format','「{label}」 선택으로 획득!').replace('{label}',_invEscapeHTML(choiceLabel))+'</div>';
     }else{
