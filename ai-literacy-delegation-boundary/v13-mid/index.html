@@ -511,11 +511,11 @@ button, input, select, textarea { font-family: inherit; }
 .retro-title { position:fixed; inset:0; z-index:60; background:#0a0a0a; display:flex; align-items:center; justify-content:center; overflow-y:auto; }
 .rt-scanlines { position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(0deg, rgba(255,255,255,0.045) 0 1px, transparent 1px 4px); }
 .rt-inner { position:relative; text-align:center; padding:48px 24px; max-width:780px; }
-.rt-badge { display:inline-block; font-family:var(--font-pixel); font-size:13px; color:var(--acc-yellow); border:2px solid var(--acc-yellow); padding:4px 14px; margin-bottom:36px; letter-spacing:3px; }
+.rt-badge { display:inline-block; font-family:var(--font-pixel); font-size:13px; color:var(--acc-yellow); border:2px solid var(--acc-yellow); padding:7px 20px; margin-bottom:36px; letter-spacing:3px; } /* v10.1 — 박스 여백 업 */
 .rt-main { margin:0 0 26px; }
 .rt-line { display:block; font-family:var(--font-pixel); font-weight:400; line-height:1.18; letter-spacing:1px; opacity:0; transform:scale(0.25); }
-.rt-line1 { font-size:clamp(34px,5.2vw,56px); color:#fff; text-shadow:4px 4px 0 var(--acc-pink-deep); animation:rtPop 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.15s forwards; }
-.rt-line2 { font-size:clamp(42px,6.8vw,74px); color:var(--acc-yellow); text-shadow:5px 5px 0 var(--acc-pink-deep); margin-top:8px; animation:rtPop 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.38s forwards; }
+.rt-line1 { font-size:clamp(42px,6.6vw,72px); color:#fff; text-shadow:5px 5px 0 var(--acc-pink-deep); animation:rtPop 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.15s forwards; } /* v10.1 — 크기 업 */
+.rt-line2 { font-size:clamp(52px,8.4vw,94px); color:var(--acc-yellow); text-shadow:6px 6px 0 var(--acc-pink-deep); margin-top:10px; animation:rtPop 0.55s cubic-bezier(0.34,1.56,0.64,1) 0.38s forwards; }
 .rt-sub { display:flex; flex-direction:column; gap:7px; margin-bottom:30px; opacity:0; animation:rtFade 0.5s ease 0.85s forwards; }
 .rt-sub span { font-family:var(--font-pixel); font-size:clamp(15px,2vw,21px); color:var(--acc-cyan); letter-spacing:1px; }
 .rt-sub .rt-sub2 { color:#fff; }
@@ -13397,7 +13397,7 @@ var TEXTS = {
     }
   },
   "title_screen": {
-    "badge": "경기도 하이러닝",
+    "badge": "경기도 하이러닝 - AI 리터러시",
     "main_title_1": "내가 할까? 시킬까?",
     "main_title_2": "그것이 문제로다!",
     "sub_title_1": "AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가!",
