@@ -292,3 +292,17 @@
 - [x] (3) 결말 재시도 모달 — primary/secondary 차등 제거, [다시 도전] [다음 시나리오] 동일 스타일 가로 배치. texts.yaml·ui_texts.csv 동기(btn_use_sub 제거).
 - [x] (4) 검토 선택지 표기 R1~R3 → 1·2·3 (컷4 choice-num·컷5 chosen-title, 표시만).
 - [ ] 피터공 브라우저 확인 (확인 포인트: 팝업 리듬·레일 위치와 역량카드 버튼 겹침·비행 연출·재시도 모달 톤)
+
+### 논리정합 텍스트 보류 22건 정비 (6/11, 세션463)
+
+> 피터공 결정: "어긋나게 읽힐 수 있으면 전부 경로 맞춤 수정". `data/migrate_hold22.py`, 백업 `scenarios.yaml.before-hold22`. 빌드 887,570 bytes (린터 클린, 드리프트 0, 인코딩 클린).
+
+- [x] 공통 문구 돌려쓰기 회색지대 24곳 경로 맞춤 문구로 교체 (자기소개 6·모둠 3·진로 6·공부계획 9)
+- [x] 등급-톤 모순 2곳 — 어린왕자 A3R1·B1R3 cut6Feedback을 B등급 톤으로
+- [x] 카드 표기 불일치 — 어린왕자 A2R2 reportCardSummary를 domainCards와 일치 + 같은 결 A2R1·A2R3 덤 2건
+- [x] 내부 메모 — studyplan matchGroups C1R3 note의 C2 설명 정정
+- [x] 유지 판단 1건 — 어린왕자 C1R1 reportReflection (경로와 정합, 수정 안 함)
+- [x] yaml→CSV 재추출(scenarios_to_csv.py)→빌드→린터 3층 동기화
+- [x] 대조표 29행 `exports/검토_260611/정비결과_보류22_대조표.csv` + 구글 시트 + ~/Downloads 사본
+- [ ] 피터공 시트 검토 (이의 행만 "피터공 판단" 컬럼 메모 → 재정비)
+- [ ] 검토 통과 후 커밋
