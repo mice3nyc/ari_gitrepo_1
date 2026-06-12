@@ -444,7 +444,7 @@ button, input, select, textarea { font-family: inherit; }
 .rmap-row-header { display:flex; align-items:center; justify-content:space-between; margin:14px 0 2px; padding:5px 10px; border:2px solid var(--ink); background:var(--bg-soft); font-size:12.5px; font-weight:700; }
 .rmap-score { font-weight:600; color:var(--ink-mute); }
 .rmap-flex { display:flex; align-items:center; gap:10px; }
-.rmap-route { width:58%; flex:0 0 auto; }
+.rmap-route { width:74%; flex:0 0 auto; } /* §4e 비용 열 포함(viewBox 760) — 항로 영역 렌더 폭은 종전 58%와 동급 */
 .rmap-thumbs { display:flex; align-items:center; gap:8px; flex:1 1 auto; min-width:0; }
 .rmap-cut { width:62px; height:62px; flex:none; border:2.5px solid var(--ink); box-shadow:3px 3px 0 var(--ink); background:var(--bg-card); overflow:hidden; cursor:pointer; }
 .rmap-cut img { width:100%; height:100%; object-fit:cover; display:block; }
@@ -1750,7 +1750,7 @@ button,
 <div class="recovery-overlay hidden" id="recovery-overlay"></div>
 <button class="debug-toggle" onclick="toggleDebug()">디버그</button>
 <div class="debug-panel" id="debug-panel"></div>
-<div class="version" id="version-label">v1.3-mid-r35b</div>
+<div class="version" id="version-label">v1.3-mid-r36</div>
 
 <!-- Phase 8.10b — 레벨업 이벤트 팝업 (DECISIONS §10.11) -->
 <div id="levelup-modal" class="modal-overlay hidden">
@@ -1875,7 +1875,7 @@ var CONFIG={
   storageKey:'ai-literacy-delegation-boundary-v13-mid',
   eventLogKey:'ai-literacy-delegation-boundary-v13-mid-events',
   sessionIdKey:'ai-literacy-v13-mid-session-id',
-  version:'v1.3-mid-r35b',
+  version:'v1.3-mid-r36',
   scenarios:['selfintro','groupwork','eorinwangja','career','studyplan'],
   pointThresholds:{S:95,A:85,B:75,C:60,D:0},
   minResourceCost:1,
@@ -13440,7 +13440,11 @@ var TEXTS = {
       "col_direct": "직접",
       "col_partial": "부분 위임",
       "col_full": "전체 위임",
-      "legend": "작은 점 = 1차·2차 선택, 큰 원 = 검토(○ 1회 · ◎ 2회 · ◉ 3회) — 점을 잇는 선이 나의 항로, 기울기가 곧 패턴",
+      "legend": "작은 점 = 1차·2차 선택, 큰 원 = 검토(○ 1회 · ◎ 2회 · ◉ 3회) — 점을 잇는 선이 나의 항로, 기울기가 곧 패턴. 오른쪽 열 = 그 선택에 실제로 쓴 시간·에너지, AI 칩 = AI를 사용한 선택",
+      "col_cost": "쓴 비용 (시간·에너지)",
+      "col_ai": "AI",
+      "cost_time": "시간",
+      "cost_energy": "에너지",
       "btn_cuts": "5컷 보기",
       "beat1": "1차 선택",
       "beat2": "2차 선택",
@@ -13755,6 +13759,78 @@ var MICRO_OFFSETS = {
     "C1": 1,
     "C2": 0,
     "C3": 0
+  }
+};
+var AI_FLAGS = {
+  "selfintro": {
+    "A": false,
+    "B": true,
+    "C": true,
+    "A1": false,
+    "A2": false,
+    "A3": true,
+    "B1": true,
+    "B2": true,
+    "B3": true,
+    "C1": true,
+    "C2": true,
+    "C3": true
+  },
+  "groupwork": {
+    "A": false,
+    "B": true,
+    "C": false,
+    "A1": false,
+    "A2": false,
+    "A3": false,
+    "B1": true,
+    "B2": true,
+    "B3": true,
+    "C1": false,
+    "C2": false,
+    "C3": false
+  },
+  "eorinwangja": {
+    "A": false,
+    "B": true,
+    "C": false,
+    "A1": false,
+    "A2": false,
+    "A3": false,
+    "B1": true,
+    "B2": false,
+    "B3": true,
+    "C1": true,
+    "C2": false,
+    "C3": false
+  },
+  "career": {
+    "A": false,
+    "B": true,
+    "C": false,
+    "A1": false,
+    "A2": false,
+    "A3": false,
+    "B1": true,
+    "B2": true,
+    "B3": true,
+    "C1": false,
+    "C2": false,
+    "C3": false
+  },
+  "studyplan": {
+    "A": false,
+    "B": true,
+    "C": false,
+    "A1": false,
+    "A2": false,
+    "A3": false,
+    "B1": true,
+    "B2": true,
+    "B3": true,
+    "C1": false,
+    "C2": false,
+    "C3": false
   }
 };
 // =====================================================
@@ -16185,7 +16261,23 @@ function _renderMiniCircleMeter(value, label){
 // 행=시나리오. 행 안 세 비트(1차 선택→2차 선택→검토)가 마이크로 항로.
 // 1차 x=tier1 칸(A직접/B부분/C전체), 2차 x=tier1 칸+MICRO_OFFSETS 보정(-1직접쪽/0유지/+1위임쪽), 검토=2차와 같은 x에 ○◎◉.
 // 행 오른쪽 대표 컷 2장(1차·검토 장면) + "5컷 보기" 펼침. 인쇄는 펼침 고정(11-print.css).
-var _RMAP_COLX={A:100,B:280,C:460}, _RMAP_OFFPX=70, _RMAP_W=560, _RMAP_ROWH=96;
+// §4e R3.6 — 항로 오른쪽 고정 열: 선택별 실비용(시간·에너지) + AI 칩. viewBox만 760으로 넓히고 항로 영역(0~560)은 무변
+var _RMAP_COLX={A:100,B:280,C:460}, _RMAP_OFFPX=70, _RMAP_W=560, _RMAP_VBW=760, _RMAP_ROWH=96;
+var _RMAP_SEPX=565, _RMAP_COSTX=580, _RMAP_AIX=720;
+// history 행의 discounts(§3a R2)에서 단계별 실지불 비용 합산. R2 이전 옛 세이브는 null(비용 열 생략)
+function _rmapCosts(r){
+  var d=r.discounts;if(!d||!d.length)return null;
+  var m={tier1:null,tier2:null,review:null};
+  for(var i=0;i<d.length;i++){
+    var st=d[i].stage;if(!(st in m))continue;
+    if(!m[st])m[st]={time:0,energy:0};
+    m[st].time+=d[i].time||0;m[st].energy+=d[i].energy||0;
+  }
+  return m;
+}
+function _rmapAiFlag(scid,choiceId){
+  return typeof AI_FLAGS!=='undefined'&&AI_FLAGS[scid]&&AI_FLAGS[scid][choiceId]===true;
+}
 function _rmapBeatXs(r){
   var x1=_RMAP_COLX[r.tier1];if(x1===undefined)x1=_RMAP_COLX.B;
   var off=0;
@@ -16194,19 +16286,39 @@ function _rmapBeatXs(r){
   return [x1,x2,x2]; // 검토는 2차와 같은 가로 위치 (검토는 위임 스펙트럼 축이 아님)
 }
 function _rmapHeaderSvg(M,_esc){
-  var s='<svg viewBox="0 0 '+_RMAP_W+' 30" style="width:100%;height:auto;display:block;">';
+  var s='<svg viewBox="0 0 '+_RMAP_VBW+' 30" style="width:100%;height:auto;display:block;">';
   var labels={A:M.col_direct||'직접',B:M.col_partial||'부분 위임',C:M.col_full||'전체 위임'};
   for(var k in _RMAP_COLX){
     s+='<text x="'+_RMAP_COLX[k]+'" y="14" text-anchor="middle" style="font-size:12px;font-weight:700;fill:var(--ink-soft);">'+_esc(labels[k])+'</text>';
     s+='<line x1="'+_RMAP_COLX[k]+'" y1="22" x2="'+_RMAP_COLX[k]+'" y2="30" style="stroke:var(--ink);stroke-opacity:0.25;stroke-width:1.5;"/>';
   }
+  // §4e — 비용 열·AI 헤더
+  s+='<text x="'+_RMAP_COSTX+'" y="14" text-anchor="start" style="font-size:11px;font-weight:700;fill:var(--ink-soft);">'+_esc(M.col_cost||'쓴 비용 (시간·에너지)')+'</text>';
+  s+='<text x="'+_RMAP_AIX+'" y="14" text-anchor="middle" style="font-size:11px;font-weight:700;fill:var(--ink-soft);">'+_esc(M.col_ai||'AI')+'</text>';
   return s+'</svg>';
 }
 // 행 SVG — entryX/exitX가 있으면 행 경계 통과선으로 위아래 행과 이어진 항로
-function _rmapRowSvg(r,xs,entryX,exitX,t2label,_esc){
+function _rmapRowSvg(r,xs,entryX,exitX,t2label,_esc,M){
+  M=M||{};
   var ROWH=_RMAP_ROWH;
   var ys=[Math.round(ROWH*0.18),Math.round(ROWH*0.52),Math.round(ROWH*0.84)];
-  var s='<svg viewBox="0 0 '+_RMAP_W+' '+ROWH+'" style="width:100%;height:auto;display:block;">';
+  var s='<svg viewBox="0 0 '+_RMAP_VBW+' '+ROWH+'" style="width:100%;height:auto;display:block;">';
+  // §4e — 항로/비용 열 구분 점선 + 비트별 실비용 + AI 칩 (1차·2차만)
+  s+='<line x1="'+_RMAP_SEPX+'" y1="0" x2="'+_RMAP_SEPX+'" y2="'+ROWH+'" style="stroke:var(--ink);stroke-opacity:0.10;stroke-width:1.5;stroke-dasharray:2,5;"/>';
+  var costs=_rmapCosts(r);
+  var stages=['tier1','tier2','review'];
+  var choiceIds=[r.tier1,r.tier2,null];
+  for(var b=0;b<3;b++){
+    if(costs&&costs[stages[b]]){
+      var ct=costs[stages[b]];
+      var txt=(M.cost_time||'시간')+' '+ct.time+' · '+(M.cost_energy||'에너지')+' '+ct.energy;
+      s+='<text x="'+_RMAP_COSTX+'" y="'+(ys[b]+4)+'" text-anchor="start" style="font-size:11px;fill:var(--ink-soft);">'+_esc(txt)+'</text>';
+    }
+    if(choiceIds[b]&&_rmapAiFlag(r.scenarioId,choiceIds[b])){
+      s+='<rect x="'+(_RMAP_AIX-15)+'" y="'+(ys[b]-9)+'" width="30" height="18" rx="9" style="fill:var(--ink);"/>';
+      s+='<text x="'+_RMAP_AIX+'" y="'+(ys[b]+4)+'" text-anchor="middle" style="font-size:10.5px;font-weight:700;fill:var(--bg-card);">'+_esc(M.col_ai||'AI')+'</text>';
+    }
+  }
   for(var k in _RMAP_COLX){
     s+='<line x1="'+_RMAP_COLX[k]+'" y1="0" x2="'+_RMAP_COLX[k]+'" y2="'+ROWH+'" style="stroke:var(--ink);stroke-opacity:0.10;stroke-width:1.5;stroke-dasharray:2,5;"/>';
   }
@@ -16264,7 +16376,7 @@ function _renderDelegationMap(hist){
     h+='<div class="rmap-row">';
     h+='<div class="rmap-row-header"><span>'+(n+1)+'. '+_esc(sc?sc.title:r.scenarioId)+'</span><span class="rmap-score">'+r.finalScore+'점 · '+_esc(grade)+'</span></div>';
     h+='<div class="rmap-flex">';
-    h+='<div class="rmap-route">'+_rmapRowSvg(r,beats[n],entry[n],exit[n],_rmapTier2Label(r),_esc)+'</div>';
+    h+='<div class="rmap-route">'+_rmapRowSvg(r,beats[n],entry[n],exit[n],_rmapTier2Label(r),_esc,M)+'</div>';
     // 대표 컷 2장 (1차 선택 장면 c2 · 검토 장면 c5) + 5컷 보기
     var c2src=getCutImageFor(r.scenarioId,r.leaf,2);
     var c5src=getCutImageFor(r.scenarioId,r.leaf,5);
@@ -17134,11 +17246,17 @@ function dbgShowReport(grade){
   var scoreByGrade={S:95,A:82,B:68,C:55,D:40};
   var score=scoreByGrade[grade]||50;
   var order=['selfintro','groupwork','eorinwangja','career','studyplan'];
+  var prevScid=gameState.currentScenarioId;
+  // §4e — 항로·비용 열·AI 칩이 다양하게 보이도록 시나리오별 경로 변화 (직접/AI 위임/사람 위임 섞임)
+  var dbgLeaf={selfintro:'A3R2',groupwork:'B2R2',eorinwangja:'C1R1',career:'B1R3',studyplan:'C3R1'};
   gameState.scenarioHistory=order.map(function(scid){
     var sc=SCENARIOS[scid]||{};
     var leafKeys=Object.keys(sc.finals||{});
-    var leaf=(leafKeys.indexOf('A1R3')>=0)?'A1R3':(leafKeys[0]||'A1R3');
+    var leaf=(leafKeys.indexOf(dbgLeaf[scid])>=0)?dbgLeaf[scid]:((leafKeys.indexOf('A1R3')>=0)?'A1R3':(leafKeys[0]||'A1R3'));
     var fin=(sc.finals||{})[leaf]||{};
+    // §4e — 비용 열 확인용 discounts 동봉 (실제 비용표 기반, getScenario()가 보도록 임시 전환)
+    gameState.currentScenarioId=scid;
+    var c1=getTier1Cost(leaf.charAt(0)),c2=getTier2Cost(leaf.substring(0,2)),cr=getReviewCost(leaf);
     return {
       scenarioId:scid,
       tier1:leaf.charAt(0),
@@ -17147,9 +17265,15 @@ function dbgShowReport(grade){
       leaf:leaf,
       finalScore:score,
       grade:grade,
-      item:fin.item||''
+      item:fin.item||'',
+      discounts:[
+        {stage:'tier1',time:c1.time||0,energy:c1.energy||0},
+        {stage:'tier2',time:c2.time||0,energy:c2.energy||0},
+        {stage:'review',time:cr.time||0,energy:cr.energy||0}
+      ]
     };
   });
+  gameState.currentScenarioId=prevScid;
   gameState.totalScore=score*5;
   gameState.clearedScenarios=order.slice();
   saveGame();

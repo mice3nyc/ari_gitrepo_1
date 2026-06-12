@@ -199,7 +199,7 @@
 .rmap-row-header { display:flex; align-items:center; justify-content:space-between; margin:14px 0 2px; padding:5px 10px; border:2px solid var(--ink); background:var(--bg-soft); font-size:12.5px; font-weight:700; }
 .rmap-score { font-weight:600; color:var(--ink-mute); }
 .rmap-flex { display:flex; align-items:center; gap:10px; }
-.rmap-route { width:58%; flex:0 0 auto; }
+.rmap-route { width:74%; flex:0 0 auto; } /* §4e 비용 열 포함(viewBox 760) — 항로 영역 렌더 폭은 종전 58%와 동급 */
 .rmap-thumbs { display:flex; align-items:center; gap:8px; flex:1 1 auto; min-width:0; }
 .rmap-cut { width:62px; height:62px; flex:none; border:2.5px solid var(--ink); box-shadow:3px 3px 0 var(--ink); background:var(--bg-card); overflow:hidden; cursor:pointer; }
 .rmap-cut img { width:100%; height:100%; object-fit:cover; display:block; }

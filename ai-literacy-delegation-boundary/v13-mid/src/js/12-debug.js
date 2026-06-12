@@ -237,11 +237,17 @@ function dbgShowReport(grade){
   var scoreByGrade={S:95,A:82,B:68,C:55,D:40};
   var score=scoreByGrade[grade]||50;
   var order=['selfintro','groupwork','eorinwangja','career','studyplan'];
+  var prevScid=gameState.currentScenarioId;
+  // §4e — 항로·비용 열·AI 칩이 다양하게 보이도록 시나리오별 경로 변화 (직접/AI 위임/사람 위임 섞임)
+  var dbgLeaf={selfintro:'A3R2',groupwork:'B2R2',eorinwangja:'C1R1',career:'B1R3',studyplan:'C3R1'};
   gameState.scenarioHistory=order.map(function(scid){
     var sc=SCENARIOS[scid]||{};
     var leafKeys=Object.keys(sc.finals||{});
-    var leaf=(leafKeys.indexOf('A1R3')>=0)?'A1R3':(leafKeys[0]||'A1R3');
+    var leaf=(leafKeys.indexOf(dbgLeaf[scid])>=0)?dbgLeaf[scid]:((leafKeys.indexOf('A1R3')>=0)?'A1R3':(leafKeys[0]||'A1R3'));
     var fin=(sc.finals||{})[leaf]||{};
+    // §4e — 비용 열 확인용 discounts 동봉 (실제 비용표 기반, getScenario()가 보도록 임시 전환)
+    gameState.currentScenarioId=scid;
+    var c1=getTier1Cost(leaf.charAt(0)),c2=getTier2Cost(leaf.substring(0,2)),cr=getReviewCost(leaf);
     return {
       scenarioId:scid,
       tier1:leaf.charAt(0),
@@ -250,9 +256,15 @@ function dbgShowReport(grade){
       leaf:leaf,
       finalScore:score,
       grade:grade,
-      item:fin.item||''
+      item:fin.item||'',
+      discounts:[
+        {stage:'tier1',time:c1.time||0,energy:c1.energy||0},
+        {stage:'tier2',time:c2.time||0,energy:c2.energy||0},
+        {stage:'review',time:cr.time||0,energy:cr.energy||0}
+      ]
     };
   });
+  gameState.currentScenarioId=prevScid;
   gameState.totalScore=score*5;
   gameState.clearedScenarios=order.slice();
   saveGame();

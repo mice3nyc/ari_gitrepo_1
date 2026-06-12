@@ -31,6 +31,7 @@ SCENARIOS_YAML = ROOT / "data" / "scenarios.yaml"
 CUTS_YAML = ROOT / "data" / "cuts.yaml"
 TEXTS_YAML = ROOT / "data" / "texts.yaml"
 MICRO_OFFSETS_YAML = ROOT / "data" / "micro_offsets.yaml"
+AI_FLAGS_YAML = ROOT / "data" / "ai_flags.yaml"
 OUTPUT = ROOT / "index.html"
 
 CSS_PLACEHOLDER = "/* __CSS_INJECT__ */"
@@ -89,10 +90,23 @@ def build_data_injection():
         if bad:
             sys.exit(f"micro_offsets.yaml 값 오류 [{scid}]: {bad} (허용: -1/0/1)")
 
+    # SPEC-report §4e-1 — 항로 AI 표시. tier1+tier2 id 전수 일치 검증
+    aiflags = load_yaml(AI_FLAGS_YAML) if AI_FLAGS_YAML.exists() else {}
+    for scid, sc in scenarios.items():
+        ids = sorted(t["id"] for t in (sc.get("tier1") or []))
+        ids += sorted(o["id"] for arr in (sc.get("tier2") or {}).values() for o in arr)
+        afids = sorted((aiflags.get(scid) or {}).keys())
+        if sorted(ids) != afids:
+            sys.exit(f"ai_flags.yaml 불일치 [{scid}]: choices {sorted(ids)} vs flags {afids}")
+        bad = [k for k, v in (aiflags.get(scid) or {}).items() if not isinstance(v, bool)]
+        if bad:
+            sys.exit(f"ai_flags.yaml 값 오류 [{scid}]: {bad} (허용: true/false)")
+
     scenarios_json = json.dumps(scenarios, ensure_ascii=False, indent=2)
     cuts_json = json.dumps(cut_default, ensure_ascii=False, indent=2)
     texts_json = json.dumps(texts or {}, ensure_ascii=False, indent=2)
     micro_json = json.dumps(micro or {}, ensure_ascii=False, indent=2)
+    aiflags_json = json.dumps(aiflags or {}, ensure_ascii=False, indent=2)
 
     inject = (
         "// =====================================================\n"
@@ -101,7 +115,8 @@ def build_data_injection():
         f"var SCENARIOS = {scenarios_json};\n"
         f"var CUT_IMAGES = {cuts_json};\n"
         f"var TEXTS = {texts_json};\n"
-        f"var MICRO_OFFSETS = {micro_json};"
+        f"var MICRO_OFFSETS = {micro_json};\n"
+        f"var AI_FLAGS = {aiflags_json};"
     )
 
     return inject, scenarios, cut_default, texts
