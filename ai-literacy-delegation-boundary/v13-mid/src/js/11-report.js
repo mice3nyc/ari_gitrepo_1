@@ -25,9 +25,10 @@ function _renderMiniCircleMeter(value, label){
 // 행=시나리오. 행 안 세 비트(1차 선택→2차 선택→검토)가 마이크로 항로.
 // 1차 x=tier1 칸(A직접/B부분/C전체), 2차 x=tier1 칸+MICRO_OFFSETS 보정(-1직접쪽/0유지/+1위임쪽), 검토=2차와 같은 x에 ○◎◉.
 // 행 오른쪽 대표 컷 2장(1차·검토 장면) + "5컷 보기" 펼침. 인쇄는 펼침 고정(11-print.css).
-// §4e R3.6 — 항로 오른쪽 고정 열: 선택별 실비용(시간·에너지) + AI 칩. viewBox만 760으로 넓히고 항로 영역(0~560)은 무변
-var _RMAP_COLX={A:100,B:280,C:460}, _RMAP_OFFPX=70, _RMAP_W=560, _RMAP_VBW=760, _RMAP_ROWH=96;
-var _RMAP_SEPX=565, _RMAP_COSTX=580, _RMAP_AIX=720;
+// §4e R3.6 — 항로 오른쪽 고정 열: 선택별 실비용(시간·에너지) + AI 칩
+// §4f R3.7 — 레이아웃 조정: 열 간격 축소(절약 폭을 비용 열에), viewBox 620(렌더 스케일 ↑), 시간·에너지 독립 열
+var _RMAP_COLX={A:70,B:185,C:300}, _RMAP_OFFPX=50, _RMAP_VBW=620, _RMAP_ROWH=96;
+var _RMAP_SEPX=375, _RMAP_TIMEX=430, _RMAP_ENERGYX=500, _RMAP_AIX=570;
 // history 행의 discounts(§3a R2)에서 단계별 실지불 비용 합산. R2 이전 옛 세이브는 null(비용 열 생략)
 function _rmapCosts(r){
   var d=r.discounts;if(!d||!d.length)return null;
@@ -53,21 +54,22 @@ function _rmapHeaderSvg(M,_esc){
   var s='<svg viewBox="0 0 '+_RMAP_VBW+' 30" style="width:100%;height:auto;display:block;">';
   var labels={A:M.col_direct||'직접',B:M.col_partial||'부분 위임',C:M.col_full||'전체 위임'};
   for(var k in _RMAP_COLX){
-    s+='<text x="'+_RMAP_COLX[k]+'" y="14" text-anchor="middle" style="font-size:12px;font-weight:700;fill:var(--ink-soft);">'+_esc(labels[k])+'</text>';
+    s+='<text x="'+_RMAP_COLX[k]+'" y="16" text-anchor="middle" style="font-size:13.5px;font-weight:700;fill:var(--ink);">'+_esc(labels[k])+'</text>';
     s+='<line x1="'+_RMAP_COLX[k]+'" y1="22" x2="'+_RMAP_COLX[k]+'" y2="30" style="stroke:var(--ink);stroke-opacity:0.25;stroke-width:1.5;"/>';
   }
-  // §4e — 비용 열·AI 헤더
-  s+='<text x="'+_RMAP_COSTX+'" y="14" text-anchor="start" style="font-size:11px;font-weight:700;fill:var(--ink-soft);">'+_esc(M.col_cost||'쓴 비용 (시간·에너지)')+'</text>';
-  s+='<text x="'+_RMAP_AIX+'" y="14" text-anchor="middle" style="font-size:11px;font-weight:700;fill:var(--ink-soft);">'+_esc(M.col_ai||'AI')+'</text>';
+  // §4f — 시간·에너지·AI 독립 열 헤더
+  s+='<text x="'+_RMAP_TIMEX+'" y="16" text-anchor="middle" style="font-size:13.5px;font-weight:700;fill:var(--ink);">'+_esc(M.cost_time||'시간')+'</text>';
+  s+='<text x="'+_RMAP_ENERGYX+'" y="16" text-anchor="middle" style="font-size:13.5px;font-weight:700;fill:var(--ink);">'+_esc(M.cost_energy||'에너지')+'</text>';
+  s+='<text x="'+_RMAP_AIX+'" y="16" text-anchor="middle" style="font-size:13.5px;font-weight:700;fill:var(--ink);">'+_esc(M.col_ai||'AI')+'</text>';
   return s+'</svg>';
 }
-// 행 SVG — entryX/exitX가 있으면 행 경계 통과선으로 위아래 행과 이어진 항로
-function _rmapRowSvg(r,xs,entryX,exitX,t2label,_esc,M){
+// 행 SVG — 행 안 세 비트(1차→2차→검토)만. 행 간 연결선은 §4f-5로 폐지(시나리오 간 선택은 서로 영향 없음)
+function _rmapRowSvg(r,xs,t2label,_esc,M){
   M=M||{};
   var ROWH=_RMAP_ROWH;
   var ys=[Math.round(ROWH*0.18),Math.round(ROWH*0.52),Math.round(ROWH*0.84)];
   var s='<svg viewBox="0 0 '+_RMAP_VBW+' '+ROWH+'" style="width:100%;height:auto;display:block;">';
-  // §4e — 항로/비용 열 구분 점선 + 비트별 실비용 + AI 칩 (1차·2차만)
+  // §4e·§4f — 항로/비용 열 구분 점선 + 비트별 시간·에너지 독립 열(숫자 크게) + AI 칩 (1차·2차만)
   s+='<line x1="'+_RMAP_SEPX+'" y1="0" x2="'+_RMAP_SEPX+'" y2="'+ROWH+'" style="stroke:var(--ink);stroke-opacity:0.10;stroke-width:1.5;stroke-dasharray:2,5;"/>';
   var costs=_rmapCosts(r);
   var stages=['tier1','tier2','review'];
@@ -75,31 +77,29 @@ function _rmapRowSvg(r,xs,entryX,exitX,t2label,_esc,M){
   for(var b=0;b<3;b++){
     if(costs&&costs[stages[b]]){
       var ct=costs[stages[b]];
-      var txt=(M.cost_time||'시간')+' '+ct.time+' · '+(M.cost_energy||'에너지')+' '+ct.energy;
-      s+='<text x="'+_RMAP_COSTX+'" y="'+(ys[b]+4)+'" text-anchor="start" style="font-size:11px;fill:var(--ink-soft);">'+_esc(txt)+'</text>';
+      s+='<text x="'+_RMAP_TIMEX+'" y="'+(ys[b]+6)+'" text-anchor="middle" style="font-size:18px;font-weight:700;fill:var(--ink);">'+ct.time+'</text>';
+      s+='<text x="'+_RMAP_ENERGYX+'" y="'+(ys[b]+6)+'" text-anchor="middle" style="font-size:18px;font-weight:700;fill:var(--ink);">'+ct.energy+'</text>';
     }
     if(choiceIds[b]&&_rmapAiFlag(r.scenarioId,choiceIds[b])){
-      s+='<rect x="'+(_RMAP_AIX-15)+'" y="'+(ys[b]-9)+'" width="30" height="18" rx="9" style="fill:var(--ink);"/>';
-      s+='<text x="'+_RMAP_AIX+'" y="'+(ys[b]+4)+'" text-anchor="middle" style="font-size:10.5px;font-weight:700;fill:var(--bg-card);">'+_esc(M.col_ai||'AI')+'</text>';
+      s+='<rect x="'+(_RMAP_AIX-16)+'" y="'+(ys[b]-10)+'" width="32" height="20" rx="10" style="fill:var(--ink);"/>';
+      s+='<text x="'+_RMAP_AIX+'" y="'+(ys[b]+4)+'" text-anchor="middle" style="font-size:11.5px;font-weight:700;fill:var(--bg-card);">'+_esc(M.col_ai||'AI')+'</text>';
     }
   }
   for(var k in _RMAP_COLX){
     s+='<line x1="'+_RMAP_COLX[k]+'" y1="0" x2="'+_RMAP_COLX[k]+'" y2="'+ROWH+'" style="stroke:var(--ink);stroke-opacity:0.10;stroke-width:1.5;stroke-dasharray:2,5;"/>';
   }
-  if(entryX!=null)s+='<polyline points="'+entryX+',0 '+xs[0]+','+ys[0]+'" style="fill:none;stroke:var(--ink);stroke-width:2.5;stroke-dasharray:7,5;"/>';
-  if(exitX!=null)s+='<polyline points="'+xs[2]+','+ys[2]+' '+exitX+','+ROWH+'" style="fill:none;stroke:var(--ink);stroke-width:2.5;stroke-dasharray:7,5;"/>';
   s+='<polyline points="'+xs[0]+','+ys[0]+' '+xs[1]+','+ys[1]+' '+xs[2]+','+ys[2]+'" style="fill:none;stroke:var(--ink);stroke-width:2.5;stroke-dasharray:7,5;"/>';
-  s+='<circle cx="'+xs[0]+'" cy="'+ys[0]+'" r="5" style="fill:var(--ink);"/>';
-  s+='<circle cx="'+xs[1]+'" cy="'+ys[1]+'" r="5" style="fill:var(--bg-card);stroke:var(--ink);stroke-width:2.5;"/>';
+  s+='<circle cx="'+xs[0]+'" cy="'+ys[0]+'" r="6" style="fill:var(--ink);"/>';
+  s+='<circle cx="'+xs[1]+'" cy="'+ys[1]+'" r="6" style="fill:var(--bg-card);stroke:var(--ink);stroke-width:2.5;"/>';
+  // §4f-6 — 검토 원: ○ 1회(빈 원) · ◐ 2회(왼쪽 반 찬 원) · ● 3회(꽉 찬 원)
   var rv=r.review||'R1';
-  s+='<circle cx="'+xs[2]+'" cy="'+ys[2]+'" r="10" style="fill:var(--bg-card);stroke:var(--ink);stroke-width:3;"/>';
-  if(rv==='R2')s+='<circle cx="'+xs[2]+'" cy="'+ys[2]+'" r="4" style="fill:var(--ink);"/>';
-  if(rv==='R3')s+='<circle cx="'+xs[2]+'" cy="'+ys[2]+'" r="6.5" style="fill:var(--ink);"/>';
+  s+='<circle cx="'+xs[2]+'" cy="'+ys[2]+'" r="11" style="fill:'+(rv==='R3'?'var(--ink)':'var(--bg-card)')+';stroke:var(--ink);stroke-width:3;"/>';
+  if(rv==='R2')s+='<path d="M '+xs[2]+' '+(ys[2]-11)+' A 11 11 0 0 0 '+xs[2]+' '+(ys[2]+11)+' Z" style="fill:var(--ink);"/>';
   if(t2label){
-    var lbl=t2label.length>24?t2label.slice(0,24)+'…':t2label;
-    var anchor=(xs[1]>_RMAP_W-180)?'end':'start';
-    var lx=(anchor==='start')?xs[1]+12:xs[1]-12;
-    s+='<text x="'+lx+'" y="'+(ys[1]+4)+'" text-anchor="'+anchor+'" style="font-size:10.5px;fill:var(--ink-soft);">'+_esc(lbl)+'</text>';
+    var lbl=t2label.length>22?t2label.slice(0,22)+'…':t2label;
+    var anchor=(xs[1]>215)?'end':'start';
+    var lx=(anchor==='start')?xs[1]+14:xs[1]-14;
+    s+='<text x="'+lx+'" y="'+(ys[1]+4)+'" text-anchor="'+anchor+'" style="font-size:12px;fill:var(--ink);">'+_esc(lbl)+'</text>';
   }
   return s+'</svg>';
 }
@@ -117,30 +117,23 @@ function _renderDelegationMap(hist){
   if(!hist||!hist.length)return '';
   var M=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.report&&TEXTS.report.map)||{};
   function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-  var ROWH=_RMAP_ROWH;
-  var ys=[Math.round(ROWH*0.18),Math.round(ROWH*0.52),Math.round(ROWH*0.84)];
-  // 행 경계 통과 x 미리 계산
-  var beats=[],entry=[],exit=[];
-  for(var i=0;i<hist.length;i++){beats.push(_rmapBeatXs(hist[i]));entry.push(null);exit.push(null);}
-  for(var j=0;j<hist.length-1;j++){
-    var below=ROWH-ys[2], above=ys[0];
-    var t=below/(below+above);
-    var cross=Math.round(beats[j][2]+(beats[j+1][0]-beats[j][2])*t);
-    exit[j]=cross;entry[j+1]=cross;
-  }
+  // §4f-5 — 행 간 연결선 폐지: 비트 x만 계산
+  var beats=[];
+  for(var i=0;i<hist.length;i++){beats.push(_rmapBeatXs(hist[i]));}
   var h='<div class="report-delegation-map" style="margin:0 0 20px;border:var(--border-w) solid var(--ink);background:var(--bg-card);box-shadow:var(--shadow);overflow:hidden;">';
   h+='<div style="display:flex;align-items:center;min-height:44px;padding:0 16px;background:var(--acc-yellow);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">'+_esc(M.title||'나의 위임 항로')+'</div>';
   h+='<div style="padding:10px 14px 4px;">';
-  h+='<div class="rmap-flex"><div class="rmap-route">'+_rmapHeaderSvg(M,_esc)+'</div><div style="flex:1;"></div></div>';
+  h+='<div class="rmap-flex"><div class="rmap-title-spacer"></div><div class="rmap-route">'+_rmapHeaderSvg(M,_esc)+'</div><div style="flex:1;"></div></div>';
   for(var n=0;n<hist.length;n++){
     var r=hist[n];
     var sc=SCENARIOS[r.scenarioId];
     var grade=r.grade||'D';
     var fin=(sc&&sc.finals)?sc.finals[r.leaf]:null;
     h+='<div class="rmap-row">';
-    h+='<div class="rmap-row-header"><span>'+(n+1)+'. '+_esc(sc?sc.title:r.scenarioId)+'</span><span class="rmap-score">'+r.finalScore+'점 · '+_esc(grade)+'</span></div>';
     h+='<div class="rmap-flex">';
-    h+='<div class="rmap-route">'+_rmapRowSvg(r,beats[n],entry[n],exit[n],_rmapTier2Label(r),_esc,M)+'</div>';
+    // §4f-1 — 시나리오 제목 = 좌측 행 전체 높이 블록 (점수·등급 동반)
+    h+='<div class="rmap-title"><span class="rmap-title-name">'+(n+1)+'. '+_esc(sc?sc.title:r.scenarioId)+'</span><span class="rmap-title-score">'+r.finalScore+'점 · '+_esc(grade)+'</span></div>';
+    h+='<div class="rmap-route">'+_rmapRowSvg(r,beats[n],_rmapTier2Label(r),_esc,M)+'</div>';
     // 대표 컷 2장 (1차 선택 장면 c2 · 검토 장면 c5) + 5컷 보기
     var c2src=getCutImageFor(r.scenarioId,r.leaf,2);
     var c5src=getCutImageFor(r.scenarioId,r.leaf,5);
