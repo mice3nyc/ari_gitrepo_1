@@ -7744,7 +7744,7 @@ studyplan:
   id: studyplan
   category: 5
   categoryName: 시험 공부
-  title: 시험 2주 전 — 공부를 어떻게
+  title: 시험공부 어떻게
   version: v1
   learningMessage: 내가 뭘 모르는지 알아차리는 순간부터 공부 계획은 내 것이 된다.
   aiSuitability: mid

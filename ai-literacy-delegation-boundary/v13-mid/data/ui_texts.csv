@@ -118,11 +118,11 @@ report,report.stat_labels.level,최종 레벨
 report,report.stat_labels.delegation,선택
 report,report.stat_labels.knowledge,능력
 report,report.map.title,나의 위임 항로
-report,report.map.col_direct,직접
+report,report.map.col_direct,내가 직접
 report,report.map.col_partial,부분 위임
 report,report.map.col_full,전체 위임
-report,report.map.legend,"작은 점 = 1차·2차 선택, 큰 원 = 검토(○ 1회 · ◐ 2회 · ● 3회) — 점을 잇는 선이 그 시나리오 안의 항로. 오른쪽 열 = 그 선택에 실제로 쓴 시간·에너지, AI 칩 = AI를 사용한 선택"
 report,report.map.col_ai,AI
+report,report.map.col_score,점수
 report,report.map.cost_time,시간
 report,report.map.cost_energy,에너지
 report,report.map.btn_cuts,5컷 보기

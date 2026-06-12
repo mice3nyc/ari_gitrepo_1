@@ -196,11 +196,9 @@
 }
 
 /* §4d R3.5 — 위임 항로 v2: 마이크로 항로 + 대표 컷 + 펼침 (report-comic 대체) */
-.rmap-row { margin:14px 0 0; }
-.rmap-title { flex:0 0 112px; align-self:stretch; display:flex; flex-direction:column; justify-content:center; gap:5px; padding:8px 10px; border:2px solid var(--ink); background:var(--bg-soft); } /* §4f-1 좌측 행 전체 높이 제목 블록 */
-.rmap-title-name { font-size:14px; font-weight:700; line-height:1.35; word-break:keep-all; }
-.rmap-title-score { font-size:12.5px; font-weight:600; color:var(--ink-mute); }
-.rmap-title-spacer { flex:0 0 112px; }
+.rmap-row { margin:10px 0 0; padding-top:8px; border-top:1.5px solid var(--ink); } /* §4g-5 시나리오 사이 가로 구분선 */
+.rmap-title { flex:0 0 150px; font-size:15px; font-weight:700; white-space:nowrap; } /* §4g-6 번호+제목만, 박스 없음 */
+.rmap-title-spacer { flex:0 0 150px; }
 .rmap-flex { display:flex; align-items:center; gap:10px; }
 .rmap-route { width:74%; flex:0 0 auto; } /* §4e 비용 열 포함(viewBox 760) — 항로 영역 렌더 폭은 종전 58%와 동급 */
 .rmap-thumbs { display:flex; align-items:center; gap:8px; flex:1 1 auto; min-width:0; }
@@ -214,4 +212,4 @@
 .rmap-cut-lg { aspect-ratio:1/1; border:2.5px solid var(--ink); box-shadow:3px 3px 0 var(--ink); background:var(--bg-card); overflow:hidden; }
 .rmap-cut-lg img { width:100%; height:100%; object-fit:cover; display:block; }
 .rmap-cap { font-size:11px; color:var(--ink-mute); line-height:1.45; margin-top:5px; word-break:keep-all; }
-@media (max-width:760px){ .rmap-flex { flex-wrap:wrap; } .rmap-route { width:100%; } .rmap-strip { grid-template-columns:repeat(3,1fr); } .rmap-title { flex:1 1 100%; flex-direction:row; justify-content:space-between; align-items:center; } .rmap-title-spacer { display:none; } }
+@media (max-width:760px){ .rmap-flex { flex-wrap:wrap; } .rmap-route { width:100%; } .rmap-strip { grid-template-columns:repeat(3,1fr); } .rmap-title { flex:1 1 100%; } .rmap-title-spacer { display:none; } }

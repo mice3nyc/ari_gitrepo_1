@@ -27,8 +27,11 @@ function _renderMiniCircleMeter(value, label){
 // 행 오른쪽 대표 컷 2장(1차·검토 장면) + "5컷 보기" 펼침. 인쇄는 펼침 고정(11-print.css).
 // §4e R3.6 — 항로 오른쪽 고정 열: 선택별 실비용(시간·에너지) + AI 칩
 // §4f R3.7 — 레이아웃 조정: 열 간격 축소(절약 폭을 비용 열에), viewBox 620(렌더 스케일 ↑), 시간·에너지 독립 열
-var _RMAP_COLX={A:70,B:185,C:300}, _RMAP_OFFPX=50, _RMAP_VBW=620, _RMAP_ROWH=96;
-var _RMAP_SEPX=375, _RMAP_TIMEX=430, _RMAP_ENERGYX=500, _RMAP_AIX=570;
+// §4g R3.8 — CMY 컬러코딩(내가 직접 C/부분 M/전체 Y) + 선택 원=위임 정도(꽉/반/빈, r9 동일) + 전 비트 라벨 + 점수 열 + 열 점선
+var _RMAP_COLX={A:60,B:165,C:270}, _RMAP_OFFPX=45, _RMAP_VBW=640, _RMAP_ROWH=96;
+var _RMAP_SEPX=352, _RMAP_TIMEX=388, _RMAP_ENERGYX=448, _RMAP_SCOREX=512, _RMAP_AIX=585;
+var _RMAP_COLDIV=[418,478,548];
+var _RMAP_CMY={A:'#00a3d4',B:'#e6007e',C:'#eab000'};
 // history 행의 discounts(§3a R2)에서 단계별 실지불 비용 합산. R2 이전 옛 세이브는 null(비용 열 생략)
 function _rmapCosts(r){
   var d=r.discounts;if(!d||!d.length)return null;
@@ -52,62 +55,88 @@ function _rmapBeatXs(r){
 }
 function _rmapHeaderSvg(M,_esc){
   var s='<svg viewBox="0 0 '+_RMAP_VBW+' 30" style="width:100%;height:auto;display:block;">';
-  var labels={A:M.col_direct||'직접',B:M.col_partial||'부분 위임',C:M.col_full||'전체 위임'};
+  var labels={A:M.col_direct||'내가 직접',B:M.col_partial||'부분 위임',C:M.col_full||'전체 위임'};
   for(var k in _RMAP_COLX){
-    s+='<text x="'+_RMAP_COLX[k]+'" y="16" text-anchor="middle" style="font-size:13.5px;font-weight:700;fill:var(--ink);">'+_esc(labels[k])+'</text>';
-    s+='<line x1="'+_RMAP_COLX[k]+'" y1="22" x2="'+_RMAP_COLX[k]+'" y2="30" style="stroke:var(--ink);stroke-opacity:0.25;stroke-width:1.5;"/>';
+    s+='<text x="'+_RMAP_COLX[k]+'" y="16" text-anchor="middle" style="font-size:13.5px;font-weight:700;fill:'+_RMAP_CMY[k]+';">'+_esc(labels[k])+'</text>';
+    s+='<line x1="'+_RMAP_COLX[k]+'" y1="22" x2="'+_RMAP_COLX[k]+'" y2="30" style="stroke:'+_RMAP_CMY[k]+';stroke-opacity:0.6;stroke-width:1.5;"/>';
   }
-  // §4f — 시간·에너지·AI 독립 열 헤더
+  // §4f·§4g — 시간·에너지·점수·AI 열 헤더
   s+='<text x="'+_RMAP_TIMEX+'" y="16" text-anchor="middle" style="font-size:13.5px;font-weight:700;fill:var(--ink);">'+_esc(M.cost_time||'시간')+'</text>';
   s+='<text x="'+_RMAP_ENERGYX+'" y="16" text-anchor="middle" style="font-size:13.5px;font-weight:700;fill:var(--ink);">'+_esc(M.cost_energy||'에너지')+'</text>';
+  s+='<text x="'+_RMAP_SCOREX+'" y="16" text-anchor="middle" style="font-size:13.5px;font-weight:700;fill:var(--ink);">'+_esc(M.col_score||'점수')+'</text>';
   s+='<text x="'+_RMAP_AIX+'" y="16" text-anchor="middle" style="font-size:13.5px;font-weight:700;fill:var(--ink);">'+_esc(M.col_ai||'AI')+'</text>';
   return s+'</svg>';
 }
-// 행 SVG — 행 안 세 비트(1차→2차→검토)만. 행 간 연결선은 §4f-5로 폐지(시나리오 간 선택은 서로 영향 없음)
-function _rmapRowSvg(r,xs,t2label,_esc,M){
+// §4g — 선택 원: 위임 정도 = 채움 (내가 직접=꽉 / 부분=왼쪽 반 / 전체=빈), r 동일, 갈래 색
+function _rmapChoiceCircle(x,y,cat){
+  var col=_RMAP_CMY[cat]||'var(--ink)';
+  var s='<circle cx="'+x+'" cy="'+y+'" r="9" style="fill:'+(cat==='A'?col:'var(--bg-card)')+';stroke:'+col+';stroke-width:2.5;"/>';
+  if(cat==='B')s+='<path d="M '+x+' '+(y-9)+' A 9 9 0 0 0 '+x+' '+(y+9)+' Z" style="fill:'+col+';"/>';
+  return s;
+}
+// 행 SVG — 행 안 세 비트(1차→2차→검토). 행 간 연결선은 §4f-5로 폐지(시나리오 간 선택은 서로 영향 없음)
+function _rmapRowSvg(r,xs,labels,_esc,M){
   M=M||{};
   var ROWH=_RMAP_ROWH;
   var ys=[Math.round(ROWH*0.18),Math.round(ROWH*0.52),Math.round(ROWH*0.84)];
   var s='<svg viewBox="0 0 '+_RMAP_VBW+' '+ROWH+'" style="width:100%;height:auto;display:block;">';
-  // §4e·§4f — 항로/비용 열 구분 점선 + 비트별 시간·에너지 독립 열(숫자 크게) + AI 칩 (1차·2차만)
-  s+='<line x1="'+_RMAP_SEPX+'" y1="0" x2="'+_RMAP_SEPX+'" y2="'+ROWH+'" style="stroke:var(--ink);stroke-opacity:0.10;stroke-width:1.5;stroke-dasharray:2,5;"/>';
+  // §4g — 위임 열 점선(갈래 색) + 비용·점수·AI 열 구분 점선
+  for(var k in _RMAP_COLX){
+    s+='<line x1="'+_RMAP_COLX[k]+'" y1="0" x2="'+_RMAP_COLX[k]+'" y2="'+ROWH+'" style="stroke:'+_RMAP_CMY[k]+';stroke-opacity:0.30;stroke-width:1.5;stroke-dasharray:2,5;"/>';
+  }
+  var divs=[_RMAP_SEPX].concat(_RMAP_COLDIV);
+  for(var dv=0;dv<divs.length;dv++){
+    s+='<line x1="'+divs[dv]+'" y1="0" x2="'+divs[dv]+'" y2="'+ROWH+'" style="stroke:var(--ink);stroke-opacity:0.15;stroke-width:1.5;stroke-dasharray:2,5;"/>';
+  }
+  // §4e·§4g — 비트별 실비용(0은 숨김)·점수·AI 칩
   var costs=_rmapCosts(r);
+  var sc=SCENARIOS[r.scenarioId];
+  var pts=[
+    sc?getTier1Points(sc,r.tier1).points:0,
+    sc?getTier2Points(sc,r.tier2).points:0,
+    sc?getReviewPoints(sc,r.review).points:0
+  ];
   var stages=['tier1','tier2','review'];
   var choiceIds=[r.tier1,r.tier2,null];
+  var numStyle='font-size:18px;font-weight:700;fill:var(--ink)';
   for(var b=0;b<3;b++){
     if(costs&&costs[stages[b]]){
       var ct=costs[stages[b]];
-      s+='<text x="'+_RMAP_TIMEX+'" y="'+(ys[b]+6)+'" text-anchor="middle" style="font-size:18px;font-weight:700;fill:var(--ink);">'+ct.time+'</text>';
-      s+='<text x="'+_RMAP_ENERGYX+'" y="'+(ys[b]+6)+'" text-anchor="middle" style="font-size:18px;font-weight:700;fill:var(--ink);">'+ct.energy+'</text>';
+      if(ct.time>0)s+='<text x="'+_RMAP_TIMEX+'" y="'+(ys[b]+6)+'" text-anchor="middle" style="'+numStyle+';">'+ct.time+'</text>';
+      if(ct.energy>0)s+='<text x="'+_RMAP_ENERGYX+'" y="'+(ys[b]+6)+'" text-anchor="middle" style="'+numStyle+';">'+ct.energy+'</text>';
     }
+    s+='<text x="'+_RMAP_SCOREX+'" y="'+(ys[b]+6)+'" text-anchor="middle" style="'+numStyle+';">'+pts[b]+'</text>';
     if(choiceIds[b]&&_rmapAiFlag(r.scenarioId,choiceIds[b])){
       s+='<rect x="'+(_RMAP_AIX-16)+'" y="'+(ys[b]-10)+'" width="32" height="20" rx="10" style="fill:var(--ink);"/>';
       s+='<text x="'+_RMAP_AIX+'" y="'+(ys[b]+4)+'" text-anchor="middle" style="font-size:11.5px;font-weight:700;fill:var(--bg-card);">'+_esc(M.col_ai||'AI')+'</text>';
     }
   }
-  for(var k in _RMAP_COLX){
-    s+='<line x1="'+_RMAP_COLX[k]+'" y1="0" x2="'+_RMAP_COLX[k]+'" y2="'+ROWH+'" style="stroke:var(--ink);stroke-opacity:0.10;stroke-width:1.5;stroke-dasharray:2,5;"/>';
-  }
   s+='<polyline points="'+xs[0]+','+ys[0]+' '+xs[1]+','+ys[1]+' '+xs[2]+','+ys[2]+'" style="fill:none;stroke:var(--ink);stroke-width:2.5;stroke-dasharray:7,5;"/>';
-  s+='<circle cx="'+xs[0]+'" cy="'+ys[0]+'" r="6" style="fill:var(--ink);"/>';
-  s+='<circle cx="'+xs[1]+'" cy="'+ys[1]+'" r="6" style="fill:var(--bg-card);stroke:var(--ink);stroke-width:2.5;"/>';
-  // §4f-6 — 검토 원: ○ 1회(빈 원) · ◐ 2회(왼쪽 반 찬 원) · ● 3회(꽉 찬 원)
+  // §4g — 1차·2차 선택 원 = 갈래(tier1)의 위임 정도·색
+  s+=_rmapChoiceCircle(xs[0],ys[0],r.tier1);
+  s+=_rmapChoiceCircle(xs[1],ys[1],r.tier1);
+  // §4f-6·§4g — 검토 원: 채움 = 검토 횟수 (○ 1회 · ◐ 2회 · ● 3회), r9 동일, ink
   var rv=r.review||'R1';
-  s+='<circle cx="'+xs[2]+'" cy="'+ys[2]+'" r="11" style="fill:'+(rv==='R3'?'var(--ink)':'var(--bg-card)')+';stroke:var(--ink);stroke-width:3;"/>';
-  if(rv==='R2')s+='<path d="M '+xs[2]+' '+(ys[2]-11)+' A 11 11 0 0 0 '+xs[2]+' '+(ys[2]+11)+' Z" style="fill:var(--ink);"/>';
-  if(t2label){
-    var lbl=t2label.length>22?t2label.slice(0,22)+'…':t2label;
-    var anchor=(xs[1]>215)?'end':'start';
-    var lx=(anchor==='start')?xs[1]+14:xs[1]-14;
-    s+='<text x="'+lx+'" y="'+(ys[1]+4)+'" text-anchor="'+anchor+'" style="font-size:12px;fill:var(--ink);">'+_esc(lbl)+'</text>';
+  s+='<circle cx="'+xs[2]+'" cy="'+ys[2]+'" r="9" style="fill:'+(rv==='R3'?'var(--ink)':'var(--bg-card)')+';stroke:var(--ink);stroke-width:2.5;"/>';
+  if(rv==='R2')s+='<path d="M '+xs[2]+' '+(ys[2]-9)+' A 9 9 0 0 0 '+xs[2]+' '+(ys[2]+9)+' Z" style="fill:var(--ink);"/>';
+  // §4g-2 — 전 비트 선택 텍스트 (1차·2차·검토)
+  for(var lb=0;lb<3;lb++){
+    var lbl=labels[lb]||'';if(!lbl)continue;
+    if(lbl.length>20)lbl=lbl.slice(0,20)+'…';
+    var anchor=(xs[lb]>200)?'end':'start';
+    var lx=(anchor==='start')?xs[lb]+15:xs[lb]-15;
+    s+='<text x="'+lx+'" y="'+(ys[lb]+4)+'" text-anchor="'+anchor+'" style="font-size:12px;fill:var(--ink);">'+_esc(lbl)+'</text>';
   }
   return s+'</svg>';
 }
-function _rmapTier2Label(r){
-  var sc=SCENARIOS[r.scenarioId];if(!sc)return '';
-  var arr=(sc.tier2||{})[r.tier1]||[];
-  for(var i=0;i<arr.length;i++){if(arr[i].id===r.tier2)return arr[i].label||'';}
-  return '';
+// 비트별 선택 텍스트: 1차·2차·검토 라벨 (§4g-2)
+function _rmapBeatLabels(r){
+  var sc=SCENARIOS[r.scenarioId];if(!sc)return ['','',''];
+  var t1=getTier1Points(sc,r.tier1).label||'';
+  var t2=getTier2Points(sc,r.tier2).label||'';
+  var rvObj=getReviewPoints(sc,r.review);
+  var rv=rvObj.label||(r.review?('검토 '+String(r.review).replace('R','')+'회'):'');
+  return [t1,t2,rv];
 }
 function _rmapToggle(i){
   var el=document.getElementById('rmapExp'+i);
@@ -127,19 +156,16 @@ function _renderDelegationMap(hist){
   for(var n=0;n<hist.length;n++){
     var r=hist[n];
     var sc=SCENARIOS[r.scenarioId];
-    var grade=r.grade||'D';
     var fin=(sc&&sc.finals)?sc.finals[r.leaf]:null;
     h+='<div class="rmap-row">';
     h+='<div class="rmap-flex">';
-    // §4f-1 — 시나리오 제목 = 좌측 행 전체 높이 블록 (점수·등급 동반)
-    h+='<div class="rmap-title"><span class="rmap-title-name">'+(n+1)+'. '+_esc(sc?sc.title:r.scenarioId)+'</span><span class="rmap-title-score">'+r.finalScore+'점 · '+_esc(grade)+'</span></div>';
-    h+='<div class="rmap-route">'+_rmapRowSvg(r,beats[n],_rmapTier2Label(r),_esc,M)+'</div>';
-    // 대표 컷 2장 (1차 선택 장면 c2 · 검토 장면 c5) + 5컷 보기
+    // §4g-6 — 시나리오 제목 = 번호+제목만, 박스 없이, 줄바꿈 없음
+    h+='<div class="rmap-title">'+(n+1)+'. '+_esc(sc?sc.title:r.scenarioId)+'</div>';
+    h+='<div class="rmap-route">'+_rmapRowSvg(r,beats[n],_rmapBeatLabels(r),_esc,M)+'</div>';
+    // §4g-9 — 대표 컷 1장 (1차 선택 장면 c2) + 5컷 보기
     var c2src=getCutImageFor(r.scenarioId,r.leaf,2);
-    var c5src=getCutImageFor(r.scenarioId,r.leaf,5);
     h+='<div class="rmap-thumbs no-print">';
     if(c2src)h+='<div class="rmap-cut" onclick="_rmapToggle('+n+')"><img src="'+c2src+'" alt="" onerror="this.style.display=\'none\'"></div>';
-    if(c5src)h+='<div class="rmap-cut" onclick="_rmapToggle('+n+')"><img src="'+c5src+'" alt="" onerror="this.style.display=\'none\'"></div>';
     h+='<div class="rmap-more" onclick="_rmapToggle('+n+')">'+_esc(M.btn_cuts||'5컷 보기')+'</div>';
     h+='</div>';
     h+='</div>';
@@ -163,7 +189,7 @@ function _renderDelegationMap(hist){
     h+='</div>';
   }
   h+='</div>';
-  h+='<div style="padding:0 16px 12px;font-size:12px;color:var(--ink-soft);">'+_esc(M.legend||'작은 점 = 1차·2차 선택, 큰 원 = 검토(○ 1회 · ◎ 2회 · ◉ 3회) — 점을 잇는 선이 나의 항로, 기울기가 곧 패턴')+'</div>';
+  // §4g-10 — 하단 범례 폐지
   h+='</div>';
   return h;
 }
@@ -715,27 +741,7 @@ function _renderGrowthReport(hist, compType, inventory){
   if(patText)h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);">'+_esc(patText)+'</div>';
   h+='</div>';
 
-  // (6) 시나리오별 선택 경로 + 결과 메시지
-  h+='<div style="margin-bottom:20px;">';
-  h+='<div style="font-size:16px;font-weight:700;margin-bottom:12px;">'+_t('final_report.scenario_results_title','시나리오별 결과')+'</div>';
-  for(var j=0;j<hist.length;j++){
-    var r=hist[j];
-    var sc=SCENARIOS[r.scenarioId];
-    var fin=(sc&&sc.finals)?sc.finals[r.leaf]:null;
-    var scTitle=(sc&&sc.title)||r.scenarioId;
-    var info=_reportLeafInfo(r);
-    var feedback=fin?(fin.shortFeedback||fin.reportFeedback||fin.awareness||''):'';
-    var gradeColor=({S:'var(--acc-mint-deep)',A:'var(--acc-mint-deep)',B:'var(--ink)',C:'var(--acc-yellow-deep)',D:'var(--acc-pink-deep)'})[r.grade]||'var(--ink)';
-    h+='<div style="margin-bottom:10px;padding:12px 14px;border:2px solid var(--ink);background:var(--bg-card);box-shadow:3px 3px 0 var(--ink);">';
-    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">';
-    h+='<span style="font-size:14px;font-weight:700;">'+_esc(scTitle)+'</span>';
-    h+='<span style="font-size:14px;font-weight:700;color:'+gradeColor+';">'+r.finalScore+'점 · '+(r.grade||'')+'</span>';
-    h+='</div>';
-    h+='<div style="font-size:12px;color:var(--ink-soft);margin-bottom:4px;">'+_esc(info.t1)+' → '+_esc(info.t2)+' → '+_esc(info.rv)+'</div>';
-    if(feedback)h+='<div style="font-family:var(--font-hand);font-size:20px;line-height:1.5;color:var(--ink-mute);">'+feedback+'</div>';
-    h+='</div>';
-  }
-  h+='</div>';
+  // (6) 시나리오별 결과 섹션 — §4g-11 폐지 (위임 항로가 선택 경로·비용·점수를 전부 대체)
 
   // (9) 회복력 / 도전력
   var allCards=_reportAllCards();
