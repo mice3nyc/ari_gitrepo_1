@@ -154,8 +154,18 @@ PLAN-report.md(이 문서) + SPEC-report.md 신설. 1차 질문 묶음 발송.
 - [x] 제목 번호+제목만 15px nowrap(박스·점수 제거) / 대표 컷 c2 1장 / 하단 범례 삭제 / 시나리오별 결과 섹션 삭제(§4g-11)
 - [x] studyplan title "시험공부 어떻게" (scenarios.yaml, 전역) / texts.yaml col_direct·col_score 갱신·legend 폐기, ui_texts.csv 302 동기
 - [x] 빌드 933,205B + 린터 0 + R3.8 스모크 29체크 PASS(/tmp/r38_smoke.js) + R2 회귀 PASS + 인코딩 클린
-- [ ] 커밋·푸시 (v1.3-mid-r38) + 라이브 확인
-- [ ] 피터공 라이브 재확인
+- [x] 커밋 424063f 푸시 (v1.3-mid-r38) — 라이브 반영 확인 완료 (6/12)
+- [x] 피터공 라이브 재확인 → 수정 4건 → R3.9로
+
+### R3.9 — 숫자 축소 + 선택 텍스트 2줄 + 상단 정리 + 학습자 유형 전면 (피터공 6/12 라이브 피드백, 같은 날 구현)
+- [x] SPEC §4h 선문후코 (4건 + 좌표 재배치 viewBox 820)
+- [x] 비용·점수 숫자 on-screen 약 14px로 축소 (viewBox 640→820 확장, vb 18 유지 — 기존 18과 라벨 12 사이)
+- [x] 선택 텍스트 2줄 분리 (_rmapSplitLabel: 20자 초과 시 중간 공백에서 분리, 말줄임 폐지) + 위임 열 간격 확대 (COLX 70/230/390, ROWH 128)
+- [x] 상단 헤더 블록 제거: 안내문 + 4박스(총점·레벨·선택/능력 원 미터) + grade_note — 렌더만 제거, texts 키·_renderMiniCircleMeter 보존
+- [x] 학습자 유형 전면 배치: _judgePattern 추출 + _renderLearnerType 신설(유형 이름 + 본문), 하단 §18 박스의 패턴 블록 제거. pattern_names 5종 신설 + patterns 본문 재집필 — **문안은 아리공 초안, 피터공 검토 대기**
+- [x] 빌드 933,185B + 린터 0 + R3.9 스모크 35체크 PASS(/tmp/smoke_r39.js) + 인코딩 클린 + ui_texts.csv 307 동기
+- [ ] 커밋·푸시 (v1.3-mid-r39) + 라이브 확인
+- [ ] 피터공 라이브 재확인 + 학습자 유형 문안 판단
 
 ## 멀티창 규칙
 

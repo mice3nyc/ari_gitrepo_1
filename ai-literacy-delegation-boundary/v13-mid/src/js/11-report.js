@@ -28,9 +28,10 @@ function _renderMiniCircleMeter(value, label){
 // §4e R3.6 — 항로 오른쪽 고정 열: 선택별 실비용(시간·에너지) + AI 칩
 // §4f R3.7 — 레이아웃 조정: 열 간격 축소(절약 폭을 비용 열에), viewBox 620(렌더 스케일 ↑), 시간·에너지 독립 열
 // §4g R3.8 — CMY 컬러코딩(내가 직접 C/부분 M/전체 Y) + 선택 원=위임 정도(꽉/반/빈, r9 동일) + 전 비트 라벨 + 점수 열 + 열 점선
-var _RMAP_COLX={A:60,B:165,C:270}, _RMAP_OFFPX=45, _RMAP_VBW=640, _RMAP_ROWH=96;
-var _RMAP_SEPX=352, _RMAP_TIMEX=388, _RMAP_ENERGYX=448, _RMAP_SCOREX=512, _RMAP_AIX=585;
-var _RMAP_COLDIV=[418,478,548];
+// §4h R3.9 — viewBox 820 확장: 숫자 18vb=on-screen 약 14px(축소), 라벨 2줄 공간, 위임 열 간격 확대
+var _RMAP_COLX={A:70,B:230,C:390}, _RMAP_OFFPX=50, _RMAP_VBW=820, _RMAP_ROWH=128;
+var _RMAP_SEPX=625, _RMAP_TIMEX=660, _RMAP_ENERGYX=706, _RMAP_SCOREX=752, _RMAP_AIX=796;
+var _RMAP_COLDIV=[683,729,775];
 var _RMAP_CMY={A:'#00a3d4',B:'#e6007e',C:'#eab000'};
 // history 행의 discounts(§3a R2)에서 단계별 실지불 비용 합산. R2 이전 옛 세이브는 null(비용 열 생략)
 function _rmapCosts(r){
@@ -54,24 +55,34 @@ function _rmapBeatXs(r){
   return [x1,x2,x2]; // 검토는 2차와 같은 가로 위치 (검토는 위임 스펙트럼 축이 아님)
 }
 function _rmapHeaderSvg(M,_esc){
-  var s='<svg viewBox="0 0 '+_RMAP_VBW+' 30" style="width:100%;height:auto;display:block;">';
+  var s='<svg viewBox="0 0 '+_RMAP_VBW+' 38" style="width:100%;height:auto;display:block;">';
   var labels={A:M.col_direct||'내가 직접',B:M.col_partial||'부분 위임',C:M.col_full||'전체 위임'};
   for(var k in _RMAP_COLX){
-    s+='<text x="'+_RMAP_COLX[k]+'" y="16" text-anchor="middle" style="font-size:13.5px;font-weight:700;fill:'+_RMAP_CMY[k]+';">'+_esc(labels[k])+'</text>';
-    s+='<line x1="'+_RMAP_COLX[k]+'" y1="22" x2="'+_RMAP_COLX[k]+'" y2="30" style="stroke:'+_RMAP_CMY[k]+';stroke-opacity:0.6;stroke-width:1.5;"/>';
+    s+='<text x="'+_RMAP_COLX[k]+'" y="20" text-anchor="middle" style="font-size:17px;font-weight:700;fill:'+_RMAP_CMY[k]+';">'+_esc(labels[k])+'</text>';
+    s+='<line x1="'+_RMAP_COLX[k]+'" y1="28" x2="'+_RMAP_COLX[k]+'" y2="38" style="stroke:'+_RMAP_CMY[k]+';stroke-opacity:0.6;stroke-width:2;"/>';
   }
   // §4f·§4g — 시간·에너지·점수·AI 열 헤더
-  s+='<text x="'+_RMAP_TIMEX+'" y="16" text-anchor="middle" style="font-size:13.5px;font-weight:700;fill:var(--ink);">'+_esc(M.cost_time||'시간')+'</text>';
-  s+='<text x="'+_RMAP_ENERGYX+'" y="16" text-anchor="middle" style="font-size:13.5px;font-weight:700;fill:var(--ink);">'+_esc(M.cost_energy||'에너지')+'</text>';
-  s+='<text x="'+_RMAP_SCOREX+'" y="16" text-anchor="middle" style="font-size:13.5px;font-weight:700;fill:var(--ink);">'+_esc(M.col_score||'점수')+'</text>';
-  s+='<text x="'+_RMAP_AIX+'" y="16" text-anchor="middle" style="font-size:13.5px;font-weight:700;fill:var(--ink);">'+_esc(M.col_ai||'AI')+'</text>';
+  s+='<text x="'+_RMAP_TIMEX+'" y="20" text-anchor="middle" style="font-size:17px;font-weight:700;fill:var(--ink);">'+_esc(M.cost_time||'시간')+'</text>';
+  s+='<text x="'+_RMAP_ENERGYX+'" y="20" text-anchor="middle" style="font-size:17px;font-weight:700;fill:var(--ink);">'+_esc(M.cost_energy||'에너지')+'</text>';
+  s+='<text x="'+_RMAP_SCOREX+'" y="20" text-anchor="middle" style="font-size:17px;font-weight:700;fill:var(--ink);">'+_esc(M.col_score||'점수')+'</text>';
+  s+='<text x="'+_RMAP_AIX+'" y="20" text-anchor="middle" style="font-size:17px;font-weight:700;fill:var(--ink);">'+_esc(M.col_ai||'AI')+'</text>';
   return s+'</svg>';
+}
+// §4h-2 — 라벨 2줄 분리: 20자 초과 시 중간점에 가장 가까운 공백에서 분리 (공백 없으면 절반)
+function _rmapSplitLabel(lbl){
+  if(!lbl||lbl.length<=20)return [lbl];
+  var mid=Math.round(lbl.length/2),best=-1,bestDist=1e9;
+  for(var i=1;i<lbl.length-1;i++){
+    if(lbl[i]===' '&&Math.abs(i-mid)<bestDist){best=i;bestDist=Math.abs(i-mid);}
+  }
+  if(best<0)return [lbl.slice(0,mid),lbl.slice(mid)];
+  return [lbl.slice(0,best),lbl.slice(best+1)];
 }
 // §4g — 선택 원: 위임 정도 = 채움 (내가 직접=꽉 / 부분=왼쪽 반 / 전체=빈), r 동일, 갈래 색
 function _rmapChoiceCircle(x,y,cat){
   var col=_RMAP_CMY[cat]||'var(--ink)';
-  var s='<circle cx="'+x+'" cy="'+y+'" r="9" style="fill:'+(cat==='A'?col:'var(--bg-card)')+';stroke:'+col+';stroke-width:2.5;"/>';
-  if(cat==='B')s+='<path d="M '+x+' '+(y-9)+' A 9 9 0 0 0 '+x+' '+(y+9)+' Z" style="fill:'+col+';"/>';
+  var s='<circle cx="'+x+'" cy="'+y+'" r="11" style="fill:'+(cat==='A'?col:'var(--bg-card)')+';stroke:'+col+';stroke-width:3;"/>';
+  if(cat==='B')s+='<path d="M '+x+' '+(y-11)+' A 11 11 0 0 0 '+x+' '+(y+11)+' Z" style="fill:'+col+';"/>';
   return s;
 }
 // 행 SVG — 행 안 세 비트(1차→2차→검토). 행 간 연결선은 §4f-5로 폐지(시나리오 간 선택은 서로 영향 없음)
@@ -82,11 +93,11 @@ function _rmapRowSvg(r,xs,labels,_esc,M){
   var s='<svg viewBox="0 0 '+_RMAP_VBW+' '+ROWH+'" style="width:100%;height:auto;display:block;">';
   // §4g — 위임 열 점선(갈래 색) + 비용·점수·AI 열 구분 점선
   for(var k in _RMAP_COLX){
-    s+='<line x1="'+_RMAP_COLX[k]+'" y1="0" x2="'+_RMAP_COLX[k]+'" y2="'+ROWH+'" style="stroke:'+_RMAP_CMY[k]+';stroke-opacity:0.30;stroke-width:1.5;stroke-dasharray:2,5;"/>';
+    s+='<line x1="'+_RMAP_COLX[k]+'" y1="0" x2="'+_RMAP_COLX[k]+'" y2="'+ROWH+'" style="stroke:'+_RMAP_CMY[k]+';stroke-opacity:0.30;stroke-width:2;stroke-dasharray:2.5,6;"/>';
   }
   var divs=[_RMAP_SEPX].concat(_RMAP_COLDIV);
   for(var dv=0;dv<divs.length;dv++){
-    s+='<line x1="'+divs[dv]+'" y1="0" x2="'+divs[dv]+'" y2="'+ROWH+'" style="stroke:var(--ink);stroke-opacity:0.15;stroke-width:1.5;stroke-dasharray:2,5;"/>';
+    s+='<line x1="'+divs[dv]+'" y1="0" x2="'+divs[dv]+'" y2="'+ROWH+'" style="stroke:var(--ink);stroke-opacity:0.15;stroke-width:2;stroke-dasharray:2.5,6;"/>';
   }
   // §4e·§4g — 비트별 실비용(0은 숨김)·점수·AI 칩
   var costs=_rmapCosts(r);
@@ -107,25 +118,30 @@ function _rmapRowSvg(r,xs,labels,_esc,M){
     }
     s+='<text x="'+_RMAP_SCOREX+'" y="'+(ys[b]+6)+'" text-anchor="middle" style="'+numStyle+';">'+pts[b]+'</text>';
     if(choiceIds[b]&&_rmapAiFlag(r.scenarioId,choiceIds[b])){
-      s+='<rect x="'+(_RMAP_AIX-16)+'" y="'+(ys[b]-10)+'" width="32" height="20" rx="10" style="fill:var(--ink);"/>';
-      s+='<text x="'+_RMAP_AIX+'" y="'+(ys[b]+4)+'" text-anchor="middle" style="font-size:11.5px;font-weight:700;fill:var(--bg-card);">'+_esc(M.col_ai||'AI')+'</text>';
+      s+='<rect x="'+(_RMAP_AIX-20)+'" y="'+(ys[b]-12)+'" width="40" height="25" rx="12" style="fill:var(--ink);"/>';
+      s+='<text x="'+_RMAP_AIX+'" y="'+(ys[b]+5)+'" text-anchor="middle" style="font-size:14px;font-weight:700;fill:var(--bg-card);">'+_esc(M.col_ai||'AI')+'</text>';
     }
   }
-  s+='<polyline points="'+xs[0]+','+ys[0]+' '+xs[1]+','+ys[1]+' '+xs[2]+','+ys[2]+'" style="fill:none;stroke:var(--ink);stroke-width:2.5;stroke-dasharray:7,5;"/>';
+  s+='<polyline points="'+xs[0]+','+ys[0]+' '+xs[1]+','+ys[1]+' '+xs[2]+','+ys[2]+'" style="fill:none;stroke:var(--ink);stroke-width:3;stroke-dasharray:9,6;"/>';
   // §4g — 1차·2차 선택 원 = 갈래(tier1)의 위임 정도·색
   s+=_rmapChoiceCircle(xs[0],ys[0],r.tier1);
   s+=_rmapChoiceCircle(xs[1],ys[1],r.tier1);
   // §4f-6·§4g — 검토 원: 채움 = 검토 횟수 (○ 1회 · ◐ 2회 · ● 3회), r9 동일, ink
   var rv=r.review||'R1';
-  s+='<circle cx="'+xs[2]+'" cy="'+ys[2]+'" r="9" style="fill:'+(rv==='R3'?'var(--ink)':'var(--bg-card)')+';stroke:var(--ink);stroke-width:2.5;"/>';
-  if(rv==='R2')s+='<path d="M '+xs[2]+' '+(ys[2]-9)+' A 9 9 0 0 0 '+xs[2]+' '+(ys[2]+9)+' Z" style="fill:var(--ink);"/>';
-  // §4g-2 — 전 비트 선택 텍스트 (1차·2차·검토)
+  s+='<circle cx="'+xs[2]+'" cy="'+ys[2]+'" r="11" style="fill:'+(rv==='R3'?'var(--ink)':'var(--bg-card)')+';stroke:var(--ink);stroke-width:3;"/>';
+  if(rv==='R2')s+='<path d="M '+xs[2]+' '+(ys[2]-11)+' A 11 11 0 0 0 '+xs[2]+' '+(ys[2]+11)+' Z" style="fill:var(--ink);"/>';
+  // §4g-2·§4h-2 — 전 비트 선택 텍스트: 20자 초과는 2줄(말줄임 폐지), C 갈래(x>330)만 좌측 anchor
   for(var lb=0;lb<3;lb++){
     var lbl=labels[lb]||'';if(!lbl)continue;
-    if(lbl.length>20)lbl=lbl.slice(0,20)+'…';
-    var anchor=(xs[lb]>200)?'end':'start';
-    var lx=(anchor==='start')?xs[lb]+15:xs[lb]-15;
-    s+='<text x="'+lx+'" y="'+(ys[lb]+4)+'" text-anchor="'+anchor+'" style="font-size:12px;fill:var(--ink);">'+_esc(lbl)+'</text>';
+    var lines=_rmapSplitLabel(lbl);
+    var anchor=(xs[lb]>330)?'end':'start';
+    var lx=(anchor==='start')?xs[lb]+18:xs[lb]-18;
+    var lStyle='font-size:15px;fill:var(--ink)';
+    if(lines.length===1){
+      s+='<text x="'+lx+'" y="'+(ys[lb]+5)+'" text-anchor="'+anchor+'" style="'+lStyle+';">'+_esc(lines[0])+'</text>';
+    }else{
+      s+='<text x="'+lx+'" y="'+(ys[lb]-3)+'" text-anchor="'+anchor+'" style="'+lStyle+';">'+_esc(lines[0])+'<tspan x="'+lx+'" dy="18">'+_esc(lines[1])+'</tspan></text>';
+    }
   }
   return s+'</svg>';
 }
@@ -528,40 +544,17 @@ function showFinalReport(){
   var verLabel=document.getElementById('version-label');if(verLabel)verLabel.style.display='none';
   trackEvent('semester_report_viewed',{totalScore:gameState.totalScore,history:gameState.scenarioHistory,level:gameState.exp.level,cards:_reportAllCards().map(function(c){return c.label;}),items:gameState.itemsCollected});
   var hist=gameState.scenarioHistory||[];
-  var totalScore=hist.reduce(function(s,r){return s+(r.finalScore||0);},0);
-  var lv=gameState.exp.level;
-  var dv=gameState.competencies.delegationChoice.value;
-  var kv=gameState.competencies.knowledge.value;
+  // §4h-3 — totalScore/lv/dv/kv/gradeNote 계산 제거 (상단 블록 렌더 폐지에 따라)
   // 2b: getCompetencyType 호출 제거 — 함수·데이터 키는 보존(되돌리기 가능)
   var compType=null;
   function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-  // texts.yaml — report 섹션 텍스트
-  var R=(typeof TEXTS!=='undefined' && TEXTS && TEXTS.report) || {};
-  var gradeNote=R.grade_note||'';
-
   var h='<div class="report-overlay"><div class="report-inner report-v813">';
   var _fr=_t('final_report',{});
   h+='<div style="display:flex;align-items:center;min-height:56px;padding:0 22px;margin-bottom:24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);font-size:20px;font-weight:700;letter-spacing:1px;">'+(_fr.title_bar||'AI 리터러시 성장 리포트')+'</div>';
-  h+='<div class="report-subtitle">'+(_fr.subtitle||'한 학기 동안 다섯 시나리오에서 내린 선택과 그 결과를 돌아봅니다.<br>AI에게 무엇을 맡기고 무엇을 직접 했는지, 어떤 역량이 자랐는지 확인하세요.')+'</div>';
-
-  // 2a: 상단 4박스 — 총점·레벨 유지 + 판단하는 힘/아는것의 힘 ± 수치 → 원 미터 교체
-  var _sl=R.stat_labels||{};
-  var lastHist=hist.length?hist[hist.length-1]:null;
-  var finalGrade=lastHist?lastHist.grade:'';
-  h+='<div class="report-grid" style="grid-template-columns:repeat(4,1fr);max-width:640px;margin:0 auto 16px;">';
-  h+='<div class="report-stat-box"><div class="report-stat-num">'+totalScore+'</div><div class="report-stat-label">'+(_sl.total||'학기 총점')+'</div></div>';
-  h+='<div class="report-stat-box"><div class="report-stat-num">Lv.'+lv+'</div><div class="report-stat-label">'+(_sl.level||'최종 레벨')+'</div></div>';
-  // 선택/능력 원 미터 — HUD setCircleMeter와 동일하게 raw 값 그대로 (clamp는 함수 안에서)
-  h+='<div class="report-stat-box" style="padding:0;">'+_renderMiniCircleMeter(dv,(_sl.delegation||'선택'))+'</div>';
-  h+='<div class="report-stat-box" style="padding:0;">'+_renderMiniCircleMeter(kv,(_sl.knowledge||'능력'))+'</div>';
-  h+='</div>';
-  // 2c: 등급 산정 한 줄 (학기 최종 등급 기준)
-  if(finalGrade&&gradeNote){
-    h+='<div style="text-align:center;font-size:12px;color:var(--ink-soft);margin:-8px 0 16px;">';
-    h+='<b>'+finalGrade+'</b> — '+_esc(gradeNote);
-    h+='</div>';
-  }
+  // §4h-3 — 안내문 + 4박스(총점·레벨·선택/능력 원 미터) + grade_note 렌더 제거 (texts 키·_renderMiniCircleMeter는 보존)
+  // §4h-4 — 그 자리에 학습자 유형 박스 (유형 이름 + 거울 문장)
+  h+=_renderLearnerType(hist,_esc);
 
   // §4 R3 — 위임 지도 "나의 위임 항로" (지도가 패턴 서사의 진입 — 카드 섹션보다 앞)
   h+=_renderDelegationMap(hist);
@@ -712,12 +705,8 @@ function printReport(){
   window.print();
 }
 
-function _renderGrowthReport(hist, compType, inventory){
-  var GR=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthReport)||{};
-  var N=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.narrative)||{};
-  function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
-  // 패턴 판정
+// §4h-4 — 패턴 판정 (옛 _renderGrowthReport 내장 로직 추출, 판정 기준 무변)
+function _judgePattern(hist){
   var t1Counts={A:0,B:0,C:0},rvCounts={R1:0,R2:0,R3:0},grCounts={S:0,A:0,B:0,C:0,D:0};
   var total=hist.length||1;
   for(var i=0;i<hist.length;i++){
@@ -731,15 +720,29 @@ function _renderGrowthReport(hist, compType, inventory){
   else if((t1Counts.B+t1Counts.C)/total>0.6)pattern='aiHeavy';
   else if((rvCounts.R2+rvCounts.R3)/total>0.6)pattern='reviewStrong';
   else if(t1Counts.A/total>0.6)pattern='selfStart';
+  return pattern;
+}
+// §4h-4 — 학습자 유형 박스 (리포트 최상단, 항로 위): 유형 이름 + 거울 문장
+function _renderLearnerType(hist,_esc){
+  var GR=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.growthReport)||{};
+  var pattern=_judgePattern(hist);
+  var patName=(GR.pattern_names||{})[pattern]||'';
+  var patText=(GR.patterns||{})[pattern]||'';
+  if(!patName&&!patText)return '';
+  var h='<div style="margin:0 0 20px;padding:18px 20px;background:var(--bg-card);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);">';
+  h+='<div style="font-size:12px;color:var(--ink-soft);font-weight:700;letter-spacing:1.5px;margin-bottom:6px;">'+_t('final_report.learner_type_label','학습자 유형')+'</div>';
+  if(patName)h+='<div style="font-size:20px;font-weight:700;margin-bottom:8px;">'+_esc(patName)+'</div>';
+  if(patText)h+='<div style="font-size:14px;line-height:1.75;color:var(--ink-mute);">'+_esc(patText)+'</div>';
+  h+='</div>';
+  return h;
+}
+
+function _renderGrowthReport(hist, compType, inventory){
+  function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
   var h='<div class="report-growth" style="margin:28px 0 20px;padding:22px 20px;background:var(--bg-card);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);">';
 
-  // (5) 2b: 학습자 유형(4분면) 폐지 → 선택 패턴 5종만 노출
-  var patText=(GR.patterns||{})[pattern]||'';
-  h+='<div style="margin-bottom:20px;padding:16px 18px;background:var(--bg-soft);border:var(--border-w) solid var(--ink);">';
-  h+='<div style="font-size:11px;color:var(--ink-soft);font-weight:700;letter-spacing:1.5px;margin-bottom:4px;">'+_t('final_report.learner_type_label','선택 패턴')+'</div>';
-  if(patText)h+='<div style="font-size:13px;line-height:1.7;color:var(--ink-mute);">'+_esc(patText)+'</div>';
-  h+='</div>';
+  // (5) 학습자 유형 박스 — §4h-4에서 리포트 최상단으로 이동 (_renderLearnerType)
 
   // (6) 시나리오별 결과 섹션 — §4g-11 폐지 (위임 항로가 선택 경로·비용·점수를 전부 대체)
 
