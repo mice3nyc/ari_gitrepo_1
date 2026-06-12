@@ -16975,7 +16975,8 @@ function _renderLearnerType(hist,_esc){
   var h='<div style="margin:0 0 20px;padding:18px 20px;background:var(--bg-card);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);">';
   h+='<div style="font-size:12px;color:var(--ink-soft);font-weight:700;letter-spacing:1.5px;margin-bottom:6px;">'+_t('final_report.learner_type_label','학습자 유형')+'</div>';
   if(patName)h+='<div style="font-size:20px;font-weight:700;margin-bottom:8px;">'+_esc(patName)+'</div>';
-  if(patText)h+='<div style="font-size:14px;line-height:1.75;color:var(--ink-mute);">'+_esc(patText)+'</div>';
+  // §4h-4 — 문장 단위 줄바꿈: 한 단락으로 이어지면 안 읽힘 (escape 후 br 삽입이라 안전)
+  if(patText)h+='<div style="font-size:14px;line-height:1.9;color:var(--ink-mute);">'+_esc(patText).replace(/\.\s+/g,'.<br>')+'</div>';
   h+='</div>';
   return h;
 }
