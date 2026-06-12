@@ -164,7 +164,7 @@ PLAN-report.md(이 문서) + SPEC-report.md 신설. 1차 질문 묶음 발송.
 - [x] 상단 헤더 블록 제거: 안내문 + 4박스(총점·레벨·선택/능력 원 미터) + grade_note — 렌더만 제거, texts 키·_renderMiniCircleMeter 보존
 - [x] 학습자 유형 전면 배치: _judgePattern 추출 + _renderLearnerType 신설(유형 이름 + 본문), 하단 §18 박스의 패턴 블록 제거. pattern_names 5종 신설 + patterns 본문 재집필 — **문안은 아리공 초안, 피터공 검토 대기**
 - [x] 빌드 933,185B + 린터 0 + R3.9 스모크 35체크 PASS(/tmp/smoke_r39.js) + 인코딩 클린 + ui_texts.csv 307 동기
-- [ ] 커밋·푸시 (v1.3-mid-r39) + 라이브 확인
+- [x] 커밋 4e2f190 푸시 (v1.3-mid-r39) — 라이브 반영 확인 완료 (6/12 23:4x)
 - [ ] 피터공 라이브 재확인 + 학습자 유형 문안 판단
 
 ## 멀티창 규칙
