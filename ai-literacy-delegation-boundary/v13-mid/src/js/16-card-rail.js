@@ -25,13 +25,14 @@ function _dockIsPending(entry){
 // 독 칩 DOM — c: {kind:'hc',axis,tag} | {kind:'domain'|'growth',name}
 // §2d v2 — 한 줄 표기. pending = 진한 회색·컬러 없음·점선·깜빡임 / 컬러는 철컥(locked) 때 입힘.
 function _dockChipLabel(c){
-  return (c.kind==='hc')?(_invEscapeHTML(c.axis)+' '+_invEscapeHTML(c.tag)):_invEscapeHTML(_cardDisplayName(c.name));
+  // §6 — 축 이름 미표시, 역량명만 (6/12)
+  return (c.kind==='hc')?_invEscapeHTML(c.tag):_invEscapeHTML(_cardDisplayName(c.name));
 }
 function _dockChipApplyLocked(el,c){
   if(c.kind==='hc'){
     var am=_axisMeta(c.axis);
     el.style.background=am.color;
-    el.innerHTML='<div class="dc-name" style="color:#fff;"><span class="dc-axis">'+_invEscapeHTML(c.axis)+'</span> '+_invEscapeHTML(c.tag)+'</div>';
+    el.innerHTML='<div class="dc-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>';
   }else{
     el.style.borderLeft='6px solid '+_cardColor(c.name);
     el.innerHTML='<div class="dc-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>';
@@ -75,7 +76,7 @@ function _railCardVisual(c){
   if(c.kind==='hc'){
     var am=_axisMeta(c.axis);
     el.style.background=am.color;
-    el.innerHTML='<div class="rail-card-name" style="color:#fff;"><span class="rail-card-axis">'+_invEscapeHTML(c.axis)+'</span> '+_invEscapeHTML(c.tag)+'</div>';
+    el.innerHTML='<div class="rail-card-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>';
   }else{
     el.style.borderLeft='6px solid '+_cardColor(c.name);
     el.innerHTML='<div class="rail-card-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>';

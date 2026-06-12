@@ -253,7 +253,7 @@ function _reportCardsByScenario(){
   if(!gameState||!gameState.inventory)return groups;
   var inv=gameState.inventory;
   function add(arr,labelFn){if(!arr)return;for(var i=0;i<arr.length;i++){var c=arr[i],sid=c.scenario;if(!groups[sid])groups[sid]=[];groups[sid].push(labelFn(c));}}
-  add(inv.humanCentricCards,function(c){return '['+c.axis+'] '+c.tag;});
+  add(inv.humanCentricCards,function(c){return c.tag;});
   add(inv.domainCards,function(c){return _cardDisplayName(c.label);});
   add(inv.growthCards,function(c){return c.label;});
   // 2e: legacy competencyCards 분기 제거
@@ -303,7 +303,7 @@ function _reportSceneMood(r,cardsThisScene){
 function _reportAllCards(){
   if(!gameState||!gameState.inventory)return [];
   var inv=gameState.inventory,all=[];
-  if(inv.humanCentricCards)for(var i=0;i<inv.humanCentricCards.length;i++){var c=inv.humanCentricCards[i];all.push({label:'['+c.axis+'] '+c.tag,scenario:c.scenario,track:'human'});}
+  if(inv.humanCentricCards)for(var i=0;i<inv.humanCentricCards.length;i++){var c=inv.humanCentricCards[i];all.push({label:c.tag,scenario:c.scenario,track:'human'});}
   if(inv.domainCards)for(var j=0;j<inv.domainCards.length;j++){var d=inv.domainCards[j];all.push({label:d.label,scenario:d.scenario,track:'domain'});}
   if(inv.growthCards)for(var k=0;k<inv.growthCards.length;k++){var g=inv.growthCards[k];all.push({label:g.label,scenario:g.scenario,track:'growth'});}
   // 2e: legacy competencyCards(track:'legacy') 분기 제거 — 기존 세이브에 있어도 무시, 깨지지 않음
@@ -550,15 +550,14 @@ function showFinalReport(){
     var card=hcFlat[ci];
     var owned=!!ownedHC[card.axis+'::'+card.tag];
     var am=_axisMeta(card.axis);
+    // §6 — 축 이름 줄 제거, 역량명만 (축 색은 배경 틴트로만 유지)
     if(owned){
-      h+='<div style="border:var(--border-w) solid var(--ink);background:'+am.bg+';padding:10px 6px;text-align:center;box-shadow:var(--shadow);">';
-      h+='<div style="font-size:15px;font-weight:600;color:'+am.color+';margin-bottom:3px;">'+_esc(card.axis)+'</div>';
-      h+='<div style="font-size:13px;font-weight:700;color:var(--ink);">'+_esc(card.tag)+'</div>';
+      h+='<div style="display:flex;align-items:center;justify-content:center;min-height:52px;border:var(--border-w) solid var(--ink);background:'+am.bg+';padding:10px 6px;text-align:center;box-shadow:var(--shadow);">';
+      h+='<div style="font-size:14px;font-weight:700;color:var(--ink);">'+_esc(card.tag)+'</div>';
       h+='</div>';
     }else{
-      h+='<div style="border:2px dashed #ccc;background:transparent;padding:10px 6px;text-align:center;">';
-      h+='<div style="font-size:15px;font-weight:600;color:#bbb;margin-bottom:3px;">'+_esc(card.axis)+'</div>';
-      h+='<div style="font-size:12px;color:#bbb;">'+_esc(card.tag)+'</div>';
+      h+='<div style="display:flex;align-items:center;justify-content:center;min-height:52px;border:2px dashed #ccc;background:transparent;padding:10px 6px;text-align:center;">';
+      h+='<div style="font-size:13px;color:#bbb;">'+_esc(card.tag)+'</div>';
       h+='</div>';
     }
   }

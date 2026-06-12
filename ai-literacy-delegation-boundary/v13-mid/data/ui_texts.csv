@@ -293,8 +293,8 @@ scenario_report,scenario_report.stat_knowledge,지식
 final_report,final_report.title_bar,AI 리터러시 성장 리포트
 final_report,final_report.subtitle,"한 학기 동안 다섯 시나리오에서 내린 선택과 그 결과를 돌아봅니다.<br>AI에게 무엇을 맡기고 무엇을 직접 했는지, 어떤 역량이 자랐는지 확인하세요."
 final_report,final_report.delegation_header,인간중심 역량 카드
-final_report,final_report.knowledge_header,능력 카드 — 도메인 역량
-final_report,final_report.no_domain_cards,이번 학기는 도메인 역량 카드를 받지 못했어요.
+final_report,final_report.knowledge_header,능력 카드
+final_report,final_report.no_domain_cards,이번 학기는 능력 카드를 받지 못했어요.
 final_report,final_report.scenario_results_title,시나리오별 결과
 final_report,final_report.growth_cards_title,성장 카드
 final_report,final_report.learner_type_label,학습자 유형

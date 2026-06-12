@@ -42,7 +42,7 @@ function pilotCardsForChoice(stage,id){
   function hcCard(axis){
     var tag=axis?amap[axis]:null;
     if(!axis||!tag)return null;
-    return {kind:'hc',axis:axis,tag:tag,label:'['+axis+'] '+tag};
+    return {kind:'hc',axis:axis,tag:tag,label:tag};
   }
   function domCard(name){return name?{kind:'domain',name:name,label:name}:null;}
   if(stage==='tier1'){

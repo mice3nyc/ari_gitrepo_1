@@ -1750,7 +1750,7 @@ button,
 <div class="recovery-overlay hidden" id="recovery-overlay"></div>
 <button class="debug-toggle" onclick="toggleDebug()">디버그</button>
 <div class="debug-panel" id="debug-panel"></div>
-<div class="version" id="version-label">v1.3-mid-r35</div>
+<div class="version" id="version-label">v1.3-mid-r35b</div>
 
 <!-- Phase 8.10b — 레벨업 이벤트 팝업 (DECISIONS §10.11) -->
 <div id="levelup-modal" class="modal-overlay hidden">
@@ -1875,7 +1875,7 @@ var CONFIG={
   storageKey:'ai-literacy-delegation-boundary-v13-mid',
   eventLogKey:'ai-literacy-delegation-boundary-v13-mid-events',
   sessionIdKey:'ai-literacy-v13-mid-session-id',
-  version:'v1.3-mid-r35',
+  version:'v1.3-mid-r35b',
   scenarios:['selfintro','groupwork','eorinwangja','career','studyplan'],
   pointThresholds:{S:95,A:85,B:75,C:60,D:0},
   minResourceCost:1,
@@ -13693,8 +13693,8 @@ var TEXTS = {
     "title_bar": "AI 리터러시 성장 리포트",
     "subtitle": "한 학기 동안 다섯 시나리오에서 내린 선택과 그 결과를 돌아봅니다.<br>AI에게 무엇을 맡기고 무엇을 직접 했는지, 어떤 역량이 자랐는지 확인하세요.",
     "delegation_header": "인간중심 역량 카드",
-    "knowledge_header": "능력 카드 — 도메인 역량",
-    "no_domain_cards": "이번 학기는 도메인 역량 카드를 받지 못했어요.",
+    "knowledge_header": "능력 카드",
+    "no_domain_cards": "이번 학기는 능력 카드를 받지 못했어요.",
     "scenario_results_title": "시나리오별 결과",
     "growth_cards_title": "성장 카드",
     "learner_type_label": "학습자 유형"
@@ -16413,7 +16413,7 @@ function _reportCardsByScenario(){
   if(!gameState||!gameState.inventory)return groups;
   var inv=gameState.inventory;
   function add(arr,labelFn){if(!arr)return;for(var i=0;i<arr.length;i++){var c=arr[i],sid=c.scenario;if(!groups[sid])groups[sid]=[];groups[sid].push(labelFn(c));}}
-  add(inv.humanCentricCards,function(c){return '['+c.axis+'] '+c.tag;});
+  add(inv.humanCentricCards,function(c){return c.tag;});
   add(inv.domainCards,function(c){return _cardDisplayName(c.label);});
   add(inv.growthCards,function(c){return c.label;});
   // 2e: legacy competencyCards 분기 제거
@@ -16463,7 +16463,7 @@ function _reportSceneMood(r,cardsThisScene){
 function _reportAllCards(){
   if(!gameState||!gameState.inventory)return [];
   var inv=gameState.inventory,all=[];
-  if(inv.humanCentricCards)for(var i=0;i<inv.humanCentricCards.length;i++){var c=inv.humanCentricCards[i];all.push({label:'['+c.axis+'] '+c.tag,scenario:c.scenario,track:'human'});}
+  if(inv.humanCentricCards)for(var i=0;i<inv.humanCentricCards.length;i++){var c=inv.humanCentricCards[i];all.push({label:c.tag,scenario:c.scenario,track:'human'});}
   if(inv.domainCards)for(var j=0;j<inv.domainCards.length;j++){var d=inv.domainCards[j];all.push({label:d.label,scenario:d.scenario,track:'domain'});}
   if(inv.growthCards)for(var k=0;k<inv.growthCards.length;k++){var g=inv.growthCards[k];all.push({label:g.label,scenario:g.scenario,track:'growth'});}
   // 2e: legacy competencyCards(track:'legacy') 분기 제거 — 기존 세이브에 있어도 무시, 깨지지 않음
@@ -16710,15 +16710,14 @@ function showFinalReport(){
     var card=hcFlat[ci];
     var owned=!!ownedHC[card.axis+'::'+card.tag];
     var am=_axisMeta(card.axis);
+    // §6 — 축 이름 줄 제거, 역량명만 (축 색은 배경 틴트로만 유지)
     if(owned){
-      h+='<div style="border:var(--border-w) solid var(--ink);background:'+am.bg+';padding:10px 6px;text-align:center;box-shadow:var(--shadow);">';
-      h+='<div style="font-size:15px;font-weight:600;color:'+am.color+';margin-bottom:3px;">'+_esc(card.axis)+'</div>';
-      h+='<div style="font-size:13px;font-weight:700;color:var(--ink);">'+_esc(card.tag)+'</div>';
+      h+='<div style="display:flex;align-items:center;justify-content:center;min-height:52px;border:var(--border-w) solid var(--ink);background:'+am.bg+';padding:10px 6px;text-align:center;box-shadow:var(--shadow);">';
+      h+='<div style="font-size:14px;font-weight:700;color:var(--ink);">'+_esc(card.tag)+'</div>';
       h+='</div>';
     }else{
-      h+='<div style="border:2px dashed #ccc;background:transparent;padding:10px 6px;text-align:center;">';
-      h+='<div style="font-size:15px;font-weight:600;color:#bbb;margin-bottom:3px;">'+_esc(card.axis)+'</div>';
-      h+='<div style="font-size:12px;color:#bbb;">'+_esc(card.tag)+'</div>';
+      h+='<div style="display:flex;align-items:center;justify-content:center;min-height:52px;border:2px dashed #ccc;background:transparent;padding:10px 6px;text-align:center;">';
+      h+='<div style="font-size:13px;color:#bbb;">'+_esc(card.tag)+'</div>';
       h+='</div>';
     }
   }
@@ -17626,7 +17625,7 @@ function pilotCardsForChoice(stage,id){
   function hcCard(axis){
     var tag=axis?amap[axis]:null;
     if(!axis||!tag)return null;
-    return {kind:'hc',axis:axis,tag:tag,label:'['+axis+'] '+tag};
+    return {kind:'hc',axis:axis,tag:tag,label:tag};
   }
   function domCard(name){return name?{kind:'domain',name:name,label:name}:null;}
   if(stage==='tier1'){
@@ -17744,13 +17743,14 @@ function _dockIsPending(entry){
 // 독 칩 DOM — c: {kind:'hc',axis,tag} | {kind:'domain'|'growth',name}
 // §2d v2 — 한 줄 표기. pending = 진한 회색·컬러 없음·점선·깜빡임 / 컬러는 철컥(locked) 때 입힘.
 function _dockChipLabel(c){
-  return (c.kind==='hc')?(_invEscapeHTML(c.axis)+' '+_invEscapeHTML(c.tag)):_invEscapeHTML(_cardDisplayName(c.name));
+  // §6 — 축 이름 미표시, 역량명만 (6/12)
+  return (c.kind==='hc')?_invEscapeHTML(c.tag):_invEscapeHTML(_cardDisplayName(c.name));
 }
 function _dockChipApplyLocked(el,c){
   if(c.kind==='hc'){
     var am=_axisMeta(c.axis);
     el.style.background=am.color;
-    el.innerHTML='<div class="dc-name" style="color:#fff;"><span class="dc-axis">'+_invEscapeHTML(c.axis)+'</span> '+_invEscapeHTML(c.tag)+'</div>';
+    el.innerHTML='<div class="dc-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>';
   }else{
     el.style.borderLeft='6px solid '+_cardColor(c.name);
     el.innerHTML='<div class="dc-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>';
@@ -17794,7 +17794,7 @@ function _railCardVisual(c){
   if(c.kind==='hc'){
     var am=_axisMeta(c.axis);
     el.style.background=am.color;
-    el.innerHTML='<div class="rail-card-name" style="color:#fff;"><span class="rail-card-axis">'+_invEscapeHTML(c.axis)+'</span> '+_invEscapeHTML(c.tag)+'</div>';
+    el.innerHTML='<div class="rail-card-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>';
   }else{
     el.style.borderLeft='6px solid '+_cardColor(c.name);
     el.innerHTML='<div class="rail-card-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>';
