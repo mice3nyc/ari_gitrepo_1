@@ -452,7 +452,12 @@ report:
     col_direct: '직접'
     col_partial: '부분 위임'
     col_full: '전체 위임'
-    legend: '◉ 검토 3회 · ◎ 검토 2회 · ○ 검토 1회 — 점을 잇는 선이 나의 항로, 기울기가 곧 패턴'
+    legend: '작은 점 = 1차·2차 선택, 큰 원 = 검토(○ 1회 · ◎ 2회 · ◉ 3회) — 점을 잇는 선이 나의 항로, 기울기가 곧 패턴'
+    btn_cuts: '5컷 보기'
+    beat1: '1차 선택'
+    beat2: '2차 선택'
+    beat_result: '결과'
+    beat_review: '검토'
 
   cards_section:
     title: "한 학기 동안 모은 역량 카드 — 총 {N}장"

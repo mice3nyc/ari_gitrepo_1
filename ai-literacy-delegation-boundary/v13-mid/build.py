@@ -30,6 +30,7 @@ JS_DIR = SRC / "js"
 SCENARIOS_YAML = ROOT / "data" / "scenarios.yaml"
 CUTS_YAML = ROOT / "data" / "cuts.yaml"
 TEXTS_YAML = ROOT / "data" / "texts.yaml"
+MICRO_OFFSETS_YAML = ROOT / "data" / "micro_offsets.yaml"
 OUTPUT = ROOT / "index.html"
 
 CSS_PLACEHOLDER = "/* __CSS_INJECT__ */"
@@ -77,9 +78,21 @@ def build_data_injection():
     if missing:
         print(f"[warn] texts.yaml 누락 키: {missing} — 코드 fallback 사용")
 
+    # SPEC-report §4d-2 — 마이크로 항로 2차 깊이 보정값. tier2 id 전수 일치 검증
+    micro = load_yaml(MICRO_OFFSETS_YAML) if MICRO_OFFSETS_YAML.exists() else {}
+    for scid, sc in scenarios.items():
+        t2ids = sorted(o["id"] for arr in (sc.get("tier2") or {}).values() for o in arr)
+        moids = sorted((micro.get(scid) or {}).keys())
+        if t2ids != moids:
+            sys.exit(f"micro_offsets.yaml 불일치 [{scid}]: tier2 {t2ids} vs offsets {moids}")
+        bad = [k for k, v in (micro.get(scid) or {}).items() if v not in (-1, 0, 1)]
+        if bad:
+            sys.exit(f"micro_offsets.yaml 값 오류 [{scid}]: {bad} (허용: -1/0/1)")
+
     scenarios_json = json.dumps(scenarios, ensure_ascii=False, indent=2)
     cuts_json = json.dumps(cut_default, ensure_ascii=False, indent=2)
     texts_json = json.dumps(texts or {}, ensure_ascii=False, indent=2)
+    micro_json = json.dumps(micro or {}, ensure_ascii=False, indent=2)
 
     inject = (
         "// =====================================================\n"
@@ -87,7 +100,8 @@ def build_data_injection():
         "// =====================================================\n"
         f"var SCENARIOS = {scenarios_json};\n"
         f"var CUT_IMAGES = {cuts_json};\n"
-        f"var TEXTS = {texts_json};"
+        f"var TEXTS = {texts_json};\n"
+        f"var MICRO_OFFSETS = {micro_json};"
     )
 
     return inject, scenarios, cut_default, texts

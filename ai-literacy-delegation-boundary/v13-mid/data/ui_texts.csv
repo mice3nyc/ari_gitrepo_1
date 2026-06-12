@@ -121,7 +121,12 @@ report,report.map.title,나의 위임 항로
 report,report.map.col_direct,직접
 report,report.map.col_partial,부분 위임
 report,report.map.col_full,전체 위임
-report,report.map.legend,"◉ 검토 3회 · ◎ 검토 2회 · ○ 검토 1회 — 점을 잇는 선이 나의 항로, 기울기가 곧 패턴"
+report,report.map.legend,"작은 점 = 1차·2차 선택, 큰 원 = 검토(○ 1회 · ◎ 2회 · ◉ 3회) — 점을 잇는 선이 나의 항로, 기울기가 곧 패턴"
+report,report.map.btn_cuts,5컷 보기
+report,report.map.beat1,1차 선택
+report,report.map.beat2,2차 선택
+report,report.map.beat_result,결과
+report,report.map.beat_review,검토
 report,report.cards_section.title,한 학기 동안 모은 역량 카드 — 총 {N}장
 report,report.cards_section.empty,이번 학기는 역량 카드를 받지 못했어요. 다시 도전!
 report,report.cards_section.human_centric_title,인간중심 역량

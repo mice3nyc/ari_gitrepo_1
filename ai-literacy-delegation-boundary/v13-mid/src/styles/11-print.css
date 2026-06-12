@@ -72,7 +72,14 @@
     border: none !important;
   }
 
-  /* 시나리오별 카툰 — 한 시나리오는 한 페이지 안에 */
+  /* §4d R3.5 — 위임 항로: 인쇄는 5컷 펼침 고정, 대표 컷·버튼 숨김(.no-print가 처리), 행 단위 페이지 분할 방지 */
+  .rmap-expand {
+    display: block !important;
+  }
+  .rmap-row {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
   .report-comic > div {
     page-break-inside: avoid;
     break-inside: avoid;
@@ -87,6 +94,7 @@
   }
 
   /* 이미지 — 인쇄 시 적정 크기 */
+  .rmap-cut-lg img,
   .report-comic img {
     max-width: 100% !important;
     height: auto !important;

@@ -21,43 +21,120 @@ function _renderMiniCircleMeter(value, label){
   return h;
 }
 
-// §4 R3 — 위임 지도 "나의 위임 항로" (인라인 SVG, 인쇄 포함)
-// 행=시나리오(플레이 순서), 가로 3칸=tier1(A직접/B부분/C전체), 노드=검토 깊이(R1○/R2◎/R3◉), 꺾은선=항로
+// §4 R3.5 — 위임 지도 "나의 위임 항로" v2 (6/12 3차 게이트: 매핑 ①깊이 + 배치 ㉮대표컷+펼치기)
+// 행=시나리오. 행 안 세 비트(1차 선택→2차 선택→검토)가 마이크로 항로.
+// 1차 x=tier1 칸(A직접/B부분/C전체), 2차 x=tier1 칸+MICRO_OFFSETS 보정(-1직접쪽/0유지/+1위임쪽), 검토=2차와 같은 x에 ○◎◉.
+// 행 오른쪽 대표 컷 2장(1차·검토 장면) + "5컷 보기" 펼침. 인쇄는 펼침 고정(11-print.css).
+var _RMAP_COLX={A:100,B:280,C:460}, _RMAP_OFFPX=70, _RMAP_W=560, _RMAP_ROWH=96;
+function _rmapBeatXs(r){
+  var x1=_RMAP_COLX[r.tier1];if(x1===undefined)x1=_RMAP_COLX.B;
+  var off=0;
+  if(typeof MICRO_OFFSETS!=='undefined'&&MICRO_OFFSETS[r.scenarioId]&&typeof MICRO_OFFSETS[r.scenarioId][r.tier2]==='number')off=MICRO_OFFSETS[r.scenarioId][r.tier2];
+  var x2=x1+off*_RMAP_OFFPX;
+  return [x1,x2,x2]; // 검토는 2차와 같은 가로 위치 (검토는 위임 스펙트럼 축이 아님)
+}
+function _rmapHeaderSvg(M,_esc){
+  var s='<svg viewBox="0 0 '+_RMAP_W+' 30" style="width:100%;height:auto;display:block;">';
+  var labels={A:M.col_direct||'직접',B:M.col_partial||'부분 위임',C:M.col_full||'전체 위임'};
+  for(var k in _RMAP_COLX){
+    s+='<text x="'+_RMAP_COLX[k]+'" y="14" text-anchor="middle" style="font-size:12px;font-weight:700;fill:var(--ink-soft);">'+_esc(labels[k])+'</text>';
+    s+='<line x1="'+_RMAP_COLX[k]+'" y1="22" x2="'+_RMAP_COLX[k]+'" y2="30" style="stroke:var(--ink);stroke-opacity:0.25;stroke-width:1.5;"/>';
+  }
+  return s+'</svg>';
+}
+// 행 SVG — entryX/exitX가 있으면 행 경계 통과선으로 위아래 행과 이어진 항로
+function _rmapRowSvg(r,xs,entryX,exitX,t2label,_esc){
+  var ROWH=_RMAP_ROWH;
+  var ys=[Math.round(ROWH*0.18),Math.round(ROWH*0.52),Math.round(ROWH*0.84)];
+  var s='<svg viewBox="0 0 '+_RMAP_W+' '+ROWH+'" style="width:100%;height:auto;display:block;">';
+  for(var k in _RMAP_COLX){
+    s+='<line x1="'+_RMAP_COLX[k]+'" y1="0" x2="'+_RMAP_COLX[k]+'" y2="'+ROWH+'" style="stroke:var(--ink);stroke-opacity:0.10;stroke-width:1.5;stroke-dasharray:2,5;"/>';
+  }
+  if(entryX!=null)s+='<polyline points="'+entryX+',0 '+xs[0]+','+ys[0]+'" style="fill:none;stroke:var(--ink);stroke-width:2.5;stroke-dasharray:7,5;"/>';
+  if(exitX!=null)s+='<polyline points="'+xs[2]+','+ys[2]+' '+exitX+','+ROWH+'" style="fill:none;stroke:var(--ink);stroke-width:2.5;stroke-dasharray:7,5;"/>';
+  s+='<polyline points="'+xs[0]+','+ys[0]+' '+xs[1]+','+ys[1]+' '+xs[2]+','+ys[2]+'" style="fill:none;stroke:var(--ink);stroke-width:2.5;stroke-dasharray:7,5;"/>';
+  s+='<circle cx="'+xs[0]+'" cy="'+ys[0]+'" r="5" style="fill:var(--ink);"/>';
+  s+='<circle cx="'+xs[1]+'" cy="'+ys[1]+'" r="5" style="fill:var(--bg-card);stroke:var(--ink);stroke-width:2.5;"/>';
+  var rv=r.review||'R1';
+  s+='<circle cx="'+xs[2]+'" cy="'+ys[2]+'" r="10" style="fill:var(--bg-card);stroke:var(--ink);stroke-width:3;"/>';
+  if(rv==='R2')s+='<circle cx="'+xs[2]+'" cy="'+ys[2]+'" r="4" style="fill:var(--ink);"/>';
+  if(rv==='R3')s+='<circle cx="'+xs[2]+'" cy="'+ys[2]+'" r="6.5" style="fill:var(--ink);"/>';
+  if(t2label){
+    var lbl=t2label.length>24?t2label.slice(0,24)+'…':t2label;
+    var anchor=(xs[1]>_RMAP_W-180)?'end':'start';
+    var lx=(anchor==='start')?xs[1]+12:xs[1]-12;
+    s+='<text x="'+lx+'" y="'+(ys[1]+4)+'" text-anchor="'+anchor+'" style="font-size:10.5px;fill:var(--ink-soft);">'+_esc(lbl)+'</text>';
+  }
+  return s+'</svg>';
+}
+function _rmapTier2Label(r){
+  var sc=SCENARIOS[r.scenarioId];if(!sc)return '';
+  var arr=(sc.tier2||{})[r.tier1]||[];
+  for(var i=0;i<arr.length;i++){if(arr[i].id===r.tier2)return arr[i].label||'';}
+  return '';
+}
+function _rmapToggle(i){
+  var el=document.getElementById('rmapExp'+i);
+  if(el)el.classList.toggle('open');
+}
 function _renderDelegationMap(hist){
   if(!hist||!hist.length)return '';
   var M=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.report&&TEXTS.report.map)||{};
   function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-  var colIdx={A:0,B:1,C:2};
-  var colXs=[330,470,610];
-  var rowH=64, top=58, W=660;
-  var H=top+hist.length*rowH-20;
-  var pts=[], nodes='', titles='';
-  for(var i=0;i<hist.length;i++){
-    var r=hist[i];
-    var sc=SCENARIOS[r.scenarioId];
-    var ci=colIdx[r.tier1];if(ci===undefined)ci=1;
-    var cx=colXs[ci], cy=top+i*rowH;
-    pts.push(cx+','+cy);
-    // 노드 — 검토 깊이: R1 빈 원 / R2 겹 원 / R3 찬 원
-    var rv=r.review||'R1';
-    nodes+='<circle cx="'+cx+'" cy="'+cy+'" r="11" style="fill:var(--bg-card);stroke:var(--ink);stroke-width:3;"/>';
-    if(rv==='R2')nodes+='<circle cx="'+cx+'" cy="'+cy+'" r="4.5" style="fill:var(--ink);"/>';
-    if(rv==='R3')nodes+='<circle cx="'+cx+'" cy="'+cy+'" r="7" style="fill:var(--ink);"/>';
-    titles+='<text x="20" y="'+(cy+5)+'" style="font-size:14px;font-weight:700;fill:var(--ink);">'+_esc(sc?sc.title:r.scenarioId)+'</text>';
+  var ROWH=_RMAP_ROWH;
+  var ys=[Math.round(ROWH*0.18),Math.round(ROWH*0.52),Math.round(ROWH*0.84)];
+  // 행 경계 통과 x 미리 계산
+  var beats=[],entry=[],exit=[];
+  for(var i=0;i<hist.length;i++){beats.push(_rmapBeatXs(hist[i]));entry.push(null);exit.push(null);}
+  for(var j=0;j<hist.length-1;j++){
+    var below=ROWH-ys[2], above=ys[0];
+    var t=below/(below+above);
+    var cross=Math.round(beats[j][2]+(beats[j+1][0]-beats[j][2])*t);
+    exit[j]=cross;entry[j+1]=cross;
   }
-  var headers='';
-  var headerLabels=[M.col_direct||'직접',M.col_partial||'부분 위임',M.col_full||'전체 위임'];
-  for(var hx=0;hx<3;hx++){
-    headers+='<text x="'+colXs[hx]+'" y="24" text-anchor="middle" style="font-size:13px;font-weight:700;fill:var(--ink-soft);">'+_esc(headerLabels[hx])+'</text>';
-    headers+='<line x1="'+colXs[hx]+'" y1="36" x2="'+colXs[hx]+'" y2="'+(H-8)+'" style="stroke:var(--ink);stroke-opacity:0.12;stroke-width:1.5;stroke-dasharray:2,5;"/>';
-  }
-  var route=(pts.length>1)?'<polyline points="'+pts.join(' ')+'" style="fill:none;stroke:var(--ink);stroke-width:2.5;stroke-dasharray:7,5;"/>':'';
   var h='<div class="report-delegation-map" style="margin:0 0 20px;border:var(--border-w) solid var(--ink);background:var(--bg-card);box-shadow:var(--shadow);overflow:hidden;">';
   h+='<div style="display:flex;align-items:center;min-height:44px;padding:0 16px;background:var(--acc-yellow);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">'+_esc(M.title||'나의 위임 항로')+'</div>';
-  h+='<div style="padding:10px 12px 4px;">';
-  h+='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;display:block;">'+headers+route+nodes+titles+'</svg>';
+  h+='<div style="padding:10px 14px 4px;">';
+  h+='<div class="rmap-flex"><div class="rmap-route">'+_rmapHeaderSvg(M,_esc)+'</div><div style="flex:1;"></div></div>';
+  for(var n=0;n<hist.length;n++){
+    var r=hist[n];
+    var sc=SCENARIOS[r.scenarioId];
+    var grade=r.grade||'D';
+    var fin=(sc&&sc.finals)?sc.finals[r.leaf]:null;
+    h+='<div class="rmap-row">';
+    h+='<div class="rmap-row-header"><span>'+(n+1)+'. '+_esc(sc?sc.title:r.scenarioId)+'</span><span class="rmap-score">'+r.finalScore+'점 · '+_esc(grade)+'</span></div>';
+    h+='<div class="rmap-flex">';
+    h+='<div class="rmap-route">'+_rmapRowSvg(r,beats[n],entry[n],exit[n],_rmapTier2Label(r),_esc)+'</div>';
+    // 대표 컷 2장 (1차 선택 장면 c2 · 검토 장면 c5) + 5컷 보기
+    var c2src=getCutImageFor(r.scenarioId,r.leaf,2);
+    var c5src=getCutImageFor(r.scenarioId,r.leaf,5);
+    h+='<div class="rmap-thumbs no-print">';
+    if(c2src)h+='<div class="rmap-cut" onclick="_rmapToggle('+n+')"><img src="'+c2src+'" alt="" onerror="this.style.display=\'none\'"></div>';
+    if(c5src)h+='<div class="rmap-cut" onclick="_rmapToggle('+n+')"><img src="'+c5src+'" alt="" onerror="this.style.display=\'none\'"></div>';
+    h+='<div class="rmap-more" onclick="_rmapToggle('+n+')">'+_esc(M.btn_cuts||'5컷 보기')+'</div>';
+    h+='</div>';
+    h+='</div>';
+    // 펼침: 핵심 돌아보기 + 5컷 스트립(캡션). 인쇄는 강제 펼침
+    h+='<div class="rmap-expand" id="rmapExp'+n+'">';
+    var reflection=(fin&&fin.reportReflection)||'';
+    if(reflection){
+      h+='<div class="rmap-reflect"><b>'+_t('game_flow.reflection_label','핵심 돌아보기')+'</b> — '+_esc(reflection)+'</div>';
+    }
+    h+='<div class="rmap-strip">';
+    var beatLabels=['',M.beat1||'1차 선택',M.beat2||'2차 선택',M.beat_result||'결과',M.beat_review||'검토'];
+    for(var c=1;c<=5;c++){
+      var src=getCutImageFor(r.scenarioId,r.leaf,c);
+      var cap=getCutCaptionFor(r.scenarioId,r.leaf,c);
+      h+='<div>';
+      if(src)h+='<div class="rmap-cut-lg"><img src="'+src+'" alt="컷'+c+'" onerror="this.style.display=\'none\'"></div>';
+      h+='<div class="rmap-cap">'+(beatLabels[c]?'<b>'+_esc(beatLabels[c])+'</b>'+(cap?' — ':''):'')+cap+'</div>';
+      h+='</div>';
+    }
+    h+='</div></div>';
+    h+='</div>';
+  }
   h+='</div>';
-  h+='<div style="padding:0 16px 12px;font-size:12px;color:var(--ink-soft);">'+_esc(M.legend||'◉ 검토 3회 · ◎ 검토 2회 · ○ 검토 1회 — 점을 잇는 선이 나의 항로, 기울기가 곧 패턴')+'</div>';
+  h+='<div style="padding:0 16px 12px;font-size:12px;color:var(--ink-soft);">'+_esc(M.legend||'작은 점 = 1차·2차 선택, 큰 원 = 검토(○ 1회 · ◎ 2회 · ◉ 3회) — 점을 잇는 선이 나의 항로, 기울기가 곧 패턴')+'</div>';
   h+='</div>';
   return h;
 }
@@ -514,44 +591,8 @@ function showFinalReport(){
   // §18: 성장 리포트 통합 — 학습자 유형 + 카드 분포 + 선택 패턴 + 강점/보완/약속
   h+=_renderGrowthReport(hist, compType, gameState.inventory||{});
 
-  // 회기별 카드 그룹
-  var cardsByScene=_reportCardsByScenario();
-
-  // 하단: 시나리오별 카툰
-  h+='<div class="report-comic">';
-  var sceneColors=['var(--acc-cyan)','var(--acc-mint)','var(--acc-yellow)','var(--acc-pink-soft)','var(--acc-cyan-soft)'];
-  hist.forEach(function(r,i){
-    var sc=SCENARIOS[r.scenarioId];
-    var grade=r.grade||'D';
-    var fin=(sc&&sc.finals)?sc.finals[r.leaf]:null;
-    var accentColor=sceneColors[i%sceneColors.length];
-
-    h+='<div style="margin-bottom:24px;border:var(--border-w) solid var(--ink);background:var(--bg-card);box-shadow:var(--shadow);overflow:hidden;">';
-    h+='<div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px;min-height:42px;background:'+accentColor+';border-bottom:var(--border-w) solid var(--ink);font-size:15px;font-weight:700;">';
-    h+='<span>'+(i+1)+'. '+_esc(sc?sc.title:r.scenarioId)+'</span>';
-    h+='<span>'+r.finalScore+'점 · '+grade+'</span>';
-    h+='</div>';
-
-    var reflection=(fin&&fin.reportReflection)||'';
-    if(reflection){
-      h+='<div style="margin:10px 14px 4px;padding:8px 12px;background:var(--bg-soft);border:2px solid var(--ink);font-size:12px;line-height:1.6;color:var(--ink-mute);">';
-      h+='<b>'+_t('game_flow.reflection_label','핵심 돌아보기')+'</b> — '+_esc(reflection);
-      h+='</div>';
-    }
-
-    h+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;padding:14px 14px 18px;">';
-    for(var c=1;c<=5;c++){
-      var src=getCutImageFor(r.scenarioId, r.leaf, c);
-      var cap=getCutCaptionFor(r.scenarioId, r.leaf, c);
-      h+='<div>';
-      if(src)h+='<div class="img-frame" style="aspect-ratio:1/1;position:relative;overflow:hidden;border:var(--border-w) solid var(--ink);box-shadow:4px 4px 0 var(--ink);background:var(--bg-card);"><img src="'+src+'" alt="컷'+c+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display=\'none\'"></div>';
-      if(cap)h+='<div style="font-family:var(--font-hand);font-size:20px;line-height:1.35;color:var(--ink-mute);margin-top:8px;word-break:keep-all;">'+cap+'</div>';
-      h+='</div>';
-    }
-    h+='</div>';
-    h+='</div>';
-  });
-  h+='</div>';
+  // §4d R3.5 — 하단 시나리오별 카툰 섹션 폐지: 컷은 위임 항로 행의 대표 컷+펼침으로 통합
+  // (행 헤더가 점수·등급 흡수, reportReflection은 펼침 안으로 이동. getCutImageFor/getCutCaptionFor는 항로에서 재사용)
 
   // v1.1 Phase 1 — PDF 저장(브라우저 인쇄) + 시작 화면 (print에서는 모두 숨김)
   h+='<div class="report-actions no-print" style="display:flex;gap:12px;justify-content:center;align-items:center;margin-top:24px;flex-wrap:wrap;">';
