@@ -13468,6 +13468,7 @@ var TEXTS = {
     "title": "AI리터러시 성장 리포트",
     "intro": "이 리포트는 다섯 개의 선택 장면을 바탕으로, 학생이 AI를 어떤 방식으로 활용했는지 돌아보는 기록이다. 점수보다 중요한 것은 어떤 과정을 AI에게 맡겼고, 어떤 과정을 직접 붙잡았는지 확인하는 것이다.",
     "pattern_names": {
+      "selective": "가려서 맡기는 유형",
       "aiHeavy": "넓게 맡기는 유형",
       "selfStart": "내가 먼저 해보는 유형",
       "reviewStrong": "끝까지 확인하는 유형",
@@ -13475,6 +13476,7 @@ var TEXTS = {
       "recoveryNeeded": "다시 도전하는 유형"
     },
     "patterns": {
+      "selective": "맡길 일과 직접 할 일을 가려서 골랐고, 결과도 좋았다. 무엇을 맡기고 무엇을 붙잡을지 아는 것, 그것이 이 게임이 기르려는 힘이다. 다음 단계는 그 기준을 말로 설명해 보는 것이다. 왜 이건 맡겼고 왜 저건 직접 했는지 말할 수 있으면, 어떤 새로운 일이 와도 가릴 수 있다.",
       "aiHeavy": "AI에게 맡기는 선택이 많았다. 빨리 가는 길을 아는 것이다. 남는 질문은 하나다. 맡긴 결과를 내가 설명할 수 있는가. 받은 것을 내 자료와 기준으로 다시 확인하면, 맡긴 일도 내 것이 된다.",
       "selfStart": "시나리오 대부분에서 직접 하는 쪽을 골랐다. 직접 한 만큼 능력이 쌓였고, 쌓인 능력은 다음 위임을 더 싸게 만든다. 이제 맡겨도 되는 일을 하나 골라 AI에게 시켜 보자. 잘 시키는 사람은 직접 해 본 사람이다.",
       "reviewStrong": "받은 결과를 그대로 넘기지 않고 다시 확인하는 선택이 많았다. 검토는 맡긴 일을 내 것으로 만드는 마지막 손길이다. 이 힘이 있으면 다음에는 더 과감하게 맡겨도 된다. 확인할 줄 아는 사람이 크게 맡길 수 있다.",
@@ -16958,7 +16960,9 @@ function _judgePattern(hist){
     var gr=hist[i].grade||'D';if(grCounts.hasOwnProperty(gr))grCounts[gr]++;
   }
   var pattern='selfStart';
-  if((grCounts.C+grCounts.D)/total>0.6)pattern='recoveryNeeded';
+  // §4h-4 6종 — selective 최상위: 섞인 항로(직접·위임 둘 다 0.4+) + 좋은 결과(S·A 0.6+) = 게임의 목표 행동
+  if(t1Counts.A/total>=0.4&&(t1Counts.B+t1Counts.C)/total>=0.4&&(grCounts.S+grCounts.A)/total>=0.6)pattern='selective';
+  else if((grCounts.C+grCounts.D)/total>0.6)pattern='recoveryNeeded';
   else if(rvCounts.R1/total>0.6)pattern='reviewWeak';
   else if((t1Counts.B+t1Counts.C)/total>0.6)pattern='aiHeavy';
   else if((rvCounts.R2+rvCounts.R3)/total>0.6)pattern='reviewStrong';

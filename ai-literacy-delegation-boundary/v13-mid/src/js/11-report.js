@@ -715,7 +715,9 @@ function _judgePattern(hist){
     var gr=hist[i].grade||'D';if(grCounts.hasOwnProperty(gr))grCounts[gr]++;
   }
   var pattern='selfStart';
-  if((grCounts.C+grCounts.D)/total>0.6)pattern='recoveryNeeded';
+  // §4h-4 6종 — selective 최상위: 섞인 항로(직접·위임 둘 다 0.4+) + 좋은 결과(S·A 0.6+) = 게임의 목표 행동
+  if(t1Counts.A/total>=0.4&&(t1Counts.B+t1Counts.C)/total>=0.4&&(grCounts.S+grCounts.A)/total>=0.6)pattern='selective';
+  else if((grCounts.C+grCounts.D)/total>0.6)pattern='recoveryNeeded';
   else if(rvCounts.R1/total>0.6)pattern='reviewWeak';
   else if((t1Counts.B+t1Counts.C)/total>0.6)pattern='aiHeavy';
   else if((rvCounts.R2+rvCounts.R3)/total>0.6)pattern='reviewStrong';
