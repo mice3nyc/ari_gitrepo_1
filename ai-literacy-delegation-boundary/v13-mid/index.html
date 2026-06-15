@@ -18198,8 +18198,17 @@ function _dockEl(){
 function dockShow(on){_dockEl().classList.toggle('on',!!on);}
 // §4p A (피터공) — 레벨·할인 = 보유 카드 장수(보이는 카드와 일치). 능력=내가할까칸(domainCards), 위임=시킬까칸(인간중심+성장).
 // 리포트 학습자 유형은 competencies 점수 그대로(별개 성향 측정) — 건드리지 않음.
-function _abilityCardCount(){var inv=gameState&&gameState.inventory;return (inv&&inv.domainCards)?inv.domainCards.length:0;}
-function _delegationCardCount(){var inv=gameState&&gameState.inventory;if(!inv)return 0;return (inv.humanCentricCards?inv.humanCentricCards.length:0)+(inv.growthCards?inv.growthCards.length:0);}
+// §4p v4 (피터공, 세션486) — 버그수정: 완료 시나리오(clearedScenarios) 카드만 카운트.
+// 진행 중 시나리오에서 막 획득한 pending 카드(currentScenarioId·미클리어)는 제외 →
+// 레벨/할인은 시나리오 도중이 아니라 철컥 확보(완료) 후 다음 시나리오부터 적용.
+function _lockedCardCount(arr){
+  if(!arr||!gameState)return 0;
+  var cleared=gameState.clearedScenarios||[],n=0;
+  for(var i=0;i<arr.length;i++){if(arr[i]&&cleared.indexOf(arr[i].scenario)>=0)n++;}
+  return n;
+}
+function _abilityCardCount(){var inv=gameState&&gameState.inventory;return inv?_lockedCardCount(inv.domainCards):0;}
+function _delegationCardCount(){var inv=gameState&&gameState.inventory;if(!inv)return 0;return _lockedCardCount(inv.humanCentricCards)+_lockedCardCount(inv.growthCards);}
 function updateDockLevels(){
   if(!gameState)return;
   var ab=document.getElementById('dock-level-ab');

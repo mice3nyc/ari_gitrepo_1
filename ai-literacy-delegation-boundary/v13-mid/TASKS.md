@@ -1,15 +1,17 @@
 ## TASKS — v1.3-mid (중등)
 
-**최종 업데이트**: 2026-06-15 세션485 (HUD 우측 결합 + 할인 캐스케이드 §4o/§4p, 라이브 9fbcf3b)
+**최종 업데이트**: 2026-06-15 세션486 (할인 즉시적용 버그 수정 §4p v4, 빌드 964,398B)
 
-### ▶ 다음 작업 (세션486) — 버그 수정: 할인이 시나리오 도중 즉시 적용됨
+### ✓ 세션486 — 버그 수정: 할인이 시나리오 도중 즉시 적용됨 (완료)
 
 피터공 발견(세션485 끝). **증상**: 카드 획득하면 그 시나리오 안에서 바로 레벨/할인이 오름. **정상**: 시나리오 끝(철컥 확보) 후 갱신 → 다음 시나리오부터 적용.
 
-- [ ] `_abilityCardCount`/`_delegationCardCount`(16-card-rail.js)가 **완료 시나리오 카드만** 카운트: `gameState.clearedScenarios.indexOf(card.scenario)>=0` 필터. 진행 중(currentScenarioId·미clear) pending 카드는 제외
-- [ ] 검증: clearedScenarios 채워지는 시점(시나리오 완료) 확인 + 진행 중 currentScenarioId 미포함 확인. 보관함 pending 칩 깜빡임은 유지(카운트만 락 기준). 엣지: 리플레이·회복력
-- [ ] 헤드리스로 시나리오1 도중 할인 0 유지 → 시나리오1 완료 후 카드 수만큼 시나리오2에서 할인 확인
-- [ ] 빌드 + 커밋·푸시. 상세 SPEC-ui-hud §4p v4 ⚠️ 블록 참조
+- [x] `_abilityCardCount`/`_delegationCardCount`(16-card-rail.js)가 **완료 시나리오 카드만** 카운트 — `_lockedCardCount()` 헬퍼 신설(`clearedScenarios.indexOf(card.scenario)>=0` 필터). 진행 중(currentScenarioId·미clear) pending 카드 제외
+- [x] 검증: 카운트 함수 두 곳이 유일 출처 — 디스플레이(`updateDockLevels`)와 실제 비용 할인(`04-resources.js _applyDiscount`)이 같은 함수를 씀. 카드 entry는 전부 `.scenario` 보유(03-engine·15-card-per-choice push 확인). 완료 push는 `goNextScenario`(10-event-handlers) → 락 애니(`_dockLockNow`)는 완료 전이라 그 시점엔 미반영, 다음 시나리오 render부터 반영. 보관함 pending 칩 깜빡임 유지(_dockIsPending 별개). 엣지(null gs·회복력) 통과
+- [x] 헤드리스(node) 검증: 시나리오1 도중 0/0 → 완료 후 1/1 → 시나리오2 도중 1/1(새카드 미반영) → 완료 후 2/2 → null gs 0/0 전부 기대값 일치. `node --check` 구문 OK
+- [x] 빌드 964,398B. 상세 SPEC-ui-hud §4p v4 ⚠️ 블록 참조
+- [ ] 피터공 라이브 클릭 확인 (시나리오 도중 할인 0 → 완료 후 다음 시나리오 할인 적용)
+- [ ] 커밋·푸시 → 라이브 반영 (피터공 확인 후)
 
 ---
 
