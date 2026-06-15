@@ -312,6 +312,8 @@
 
 **v3 비용 한 줄 통합 (피터공, 6/15)**: 시간·에너지를 **한 줄에** — "시간 비용 : N | 에너지 비용 : N"(`.cost-simple` flex-row, `.cost-sep`="|"). 두 줄 wrap 방지(nowrap+15px). **취소선·화살표 폐지** → 캐스케이드 스텝4가 비용 숫자(`.cost-num`)를 final로 교체 + 초록(`.discounted`) + 펄스×2(자리 절약).
 
+**v4 레벨·할인 = 카드 장수 (피터공 A, 6/15)**: "카드 2장인데 레벨 3" 어긋남 해결. 기존엔 레벨=`competencies.value`(선택 누적 점수), 카드=시나리오 보상이라 트리거·속도가 달라 안 맞았다. → **레벨·할인을 보유 카드 장수로 통일**: 능력=내가할까칸 `domainCards.length`, 위임=시킬까칸 `humanCentricCards+growthCards` 수. `_abilityCardCount`/`_delegationCardCount`(16-card-rail) — `updateDockLevels`(표시)·`_applyDiscount`(비용 할인) 둘 다 이 출처. **보이는 카드 = 레벨 = 할인 = 비용 감소** 완전 일치. **리포트 학습자 유형은 `competencies.value` 그대로**(성향 측정, 카드 수와 별개 — 건드리지 않음).
+
 ## 5. 미해결 / 다음 단계
 
 - [ ] 원 7개의 **숫자 로직 정식 설계** — 획득·증감 단위를 7단계 기준으로 재설계 (피터공: "일단은 3개가 기존 0"). 콘텐츠 트랙 밸런스와 엮임.

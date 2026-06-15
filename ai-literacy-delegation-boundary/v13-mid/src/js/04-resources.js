@@ -115,8 +115,9 @@ function _calculateCardEnergyDiscount(discountTags){
 // v1.0 세션325: tier1 할인 끔 + 바닥값 도입 (덱스 QA)
 var DISCOUNT_FLOOR={tier1:{time:0,energy:0},tier2:{time:0,energy:0},review:{time:0,energy:0}};
 function _applyDiscount(c,stageType,choiceId,selectedCard){
-  var dlg=(gameState&&gameState.competencies)?gameState.competencies.delegationChoice.value||0:0;
-  var knl=(gameState&&gameState.competencies)?gameState.competencies.knowledge.value||0:0;
+  // §4p A (피터공) — 할인 = 보유 카드 장수(레벨 표시와 동일 출처). 시간=시킬까칸 / 에너지=내가할까칸.
+  var dlg=(typeof _delegationCardCount==='function')?_delegationCardCount():0;
+  var knl=(typeof _abilityCardCount==='function')?_abilityCardCount():0;
   var rawT=c.time,rawE=c.energy;
   if(stageType==='tier1'){
     return {time:0,energy:0,_discount:{dlg:0,knl:0,dlgEffect:0,knlEffect:0,cardDiscount:0,cardDetails:[],mPos:1,mNeg:1,rawTime:0,rawEnergy:0,clampedEnergy:0}};

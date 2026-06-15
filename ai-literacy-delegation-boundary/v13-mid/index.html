@@ -14439,8 +14439,9 @@ function _calculateCardEnergyDiscount(discountTags){
 // v1.0 세션325: tier1 할인 끔 + 바닥값 도입 (덱스 QA)
 var DISCOUNT_FLOOR={tier1:{time:0,energy:0},tier2:{time:0,energy:0},review:{time:0,energy:0}};
 function _applyDiscount(c,stageType,choiceId,selectedCard){
-  var dlg=(gameState&&gameState.competencies)?gameState.competencies.delegationChoice.value||0:0;
-  var knl=(gameState&&gameState.competencies)?gameState.competencies.knowledge.value||0:0;
+  // §4p A (피터공) — 할인 = 보유 카드 장수(레벨 표시와 동일 출처). 시간=시킬까칸 / 에너지=내가할까칸.
+  var dlg=(typeof _delegationCardCount==='function')?_delegationCardCount():0;
+  var knl=(typeof _abilityCardCount==='function')?_abilityCardCount():0;
   var rawT=c.time,rawE=c.energy;
   if(stageType==='tier1'){
     return {time:0,energy:0,_discount:{dlg:0,knl:0,dlgEffect:0,knlEffect:0,cardDiscount:0,cardDetails:[],mPos:1,mNeg:1,rawTime:0,rawEnergy:0,clampedEnergy:0}};
@@ -18195,18 +18196,19 @@ function _dockEl(){
   return dock;
 }
 function dockShow(on){_dockEl().classList.toggle('on',!!on);}
-// 6/15 r42 (§4n) — 레일 헤더 레벨 숫자 = 역량 raw 값 (0부터, 보정 없음). 능력=knowledge / 위임=delegationChoice.
+// §4p A (피터공) — 레벨·할인 = 보유 카드 장수(보이는 카드와 일치). 능력=내가할까칸(domainCards), 위임=시킬까칸(인간중심+성장).
+// 리포트 학습자 유형은 competencies 점수 그대로(별개 성향 측정) — 건드리지 않음.
+function _abilityCardCount(){var inv=gameState&&gameState.inventory;return (inv&&inv.domainCards)?inv.domainCards.length:0;}
+function _delegationCardCount(){var inv=gameState&&gameState.inventory;if(!inv)return 0;return (inv.humanCentricCards?inv.humanCentricCards.length:0)+(inv.growthCards?inv.growthCards.length:0);}
 function updateDockLevels(){
-  if(!gameState||!gameState.competencies)return;
+  if(!gameState)return;
   var ab=document.getElementById('dock-level-ab');
   var hc=document.getElementById('dock-level-hc');
-  // §4o v5 (피터공): 레벨 0부터 = 할인 값과 동일 매칭 (레벨 N ↔ 할인 N). 기존 "레벨 1부터"(§4n) 폐지.
-  var knl=Math.max(0,gameState.competencies.knowledge.value);
-  var dlg=Math.max(0,gameState.competencies.delegationChoice.value);
+  var knl=_abilityCardCount();
+  var dlg=_delegationCardCount();
   if(ab)ab.textContent=knl;
   if(hc)hc.textContent=dlg;
-  // 할인 = 레벨 = raw 값 (능력→에너지 할인 / 위임→시간 할인). 카드 할인은 선택 시 별도 가산.
-  // §4o v7 (피터공): 할인 0이면 블럭 숨김, >0이면 숫자만 크게(-N) 강조.
+  // 할인 = 카드 장수 (능력→에너지 할인 / 위임→시간 할인). 0이면 블럭 숨김(§4o v7).
   _setDockDisc(document.getElementById('dock-disc-ab'),knl);
   _setDockDisc(document.getElementById('dock-disc-hc'),dlg);
 }
