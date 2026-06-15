@@ -5,12 +5,14 @@ var container=document.getElementById('main-container');
 
 function showStats(){
   document.getElementById('panel-row').classList.add('visible');
+  document.body.classList.add('scenario-active'); // 6/15 r42 (§4n) — 우측 레일 자리 확보
   // §2d — inv-tab 버튼 대신 카드 독. 상세 패널은 독 클릭으로 진입.
   var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='none';
   if(typeof dockShow==='function'){dockRender();dockShow(true);}
 }
 function hideStats(){
   document.getElementById('panel-row').classList.remove('visible');
+  document.body.classList.remove('scenario-active'); // 6/15 r42 (§4n)
   var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='none';
   if(typeof dockShow==='function')dockShow(false);
 }
@@ -166,9 +168,13 @@ function updateStats(){
     _prevPending.delegation=gameState.pending.delegation||0;
     _prevPending.knowledge=gameState.pending.knowledge||0;
   }
-  // 중앙 누적 SCORE 표시 — v6 6/11: totalScore + 확정된 현재 시나리오 점수 (LV은 updateExpUI가 담당)
+  // 6/15 r42 (§4n) — 우상단 SCORE = 전체 누적(totalScore). 중앙 알약(rider)이 해당 시나리오 점수 담당.
   var scoreNumEl=document.getElementById('score-num');
-  if(scoreNumEl)scoreNumEl.textContent=(gameState.totalScore||0)+(gameState.score||0);
+  if(scoreNumEl)scoreNumEl.textContent=(gameState.totalScore||0);
+  // HUD 중앙 시나리오 제목 + 우측 레일 레벨 숫자
+  var titleEl=document.getElementById('hud-scenario-title');
+  if(titleEl){var _scT=getScenario();titleEl.textContent=_scT?('상황: '+_scT.title):'';}
+  if(typeof updateDockLevels==='function')updateDockLevels();
   updateScoreGraph();
   updateResourceUI();
   updateExpUI();
@@ -237,10 +243,13 @@ function getCurrentCutNum(){
 function animateStat(which,oldVal,newVal){
   var diff=newVal-oldVal;if(diff===0)return;
   var st=document.getElementById('stat-'+which);
-  st.classList.add(diff>0?'flash-up':'flash-down');
-  // v2 6/11 — ±N float 인디케이터 제거 (피터공). 원 미터 갱신이 변화를 보여줌.
+  if(st)st.classList.add(diff>0?'flash-up':'flash-down');
   setCircleMeter('meter-'+which,newVal);
-  setTimeout(function(){st.classList.remove('flash-up','flash-down');},2000);
+  // 6/15 r42 (§4n) — 우측 레일 레벨 숫자 갱신 + 펄스
+  if(typeof updateDockLevels==='function')updateDockLevels();
+  var dlEl=document.getElementById(which==='delegation'?'dock-level-hc':'dock-level-ab');
+  if(dlEl){dlEl.classList.remove('pulsing');void dlEl.offsetWidth;dlEl.classList.add('pulsing');setTimeout(function(){dlEl.classList.remove('pulsing');},600);}
+  setTimeout(function(){if(st)st.classList.remove('flash-up','flash-down');},2000);
 }
 
 // 타이틀 화면 — §4i v10: 레트로 + 물마루, 튜토리얼은 별도 화면으로 분리
@@ -516,11 +525,28 @@ function setPanelImage(cutNum,labelText){
   }
 }
 
+// 6/15 — sticky HUD(.panel-row) 높이만큼 보정한 스크롤. block:'center'는 키 큰 패널의
+// 상단(이미지·제목)을 HUD 밑으로 밀어넣어, 컷 시작 시 위쪽이 가려졌다. 패널 top을 HUD 바로 아래에 맞춘다.
+function _hudOffset(){
+  var hud=document.querySelector('.panel-row');
+  if(!hud)return 0;
+  var cs=getComputedStyle(hud);
+  if(cs.display==='none'||(cs.position!=='sticky'&&cs.position!=='fixed'))return 0;
+  return hud.getBoundingClientRect().height;
+}
+// 패널 위쪽(이미지)을 HUD 바로 아래로 — 컷 시작 + 선택 후 이미지 복귀에 쓰임
+function _scrollPanelTop(panel){
+  if(!panel)return;
+  var gap=12;
+  var top=panel.getBoundingClientRect().top+window.pageYOffset-_hudOffset()-gap;
+  window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+}
+
 function activatePanel(cutNum){
   var panel=currentRow.querySelector('[data-cut="'+cutNum+'"]');
   if(!panel)return null;
   panel.classList.add('active','slide-in');
-  setTimeout(function(){panel.scrollIntoView({behavior:'smooth',block:'center'});},80);
+  setTimeout(function(){_scrollPanelTop(panel);},80);
   return panel;
 }
 
@@ -651,8 +677,19 @@ function getCardDiscountMark(stageType,choiceId){
 // §23 — 1차 선택지를 Cut 1 body 아래에 펼침
 function _scrollChoicesIntoView(area,count){
   setTimeout(function(){
-    var last=area.lastElementChild;
-    if(last)last.scrollIntoView({behavior:'smooth',block:'nearest'});
+    if(!area)return;
+    var hud=_hudOffset();
+    var avail=window.innerHeight-hud;
+    var rect=area.getBoundingClientRect();
+    if(rect.height<=avail-16){
+      // 질문+선택지 전체가 한 화면에 들어가면 영역 top을 HUD 바로 아래로 (3개 다 보이게)
+      var top=rect.top+window.pageYOffset-hud-12;
+      window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+    }else{
+      // 너무 길어 한 화면에 안 들어가면 마지막 선택지라도 보이도록
+      var last=area.lastElementChild;
+      if(last)last.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
   },count*120+300);
 }
 function showTier1Choices(){

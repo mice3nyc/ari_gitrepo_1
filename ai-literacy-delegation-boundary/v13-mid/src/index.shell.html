@@ -19,6 +19,7 @@
   </div>
   <!-- 중앙: 시나리오 실시간 점수 그래프 + 누적 SCORE + LV/XP — 6/11 v6 (SPEC §4e) -->
   <div class="score-display" id="score-display">
+    <div class="hud-title" id="hud-scenario-title"></div>
     <div class="score-graph-row">
       <div class="score-graph" id="score-graph">
         <!-- v6.2 — 알약형 트랙 안에 머리+숫자 (피터공 스케치 IMG_4762). icon-schoolhead.svg 분리 임베드: 머리/기어 두 패스, 기어만 SMIL 회전(중심 11,10) -->
@@ -30,13 +31,12 @@
           </div>
         </div>
       </div>
-      <!-- 누적 SCORE (totalScore + 확정된 현재 시나리오 점수) + LV — v6.1: XP 바 HUD 표시 제거(시스템 무변), LV은 SCORE 아래 -->
-      <div class="score-total-block">
-        <span class="display-label">SCORE</span>
-        <span class="display-num" id="score-num">0</span>
-        <span class="score-lv-line">LV <span class="lv-compact" id="lv-num">1</span></span>
-      </div>
     </div>
+  </div>
+  <!-- 우상단: 누적 SCORE (전체 시나리오 합) + LV — 6/15 r42: 미터 우측 레일 이동에 따라 SCORE를 독립 우측 구역으로 -->
+  <div class="score-total-block">
+    <span class="display-label">SCORE</span>
+    <span class="display-num" id="score-num">0</span>
   </div>
   <!-- 우측: 역량 (원 7개 미터 — 6/11 HUD 개편: 타이틀·숫자·양방향 바 제거, 기본 3개 채움 = 기존 0) -->
   <div class="stats-bar" id="stats-bar">

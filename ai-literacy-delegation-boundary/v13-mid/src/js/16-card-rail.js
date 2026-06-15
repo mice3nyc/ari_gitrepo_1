@@ -8,14 +8,46 @@ function _dockEl(){
   if(!dock){
     dock=document.createElement('div');
     dock.id='card-dock';
-    dock.innerHTML='<div class="dock-sec"><div class="dock-sec-title">'+_t('inventory_labels.section_human_centric','인간중심 역량')+'</div><div class="dock-list" id="dock-list-hc"></div></div>'
-      +'<div class="dock-sec"><div class="dock-sec-title">'+_t('inventory_labels.section_ability','능력 카드')+'</div><div class="dock-list" id="dock-list-ab"></div></div>';
+    // 6/15 r42 (§4n) — 두 칸 가로: 좌=내가할까?(능력→능력카드) / 우=시킬까?(위임→인간중심+성장)
+    dock.innerHTML=
+      '<div class="dock-col" id="dock-col-ab">'
+        +'<div class="dock-col-top">'
+          +'<div class="dock-col-head">'+_t('dock.head_self','내가할까?')+'</div>'
+          +'<div class="dock-level"><span class="dl-label">'+_t('dock.level_ability','능력 레벨')+'</span><span class="dl-num" id="dock-level-ab">1</span></div>'
+        +'</div>'
+        +'<div class="dock-discount" id="dock-disc-ab">에너지 할인 -0</div>'
+        +'<div class="dock-cards-box"><div class="dock-list" id="dock-list-ab"></div></div>'
+      +'</div>'
+      +'<div class="dock-col" id="dock-col-hc">'
+        +'<div class="dock-col-top">'
+          +'<div class="dock-col-head">'+_t('dock.head_delegate','시킬까?')+'</div>'
+          +'<div class="dock-level"><span class="dl-label">'+_t('dock.level_delegation','위임 레벨')+'</span><span class="dl-num" id="dock-level-hc">1</span></div>'
+        +'</div>'
+        +'<div class="dock-discount" id="dock-disc-hc">시간 할인 -0</div>'
+        +'<div class="dock-cards-box"><div class="dock-list" id="dock-list-hc"></div></div>'
+      +'</div>';
     // §2d v2 — inv-panel 폐지: 독은 표시 전용. 리셋은 디버그 패널 초기화로.
     document.body.appendChild(dock);
   }
   return dock;
 }
 function dockShow(on){_dockEl().classList.toggle('on',!!on);}
+// 6/15 r42 (§4n) — 레일 헤더 레벨 숫자 = 역량 raw 값 (0부터, 보정 없음). 능력=knowledge / 위임=delegationChoice.
+function updateDockLevels(){
+  if(!gameState||!gameState.competencies)return;
+  var ab=document.getElementById('dock-level-ab');
+  var hc=document.getElementById('dock-level-hc');
+  // 표시는 레벨 1부터(피터공): 내부 raw 값 0 → 레벨 1
+  var knl=Math.max(0,gameState.competencies.knowledge.value);
+  var dlg=Math.max(0,gameState.competencies.delegationChoice.value);
+  if(ab)ab.textContent=knl+1;
+  if(hc)hc.textContent=dlg+1;
+  // 할인 = 레벨−1 = raw 값 (능력→에너지 할인 / 위임→시간 할인). 카드 할인은 선택 시 별도 가산.
+  var dAb=document.getElementById('dock-disc-ab');
+  var dHc=document.getElementById('dock-disc-hc');
+  if(dAb)dAb.textContent='에너지 할인 -'+knl;
+  if(dHc)dHc.textContent='시간 할인 -'+dlg;
+}
 // 임시(pending) 판정 — 현재 시나리오에서 선택으로 획득, 아직 미클리어
 function _dockIsPending(entry){
   if(!entry||!entry.perChoice||!gameState)return false;
@@ -49,7 +81,7 @@ function _dockChip(c,pending){
   }
   return el;
 }
-function _dockListFor(c){return document.getElementById(c.kind==='hc'?'dock-list-hc':'dock-list-ab');}
+function _dockListFor(c){return document.getElementById((c.kind==='hc'||c.kind==='growth')?'dock-list-hc':'dock-list-ab');}
 // 인벤토리 → 독 전체 재렌더 (읽기 전용 미러, 획득 순서 = 배열 순서)
 function dockRender(){
   _dockEl();
@@ -59,9 +91,11 @@ function dockRender(){
   hcL.innerHTML='';abL.innerHTML='';
   if(!gameState||!gameState.inventory)return;
   var inv=gameState.inventory;
+  // 6/15 r42 (§4n) — 능력카드(domain)=내가할까 칸 / 인간중심(hc)+성장(growth, B)=시킬까 칸
   (inv.humanCentricCards||[]).forEach(function(e){hcL.appendChild(_dockChip({kind:'hc',axis:e.axis,tag:e.tag},_dockIsPending(e)));});
+  (inv.growthCards||[]).forEach(function(e){hcL.appendChild(_dockChip({kind:'growth',name:e.label},_dockIsPending(e)));});
   (inv.domainCards||[]).forEach(function(e){abL.appendChild(_dockChip({kind:'domain',name:e.label},_dockIsPending(e)));});
-  (inv.growthCards||[]).forEach(function(e){abL.appendChild(_dockChip({kind:'growth',name:e.label},_dockIsPending(e)));});
+  updateDockLevels();
 }
 function railClear(){
   var pop=document.getElementById('card-earn-popup');

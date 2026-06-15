@@ -196,6 +196,55 @@
 1. **미리보기 카드 한 줄**: `_railCardVisual`의 hc 두 줄(axis 위 작은 줄 + tag 아래)을 **독 칩(§2d v2 ③)과 같은 한 줄 인라인**으로 — "중심잡기 주체성"(axis는 `.rail-card-axis` opacity 0.85, nowrap). 비행 고스트도 같은 비주얼 공유.
 2. **타이틀 = "{카드명} 확보!"**: `.cep-title`을 `popup_title_format`("{cards} 확보!") 키로 — "주체성 확보!". 여러 장이면 "주체성 · 통합적 사고 확보!". ui_texts.csv 재추출 동기.
 
+## 4m. 세션484 (6/15) — 컷 스크롤: HUD 인지 + 이미지 복귀 (피터공)
+
+> "cut1,3 상단 박스가 항상 HUD 아래로 들어간 상태로 시작한다. 처음엔 무조건 상단부까지 다 보이고, [어떻게 할까?] 누르면 선택지 3개가 다 보이도록, 선택 후엔 다시 이미지가 보이도록."
+
+문제: `activatePanel()`이 `scrollIntoView({block:'center'})`로 패널을 세로 중앙 정렬 → 이미지(정사각 ~360px)+본문으로 키 큰 패널의 상단이 sticky HUD(`.panel-row`, top:0) 밑에 가려짐.
+
+1. **HUD 인지 스크롤 헬퍼**(`09-render-scenario.js`): `_hudOffset()` = `.panel-row`가 보이고 sticky/fixed일 때 그 높이. `_scrollPanelTop(panel)` = 패널 top을 `HUD높이 + 12px gap` 아래로 `window.scrollTo`.
+2. **컷 시작 = 상단부터**: `activatePanel`의 center 스크롤 → `_scrollPanelTop`. 모든 컷(cut1~6)이 이미지·제목부터 보이게 시작.
+3. **선택 후 이미지 복귀**: 다음 컷 활성화가 곧 `_scrollPanelTop` → 그 컷 이미지를 HUD 바로 아래로 올림(별도 로직 불필요). 데스크톱 3열 그리드에선 같은 행 컷이라 행 top으로 복귀 = 이미지 노출.
+4. **선택지 펼침 = 3개 다 보이게**: `_scrollChoicesIntoView` 보강 — 질문+선택지 전체가 `뷰포트−HUD`에 들어가면 영역 top을 HUD 아래로(질문+3개 동시 노출), 넘치면 마지막 선택지를 `block:'nearest'`로.
+
+## 4n. 세션484 (6/15 r42) — 시나리오 화면 전면 레이아웃 개편 (피터공 스케치)
+
+> 스케치: `Assets/incoming/AI리터러시/UIUX/UI레이아웃 260615.png`. 요청: [[요청.26.0615.1637-시나리오UI개편]].
+> 이번 라운드 = **레이아웃만**. 레벨 의미·비용 할인 단순화·카드 칸 밸런스는 다음 단계.
+
+**HUD 재편 3구역 (좌:1fr / 중앙:44% / 우:1fr)** — `.panel-row` (피터공 6/15)
+- **좌(`.resource-bar` flex:1)**: 시간/에너지 게이지, 좌정렬.
+- **중앙(`.score-display` flex:0 1 44%)**: 폭을 기존의 ~2/3로 줄이고 좌우 1fr 사이에서 중앙. 맨 위 **`상황: {시나리오 제목}`**(`.hud-title`, `#hud-scenario-title`, updateStats에서 `'상황: '+title`) + 그 아래 점수 알약(rider). rider 숫자 = `getLiveScore()` = **해당 시나리오 점수**.
+- **우(`.score-total-block` flex:1, align-items:flex-end)**: 우정렬. `#score-num` = **전체 누적**(`totalScore`만). **LV 줄 제거**(`score-lv-line` 마크업 삭제 — updateExpUI는 null-safe).
+- **미터 제거**: `.stats-bar`(선택·능력 원형 7점)는 `display:none`으로 숨김 — **DOM·로직은 유지**(setCircleMeter/pending 무파손), 표시만 우측 레일 숫자로 이관.
+- **컷 상단 가림 해결**: `.panel-row`가 fixed(약 116px)라 컨테이너가 그 아래 깔림 → `body.scenario-active #main-container { padding-top:132px }`로 상단 여백 확보(컷 꼭대기가 HUD 아래로 보이고 스크롤 정상). paperlogy의 `.panel-row + .container` 규칙은 사이의 `나가기` 버튼 때문에 안 먹음.
+
+**레벨 숫자화 (A)**
+- 능력·위임 = `competencies.knowledge.value` / `delegationChoice.value`. 내부 값은 0부터(raw, "3개가 기존 0" 보정 없음). **표시는 레벨 1부터**(피터공): `updateDockLevels()`가 `value+1`로 표시 — 시작 시 능력 레벨 1 / 위임 레벨 1, 역량 쌓이면 2·3. 레일 헤더 민트 박스(`.dock-level`)에 표시, `animateStat` 펄스.
+- 글씨 크기(피터공): 헤더(내가할까?/시킬까?) 22px, 레벨 라벨+숫자 **같은 크기 18px**("능력 레벨 1"로 한 호흡에 읽힘).
+
+**우측 레일 두 칸 (`#card-dock`)**
+- `flex-direction:row`, width 300, `top:8px right:12px bottom:12px` — HUD와 같은 높이에서 시작, 상시 노출(showStats에서 on).
+- **좌 칸 = 내가할까?(능력 레벨) → 능력카드**(domainCards, `dock-list-ab`). **우 칸 = 시킬까?(위임 레벨) → 인간중심 역량**(humanCentricCards) + **성장·회복력**(growthCards, (B)에 따라 hc 칸으로 이동). 각 칸: 헤더 + 민트 레벨 박스 + 카드 박스. 카드 쌓이면 칸 안에서 스크롤.
+- 매핑 근거: 능력↑(knowledge) 선택 → 능력카드 / 위임↑(delegation) 선택 → 인간중심. 현재 획득 로직과 일치(§15 pilotCardsForChoice).
+
+**페이지 레이아웃 — 그룹 중앙정렬**
+- HUD + 그리드 + 레일을 한 그룹으로 묶어 **화면 중앙**에 둠(피터공: "좌우 정렬 아니라 중앙쯤"). `body.scenario-active`에 CSS 변수 `--bw`(그룹 폭 = min(1412px, 100vw-24px)) + `--gx`(좌측 여백 = (100vw-bw)/2). 그리드·HUD 폭 = `calc(--bw - 312)`(레일 300 + gap 12), 좌표 `--gx`. 레일 `left: calc(--gx + --bw - 300)` = 그리드 우측 끝 옆(gap 12). HUD는 그리드 폭에 맞춤(레일 미포함, 피터공: "HUD는 cut 폭보다 약간 넓은 정도").
+- **함정**: 10-paperlogy가 `.panel-row`를 `position:fixed; left:50% translateX`(중앙)로 둠 → flex align-self/margin 다 무시. fixed의 `left`/`width`를 직접 덮어써야 함.
+- 레일 헤더+레벨(`.dock-col-top`) = HUD 박스와 같은 스타일(둥근 카드+그림자), 그 아래 카드 자리(`.dock-cards-box`, 점선 둥근 박스).
+- showStats/hideStats에서 scenario-active 토글(리포트·시작화면은 hideStats로 해제). ≤900px: 레일 static 하단 스택 + HUD 중앙 원복.
+
+**컷 본문 무변 (6)**: 제목 중앙 표시는 반복일 뿐, 컷 본문 내용·구조는 그대로.
+
+**반복 정정 (6/15 세션484, 피터공 스케치 재확인)**
+- HUD `--hud-h`(116px)로 높이 고정 → 레일 박스(`.dock-col-top`)와 동일 높이. 컨테이너 `padding-top:calc(--hud-h+16)`로 컷 꼭대기가 HUD 아래 보임.
+- **중앙(점수)**: 별도 카드 테두리 제거, 좌우 얇은 라인(`border-left/right 1.5px ink-soft`)으로만 구분. 제목(`.hud-title` 20px, 상단 여백) 위 + 점수 알약 아래(하단 여백). `space-between`.
+- **SCORE**: 우정렬, LV 줄 삭제. **시간/에너지**: 좌정렬(flex:1).
+- **레일 박스 = HUD 형식**: 화면 상단 부착(`#card-dock top:0`), 라운딩 없음(`border-radius:0; border-top:0`), HUD와 같은 높이. 헤더(내가할까?/시킬까? 22px) + 민트 레벨 띠(아래) = HUD 제목+알약 구조와 평행.
+- **레벨 표시 1부터**: `value+1`(레벨 1 시작). **할인 = 레벨−1 = raw 값**(피터공 "n−1") — 이미 `_applyDiscount`가 그렇게 동작(시간할인=위임 raw, 에너지할인=능력 raw + 선택 카드). tier1은 비용·할인 0(설계).
+- **할인 정보 블럭**(`.dock-discount`, 초록 #15803d): 레벨 박스 아래·카드 자리 위에 "에너지 할인 -N"(능력 칸=knowledge.value) / "시간 할인 -N"(위임 칸=delegationChoice.value). `updateDockLevels()`가 갱신.
+- **카드 자리**(`.dock-cards-box`, 점선): `min-height:140px`(약 3개) + 콘텐츠로 성장.
+
 ## 5. 미해결 / 다음 단계
 
 - [ ] 원 7개의 **숫자 로직 정식 설계** — 획득·증감 단위를 7단계 기준으로 재설계 (피터공: "일단은 3개가 기존 0"). 콘텐츠 트랙 밸런스와 엮임.

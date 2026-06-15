@@ -17,7 +17,7 @@
 .resource-bar.flash-levelup { animation:flashLevelUp 0.8s ease; }
 
 /* ===== 좌측 패널 — 자원 게이지 (단방향) — 6/11 HUD 개편: 아이콘+큰 레이블+두툼한 바+바 위 수치 ===== */
-.resource-bar { flex:3 1 0; min-width:0; display:flex; flex-direction:row; gap:0; padding:0; border:0; background:transparent; box-shadow:none; overflow:hidden; } /* v3 6/11 — 중간 박스 제거 / v6 6/11 — 3:5:3 분할 (SPEC §4e) */
+.resource-bar { flex:1 1 0; min-width:0; display:flex; flex-direction:row; gap:0; padding:0; border:0; background:transparent; box-shadow:none; overflow:hidden; } /* v3 6/11 / r42 6/15 — 좌정렬, 3구역(좌:시간에너지 / 중앙:점수 / 우:SCORE) */
 .resource-item { flex:1; display:flex; flex-direction:row; align-items:center; gap:8px; padding:8px 12px; position:relative; transition:background-color 0.3s; }
 .resource-icon { flex:0 0 auto; display:flex; align-items:center; }
 .resource-icon svg { width:22px; height:22px; fill:var(--ink); display:block; }
@@ -72,7 +72,11 @@
 .scenario-progress-strip .sps-items.zero { color:#bbb; border-color:#ddd; }
 
 /* ===== 중앙 LV·SCORE 큰 디스플레이 ===== */
-.score-display { flex:5 1 0; min-width:0; display:flex; flex-direction:column; align-items:stretch; gap:6px; padding:8px 18px; border:var(--border-w) solid var(--ink); background:var(--bg-card); box-shadow:none; border-radius:16px; } /* v6 6/11 — 3:5:3 분할 / v6.2 — drop shadow 제거 + 라운딩 (SPEC §4e-7) */
+.score-display { flex:0 1 44%; min-width:0; display:flex; flex-direction:column; justify-content:space-between; align-items:stretch; gap:6px; padding:11px 16px 13px; border:0; border-left:1.5px solid var(--ink-soft); border-right:1.5px solid var(--ink-soft); background:transparent; box-shadow:none; border-radius:0; } /* r42 6/15 — 별도 박스 제거, 좌우 얇은 라인 구분. 제목(위·상단여백)+점수 알약(아래·하단여백) */
+/* 6/15 r42 (§4n) — HUD 중앙 시나리오 제목 + 미터→우측 레일 이동 */
+.hud-title { font-size:20px; font-weight:800; text-align:center; color:var(--ink); line-height:1.2; padding:0 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.stats-bar { display:none !important; }
+.panel-row.visible .score-total-block { align-self:center; }
 /* 6/11 HUD 개편 — panel-title([자원]/[역량] 세로 타이틀) 제거 */
 .panel-content { flex:1; display:flex; flex-direction:column; }
 .panel-divider { height:1px; background:#ddd; }
@@ -95,7 +99,7 @@
 .score-graph-rider.num-right .score-graph-num { right:auto; left:100%; margin-right:0; margin-left:8px; color:var(--ink); }
 .score-graph-num.pulsing { animation:numPulse 0.5s ease; }
 /* 누적 SCORE 블록 (그래프 우측) — v6.1: LV은 SCORE 숫자 아래 작은 한 줄, XP 바 HUD 표시 제거 */
-.score-total-block { flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:3px; min-width:54px; }
+.score-total-block { flex:1 1 0; display:flex; flex-direction:column; align-items:flex-end; justify-content:center; gap:3px; min-width:54px; } /* r42 6/15 — 우정렬 */
 .score-lv-line { font-size:11px; font-weight:800; color:#888; letter-spacing:1px; line-height:1; }
 .lv-compact { font-size:12px; font-weight:800; color:#111; line-height:1; display:inline-block; }
 .lv-compact.pulsing { animation:numPulse 0.5s ease; }

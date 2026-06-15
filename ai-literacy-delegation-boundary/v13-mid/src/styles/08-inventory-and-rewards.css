@@ -98,12 +98,29 @@
 .no-card-notice { margin-top:10px; padding:8px 12px; background:var(--bg-soft); border:var(--border-w) solid var(--ink); font-size:12px; color:var(--ink); }
 
 /* ===== 카드 독 (SPEC-card-per-choice §2d) — 우측 상시 컬렉션 ===== */
-#card-dock { position:fixed; top:96px; right:10px; bottom:12px; width:200px; z-index:180; display:none; flex-direction:column; gap:10px; overflow-y:auto; scrollbar-width:none; }
-#card-dock::-webkit-scrollbar { display:none; }
+/* 6/15 r42 (§4n) — 우측 레일 두 칸: 내가할까?(능력) | 시킬까?(위임). 그룹 중앙정렬 — 그리드 우측 끝 옆에 붙음(--gx/--bw는 body.scenario-active에서 상속). */
+#card-dock { position:fixed; top:0; left: calc(var(--gx) + var(--bw) - 300px); bottom:12px; width:300px; z-index:180; display:none; flex-direction:row; gap:10px; }
 #card-dock.on { display:flex; }
+.dock-col { flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:10px; overflow-y:auto; scrollbar-width:none; }
+.dock-col::-webkit-scrollbar { display:none; }
+/* 헤더+레벨 = HUD 박스와 같은 형식·같은 높이(--hud-h)의 박스. 헤더(위)+레벨 민트 띠(아래) = HUD의 제목+알약 구조와 평행. */
+.dock-col-top { flex-shrink:0; height: var(--hud-h); display:flex; flex-direction:column; border:var(--border-w) solid var(--ink); border-top:0; border-radius:0; background:var(--bg-card); box-shadow:var(--shadow); overflow:hidden; } /* HUD와 동일: 상단 부착·라운딩 없음·border-top:0 */
+.dock-col-head { flex:1; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; text-align:center; color:var(--ink); padding:4px; }
+.dock-level { display:flex; align-items:baseline; justify-content:center; gap:7px; background:var(--acc-mint); border-top:2px solid var(--ink); padding:9px 4px; }
+.dock-level .dl-label { font-size:18px; font-weight:800; color:var(--ink); }
+.dock-level .dl-num { font-size:18px; font-weight:800; color:var(--ink); line-height:1; }
+.dock-level .dl-num.pulsing { animation:numPulse 0.5s ease; }
+/* 박스 아래 · 카드 자리 위 — 큰 글씨 초록 블럭 할인 정보 (능력 칸=에너지 할인 / 위임 칸=시간 할인) */
+.dock-discount { flex-shrink:0; text-align:center; font-size:16px; font-weight:800; color:#fff; background:#15803d; border:var(--border-w) solid var(--ink); padding:9px 4px; line-height:1.15; }
+/* 점선 카드 자리 — 처음 3개 정도 크기, 카드 쌓이면 늘어남 */
+.dock-cards-box { flex:0 0 auto; border:var(--border-w) dashed var(--ink-soft); border-radius:0; background:var(--bg-card); padding:10px; min-height:140px; }
 .dock-sec { border:3px solid var(--ink); background:var(--bg-card); padding:8px; flex-shrink:0; }
 .dock-sec-title { font-size:13px; font-weight:800; letter-spacing:1.5px; color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:6px; margin-bottom:8px; text-align:center; }
 .dock-list { display:flex; flex-direction:column; gap:6px; min-height:10px; }
+@media (max-width:900px){
+  #card-dock.on { position:static; width:100%; right:auto; top:auto; bottom:auto; margin-top:10px; }
+  .dock-col { overflow-y:visible; }
+}
 .dock-card { border:2px solid var(--ink); background:#fff; padding:8px 10px; }
 .dock-card .dc-name { font-size:14px; font-weight:700; line-height:1.25; white-space:nowrap; overflow:hidden; }
 .dock-card .dc-axis { font-weight:600; opacity:0.85; }

@@ -33,6 +33,19 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: var(--font-main); background: var(--bg-page); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+/* 6/15 r42 (§4n) — 시나리오 진행 중 우측 레일(300+여백=336) 자리 확보. body는 flex center라 padding/stretch가 안 먹어 →
+   align-self:flex-start로 좌측 정렬 + width를 (전체-336)으로 줄여 레일과 겹치지 않게. ≤900px는 레일 하단 스택이라 원복. */
+/* 그룹(HUD+그리드 | 레일) 전체를 화면 중앙에 둠. --bw=그룹 폭(레일 312 포함), --gx=좌측 여백.
+   그리드 폭 = --bw - 312(레일300+gap12+gap... ). HUD는 그리드와 같은 좌표/폭, 레일은 그리드 우측 옆. */
+body.scenario-active { align-items: flex-start; --bw: min(1412px, calc(100vw - 24px)); --gx: calc((100vw - min(1412px, calc(100vw - 24px))) / 2); --hud-h: 116px; }
+body.scenario-active #main-container { margin-left: var(--gx); margin-right: 0; width: calc(var(--bw) - 312px); max-width: none; padding-top: calc(var(--hud-h) + 16px); } /* fixed HUD 높이만큼 컨테이너 상단 여백 — 컷 꼭대기가 HUD 아래로 보이게(paperlogy의 + .container 규칙은 나가기 버튼 때문에 안 먹음) */
+/* 10-paperlogy가 .panel-row를 position:fixed + left:50% translateX(중앙)로 둠 → 그리드 좌표/폭에 맞춰 덮어씀. 높이는 --hud-h로 고정(레일 박스와 동일 높이). */
+body.scenario-active .panel-row { left: var(--gx); right: auto; transform: none; width: calc(var(--bw) - 312px); max-width: none; height: var(--hud-h); }
+@media (max-width:900px){
+  body.scenario-active { align-items: center; }
+  body.scenario-active #main-container { margin: 0; width: 100%; max-width: 1100px; }
+  body.scenario-active .panel-row { left: 50%; right: auto; transform: translateX(-50%); width: calc(100vw - 24px); max-width: min(1120px, calc(100vw - 24px)); }
+}
 /* SPEC-ui-hud §4d-2 — 폼 요소는 폰트를 상속하지 않아 시스템 폰트로 샌다. 전역 차단 (debug 패널 monospace는 뒤 선언이 이김) */
 button, input, select, textarea { font-family: inherit; }
 .container { max-width: 1100px; width: 100%; padding: 8px 24px 80px; }

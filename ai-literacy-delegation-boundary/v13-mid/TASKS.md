@@ -1,6 +1,33 @@
 ## TASKS — v1.3-mid (중등)
 
-**최종 업데이트**: 2026-06-15 세션481 (인트로 CRT 모니터 연출 r40 — 시안 승인 후 라이브 통합, SPEC-intro-crt.md)
+**최종 업데이트**: 2026-06-15 세션484 (시나리오 화면 전면 레이아웃 개편 r42 — HUD 4구역 + 우측 두 칸 레일 + 레벨 숫자화, SPEC-ui-hud §4n)
+
+### r41 — 컷 스크롤: HUD 인지 시작 + 선택 후 이미지 복귀 (6/15 피터공)
+
+cut1·cut3 상단이 sticky HUD 밑으로 가려진 채 시작하던 문제 수정. SPEC-ui-hud §4m.
+
+- [x] `09-render-scenario.js`: `_hudOffset()`+`_scrollPanelTop()` 헬퍼 신설. `activatePanel`의 `scrollIntoView({block:'center'})` → `_scrollPanelTop`(패널 top을 HUD 바로 아래로) — 모든 컷 시작이 이미지·제목부터, 선택 후 다음 컷 이미지 자동 복귀
+- [x] `_scrollChoicesIntoView` HUD 인지 보강 — 질문+선택지 3개가 한 화면에 들어가면 영역 top을 HUD 아래로(다 보이게), 넘치면 마지막 선택지 nearest
+- [x] 빌드 948,140B + node 구문 OK (`09-render-scenario.js`)
+- [ ] 피터공 라이브 클릭 확인 (cut1 시작 상단 노출 / [어떻게 할까?] 3개 노출 / 선택 후 이미지 복귀)
+- [ ] 커밋·푸시 → 라이브 반영
+
+---
+
+### r42 — 시나리오 화면 전면 레이아웃 개편 (6/15 피터공 스케치, SPEC-ui-hud §4n)
+
+스케치 `Assets/incoming/AI리터러시/UIUX/UI레이아웃 260615.png`. 요청 노트 [[요청.26.0615.1637-시나리오UI개편]]. 이번 라운드 = 레이아웃만(레벨 의미·할인·카드 밸런스는 다음).
+
+- [x] HUD 재편: 시나리오 제목(`#hud-scenario-title`) 중앙 신설 + 점수 알약=시나리오 점수 / SCORE=누적(`totalScore`, `score-total-block` 우측 독립 구역으로) / 미터(`.stats-bar`)는 `display:none`(DOM·로직 유지)
+- [x] 레벨 숫자화: 능력=knowledge / 위임=delegationChoice raw 값(0부터, 보정 없음 — 피터공 A). `updateDockLevels()` + `animateStat` 펄스
+- [x] 우측 레일 두 칸(`#card-dock` flex-row): 좌 내가할까?(능력→domainCards) / 우 시킬까?(위임→humanCentric+growth). 헤더+민트 레벨 박스+카드 박스, 카드 쌓이면 스크롤. growth→hc 칸(피터공 B)
+- [x] 페이지 레이아웃 = **그룹 중앙정렬**(피터공 2차 정정: "좌우정렬 아니라 HUD+카드바가 화면 중앙쯤"). CSS var `--bw`(그룹폭 min(1412,100vw-24)) + `--gx`(좌측여백). 그리드/HUD 폭=`--bw-312`, 좌표 `--gx`. 레일 `left:calc(--gx+--bw-300)`=그리드 우측 옆(gap12). HUD는 그리드 폭에 맞춤(약간만 넓게). **함정**: paperlogy가 `.panel-row`를 fixed+중앙(left:50% translateX)으로 둬서 flex 정렬 무시 → fixed의 left/width 직접 덮어씀. 레일 헤더(`.dock-col-top`)=HUD 박스 스타일(둥근 카드+그림자)+카드 자리(`.dock-cards-box` 점선). ≤900px 레일 하단 스택·HUD 중앙 원복
+- [x] 빌드 953,448B + node 구문 OK + 헤드리스(vw1500: HUD 44~1144 = 그리드 44~1144 정렬, 레일 1156~1456, 그룹 44~1456 중앙[양쪽 44]; cut1→tier1→cut2 무에러, 카드 팝업·점수·레벨 정상). showFinalReport/showStartScreen은 hideStats로 scenario-active 해제
+- [x] **반복 정정(6/15 피터공)**: HUD 시간/에너지 좌·점수 중앙(박스 제거+얇은 라인, 제목20px 위/알약 아래 여백)·SCORE 우·LV 삭제. 컷 꼭대기 HUD 아래 노출(`--hud-h`116 + 컨테이너 padding-top). 레일 박스=HUD형식(상단부착 top:0·라운딩0·border-top:0·같은높이). 레벨 1부터(value+1). 초록 할인 블럭(에너지/시간 할인 -N=raw값=레벨-1). 점선 카드자리 3개크기 grow. 빌드 955,144B
+- [ ] 피터공 육안 검토 (실제 빌드 브라우저 오픈됨)
+- [ ] 커밋·푸시 → 라이브 반영
+
+---
 
 ### r40 — 인트로 CRT 모니터 연출 (6/15 피터공, 시안 승인 후 통합)
 

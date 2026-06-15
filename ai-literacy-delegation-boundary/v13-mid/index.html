@@ -39,6 +39,19 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: var(--font-main); background: var(--bg-page); color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+/* 6/15 r42 (§4n) — 시나리오 진행 중 우측 레일(300+여백=336) 자리 확보. body는 flex center라 padding/stretch가 안 먹어 →
+   align-self:flex-start로 좌측 정렬 + width를 (전체-336)으로 줄여 레일과 겹치지 않게. ≤900px는 레일 하단 스택이라 원복. */
+/* 그룹(HUD+그리드 | 레일) 전체를 화면 중앙에 둠. --bw=그룹 폭(레일 312 포함), --gx=좌측 여백.
+   그리드 폭 = --bw - 312(레일300+gap12+gap... ). HUD는 그리드와 같은 좌표/폭, 레일은 그리드 우측 옆. */
+body.scenario-active { align-items: flex-start; --bw: min(1412px, calc(100vw - 24px)); --gx: calc((100vw - min(1412px, calc(100vw - 24px))) / 2); --hud-h: 116px; }
+body.scenario-active #main-container { margin-left: var(--gx); margin-right: 0; width: calc(var(--bw) - 312px); max-width: none; padding-top: calc(var(--hud-h) + 16px); } /* fixed HUD 높이만큼 컨테이너 상단 여백 — 컷 꼭대기가 HUD 아래로 보이게(paperlogy의 + .container 규칙은 나가기 버튼 때문에 안 먹음) */
+/* 10-paperlogy가 .panel-row를 position:fixed + left:50% translateX(중앙)로 둠 → 그리드 좌표/폭에 맞춰 덮어씀. 높이는 --hud-h로 고정(레일 박스와 동일 높이). */
+body.scenario-active .panel-row { left: var(--gx); right: auto; transform: none; width: calc(var(--bw) - 312px); max-width: none; height: var(--hud-h); }
+@media (max-width:900px){
+  body.scenario-active { align-items: center; }
+  body.scenario-active #main-container { margin: 0; width: 100%; max-width: 1100px; }
+  body.scenario-active .panel-row { left: 50%; right: auto; transform: translateX(-50%); width: calc(100vw - 24px); max-width: min(1120px, calc(100vw - 24px)); }
+}
 /* SPEC-ui-hud §4d-2 — 폼 요소는 폰트를 상속하지 않아 시스템 폰트로 샌다. 전역 차단 (debug 패널 monospace는 뒤 선언이 이김) */
 button, input, select, textarea { font-family: inherit; }
 .container { max-width: 1100px; width: 100%; padding: 8px 24px 80px; }
@@ -62,7 +75,7 @@ button, input, select, textarea { font-family: inherit; }
 .resource-bar.flash-levelup { animation:flashLevelUp 0.8s ease; }
 
 /* ===== 좌측 패널 — 자원 게이지 (단방향) — 6/11 HUD 개편: 아이콘+큰 레이블+두툼한 바+바 위 수치 ===== */
-.resource-bar { flex:3 1 0; min-width:0; display:flex; flex-direction:row; gap:0; padding:0; border:0; background:transparent; box-shadow:none; overflow:hidden; } /* v3 6/11 — 중간 박스 제거 / v6 6/11 — 3:5:3 분할 (SPEC §4e) */
+.resource-bar { flex:1 1 0; min-width:0; display:flex; flex-direction:row; gap:0; padding:0; border:0; background:transparent; box-shadow:none; overflow:hidden; } /* v3 6/11 / r42 6/15 — 좌정렬, 3구역(좌:시간에너지 / 중앙:점수 / 우:SCORE) */
 .resource-item { flex:1; display:flex; flex-direction:row; align-items:center; gap:8px; padding:8px 12px; position:relative; transition:background-color 0.3s; }
 .resource-icon { flex:0 0 auto; display:flex; align-items:center; }
 .resource-icon svg { width:22px; height:22px; fill:var(--ink); display:block; }
@@ -117,7 +130,11 @@ button, input, select, textarea { font-family: inherit; }
 .scenario-progress-strip .sps-items.zero { color:#bbb; border-color:#ddd; }
 
 /* ===== 중앙 LV·SCORE 큰 디스플레이 ===== */
-.score-display { flex:5 1 0; min-width:0; display:flex; flex-direction:column; align-items:stretch; gap:6px; padding:8px 18px; border:var(--border-w) solid var(--ink); background:var(--bg-card); box-shadow:none; border-radius:16px; } /* v6 6/11 — 3:5:3 분할 / v6.2 — drop shadow 제거 + 라운딩 (SPEC §4e-7) */
+.score-display { flex:0 1 44%; min-width:0; display:flex; flex-direction:column; justify-content:space-between; align-items:stretch; gap:6px; padding:11px 16px 13px; border:0; border-left:1.5px solid var(--ink-soft); border-right:1.5px solid var(--ink-soft); background:transparent; box-shadow:none; border-radius:0; } /* r42 6/15 — 별도 박스 제거, 좌우 얇은 라인 구분. 제목(위·상단여백)+점수 알약(아래·하단여백) */
+/* 6/15 r42 (§4n) — HUD 중앙 시나리오 제목 + 미터→우측 레일 이동 */
+.hud-title { font-size:20px; font-weight:800; text-align:center; color:var(--ink); line-height:1.2; padding:0 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.stats-bar { display:none !important; }
+.panel-row.visible .score-total-block { align-self:center; }
 /* 6/11 HUD 개편 — panel-title([자원]/[역량] 세로 타이틀) 제거 */
 .panel-content { flex:1; display:flex; flex-direction:column; }
 .panel-divider { height:1px; background:#ddd; }
@@ -140,7 +157,7 @@ button, input, select, textarea { font-family: inherit; }
 .score-graph-rider.num-right .score-graph-num { right:auto; left:100%; margin-right:0; margin-left:8px; color:var(--ink); }
 .score-graph-num.pulsing { animation:numPulse 0.5s ease; }
 /* 누적 SCORE 블록 (그래프 우측) — v6.1: LV은 SCORE 숫자 아래 작은 한 줄, XP 바 HUD 표시 제거 */
-.score-total-block { flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:3px; min-width:54px; }
+.score-total-block { flex:1 1 0; display:flex; flex-direction:column; align-items:flex-end; justify-content:center; gap:3px; min-width:54px; } /* r42 6/15 — 우정렬 */
 .score-lv-line { font-size:11px; font-weight:800; color:#888; letter-spacing:1px; line-height:1; }
 .lv-compact { font-size:12px; font-weight:800; color:#111; line-height:1; display:inline-block; }
 .lv-compact.pulsing { animation:numPulse 0.5s ease; }
@@ -854,12 +871,29 @@ button, input, select, textarea { font-family: inherit; }
 .no-card-notice { margin-top:10px; padding:8px 12px; background:var(--bg-soft); border:var(--border-w) solid var(--ink); font-size:12px; color:var(--ink); }
 
 /* ===== 카드 독 (SPEC-card-per-choice §2d) — 우측 상시 컬렉션 ===== */
-#card-dock { position:fixed; top:96px; right:10px; bottom:12px; width:200px; z-index:180; display:none; flex-direction:column; gap:10px; overflow-y:auto; scrollbar-width:none; }
-#card-dock::-webkit-scrollbar { display:none; }
+/* 6/15 r42 (§4n) — 우측 레일 두 칸: 내가할까?(능력) | 시킬까?(위임). 그룹 중앙정렬 — 그리드 우측 끝 옆에 붙음(--gx/--bw는 body.scenario-active에서 상속). */
+#card-dock { position:fixed; top:0; left: calc(var(--gx) + var(--bw) - 300px); bottom:12px; width:300px; z-index:180; display:none; flex-direction:row; gap:10px; }
 #card-dock.on { display:flex; }
+.dock-col { flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:10px; overflow-y:auto; scrollbar-width:none; }
+.dock-col::-webkit-scrollbar { display:none; }
+/* 헤더+레벨 = HUD 박스와 같은 형식·같은 높이(--hud-h)의 박스. 헤더(위)+레벨 민트 띠(아래) = HUD의 제목+알약 구조와 평행. */
+.dock-col-top { flex-shrink:0; height: var(--hud-h); display:flex; flex-direction:column; border:var(--border-w) solid var(--ink); border-top:0; border-radius:0; background:var(--bg-card); box-shadow:var(--shadow); overflow:hidden; } /* HUD와 동일: 상단 부착·라운딩 없음·border-top:0 */
+.dock-col-head { flex:1; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; text-align:center; color:var(--ink); padding:4px; }
+.dock-level { display:flex; align-items:baseline; justify-content:center; gap:7px; background:var(--acc-mint); border-top:2px solid var(--ink); padding:9px 4px; }
+.dock-level .dl-label { font-size:18px; font-weight:800; color:var(--ink); }
+.dock-level .dl-num { font-size:18px; font-weight:800; color:var(--ink); line-height:1; }
+.dock-level .dl-num.pulsing { animation:numPulse 0.5s ease; }
+/* 박스 아래 · 카드 자리 위 — 큰 글씨 초록 블럭 할인 정보 (능력 칸=에너지 할인 / 위임 칸=시간 할인) */
+.dock-discount { flex-shrink:0; text-align:center; font-size:16px; font-weight:800; color:#fff; background:#15803d; border:var(--border-w) solid var(--ink); padding:9px 4px; line-height:1.15; }
+/* 점선 카드 자리 — 처음 3개 정도 크기, 카드 쌓이면 늘어남 */
+.dock-cards-box { flex:0 0 auto; border:var(--border-w) dashed var(--ink-soft); border-radius:0; background:var(--bg-card); padding:10px; min-height:140px; }
 .dock-sec { border:3px solid var(--ink); background:var(--bg-card); padding:8px; flex-shrink:0; }
 .dock-sec-title { font-size:13px; font-weight:800; letter-spacing:1.5px; color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:6px; margin-bottom:8px; text-align:center; }
 .dock-list { display:flex; flex-direction:column; gap:6px; min-height:10px; }
+@media (max-width:900px){
+  #card-dock.on { position:static; width:100%; right:auto; top:auto; bottom:auto; margin-top:10px; }
+  .dock-col { overflow-y:visible; }
+}
 .dock-card { border:2px solid var(--ink); background:#fff; padding:8px 10px; }
 .dock-card .dc-name { font-size:14px; font-weight:700; line-height:1.25; white-space:nowrap; overflow:hidden; }
 .dock-card .dc-axis { font-weight:600; opacity:0.85; }
@@ -1791,6 +1825,7 @@ button,
   </div>
   <!-- 중앙: 시나리오 실시간 점수 그래프 + 누적 SCORE + LV/XP — 6/11 v6 (SPEC §4e) -->
   <div class="score-display" id="score-display">
+    <div class="hud-title" id="hud-scenario-title"></div>
     <div class="score-graph-row">
       <div class="score-graph" id="score-graph">
         <!-- v6.2 — 알약형 트랙 안에 머리+숫자 (피터공 스케치 IMG_4762). icon-schoolhead.svg 분리 임베드: 머리/기어 두 패스, 기어만 SMIL 회전(중심 11,10) -->
@@ -1802,13 +1837,12 @@ button,
           </div>
         </div>
       </div>
-      <!-- 누적 SCORE (totalScore + 확정된 현재 시나리오 점수) + LV — v6.1: XP 바 HUD 표시 제거(시스템 무변), LV은 SCORE 아래 -->
-      <div class="score-total-block">
-        <span class="display-label">SCORE</span>
-        <span class="display-num" id="score-num">0</span>
-        <span class="score-lv-line">LV <span class="lv-compact" id="lv-num">1</span></span>
-      </div>
     </div>
+  </div>
+  <!-- 우상단: 누적 SCORE (전체 시나리오 합) + LV — 6/15 r42: 미터 우측 레일 이동에 따라 SCORE를 독립 우측 구역으로 -->
+  <div class="score-total-block">
+    <span class="display-label">SCORE</span>
+    <span class="display-num" id="score-num">0</span>
   </div>
   <!-- 우측: 역량 (원 7개 미터 — 6/11 HUD 개편: 타이틀·숫자·양방향 바 제거, 기본 3개 채움 = 기존 0) -->
   <div class="stats-bar" id="stats-bar">
@@ -14954,12 +14988,14 @@ var container=document.getElementById('main-container');
 
 function showStats(){
   document.getElementById('panel-row').classList.add('visible');
+  document.body.classList.add('scenario-active'); // 6/15 r42 (§4n) — 우측 레일 자리 확보
   // §2d — inv-tab 버튼 대신 카드 독. 상세 패널은 독 클릭으로 진입.
   var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='none';
   if(typeof dockShow==='function'){dockRender();dockShow(true);}
 }
 function hideStats(){
   document.getElementById('panel-row').classList.remove('visible');
+  document.body.classList.remove('scenario-active'); // 6/15 r42 (§4n)
   var invTab=document.getElementById('inv-tab');if(invTab)invTab.style.display='none';
   if(typeof dockShow==='function')dockShow(false);
 }
@@ -15115,9 +15151,13 @@ function updateStats(){
     _prevPending.delegation=gameState.pending.delegation||0;
     _prevPending.knowledge=gameState.pending.knowledge||0;
   }
-  // 중앙 누적 SCORE 표시 — v6 6/11: totalScore + 확정된 현재 시나리오 점수 (LV은 updateExpUI가 담당)
+  // 6/15 r42 (§4n) — 우상단 SCORE = 전체 누적(totalScore). 중앙 알약(rider)이 해당 시나리오 점수 담당.
   var scoreNumEl=document.getElementById('score-num');
-  if(scoreNumEl)scoreNumEl.textContent=(gameState.totalScore||0)+(gameState.score||0);
+  if(scoreNumEl)scoreNumEl.textContent=(gameState.totalScore||0);
+  // HUD 중앙 시나리오 제목 + 우측 레일 레벨 숫자
+  var titleEl=document.getElementById('hud-scenario-title');
+  if(titleEl){var _scT=getScenario();titleEl.textContent=_scT?('상황: '+_scT.title):'';}
+  if(typeof updateDockLevels==='function')updateDockLevels();
   updateScoreGraph();
   updateResourceUI();
   updateExpUI();
@@ -15186,10 +15226,13 @@ function getCurrentCutNum(){
 function animateStat(which,oldVal,newVal){
   var diff=newVal-oldVal;if(diff===0)return;
   var st=document.getElementById('stat-'+which);
-  st.classList.add(diff>0?'flash-up':'flash-down');
-  // v2 6/11 — ±N float 인디케이터 제거 (피터공). 원 미터 갱신이 변화를 보여줌.
+  if(st)st.classList.add(diff>0?'flash-up':'flash-down');
   setCircleMeter('meter-'+which,newVal);
-  setTimeout(function(){st.classList.remove('flash-up','flash-down');},2000);
+  // 6/15 r42 (§4n) — 우측 레일 레벨 숫자 갱신 + 펄스
+  if(typeof updateDockLevels==='function')updateDockLevels();
+  var dlEl=document.getElementById(which==='delegation'?'dock-level-hc':'dock-level-ab');
+  if(dlEl){dlEl.classList.remove('pulsing');void dlEl.offsetWidth;dlEl.classList.add('pulsing');setTimeout(function(){dlEl.classList.remove('pulsing');},600);}
+  setTimeout(function(){if(st)st.classList.remove('flash-up','flash-down');},2000);
 }
 
 // 타이틀 화면 — §4i v10: 레트로 + 물마루, 튜토리얼은 별도 화면으로 분리
@@ -15465,11 +15508,28 @@ function setPanelImage(cutNum,labelText){
   }
 }
 
+// 6/15 — sticky HUD(.panel-row) 높이만큼 보정한 스크롤. block:'center'는 키 큰 패널의
+// 상단(이미지·제목)을 HUD 밑으로 밀어넣어, 컷 시작 시 위쪽이 가려졌다. 패널 top을 HUD 바로 아래에 맞춘다.
+function _hudOffset(){
+  var hud=document.querySelector('.panel-row');
+  if(!hud)return 0;
+  var cs=getComputedStyle(hud);
+  if(cs.display==='none'||(cs.position!=='sticky'&&cs.position!=='fixed'))return 0;
+  return hud.getBoundingClientRect().height;
+}
+// 패널 위쪽(이미지)을 HUD 바로 아래로 — 컷 시작 + 선택 후 이미지 복귀에 쓰임
+function _scrollPanelTop(panel){
+  if(!panel)return;
+  var gap=12;
+  var top=panel.getBoundingClientRect().top+window.pageYOffset-_hudOffset()-gap;
+  window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+}
+
 function activatePanel(cutNum){
   var panel=currentRow.querySelector('[data-cut="'+cutNum+'"]');
   if(!panel)return null;
   panel.classList.add('active','slide-in');
-  setTimeout(function(){panel.scrollIntoView({behavior:'smooth',block:'center'});},80);
+  setTimeout(function(){_scrollPanelTop(panel);},80);
   return panel;
 }
 
@@ -15600,8 +15660,19 @@ function getCardDiscountMark(stageType,choiceId){
 // §23 — 1차 선택지를 Cut 1 body 아래에 펼침
 function _scrollChoicesIntoView(area,count){
   setTimeout(function(){
-    var last=area.lastElementChild;
-    if(last)last.scrollIntoView({behavior:'smooth',block:'nearest'});
+    if(!area)return;
+    var hud=_hudOffset();
+    var avail=window.innerHeight-hud;
+    var rect=area.getBoundingClientRect();
+    if(rect.height<=avail-16){
+      // 질문+선택지 전체가 한 화면에 들어가면 영역 top을 HUD 바로 아래로 (3개 다 보이게)
+      var top=rect.top+window.pageYOffset-hud-12;
+      window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+    }else{
+      // 너무 길어 한 화면에 안 들어가면 마지막 선택지라도 보이도록
+      var last=area.lastElementChild;
+      if(last)last.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
   },count*120+300);
 }
 function showTier1Choices(){
@@ -18030,14 +18101,46 @@ function _dockEl(){
   if(!dock){
     dock=document.createElement('div');
     dock.id='card-dock';
-    dock.innerHTML='<div class="dock-sec"><div class="dock-sec-title">'+_t('inventory_labels.section_human_centric','인간중심 역량')+'</div><div class="dock-list" id="dock-list-hc"></div></div>'
-      +'<div class="dock-sec"><div class="dock-sec-title">'+_t('inventory_labels.section_ability','능력 카드')+'</div><div class="dock-list" id="dock-list-ab"></div></div>';
+    // 6/15 r42 (§4n) — 두 칸 가로: 좌=내가할까?(능력→능력카드) / 우=시킬까?(위임→인간중심+성장)
+    dock.innerHTML=
+      '<div class="dock-col" id="dock-col-ab">'
+        +'<div class="dock-col-top">'
+          +'<div class="dock-col-head">'+_t('dock.head_self','내가할까?')+'</div>'
+          +'<div class="dock-level"><span class="dl-label">'+_t('dock.level_ability','능력 레벨')+'</span><span class="dl-num" id="dock-level-ab">1</span></div>'
+        +'</div>'
+        +'<div class="dock-discount" id="dock-disc-ab">에너지 할인 -0</div>'
+        +'<div class="dock-cards-box"><div class="dock-list" id="dock-list-ab"></div></div>'
+      +'</div>'
+      +'<div class="dock-col" id="dock-col-hc">'
+        +'<div class="dock-col-top">'
+          +'<div class="dock-col-head">'+_t('dock.head_delegate','시킬까?')+'</div>'
+          +'<div class="dock-level"><span class="dl-label">'+_t('dock.level_delegation','위임 레벨')+'</span><span class="dl-num" id="dock-level-hc">1</span></div>'
+        +'</div>'
+        +'<div class="dock-discount" id="dock-disc-hc">시간 할인 -0</div>'
+        +'<div class="dock-cards-box"><div class="dock-list" id="dock-list-hc"></div></div>'
+      +'</div>';
     // §2d v2 — inv-panel 폐지: 독은 표시 전용. 리셋은 디버그 패널 초기화로.
     document.body.appendChild(dock);
   }
   return dock;
 }
 function dockShow(on){_dockEl().classList.toggle('on',!!on);}
+// 6/15 r42 (§4n) — 레일 헤더 레벨 숫자 = 역량 raw 값 (0부터, 보정 없음). 능력=knowledge / 위임=delegationChoice.
+function updateDockLevels(){
+  if(!gameState||!gameState.competencies)return;
+  var ab=document.getElementById('dock-level-ab');
+  var hc=document.getElementById('dock-level-hc');
+  // 표시는 레벨 1부터(피터공): 내부 raw 값 0 → 레벨 1
+  var knl=Math.max(0,gameState.competencies.knowledge.value);
+  var dlg=Math.max(0,gameState.competencies.delegationChoice.value);
+  if(ab)ab.textContent=knl+1;
+  if(hc)hc.textContent=dlg+1;
+  // 할인 = 레벨−1 = raw 값 (능력→에너지 할인 / 위임→시간 할인). 카드 할인은 선택 시 별도 가산.
+  var dAb=document.getElementById('dock-disc-ab');
+  var dHc=document.getElementById('dock-disc-hc');
+  if(dAb)dAb.textContent='에너지 할인 -'+knl;
+  if(dHc)dHc.textContent='시간 할인 -'+dlg;
+}
 // 임시(pending) 판정 — 현재 시나리오에서 선택으로 획득, 아직 미클리어
 function _dockIsPending(entry){
   if(!entry||!entry.perChoice||!gameState)return false;
@@ -18071,7 +18174,7 @@ function _dockChip(c,pending){
   }
   return el;
 }
-function _dockListFor(c){return document.getElementById(c.kind==='hc'?'dock-list-hc':'dock-list-ab');}
+function _dockListFor(c){return document.getElementById((c.kind==='hc'||c.kind==='growth')?'dock-list-hc':'dock-list-ab');}
 // 인벤토리 → 독 전체 재렌더 (읽기 전용 미러, 획득 순서 = 배열 순서)
 function dockRender(){
   _dockEl();
@@ -18081,9 +18184,11 @@ function dockRender(){
   hcL.innerHTML='';abL.innerHTML='';
   if(!gameState||!gameState.inventory)return;
   var inv=gameState.inventory;
+  // 6/15 r42 (§4n) — 능력카드(domain)=내가할까 칸 / 인간중심(hc)+성장(growth, B)=시킬까 칸
   (inv.humanCentricCards||[]).forEach(function(e){hcL.appendChild(_dockChip({kind:'hc',axis:e.axis,tag:e.tag},_dockIsPending(e)));});
+  (inv.growthCards||[]).forEach(function(e){hcL.appendChild(_dockChip({kind:'growth',name:e.label},_dockIsPending(e)));});
   (inv.domainCards||[]).forEach(function(e){abL.appendChild(_dockChip({kind:'domain',name:e.label},_dockIsPending(e)));});
-  (inv.growthCards||[]).forEach(function(e){abL.appendChild(_dockChip({kind:'growth',name:e.label},_dockIsPending(e)));});
+  updateDockLevels();
 }
 function railClear(){
   var pop=document.getElementById('card-earn-popup');
