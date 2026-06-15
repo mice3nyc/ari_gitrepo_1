@@ -680,7 +680,7 @@ button, input, select, textarea { font-family: inherit; }
 @keyframes crtTextblink{50%{opacity:.15}}
 .crt-deleg .crt-btn{margin-top:7%;opacity:0;pointer-events:none;transition:opacity .35s;}
 .crt-deleg .crt-btn.show{opacity:1;pointer-events:auto;}
-.crt-method{justify-content:flex-start;overflow:auto;}
+.crt-method{justify-content:flex-start;overflow:auto;padding-top:9%;padding-bottom:9%;}
 .crt-mhead{color:var(--cg);font-size:clamp(13px,2.3vw,17px);border-bottom:2px solid var(--cg-dim);padding-bottom:8px;margin-bottom:6%;text-shadow:0 0 6px rgba(127,255,176,.5);}
 .crt-mline{color:#dff7ea;font-size:clamp(11px,2.1vw,16px);line-height:1.7;margin-bottom:15px;display:flex;gap:11px;align-items:flex-start;text-align:left;}
 .crt-mline .crt-mtext{min-height:1.7em;}
@@ -695,7 +695,7 @@ button, input, select, textarea { font-family: inherit; }
 .crt-mline:nth-child(6) .crt-no{background:#7fd0ff;}
 .crt-kicker{color:var(--cp);font-size:clamp(12px,2.2vw,16px);text-align:center;margin-top:7%;line-height:1.7;text-shadow:0 0 8px rgba(255,107,157,.4);opacity:0;transition:opacity .4s;}
 .crt-kicker.show{opacity:1;}
-.crt-method .crt-btn{margin:8% auto 2%;display:block;opacity:0;transition:opacity .3s;}
+.crt-method .crt-btn{margin:5% auto 0;display:block;opacity:0;transition:opacity .3s;}
 .crt-method .crt-btn.show{opacity:1;}
 .crt-overlay .hl{background:none;padding:0;color:inherit;white-space:normal;}
 .crt-overlay .hl--c{color:var(--cc);}
@@ -13636,7 +13636,7 @@ var TEXTS = {
     "main_title_2": "그것이 문제로다!",
     "sub_title_1": "AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가!",
     "sub_title_2": "AI 리터러시, 위임의 경계!",
-    "host_text": "딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>누구나 할 수 있다면, 누구인가가 중요하다.<br>무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지. 당신은 구별할 수 있을까?",
+    "host_text": "딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>누구나 할 수 있다면, 누구인가가 중요하다.<br>무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지.<br>당신은 구별할 수 있을까?",
     "btn_start": "시작하기"
   },
   "tutorial_screen": {
@@ -15283,8 +15283,8 @@ function _crtToTitle(){
   eT1.textContent='';eT2.textContent='';eS.innerHTML='';eP.innerHTML='';
   eI.classList.remove('draw');eB.classList.remove('show');eT1.classList.remove('crt-glitch');eT2.classList.remove('crt-glitch');
   _crtT(function(){
-    _crtType(eT1,t1,60,function(){_crtGlitch(eT1);
-      _crtType(eT2,t2,60,function(){_crtGlitch(eT2);
+    _crtType(eT1,t1,60,function(){
+      _crtType(eT2,t2,60,function(){
         _crtT(function(){_crtTypeHTML(eS,subs,18,function(){
           eI.classList.add('draw');
           _crtT(function(){_crtTypeHTML(eP,host,11,function(){_crtT(function(){eB.classList.add('show');},160);});},320);

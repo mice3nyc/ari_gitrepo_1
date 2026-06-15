@@ -334,8 +334,8 @@ function _crtToTitle(){
   eT1.textContent='';eT2.textContent='';eS.innerHTML='';eP.innerHTML='';
   eI.classList.remove('draw');eB.classList.remove('show');eT1.classList.remove('crt-glitch');eT2.classList.remove('crt-glitch');
   _crtT(function(){
-    _crtType(eT1,t1,60,function(){_crtGlitch(eT1);
-      _crtType(eT2,t2,60,function(){_crtGlitch(eT2);
+    _crtType(eT1,t1,60,function(){
+      _crtType(eT2,t2,60,function(){
         _crtT(function(){_crtTypeHTML(eS,subs,18,function(){
           eI.classList.add('draw');
           _crtT(function(){_crtTypeHTML(eP,host,11,function(){_crtT(function(){eB.classList.add('show');},160);});},320);
