@@ -314,6 +314,9 @@
 
 **v4 레벨·할인 = 카드 장수 (피터공 A, 6/15)**: "카드 2장인데 레벨 3" 어긋남 해결. 기존엔 레벨=`competencies.value`(선택 누적 점수), 카드=시나리오 보상이라 트리거·속도가 달라 안 맞았다. → **레벨·할인을 보유 카드 장수로 통일**: 능력=내가할까칸 `domainCards.length`, 위임=시킬까칸 `humanCentricCards+growthCards` 수. `_abilityCardCount`/`_delegationCardCount`(16-card-rail) — `updateDockLevels`(표시)·`_applyDiscount`(비용 할인) 둘 다 이 출처. **보이는 카드 = 레벨 = 할인 = 비용 감소** 완전 일치. **리포트 학습자 유형은 `competencies.value` 그대로**(성향 측정, 카드 수와 별개 — 건드리지 않음).
 
+> ⚠️ **v4 미해결 버그 (세션485 발견, 세션486 수정 예정)** — 카드 장수 카운트가 **현재 시나리오에서 막 획득한(아직 철컥 락 안 된) pending 카드까지 즉시 포함**해서, 레벨/할인이 **시나리오 도중에 바로 오른다.** **올바른 동작**: 역량카드는 시나리오 끝(철컥 확보)에 공식 확정 → 레벨/할인은 그때 갱신 → **다음 시나리오부터 적용.**
+> **수정 방향(선문후코)**: `_abilityCardCount`/`_delegationCardCount`가 **완료된 시나리오의 카드만** 센다 — `gameState.clearedScenarios.indexOf(card.scenario)>=0`인 항목만 카운트(현재 진행 중 시나리오 scenario===currentScenarioId·미clear 카드는 제외). 검증: clearedScenarios가 시나리오 완료 시점에 채워지는지, 진행 중엔 currentScenarioId 미포함인지 확인. 엣지: 리플레이·회복력 카드. 비주얼(보관함 pending 칩 깜빡임)은 그대로 두고 **카운트만** 락 기준.
+
 ## 5. 미해결 / 다음 단계
 
 - [ ] 원 7개의 **숫자 로직 정식 설계** — 획득·증감 단위를 7단계 기준으로 재설계 (피터공: "일단은 3개가 기존 0"). 콘텐츠 트랙 밸런스와 엮임.
