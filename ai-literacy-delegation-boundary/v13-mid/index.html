@@ -133,7 +133,7 @@ button, input, select, textarea { font-family: inherit; }
 /* ===== 중앙 LV·SCORE 큰 디스플레이 ===== */
 .score-display { flex:1 1 0; min-width:0; display:flex; flex-direction:column; justify-content:space-between; align-items:stretch; gap:6px; padding:11px 14px 13px; border:0; border-left:2px dashed var(--ink-soft); border-right:2px dashed var(--ink-soft); background:transparent; box-shadow:none; border-radius:0; } /* r42 6/15 점선화 / §4o v4 6/15 — 자원 영역과 동일 폭(flex 1:1, 피터공) */
 /* 6/15 r42 (§4n) — HUD 중앙 시나리오 제목 + 미터→우측 레일 이동 */
-.hud-title { font-size:20px; font-weight:800; text-align:center; color:var(--ink); line-height:1.2; padding:0 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hud-title { font-size:18px; font-weight:800; text-align:center; color:var(--ink); line-height:1.5; padding:0 4px 3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } /* §4r 6/15 — line-height↑+하단 패딩으로 받침/획 크롭 해소(피터공), 한 줄 길어져 18px */
 .stats-bar { display:none !important; }
 .panel-row.visible .score-total-block { align-self:center; }
 /* 6/11 HUD 개편 — panel-title([자원]/[역량] 세로 타이틀) 제거 */
@@ -158,10 +158,9 @@ button, input, select, textarea { font-family: inherit; }
 .score-graph-rider.num-right .score-graph-num { right:auto; left:100%; margin-right:0; margin-left:8px; color:var(--ink); }
 .score-graph-num.pulsing { animation:numPulse 0.5s ease; }
 /* 누적 SCORE 블록 (그래프 우측) — v6.1: LV은 SCORE 숫자 아래 작은 한 줄, XP 바 HUD 표시 제거 */
-.score-total-block { flex:0 1 auto; display:flex; flex-direction:row; align-items:baseline; justify-content:center; gap:8px; min-width:96px; padding:0 12px; } /* §4o 6/15 — "SCORE : 0" 한 줄 중앙정렬 / v3 — 내용폭만(남는 폭은 시간에너지로) */
-.score-total-block .display-label { font-size:17px; font-weight:800; color:var(--ink); letter-spacing:1.5px; }
-.score-total-block .display-label::after { content:":"; margin-left:5px; }
-.score-total-block .display-num { font-size:27px; }
+.score-total-block { flex:0 1 auto; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; min-width:84px; padding:0 12px; } /* §4r 6/15 — 두 줄: 작은 "전체점수" 위 + 큰 숫자 아래(피터공) */
+.score-total-block .display-label { font-size:12px; font-weight:800; color:#888; letter-spacing:1px; }
+.score-total-block .display-num { font-size:32px; }
 .score-lv-line { font-size:11px; font-weight:800; color:#888; letter-spacing:1px; line-height:1; }
 .lv-compact { font-size:12px; font-weight:800; color:#111; line-height:1; display:inline-block; }
 .lv-compact.pulsing { animation:numPulse 0.5s ease; }
@@ -231,6 +230,40 @@ button, input, select, textarea { font-family: inherit; }
 .choices-area.cascade-locked .choice-card { pointer-events:none; }
 .choices-area.cascade-locked .choice-card:not(.disabled) { opacity:.92; }
 @keyframes pulseFx { 0%{transform:scale(1)} 45%{transform:scale(1.5)} 100%{transform:scale(1)} }
+
+/* ===== §4q v3 6/15 세션486 — 할인 정보창 (피터공): 옆 칸(cut3/cut5)에 선택 버튼 우측 같은 크기 ===== */
+/* 옆 칸 패널 = 정보창. 타이틀 없음. 박스는 JS가 선택지 화면 위치를 측정해 절대 배치(줄 맞춤) */
+.panel.dfx-host .panel-body { padding-left:2px; } /* §4q v5 — 선택지에 더 가깝게(피터공) */
+/* 효과 박스 — 대응 선택 버튼과 같은 줄·같은 높이(JS 절대배치). 선택지 텍스트 반복 안 함. 계산 끝나면 사라짐 */
+.choice-fx { display:flex; flex-direction:column; justify-content:center; gap:4px; padding:7px 9px; box-sizing:border-box;
+  border:var(--border-w) solid var(--ink); background:var(--bg-soft); border-radius:0; /* §4q v4 — drop shadow 없음(피터공) */
+  opacity:0; transform:translateX(8px); transition:opacity .25s ease, transform .25s ease; }
+.choice-fx.show { opacity:1; transform:translateX(0); }
+.fx-sec { display:flex; flex-direction:column; align-items:center; gap:4px; }
+.fx-sec + .fx-sec { border-top:2px dashed var(--ink-soft); margin-top:4px; padding-top:6px; }
+.fx-head { font-size:16px; font-weight:800; color:var(--acc-pink-deep); text-shadow:2px 2px 0 var(--ink); line-height:1.1; }
+.fx-sec[data-res="energy"] .fx-head { color:var(--acc-cyan-deep); }
+/* 카드 = 목록과 같은 디자인(.dock-card 복제). §4q v4 — 모두 같은 크기 고정(피터공) */
+.fx-cards { display:flex; flex-wrap:wrap; gap:4px; justify-content:center; min-height:2px; }
+.fx-cards .fx-clone { box-sizing:border-box; width:88px; min-width:88px; max-width:88px; height:30px; min-height:30px;
+  display:flex; align-items:center; justify-content:center; padding:2px 4px; overflow:hidden; }
+.fx-cards .fx-clone .dc-name { font-size:10px; line-height:1.1; white-space:normal; overflow:hidden; text-align:center; max-height:100%; }
+/* 박스엔 할인 수치(-N)만 — 실제 비용은 선택 버튼에서 큰 글씨(아래 cost-zoom) */
+.fx-disc-row { display:flex; align-items:center; justify-content:center; gap:8px; }
+.fx-label { font-size:12px; font-weight:800; letter-spacing:.5px; color:var(--ink); white-space:nowrap; }
+.fx-disc { font-size:30px; font-weight:800; color:var(--acc-pink-deep); text-shadow:2px 2px 0 var(--ink); line-height:1; display:inline-block; }
+.fx-sec[data-res="energy"] .fx-disc { color:var(--acc-cyan-deep); }
+.fx-disc.pulse { animation:fxNumPulse .3s ease; }
+@keyframes fxNumPulse { 0%,100%{transform:scale(1)} 45%{transform:scale(1.55)} }
+/* §4q v7 — 선택 버튼(cut2) 비용을 적용 중 큰 글씨로(피터공). 끝나면 2번 깜빡 후 원래 크기 복귀 */
+.cost-simple .cost-num.cost-zoom { font-size:32px; font-weight:800; color:var(--acc-pink-deep); line-height:1; }
+.cost-simple .cost-num.blink2 { animation:fxBlink2 .3s ease 2; }
+@keyframes fxBlink2 { 0%,100%{opacity:1} 50%{opacity:.12} }
+/* §4q — [적용하기] 버튼: 눌러서 적용+다음(피터공) */
+.fx-confirm { margin-top:6px; align-self:center; padding:5px 16px; font-size:12px; font-weight:800; cursor:pointer; letter-spacing:.5px;
+  border:2px solid var(--ink); background:var(--acc-yellow); color:var(--ink); border-radius:0; box-shadow:2px 2px 0 var(--ink); }
+.fx-confirm:hover { background:var(--ink); color:#fff; }
+.fx-confirm:active { transform:translate(1px,1px); box-shadow:1px 1px 0 var(--ink); }
 /* ===== Overlay (Start) ===== */
 .overlay-card { display:flex; align-items:center; justify-content:center; min-height:480px; animation:overlayIn 0.5s ease; }
 @keyframes overlayIn { from{opacity:0} to{opacity:1} }
@@ -1884,7 +1917,7 @@ button,
   </div>
   <!-- 우상단: 누적 SCORE (전체 시나리오 합) + LV — 6/15 r42: 미터 우측 레일 이동에 따라 SCORE를 독립 우측 구역으로 -->
   <div class="score-total-block">
-    <span class="display-label">SCORE</span>
+    <span class="display-label">전체점수</span>
     <span class="display-num" id="score-num">0</span>
   </div>
   <!-- 6/15 §4o — 우측 두 칸을 HUD에 결합: 내가할까/시킬까 헤더+레벨+할인 (점선 구획, 플랫) -->
@@ -13242,20 +13275,20 @@ var CUT_IMAGES = {
 var TEXTS = {
   "humanCentricCards": {
     "중심잡기": {
-      "color": "#c62828",
-      "bg": "#fff1ec",
+      "color": "#2e7d32",
+      "bg": "#eaf6ec",
       "short": "AI 시대에 자기 기준과 목표를 붙잡는 힘",
       "tags": {
         "주체성": {
-          "color": "#d32f2f",
+          "color": "#43a047",
           "short": "명확한 목표와 기준을 가지고 AI 활용을 주도하며 결과에 책임지는 힘"
         },
         "적응성": {
-          "color": "#e64a19",
+          "color": "#00897b",
           "short": "새로운 AI 기술과 환경 변화를 유연하게 받아들이고 활용하는 힘"
         },
         "호기심": {
-          "color": "#f57c00",
+          "color": "#689f38",
           "short": "AI 답에 멈추지 않고 더 묻고 탐색하는 태도"
         }
       }
@@ -13314,17 +13347,17 @@ var TEXTS = {
   "domainCards": {
     "자기이해": {
       "display": "자기이해 능력",
-      "color": "#e64a19",
+      "color": "#00897b",
       "short": "내 경험·관심·약점·기준을 알아차리는 힘"
     },
     "표현력": {
       "display": "표현 능력",
-      "color": "#c2185b",
+      "color": "#8e24aa",
       "short": "내 생각을 글이나 말로 풀어내는 힘"
     },
     "문해력": {
       "display": "문해 능력",
-      "color": "#ad1457",
+      "color": "#5e35b1",
       "short": "글과 자료를 직접 읽고 의미를 길어올리는 힘"
     },
     "분석력": {
@@ -13334,7 +13367,7 @@ var TEXTS = {
     },
     "검토력": {
       "display": "검토 능력",
-      "color": "#d32f2f",
+      "color": "#43a047",
       "short": "결과를 다시 확인하고 고치는 힘"
     },
     "자료판단력": {
@@ -13359,7 +13392,7 @@ var TEXTS = {
     },
     "탐색력": {
       "display": "탐색 능력",
-      "color": "#ef6c00",
+      "color": "#0277bd",
       "short": "관심과 가능성을 찾아 넓히는 힘"
     }
   },
@@ -13375,7 +13408,7 @@ var TEXTS = {
   },
   "cards": {
     "검수능력": {
-      "color": "#d32f2f",
+      "color": "#43a047",
       "short": "AI/타인 결과를 끝까지 확인하는 습관",
       "full_definition": "검수능력 — AI나 타인의 결과를 끝까지 확인하고 검증하는 습관",
       "description": "주어진 결과를 그대로 받지 않고 한 번 더 점검한다.\nAI 결과의 정확성·편향·맥락 적합성을 자기 시선으로 다시 본다.\n학습자가 AI 시대에 필요한 핵심 메타 능력 중 하나.\n"
@@ -13399,19 +13432,19 @@ var TEXTS = {
       "description": "\"당연히 그렇다\"를 \"정말 그런가\"로 다시 묻는다.\n주어진 정보·선택지의 전제·편향·맥락을 검토한다.\nAI 결과·인터넷 자료·타인 의견 모두에 적용되는 기본 시선.\n"
     },
     "자기지식": {
-      "color": "#e64a19",
+      "color": "#00897b",
       "short": "자기 경험·관심을 자기 말로 정리하는 능력",
       "full_definition": "자기지식 — 자기 경험·관심·강점을 알고 자기 말로 정리하는 능력",
       "description": "남이 아니라 자기 자신을 안다.\n자기 경험·관심·강점을 자기 언어로 풀어낼 수 있다.\nAI에게 맡기기 전에 먼저 자기 안에서 길어 올리는 자리.\n"
     },
     "표현력": {
-      "color": "#c2185b",
+      "color": "#8e24aa",
       "short": "자기 생각을 자기 언어로 풀어내는 힘",
       "full_definition": "표현력 — 자기 생각을 자기 언어로 풀어내는 힘",
       "description": "머릿속에 있는 것을 글·말로 옮긴다.\n어휘·문장 구조·맥락을 자기 결로 쥔다.\nAI가 다듬을 수는 있어도 처음에 무엇을 표현할지는 자기 자리.\n"
     },
     "정리력": {
-      "color": "#f57c00",
+      "color": "#689f38",
       "short": "정보를 구조화하고 가지런히 만드는 능력",
       "full_definition": "정리력 — 흩어진 정보를 구조화하고 가지런히 만드는 능력",
       "description": "흩어진 자료·생각·정보를 분류하고 우선순위를 매긴다.\n읽는 사람이 한 호흡에 파악할 수 있게 가지런히 둔다.\nAI 출력을 그대로 두지 않고 자기 구조로 다시 짜는 능력.\n"
@@ -13441,7 +13474,7 @@ var TEXTS = {
       "description": "문장의 표면이 아니라 결을 읽는다.\n행간·은유·생략된 맥락을 짚는다.\nAI 요약에 머물지 않고 원문을 자기 시선으로 다시 만나는 자리.\n"
     },
     "공감력": {
-      "color": "#d81b60",
+      "color": "#3949ab",
       "short": "타인의 마음을 읽고 따라가는 능력",
       "full_definition": "공감력 — 타인의 마음·맥락을 따라가는 능력",
       "description": "등장인물이나 상대가 무엇을 느끼는지 함께 따라간다.\n자기 자리에서만 보지 않고 상대 자리에서 다시 본다.\nAI가 흉내 낼 수 없는 인간의 결.\n"
@@ -13465,7 +13498,7 @@ var TEXTS = {
       "description": "여러 출처를 모으고 비교하고 가중치를 매긴다.\n한 자료에 휩쓸리지 않고 교차 검증한다.\nAI 결과도 한 자료로 두고 다른 자료와 비교하는 습관.\n"
     },
     "직업이해": {
-      "color": "#bf360c",
+      "color": "#33691e",
       "short": "직업 세계의 실제 결을 읽는 능력",
       "full_definition": "직업이해 — 직업 세계의 실제 결·맥락을 읽는 능력",
       "description": "직업의 표면 라벨이 아니라 실제 일의 결을 안다.\n어떤 사람이 어떤 환경에서 무엇을 하는지를 이해한다.\nAI가 만든 정형 직업 설명을 넘어 살아 있는 맥락을 보는 자리.\n"
@@ -15208,7 +15241,7 @@ function updateStats(){
   if(scoreNumEl)scoreNumEl.textContent=(gameState.totalScore||0);
   // HUD 중앙 시나리오 제목 + 우측 레일 레벨 숫자
   var titleEl=document.getElementById('hud-scenario-title');
-  if(titleEl){var _scT=getScenario();titleEl.textContent=_scT?('상황: '+_scT.title):'';}
+  if(titleEl){var _scT=getScenario();titleEl.textContent=_scT?("'"+_scT.title+"' 시나리오 점수"):'';} // §4r — "'제목' 시나리오 점수" 한 줄(피터공)
   if(typeof updateDockLevels==='function')updateDockLevels();
   updateScoreGraph();
   updateResourceUI();
@@ -15697,63 +15730,101 @@ function buildCostHTML(cost){
 // §4p — 역량카드 할인 가능 표식 폐지(쿠폰 모달 폐지). 호출부 호환 위해 빈 문자열.
 function getCardDiscountMark(stageType,choiceId){return '';}
 
-// ===== §4p 할인 캐스케이드 애니메이션 =====
+// ===== §4q v7 할인 정보창 (세션486, 피터공) — 자원 1개씩 정적 표시, 버튼 누르면 큰 숫자 카운트 후 다음 =====
+// 자동은 정신없다 → 사용자 페이스. 한 박스에 자원 한 칸(시간→에너지)씩 정적 표시 + [적용확인].
+// 버튼 누르면 그때 큰 숫자로 할인이 오르고(-1..-N) 비용이 내리는 카운트 연출 → 끝나면 다음 칸/선택지.
 var _cascadeBusy=false;
-function _pulse(el,iters){
+var FX_META={time:{head:'시킬까!',label:'시간 할인',dock:'dock-list-hc'},energy:{head:'내가 할까!',label:'에너지 할인',dock:'dock-list-ab'}};
+function _fxDiscountedLines(card){
+  return Array.prototype.slice.call(card.querySelectorAll('.cost-line')).filter(function(l){return (+l.dataset.raw)>(+l.dataset.final);});
+}
+// 해당 칸 확보 카드를 목록과 같은 디자인으로 복제(모두 정적 표시, 최대 6장)
+function _fxFillCards(container,res){
+  var list=document.getElementById(FX_META[res].dock);
+  var chips=list?Array.prototype.slice.call(list.querySelectorAll('.dock-card.locked')):[];
+  chips.slice(0,6).forEach(function(chip){
+    var m=chip.cloneNode(true);m.classList.remove('locking','reveal','pending');m.classList.add('fx-clone');
+    m.style.opacity='1';m.style.animation='';container.appendChild(m);
+  });
+}
+// 한 자원 칸 박스: 할인 수치(-N)만 박스에. 실제 비용은 선택 버튼(cut2)에서 큰 글씨(cost-zoom).
+function _fxBuildSectionBox(card,line,host){
+  var res=line.dataset.res,M=FX_META[res],N=(+line.dataset.raw)-(+line.dataset.final);
+  var hostRect=host.getBoundingClientRect(),bTop=host.clientTop||0,r=card.getBoundingClientRect();
+  var box=document.createElement('div');box.className='choice-fx show';box.style.position='absolute';
+  box.style.top=Math.max(0,Math.round(r.top-hostRect.top-bTop))+'px';box.style.left='0px';box.style.right='4px';
+  box.innerHTML='<div class="fx-sec" data-res="'+res+'">'
+    +'<div class="fx-head">'+M.head+'</div>'
+    +'<div class="fx-cards"></div>'
+    +'<div class="fx-disc-row"><span class="fx-label">'+M.label+'</span><span class="fx-disc">-'+N+'</span></div>'
+    +'</div>'
+    +'<button type="button" class="fx-confirm">적용하기</button>';
+  _fxFillCards(box.querySelector('.fx-cards'),res);
+  var cn=line.querySelector('.cost-num');if(cn)cn.classList.add('cost-zoom'); // 선택 버튼 비용 큰 글씨
+  host.appendChild(box);
+  return box;
+}
+// [적용하기] 클릭 시: 할인 -N에서 줄어 사라지고(박스), 선택버튼 비용 raw→final로 줄어든다. 끝나면 비용 2번 깜빡 후 원래 크기 복귀.
+function _fxRunCount(box,line){
   return new Promise(function(res){
-    if(!el){res();return;}
-    var n=iters||1;
-    el.style.animation='none';void el.offsetWidth; // reflow 리셋
-    el.style.animation='pulseFx 0.34s ease 0s '+n;
-    var done=function(){if(!el._pdone){el._pdone=1;el.removeEventListener('animationend',done);el.style.animation='';el._pdone=0;res();}};
-    el.addEventListener('animationend',done);
-    setTimeout(done,340*n+220); // animationend 안전망
+    var raw=+line.dataset.raw,final=+line.dataset.final,N=raw-final;
+    var disc=box.querySelector('.fx-disc'),costNum=line.querySelector('.cost-num');
+    function finish(){
+      if(disc&&disc.parentNode)disc.parentNode.removeChild(disc); // 할인 수치 사라짐
+      if(costNum){
+        costNum.textContent=String(final);costNum.classList.add('discounted');
+        costNum.classList.remove('blink2');void costNum.offsetWidth;costNum.classList.add('blink2'); // 2번 깜빡
+        setTimeout(function(){costNum.classList.remove('blink2','cost-zoom');res();},760); // 깜빡 후 원래 크기 복귀
+      }else res();
+    }
+    var k=0;
+    (function tick(){
+      k++;
+      if(costNum)costNum.textContent=String(raw-k);            // 비용 10→9→8→7
+      if(disc)disc.textContent=(N-k>0)?('-'+(N-k)):'';          // 할인 -3→-2→-1→사라짐
+      if(disc&&N-k>0){disc.classList.remove('pulse');void disc.offsetWidth;disc.classList.add('pulse');}
+      if(k>=N){setTimeout(finish,360);return;}
+      setTimeout(tick,360);
+    })();
   });
 }
-function _dockDiscNumFor(res){
-  var box=document.getElementById(res==='energy'?'dock-disc-ab':'dock-disc-hc');
-  return (box&&box.style.display!=='none')?box.querySelector('.dd-num'):null;
-}
-// 해당 할인 칸의 최근 카드 1장씩(시간=시킬까칸 / 에너지=내가할까칸) — "한두개만" 펄스
-function _discountCardsToPulse(lines){
-  var out=[];
-  lines.forEach(function(l){
-    var list=document.getElementById(l.dataset.res==='energy'?'dock-list-ab':'dock-list-hc');
-    if(list&&list.lastElementChild)out.push(list.lastElementChild);
-  });
-  return out;
-}
-// §4p v3 — 취소선/화살표 폐지: 비용 숫자를 final로 바꾸고 초록(discounted) + 펄스 x2
-function _applyDiscountToLine(l){
-  var num=l.querySelector('.cost-num');
-  if(num){num.textContent=l.dataset.final;num.classList.add('discounted');}
-  return _pulse(num,2);
-}
-function _animateChoiceDiscount(card){
-  var lines=Array.prototype.slice.call(card.querySelectorAll('.cost-line')).filter(function(l){return (+l.dataset.raw)>(+l.dataset.final);});
-  if(!lines.length)return Promise.resolve();
-  var nums=lines.map(function(l){return l.querySelector('.cost-num');});
-  return Promise.all(nums.map(function(n){return _pulse(n,1);}))                              // 1) 비용 숫자
-    .then(function(){return Promise.all(_discountCardsToPulse(lines).map(function(c){return _pulse(c,1);}));}) // 2) 적용 카드
-    .then(function(){return Promise.all(lines.map(function(l){return _dockDiscNumFor(l.dataset.res);}).filter(Boolean).map(function(d){return _pulse(d,1);}));}) // 3) 할인 -N
-    .then(function(){return Promise.all(lines.map(function(l){return _applyDiscountToLine(l);}));}); // 4) 취소선→새 가격 x2
-}
-function runDiscountCascade(area){
+// §4q v7 (피터공) — 스텝 = (선택지 × 할인 자원). 시간 먼저, 에너지 다음, 그다음 선택지.
+function runDiscountCascade(area,targetCut){
+  var _unlock=function(){_cascadeBusy=false;if(area)area.classList.remove('cascade-locked');};
   if(!area){_cascadeBusy=false;return;}
   var cards=Array.prototype.slice.call(area.querySelectorAll('.choice-card'));
-  var discounted=cards.filter(function(c){return Array.prototype.slice.call(c.querySelectorAll('.cost-line')).some(function(l){return (+l.dataset.raw)>(+l.dataset.final);});});
-  if(!discounted.length){_cascadeBusy=false;area.classList.remove('cascade-locked');return;}
-  var seq=Promise.resolve();
-  discounted.forEach(function(card){seq=seq.then(function(){return _animateChoiceDiscount(card);});});
-  seq.then(function(){_cascadeBusy=false;area.classList.remove('cascade-locked');});
+  var panel=currentRow&&currentRow.querySelector('[data-cut="'+targetCut+'"]');
+  var host=panel&&panel.querySelector('.panel-body');
+  var steps=[];
+  cards.forEach(function(card){
+    var lines=_fxDiscountedLines(card);
+    lines.sort(function(a,b){return (a.dataset.res==='time'?0:1)-(b.dataset.res==='time'?0:1);}); // 시간 먼저
+    lines.forEach(function(l){steps.push({card:card,line:l});});
+  });
+  if(!steps.length||!host){_unlock();return;}
+  panel.classList.add('dfx-host');
+  host.innerHTML='';host.style.position='relative'; // 절대배치 기준
+  var idx=0;
+  function done(){if(host){host.innerHTML='';host.style.position='';}if(panel)panel.classList.remove('dfx-host');_unlock();}
+  function step(){
+    if(idx>=steps.length){done();return;}
+    var s=steps[idx],box=_fxBuildSectionBox(s.card,s.line,host);
+    var btn=box.querySelector('.fx-confirm');
+    var go=function(){
+      if(btn)btn.disabled=true;
+      _fxRunCount(box,s.line).then(function(){if(box.parentNode)box.parentNode.removeChild(box);idx++;step();}); // 카운트 후 다음
+    };
+    if(btn)btn.onclick=go;else go();
+  }
+  step();
 }
-// 선택지 영역에 할인이 하나라도 있으면 즉시 잠금 + 카드 다 뜬 뒤 캐스케이드 시작
-function _scheduleCascade(area,count){
+// 선택지 영역에 할인이 하나라도 있으면 즉시 잠금 + 카드 다 뜬 뒤 캐스케이드 시작 (targetCut: 정보창 띄울 옆 칸)
+function _scheduleCascade(area,count,targetCut){
   if(!area)return;
   var any=Array.prototype.slice.call(area.querySelectorAll('.cost-line')).some(function(l){return (+l.dataset.raw)>(+l.dataset.final);});
   if(!any)return;
   _cascadeBusy=true;area.classList.add('cascade-locked');
-  setTimeout(function(){runDiscountCascade(area);},count*120+550);
+  setTimeout(function(){runDiscountCascade(area,targetCut);},count*120+550);
 }
 
 // §23 — 1차 선택지를 Cut 1 body 아래에 펼침
@@ -15835,7 +15906,7 @@ function showTier2Choices(){
   _scrollChoicesIntoView(area,t2list.length);
   updateStats();
   if(_checkAllUnaffordable(costs))triggerGameOver();
-  else _scheduleCascade(area,t2list.length); // §4p 할인 캐스케이드
+  else _scheduleCascade(area,t2list.length,3); // §4q 할인 정보창 → 옆 칸 cut3
 }
 
 // §23 — Cut 3 활성화: 이미지 + 2차 선택 요약 + "결과 확인하기" 버튼
@@ -15845,6 +15916,7 @@ function showCut3Summary(){
   ['A','B','C'].forEach(function(g){if(!t2obj&&sc.tier2[g])t2obj=sc.tier2[g].find(function(x){return x.id===t2;});});
   setPanelImage(3,_t('game_flow.panel_labels.tier2_choice','2차 선택'));
   var panel=activatePanel(3);
+  if(panel)panel.classList.remove('dfx-host'); // §4q 할인 정보창 → 선택 요약으로 전환
   // §4g v8 — "위임 깊이: ±N" 줄 제거 (피터공)
   panel.querySelector('.panel-body').innerHTML=
     '<div class="chosen-summary"><div class="chosen-label">'+_t('game_flow.chosen_labels.tier2','2차 선택')+'</div><div class="chosen-title">'+t2+'. '+t2obj.label+'</div></div>'+
@@ -15901,7 +15973,7 @@ function showReviewChoices(){
   _scrollChoicesIntoView(area,sc.reviews.length);
   updateStats();
   if(_checkAllUnaffordable(costs))triggerGameOver();
-  else _scheduleCascade(area,sc.reviews.length); // §4p 할인 캐스케이드
+  else _scheduleCascade(area,sc.reviews.length,5); // §4q 할인 정보창 → 옆 칸 cut5
 }
 
 // §23 — Cut 5 활성화: 이미지 + 검토 선택 요약
@@ -15912,6 +15984,7 @@ function showCut5Summary(){
   var rvLabelLeaf=(sc.reviewLabels&&sc.reviewLabels[leaf])||rvObj.label;
   setPanelImage(5,_t('game_flow.panel_labels.review','검토'));
   var panel=activatePanel(5);
+  if(panel)panel.classList.remove('dfx-host'); // §4q 할인 정보창 → 선택 요약으로 전환
   panel.querySelector('.panel-body').innerHTML='<div class="chosen-summary"><div class="chosen-label">'+_t('game_flow.chosen_labels.review','검토 선택')+'</div><div class="chosen-title">'+rvObj.id.replace(/^R/,'')+'. '+rvLabelLeaf+'</div>'+(supplement?'<div class="chosen-way">'+supplement+'</div>':'')+'</div>';
 }
 
@@ -18227,6 +18300,9 @@ function _setDockDisc(box,v){
   var num=box.querySelector('.dd-num');
   if(num)num.textContent='-'+v;
 }
+// §4q v4 (피터공) — 위임(시킬까/hc) 카드 이름에 "역량" 추가. 예: 주체성 → 주체성 역량.
+// (도메인/내가할까 카드는 _cardDisplayName이 "능력"형으로 따로 처리)
+function _hcName(tag){return tag?(tag+' 역량'):tag;}
 // 임시(pending) 판정 — 현재 시나리오에서 선택으로 획득, 아직 미클리어
 function _dockIsPending(entry){
   if(!entry||!entry.perChoice||!gameState)return false;
@@ -18237,7 +18313,7 @@ function _dockIsPending(entry){
 // §2d v2 — 한 줄 표기. pending = 진한 회색·컬러 없음·점선·깜빡임 / 컬러는 철컥(locked) 때 입힘.
 function _dockChipLabel(c){
   // §6 — 축 이름 미표시, 역량명만 (6/12)
-  return (c.kind==='hc')?_invEscapeHTML(c.tag):_invEscapeHTML(_cardDisplayName(c.name));
+  return (c.kind==='hc')?_invEscapeHTML(_hcName(c.tag)):_invEscapeHTML(_cardDisplayName(c.name));
 }
 // §4o v5 (피터공) — 같은 카드 누적: identity 키로 묶어 ×N 표시
 function _dockChipKey(c){
@@ -18262,7 +18338,7 @@ function _dockChipApplyLocked(el,c,count){
   if(c.kind==='hc'){
     var am=_axisMeta(c.axis);
     el.style.background=am.color;
-    el.innerHTML='<div class="dc-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>'+_dockCountBadge(count,true);
+    el.innerHTML='<div class="dc-name" style="color:#fff;">'+_invEscapeHTML(_hcName(c.tag))+'</div>'+_dockCountBadge(count,true);
   }else{
     el.style.borderLeft='6px solid '+_cardColor(c.name);
     el.innerHTML='<div class="dc-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>'+_dockCountBadge(count,false);
@@ -18320,7 +18396,7 @@ function _railCardVisual(c){
   if(c.kind==='hc'){
     var am=_axisMeta(c.axis);
     el.style.background=am.color;
-    el.innerHTML='<div class="rail-card-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>';
+    el.innerHTML='<div class="rail-card-name" style="color:#fff;">'+_invEscapeHTML(_hcName(c.tag))+'</div>';
   }else{
     el.style.borderLeft='6px solid '+_cardColor(c.name);
     el.innerHTML='<div class="rail-card-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>';
@@ -18349,7 +18425,7 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
     if(!cards||!cards.length){resolve();return;}
     var old=document.getElementById('card-earn-popup');
     if(old&&old.parentNode)old.parentNode.removeChild(old);
-    var names=cards.map(function(c){return c.kind==='hc'?c.tag:_cardDisplayName(c.name);});
+    var names=cards.map(function(c){return c.kind==='hc'?_hcName(c.tag):_cardDisplayName(c.name);});
     var pop=document.createElement('div');
     pop.id='card-earn-popup';
     pop.className='card-earn-popup';

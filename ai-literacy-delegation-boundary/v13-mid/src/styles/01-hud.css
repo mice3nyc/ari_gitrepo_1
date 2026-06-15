@@ -74,7 +74,7 @@
 /* ===== 중앙 LV·SCORE 큰 디스플레이 ===== */
 .score-display { flex:1 1 0; min-width:0; display:flex; flex-direction:column; justify-content:space-between; align-items:stretch; gap:6px; padding:11px 14px 13px; border:0; border-left:2px dashed var(--ink-soft); border-right:2px dashed var(--ink-soft); background:transparent; box-shadow:none; border-radius:0; } /* r42 6/15 점선화 / §4o v4 6/15 — 자원 영역과 동일 폭(flex 1:1, 피터공) */
 /* 6/15 r42 (§4n) — HUD 중앙 시나리오 제목 + 미터→우측 레일 이동 */
-.hud-title { font-size:20px; font-weight:800; text-align:center; color:var(--ink); line-height:1.2; padding:0 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hud-title { font-size:18px; font-weight:800; text-align:center; color:var(--ink); line-height:1.5; padding:0 4px 3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } /* §4r 6/15 — line-height↑+하단 패딩으로 받침/획 크롭 해소(피터공), 한 줄 길어져 18px */
 .stats-bar { display:none !important; }
 .panel-row.visible .score-total-block { align-self:center; }
 /* 6/11 HUD 개편 — panel-title([자원]/[역량] 세로 타이틀) 제거 */
@@ -99,10 +99,9 @@
 .score-graph-rider.num-right .score-graph-num { right:auto; left:100%; margin-right:0; margin-left:8px; color:var(--ink); }
 .score-graph-num.pulsing { animation:numPulse 0.5s ease; }
 /* 누적 SCORE 블록 (그래프 우측) — v6.1: LV은 SCORE 숫자 아래 작은 한 줄, XP 바 HUD 표시 제거 */
-.score-total-block { flex:0 1 auto; display:flex; flex-direction:row; align-items:baseline; justify-content:center; gap:8px; min-width:96px; padding:0 12px; } /* §4o 6/15 — "SCORE : 0" 한 줄 중앙정렬 / v3 — 내용폭만(남는 폭은 시간에너지로) */
-.score-total-block .display-label { font-size:17px; font-weight:800; color:var(--ink); letter-spacing:1.5px; }
-.score-total-block .display-label::after { content:":"; margin-left:5px; }
-.score-total-block .display-num { font-size:27px; }
+.score-total-block { flex:0 1 auto; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; min-width:84px; padding:0 12px; } /* §4r 6/15 — 두 줄: 작은 "전체점수" 위 + 큰 숫자 아래(피터공) */
+.score-total-block .display-label { font-size:12px; font-weight:800; color:#888; letter-spacing:1px; }
+.score-total-block .display-num { font-size:32px; }
 .score-lv-line { font-size:11px; font-weight:800; color:#888; letter-spacing:1px; line-height:1; }
 .lv-compact { font-size:12px; font-weight:800; color:#111; line-height:1; display:inline-block; }
 .lv-compact.pulsing { animation:numPulse 0.5s ease; }

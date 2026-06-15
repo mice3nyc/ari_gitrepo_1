@@ -55,6 +55,9 @@ function _setDockDisc(box,v){
   var num=box.querySelector('.dd-num');
   if(num)num.textContent='-'+v;
 }
+// §4q v4 (피터공) — 위임(시킬까/hc) 카드 이름에 "역량" 추가. 예: 주체성 → 주체성 역량.
+// (도메인/내가할까 카드는 _cardDisplayName이 "능력"형으로 따로 처리)
+function _hcName(tag){return tag?(tag+' 역량'):tag;}
 // 임시(pending) 판정 — 현재 시나리오에서 선택으로 획득, 아직 미클리어
 function _dockIsPending(entry){
   if(!entry||!entry.perChoice||!gameState)return false;
@@ -65,7 +68,7 @@ function _dockIsPending(entry){
 // §2d v2 — 한 줄 표기. pending = 진한 회색·컬러 없음·점선·깜빡임 / 컬러는 철컥(locked) 때 입힘.
 function _dockChipLabel(c){
   // §6 — 축 이름 미표시, 역량명만 (6/12)
-  return (c.kind==='hc')?_invEscapeHTML(c.tag):_invEscapeHTML(_cardDisplayName(c.name));
+  return (c.kind==='hc')?_invEscapeHTML(_hcName(c.tag)):_invEscapeHTML(_cardDisplayName(c.name));
 }
 // §4o v5 (피터공) — 같은 카드 누적: identity 키로 묶어 ×N 표시
 function _dockChipKey(c){
@@ -90,7 +93,7 @@ function _dockChipApplyLocked(el,c,count){
   if(c.kind==='hc'){
     var am=_axisMeta(c.axis);
     el.style.background=am.color;
-    el.innerHTML='<div class="dc-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>'+_dockCountBadge(count,true);
+    el.innerHTML='<div class="dc-name" style="color:#fff;">'+_invEscapeHTML(_hcName(c.tag))+'</div>'+_dockCountBadge(count,true);
   }else{
     el.style.borderLeft='6px solid '+_cardColor(c.name);
     el.innerHTML='<div class="dc-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>'+_dockCountBadge(count,false);
@@ -148,7 +151,7 @@ function _railCardVisual(c){
   if(c.kind==='hc'){
     var am=_axisMeta(c.axis);
     el.style.background=am.color;
-    el.innerHTML='<div class="rail-card-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>';
+    el.innerHTML='<div class="rail-card-name" style="color:#fff;">'+_invEscapeHTML(_hcName(c.tag))+'</div>';
   }else{
     el.style.borderLeft='6px solid '+_cardColor(c.name);
     el.innerHTML='<div class="rail-card-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>';
@@ -177,7 +180,7 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
     if(!cards||!cards.length){resolve();return;}
     var old=document.getElementById('card-earn-popup');
     if(old&&old.parentNode)old.parentNode.removeChild(old);
-    var names=cards.map(function(c){return c.kind==='hc'?c.tag:_cardDisplayName(c.name);});
+    var names=cards.map(function(c){return c.kind==='hc'?_hcName(c.tag):_cardDisplayName(c.name);});
     var pop=document.createElement('div');
     pop.id='card-earn-popup';
     pop.className='card-earn-popup';

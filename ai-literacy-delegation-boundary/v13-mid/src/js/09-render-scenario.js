@@ -173,7 +173,7 @@ function updateStats(){
   if(scoreNumEl)scoreNumEl.textContent=(gameState.totalScore||0);
   // HUD 중앙 시나리오 제목 + 우측 레일 레벨 숫자
   var titleEl=document.getElementById('hud-scenario-title');
-  if(titleEl){var _scT=getScenario();titleEl.textContent=_scT?('상황: '+_scT.title):'';}
+  if(titleEl){var _scT=getScenario();titleEl.textContent=_scT?("'"+_scT.title+"' 시나리오 점수"):'';} // §4r — "'제목' 시나리오 점수" 한 줄(피터공)
   if(typeof updateDockLevels==='function')updateDockLevels();
   updateScoreGraph();
   updateResourceUI();
@@ -662,63 +662,101 @@ function buildCostHTML(cost){
 // §4p — 역량카드 할인 가능 표식 폐지(쿠폰 모달 폐지). 호출부 호환 위해 빈 문자열.
 function getCardDiscountMark(stageType,choiceId){return '';}
 
-// ===== §4p 할인 캐스케이드 애니메이션 =====
+// ===== §4q v7 할인 정보창 (세션486, 피터공) — 자원 1개씩 정적 표시, 버튼 누르면 큰 숫자 카운트 후 다음 =====
+// 자동은 정신없다 → 사용자 페이스. 한 박스에 자원 한 칸(시간→에너지)씩 정적 표시 + [적용확인].
+// 버튼 누르면 그때 큰 숫자로 할인이 오르고(-1..-N) 비용이 내리는 카운트 연출 → 끝나면 다음 칸/선택지.
 var _cascadeBusy=false;
-function _pulse(el,iters){
+var FX_META={time:{head:'시킬까!',label:'시간 할인',dock:'dock-list-hc'},energy:{head:'내가 할까!',label:'에너지 할인',dock:'dock-list-ab'}};
+function _fxDiscountedLines(card){
+  return Array.prototype.slice.call(card.querySelectorAll('.cost-line')).filter(function(l){return (+l.dataset.raw)>(+l.dataset.final);});
+}
+// 해당 칸 확보 카드를 목록과 같은 디자인으로 복제(모두 정적 표시, 최대 6장)
+function _fxFillCards(container,res){
+  var list=document.getElementById(FX_META[res].dock);
+  var chips=list?Array.prototype.slice.call(list.querySelectorAll('.dock-card.locked')):[];
+  chips.slice(0,6).forEach(function(chip){
+    var m=chip.cloneNode(true);m.classList.remove('locking','reveal','pending');m.classList.add('fx-clone');
+    m.style.opacity='1';m.style.animation='';container.appendChild(m);
+  });
+}
+// 한 자원 칸 박스: 할인 수치(-N)만 박스에. 실제 비용은 선택 버튼(cut2)에서 큰 글씨(cost-zoom).
+function _fxBuildSectionBox(card,line,host){
+  var res=line.dataset.res,M=FX_META[res],N=(+line.dataset.raw)-(+line.dataset.final);
+  var hostRect=host.getBoundingClientRect(),bTop=host.clientTop||0,r=card.getBoundingClientRect();
+  var box=document.createElement('div');box.className='choice-fx show';box.style.position='absolute';
+  box.style.top=Math.max(0,Math.round(r.top-hostRect.top-bTop))+'px';box.style.left='0px';box.style.right='4px';
+  box.innerHTML='<div class="fx-sec" data-res="'+res+'">'
+    +'<div class="fx-head">'+M.head+'</div>'
+    +'<div class="fx-cards"></div>'
+    +'<div class="fx-disc-row"><span class="fx-label">'+M.label+'</span><span class="fx-disc">-'+N+'</span></div>'
+    +'</div>'
+    +'<button type="button" class="fx-confirm">적용하기</button>';
+  _fxFillCards(box.querySelector('.fx-cards'),res);
+  var cn=line.querySelector('.cost-num');if(cn)cn.classList.add('cost-zoom'); // 선택 버튼 비용 큰 글씨
+  host.appendChild(box);
+  return box;
+}
+// [적용하기] 클릭 시: 할인 -N에서 줄어 사라지고(박스), 선택버튼 비용 raw→final로 줄어든다. 끝나면 비용 2번 깜빡 후 원래 크기 복귀.
+function _fxRunCount(box,line){
   return new Promise(function(res){
-    if(!el){res();return;}
-    var n=iters||1;
-    el.style.animation='none';void el.offsetWidth; // reflow 리셋
-    el.style.animation='pulseFx 0.34s ease 0s '+n;
-    var done=function(){if(!el._pdone){el._pdone=1;el.removeEventListener('animationend',done);el.style.animation='';el._pdone=0;res();}};
-    el.addEventListener('animationend',done);
-    setTimeout(done,340*n+220); // animationend 안전망
+    var raw=+line.dataset.raw,final=+line.dataset.final,N=raw-final;
+    var disc=box.querySelector('.fx-disc'),costNum=line.querySelector('.cost-num');
+    function finish(){
+      if(disc&&disc.parentNode)disc.parentNode.removeChild(disc); // 할인 수치 사라짐
+      if(costNum){
+        costNum.textContent=String(final);costNum.classList.add('discounted');
+        costNum.classList.remove('blink2');void costNum.offsetWidth;costNum.classList.add('blink2'); // 2번 깜빡
+        setTimeout(function(){costNum.classList.remove('blink2','cost-zoom');res();},760); // 깜빡 후 원래 크기 복귀
+      }else res();
+    }
+    var k=0;
+    (function tick(){
+      k++;
+      if(costNum)costNum.textContent=String(raw-k);            // 비용 10→9→8→7
+      if(disc)disc.textContent=(N-k>0)?('-'+(N-k)):'';          // 할인 -3→-2→-1→사라짐
+      if(disc&&N-k>0){disc.classList.remove('pulse');void disc.offsetWidth;disc.classList.add('pulse');}
+      if(k>=N){setTimeout(finish,360);return;}
+      setTimeout(tick,360);
+    })();
   });
 }
-function _dockDiscNumFor(res){
-  var box=document.getElementById(res==='energy'?'dock-disc-ab':'dock-disc-hc');
-  return (box&&box.style.display!=='none')?box.querySelector('.dd-num'):null;
-}
-// 해당 할인 칸의 최근 카드 1장씩(시간=시킬까칸 / 에너지=내가할까칸) — "한두개만" 펄스
-function _discountCardsToPulse(lines){
-  var out=[];
-  lines.forEach(function(l){
-    var list=document.getElementById(l.dataset.res==='energy'?'dock-list-ab':'dock-list-hc');
-    if(list&&list.lastElementChild)out.push(list.lastElementChild);
-  });
-  return out;
-}
-// §4p v3 — 취소선/화살표 폐지: 비용 숫자를 final로 바꾸고 초록(discounted) + 펄스 x2
-function _applyDiscountToLine(l){
-  var num=l.querySelector('.cost-num');
-  if(num){num.textContent=l.dataset.final;num.classList.add('discounted');}
-  return _pulse(num,2);
-}
-function _animateChoiceDiscount(card){
-  var lines=Array.prototype.slice.call(card.querySelectorAll('.cost-line')).filter(function(l){return (+l.dataset.raw)>(+l.dataset.final);});
-  if(!lines.length)return Promise.resolve();
-  var nums=lines.map(function(l){return l.querySelector('.cost-num');});
-  return Promise.all(nums.map(function(n){return _pulse(n,1);}))                              // 1) 비용 숫자
-    .then(function(){return Promise.all(_discountCardsToPulse(lines).map(function(c){return _pulse(c,1);}));}) // 2) 적용 카드
-    .then(function(){return Promise.all(lines.map(function(l){return _dockDiscNumFor(l.dataset.res);}).filter(Boolean).map(function(d){return _pulse(d,1);}));}) // 3) 할인 -N
-    .then(function(){return Promise.all(lines.map(function(l){return _applyDiscountToLine(l);}));}); // 4) 취소선→새 가격 x2
-}
-function runDiscountCascade(area){
+// §4q v7 (피터공) — 스텝 = (선택지 × 할인 자원). 시간 먼저, 에너지 다음, 그다음 선택지.
+function runDiscountCascade(area,targetCut){
+  var _unlock=function(){_cascadeBusy=false;if(area)area.classList.remove('cascade-locked');};
   if(!area){_cascadeBusy=false;return;}
   var cards=Array.prototype.slice.call(area.querySelectorAll('.choice-card'));
-  var discounted=cards.filter(function(c){return Array.prototype.slice.call(c.querySelectorAll('.cost-line')).some(function(l){return (+l.dataset.raw)>(+l.dataset.final);});});
-  if(!discounted.length){_cascadeBusy=false;area.classList.remove('cascade-locked');return;}
-  var seq=Promise.resolve();
-  discounted.forEach(function(card){seq=seq.then(function(){return _animateChoiceDiscount(card);});});
-  seq.then(function(){_cascadeBusy=false;area.classList.remove('cascade-locked');});
+  var panel=currentRow&&currentRow.querySelector('[data-cut="'+targetCut+'"]');
+  var host=panel&&panel.querySelector('.panel-body');
+  var steps=[];
+  cards.forEach(function(card){
+    var lines=_fxDiscountedLines(card);
+    lines.sort(function(a,b){return (a.dataset.res==='time'?0:1)-(b.dataset.res==='time'?0:1);}); // 시간 먼저
+    lines.forEach(function(l){steps.push({card:card,line:l});});
+  });
+  if(!steps.length||!host){_unlock();return;}
+  panel.classList.add('dfx-host');
+  host.innerHTML='';host.style.position='relative'; // 절대배치 기준
+  var idx=0;
+  function done(){if(host){host.innerHTML='';host.style.position='';}if(panel)panel.classList.remove('dfx-host');_unlock();}
+  function step(){
+    if(idx>=steps.length){done();return;}
+    var s=steps[idx],box=_fxBuildSectionBox(s.card,s.line,host);
+    var btn=box.querySelector('.fx-confirm');
+    var go=function(){
+      if(btn)btn.disabled=true;
+      _fxRunCount(box,s.line).then(function(){if(box.parentNode)box.parentNode.removeChild(box);idx++;step();}); // 카운트 후 다음
+    };
+    if(btn)btn.onclick=go;else go();
+  }
+  step();
 }
-// 선택지 영역에 할인이 하나라도 있으면 즉시 잠금 + 카드 다 뜬 뒤 캐스케이드 시작
-function _scheduleCascade(area,count){
+// 선택지 영역에 할인이 하나라도 있으면 즉시 잠금 + 카드 다 뜬 뒤 캐스케이드 시작 (targetCut: 정보창 띄울 옆 칸)
+function _scheduleCascade(area,count,targetCut){
   if(!area)return;
   var any=Array.prototype.slice.call(area.querySelectorAll('.cost-line')).some(function(l){return (+l.dataset.raw)>(+l.dataset.final);});
   if(!any)return;
   _cascadeBusy=true;area.classList.add('cascade-locked');
-  setTimeout(function(){runDiscountCascade(area);},count*120+550);
+  setTimeout(function(){runDiscountCascade(area,targetCut);},count*120+550);
 }
 
 // §23 — 1차 선택지를 Cut 1 body 아래에 펼침
@@ -800,7 +838,7 @@ function showTier2Choices(){
   _scrollChoicesIntoView(area,t2list.length);
   updateStats();
   if(_checkAllUnaffordable(costs))triggerGameOver();
-  else _scheduleCascade(area,t2list.length); // §4p 할인 캐스케이드
+  else _scheduleCascade(area,t2list.length,3); // §4q 할인 정보창 → 옆 칸 cut3
 }
 
 // §23 — Cut 3 활성화: 이미지 + 2차 선택 요약 + "결과 확인하기" 버튼
@@ -810,6 +848,7 @@ function showCut3Summary(){
   ['A','B','C'].forEach(function(g){if(!t2obj&&sc.tier2[g])t2obj=sc.tier2[g].find(function(x){return x.id===t2;});});
   setPanelImage(3,_t('game_flow.panel_labels.tier2_choice','2차 선택'));
   var panel=activatePanel(3);
+  if(panel)panel.classList.remove('dfx-host'); // §4q 할인 정보창 → 선택 요약으로 전환
   // §4g v8 — "위임 깊이: ±N" 줄 제거 (피터공)
   panel.querySelector('.panel-body').innerHTML=
     '<div class="chosen-summary"><div class="chosen-label">'+_t('game_flow.chosen_labels.tier2','2차 선택')+'</div><div class="chosen-title">'+t2+'. '+t2obj.label+'</div></div>'+
@@ -866,7 +905,7 @@ function showReviewChoices(){
   _scrollChoicesIntoView(area,sc.reviews.length);
   updateStats();
   if(_checkAllUnaffordable(costs))triggerGameOver();
-  else _scheduleCascade(area,sc.reviews.length); // §4p 할인 캐스케이드
+  else _scheduleCascade(area,sc.reviews.length,5); // §4q 할인 정보창 → 옆 칸 cut5
 }
 
 // §23 — Cut 5 활성화: 이미지 + 검토 선택 요약
@@ -877,6 +916,7 @@ function showCut5Summary(){
   var rvLabelLeaf=(sc.reviewLabels&&sc.reviewLabels[leaf])||rvObj.label;
   setPanelImage(5,_t('game_flow.panel_labels.review','검토'));
   var panel=activatePanel(5);
+  if(panel)panel.classList.remove('dfx-host'); // §4q 할인 정보창 → 선택 요약으로 전환
   panel.querySelector('.panel-body').innerHTML='<div class="chosen-summary"><div class="chosen-label">'+_t('game_flow.chosen_labels.review','검토 선택')+'</div><div class="chosen-title">'+rvObj.id.replace(/^R/,'')+'. '+rvLabelLeaf+'</div>'+(supplement?'<div class="chosen-way">'+supplement+'</div>':'')+'</div>';
 }
 

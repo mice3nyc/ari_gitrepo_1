@@ -1,6 +1,32 @@
 ## TASKS — v1.3-mid (중등)
 
-**최종 업데이트**: 2026-06-15 세션486 (할인 즉시적용 버그 수정 §4p v4, 빌드 964,398B)
+**최종 업데이트**: 2026-06-16 세션486 (할인 정보창 §4q v7.1 + HUD §4r + 선문후코 정합 점검·죽은코드 정리, 빌드 970,748B)
+
+### ✓ 세션486 (2) — 할인 효과 박스 + HUD 제목/전체점수 (완료, 피터공 라이브 확인 대기)
+
+피터공: "펄스 효과로 할인 보여주는 게 전혀 안 읽혀." → 효과를 선택지 박스 우측으로. 추가로 HUD 제목 크롭·형식 + 전체점수 두 줄.
+
+- [x] **할인 정보창(§4q v3, 피터공 정정 2회)**: 옆 칸(tier2→cut3, review→cut5)에 **선택 버튼 우측 같은 크기**로 배치(스페이서 정렬, minHeight=버튼높이). 타이틀·선택지 텍스트 반복 X. 박스 = 시킬까!→카드(목록 디자인 복제)→`시간 할인`+우측 -N. 카운트다운: **선택창 비용 2배 줌**+하나씩↓, -N 0→-N 펄스↑(동시). 끝에 비용 final 초록+줌 해제. dock 레일 펄스 폐지
+- [x] **카드 색(§4)**: 빨강 계열 제거 → 파랑·초록·보라 재매핑(texts.yaml 16곳). 노랑은 흰글자 칩 가독성 때문에 보류(도메인 카드엔 가능 — 피터공 확인 필요)
+- [x] 게임 락 방지: seq `.catch`로 실패해도 `_cascadeBusy` 해제. 할인0이면 정보창 없음
+- [x] **HUD(§4r)**: 중앙 제목 `상황: X`→`'X' 시나리오 점수` 한 줄 + 크롭 해소 / 전체점수 두 줄(작은 라벨+큰 숫자)
+- [x] `node --check` OK. 헤드리스(cut3): 박스2·복제카드5·타이틀X·라벨`시간 할인`·disc -3/-1/-1·cut2 비용 final 초록(비할인 plain)·줌 해제·busy 해제, ERR=[]
+- [x] **v4 다듬기(피터공)**: 효과 카드 88×30 고정 / 시킬까→내가 할까 순서 교체(박스=선택지 크기, 안 쌓음) / 위임(hc) 카드명 +"역량"(주체성 역량, `_hcName` dock·rail·팝업·fx 일괄) / 박스 drop shadow 제거
+- [x] 헤드리스 v4 검증: hcname="주체성 역량"·dockLabel="경청 역량"·잔여 fx-sec 1개(last=energy)·clone 88×30·shadow none·ERR=[]
+- [x] **v5 다듬기(피터공)**: 줄 맞춤(cut2 .choices-area 미러=.dfx-area+숨긴 질문+minHeight 슬롯, 상단 정렬) / 선택지에 더 가깝게(dfx-host 좌패딩↓, 그리드 gutter는 유지) / 계산 끝나면 박스 사라짐(`_fxFadeRemove`→끝나면 cut3 비우고 dfx-host 제거) / show·burst rAF→setTimeout(가시성)
+- [x] 헤드리스 v5 검증: 박스 show=true·head 시킬까!·카드 burst=true / 끝: cut3 본문 비움·dfx-host 제거·cut2 비용 초록 유지·busy 해제·ERR=[]
+- [x] **v5.1 줄 맞춤 정정**: 각 선택지 `getBoundingClientRect`로 위치 측정, 박스 `position:absolute top=card.top−host.top−clientTop`(요약·질문 높이 무관). 오차 ≤1px
+- [x] **v6 자동애니 폐기(피터공: "자동으로 나오니 넘 정신없다")**: 타이핑·카운트다운·빵빵·자동순차 전부 제거 → 각 할인 선택지 정보를 **한 번에 정적 표시**(시킬까!+카드+시간할인 -N / 내가할까!+카드+에너지할인 -M) + **[적용확인] 버튼**. 클릭 시 그 선택지 비용 final 초록 확정→다음 박스. 마지막 확인 후 cut3 원복+선택지 잠금 해제. 폐기 함수/CSS 정리
+- [x] 헤드리스 v6 검증: 정적 박스 → 클릭 시 비용 초록+다음 → cut3 비움·잠금 해제, ERR=[]
+- [x] **v7 자원 단위 스텝 + 버튼 트리거 카운트(피터공)**: 스텝=선택지×자원. 한 박스에 자원 1칸 정적(시킬까!+카드+`[비용] 시간 할인 [-0]`)+버튼. 버튼 누르면 큰 숫자(.counting 42px)로 할인 -1..-N↑·비용↓ 카운트(펄스)→cut2 확정→다음 자원/선택지. `_fxBuildSectionBox`·`_fxRunCount`
+- [x] 헤드리스 v7 검증: 자원 단위 스텝 + 버튼 누르면 카운트, OK
+- [x] **v7.1(피터공)**: 박스엔 할인 수치(-N)만 / 실제 비용은 선택 버튼서 큰 글씨(cost-zoom 32px) / 버튼 `적용확인`→`적용하기` / 클릭 시 할인 -N 줄어 사라지고 비용 raw→final 감소 / 다 적용되면 할인 수치 사라지고 비용 final 초록 + 2번 깜빡(fxBlink2) + 원래 크기 복귀
+- [x] 헤드리스 v7.1 검증: box disc=-3·비용박스없음·버튼 적용하기·cut2 10 zoom → 클릭 cut2 7 초록·zoom해제·box energy -1 → 끝 cut3 비움·잠금 해제, ERR=[]
+- [x] 빌드 971,020B. 상세 SPEC-ui-hud §4q v7.1·§4r
+- [x] **선문후코 정합 점검(피터공)**: 코드↔SPEC↔TASKS 교차 — 옛 애니 함수 잔재 0, CSS 클래스 전부 사용, 현행 함수 전부 문서화, 빌드 기록=실제 크기 일치. 죽은 코드 `_costHasDiscount`(v3 예약 폐기 잔재, 호출 0) 제거. 재빌드 970,748B
+- [ ] 피터공 라이브 확인 (효과 박스 읽힘·타이밍 / 제목·전체점수 모양) → 조정 후 커밋·푸시
+
+---
 
 ### ✓ 세션486 — 버그 수정: 할인이 시나리오 도중 즉시 적용됨 (완료)
 
@@ -9,9 +35,9 @@
 - [x] `_abilityCardCount`/`_delegationCardCount`(16-card-rail.js)가 **완료 시나리오 카드만** 카운트 — `_lockedCardCount()` 헬퍼 신설(`clearedScenarios.indexOf(card.scenario)>=0` 필터). 진행 중(currentScenarioId·미clear) pending 카드 제외
 - [x] 검증: 카운트 함수 두 곳이 유일 출처 — 디스플레이(`updateDockLevels`)와 실제 비용 할인(`04-resources.js _applyDiscount`)이 같은 함수를 씀. 카드 entry는 전부 `.scenario` 보유(03-engine·15-card-per-choice push 확인). 완료 push는 `goNextScenario`(10-event-handlers) → 락 애니(`_dockLockNow`)는 완료 전이라 그 시점엔 미반영, 다음 시나리오 render부터 반영. 보관함 pending 칩 깜빡임 유지(_dockIsPending 별개). 엣지(null gs·회복력) 통과
 - [x] 헤드리스(node) 검증: 시나리오1 도중 0/0 → 완료 후 1/1 → 시나리오2 도중 1/1(새카드 미반영) → 완료 후 2/2 → null gs 0/0 전부 기대값 일치. `node --check` 구문 OK
-- [x] 빌드 964,398B. 상세 SPEC-ui-hud §4p v4 ⚠️ 블록 참조
+- [x] 빌드 964,398B. 상세 SPEC-ui-hud §4p v4 블록 참조
+- [x] 커밋·푸시 → 라이브 반영 (4f63ec3, main)
 - [ ] 피터공 라이브 클릭 확인 (시나리오 도중 할인 0 → 완료 후 다음 시나리오 할인 적용)
-- [ ] 커밋·푸시 → 라이브 반영 (피터공 확인 후)
 
 ---
 
