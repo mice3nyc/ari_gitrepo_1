@@ -28,16 +28,12 @@
 .cost-card-chips .card-chip { font-size:9px; color:var(--ink); font-weight:600; padding:1px 5px; background:var(--acc-mint-soft); border:2px solid var(--ink); border-radius:0; white-space:nowrap; }
 
 
-/* ===== §4p 6/15 — 비용 한 줄 단순형 + 할인 캐스케이드 ===== */
-.choice-cost.cost-simple { display:flex; flex-direction:column; gap:3px; margin-top:8px; }
-.cost-simple .cost-line { display:flex; align-items:center; gap:5px; font-size:15px; font-weight:800; color:var(--ink); white-space:nowrap; } /* §4p v2 — 한 줄 고정(nowrap)+크기 축소 */
-.cost-simple .cost-line-label { font-weight:800; }
-.cost-simple .cost-line-sep { opacity:.55; }
-.cost-simple .cost-num-wrap { display:inline-flex; align-items:center; gap:6px; }
+/* ===== §4p v3 6/15 — 시간·에너지 비용을 한 줄에 (피터공: "시간비용:6 | 에너지비용:10"). 취소선 폐지, 숫자만 바뀜 ===== */
+.choice-cost.cost-simple { display:flex; flex-direction:row; flex-wrap:nowrap; align-items:baseline; justify-content:center; gap:10px; margin-top:8px; font-size:15px; font-weight:800; color:var(--ink); white-space:nowrap; }
+.cost-simple .cost-line { display:inline-flex; align-items:baseline; gap:4px; }
+.cost-simple .cost-sep { opacity:.4; font-weight:700; }
 .cost-simple .cost-num { display:inline-block; font-weight:800; }
-.cost-simple .cost-num-raw.struck { text-decoration:line-through; text-decoration-thickness:2px; color:#9a9a9a; }
-.cost-simple .cost-arrow { font-weight:800; color:var(--ink); }
-.cost-simple .cost-num-final { font-size:18px; color:#15803d; text-shadow:1.5px 1.5px 0 var(--ink); }
+.cost-simple .cost-num.discounted { color:#15803d; } /* 할인 적용되면 초록(취소선 대신 색 변화) */
 /* 캐스케이드 도는 동안 클릭 잠금(시각: 살짝 흐리게) */
 .choices-area.cascade-locked .choice-card { pointer-events:none; }
 .choices-area.cascade-locked .choice-card:not(.disabled) { opacity:.92; }

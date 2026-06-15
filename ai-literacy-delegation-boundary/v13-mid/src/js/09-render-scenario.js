@@ -646,18 +646,16 @@ function _buildCostLine(costLabel,rawVal,discountLabel,discountVal,finalLabel,ac
       '<div class="cost-formula-val cost-formula-final"><b>'+finalVal+'</b></div></div>'+
   '</div>';
 }
-// §4p — 한 줄 큰 글씨 비용. 초기엔 raw(할인 전) 표시, data-raw/data-final 보유(캐스케이드가 할인 적용).
+// §4p v3 — 시간·에너지를 한 줄에("시간 비용 : N | 에너지 비용 : N"). 초기 raw, 캐스케이드가 숫자만 final로 교체.
 function _costSimpleLine(label,res,raw,final){
-  return '<div class="cost-line" data-res="'+res+'" data-raw="'+raw+'" data-final="'+final+'">'+
-    '<span class="cost-line-label">'+label+'</span><span class="cost-line-sep">:</span>'+
-    '<span class="cost-num-wrap"><span class="cost-num cost-num-raw">'+raw+'</span></span>'+
-  '</div>';
+  return '<span class="cost-line" data-res="'+res+'" data-raw="'+raw+'" data-final="'+final+'">'+label+' : <span class="cost-num">'+raw+'</span></span>';
 }
 function buildCostHTML(cost){
   var d=cost._discount||{rawTime:cost.time,rawEnergy:cost.energy};
   var _cl=_t('cost_labels',{});
   return '<div class="choice-cost cost-simple">'+
     _costSimpleLine(_cl.time_cost||'시간 비용','time',d.rawTime,cost.time)+
+    '<span class="cost-sep">|</span>'+
     _costSimpleLine(_cl.energy_cost||'에너지 비용','energy',d.rawEnergy,cost.energy)+
   '</div>';
 }
@@ -690,19 +688,16 @@ function _discountCardsToPulse(lines){
   });
   return out;
 }
+// §4p v3 — 취소선/화살표 폐지: 비용 숫자를 final로 바꾸고 초록(discounted) + 펄스 x2
 function _applyDiscountToLine(l){
-  var wrap=l.querySelector('.cost-num-wrap');
-  var rawEl=l.querySelector('.cost-num-raw');
-  if(rawEl)rawEl.classList.add('struck');
-  var arrow=document.createElement('span');arrow.className='cost-arrow';arrow.textContent='→';
-  var fin=document.createElement('span');fin.className='cost-num cost-num-final';fin.textContent=l.dataset.final;
-  wrap.appendChild(arrow);wrap.appendChild(fin);
-  return _pulse(fin,2);
+  var num=l.querySelector('.cost-num');
+  if(num){num.textContent=l.dataset.final;num.classList.add('discounted');}
+  return _pulse(num,2);
 }
 function _animateChoiceDiscount(card){
   var lines=Array.prototype.slice.call(card.querySelectorAll('.cost-line')).filter(function(l){return (+l.dataset.raw)>(+l.dataset.final);});
   if(!lines.length)return Promise.resolve();
-  var nums=lines.map(function(l){return l.querySelector('.cost-num-raw');});
+  var nums=lines.map(function(l){return l.querySelector('.cost-num');});
   return Promise.all(nums.map(function(n){return _pulse(n,1);}))                              // 1) 비용 숫자
     .then(function(){return Promise.all(_discountCardsToPulse(lines).map(function(c){return _pulse(c,1);}));}) // 2) 적용 카드
     .then(function(){return Promise.all(lines.map(function(l){return _dockDiscNumFor(l.dataset.res);}).filter(Boolean).map(function(d){return _pulse(d,1);}));}) // 3) 할인 -N
