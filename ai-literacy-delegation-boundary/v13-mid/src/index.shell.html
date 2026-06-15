@@ -38,6 +38,17 @@
     <span class="display-label">SCORE</span>
     <span class="display-num" id="score-num">0</span>
   </div>
+  <!-- 6/15 §4o — 우측 두 칸을 HUD에 결합: 내가할까/시킬까 헤더+레벨+할인 (점선 구획, 플랫) -->
+  <div class="hud-dock">
+    <div class="hud-dock-col" id="hud-dock-ab">
+      <div class="hdc-head">내가 할까?</div>
+      <div class="hdc-level"><span class="dl-label">능력 레벨</span><span class="dl-sep"> : </span><span class="dl-num" id="dock-level-ab">0</span></div>
+    </div>
+    <div class="hud-dock-col" id="hud-dock-hc">
+      <div class="hdc-head">시킬까?</div>
+      <div class="hdc-level"><span class="dl-label">위임 레벨</span><span class="dl-sep"> : </span><span class="dl-num" id="dock-level-hc">0</span></div>
+    </div>
+  </div>
   <!-- 우측: 역량 (원 7개 미터 — 6/11 HUD 개편: 타이틀·숫자·양방향 바 제거, 기본 3개 채움 = 기존 0) -->
   <div class="stats-bar" id="stats-bar">
     <div class="panel-content">

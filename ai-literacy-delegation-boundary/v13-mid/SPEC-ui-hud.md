@@ -245,6 +245,71 @@
 - **할인 정보 블럭**(`.dock-discount`, 초록 #15803d): 레벨 박스 아래·카드 자리 위에 "에너지 할인 -N"(능력 칸=knowledge.value) / "시간 할인 -N"(위임 칸=delegationChoice.value). `updateDockLevels()`가 갱신.
 - **카드 자리**(`.dock-cards-box`, 점선): `min-height:140px`(약 3개) + 콘텐츠로 성장.
 
+## 4o. 세션485 (6/15) — 우측 두 컬럼을 HUD로 결합 (피터공 스케치)
+
+> 스케치: `Assets/incoming/AI리터러시/UIUX/우측상단UI변경.JPG` (전체화면 4등분 중 우측 상단만). 요청: [[요청.26.0615.1933-HUD우측결합]].
+> 피터공: "내가할까/시킬까 부분도 기본 HUD 디자인의 일부로 합치려고 해. 지금 디자인이 넘 복잡하거든." §4n에서 별도 박스(테두리+그림자)로 떠 있던 두 레일 컬럼 헤더를 **HUD 띠 하나**로 흡수.
+
+**HUD 풀폭 + 우측 결합 (`.panel-row`)**
+- `body.scenario-active .panel-row` 폭 `calc(--bw - 312px)` → **`var(--bw)`** (그룹 전체 폭). 좌(시간에너지)·중앙(제목+점수)·우(SCORE)는 그대로 그리드 위(`--bw - 312`)를 덮고, 새 우측 그룹이 그 옆 312 구역(카드 보관함 위)을 덮는다.
+- **새 우측 그룹 `.hud-dock`**(panel-row 안, `.score-total-block` 다음): `flex:0 0 300px`, 두 칸 `.hud-dock-col`(좌=내가할까 / 우=시킬까). 각 칸 세로 = `.hdc-head`(헤더 18px) + `.hdc-level`(레벨 텍스트, **플랫** — §4n 민트 박스 폐지) + `.hdc-disc`(할인 박스).
+- **점선 세로 구획**: HUD 각 섹션 경계를 `border-left: var(--border-w) dashed var(--ink-soft)`. score-display의 기존 좌우 solid 라인(§4n)도 점선으로. 두 hud-dock-col 사이도 점선.
+- **할인 = 작은 박스** `.hdc-disc`: 초록 테두리(#15803d) 박스 + 라벨/숫자. **값 0이면 "에너지 할인 0"**("-0" 아님, 피터공). 값>0이면 "에너지 할인 -N". §4n `.dock-discount` 초록 텍스트 폐지.
+- **단순화**: dock-col-top의 별도 border+box-shadow+민트 띠 제거. HUD 한 줄 안에서 점선으로만 구분 → 플랫.
+
+**카드 보관함 (`#card-dock`)**
+- _dockEl()에서 `.dock-col-top`·`.dock-discount` 마크업 제거 → **카드 박스 2개만**(`.dock-cards-box` × 2, id dock-list-ab/hc 유지).
+- 위치: `top: var(--hud-h)`(HUD 아래 시작), 우측 정렬해 hud-dock 두 칸 아래로 정렬. height/scroll 로직 유지.
+
+**로직**
+- `updateDockLevels()`: 타깃 id(dock-level-ab/hc, dock-disc-ab/hc) HUD 안 새 위치로 유지(이동만, 로직 동일). 레벨=`value+1`(1부터, §4n 유지). 할인=raw 값(`n−1`, §4n 유지) — 표시만 0→"0".
+- 카드 획득 비행(showCardEarnPopup): 타깃 list = dock-list-ab/hc 그대로라 무파손.
+- ≤900px 폴백: hud-dock도 세로 스택으로 원복(HUD 중앙 복귀 규칙과 함께).
+
+**v2 카툰화 (피터공 5건, 6/15)**
+- 내가할까/시킬까 = `.hdc-head` 25px + 컬러 + 검정 하드섀도(`text-shadow:2.5px 2.5px 0 var(--ink)`). 두 칸 색 구분: **내가 할까(직접)=cyan-deep #17a2c2 / 시킬까(AI 위임)=pink-deep #d93a75**(게임 타이틀 핑크 하드섀도 족보).
+- 레벨 = "능력 레벨 : 1" / "위임 레벨 : 1"(콜론 `.dl-sep`), 칸 색과 동일(cyan/pink). 민트 박스 폐지(§4n) 확정.
+- 할인 박스 `.hdc-disc` = 초록 채움(#15803d) + 흰 글씨 + 검정 하드섀도, 크게(15px, padding 5/13).
+- SCORE = `.score-total-block` "SCORE : 0" 한 줄 중앙정렬(라벨 17px + `::after` 콜론 + 숫자 27px).
+
+**v3 레이아웃 균형 (피터공, 6/15)**
+- **나가기 버튼 HUD 밖으로**: `.scenario-exit` 화면 우하단 고정(`bottom:16 right:16`). resource-bar 좌측 padding 제거(§4o v1의 52px·나가기 회피용 폐지) → 시간/에너지가 HUD 좌단부터.
+- **시간/에너지 폭 확보(피터공 "!!!")**: 중앙 점수 그래프를 줄이더라도 자원 바 폭 우선. `.score-total-block` `0 1 auto`(내용폭만).
+- **v4 동일 폭(피터공)**: 자원 영역 = 시나리오 점수바 영역 같은 폭. `.resource-bar`·`.score-display` 둘 다 `flex:1 1 0` → SCORE 내용폭·hud-dock 300 제외한 남는 폭을 절반씩.
+
+**v5 카드 누적 + 레벨 0부터 (피터공, 6/15)**
+- **같은 카드 ×N**: dockRender가 identity(`_dockChipKey`: hc=tag / growth·domain=label)로 묶어 한 칩에 `×N` 배지(`.dc-count`, count>1만). `_dockRenderGroup` 그룹핑. 칩 = flex(이름 좌·배지 우). 카드 비행(close)도 같은 카드면 기존 칩으로 날아가 count 갱신(`_dockCountFor`=인벤토리 총개수), 없으면 새 pending 칩. `_dockLockNow`도 ×N 유지.
+- **레벨 0부터 = 할인 매칭**: `updateDockLevels` 레벨 표시 `value`(0부터, 기존 `value+1` 폐지) → 레벨 N ↔ 할인 N 숫자 동일. §4n "레벨 1부터" 폐지.
+
+**v6 할인을 카드 박스 아래로 (피터공, 6/15)**
+- HUD `.hud-dock`에서 할인(`.hdc-disc`) 제거 → 헤더+레벨만. 할인은 `#card-dock` 각 칸 카드 박스 **아래** `.dock-disc`로 이동.
+
+**v7 할인 3줄 + 큰 숫자 강조 + 0 숨김 (피터공, 6/15)**
+- `.dock-disc` = 3줄: `.dd-head`(내가 할까?/시킬까?) / `.dd-label`(에너지 할인/시간 할인) / `.dd-num`(**큰 숫자 -N**, 40px + 검정 하드섀도 3px, 칸 색). 잘 안 읽히던 한 줄(`.dd-val`) 폐지.
+- **할인 0이면 블럭 전체 숨김**(`_setDockDisc`: `box.style.display=v>0?'':'none'`, id가 `.dd-val`→컨테이너 `.dock-disc`로 이동, 초기 `display:none`). >0이면 `.dd-num`에 `-N`. v2의 "0 표시"는 숨김으로 대체.
+
+## 4p. 세션485 (6/15) — 비용 단순화 + 할인 효과 캐스케이드 애니메이션 (피터공)
+
+> 요청: [[요청.26.0615.1933-HUD우측결합]] 연장. 할인이 "능력/위임을 쌓으면 비용이 깎인다"는 인과를 눈으로 보게 한다.
+
+**할인 모델 통일 (피터공 확정)**
+- **카드 매칭 보너스(-2/-3)·쿠폰 모달(`showCouponSelect`) 폐지.** 할인 = **레벨 총점만**: 에너지 할인 = `knowledge.value`, 시간 할인 = `delegationChoice.value`. `_applyDiscount`에서 `selectedCard`/`cardDiscount` 제거(energyDisc=knl). `getCardDiscountMark`→`''`(역량카드 할인 가능 표식 제거). onTier2/onReview의 쿠폰 분기·`_couponSelections`·`getTier2CostWithCard`/`getReviewCostWithCard` 경로 제거(단순 `getTier2Cost`/`getReviewCost`).
+- 카드는 이제 **주목용**(할인을 만들어준 출처라는 표시), 기능적 선택 아님.
+
+**비용 표시 단순화 (`buildCostHTML`)**
+- 기존 공식형(`비용 N − 할인 N = 비용 N`) 폐지 → **한 줄 큰 글씨**: `시간 비용 : N` / `에너지 비용 : N`(`.cost-simple`>`.cost-line`). 초기엔 **raw(할인 전)** 표시, `data-raw`/`data-final` 보유.
+- 할인 0(레벨 0)이면 정적 표시·애니 없음·즉시 클릭. 할인>0이면 캐스케이드.
+
+**할인 캐스케이드 (`runDiscountCascade`)** — 선택지 렌더 후 호출(tier2·review). 애니 끝까지 **클릭 잠금**(`_cascadeBusy`, onTier1/2/Review 가드 + 카드 dim).
+- 선택지 **위→아래 순서**로 1개씩. 할인 있는 선택지만(raw≠final). "펄스" = 커졌다 원복(scale, opacity 아님).
+- 선택지 1개당 4스텝(시간·에너지 두 줄은 병렬로 함께):
+  1. **비용 숫자** 펄스
+  2. **적용 카드 1~2개** 펄스(해당 칸 최근 카드, 없으면 생략)
+  3. **할인 -N 숫자**(dock `.dd-num`) 펄스
+  4. 비용 **취소선+회색 → 화살표 → 새 가격** 두 번 펄스 후 멈춤
+- 끝나면 다음 할인 선택지로. 전부 끝나면 `_cascadeBusy=false`.
+- 적용 범위: 시간·에너지 모두. tier1(비용·할인 0)은 제외.
+
 ## 5. 미해결 / 다음 단계
 
 - [ ] 원 7개의 **숫자 로직 정식 설계** — 획득·증감 단위를 7단계 기준으로 재설계 (피터공: "일단은 3개가 기존 0"). 콘텐츠 트랙 밸런스와 엮임.

@@ -646,32 +646,84 @@ function _buildCostLine(costLabel,rawVal,discountLabel,discountVal,finalLabel,ac
       '<div class="cost-formula-val cost-formula-final"><b>'+finalVal+'</b></div></div>'+
   '</div>';
 }
-function buildCostHTML(cost){
-  var d=cost._discount||{dlgEffect:0,knlEffect:0,rawTime:cost.time,rawEnergy:cost.energy,cardDiscount:0,cardDetails:[],clampedEnergy:0};
-  var totalEnergyDisc=d.clampedEnergy||0;
-  var hasAxisDiscount=(d.dlgEffect>0||totalEnergyDisc>0);
-  if(!hasAxisDiscount){
-    var _cl=_t('cost_labels',{});
-    return '<div class="choice-cost cost-formula-box">'+
-      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">'+(_cl.time_cost||'시간 비용')+'</div><div class="cost-formula-val cost-formula-final"><b>'+cost.time+'</b></div></div></div>'+
-      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">'+(_cl.energy_cost||'에너지 비용')+'</div><div class="cost-formula-val cost-formula-final"><b>'+cost.energy+'</b></div></div></div>'+
-    '</div>';
-  }
-  var energyHtml='';
-  var _cl2=_t('cost_labels',{});
-  energyHtml+=_buildCostLine(_cl2.energy_cost||'에너지 비용',d.rawEnergy,_cl2.energy_discount||'능력 할인',totalEnergyDisc,_cl2.cost_final||'비용',cost.energy);
-  return '<div class="choice-cost cost-formula-box">'+
-    _buildCostLine(_cl2.time_cost||'시간 비용',d.rawTime,_cl2.time_discount||'선택 할인',d.dlgEffect,_cl2.cost_final||'비용',cost.time)+
-    '<div class="cost-energy-col">'+energyHtml+'</div>'+
+// §4p — 한 줄 큰 글씨 비용. 초기엔 raw(할인 전) 표시, data-raw/data-final 보유(캐스케이드가 할인 적용).
+function _costSimpleLine(label,res,raw,final){
+  return '<div class="cost-line" data-res="'+res+'" data-raw="'+raw+'" data-final="'+final+'">'+
+    '<span class="cost-line-label">'+label+'</span><span class="cost-line-sep">:</span>'+
+    '<span class="cost-num-wrap"><span class="cost-num cost-num-raw">'+raw+'</span></span>'+
   '</div>';
 }
-// §4f — 역량카드 할인 가능 표식 (버튼 아님, 선택 텍스트 끝 초록 박스)
-// 기존 하단 cost-coupon-badge·_updateCouponBadge(적용 후 비용 갱신·blink)는 v7에서 제거 —
-// 모달 확정 즉시 선택으로 바뀌어 적용 후 화면 갱신 자체가 사라짐.
-function getCardDiscountMark(stageType,choiceId){
-  var avail=getAvailableCardDiscounts(stageType,choiceId);
-  if(avail.length>0)return ' <span class="card-discount-mark">'+_t('coupon.choice_mark','역량카드 할인 가능')+'</span>';
-  return '';
+function buildCostHTML(cost){
+  var d=cost._discount||{rawTime:cost.time,rawEnergy:cost.energy};
+  var _cl=_t('cost_labels',{});
+  return '<div class="choice-cost cost-simple">'+
+    _costSimpleLine(_cl.time_cost||'시간 비용','time',d.rawTime,cost.time)+
+    _costSimpleLine(_cl.energy_cost||'에너지 비용','energy',d.rawEnergy,cost.energy)+
+  '</div>';
+}
+// §4p — 역량카드 할인 가능 표식 폐지(쿠폰 모달 폐지). 호출부 호환 위해 빈 문자열.
+function getCardDiscountMark(stageType,choiceId){return '';}
+
+// ===== §4p 할인 캐스케이드 애니메이션 =====
+var _cascadeBusy=false;
+function _pulse(el,iters){
+  return new Promise(function(res){
+    if(!el){res();return;}
+    var n=iters||1;
+    el.style.animation='none';void el.offsetWidth; // reflow 리셋
+    el.style.animation='pulseFx 0.34s ease 0s '+n;
+    var done=function(){if(!el._pdone){el._pdone=1;el.removeEventListener('animationend',done);el.style.animation='';el._pdone=0;res();}};
+    el.addEventListener('animationend',done);
+    setTimeout(done,340*n+220); // animationend 안전망
+  });
+}
+function _dockDiscNumFor(res){
+  var box=document.getElementById(res==='energy'?'dock-disc-ab':'dock-disc-hc');
+  return (box&&box.style.display!=='none')?box.querySelector('.dd-num'):null;
+}
+// 해당 할인 칸의 최근 카드 1장씩(시간=시킬까칸 / 에너지=내가할까칸) — "한두개만" 펄스
+function _discountCardsToPulse(lines){
+  var out=[];
+  lines.forEach(function(l){
+    var list=document.getElementById(l.dataset.res==='energy'?'dock-list-ab':'dock-list-hc');
+    if(list&&list.lastElementChild)out.push(list.lastElementChild);
+  });
+  return out;
+}
+function _applyDiscountToLine(l){
+  var wrap=l.querySelector('.cost-num-wrap');
+  var rawEl=l.querySelector('.cost-num-raw');
+  if(rawEl)rawEl.classList.add('struck');
+  var arrow=document.createElement('span');arrow.className='cost-arrow';arrow.textContent='→';
+  var fin=document.createElement('span');fin.className='cost-num cost-num-final';fin.textContent=l.dataset.final;
+  wrap.appendChild(arrow);wrap.appendChild(fin);
+  return _pulse(fin,2);
+}
+function _animateChoiceDiscount(card){
+  var lines=Array.prototype.slice.call(card.querySelectorAll('.cost-line')).filter(function(l){return (+l.dataset.raw)>(+l.dataset.final);});
+  if(!lines.length)return Promise.resolve();
+  var nums=lines.map(function(l){return l.querySelector('.cost-num-raw');});
+  return Promise.all(nums.map(function(n){return _pulse(n,1);}))                              // 1) 비용 숫자
+    .then(function(){return Promise.all(_discountCardsToPulse(lines).map(function(c){return _pulse(c,1);}));}) // 2) 적용 카드
+    .then(function(){return Promise.all(lines.map(function(l){return _dockDiscNumFor(l.dataset.res);}).filter(Boolean).map(function(d){return _pulse(d,1);}));}) // 3) 할인 -N
+    .then(function(){return Promise.all(lines.map(function(l){return _applyDiscountToLine(l);}));}); // 4) 취소선→새 가격 x2
+}
+function runDiscountCascade(area){
+  if(!area){_cascadeBusy=false;return;}
+  var cards=Array.prototype.slice.call(area.querySelectorAll('.choice-card'));
+  var discounted=cards.filter(function(c){return Array.prototype.slice.call(c.querySelectorAll('.cost-line')).some(function(l){return (+l.dataset.raw)>(+l.dataset.final);});});
+  if(!discounted.length){_cascadeBusy=false;area.classList.remove('cascade-locked');return;}
+  var seq=Promise.resolve();
+  discounted.forEach(function(card){seq=seq.then(function(){return _animateChoiceDiscount(card);});});
+  seq.then(function(){_cascadeBusy=false;area.classList.remove('cascade-locked');});
+}
+// 선택지 영역에 할인이 하나라도 있으면 즉시 잠금 + 카드 다 뜬 뒤 캐스케이드 시작
+function _scheduleCascade(area,count){
+  if(!area)return;
+  var any=Array.prototype.slice.call(area.querySelectorAll('.cost-line')).some(function(l){return (+l.dataset.raw)>(+l.dataset.final);});
+  if(!any)return;
+  _cascadeBusy=true;area.classList.add('cascade-locked');
+  setTimeout(function(){runDiscountCascade(area);},count*120+550);
 }
 
 // §23 — 1차 선택지를 Cut 1 body 아래에 펼침
@@ -753,6 +805,7 @@ function showTier2Choices(){
   _scrollChoicesIntoView(area,t2list.length);
   updateStats();
   if(_checkAllUnaffordable(costs))triggerGameOver();
+  else _scheduleCascade(area,t2list.length); // §4p 할인 캐스케이드
 }
 
 // §23 — Cut 3 활성화: 이미지 + 2차 선택 요약 + "결과 확인하기" 버튼
@@ -818,6 +871,7 @@ function showReviewChoices(){
   _scrollChoicesIntoView(area,sc.reviews.length);
   updateStats();
   if(_checkAllUnaffordable(costs))triggerGameOver();
+  else _scheduleCascade(area,sc.reviews.length); // §4p 할인 캐스케이드
 }
 
 // §23 — Cut 5 활성화: 이미지 + 검토 선택 요약

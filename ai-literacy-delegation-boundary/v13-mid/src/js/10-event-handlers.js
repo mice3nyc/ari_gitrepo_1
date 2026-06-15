@@ -271,25 +271,15 @@ function onTier1(t1id){
   });
 }
 
-var _couponSelections={};
+var _couponSelections={}; // §4p — 쿠폰 모달 폐지 후 미사용(리셋 호출 호환용 유지)
 function onTier2(t2id){
-  var availCards=getAvailableCardDiscounts('tier2',t2id);
-  var couponKey='tier2:'+t2id;
-  if(availCards.length>0&&_couponSelections[couponKey]===undefined){
-    // §4f v7 — 모달 확정 = 즉시 선택. 저장 후 자기 재호출로 바로 진행 (재클릭 단계 제거)
-    showCouponSelect(availCards,function(selectedCard){
-      _couponSelections[couponKey]=selectedCard;
-      onTier2(t2id);
-    });
-    return;
-  }
-  var selectedCard=_couponSelections[couponKey]||null;
+  if(_cascadeBusy)return; // §4p — 할인 캐스케이드 도는 동안 클릭 잠금
   var prev=gameState.competencies.delegationChoice.value;
   var prevTime=gameState.resources.time.current;
   var prevEnergy=gameState.resources.energy.current;
   applyTier2(t2id);
   var now=gameState.competencies.delegationChoice.value;
-  var cost=selectedCard?getTier2CostWithCard(t2id,selectedCard):getTier2Cost(t2id);
+  var cost=getTier2Cost(t2id);
   consumeStage('tier2',cost,null);
   var nowTime=gameState.resources.time.current;
   var nowEnergy=gameState.resources.energy.current;
@@ -304,19 +294,7 @@ function onTier2(t2id){
 }
 
 function onReview(rid){
-  var leaf=getLeafPath();
-  var reviewLeaf=leaf||rid;
-  var availCards=getAvailableCardDiscounts('review',reviewLeaf);
-  var couponKey='review:'+reviewLeaf;
-  if(availCards.length>0&&_couponSelections[couponKey]===undefined){
-    // §4f v7 — 모달 확정 = 즉시 선택
-    showCouponSelect(availCards,function(selectedCard){
-      _couponSelections[couponKey]=selectedCard;
-      onReview(rid);
-    });
-    return;
-  }
-  var selectedCard=_couponSelections[couponKey]||null;
+  if(_cascadeBusy)return; // §4p — 할인 캐스케이드 도는 동안 클릭 잠금
   var prevK=gameState.competencies.knowledge.value;
   var prevTime=gameState.resources.time.current;
   var prevEnergy=gameState.resources.energy.current;
@@ -324,7 +302,7 @@ function onReview(rid){
   var nowK=gameState.competencies.knowledge.value;
   var lp=getLeafPath();
   if(lp){
-    var cost=selectedCard?getReviewCostWithCard(lp,selectedCard):getReviewCost(lp);
+    var cost=getReviewCost(lp);
     consumeStage('review',cost,lp);
   }
   var nowTime=gameState.resources.time.current;

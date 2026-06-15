@@ -8,23 +8,15 @@ function _dockEl(){
   if(!dock){
     dock=document.createElement('div');
     dock.id='card-dock';
-    // 6/15 r42 (§4n) — 두 칸 가로: 좌=내가할까?(능력→능력카드) / 우=시킬까?(위임→인간중심+성장)
+    // 6/15 §4o — 헤더+레벨은 HUD(.hud-dock)로. 독 = 카드 보관함 + 그 아래 할인 블럭(§4o v6, 피터공: 할인을 카드 박스 아래로·카툰 강조).
     dock.innerHTML=
       '<div class="dock-col" id="dock-col-ab">'
-        +'<div class="dock-col-top">'
-          +'<div class="dock-col-head">'+_t('dock.head_self','내가할까?')+'</div>'
-          +'<div class="dock-level"><span class="dl-label">'+_t('dock.level_ability','능력 레벨')+'</span><span class="dl-num" id="dock-level-ab">1</span></div>'
-        +'</div>'
-        +'<div class="dock-discount" id="dock-disc-ab">에너지 할인 -0</div>'
         +'<div class="dock-cards-box"><div class="dock-list" id="dock-list-ab"></div></div>'
+        +'<div class="dock-disc" id="dock-disc-ab" style="display:none"><span class="dd-head">내가 할까?</span><span class="dd-label">에너지 할인</span><span class="dd-num">0</span></div>'
       +'</div>'
       +'<div class="dock-col" id="dock-col-hc">'
-        +'<div class="dock-col-top">'
-          +'<div class="dock-col-head">'+_t('dock.head_delegate','시킬까?')+'</div>'
-          +'<div class="dock-level"><span class="dl-label">'+_t('dock.level_delegation','위임 레벨')+'</span><span class="dl-num" id="dock-level-hc">1</span></div>'
-        +'</div>'
-        +'<div class="dock-discount" id="dock-disc-hc">시간 할인 -0</div>'
         +'<div class="dock-cards-box"><div class="dock-list" id="dock-list-hc"></div></div>'
+        +'<div class="dock-disc" id="dock-disc-hc" style="display:none"><span class="dd-head">시킬까?</span><span class="dd-label">시간 할인</span><span class="dd-num">0</span></div>'
       +'</div>';
     // §2d v2 — inv-panel 폐지: 독은 표시 전용. 리셋은 디버그 패널 초기화로.
     document.body.appendChild(dock);
@@ -37,16 +29,21 @@ function updateDockLevels(){
   if(!gameState||!gameState.competencies)return;
   var ab=document.getElementById('dock-level-ab');
   var hc=document.getElementById('dock-level-hc');
-  // 표시는 레벨 1부터(피터공): 내부 raw 값 0 → 레벨 1
+  // §4o v5 (피터공): 레벨 0부터 = 할인 값과 동일 매칭 (레벨 N ↔ 할인 N). 기존 "레벨 1부터"(§4n) 폐지.
   var knl=Math.max(0,gameState.competencies.knowledge.value);
   var dlg=Math.max(0,gameState.competencies.delegationChoice.value);
-  if(ab)ab.textContent=knl+1;
-  if(hc)hc.textContent=dlg+1;
-  // 할인 = 레벨−1 = raw 값 (능력→에너지 할인 / 위임→시간 할인). 카드 할인은 선택 시 별도 가산.
-  var dAb=document.getElementById('dock-disc-ab');
-  var dHc=document.getElementById('dock-disc-hc');
-  if(dAb)dAb.textContent='에너지 할인 -'+knl;
-  if(dHc)dHc.textContent='시간 할인 -'+dlg;
+  if(ab)ab.textContent=knl;
+  if(hc)hc.textContent=dlg;
+  // 할인 = 레벨 = raw 값 (능력→에너지 할인 / 위임→시간 할인). 카드 할인은 선택 시 별도 가산.
+  // §4o v7 (피터공): 할인 0이면 블럭 숨김, >0이면 숫자만 크게(-N) 강조.
+  _setDockDisc(document.getElementById('dock-disc-ab'),knl);
+  _setDockDisc(document.getElementById('dock-disc-hc'),dlg);
+}
+function _setDockDisc(box,v){
+  if(!box)return;
+  box.style.display=(v>0)?'':'none';
+  var num=box.querySelector('.dd-num');
+  if(num)num.textContent='-'+v;
 }
 // 임시(pending) 판정 — 현재 시나리오에서 선택으로 획득, 아직 미클리어
 function _dockIsPending(entry){
@@ -60,24 +57,44 @@ function _dockChipLabel(c){
   // §6 — 축 이름 미표시, 역량명만 (6/12)
   return (c.kind==='hc')?_invEscapeHTML(c.tag):_invEscapeHTML(_cardDisplayName(c.name));
 }
-function _dockChipApplyLocked(el,c){
+// §4o v5 (피터공) — 같은 카드 누적: identity 키로 묶어 ×N 표시
+function _dockChipKey(c){
+  if(c.kind==='hc')return 'hc:'+c.tag;
+  if(c.kind==='growth')return 'g:'+c.name;
+  return 'd:'+c.name;
+}
+// 인벤토리 안 같은 identity 카드 총 개수 (locked+pending 모두)
+function _dockCountFor(c){
+  if(!gameState||!gameState.inventory)return 1;
+  var inv=gameState.inventory,n=0,i;
+  if(c.kind==='hc'){var a=inv.humanCentricCards||[];for(i=0;i<a.length;i++)if(a[i].tag===c.tag)n++;}
+  else if(c.kind==='growth'){var g=inv.growthCards||[];for(i=0;i<g.length;i++)if(g[i].label===c.name)n++;}
+  else{var d=inv.domainCards||[];for(i=0;i<d.length;i++)if(d[i].label===c.name)n++;}
+  return n||1;
+}
+function _dockCountBadge(count,white){
+  if(!(count>1))return '';
+  return '<span class="dc-count"'+(white?' style="color:#fff;"':'')+'>×'+count+'</span>';
+}
+function _dockChipApplyLocked(el,c,count){
   if(c.kind==='hc'){
     var am=_axisMeta(c.axis);
     el.style.background=am.color;
-    el.innerHTML='<div class="dc-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>';
+    el.innerHTML='<div class="dc-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>'+_dockCountBadge(count,true);
   }else{
     el.style.borderLeft='6px solid '+_cardColor(c.name);
-    el.innerHTML='<div class="dc-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>';
+    el.innerHTML='<div class="dc-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>'+_dockCountBadge(count,false);
   }
 }
-function _dockChip(c,pending){
+function _dockChip(c,pending,count){
   var el=document.createElement('div');
   el._cardData=c;
+  el.dataset.key=_dockChipKey(c);
   el.className='dock-card '+(pending?'pending':'locked');
   if(pending){
-    el.innerHTML='<div class="dc-name">'+_dockChipLabel(c)+'</div>';
+    el.innerHTML='<div class="dc-name">'+_dockChipLabel(c)+'</div>'+_dockCountBadge(count,false);
   }else{
-    _dockChipApplyLocked(el,c);
+    _dockChipApplyLocked(el,c,count);
   }
   return el;
 }
@@ -92,10 +109,21 @@ function dockRender(){
   if(!gameState||!gameState.inventory)return;
   var inv=gameState.inventory;
   // 6/15 r42 (§4n) — 능력카드(domain)=내가할까 칸 / 인간중심(hc)+성장(growth, B)=시킬까 칸
-  (inv.humanCentricCards||[]).forEach(function(e){hcL.appendChild(_dockChip({kind:'hc',axis:e.axis,tag:e.tag},_dockIsPending(e)));});
-  (inv.growthCards||[]).forEach(function(e){hcL.appendChild(_dockChip({kind:'growth',name:e.label},_dockIsPending(e)));});
-  (inv.domainCards||[]).forEach(function(e){abL.appendChild(_dockChip({kind:'domain',name:e.label},_dockIsPending(e)));});
+  // §4o v5 (피터공) — 같은 카드는 ×N으로 묶어 표시 (획득 순서로 첫 등장 위치 유지)
+  _dockRenderGroup(hcL,(inv.humanCentricCards||[]).map(function(e){return {e:e,c:{kind:'hc',axis:e.axis,tag:e.tag}};})
+    .concat((inv.growthCards||[]).map(function(e){return {e:e,c:{kind:'growth',name:e.label}};})));
+  _dockRenderGroup(abL,(inv.domainCards||[]).map(function(e){return {e:e,c:{kind:'domain',name:e.label}};}));
   updateDockLevels();
+}
+function _dockRenderGroup(listEl,items){
+  var order=[],map={};
+  items.forEach(function(it){
+    var k=_dockChipKey(it.c);
+    if(!map[k]){map[k]={c:it.c,count:0,pending:false};order.push(k);}
+    map[k].count++;
+    if(_dockIsPending(it.e))map[k].pending=true;
+  });
+  order.forEach(function(k){var g=map[k];listEl.appendChild(_dockChip(g.c,g.pending,g.count));});
 }
 function railClear(){
   var pop=document.getElementById('card-earn-popup');
@@ -172,9 +200,19 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
       cards.forEach(function(c,i){
         var list=_dockListFor(c);
         if(!list){return;}
-        var chip=_dockChip(c,true);
-        chip.style.visibility='hidden';
-        list.appendChild(chip);
+        // §4o v5 — 같은 카드 이미 있으면 그 칩으로 날아가 ×N 증가, 없으면 새 pending 칩
+        var chip=list.querySelector('[data-key="'+_dockChipKey(c)+'"]');
+        var isNew=!chip;
+        function _bumpExisting(ch){
+          ch.classList.remove('locked');ch.classList.add('pending');
+          ch.style.background='';ch.style.borderLeft='';
+          ch.innerHTML='<div class="dc-name">'+_dockChipLabel(c)+'</div>'+_dockCountBadge(_dockCountFor(c),false);
+        }
+        if(isNew){
+          chip=_dockChip(c,true,_dockCountFor(c));
+          chip.style.visibility='hidden';
+          list.appendChild(chip);
+        }
         var src=minis[i];
         var sr=src?src.getBoundingClientRect():null;
         var tr=chip.getBoundingClientRect();
@@ -186,7 +224,7 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
           var tx=tr.left+tr.width/2-(sr.left+sr.width/2);
           var ty=tr.top+tr.height/2-(sr.top+sr.height/2);
           var sc=Math.max(0.3,tr.width/sr.width);
-          (function(g,ch,dx,dy,s,idx){
+          (function(g,ch,dx,dy,s,idx,_new){
             setTimeout(function(){
               requestAnimationFrame(function(){
                 g.style.transform='translate('+dx+'px,'+dy+'px) rotate(540deg) scale('+s.toFixed(2)+')';
@@ -194,13 +232,15 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
               });
               setTimeout(function(){
                 if(g.parentNode)g.parentNode.removeChild(g);
-                ch.style.visibility='';
+                if(_new){ch.style.visibility='';}
+                else{_bumpExisting(ch);}
                 ch.classList.add('reveal');
               },560);
             },idx*150);
-          })(ghost,chip,tx,ty,sc,i);
+          })(ghost,chip,tx,ty,sc,i,isNew);
         }else{
-          chip.style.visibility='';
+          if(isNew){chip.style.visibility='';}
+          else{_bumpExisting(chip);}
         }
       });
       pop.classList.remove('show');
@@ -234,7 +274,7 @@ function _dockLockNow(){
       setTimeout(function(){
         el.classList.remove('pending');
         el.classList.add('locked','locking');
-        if(el._cardData)_dockChipApplyLocked(el,el._cardData); // 철컥과 함께 컬러 입힘 (§2d v2)
+        if(el._cardData)_dockChipApplyLocked(el,el._cardData,_dockCountFor(el._cardData)); // 철컥과 함께 컬러+×N 입힘 (§2d v2 / §4o v5)
         (function(node){setTimeout(function(){node.classList.remove('locking');},450);})(el);
       },i*120);
     });

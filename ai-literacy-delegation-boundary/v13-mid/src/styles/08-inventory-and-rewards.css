@@ -98,8 +98,8 @@
 .no-card-notice { margin-top:10px; padding:8px 12px; background:var(--bg-soft); border:var(--border-w) solid var(--ink); font-size:12px; color:var(--ink); }
 
 /* ===== 카드 독 (SPEC-card-per-choice §2d) — 우측 상시 컬렉션 ===== */
-/* 6/15 r42 (§4n) — 우측 레일 두 칸: 내가할까?(능력) | 시킬까?(위임). 그룹 중앙정렬 — 그리드 우측 끝 옆에 붙음(--gx/--bw는 body.scenario-active에서 상속). */
-#card-dock { position:fixed; top:0; left: calc(var(--gx) + var(--bw) - 300px); bottom:12px; width:300px; z-index:180; display:none; flex-direction:row; gap:10px; }
+/* 6/15 §4o — 헤더/레벨/할인은 HUD(.hud-dock)로 이관, 독은 카드 보관함 2칸만. HUD 아래 시작(top:--hud-h+16), 우측 끝은 HUD 내용 우단(gx+bw-13)과 정렬. */
+#card-dock { position:fixed; top: calc(var(--hud-h) + 16px); left:auto; right: calc(var(--gx) + 13px); bottom:12px; width:300px; z-index:180; display:none; flex-direction:row; gap:10px; }
 #card-dock.on { display:flex; }
 .dock-col { flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:10px; overflow-y:auto; scrollbar-width:none; }
 .dock-col::-webkit-scrollbar { display:none; }
@@ -114,6 +114,15 @@
 .dock-discount { flex-shrink:0; text-align:center; font-size:16px; font-weight:800; color:#fff; background:#15803d; border:var(--border-w) solid var(--ink); padding:9px 4px; line-height:1.15; }
 /* 점선 카드 자리 — 처음 3개 정도 크기, 카드 쌓이면 늘어남 */
 .dock-cards-box { flex:0 0 auto; border:var(--border-w) dashed var(--ink-soft); border-radius:0; background:var(--bg-card); padding:10px; min-height:140px; }
+/* §4o v6/v7 (피터공) — 할인 블럭을 카드 박스 아래로. 3줄("내가 할까?" / "에너지 할인" / 큰 숫자). 0이면 JS가 숨김. 숫자를 크게+강한 그림자로 확 띄게 */
+.dock-disc { flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:2px; text-align:center; padding:11px 6px 7px; }
+.dock-disc .dd-head { font-size:16px; font-weight:800; letter-spacing:0.5px; line-height:1.1; }
+.dock-disc .dd-label { font-size:14px; font-weight:800; line-height:1.1; }
+.dock-disc .dd-num { font-size:40px; font-weight:800; line-height:1; margin-top:2px; }
+#dock-col-ab .dock-disc .dd-head, #dock-col-ab .dock-disc .dd-label { color:var(--acc-cyan-deep); }
+#dock-col-ab .dock-disc .dd-num { color:var(--acc-cyan-deep); text-shadow:3px 3px 0 var(--ink); }
+#dock-col-hc .dock-disc .dd-head, #dock-col-hc .dock-disc .dd-label { color:var(--acc-pink-deep); }
+#dock-col-hc .dock-disc .dd-num { color:var(--acc-pink-deep); text-shadow:3px 3px 0 var(--ink); }
 .dock-sec { border:3px solid var(--ink); background:var(--bg-card); padding:8px; flex-shrink:0; }
 .dock-sec-title { font-size:13px; font-weight:800; letter-spacing:1.5px; color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:6px; margin-bottom:8px; text-align:center; }
 .dock-list { display:flex; flex-direction:column; gap:6px; min-height:10px; }
@@ -121,8 +130,10 @@
   #card-dock.on { position:static; width:100%; right:auto; top:auto; bottom:auto; margin-top:10px; }
   .dock-col { overflow-y:visible; }
 }
-.dock-card { border:2px solid var(--ink); background:#fff; padding:8px 10px; }
-.dock-card .dc-name { font-size:14px; font-weight:700; line-height:1.25; white-space:nowrap; overflow:hidden; }
+.dock-card { border:2px solid var(--ink); background:#fff; padding:8px 10px; display:flex; align-items:center; justify-content:space-between; gap:6px; }
+.dock-card .dc-name { flex:1 1 auto; min-width:0; font-size:14px; font-weight:700; line-height:1.25; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+/* §4o v5 — 같은 카드 누적 ×N 배지 */
+.dock-card .dc-count { flex:0 0 auto; font-size:14px; font-weight:800; line-height:1; color:var(--ink); }
 .dock-card .dc-axis { font-weight:600; opacity:0.85; }
 /* §2d v2 — pending: 진한 회색 글씨·컬러 없음·점선·깜빡임. 컬러는 철컥 때 */
 .dock-card.pending { border-style:dashed; border-color:#555; animation:dockBlink 1s step-end infinite; }
@@ -153,4 +164,4 @@
 .cep-acquire { display:block; width:100%; margin-top:12px; padding:10px 8px; font-family:inherit; font-size:15px; font-weight:800; border-radius:0; cursor:pointer; background:var(--acc-yellow,#ffdb31); color:var(--ink); border:var(--border-w,3px) solid var(--ink); box-shadow:var(--shadow,4px 4px 0 var(--ink)); transition:transform 0.05s, box-shadow 0.05s; }
 .cep-acquire:active { transform:translate(2px,2px); box-shadow:var(--shadow-press,2px 2px 0 var(--ink)); }
 .cep-cards .rail-card { opacity:1; transform:none; box-shadow:none; }
-@media (max-width:1320px){ #card-dock{width:170px;} .rail-card-name{font-size:12px;} .card-earn-popup{width:220px;right:146px;} .card-earn-popup.over-image{width:260px;} }
+@media (max-width:1320px){ .rail-card-name{font-size:12px;} .card-earn-popup{width:220px;right:146px;} .card-earn-popup.over-image{width:260px;} }

@@ -17,7 +17,7 @@
 .resource-bar.flash-levelup { animation:flashLevelUp 0.8s ease; }
 
 /* ===== 좌측 패널 — 자원 게이지 (단방향) — 6/11 HUD 개편: 아이콘+큰 레이블+두툼한 바+바 위 수치 ===== */
-.resource-bar { flex:1 1 0; min-width:0; display:flex; flex-direction:row; gap:0; padding:0; border:0; background:transparent; box-shadow:none; overflow:hidden; } /* v3 6/11 / r42 6/15 — 좌정렬, 3구역(좌:시간에너지 / 중앙:점수 / 우:SCORE) */
+.resource-bar { flex:1 1 0; min-width:0; display:flex; flex-direction:row; gap:0; padding:0; border:0; background:transparent; box-shadow:none; overflow:hidden; } /* v3 6/11 / r42 6/15 / §4o v4 6/15 — 자원 영역 = 점수바 영역 동일 폭(피터공) */
 .resource-item { flex:1; display:flex; flex-direction:row; align-items:center; gap:8px; padding:8px 12px; position:relative; transition:background-color 0.3s; }
 .resource-icon { flex:0 0 auto; display:flex; align-items:center; }
 .resource-icon svg { width:22px; height:22px; fill:var(--ink); display:block; }
@@ -72,7 +72,7 @@
 .scenario-progress-strip .sps-items.zero { color:#bbb; border-color:#ddd; }
 
 /* ===== 중앙 LV·SCORE 큰 디스플레이 ===== */
-.score-display { flex:0 1 44%; min-width:0; display:flex; flex-direction:column; justify-content:space-between; align-items:stretch; gap:6px; padding:11px 16px 13px; border:0; border-left:1.5px solid var(--ink-soft); border-right:1.5px solid var(--ink-soft); background:transparent; box-shadow:none; border-radius:0; } /* r42 6/15 — 별도 박스 제거, 좌우 얇은 라인 구분. 제목(위·상단여백)+점수 알약(아래·하단여백) */
+.score-display { flex:1 1 0; min-width:0; display:flex; flex-direction:column; justify-content:space-between; align-items:stretch; gap:6px; padding:11px 14px 13px; border:0; border-left:2px dashed var(--ink-soft); border-right:2px dashed var(--ink-soft); background:transparent; box-shadow:none; border-radius:0; } /* r42 6/15 점선화 / §4o v4 6/15 — 자원 영역과 동일 폭(flex 1:1, 피터공) */
 /* 6/15 r42 (§4n) — HUD 중앙 시나리오 제목 + 미터→우측 레일 이동 */
 .hud-title { font-size:20px; font-weight:800; text-align:center; color:var(--ink); line-height:1.2; padding:0 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .stats-bar { display:none !important; }
@@ -99,7 +99,10 @@
 .score-graph-rider.num-right .score-graph-num { right:auto; left:100%; margin-right:0; margin-left:8px; color:var(--ink); }
 .score-graph-num.pulsing { animation:numPulse 0.5s ease; }
 /* 누적 SCORE 블록 (그래프 우측) — v6.1: LV은 SCORE 숫자 아래 작은 한 줄, XP 바 HUD 표시 제거 */
-.score-total-block { flex:1 1 0; display:flex; flex-direction:column; align-items:flex-end; justify-content:center; gap:3px; min-width:54px; } /* r42 6/15 — 우정렬 */
+.score-total-block { flex:0 1 auto; display:flex; flex-direction:row; align-items:baseline; justify-content:center; gap:8px; min-width:96px; padding:0 12px; } /* §4o 6/15 — "SCORE : 0" 한 줄 중앙정렬 / v3 — 내용폭만(남는 폭은 시간에너지로) */
+.score-total-block .display-label { font-size:17px; font-weight:800; color:var(--ink); letter-spacing:1.5px; }
+.score-total-block .display-label::after { content:":"; margin-left:5px; }
+.score-total-block .display-num { font-size:27px; }
 .score-lv-line { font-size:11px; font-weight:800; color:#888; letter-spacing:1px; line-height:1; }
 .lv-compact { font-size:12px; font-weight:800; color:#111; line-height:1; display:inline-block; }
 .lv-compact.pulsing { animation:numPulse 0.5s ease; }
@@ -107,8 +110,25 @@
 
 /* §17.2 — 시나리오 나가기 버튼 (전체 윈도우 좌측 상단 코너 고정, 검정. 시나리오 진행 화면 전용) */
 /* DOM에서 panel-row 바로 다음이라 ~ 셀렉터로 HUD 표시에 자동 연동 — JS 토글 불필요 */
-.scenario-exit { display:none; position:fixed; top:12px; left:12px; z-index:1000; padding:7px 13px; font-size:12px; font-weight:700; font-family:inherit; color:#fff; background:#111; border:2px solid #111; border-radius:10px; cursor:pointer; line-height:1; white-space:nowrap; }
+/* §4o v3 6/15 — 나가기 버튼은 HUD 밖 화면 우하단으로 (피터공). HUD 좌단을 시간/에너지에 온전히 내줌 */
+.scenario-exit { display:none; position:fixed; top:auto; bottom:16px; right:16px; left:auto; z-index:1000; padding:8px 15px; font-size:12px; font-weight:700; font-family:inherit; color:#fff; background:#111; border:2px solid #111; border-radius:10px; cursor:pointer; line-height:1; white-space:nowrap; }
 .scenario-exit:hover { background:#333; }
 .panel-row.visible ~ .scenario-exit { display:block; }
-/* 버튼이 HUD 좌측 끝(시간 게이지)과 겹치지 않게 자원 바를 오른쪽으로 비킴 */
-.panel-row.visible .resource-bar { padding-left:76px; }
+
+/* ===== §4o 6/15 — 우측 두 칸을 HUD에 결합 (내가할까/시킬까 — 헤더+레벨+할인). 점선 구획·카툰 ===== */
+/* §4o v2(피터공): 내가할까/시킬까 크게+컬러+하드섀도, 레벨 "능력 레벨 : 1" 컬러, 할인 초록박스 흰글씨 크게 */
+.hud-dock { flex:0 0 300px; align-self:stretch; display:flex; flex-direction:row; gap:0; }
+.hud-dock-col { flex:1 1 0; min-width:0; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:7px; padding:6px 10px; text-align:center; border-left:2px dashed var(--ink-soft); }
+.hdc-head { font-size:25px; font-weight:800; line-height:1.05; letter-spacing:0.5px; }
+/* 능력=내가할까(직접)=cyan / 위임=시킬까(AI)=pink. 하드섀도로 카툰 팝. */
+#hud-dock-ab .hdc-head { color:var(--acc-cyan-deep); text-shadow:2.5px 2.5px 0 var(--ink); }
+#hud-dock-hc .hdc-head { color:var(--acc-pink-deep); text-shadow:2.5px 2.5px 0 var(--ink); }
+.hdc-level { font-size:15px; font-weight:800; line-height:1; white-space:nowrap; }
+#hud-dock-ab .hdc-level { color:var(--acc-cyan-deep); }
+#hud-dock-hc .hdc-level { color:var(--acc-pink-deep); }
+.hdc-level .dl-num { font-size:18px; }
+.hdc-level .dl-num.pulsing { animation:numPulse 0.5s ease; }
+/* §4o v6 — 할인은 HUD에서 빼서 카드 박스 아래(.dock-disc)로 이동 (08-inventory) */
+@media (max-width:900px){
+  .hud-dock { flex-basis:auto; width:100%; }
+}

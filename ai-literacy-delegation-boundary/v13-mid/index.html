@@ -45,8 +45,9 @@ body { font-family: var(--font-main); background: var(--bg-page); color: var(--i
    그리드 폭 = --bw - 312(레일300+gap12+gap... ). HUD는 그리드와 같은 좌표/폭, 레일은 그리드 우측 옆. */
 body.scenario-active { align-items: flex-start; --bw: min(1412px, calc(100vw - 24px)); --gx: calc((100vw - min(1412px, calc(100vw - 24px))) / 2); --hud-h: 116px; }
 body.scenario-active #main-container { margin-left: var(--gx); margin-right: 0; width: calc(var(--bw) - 312px); max-width: none; padding-top: calc(var(--hud-h) + 16px); } /* fixed HUD 높이만큼 컨테이너 상단 여백 — 컷 꼭대기가 HUD 아래로 보이게(paperlogy의 + .container 규칙은 나가기 버튼 때문에 안 먹음) */
-/* 10-paperlogy가 .panel-row를 position:fixed + left:50% translateX(중앙)로 둠 → 그리드 좌표/폭에 맞춰 덮어씀. 높이는 --hud-h로 고정(레일 박스와 동일 높이). */
-body.scenario-active .panel-row { left: var(--gx); right: auto; transform: none; width: calc(var(--bw) - 312px); max-width: none; height: var(--hud-h); }
+/* 10-paperlogy가 .panel-row를 position:fixed + left:50% translateX(중앙)로 둠 → 그리드 좌표/폭에 맞춰 덮어씀. 높이는 --hud-h로 고정. */
+/* 6/15 §4o — HUD가 그룹 전체 폭(--bw)을 덮음: 좌(시간에너지)·중앙(점수)·우(SCORE)는 그리드 위, .hud-dock은 카드 보관함 위. */
+body.scenario-active .panel-row { left: var(--gx); right: auto; transform: none; width: var(--bw); max-width: none; height: var(--hud-h); }
 @media (max-width:900px){
   body.scenario-active { align-items: center; }
   body.scenario-active #main-container { margin: 0; width: 100%; max-width: 1100px; }
@@ -75,7 +76,7 @@ button, input, select, textarea { font-family: inherit; }
 .resource-bar.flash-levelup { animation:flashLevelUp 0.8s ease; }
 
 /* ===== 좌측 패널 — 자원 게이지 (단방향) — 6/11 HUD 개편: 아이콘+큰 레이블+두툼한 바+바 위 수치 ===== */
-.resource-bar { flex:1 1 0; min-width:0; display:flex; flex-direction:row; gap:0; padding:0; border:0; background:transparent; box-shadow:none; overflow:hidden; } /* v3 6/11 / r42 6/15 — 좌정렬, 3구역(좌:시간에너지 / 중앙:점수 / 우:SCORE) */
+.resource-bar { flex:1 1 0; min-width:0; display:flex; flex-direction:row; gap:0; padding:0; border:0; background:transparent; box-shadow:none; overflow:hidden; } /* v3 6/11 / r42 6/15 / §4o v4 6/15 — 자원 영역 = 점수바 영역 동일 폭(피터공) */
 .resource-item { flex:1; display:flex; flex-direction:row; align-items:center; gap:8px; padding:8px 12px; position:relative; transition:background-color 0.3s; }
 .resource-icon { flex:0 0 auto; display:flex; align-items:center; }
 .resource-icon svg { width:22px; height:22px; fill:var(--ink); display:block; }
@@ -130,7 +131,7 @@ button, input, select, textarea { font-family: inherit; }
 .scenario-progress-strip .sps-items.zero { color:#bbb; border-color:#ddd; }
 
 /* ===== 중앙 LV·SCORE 큰 디스플레이 ===== */
-.score-display { flex:0 1 44%; min-width:0; display:flex; flex-direction:column; justify-content:space-between; align-items:stretch; gap:6px; padding:11px 16px 13px; border:0; border-left:1.5px solid var(--ink-soft); border-right:1.5px solid var(--ink-soft); background:transparent; box-shadow:none; border-radius:0; } /* r42 6/15 — 별도 박스 제거, 좌우 얇은 라인 구분. 제목(위·상단여백)+점수 알약(아래·하단여백) */
+.score-display { flex:1 1 0; min-width:0; display:flex; flex-direction:column; justify-content:space-between; align-items:stretch; gap:6px; padding:11px 14px 13px; border:0; border-left:2px dashed var(--ink-soft); border-right:2px dashed var(--ink-soft); background:transparent; box-shadow:none; border-radius:0; } /* r42 6/15 점선화 / §4o v4 6/15 — 자원 영역과 동일 폭(flex 1:1, 피터공) */
 /* 6/15 r42 (§4n) — HUD 중앙 시나리오 제목 + 미터→우측 레일 이동 */
 .hud-title { font-size:20px; font-weight:800; text-align:center; color:var(--ink); line-height:1.2; padding:0 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .stats-bar { display:none !important; }
@@ -157,7 +158,10 @@ button, input, select, textarea { font-family: inherit; }
 .score-graph-rider.num-right .score-graph-num { right:auto; left:100%; margin-right:0; margin-left:8px; color:var(--ink); }
 .score-graph-num.pulsing { animation:numPulse 0.5s ease; }
 /* 누적 SCORE 블록 (그래프 우측) — v6.1: LV은 SCORE 숫자 아래 작은 한 줄, XP 바 HUD 표시 제거 */
-.score-total-block { flex:1 1 0; display:flex; flex-direction:column; align-items:flex-end; justify-content:center; gap:3px; min-width:54px; } /* r42 6/15 — 우정렬 */
+.score-total-block { flex:0 1 auto; display:flex; flex-direction:row; align-items:baseline; justify-content:center; gap:8px; min-width:96px; padding:0 12px; } /* §4o 6/15 — "SCORE : 0" 한 줄 중앙정렬 / v3 — 내용폭만(남는 폭은 시간에너지로) */
+.score-total-block .display-label { font-size:17px; font-weight:800; color:var(--ink); letter-spacing:1.5px; }
+.score-total-block .display-label::after { content:":"; margin-left:5px; }
+.score-total-block .display-num { font-size:27px; }
 .score-lv-line { font-size:11px; font-weight:800; color:#888; letter-spacing:1px; line-height:1; }
 .lv-compact { font-size:12px; font-weight:800; color:#111; line-height:1; display:inline-block; }
 .lv-compact.pulsing { animation:numPulse 0.5s ease; }
@@ -165,11 +169,28 @@ button, input, select, textarea { font-family: inherit; }
 
 /* §17.2 — 시나리오 나가기 버튼 (전체 윈도우 좌측 상단 코너 고정, 검정. 시나리오 진행 화면 전용) */
 /* DOM에서 panel-row 바로 다음이라 ~ 셀렉터로 HUD 표시에 자동 연동 — JS 토글 불필요 */
-.scenario-exit { display:none; position:fixed; top:12px; left:12px; z-index:1000; padding:7px 13px; font-size:12px; font-weight:700; font-family:inherit; color:#fff; background:#111; border:2px solid #111; border-radius:10px; cursor:pointer; line-height:1; white-space:nowrap; }
+/* §4o v3 6/15 — 나가기 버튼은 HUD 밖 화면 우하단으로 (피터공). HUD 좌단을 시간/에너지에 온전히 내줌 */
+.scenario-exit { display:none; position:fixed; top:auto; bottom:16px; right:16px; left:auto; z-index:1000; padding:8px 15px; font-size:12px; font-weight:700; font-family:inherit; color:#fff; background:#111; border:2px solid #111; border-radius:10px; cursor:pointer; line-height:1; white-space:nowrap; }
 .scenario-exit:hover { background:#333; }
 .panel-row.visible ~ .scenario-exit { display:block; }
-/* 버튼이 HUD 좌측 끝(시간 게이지)과 겹치지 않게 자원 바를 오른쪽으로 비킴 */
-.panel-row.visible .resource-bar { padding-left:76px; }
+
+/* ===== §4o 6/15 — 우측 두 칸을 HUD에 결합 (내가할까/시킬까 — 헤더+레벨+할인). 점선 구획·카툰 ===== */
+/* §4o v2(피터공): 내가할까/시킬까 크게+컬러+하드섀도, 레벨 "능력 레벨 : 1" 컬러, 할인 초록박스 흰글씨 크게 */
+.hud-dock { flex:0 0 300px; align-self:stretch; display:flex; flex-direction:row; gap:0; }
+.hud-dock-col { flex:1 1 0; min-width:0; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:7px; padding:6px 10px; text-align:center; border-left:2px dashed var(--ink-soft); }
+.hdc-head { font-size:25px; font-weight:800; line-height:1.05; letter-spacing:0.5px; }
+/* 능력=내가할까(직접)=cyan / 위임=시킬까(AI)=pink. 하드섀도로 카툰 팝. */
+#hud-dock-ab .hdc-head { color:var(--acc-cyan-deep); text-shadow:2.5px 2.5px 0 var(--ink); }
+#hud-dock-hc .hdc-head { color:var(--acc-pink-deep); text-shadow:2.5px 2.5px 0 var(--ink); }
+.hdc-level { font-size:15px; font-weight:800; line-height:1; white-space:nowrap; }
+#hud-dock-ab .hdc-level { color:var(--acc-cyan-deep); }
+#hud-dock-hc .hdc-level { color:var(--acc-pink-deep); }
+.hdc-level .dl-num { font-size:18px; }
+.hdc-level .dl-num.pulsing { animation:numPulse 0.5s ease; }
+/* §4o v6 — 할인은 HUD에서 빼서 카드 박스 아래(.dock-disc)로 이동 (08-inventory) */
+@media (max-width:900px){
+  .hud-dock { flex-basis:auto; width:100%; }
+}
 /* ===== 선택지 비용 표시 — 4박스 그리드 (DECISIONS §10.6 4/30 세션257) ===== */
 .choice-cost { display:flex; gap:0; margin-top:1px; padding-top:10px; border-top:1px dashed #ddd; }
 .cost-group { display:flex; gap:10px; flex:1; align-items:flex-end; justify-content:center; padding:0 8px; }
@@ -199,6 +220,21 @@ button, input, select, textarea { font-family: inherit; }
 .cost-card-chips { display:flex; flex-wrap:wrap; gap:3px; justify-content:center; margin-bottom:2px; }
 .cost-card-chips .card-chip { font-size:9px; color:var(--ink); font-weight:600; padding:1px 5px; background:var(--acc-mint-soft); border:2px solid var(--ink); border-radius:0; white-space:nowrap; }
 
+
+/* ===== §4p 6/15 — 비용 한 줄 단순형 + 할인 캐스케이드 ===== */
+.choice-cost.cost-simple { display:flex; flex-direction:column; gap:3px; margin-top:8px; }
+.cost-simple .cost-line { display:flex; align-items:center; gap:5px; font-size:15px; font-weight:800; color:var(--ink); white-space:nowrap; } /* §4p v2 — 한 줄 고정(nowrap)+크기 축소 */
+.cost-simple .cost-line-label { font-weight:800; }
+.cost-simple .cost-line-sep { opacity:.55; }
+.cost-simple .cost-num-wrap { display:inline-flex; align-items:center; gap:6px; }
+.cost-simple .cost-num { display:inline-block; font-weight:800; }
+.cost-simple .cost-num-raw.struck { text-decoration:line-through; text-decoration-thickness:2px; color:#9a9a9a; }
+.cost-simple .cost-arrow { font-weight:800; color:var(--ink); }
+.cost-simple .cost-num-final { font-size:18px; color:#15803d; text-shadow:1.5px 1.5px 0 var(--ink); }
+/* 캐스케이드 도는 동안 클릭 잠금(시각: 살짝 흐리게) */
+.choices-area.cascade-locked .choice-card { pointer-events:none; }
+.choices-area.cascade-locked .choice-card:not(.disabled) { opacity:.92; }
+@keyframes pulseFx { 0%{transform:scale(1)} 45%{transform:scale(1.5)} 100%{transform:scale(1)} }
 /* ===== Overlay (Start) ===== */
 .overlay-card { display:flex; align-items:center; justify-content:center; min-height:480px; animation:overlayIn 0.5s ease; }
 @keyframes overlayIn { from{opacity:0} to{opacity:1} }
@@ -871,8 +907,8 @@ button, input, select, textarea { font-family: inherit; }
 .no-card-notice { margin-top:10px; padding:8px 12px; background:var(--bg-soft); border:var(--border-w) solid var(--ink); font-size:12px; color:var(--ink); }
 
 /* ===== 카드 독 (SPEC-card-per-choice §2d) — 우측 상시 컬렉션 ===== */
-/* 6/15 r42 (§4n) — 우측 레일 두 칸: 내가할까?(능력) | 시킬까?(위임). 그룹 중앙정렬 — 그리드 우측 끝 옆에 붙음(--gx/--bw는 body.scenario-active에서 상속). */
-#card-dock { position:fixed; top:0; left: calc(var(--gx) + var(--bw) - 300px); bottom:12px; width:300px; z-index:180; display:none; flex-direction:row; gap:10px; }
+/* 6/15 §4o — 헤더/레벨/할인은 HUD(.hud-dock)로 이관, 독은 카드 보관함 2칸만. HUD 아래 시작(top:--hud-h+16), 우측 끝은 HUD 내용 우단(gx+bw-13)과 정렬. */
+#card-dock { position:fixed; top: calc(var(--hud-h) + 16px); left:auto; right: calc(var(--gx) + 13px); bottom:12px; width:300px; z-index:180; display:none; flex-direction:row; gap:10px; }
 #card-dock.on { display:flex; }
 .dock-col { flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:10px; overflow-y:auto; scrollbar-width:none; }
 .dock-col::-webkit-scrollbar { display:none; }
@@ -887,6 +923,15 @@ button, input, select, textarea { font-family: inherit; }
 .dock-discount { flex-shrink:0; text-align:center; font-size:16px; font-weight:800; color:#fff; background:#15803d; border:var(--border-w) solid var(--ink); padding:9px 4px; line-height:1.15; }
 /* 점선 카드 자리 — 처음 3개 정도 크기, 카드 쌓이면 늘어남 */
 .dock-cards-box { flex:0 0 auto; border:var(--border-w) dashed var(--ink-soft); border-radius:0; background:var(--bg-card); padding:10px; min-height:140px; }
+/* §4o v6/v7 (피터공) — 할인 블럭을 카드 박스 아래로. 3줄("내가 할까?" / "에너지 할인" / 큰 숫자). 0이면 JS가 숨김. 숫자를 크게+강한 그림자로 확 띄게 */
+.dock-disc { flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:2px; text-align:center; padding:11px 6px 7px; }
+.dock-disc .dd-head { font-size:16px; font-weight:800; letter-spacing:0.5px; line-height:1.1; }
+.dock-disc .dd-label { font-size:14px; font-weight:800; line-height:1.1; }
+.dock-disc .dd-num { font-size:40px; font-weight:800; line-height:1; margin-top:2px; }
+#dock-col-ab .dock-disc .dd-head, #dock-col-ab .dock-disc .dd-label { color:var(--acc-cyan-deep); }
+#dock-col-ab .dock-disc .dd-num { color:var(--acc-cyan-deep); text-shadow:3px 3px 0 var(--ink); }
+#dock-col-hc .dock-disc .dd-head, #dock-col-hc .dock-disc .dd-label { color:var(--acc-pink-deep); }
+#dock-col-hc .dock-disc .dd-num { color:var(--acc-pink-deep); text-shadow:3px 3px 0 var(--ink); }
 .dock-sec { border:3px solid var(--ink); background:var(--bg-card); padding:8px; flex-shrink:0; }
 .dock-sec-title { font-size:13px; font-weight:800; letter-spacing:1.5px; color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:6px; margin-bottom:8px; text-align:center; }
 .dock-list { display:flex; flex-direction:column; gap:6px; min-height:10px; }
@@ -894,8 +939,10 @@ button, input, select, textarea { font-family: inherit; }
   #card-dock.on { position:static; width:100%; right:auto; top:auto; bottom:auto; margin-top:10px; }
   .dock-col { overflow-y:visible; }
 }
-.dock-card { border:2px solid var(--ink); background:#fff; padding:8px 10px; }
-.dock-card .dc-name { font-size:14px; font-weight:700; line-height:1.25; white-space:nowrap; overflow:hidden; }
+.dock-card { border:2px solid var(--ink); background:#fff; padding:8px 10px; display:flex; align-items:center; justify-content:space-between; gap:6px; }
+.dock-card .dc-name { flex:1 1 auto; min-width:0; font-size:14px; font-weight:700; line-height:1.25; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+/* §4o v5 — 같은 카드 누적 ×N 배지 */
+.dock-card .dc-count { flex:0 0 auto; font-size:14px; font-weight:800; line-height:1; color:var(--ink); }
 .dock-card .dc-axis { font-weight:600; opacity:0.85; }
 /* §2d v2 — pending: 진한 회색 글씨·컬러 없음·점선·깜빡임. 컬러는 철컥 때 */
 .dock-card.pending { border-style:dashed; border-color:#555; animation:dockBlink 1s step-end infinite; }
@@ -926,7 +973,7 @@ button, input, select, textarea { font-family: inherit; }
 .cep-acquire { display:block; width:100%; margin-top:12px; padding:10px 8px; font-family:inherit; font-size:15px; font-weight:800; border-radius:0; cursor:pointer; background:var(--acc-yellow,#ffdb31); color:var(--ink); border:var(--border-w,3px) solid var(--ink); box-shadow:var(--shadow,4px 4px 0 var(--ink)); transition:transform 0.05s, box-shadow 0.05s; }
 .cep-acquire:active { transform:translate(2px,2px); box-shadow:var(--shadow-press,2px 2px 0 var(--ink)); }
 .cep-cards .rail-card { opacity:1; transform:none; box-shadow:none; }
-@media (max-width:1320px){ #card-dock{width:170px;} .rail-card-name{font-size:12px;} .card-earn-popup{width:220px;right:146px;} .card-earn-popup.over-image{width:260px;} }
+@media (max-width:1320px){ .rail-card-name{font-size:12px;} .card-earn-popup{width:220px;right:146px;} .card-earn-popup.over-image{width:260px;} }
 /* ===== GAME OVER 모달 (5/3 정정 — 자원 부족) ===== */
 .gameover-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:1100; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.25s ease; }
 .gameover-overlay.visible { opacity:1; pointer-events:auto; }
@@ -1843,6 +1890,17 @@ button,
   <div class="score-total-block">
     <span class="display-label">SCORE</span>
     <span class="display-num" id="score-num">0</span>
+  </div>
+  <!-- 6/15 §4o — 우측 두 칸을 HUD에 결합: 내가할까/시킬까 헤더+레벨+할인 (점선 구획, 플랫) -->
+  <div class="hud-dock">
+    <div class="hud-dock-col" id="hud-dock-ab">
+      <div class="hdc-head">내가 할까?</div>
+      <div class="hdc-level"><span class="dl-label">능력 레벨</span><span class="dl-sep"> : </span><span class="dl-num" id="dock-level-ab">0</span></div>
+    </div>
+    <div class="hud-dock-col" id="hud-dock-hc">
+      <div class="hdc-head">시킬까?</div>
+      <div class="hdc-level"><span class="dl-label">위임 레벨</span><span class="dl-sep"> : </span><span class="dl-num" id="dock-level-hc">0</span></div>
+    </div>
   </div>
   <!-- 우측: 역량 (원 7개 미터 — 6/11 HUD 개편: 타이틀·숫자·양방향 바 제거, 기본 3개 채움 = 기존 0) -->
   <div class="stats-bar" id="stats-bar">
@@ -14391,18 +14449,15 @@ function _applyDiscount(c,stageType,choiceId,selectedCard){
   if(stageType==='tier1'){
     return {time:0,energy:0,_discount:{dlg:0,knl:0,dlgEffect:0,knlEffect:0,cardDiscount:0,cardDetails:[],mPos:1,mNeg:1,rawTime:0,rawEnergy:0,clampedEnergy:0}};
   }
+  // §4p (피터공) — 할인 = 레벨 총점만. 카드 매칭 보너스 폐지(selectedCard 무시).
   var timeDisc=dlg;
-  var cardDisc={total:0,details:[]};
-  if(selectedCard){
-    cardDisc={total:selectedCard.amount,details:[selectedCard]};
-  }
-  var energyDisc=knl+cardDisc.total;
+  var energyDisc=knl;
   var floor=DISCOUNT_FLOOR[stageType]||{time:3,energy:2};
   return {
     time:(rawT>0)?Math.max(floor.time,rawT-timeDisc):0,
     energy:(rawE>0)?Math.max(floor.energy,rawE-energyDisc):0,
     _discount:{dlg:dlg,knl:knl,dlgEffect:timeDisc,knlEffect:knl,
-      cardDiscount:cardDisc.total,cardDetails:cardDisc.details,
+      cardDiscount:0,cardDetails:[],
       mPos:1,mNeg:1,rawTime:rawT,rawEnergy:rawE,clampedEnergy:energyDisc}
   };
 }
@@ -15629,32 +15684,84 @@ function _buildCostLine(costLabel,rawVal,discountLabel,discountVal,finalLabel,ac
       '<div class="cost-formula-val cost-formula-final"><b>'+finalVal+'</b></div></div>'+
   '</div>';
 }
-function buildCostHTML(cost){
-  var d=cost._discount||{dlgEffect:0,knlEffect:0,rawTime:cost.time,rawEnergy:cost.energy,cardDiscount:0,cardDetails:[],clampedEnergy:0};
-  var totalEnergyDisc=d.clampedEnergy||0;
-  var hasAxisDiscount=(d.dlgEffect>0||totalEnergyDisc>0);
-  if(!hasAxisDiscount){
-    var _cl=_t('cost_labels',{});
-    return '<div class="choice-cost cost-formula-box">'+
-      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">'+(_cl.time_cost||'시간 비용')+'</div><div class="cost-formula-val cost-formula-final"><b>'+cost.time+'</b></div></div></div>'+
-      '<div class="cost-formula-line"><div class="cost-formula-cell"><div class="cost-formula-label">'+(_cl.energy_cost||'에너지 비용')+'</div><div class="cost-formula-val cost-formula-final"><b>'+cost.energy+'</b></div></div></div>'+
-    '</div>';
-  }
-  var energyHtml='';
-  var _cl2=_t('cost_labels',{});
-  energyHtml+=_buildCostLine(_cl2.energy_cost||'에너지 비용',d.rawEnergy,_cl2.energy_discount||'능력 할인',totalEnergyDisc,_cl2.cost_final||'비용',cost.energy);
-  return '<div class="choice-cost cost-formula-box">'+
-    _buildCostLine(_cl2.time_cost||'시간 비용',d.rawTime,_cl2.time_discount||'선택 할인',d.dlgEffect,_cl2.cost_final||'비용',cost.time)+
-    '<div class="cost-energy-col">'+energyHtml+'</div>'+
+// §4p — 한 줄 큰 글씨 비용. 초기엔 raw(할인 전) 표시, data-raw/data-final 보유(캐스케이드가 할인 적용).
+function _costSimpleLine(label,res,raw,final){
+  return '<div class="cost-line" data-res="'+res+'" data-raw="'+raw+'" data-final="'+final+'">'+
+    '<span class="cost-line-label">'+label+'</span><span class="cost-line-sep">:</span>'+
+    '<span class="cost-num-wrap"><span class="cost-num cost-num-raw">'+raw+'</span></span>'+
   '</div>';
 }
-// §4f — 역량카드 할인 가능 표식 (버튼 아님, 선택 텍스트 끝 초록 박스)
-// 기존 하단 cost-coupon-badge·_updateCouponBadge(적용 후 비용 갱신·blink)는 v7에서 제거 —
-// 모달 확정 즉시 선택으로 바뀌어 적용 후 화면 갱신 자체가 사라짐.
-function getCardDiscountMark(stageType,choiceId){
-  var avail=getAvailableCardDiscounts(stageType,choiceId);
-  if(avail.length>0)return ' <span class="card-discount-mark">'+_t('coupon.choice_mark','역량카드 할인 가능')+'</span>';
-  return '';
+function buildCostHTML(cost){
+  var d=cost._discount||{rawTime:cost.time,rawEnergy:cost.energy};
+  var _cl=_t('cost_labels',{});
+  return '<div class="choice-cost cost-simple">'+
+    _costSimpleLine(_cl.time_cost||'시간 비용','time',d.rawTime,cost.time)+
+    _costSimpleLine(_cl.energy_cost||'에너지 비용','energy',d.rawEnergy,cost.energy)+
+  '</div>';
+}
+// §4p — 역량카드 할인 가능 표식 폐지(쿠폰 모달 폐지). 호출부 호환 위해 빈 문자열.
+function getCardDiscountMark(stageType,choiceId){return '';}
+
+// ===== §4p 할인 캐스케이드 애니메이션 =====
+var _cascadeBusy=false;
+function _pulse(el,iters){
+  return new Promise(function(res){
+    if(!el){res();return;}
+    var n=iters||1;
+    el.style.animation='none';void el.offsetWidth; // reflow 리셋
+    el.style.animation='pulseFx 0.34s ease 0s '+n;
+    var done=function(){if(!el._pdone){el._pdone=1;el.removeEventListener('animationend',done);el.style.animation='';el._pdone=0;res();}};
+    el.addEventListener('animationend',done);
+    setTimeout(done,340*n+220); // animationend 안전망
+  });
+}
+function _dockDiscNumFor(res){
+  var box=document.getElementById(res==='energy'?'dock-disc-ab':'dock-disc-hc');
+  return (box&&box.style.display!=='none')?box.querySelector('.dd-num'):null;
+}
+// 해당 할인 칸의 최근 카드 1장씩(시간=시킬까칸 / 에너지=내가할까칸) — "한두개만" 펄스
+function _discountCardsToPulse(lines){
+  var out=[];
+  lines.forEach(function(l){
+    var list=document.getElementById(l.dataset.res==='energy'?'dock-list-ab':'dock-list-hc');
+    if(list&&list.lastElementChild)out.push(list.lastElementChild);
+  });
+  return out;
+}
+function _applyDiscountToLine(l){
+  var wrap=l.querySelector('.cost-num-wrap');
+  var rawEl=l.querySelector('.cost-num-raw');
+  if(rawEl)rawEl.classList.add('struck');
+  var arrow=document.createElement('span');arrow.className='cost-arrow';arrow.textContent='→';
+  var fin=document.createElement('span');fin.className='cost-num cost-num-final';fin.textContent=l.dataset.final;
+  wrap.appendChild(arrow);wrap.appendChild(fin);
+  return _pulse(fin,2);
+}
+function _animateChoiceDiscount(card){
+  var lines=Array.prototype.slice.call(card.querySelectorAll('.cost-line')).filter(function(l){return (+l.dataset.raw)>(+l.dataset.final);});
+  if(!lines.length)return Promise.resolve();
+  var nums=lines.map(function(l){return l.querySelector('.cost-num-raw');});
+  return Promise.all(nums.map(function(n){return _pulse(n,1);}))                              // 1) 비용 숫자
+    .then(function(){return Promise.all(_discountCardsToPulse(lines).map(function(c){return _pulse(c,1);}));}) // 2) 적용 카드
+    .then(function(){return Promise.all(lines.map(function(l){return _dockDiscNumFor(l.dataset.res);}).filter(Boolean).map(function(d){return _pulse(d,1);}));}) // 3) 할인 -N
+    .then(function(){return Promise.all(lines.map(function(l){return _applyDiscountToLine(l);}));}); // 4) 취소선→새 가격 x2
+}
+function runDiscountCascade(area){
+  if(!area){_cascadeBusy=false;return;}
+  var cards=Array.prototype.slice.call(area.querySelectorAll('.choice-card'));
+  var discounted=cards.filter(function(c){return Array.prototype.slice.call(c.querySelectorAll('.cost-line')).some(function(l){return (+l.dataset.raw)>(+l.dataset.final);});});
+  if(!discounted.length){_cascadeBusy=false;area.classList.remove('cascade-locked');return;}
+  var seq=Promise.resolve();
+  discounted.forEach(function(card){seq=seq.then(function(){return _animateChoiceDiscount(card);});});
+  seq.then(function(){_cascadeBusy=false;area.classList.remove('cascade-locked');});
+}
+// 선택지 영역에 할인이 하나라도 있으면 즉시 잠금 + 카드 다 뜬 뒤 캐스케이드 시작
+function _scheduleCascade(area,count){
+  if(!area)return;
+  var any=Array.prototype.slice.call(area.querySelectorAll('.cost-line')).some(function(l){return (+l.dataset.raw)>(+l.dataset.final);});
+  if(!any)return;
+  _cascadeBusy=true;area.classList.add('cascade-locked');
+  setTimeout(function(){runDiscountCascade(area);},count*120+550);
 }
 
 // §23 — 1차 선택지를 Cut 1 body 아래에 펼침
@@ -15736,6 +15843,7 @@ function showTier2Choices(){
   _scrollChoicesIntoView(area,t2list.length);
   updateStats();
   if(_checkAllUnaffordable(costs))triggerGameOver();
+  else _scheduleCascade(area,t2list.length); // §4p 할인 캐스케이드
 }
 
 // §23 — Cut 3 활성화: 이미지 + 2차 선택 요약 + "결과 확인하기" 버튼
@@ -15801,6 +15909,7 @@ function showReviewChoices(){
   _scrollChoicesIntoView(area,sc.reviews.length);
   updateStats();
   if(_checkAllUnaffordable(costs))triggerGameOver();
+  else _scheduleCascade(area,sc.reviews.length); // §4p 할인 캐스케이드
 }
 
 // §23 — Cut 5 활성화: 이미지 + 검토 선택 요약
@@ -16314,25 +16423,15 @@ function onTier1(t1id){
   });
 }
 
-var _couponSelections={};
+var _couponSelections={}; // §4p — 쿠폰 모달 폐지 후 미사용(리셋 호출 호환용 유지)
 function onTier2(t2id){
-  var availCards=getAvailableCardDiscounts('tier2',t2id);
-  var couponKey='tier2:'+t2id;
-  if(availCards.length>0&&_couponSelections[couponKey]===undefined){
-    // §4f v7 — 모달 확정 = 즉시 선택. 저장 후 자기 재호출로 바로 진행 (재클릭 단계 제거)
-    showCouponSelect(availCards,function(selectedCard){
-      _couponSelections[couponKey]=selectedCard;
-      onTier2(t2id);
-    });
-    return;
-  }
-  var selectedCard=_couponSelections[couponKey]||null;
+  if(_cascadeBusy)return; // §4p — 할인 캐스케이드 도는 동안 클릭 잠금
   var prev=gameState.competencies.delegationChoice.value;
   var prevTime=gameState.resources.time.current;
   var prevEnergy=gameState.resources.energy.current;
   applyTier2(t2id);
   var now=gameState.competencies.delegationChoice.value;
-  var cost=selectedCard?getTier2CostWithCard(t2id,selectedCard):getTier2Cost(t2id);
+  var cost=getTier2Cost(t2id);
   consumeStage('tier2',cost,null);
   var nowTime=gameState.resources.time.current;
   var nowEnergy=gameState.resources.energy.current;
@@ -16347,19 +16446,7 @@ function onTier2(t2id){
 }
 
 function onReview(rid){
-  var leaf=getLeafPath();
-  var reviewLeaf=leaf||rid;
-  var availCards=getAvailableCardDiscounts('review',reviewLeaf);
-  var couponKey='review:'+reviewLeaf;
-  if(availCards.length>0&&_couponSelections[couponKey]===undefined){
-    // §4f v7 — 모달 확정 = 즉시 선택
-    showCouponSelect(availCards,function(selectedCard){
-      _couponSelections[couponKey]=selectedCard;
-      onReview(rid);
-    });
-    return;
-  }
-  var selectedCard=_couponSelections[couponKey]||null;
+  if(_cascadeBusy)return; // §4p — 할인 캐스케이드 도는 동안 클릭 잠금
   var prevK=gameState.competencies.knowledge.value;
   var prevTime=gameState.resources.time.current;
   var prevEnergy=gameState.resources.energy.current;
@@ -16367,7 +16454,7 @@ function onReview(rid){
   var nowK=gameState.competencies.knowledge.value;
   var lp=getLeafPath();
   if(lp){
-    var cost=selectedCard?getReviewCostWithCard(lp,selectedCard):getReviewCost(lp);
+    var cost=getReviewCost(lp);
     consumeStage('review',cost,lp);
   }
   var nowTime=gameState.resources.time.current;
@@ -18101,23 +18188,15 @@ function _dockEl(){
   if(!dock){
     dock=document.createElement('div');
     dock.id='card-dock';
-    // 6/15 r42 (§4n) — 두 칸 가로: 좌=내가할까?(능력→능력카드) / 우=시킬까?(위임→인간중심+성장)
+    // 6/15 §4o — 헤더+레벨은 HUD(.hud-dock)로. 독 = 카드 보관함 + 그 아래 할인 블럭(§4o v6, 피터공: 할인을 카드 박스 아래로·카툰 강조).
     dock.innerHTML=
       '<div class="dock-col" id="dock-col-ab">'
-        +'<div class="dock-col-top">'
-          +'<div class="dock-col-head">'+_t('dock.head_self','내가할까?')+'</div>'
-          +'<div class="dock-level"><span class="dl-label">'+_t('dock.level_ability','능력 레벨')+'</span><span class="dl-num" id="dock-level-ab">1</span></div>'
-        +'</div>'
-        +'<div class="dock-discount" id="dock-disc-ab">에너지 할인 -0</div>'
         +'<div class="dock-cards-box"><div class="dock-list" id="dock-list-ab"></div></div>'
+        +'<div class="dock-disc" id="dock-disc-ab" style="display:none"><span class="dd-head">내가 할까?</span><span class="dd-label">에너지 할인</span><span class="dd-num">0</span></div>'
       +'</div>'
       +'<div class="dock-col" id="dock-col-hc">'
-        +'<div class="dock-col-top">'
-          +'<div class="dock-col-head">'+_t('dock.head_delegate','시킬까?')+'</div>'
-          +'<div class="dock-level"><span class="dl-label">'+_t('dock.level_delegation','위임 레벨')+'</span><span class="dl-num" id="dock-level-hc">1</span></div>'
-        +'</div>'
-        +'<div class="dock-discount" id="dock-disc-hc">시간 할인 -0</div>'
         +'<div class="dock-cards-box"><div class="dock-list" id="dock-list-hc"></div></div>'
+        +'<div class="dock-disc" id="dock-disc-hc" style="display:none"><span class="dd-head">시킬까?</span><span class="dd-label">시간 할인</span><span class="dd-num">0</span></div>'
       +'</div>';
     // §2d v2 — inv-panel 폐지: 독은 표시 전용. 리셋은 디버그 패널 초기화로.
     document.body.appendChild(dock);
@@ -18130,16 +18209,21 @@ function updateDockLevels(){
   if(!gameState||!gameState.competencies)return;
   var ab=document.getElementById('dock-level-ab');
   var hc=document.getElementById('dock-level-hc');
-  // 표시는 레벨 1부터(피터공): 내부 raw 값 0 → 레벨 1
+  // §4o v5 (피터공): 레벨 0부터 = 할인 값과 동일 매칭 (레벨 N ↔ 할인 N). 기존 "레벨 1부터"(§4n) 폐지.
   var knl=Math.max(0,gameState.competencies.knowledge.value);
   var dlg=Math.max(0,gameState.competencies.delegationChoice.value);
-  if(ab)ab.textContent=knl+1;
-  if(hc)hc.textContent=dlg+1;
-  // 할인 = 레벨−1 = raw 값 (능력→에너지 할인 / 위임→시간 할인). 카드 할인은 선택 시 별도 가산.
-  var dAb=document.getElementById('dock-disc-ab');
-  var dHc=document.getElementById('dock-disc-hc');
-  if(dAb)dAb.textContent='에너지 할인 -'+knl;
-  if(dHc)dHc.textContent='시간 할인 -'+dlg;
+  if(ab)ab.textContent=knl;
+  if(hc)hc.textContent=dlg;
+  // 할인 = 레벨 = raw 값 (능력→에너지 할인 / 위임→시간 할인). 카드 할인은 선택 시 별도 가산.
+  // §4o v7 (피터공): 할인 0이면 블럭 숨김, >0이면 숫자만 크게(-N) 강조.
+  _setDockDisc(document.getElementById('dock-disc-ab'),knl);
+  _setDockDisc(document.getElementById('dock-disc-hc'),dlg);
+}
+function _setDockDisc(box,v){
+  if(!box)return;
+  box.style.display=(v>0)?'':'none';
+  var num=box.querySelector('.dd-num');
+  if(num)num.textContent='-'+v;
 }
 // 임시(pending) 판정 — 현재 시나리오에서 선택으로 획득, 아직 미클리어
 function _dockIsPending(entry){
@@ -18153,24 +18237,44 @@ function _dockChipLabel(c){
   // §6 — 축 이름 미표시, 역량명만 (6/12)
   return (c.kind==='hc')?_invEscapeHTML(c.tag):_invEscapeHTML(_cardDisplayName(c.name));
 }
-function _dockChipApplyLocked(el,c){
+// §4o v5 (피터공) — 같은 카드 누적: identity 키로 묶어 ×N 표시
+function _dockChipKey(c){
+  if(c.kind==='hc')return 'hc:'+c.tag;
+  if(c.kind==='growth')return 'g:'+c.name;
+  return 'd:'+c.name;
+}
+// 인벤토리 안 같은 identity 카드 총 개수 (locked+pending 모두)
+function _dockCountFor(c){
+  if(!gameState||!gameState.inventory)return 1;
+  var inv=gameState.inventory,n=0,i;
+  if(c.kind==='hc'){var a=inv.humanCentricCards||[];for(i=0;i<a.length;i++)if(a[i].tag===c.tag)n++;}
+  else if(c.kind==='growth'){var g=inv.growthCards||[];for(i=0;i<g.length;i++)if(g[i].label===c.name)n++;}
+  else{var d=inv.domainCards||[];for(i=0;i<d.length;i++)if(d[i].label===c.name)n++;}
+  return n||1;
+}
+function _dockCountBadge(count,white){
+  if(!(count>1))return '';
+  return '<span class="dc-count"'+(white?' style="color:#fff;"':'')+'>×'+count+'</span>';
+}
+function _dockChipApplyLocked(el,c,count){
   if(c.kind==='hc'){
     var am=_axisMeta(c.axis);
     el.style.background=am.color;
-    el.innerHTML='<div class="dc-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>';
+    el.innerHTML='<div class="dc-name" style="color:#fff;">'+_invEscapeHTML(c.tag)+'</div>'+_dockCountBadge(count,true);
   }else{
     el.style.borderLeft='6px solid '+_cardColor(c.name);
-    el.innerHTML='<div class="dc-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>';
+    el.innerHTML='<div class="dc-name">'+_invEscapeHTML(_cardDisplayName(c.name))+'</div>'+_dockCountBadge(count,false);
   }
 }
-function _dockChip(c,pending){
+function _dockChip(c,pending,count){
   var el=document.createElement('div');
   el._cardData=c;
+  el.dataset.key=_dockChipKey(c);
   el.className='dock-card '+(pending?'pending':'locked');
   if(pending){
-    el.innerHTML='<div class="dc-name">'+_dockChipLabel(c)+'</div>';
+    el.innerHTML='<div class="dc-name">'+_dockChipLabel(c)+'</div>'+_dockCountBadge(count,false);
   }else{
-    _dockChipApplyLocked(el,c);
+    _dockChipApplyLocked(el,c,count);
   }
   return el;
 }
@@ -18185,10 +18289,21 @@ function dockRender(){
   if(!gameState||!gameState.inventory)return;
   var inv=gameState.inventory;
   // 6/15 r42 (§4n) — 능력카드(domain)=내가할까 칸 / 인간중심(hc)+성장(growth, B)=시킬까 칸
-  (inv.humanCentricCards||[]).forEach(function(e){hcL.appendChild(_dockChip({kind:'hc',axis:e.axis,tag:e.tag},_dockIsPending(e)));});
-  (inv.growthCards||[]).forEach(function(e){hcL.appendChild(_dockChip({kind:'growth',name:e.label},_dockIsPending(e)));});
-  (inv.domainCards||[]).forEach(function(e){abL.appendChild(_dockChip({kind:'domain',name:e.label},_dockIsPending(e)));});
+  // §4o v5 (피터공) — 같은 카드는 ×N으로 묶어 표시 (획득 순서로 첫 등장 위치 유지)
+  _dockRenderGroup(hcL,(inv.humanCentricCards||[]).map(function(e){return {e:e,c:{kind:'hc',axis:e.axis,tag:e.tag}};})
+    .concat((inv.growthCards||[]).map(function(e){return {e:e,c:{kind:'growth',name:e.label}};})));
+  _dockRenderGroup(abL,(inv.domainCards||[]).map(function(e){return {e:e,c:{kind:'domain',name:e.label}};}));
   updateDockLevels();
+}
+function _dockRenderGroup(listEl,items){
+  var order=[],map={};
+  items.forEach(function(it){
+    var k=_dockChipKey(it.c);
+    if(!map[k]){map[k]={c:it.c,count:0,pending:false};order.push(k);}
+    map[k].count++;
+    if(_dockIsPending(it.e))map[k].pending=true;
+  });
+  order.forEach(function(k){var g=map[k];listEl.appendChild(_dockChip(g.c,g.pending,g.count));});
 }
 function railClear(){
   var pop=document.getElementById('card-earn-popup');
@@ -18265,9 +18380,19 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
       cards.forEach(function(c,i){
         var list=_dockListFor(c);
         if(!list){return;}
-        var chip=_dockChip(c,true);
-        chip.style.visibility='hidden';
-        list.appendChild(chip);
+        // §4o v5 — 같은 카드 이미 있으면 그 칩으로 날아가 ×N 증가, 없으면 새 pending 칩
+        var chip=list.querySelector('[data-key="'+_dockChipKey(c)+'"]');
+        var isNew=!chip;
+        function _bumpExisting(ch){
+          ch.classList.remove('locked');ch.classList.add('pending');
+          ch.style.background='';ch.style.borderLeft='';
+          ch.innerHTML='<div class="dc-name">'+_dockChipLabel(c)+'</div>'+_dockCountBadge(_dockCountFor(c),false);
+        }
+        if(isNew){
+          chip=_dockChip(c,true,_dockCountFor(c));
+          chip.style.visibility='hidden';
+          list.appendChild(chip);
+        }
         var src=minis[i];
         var sr=src?src.getBoundingClientRect():null;
         var tr=chip.getBoundingClientRect();
@@ -18279,7 +18404,7 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
           var tx=tr.left+tr.width/2-(sr.left+sr.width/2);
           var ty=tr.top+tr.height/2-(sr.top+sr.height/2);
           var sc=Math.max(0.3,tr.width/sr.width);
-          (function(g,ch,dx,dy,s,idx){
+          (function(g,ch,dx,dy,s,idx,_new){
             setTimeout(function(){
               requestAnimationFrame(function(){
                 g.style.transform='translate('+dx+'px,'+dy+'px) rotate(540deg) scale('+s.toFixed(2)+')';
@@ -18287,13 +18412,15 @@ function showCardEarnPopup(choiceLabel,cards,anchorCut){
               });
               setTimeout(function(){
                 if(g.parentNode)g.parentNode.removeChild(g);
-                ch.style.visibility='';
+                if(_new){ch.style.visibility='';}
+                else{_bumpExisting(ch);}
                 ch.classList.add('reveal');
               },560);
             },idx*150);
-          })(ghost,chip,tx,ty,sc,i);
+          })(ghost,chip,tx,ty,sc,i,isNew);
         }else{
-          chip.style.visibility='';
+          if(isNew){chip.style.visibility='';}
+          else{_bumpExisting(chip);}
         }
       });
       pop.classList.remove('show');
@@ -18327,7 +18454,7 @@ function _dockLockNow(){
       setTimeout(function(){
         el.classList.remove('pending');
         el.classList.add('locked','locking');
-        if(el._cardData)_dockChipApplyLocked(el,el._cardData); // 철컥과 함께 컬러 입힘 (§2d v2)
+        if(el._cardData)_dockChipApplyLocked(el,el._cardData,_dockCountFor(el._cardData)); // 철컥과 함께 컬러+×N 입힘 (§2d v2 / §4o v5)
         (function(node){setTimeout(function(){node.classList.remove('locking');},450);})(el);
       },i*120);
     });

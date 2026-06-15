@@ -121,18 +121,15 @@ function _applyDiscount(c,stageType,choiceId,selectedCard){
   if(stageType==='tier1'){
     return {time:0,energy:0,_discount:{dlg:0,knl:0,dlgEffect:0,knlEffect:0,cardDiscount:0,cardDetails:[],mPos:1,mNeg:1,rawTime:0,rawEnergy:0,clampedEnergy:0}};
   }
+  // §4p (피터공) — 할인 = 레벨 총점만. 카드 매칭 보너스 폐지(selectedCard 무시).
   var timeDisc=dlg;
-  var cardDisc={total:0,details:[]};
-  if(selectedCard){
-    cardDisc={total:selectedCard.amount,details:[selectedCard]};
-  }
-  var energyDisc=knl+cardDisc.total;
+  var energyDisc=knl;
   var floor=DISCOUNT_FLOOR[stageType]||{time:3,energy:2};
   return {
     time:(rawT>0)?Math.max(floor.time,rawT-timeDisc):0,
     energy:(rawE>0)?Math.max(floor.energy,rawE-energyDisc):0,
     _discount:{dlg:dlg,knl:knl,dlgEffect:timeDisc,knlEffect:knl,
-      cardDiscount:cardDisc.total,cardDetails:cardDisc.details,
+      cardDiscount:0,cardDetails:[],
       mPos:1,mNeg:1,rawTime:rawT,rawEnergy:rawE,clampedEnergy:energyDisc}
   };
 }
