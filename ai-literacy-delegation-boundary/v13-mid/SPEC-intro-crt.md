@@ -1,0 +1,58 @@
+# SPEC — 인트로 CRT 모니터 연출 (v1.3-mid-r40)
+
+**작성**: 2026-06-15 · **상태**: 구현 착수 (시안 승인 후 라이브 통합)
+**근거**: 시안 `mockups/title-crt-sian.html`(피터공 6/15 승인) → 기존 `rt-` 레트로 타이틀을 모니터 프레임 + 부팅/타이핑 연출로 업그레이드.
+**연결**: 요청 노트 [[요청.26.0615.1010-CRT타이틀연출]] / 기존 흐름 09-render-scenario.js §4i v10.
+
+## 목적
+
+진입 화면(타이틀·튜토리얼)을 80년대 CRT 모니터 안에서 부팅되는 8비트 게임처럼. 본편(미니멀 라이트)과 결을 분리해 "AI를 마주하는 화면 앞에 앉는다"는 진입 의식. 시나리오 선택 이후 본편은 무변.
+
+## 화면 흐름 (기존 흐름 대체)
+
+```
+showTitleScreen
+  → [부팅] 좌측 커서 깜빡 → "경기도 하이러닝 - AI 리터러시: 게임 시작" 좌→우 타이핑 → 준비 줄
+  → [타이틀] 스윕(화면 그림) → 제목 2줄 글자별 타이핑+글리치 → 부제·인트로 박스 그려짐/써짐 → 시작 버튼 펄스
+  → enterFromTitle (시작하기)
+      · tutorialSeen=true → bootFlashTo(showStartScreen)  [재방문은 튜토리얼 생략, 기존 로직 유지]
+      · 아니면 → crtShowDeleg
+  → [위임 정의] "위임" 대형 + 3줄 글자별 타이핑 → 깜빡 2~3회 → 계속 버튼
+  → crtShowMethod (계속)
+  → [게임 방법] 번호 배지[1~5] 2회 깜빡 → 그 줄 좌→우 타이핑 (5단계 순차) → kicker → 게임 시작 버튼
+  → enterFromTutorial → bootFlashTo(showStartScreen)  [기존 유지]
+```
+
+- "튜토리얼 다시 보기"(시작 화면) → showTutorialScreen = 모니터 렌더 후 위임 정의부터(부팅·타이틀 생략).
+- 부팅/타이틀/위임/방법은 한 번 렌더한 모니터 DOM 안의 4개 `.crt-layer`를 토글(재렌더 X). enterFromTutorial만 container 재렌더(본게임 진입).
+
+## DOM / 클래스 (신규 `crt-` 접두어, 기존 `rt-`와 분리)
+
+`.crt-overlay`(fixed 풀스크린 다크) > `.crt-monitor`(크림 본체) > `.crt-bezel`(초콜릿 경사) > `.crt-screen`
+화면 안: `.crt-glare`/`.crt-flash`/`.crt-sweep` + 4 `.crt-layer`(#crtBoot/#crtTitle/#crtDeleg/#crtMethod).
+- 타이틀: `.crt-t1`·`.crt-t2`(대형, 배지 없음)·`.crt-subs`·`.crt-intro>p`·`.crt-btn`.
+- 위임: `.crt-dword`(대형 "위임")·`.crt-dlines>.crt-dln`(intro 줄 수만큼)·계속 버튼.
+- 방법: `.crt-mhead`·`.crt-mline>(.crt-no + .crt-mtext)` ×5·`.crt-kicker`·게임시작 버튼.
+
+## 데이터 (texts.yaml — single source)
+
+- `title_screen.badge` → 부팅 줄 = badge + ": 게임 시작" (부팅 sub 줄은 JS 하드코딩 플레이버).
+- `title_screen.main_title_1/2`, `sub_title_1`, `host_text`, `btn_start` — 기존 키 재사용.
+- `tutorial_screen.delegation_word` "위임", `delegation_intro`(3줄), `tutorial`(5줄, 번호와 1:1), `kicker`, `btn_continue`, `btn_more`(계속 → 위임→방법) 신설.
+- 위임/방법 본문은 피터공 6/15 신규 문안(아래). 강조는 `.hl--c/.hl--p/.hl--y`(CRT 화면에선 배경칠 제거, 색 텍스트로 오버라이드).
+
+### 신규 문안
+delegation_intro: ["위임이란 내가 할 일을 다른 누군가에게 맡기는 것!","내가 할까? <b>AI에게 시킬까?</b>","내 대신 AI에게 시키는 것이 바로 위임이다."]
+tutorial(1~5): 상황/선택 / 선택은 다른 시간·에너지·자원 / 직접 하면 비싸지만 능력 / 능력 쌓이면 다음 위임 싸짐 / 제출 전 검토로 점수.
+
+## 폰트
+
+8비트 픽셀 = Galmuri11(OFL). `fonts/Galmuri11.woff2` 추가, `--font-crt:'Galmuri11'` 신설(00-base.css). CRT 화면 전용 — 본편 `--font-pixel`(Mulmaru) 불변.
+
+## 애니메이션 타이밍 (시안 기준)
+
+부팅 초기 커서 깜빡 1.3s → 타이핑 65ms/자. 타이틀 제목 60ms/자 + 글리치 0.22s×3. 위임 3줄 33ms/자 → 깜빡. 방법 번호 2회 깜빡(0.86s) → 28ms/자. 전부 JS 타이머, 값만 바꾸면 조정.
+
+## 비범위 (이번 빌드 제외)
+
+본편 화면, 시나리오 데이터, 리포트, 밸런스. 인트로 연출만.

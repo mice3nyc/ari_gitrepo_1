@@ -252,18 +252,10 @@ function showTitleScreen(){
     if(saved&&saved.clearedScenarios){gameState=saved;}
     else{gameState=createInitialState();saveGame();}
   }
-  var _ts=_t('title_screen',{});
-  var h='<div class="retro-title">';
-  h+='<div class="rt-scanlines" aria-hidden="true"></div>';
-  h+='<div class="rt-inner">';
-  h+='<div class="rt-badge">'+(_ts.badge||'경기도 하이러닝')+'</div>';
-  h+='<h1 class="rt-main"><span class="rt-line rt-line1">'+(_ts.main_title_1||'내가 할까? 시킬까?')+'</span><span class="rt-line rt-line2">'+(_ts.main_title_2||'그것이 문제로다!')+'</span></h1>';
-  h+='<div class="rt-sub"><span>'+(_ts.sub_title_1||'AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가!')+'</span><span class="rt-sub2">'+(_ts.sub_title_2||'AI 리터러시, 위임의 경계!')+'</span></div>';
-  h+='<div class="rt-host">'+(_ts.host_text||'딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>누구나 할 수 있다면, 누구인가가 중요하다.<br>무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지. 당신은 구별할 수 있을까?')+'</div>';
-  h+='<button class="rt-start" onclick="enterFromTitle()"><span class="rt-start-caret">▶</span> '+(_ts.btn_start||'시작하기')+'</button>';
-  h+='</div></div>';
-  container.innerHTML=h;
+  _crtClear();
+  container.innerHTML=_crtMarkup();
   trackEvent('title_viewed',{tutorialSeenBefore:!!gameState.tutorialSeen});
+  _crtRunBoot();
 }
 
 // §4i-7 — 공통 타이틀 헤더 (튜토리얼·시나리오 선택 상단)
@@ -275,40 +267,122 @@ function buildGameTitleHead(){
   '</div>';
 }
 
-// 튜토리얼/안내 화면 — §4i v10 신설 (타이틀에서 분리), §4i-9 문안 v2 (위임 정의 먼저)
+// 튜토리얼 진입(시작 화면 "튜토리얼 다시 보기") — 모니터 렌더 후 위임 정의부터(부팅·타이틀 생략)
 function showTutorialScreen(){
   hideStats();
-  var _tu=_t('tutorial_screen',{});
-  var _intro=_tu.delegation_intro||[
-    '내 일을 다른 누군가에게 맡기는 것!',
-    '이 게임에서는, <b>내 일을 AI에게 시키는 것</b>이 위임이다.',
-    '"위임할까, 말까?" = "AI에게 시킬까, 내가 직접 할까?"'
-  ];
-  var _tut=_tu.tutorial||[
-    '시나리오마다 묻는다. "내가 할까? AI에게 시킬까?" 선택할 때마다 <span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>를 쓴다.',
-    '직접 하면 더 비싸다. 대신 능력이 쌓인다. 능력이 쌓이면 다음 위임이 싸진다!',
-    '그러니 <span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>를 어디에 쓸지가 이 게임의 진짜 승부다.',
-    '제출 전, 마지막 한 번! 어떻게 검토하느냐에 따라 점수가 크게 달라진다.',
-    '점수에 따라 등급과 자원토큰을 받는다.<br><span class="hl hl--c">시간</span>과 <span class="hl hl--p">에너지</span>는 토큰으로 직접 충전해야 한다.',
-    '좋은 선택은 역량 카드로 쌓이고, 모은 카드는 비용을 깎아 준다.'
-  ];
-  // §4i-8 — 타이틀과 같은 레트로 프레임 (v2.2: 가로 그리드용 와이드 변형)
-  var h='<div class="retro-title"><div class="rt-scanlines" aria-hidden="true"></div><div class="rt-inner rt-inner--wide">';
-  h+=buildGameTitleHead();
-  h+='<h1 class="rt-tutorial-heading">'+(_tu.heading||'게임 안내')+'</h1>';
-  // §4i-9 — 위임 정의 블록 (자문 선생님 4학년 검증 문구), v2.1 대형 글자 빵
-  h+='<div class="rt-delegation">';
-  h+='<span class="rt-delegation-word">'+(_tu.delegation_word||'위임')+'</span>';
-  for(var di=0;di<_intro.length;di++)h+='<p>'+_intro[di]+'</p>';
-  h+='</div>';
-  h+='<ol class="rt-tutorial">';
-  for(var ti=0;ti<_tut.length;ti++)h+='<li>'+_tut[ti]+'</li>';
-  h+='</ol>';
-  if(_tu.kicker)h+='<p class="rt-tutorial-kicker">'+_tu.kicker+'</p>';
-  h+='<button class="rt-start rt-now" onclick="enterFromTutorial()">'+(_tu.btn_continue||'계속 →')+'</button>';
-  h+='</div></div>';
-  container.innerHTML=h;
+  _crtClear();
+  container.innerHTML=_crtMarkup();
+  crtShowDeleg();
+}
+
+// ===== r40 — 인트로 CRT 모니터 연출 (시안 mockups/title-crt-sian.html 승인분 통합) =====
+// 부팅→타이틀→위임 정의→게임 방법, 한 번 렌더한 모니터 DOM의 4개 .crt-layer 토글. SPEC-intro-crt.md
+var _crtTimers=[], _crtIntroLines=[], _crtTutLines=[];
+function _crtT(fn,ms){var id=setTimeout(fn,ms);_crtTimers.push(id);return id;}
+function _crtClear(){for(var i=0;i<_crtTimers.length;i++)clearTimeout(_crtTimers[i]);_crtTimers=[];}
+function _g(id){return document.getElementById(id);}
+function _crtHideAll(){var L=[_g('crtBoot'),_g('crtTitle'),_g('crtDeleg'),_g('crtMethod')];
+  for(var i=0;i<L.length;i++){if(L[i]){L[i].style.display='none';L[i].classList.remove('crt-on');}}}
+function _crtShow(el){if(!el)return;el.style.display='flex';void el.offsetWidth;el.classList.add('crt-on');}
+
+function _crtMarkup(){
+  var _ts=_t('title_screen',{}), _tu=_t('tutorial_screen',{});
+  _crtIntroLines=_tu.delegation_intro||['위임이란 내가 할 일을 다른 누군가에게 맡기는 것!','내가 할까? <b>AI에게 시킬까?</b>','내 대신 AI에게 시키는 것이 바로 위임이다.'];
+  _crtTutLines=_tu.tutorial||[];
+  var dlns='';for(var i=0;i<_crtIntroLines.length;i++)dlns+='<div class="crt-dln"></div>';
+  var mlns='';for(var j=0;j<_crtTutLines.length;j++)mlns+='<div class="crt-mline"><span class="crt-no">'+(j+1)+'</span><span class="crt-mtext"></span></div>';
+  var kick=_tu.kicker?'<div class="crt-kicker">'+_tu.kicker+'</div>':'';
+  return '<div class="crt-overlay"><div class="crt-monitor"><div class="crt-bezel"><div class="crt-screen">'
+    +'<div class="crt-glare"></div><div class="crt-flash" id="crtFlash"></div><div class="crt-sweep" id="crtSweep"></div>'
+    +'<div class="crt-layer" id="crtBoot"><div class="crt-bootline" id="crtBootLine"></div><div class="crt-bootline crt-sub" id="crtBootSub"></div></div>'
+    +'<div class="crt-layer crt-title" id="crtTitle"><div class="crt-t1" id="crtT1"></div><div class="crt-t2" id="crtT2"></div>'
+      +'<div class="crt-subs" id="crtSubs"></div>'
+      +'<div class="crt-intro" id="crtIntro"><p id="crtIntroP"></p>'
+      +'<button class="crt-btn" id="crtStartBtn" onclick="enterFromTitle()">▶ '+(_ts.btn_start||'시작하기')+'</button></div></div>'
+    +'<div class="crt-layer crt-deleg" id="crtDeleg"><div class="crt-dword">'+(_tu.delegation_word||'위임')+'</div>'
+      +'<div class="crt-dlines" id="crtDlines">'+dlns+'</div>'
+      +'<button class="crt-btn" id="crtDelegBtn" onclick="crtShowMethod()">'+(_tu.btn_more||'계속 →')+'</button></div>'
+    +'<div class="crt-layer crt-method" id="crtMethod"><div class="crt-mhead">'+(_tu.heading||'게임 방법')+'</div>'+mlns+kick
+      +'<button class="crt-btn" id="crtMethodBtn" onclick="enterFromTutorial()">'+(_tu.btn_continue||'게임 시작 ▶')+'</button></div>'
+    +'</div></div><div class="crt-base"><div class="crt-vents"></div><div class="crt-brand"><span class="crt-led"></span> NOLGONG-CRT · AI-2026</div></div></div></div>';
+}
+
+// 타이핑: 평문 / 태그 보존(<br>·<span>·<b>는 통째 즉시, 글자만 한 자씩)
+function _crtType(el,str,sp,cb){var i=0;(function step(){if(i<=str.length){el.innerHTML=str.slice(0,i)+'<span class="crt-cur"></span>';i++;_crtT(step,sp);}else{el.textContent=str;if(cb)cb();}})();}
+function _crtTypeHTML(el,html,sp,cb){var toks=[],re=/(<[^>]+>)|([^<])/g,m;while((m=re.exec(html))){toks.push(m[1]?{t:m[1]}:{c:m[2]});}var i=0,out='';(function step(){if(i<toks.length){var tk=toks[i++];out+=(tk.t||tk.c);el.innerHTML=out+'<span class="crt-cur"></span>';_crtT(step,tk.t?0:sp);}else{el.innerHTML=out;if(cb)cb();}})();}
+function _crtGlitch(el){el.classList.add('crt-glitch');_crtT(function(){el.classList.remove('crt-glitch');},700);}
+
+// 부팅: 좌측 커서 깜빡 → 좌→우 타이핑 → 준비 줄 → 타이틀
+function _crtRunBoot(){
+  var _ts=_t('title_screen',{});
+  var line=(_ts.badge||'경기도 하이러닝 - AI 리터러시')+': 게임 시작';
+  var sub='> 시스템 준비 완료. 잠시 후 시작합니다_';
+  var bl=_g('crtBootLine'), bs=_g('crtBootSub');
+  _crtHideAll(); _crtShow(_g('crtBoot'));
+  bs.innerHTML=''; bl.innerHTML='<span class="crt-cur"></span>';
+  _crtT(function(){_crtType(bl,line,60,function(){_crtT(function(){_crtType(bs,sub,36,function(){_crtT(_crtToTitle,1000);});},420);});},1300);
+}
+
+// 타이틀: 스윕 → 제목 2줄 타이핑+글리치 → 부제·인트로 써짐 → 시작 버튼
+function _crtToTitle(){
+  var _ts=_t('title_screen',{});
+  var t1=_ts.main_title_1||'내가 할까? 시킬까?', t2=_ts.main_title_2||'그것이 문제로다!';
+  var subs=_ts.sub_title_1||'AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가!';
+  var host=_ts.host_text||'딸깍하면 누구나 할 수 있는 AI 시대라고 한다.';
+  _crtHideAll(); _crtShow(_g('crtTitle'));
+  var eT1=_g('crtT1'), eT2=_g('crtT2'), eS=_g('crtSubs'), eI=_g('crtIntro'), eP=_g('crtIntroP'), eB=_g('crtStartBtn');
+  eT1.textContent='';eT2.textContent='';eS.innerHTML='';eP.innerHTML='';
+  eI.classList.remove('draw');eB.classList.remove('show');eT1.classList.remove('crt-glitch');eT2.classList.remove('crt-glitch');
+  _crtT(function(){
+    _crtType(eT1,t1,60,function(){_crtGlitch(eT1);
+      _crtType(eT2,t2,60,function(){_crtGlitch(eT2);
+        _crtT(function(){_crtTypeHTML(eS,subs,18,function(){
+          eI.classList.add('draw');
+          _crtT(function(){_crtTypeHTML(eP,host,11,function(){_crtT(function(){eB.classList.add('show');},160);});},320);
+        });},250);
+      });
+    });
+  },720);
+}
+
+// 위임 정의: 3줄 글자별 타이핑 → 깜빡 → 계속 버튼
+function crtShowDeleg(){
+  _crtClear();
+  _crtHideAll(); _crtShow(_g('crtDeleg'));
+  var dl=_g('crtDlines'), lns=dl.querySelectorAll('.crt-dln'), btn=_g('crtDelegBtn');
+  for(var i=0;i<lns.length;i++)lns[i].innerHTML='';
+  btn.classList.remove('show'); dl.classList.remove('blink');
   trackEvent('tutorial_viewed',{});
+  _crtDelegLine(0,lns,btn);
+}
+function _crtDelegLine(i,lns,btn){
+  if(i>=_crtIntroLines.length){
+    _crtT(function(){var dl=_g('crtDlines');dl.classList.add('blink');_crtT(function(){dl.classList.remove('blink');btn.classList.add('show');},900);},350);
+    return;
+  }
+  _crtTypeHTML(lns[i],_crtIntroLines[i],33,function(){_crtT(function(){_crtDelegLine(i+1,lns,btn);},260);});
+}
+
+// 게임 방법: 번호 배지 2회 깜빡 → 줄 타이핑, 5단계 순차 → kicker → 게임 시작
+function crtShowMethod(){
+  _crtClear();
+  _crtHideAll(); _crtShow(_g('crtMethod'));
+  var m=_g('crtMethod'), lines=m.querySelectorAll('.crt-mline');
+  var kicker=m.querySelector('.crt-kicker'), mbtn=_g('crtMethodBtn');
+  for(var i=0;i<lines.length;i++){lines[i].querySelector('.crt-mtext').innerHTML='';var n=lines[i].querySelector('.crt-no');n.classList.remove('numon','blink2');}
+  if(kicker)kicker.classList.remove('show'); mbtn.classList.remove('show');
+  _crtMethodLine(0,lines,kicker,mbtn);
+}
+function _crtMethodLine(i,lines,kicker,mbtn){
+  if(i>=lines.length){
+    _crtT(function(){if(kicker)kicker.classList.add('show');_crtT(function(){mbtn.classList.add('show');},350);},250);
+    return;
+  }
+  var no=lines[i].querySelector('.crt-no'), txt=lines[i].querySelector('.crt-mtext');
+  no.classList.add('blink2');
+  _crtT(function(){no.classList.remove('blink2');no.classList.add('numon');
+    _crtTypeHTML(txt,_crtTutLines[i],28,function(){_crtT(function(){_crtMethodLine(i+1,lines,kicker,mbtn);},200);});
+  },860);
 }
 // §4j-1 — CRT 부팅 플래시 헬퍼: 레트로(다크)에서 본게임(라이트)으로 넘어가는 경계 연출
 function bootFlashTo(fn){
@@ -336,7 +410,7 @@ function enterFromTitle(){
   }
   gameState.tutorialSeen=true;
   saveGame();
-  showTutorialScreen();
+  crtShowDeleg();
 }
 
 function showStartScreen(){

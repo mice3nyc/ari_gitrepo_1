@@ -1,6 +1,26 @@
 ## TASKS — v1.3-mid (중등)
 
-**최종 업데이트**: 2026-06-11 세션468 (획득 팝업 v3 확보 버튼 + 자원토큰 보상 상향, SPEC-card-per-choice §2e·SPEC §18)
+**최종 업데이트**: 2026-06-15 세션481 (인트로 CRT 모니터 연출 r40 — 시안 승인 후 라이브 통합, SPEC-intro-crt.md)
+
+### r40 — 인트로 CRT 모니터 연출 (6/15 피터공, 시안 승인 후 통합)
+
+기존 `rt-` 레트로 타이틀 → 모니터 프레임 + 부팅/타이핑 연출로 업그레이드. 시안 `mockups/title-crt-sian.html` 5회 반복 후 승인. SPEC-intro-crt.md.
+
+- [x] 시안: 모니터 프레임(레퍼런스 `Assets/incoming/AI리터러시/UIUX/모니터프레임/` 크림 본체+초콜릿 경사 베젤+통풍구+LED), 부팅 좌→우 타이핑, 타이틀 스윕+글자 타이핑+글리치(배지 제거·대형), 위임 정의 3줄 타이핑+깜빡, 게임 방법 번호 5단계 깜빡+타이핑
+- [x] Galmuri11 픽셀폰트(OFL) 추가 — `fonts/Galmuri11.woff2` + `--font-crt`(00-base.css)
+- [x] texts.yaml 신규 문안 — delegation_intro 3줄(위임 정의)·tutorial 5줄(상황/선택·시간에너지자원/직접비싸지만능력/능력쌓이면싸짐/검토로점수)·btn_more 신설·heading "게임 방법"·btn_continue "게임 시작 ▶". ui_texts.csv 309 동기
+- [x] 09-render-scenario.js: showTitleScreen/showTutorialScreen 교체 + CRT 모듈(`_crtMarkup`·타이핑 헬퍼·부팅/타이틀/위임/방법 시퀀스). 흐름 showTitle(부팅→타이틀)→enterFromTitle→crtShowDeleg→crtShowMethod→enterFromTutorial→본게임. 재방문 튜토리얼 생략 로직 유지
+- [x] 06-scenario-select.css: `.crt-*` 신규(기존 `rt-`와 분리, 미사용 rt- 잔존 무해). CRT 화면 안 `.hl` 배경칠→색 텍스트 오버라이드
+- [x] 빌드 946,843B + node 구문 OK + 헤드리스 부팅·타이틀 렌더 PASS + 인코딩 클린(BS 0·NFD 0)
+- [ ] 피터공 라이브 클릭 확인 (시작하기→위임→게임방법→게임 시작 진입) + 속도·크기 미세조정
+- [ ] 커밋·푸시 → 라이브 반영
+
+> [!info] 이 빌드(v1.3-mid)는 1차 교사 검토(5명) 피드백 반영 작업 빌드. 중등 수리 완료 후 v13-elem로 초등 분기(기존 v12-elem 6/1 시나리오 정본 이전).
+> 요청 노트: [[요청.26.0608.0851-AI리터러시교사반영]] · [[요청.26.0615.1010-CRT타이틀연출]] / 신규 명세는 SPEC §14·SPEC-intro-crt.md.
+
+---
+
+**이전 업데이트**: 2026-06-11 세션468 (획득 팝업 v3 확보 버튼 + 자원토큰 보상 상향, SPEC-card-per-choice §2e·SPEC §18)
 
 ### §2e+§18 — 획득 팝업 확보 버튼 + 토큰 보상 두 자리 상향 (6/11 피터공, 세션468)
 

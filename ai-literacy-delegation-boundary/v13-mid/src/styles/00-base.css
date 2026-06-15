@@ -4,6 +4,8 @@
 
 /* §4i v10 — 물마루 픽셀 폰트 (타이틀 전용, OFL 1.1, ../fonts/에 LICENSE 동봉) */
 @font-face { font-family:'Mulmaru'; src:url('../fonts/Mulmaru.woff2') format('woff2'); font-display:swap; }
+/* r40 — Galmuri11 8비트 픽셀 폰트 (인트로 CRT 화면 전용, OFL) */
+@font-face { font-family:'Galmuri11'; src:url('../fonts/Galmuri11.woff2') format('woff2'); font-display:block; }
 
 :root {
   --bg-page:#d0d0d0; --bg-card:#ffffff; --bg-soft:#f4f1ea; --bg-dark:#000000;
@@ -20,6 +22,7 @@
   --font-main:"Mulmaru","Paperlogy","Pretendard",system-ui,sans-serif; /* §4i-6 — UI 전체 물마루 전환 시도 (피터공) */
   --font-hand:"Nanum Pen Script","Caveat",cursive;
   --font-pixel:"Mulmaru","Paperlogy",sans-serif;
+  --font-crt:"Galmuri11","Mulmaru",monospace; /* r40 — 인트로 CRT 8비트 화면 전용 */
 }
 
 .hl { padding:1px 8px; color:var(--ink); white-space:nowrap; }
