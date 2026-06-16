@@ -41,34 +41,52 @@
 
 /* ===== §4q v3 6/15 세션486 — 할인 정보창 (피터공): 옆 칸(cut3/cut5)에 선택 버튼 우측 같은 크기 ===== */
 /* 옆 칸 패널 = 정보창. 타이틀 없음. 박스는 JS가 선택지 화면 위치를 측정해 절대 배치(줄 맞춤) */
-.panel.dfx-host .panel-body { padding-left:2px; } /* §4q v5 — 선택지에 더 가깝게(피터공) */
+/* §4q v9.2 — 박스가 cut3 밖(경계 걸침)으로 나가도 안 잘리게 overflow 풀기(피터공) */
+.panel.dfx-host { overflow:visible; }
+.panel.dfx-host .panel-body { padding-left:2px; overflow:visible; } /* §4q v5 — 선택지에 더 가깝게(피터공) */
 /* 효과 박스 — 대응 선택 버튼과 같은 줄·같은 높이(JS 절대배치). 선택지 텍스트 반복 안 함. 계산 끝나면 사라짐 */
-.choice-fx { display:flex; flex-direction:column; justify-content:center; gap:4px; padding:7px 9px; box-sizing:border-box;
+.choice-fx { display:flex; flex-direction:column; justify-content:center; gap:4px; padding:7px 9px; box-sizing:border-box; z-index:30;
   border:var(--border-w) solid var(--ink); background:var(--bg-soft); border-radius:0; /* §4q v4 — drop shadow 없음(피터공) */
   opacity:0; transform:translateX(8px); transition:opacity .25s ease, transform .25s ease; }
 .choice-fx.show { opacity:1; transform:translateX(0); }
-.fx-sec { display:flex; flex-direction:column; align-items:center; gap:4px; }
+/* §4q v8 (6/16 피터공) — 1줄 헤드+레벨 / 2줄 동일폭 카드 / 3줄 ← + -N + 라벨 + [적용하기] */
+.fx-sec { display:flex; flex-direction:column; align-items:stretch; gap:6px; }
 .fx-sec + .fx-sec { border-top:2px dashed var(--ink-soft); margin-top:4px; padding-top:6px; }
-.fx-head { font-size:16px; font-weight:800; color:var(--acc-pink-deep); text-shadow:2px 2px 0 var(--ink); line-height:1.1; }
+/* 1줄: 헤드(볼드 강) 좌 + 레벨(다른 색) 우 */
+.fx-head-row { display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+/* v9.2 — 픽셀폰트+그림자라 안 읽힘 → 그림자 제거 + 크기 키움(피터공) */
+.fx-head { font-size:21px; font-weight:800; color:var(--acc-pink-deep); line-height:1.15; }
 .fx-sec[data-res="energy"] .fx-head { color:var(--acc-cyan-deep); }
-/* 카드 = 목록과 같은 디자인(.dock-card 복제). §4q v4 — 모두 같은 크기 고정(피터공) */
-.fx-cards { display:flex; flex-wrap:wrap; gap:4px; justify-content:center; min-height:2px; }
-.fx-cards .fx-clone { box-sizing:border-box; width:88px; min-width:88px; max-width:88px; height:30px; min-height:30px;
-  display:flex; align-items:center; justify-content:center; padding:2px 4px; overflow:hidden; }
-.fx-cards .fx-clone .dc-name { font-size:10px; line-height:1.1; white-space:normal; overflow:hidden; text-align:center; max-height:100%; }
-/* 박스엔 할인 수치(-N)만 — 실제 비용은 선택 버튼에서 큰 글씨(아래 cost-zoom) */
-.fx-disc-row { display:flex; align-items:center; justify-content:center; gap:8px; }
+.fx-level { font-size:12px; font-weight:800; letter-spacing:.3px; white-space:nowrap; color:var(--acc-yellow-deep); }
+.fx-sec[data-res="energy"] .fx-level { color:var(--acc-mint-deep); }
+/* 2줄: 카드 = 목록 디자인(.dock-card 복제). v8 — 넉넉한 동일 폭(flex 균등 분배) */
+.fx-cards { display:flex; flex-wrap:wrap; gap:5px; justify-content:flex-start; min-height:2px; }
+/* v8.1 (6/16 피터공) — [적용하기] 버튼과 구별: 카드는 드롭쉐도우 없이 싱글라인 + 박스 라운딩 */
+.fx-cards .fx-clone { box-sizing:border-box; flex:1 1 0; min-width:72px; max-width:none; width:auto; height:32px; min-height:32px;
+  display:flex; align-items:center; justify-content:center; padding:2px 8px; overflow:hidden;
+  box-shadow:none; border-radius:8px; border:2px solid var(--ink); /* v9.3 — 채워지면 solid 테두리(빈칸은 .fx-empty가 점선으로 override) */ }
+.fx-cards .fx-clone .dc-name { font-size:11px; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; text-align:center; max-width:100%; }
+/* v9.1 — 빈 점선 슬롯(카드 날아오기 전) + 도착 강조(reveal) */
+.fx-cards .fx-clone.fx-empty { border:2px dashed var(--ink-soft); background:transparent !important; box-shadow:none; }
+.fx-cards .fx-clone.reveal { animation:railPopIn .4s cubic-bezier(.34,1.56,.64,1); }
+/* 3줄: ← 화살표 + 할인 수치(-N) 큰 글씨 + 라벨 + [적용하기]. 실제 비용은 선택 버튼 큰 글씨(아래 cost-zoom) */
+.fx-apply-row { display:flex; align-items:center; gap:8px; }
+.fx-arrow { font-size:22px; font-weight:800; color:var(--ink); line-height:1; }
 .fx-label { font-size:12px; font-weight:800; letter-spacing:.5px; color:var(--ink); white-space:nowrap; }
-.fx-disc { font-size:30px; font-weight:800; color:var(--acc-pink-deep); text-shadow:2px 2px 0 var(--ink); line-height:1; display:inline-block; }
+.fx-disc { font-size:32px; font-weight:800; color:var(--acc-pink-deep); text-shadow:2px 2px 0 var(--ink); line-height:1; display:inline-block; }
 .fx-sec[data-res="energy"] .fx-disc { color:var(--acc-cyan-deep); }
-.fx-disc.pulse { animation:fxNumPulse .3s ease; }
-@keyframes fxNumPulse { 0%,100%{transform:scale(1)} 45%{transform:scale(1.55)} }
+/* v9.1 — 펄스를 더 팝하게+아주 살짝 빠르게(back-ease 오버슈트) */
+.fx-disc.pulse { animation:fxNumPulse .24s cubic-bezier(.34,1.7,.5,1); }
+@keyframes fxNumPulse { 0%{transform:scale(1)} 40%{transform:scale(1.7)} 100%{transform:scale(1)} }
+/* v9.1 — 마지막 숫자: 크게 팝 후 페이드아웃(효과 없이 사라지던 것 보완) */
+.fx-disc.finalpop { animation:fxFinalPop .3s cubic-bezier(.34,1.7,.5,1) forwards; }
+@keyframes fxFinalPop { 0%{transform:scale(1);opacity:1} 45%{transform:scale(1.85);opacity:1} 100%{transform:scale(1.2);opacity:0} }
 /* §4q v7 — 선택 버튼(cut2) 비용을 적용 중 큰 글씨로(피터공). 끝나면 2번 깜빡 후 원래 크기 복귀 */
 .cost-simple .cost-num.cost-zoom { font-size:32px; font-weight:800; color:var(--acc-pink-deep); line-height:1; }
 .cost-simple .cost-num.blink2 { animation:fxBlink2 .3s ease 2; }
 @keyframes fxBlink2 { 0%,100%{opacity:1} 50%{opacity:.12} }
-/* §4q — [적용하기] 버튼: 눌러서 적용+다음(피터공) */
-.fx-confirm { margin-top:6px; align-self:center; padding:5px 16px; font-size:12px; font-weight:800; cursor:pointer; letter-spacing:.5px;
-  border:2px solid var(--ink); background:var(--acc-yellow); color:var(--ink); border-radius:0; box-shadow:2px 2px 0 var(--ink); }
+/* §4q v8 — [적용하기] 버튼: 3줄 우측 끝(margin-left:auto), 드롭쉐도우(피터공) */
+.fx-confirm { margin-left:auto; padding:6px 16px; font-size:12px; font-weight:800; cursor:pointer; letter-spacing:.5px;
+  border:2px solid var(--ink); background:var(--acc-yellow); color:var(--ink); border-radius:0; box-shadow:3px 3px 0 var(--ink); }
 .fx-confirm:hover { background:var(--ink); color:#fff; }
 .fx-confirm:active { transform:translate(1px,1px); box-shadow:1px 1px 0 var(--ink); }

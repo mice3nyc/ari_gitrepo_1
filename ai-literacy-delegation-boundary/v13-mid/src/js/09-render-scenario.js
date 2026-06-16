@@ -666,17 +666,50 @@ function getCardDiscountMark(stageType,choiceId){return '';}
 // 자동은 정신없다 → 사용자 페이스. 한 박스에 자원 한 칸(시간→에너지)씩 정적 표시 + [적용확인].
 // 버튼 누르면 그때 큰 숫자로 할인이 오르고(-1..-N) 비용이 내리는 카운트 연출 → 끝나면 다음 칸/선택지.
 var _cascadeBusy=false;
-var FX_META={time:{head:'시킬까!',label:'시간 할인',dock:'dock-list-hc'},energy:{head:'내가 할까!',label:'에너지 할인',dock:'dock-list-ab'}};
+var FX_META={
+  time:{head:'시킬까!',label:'시간 할인',levelLabel:'위임레벨',dock:'dock-list-hc'},
+  energy:{head:'내가 할까!',label:'에너지 할인',levelLabel:'능력레벨',dock:'dock-list-ab'}
+};
+// §4q v8 (6/16) — 박스 칸의 레벨 숫자. 시킬까=위임레벨(시킬까 카드 장수), 내가할까=능력레벨(능력 카드 장수)
+function _fxLevelFor(res){
+  if(res==='time')return (typeof _delegationCardCount==='function')?_delegationCardCount():0;
+  return (typeof _abilityCardCount==='function')?_abilityCardCount():0;
+}
 function _fxDiscountedLines(card){
   return Array.prototype.slice.call(card.querySelectorAll('.cost-line')).filter(function(l){return (+l.dataset.raw)>(+l.dataset.final);});
 }
-// 해당 칸 확보 카드를 목록과 같은 디자인으로 복제(모두 정적 표시, 최대 6장)
+// 슬롯에 실제 카드 내용/컬러 채우고 강조(reveal)
+function _fxFillSlot(slot,chip){
+  slot.classList.remove('fx-empty');
+  slot.innerHTML=chip.innerHTML;
+  slot.style.background=chip.style.background||'';
+  slot.style.borderLeft=chip.style.borderLeft||'';
+  slot.classList.remove('reveal');void slot.offsetWidth;slot.classList.add('reveal');
+}
+// §4q v9.1 (6/16 피터공) — 빈 점선 슬롯 먼저, 목록 카드가 하나씩 회전하며 날아와 채운다(획득팝업 회전-비행 모티프 재사용).
 function _fxFillCards(container,res){
   var list=document.getElementById(FX_META[res].dock);
   var chips=list?Array.prototype.slice.call(list.querySelectorAll('.dock-card.locked')):[];
-  chips.slice(0,6).forEach(function(chip){
-    var m=chip.cloneNode(true);m.classList.remove('locking','reveal','pending');m.classList.add('fx-clone');
-    m.style.opacity='1';m.style.animation='';container.appendChild(m);
+  chips=chips.slice(0,3); // 최대 3장(할인 가격은 동일)
+  // 1) 빈 점선 슬롯
+  var slots=chips.map(function(){var s=document.createElement('div');s.className='fx-clone fx-empty';container.appendChild(s);return s;});
+  // 2) 카드 하나씩 회전 비행 → 슬롯 채움(강조)
+  chips.forEach(function(chip,i){
+    (function(chip,slot,idx){
+      setTimeout(function(){
+        var sr=chip.getBoundingClientRect(),tr=slot.getBoundingClientRect();
+        if(sr.width<=0||tr.width<=0){_fxFillSlot(slot,chip);return;} // 독 안 보이면 즉시 채움(degrade)
+        var ghost=chip.cloneNode(true);
+        ghost.classList.add('fx-clone');ghost.classList.remove('locking','reveal','pending');
+        ghost.style.cssText+=';position:fixed;left:'+sr.left+'px;top:'+sr.top+'px;width:'+sr.width+'px;height:'+sr.height+'px;margin:0;z-index:600;box-shadow:none;border-radius:8px;transition:transform .5s cubic-bezier(.45,0,.55,1),opacity .2s ease .42s;';
+        document.body.appendChild(ghost);
+        var tx=tr.left+tr.width/2-(sr.left+sr.width/2);
+        var ty=tr.top+tr.height/2-(sr.top+sr.height/2);
+        var scl=tr.width/sr.width;
+        requestAnimationFrame(function(){ghost.style.transform='translate('+tx+'px,'+ty+'px) rotate(540deg) scale('+scl.toFixed(2)+')';ghost.style.opacity='0.25';});
+        setTimeout(function(){if(ghost.parentNode)ghost.parentNode.removeChild(ghost);_fxFillSlot(slot,chip);},520);
+      },idx*180+120);
+    })(chip,slots[i],i);
   });
 }
 // 한 자원 칸 박스: 할인 수치(-N)만 박스에. 실제 비용은 선택 버튼(cut2)에서 큰 글씨(cost-zoom).
@@ -684,39 +717,58 @@ function _fxBuildSectionBox(card,line,host){
   var res=line.dataset.res,M=FX_META[res],N=(+line.dataset.raw)-(+line.dataset.final);
   var hostRect=host.getBoundingClientRect(),bTop=host.clientTop||0,r=card.getBoundingClientRect();
   var box=document.createElement('div');box.className='choice-fx show';box.style.position='absolute';
-  box.style.top=Math.max(0,Math.round(r.top-hostRect.top-bTop))+'px';box.style.left='0px';box.style.right='4px';
+  // §4q v9.2 (6/16 피터공) — 박스를 20px 좌측으로 → cut3/cut2 경계에 걸치게(dfx-host overflow:visible 필요)
+  box.style.top=Math.max(0,Math.round(r.top-hostRect.top-bTop))+'px';box.style.left='-20px';box.style.right='4px';
+  // §4q v8 (6/16 피터공) — 1줄: 헤드 볼드 + 위임/능력 레벨(다른 색) / 2줄: 동일 폭 카드 박스 / 3줄: ← + -N 큰 글씨 + 라벨 + [적용하기]
   box.innerHTML='<div class="fx-sec" data-res="'+res+'">'
-    +'<div class="fx-head">'+M.head+'</div>'
+    +'<div class="fx-head-row"><span class="fx-head">'+M.head+'</span><span class="fx-level">'+M.levelLabel+' '+_fxLevelFor(res)+'</span></div>'
     +'<div class="fx-cards"></div>'
-    +'<div class="fx-disc-row"><span class="fx-label">'+M.label+'</span><span class="fx-disc">-'+N+'</span></div>'
+    +'<div class="fx-apply-row">'
+      +'<span class="fx-arrow">&larr;</span>'
+      +'<span class="fx-disc">-'+N+'</span>'
+      +'<span class="fx-label">'+M.label+'</span>'
+      +'<button type="button" class="fx-confirm">적용하기</button>'
     +'</div>'
-    +'<button type="button" class="fx-confirm">적용하기</button>';
+    +'</div>';
   _fxFillCards(box.querySelector('.fx-cards'),res);
   var cn=line.querySelector('.cost-num');if(cn)cn.classList.add('cost-zoom'); // 선택 버튼 비용 큰 글씨
   host.appendChild(box);
   return box;
 }
 // [적용하기] 클릭 시: 할인 -N에서 줄어 사라지고(박스), 선택버튼 비용 raw→final로 줄어든다. 끝나면 비용 2번 깜빡 후 원래 크기 복귀.
+// §4q v9.1 (6/16 피터공) — ① 펄스를 더 팝하게+아주 살짝 빠르게(360→300, fxNumPulse back-ease) ② 마지막 숫자도 효과(finalpop) 후 사라짐.
 function _fxRunCount(box,line){
   return new Promise(function(res){
     var raw=+line.dataset.raw,final=+line.dataset.final,N=raw-final;
     var disc=box.querySelector('.fx-disc'),costNum=line.querySelector('.cost-num');
-    function finish(){
-      if(disc&&disc.parentNode)disc.parentNode.removeChild(disc); // 할인 수치 사라짐
+    var STEP=300;
+    function pop(el){if(!el)return;el.classList.remove('pulse');void el.offsetWidth;el.classList.add('pulse');}
+    function settleCost(){
       if(costNum){
         costNum.textContent=String(final);costNum.classList.add('discounted');
         costNum.classList.remove('blink2');void costNum.offsetWidth;costNum.classList.add('blink2'); // 2번 깜빡
         setTimeout(function(){costNum.classList.remove('blink2','cost-zoom');res();},760); // 깜빡 후 원래 크기 복귀
       }else res();
     }
+    function finish(){
+      // 마지막 숫자까지 팝(finalpop) 후 사라짐 — 효과 없이 그냥 사라지던 것 보완
+      if(disc&&disc.parentNode){
+        disc.classList.remove('pulse');void disc.offsetWidth;disc.classList.add('finalpop');
+        setTimeout(function(){if(disc&&disc.parentNode)disc.parentNode.removeChild(disc);settleCost();},300);
+      }else settleCost();
+    }
+    if(disc)pop(disc); // 첫 숫자(-N)도 팝
     var k=0;
     (function tick(){
       k++;
-      if(costNum)costNum.textContent=String(raw-k);            // 비용 10→9→8→7
-      if(disc)disc.textContent=(N-k>0)?('-'+(N-k)):'';          // 할인 -3→-2→-1→사라짐
-      if(disc&&N-k>0){disc.classList.remove('pulse');void disc.offsetWidth;disc.classList.add('pulse');}
-      if(k>=N){setTimeout(finish,360);return;}
-      setTimeout(tick,360);
+      if(costNum)costNum.textContent=String(raw-k);   // 비용 10→9→8→7
+      var dv=N-k;
+      if(dv>0){
+        if(disc){disc.textContent='-'+dv;pop(disc);}  // 할인 -3→-2→-1, 각 팝
+        setTimeout(tick,STEP);
+      }else{
+        setTimeout(finish,STEP);                       // 마지막 비트 — disc는 -1 유지하다 finalpop으로 사라짐
+      }
     })();
   });
 }
@@ -751,12 +803,52 @@ function runDiscountCascade(area,targetCut){
   step();
 }
 // 선택지 영역에 할인이 하나라도 있으면 즉시 잠금 + 카드 다 뜬 뒤 캐스케이드 시작 (targetCut: 정보창 띄울 옆 칸)
+// §4q v9 (6/16) — 자동 전체 캐스케이드 폐기. 아래 selectChoiceWithDiscount(선택 후 그 선택지만)로 대체. (호환 위해 함수 유지·미사용)
 function _scheduleCascade(area,count,targetCut){
   if(!area)return;
   var any=Array.prototype.slice.call(area.querySelectorAll('.cost-line')).some(function(l){return (+l.dataset.raw)>(+l.dataset.final);});
   if(!any)return;
   _cascadeBusy=true;area.classList.add('cascade-locked');
   setTimeout(function(){runDiscountCascade(area,targetCut);},count*120+550);
+}
+// §4q v9 (6/16 피터공) — 선택 → 선택할인 → 다음. 클릭한 선택지의 할인만 순차(시간→에너지) 적용 후 proceedFn 호출.
+// 할인 없으면 바로 진행. 적용하기 버튼·카운트 연출은 동일(_fxBuildSectionBox/_fxRunCount 재사용).
+function runChoiceDiscount(card,targetCut){
+  return new Promise(function(resolve){
+    var lines=_fxDiscountedLines(card);
+    lines.sort(function(a,b){return (a.dataset.res==='time'?0:1)-(b.dataset.res==='time'?0:1);});
+    var panel=currentRow&&currentRow.querySelector('[data-cut="'+targetCut+'"]');
+    var host=panel&&panel.querySelector('.panel-body');
+    if(!lines.length||!host){resolve();return;}
+    _cascadeBusy=true;
+    var area=card.parentNode;if(area)area.classList.add('cascade-locked');
+    panel.classList.add('dfx-host');
+    host.innerHTML='';host.style.position='relative';
+    var idx=0;
+    function done(){
+      if(host){host.innerHTML='';host.style.position='';}
+      if(panel)panel.classList.remove('dfx-host');
+      _cascadeBusy=false;if(area)area.classList.remove('cascade-locked');
+      resolve();
+    }
+    function step(){
+      if(idx>=lines.length){done();return;}
+      var box=_fxBuildSectionBox(card,lines[idx],host);
+      var btn=box.querySelector('.fx-confirm');
+      var go=function(){
+        if(btn)btn.disabled=true;
+        _fxRunCount(box,lines[idx]).then(function(){if(box.parentNode)box.parentNode.removeChild(box);idx++;step();});
+      };
+      if(btn)btn.onclick=go;else go();
+    }
+    step();
+  });
+}
+// 선택지 클릭 핸들러: 할인 있으면 그 선택지 할인 박스 → 적용 후 진행 / 없으면 바로 진행
+function selectChoiceWithDiscount(choiceId,card,proceedFn,targetCut){
+  if(_cascadeBusy)return;
+  if(!_fxDiscountedLines(card).length){proceedFn(choiceId);return;}
+  runChoiceDiscount(card,targetCut).then(function(){proceedFn(choiceId);});
 }
 
 // §23 — 1차 선택지를 Cut 1 body 아래에 펼침
@@ -827,7 +919,7 @@ function showTier2Choices(){
     var card=document.createElement('div');
     var afford=canAffordCost(costs[i]);
     card.className='choice-card'+(afford?'':' disabled');
-    if(afford)card.onclick=function(){onTier2(c.id);};
+    if(afford)card.onclick=function(){selectChoiceWithDiscount(c.id,card,onTier2,3);}; // §4q v9 — 선택→선택할인→다음
     var costHTML=buildCostHTML(costs[i]);
     var mark=afford?getCardDiscountMark('tier2',c.id):'';
     var tag=afford?'':'<span class="insufficient-tag">'+_t('game_flow.insufficient','자원 부족')+'</span>';
@@ -838,7 +930,7 @@ function showTier2Choices(){
   _scrollChoicesIntoView(area,t2list.length);
   updateStats();
   if(_checkAllUnaffordable(costs))triggerGameOver();
-  else _scheduleCascade(area,t2list.length,3); // §4q 할인 정보창 → 옆 칸 cut3
+  // §4q v9 — 자동 캐스케이드 폐기: 선택 클릭 시 selectChoiceWithDiscount가 그 선택지 할인만 띄움
 }
 
 // §23 — Cut 3 활성화: 이미지 + 2차 선택 요약 + "결과 확인하기" 버튼
@@ -892,7 +984,7 @@ function showReviewChoices(){
     var card=document.createElement('div');
     var afford=canAffordCost(costs[i]);
     card.className='choice-card'+(afford?'':' disabled');
-    if(afford)card.onclick=function(){onReview(r.id);};
+    if(afford)card.onclick=function(){selectChoiceWithDiscount(r.id,card,onReview,5);}; // §4q v9 — 선택→선택할인→다음
     var costHTML=buildCostHTML(costs[i]);
     var leafKey=t2cur+r.id;
     var mark=afford?getCardDiscountMark('review',leafKey):'';
@@ -905,7 +997,7 @@ function showReviewChoices(){
   _scrollChoicesIntoView(area,sc.reviews.length);
   updateStats();
   if(_checkAllUnaffordable(costs))triggerGameOver();
-  else _scheduleCascade(area,sc.reviews.length,5); // §4q 할인 정보창 → 옆 칸 cut5
+  // §4q v9 — 자동 캐스케이드 폐기: 선택 클릭 시 selectChoiceWithDiscount가 그 선택지 할인만 띄움
 }
 
 // §23 — Cut 5 활성화: 이미지 + 검토 선택 요약
@@ -1091,7 +1183,8 @@ function goCut6(){
   nb.onclick=goNextScenario;
 
   // 시나리오 끝 chain (SPEC §6.3, v0.9 — RP 분배 제거, 에너지 자동 회복)
-  // 결과 패널 1.4초 보여주고 → [0] pending 흡수 → [1] 카드 → [1.5] 회복력 특별 UI(B 이하) → [2] 에너지 회복 애니메이션 → [3] 레벨업 → 다음 버튼
+  // 결과 패널 1.4초 보여주고 → [0] pending 흡수 → [1] 카드 → [2] 레벨업 → [3] RP → [3.5] 철컥(시나리오 완료) → [4] 회복력 특별 UI(B 이하) → 다음 버튼
+  // 6/16 — 회복력 모달은 카드 획득·철컥이 다 끝난 맨 끝으로 (피터공: 카드 팝업과 연속으로 뜨던 문제)
   var _v8CardLabels=[];
   var _hasRecoveryCard=false;
   // 6/11 파일럿 — 선택별 획득 시나리오: 검토 카드는 onReview에서 즉시 지급·레일 표시(§2b). 결말 일괄 지급 없음.
@@ -1114,10 +1207,6 @@ function goCut6(){
     if(_v8CardLabels.length){
       chain=chain.then(function(){return playCardRewardSequential(_v8CardLabels,'');});
     }
-    // [1.5] 회복력 특별 UI — B 이하만, 화면 중앙, 리플레이 진입점
-    if(_hasRecoveryCard){
-      chain=chain.then(function(){return showRecoveryCardModal(scid);});
-    }
     // [2] 레벨업 — 레벨 표시 + 보너스 RP 안내 (에너지 자동 충전 없음)
     if(didLevelUp){
       chain=chain.then(function(){return showLevelUpModal(prevLevel,newLevel);});
@@ -1129,6 +1218,11 @@ function goCut6(){
     // [3.5] §2b — 레일 카드 → 역량카드 버튼 비행 (레일 비면 no-op, 비파일럿 영향 없음)
     if(typeof railFlyToInventory==='function'){
       chain=chain.then(function(){return railFlyToInventory();});
+    }
+    // [4] 회복력 특별 UI — B 이하만, 화면 중앙, 리플레이 진입점.
+    // 6/16 피터공: 카드 획득 팝업·철컥(시나리오 완료)이 모두 끝난 뒤에 띄운다 (체인 맨 끝으로 이동).
+    if(_hasRecoveryCard){
+      chain=chain.then(function(){return showRecoveryCardModal(scid);});
     }
     chain.then(function(){
       var c6body=currentRow.querySelector('[data-cut="6"] .panel-body');

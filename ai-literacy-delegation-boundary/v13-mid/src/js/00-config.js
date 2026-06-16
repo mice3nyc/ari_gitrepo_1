@@ -95,7 +95,11 @@ function getAxisDelta(sign){
 // v2 6/11 — 도메인 카드 능력형 표시명 (texts.yaml domainCards[].display).
 // 내부 키·세이브·scenarios.yaml은 기존 이름 유지, 렌더 시점에만 교체.
 function _cardDisplayName(label){
-  if(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.domainCards&&TEXTS.domainCards[label]&&TEXTS.domainCards[label].display)return TEXTS.domainCards[label].display;
+  if(typeof TEXTS!=='undefined'&&TEXTS){
+    if(TEXTS.domainCards&&TEXTS.domainCards[label]&&TEXTS.domainCards[label].display)return TEXTS.domainCards[label].display;
+    // 6/16 — 성장 카드(회복력·도전력)도 "회복 역량/도전 역량"으로 인간중심 "X 역량"과 통일 (피터공)
+    if(TEXTS.growthCards&&TEXTS.growthCards[label]&&TEXTS.growthCards[label].display)return TEXTS.growthCards[label].display;
+  }
   return label;
 }
 var GRADE_LABEL={S:'S',A:'A',B:'B',C:'C',D:'D'};

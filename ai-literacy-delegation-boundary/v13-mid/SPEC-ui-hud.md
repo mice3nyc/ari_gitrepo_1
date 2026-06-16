@@ -338,6 +338,18 @@
 
 **v7.1 — 비용은 선택 버튼, 박스엔 할인 수치만 (피터공)**: ① 박스엔 **할인 수치(-N)만**(`.fx-disc-row`: 라벨 + `-N`). 실제 비용은 **선택 버튼(cut2)에서 큰 글씨**(`.cost-num.cost-zoom` 32px) — 스텝 박스가 뜨면 해당 라인 비용에 `cost-zoom` 부여. ② 버튼 `적용확인`→**`적용하기`**. ③ 클릭 시 `_fxRunCount`: 할인 `-N`에서 **줄어 사라지고**(−(N−k), 0이면 element 제거), cut2 비용 `raw→final`로 한 칸씩 감소(10→9→8→7). ④ 할인 다 적용되면 **할인 수치 사라지고**(disc 제거), 최종 비용 = final+초록 + **2번 깜빡**(`fxBlink2` opacity, 2회) **→ `cost-zoom` 제거(원래 크기 복귀)** → 다음 자원/선택지. 헤드리스 검증: 박스 disc=-3·비용박스없음·버튼 적용하기·cut2 10 zoom / 클릭 시 cut2 7 초록·zoom 해제·다음 박스 disc=-1 / 끝 cut3 비움·잠금 해제, ERR=[].
 
+**v8 — 박스 레이아웃 재구성 (6/16 피터공, 레이아웃 먼저·기능은 다음 회기)**: 한 칸 박스를 3줄로 정리. ① **1줄 `.fx-head-row`**: `시킬까!`(헤드 볼드 강, 17px) 좌 + `위임레벨 N`(다른 색 — time=`--acc-yellow-deep`, energy=`능력레벨`·`--acc-mint-deep`) 우, space-between. 레벨 N = 해당 칸 카드 장수(`_fxLevelFor`: time→`_delegationCardCount`, energy→`_abilityCardCount`). ② **2줄 `.fx-cards`**: 카드 복제(`.fx-clone`)를 **넉넉한 동일 폭**(`flex:1 1 0`, min-width 72px, 높이 34px)으로 균등 분배. ③ **3줄 `.fx-apply-row`**: `←`(`.fx-arrow`, 선택지 가리킴) + `-N`(`.fx-disc` 32px 큰 글씨) + 라벨(`시간 할인`) + `[적용하기]`(`margin-left:auto` 우측 끝, 드롭쉐도우 `3px 3px 0`). 버튼·할인수치 id 유지 → `_fxRunCount`/클릭 핸들러 무변(레이아웃만). **다음 회기**: 기능 조정(카운트 연출·자원 스텝 흐름). 함수 `_fxBuildSectionBox` HTML 교체 + `FX_META.levelLabel` 추가.
+
+**v8.1 — 카드 정리 (6/16 피터공)**: ① **카드 표시 최대 3장**(`_fxFillCards` `slice(0,3)`) — 여러 장이어도 딱 맞는 3장까지만. **할인 가격은 동일**(표시만 캡, -N 무변). ② **[적용하기] 버튼과 구별** — `.dock-card.locked`의 `box-shadow:2px 2px 0`가 클론에 상속돼 노란 버튼처럼 보이던 문제. `.fx-clone` `box-shadow:none` + `border-radius:8px`(박스 라운딩) + `.dc-name white-space:nowrap`+ellipsis(싱글라인). 버튼은 드롭쉐도우 유지 → 카드(라운딩·플랫)와 버튼(각짐·그림자)이 시각적으로 갈림.
+
+**v9 — 자동 캐스케이드 폐기, 선택→선택할인→다음 (6/16 피터공)**: 기존 v7~v8은 선택지 펼치면 **모든 할인 선택지를 자동 순차**로 보여주고(전부 적용해야 선택 가능) → 바꿈: **선택지는 즉시 클릭 가능**, 플레이어가 한 선택지를 누르면 **그 선택지의 할인만**(시간→에너지) 박스로 띄우고 적용 후 진행. ① `showTier2Choices`/`showReviewChoices`의 `_scheduleCascade` 호출 폐기(함수는 호환 유지·미사용) — 펼침 즉시 클릭 가능. ② 클릭 핸들러 `onTier2`/`onReview` → **`selectChoiceWithDiscount(id,card,proceedFn,targetCut)`**: 그 카드의 할인 라인 있으면 `runChoiceDiscount`(클릭 카드 한정 스텝, 시간 먼저) 돌린 뒤 proceedFn 호출, 없으면 즉시 proceedFn. 박스 표시 중 `cascade-locked`(pointer-events:none)로 다른 선택지 잠금. ③ **박스 작동(적용하기·카운트)은 v8.1과 동일** — `_fxBuildSectionBox`/`_fxRunCount` 재사용. ④ **disable = 할인 후 비용 기준**(기존부터 `getTier2Cost`가 final 반환 → `canAffordCost(final)`): 할인 적용해도 자원 부족하면 선택지 disabled+자원부족 태그. **CDP 검증(headless)**: 카드 dlg2/knl2, tier2 3선택지 전부 할인(예 time 20→18) 클릭→박스(위임레벨 2·-2·적용하기) 등장→적용→cut3 요약 진행, 예외 0. 자원 time=17 → 할인후 18 선택지만 disabled, 17·13은 활성.
+
+**v9.1 — 마이크로 연출 (6/16 피터공)**: ① **펄스 팝+살짝 빠르게** — `fxNumPulse` `.3s ease`→`.24s` back-ease 오버슈트(scale 1.55→1.7), 카운트 스텝 360→300ms. ② **마지막 숫자도 효과** — 기존엔 할인이 0 되며 효과 없이 사라짐 → `_fxRunCount` 재구성: 첫 숫자(-N)도 팝, 각 스텝 팝, **마지막 비트에 `finalpop`**(크게 팝 후 페이드아웃 `fxFinalPop`) 후 제거 → 그다음 비용 settle(blink2). ③ **카드 회전 비행 채움** — `_fxFillCards`가 정적 복제 대신 **빈 점선 슬롯**(`.fx-clone.fx-empty`) 먼저 깔고, 독 목록 카드가 하나씩(180ms 간격) **회전(540°) 비행**해 슬롯에 도착·`reveal`(railPopIn) 강조(획득팝업 모티프 역방향). 독 안 보이면 즉시 채움(degrade). `_fxFillSlot` 신설. **CDP 검증**: 클릭 직후 빈 슬롯 2 → 비행 후 채움(이름 "주체성 역량"·"경청 역량") → finalpop 확인 → cut3 진행, 예외 0.
+
+**v9.2 — 경계 걸침 + 헤드 가독성 (6/16 피터공)**: ① **박스 20px 좌측 이동** → cut3/cut2 경계에 걸치게(더 잘 보임). `box.style.left` 0→-20px. `.panel`이 `overflow:hidden`이라 잘려서 → **`.panel.dfx-host`+`.panel-body` `overflow:visible`** + 박스 `z-index:30`(cut2 위로). 검증: boxLeft 808 < cut3left 825(걸침). ② **`시킬까!` 헤드 가독성** — 픽셀폰트+그림자라 안 읽힘 → `text-shadow` 제거 + 17→21px. (그림자는 박스 자체엔 그대로 없음 — 세션486 결정 유지)
+
+**v9.3 — 채운 카드 solid 테두리 (6/16 피터공)**: 빈 슬롯(`.fx-empty` 점선)이 카드 도착 후 테두리가 통째로 날아가던 버그 — base `.fx-clone`에 테두리 미정의(점선은 `.fx-empty`에만)였음. `.fx-clone`에 `border:2px solid var(--ink)` 추가 → 빈칸=점선, 채워지면=solid. 검증: 채운 카드 computed borderStyle=solid 2px.
+
 **잠금/안전**: 애니 끝까지 `_cascadeBusy`(onTier2/Review 가드 + `cascade-locked` dim). seq `.catch`로 실패해도 잠금 해제(게임 락 방지). 할인 0(시나리오1 등 락 카드 없음)이면 정보창 없음 — §4p v4 락 기준과 자동 일치. dock-disc(레일 -N)는 정적 유지. 헤드리스 검증(cut3): 박스2·복제카드5·타이틀X·정렬 스페이서·라벨 `시간 할인`/`에너지 할인`·disc -3/-1/-1·cut2 비용 final 초록(비할인 plain)·줌 해제·busy 해제·ERR 0 통과.
 
 ## 4r. 세션486 (6/15) — HUD 중앙 제목 + 전체점수 (피터공)
@@ -345,6 +357,11 @@
 - **중앙 제목 형식**: `상황: 자기소개 글` → **`'자기소개 글' 시나리오 점수`** 한 줄(아래 점수 그래프의 라벨 역할). `hud-scenario-title` textContent.
 - **제목 크롭 해소**: `.hud-title` 받침/획이 아래에서 잘리던 문제 → `line-height` 1.2→1.5 + `padding-bottom:3px`. 한 줄이 길어져 `font-size` 20→18px.
 - **전체점수 두 줄**: 우측 `SCORE : 22` 한 줄 → **두 줄**(작은 `전체점수` 위 + 큰 숫자 아래). `.score-total-block` flex row→column, 라벨 12px 회색·콜론(`::after`) 제거, 숫자 32px. 마크업 라벨 `SCORE`→`전체점수`.
+
+## 4s. 세션488 (6/16) — 회복력 카드: 모달 타이밍 + 역량 표기 (피터공)
+
+- **회복력 특별 UI 모달 타이밍**: 시나리오 끝 chain(`09-render-scenario.js`)에서 `[1.5]`(카드 보상 직후)에 있던 `showRecoveryCardModal`을 **`[4]`(철컥 `railFlyToInventory` 뒤)로 이동**. 카드 획득 팝업과 연속으로 뜨던 문제 → 카드 획득·철컥(시나리오 완료)이 모두 끝난 뒤에 회복 모달이 뜬다. chain 순서: `[0] pending 흡수 → [1] 카드 → [2] 레벨업 → [3] RP → [3.5] 철컥 → [4] 회복력 모달 → 다음 버튼`.
+- **회복/도전 카드 "역량" 표기 통일**: 시킬까(hc) 칸에 들어가는 성장 카드(회복력·도전력)를 인간중심 "X 역량"과 통일해 **"회복 역량"·"도전 역량"**으로 표기. `data/texts.yaml` growthCards에 `display` 필드 추가, `_cardDisplayName`(00-config)이 domainCards에 더해 growthCards.display도 읽도록 확장 → dock·획득팝업·리포트·§4q 카드 복제 일괄 적용. 내부 키·세이브·scenarios.yaml은 기존 라벨(회복력/도전력) 유지, 렌더 시점에만 교체.
 
 ## 5. 미해결 / 다음 단계
 
