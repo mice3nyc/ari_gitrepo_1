@@ -823,6 +823,7 @@ function runChoiceDiscount(card,targetCut){
     if(!lines.length||!host){resolve();return;}
     _cascadeBusy=true;
     var area=card.parentNode;if(area)area.classList.add('cascade-locked');
+    card.classList.add('fx-selected'); // §4q v9.4 — 선택한 카드 표식 → 비선택 카드 회색 처리(CSS)
     panel.classList.add('dfx-host');
     host.innerHTML='';host.style.position='relative';
     var idx=0;
@@ -830,6 +831,7 @@ function runChoiceDiscount(card,targetCut){
       if(host){host.innerHTML='';host.style.position='';}
       if(panel)panel.classList.remove('dfx-host');
       _cascadeBusy=false;if(area)area.classList.remove('cascade-locked');
+      card.classList.remove('fx-selected');
       resolve();
     }
     function step(){

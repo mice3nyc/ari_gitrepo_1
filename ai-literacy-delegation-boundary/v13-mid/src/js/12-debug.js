@@ -2,14 +2,15 @@
 // 12. Debug Panel
 // =====================================================
 
-// r42 — 로컬 테스팅 화면 네비: localhost/file://에서만 노출(배포·KT 환경에선 숨김)
+// r42 — 테스팅 화면 네비: 로컬·라이브 모두 노출(피터공 6/16 "라이브도 있어야 테스팅").
+// KT 전달 직전 숨기려면 _initDevNav에서 _isLocalEnv() 게이팅 복원.
 function _isLocalEnv(){
   var h=(location.hostname||'');
   return location.protocol==='file:'||h==='localhost'||h==='127.0.0.1'||h==='0.0.0.0'||h==='';
 }
 function _initDevNav(){
   var nav=document.getElementById('dev-nav');
-  if(nav&&_isLocalEnv())nav.hidden=false;
+  if(nav)nav.hidden=false; // 현재: 항상 노출(라이브 테스팅). 배포본 숨김 필요 시 _isLocalEnv() 가드 추가
 }
 // 리포트 화면은 시나리오 기록이 있어야 의미 → 비어 있으면 샘플(A등급 5종) 채우고 보여줌
 function devNavReport(){

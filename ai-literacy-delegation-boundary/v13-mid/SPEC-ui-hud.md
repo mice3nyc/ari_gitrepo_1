@@ -350,6 +350,8 @@
 
 **v9.3 — 채운 카드 solid 테두리 (6/16 피터공)**: 빈 슬롯(`.fx-empty` 점선)이 카드 도착 후 테두리가 통째로 날아가던 버그 — base `.fx-clone`에 테두리 미정의(점선은 `.fx-empty`에만)였음. `.fx-clone`에 `border:2px solid var(--ink)` 추가 → 빈칸=점선, 채워지면=solid. 검증: 채운 카드 computed borderStyle=solid 2px.
 
+**v9.4 — 비선택 선택지 회색 처리 (6/16 피터공)**: 선택지 하나를 누르면 할인 박스가 뜨고 나머지 선택지는 이미 못 누르는 상태(`cascade-locked` pointer-events:none) → 시각으로도 명확히. `runChoiceDiscount`에서 클릭 카드에 `.fx-selected` 부여(`done()`에서 제거). CSS: `.cascade-locked .choice-card:not(.fx-selected)`는 `opacity:.4` + `grayscale(.85)`(0.2s 트랜지션), `.fx-selected`만 또렷(opacity 1·filter none). 기존 `:not(.disabled){opacity:.92}` 미세 dim 대체.
+
 **잠금/안전**: 애니 끝까지 `_cascadeBusy`(onTier2/Review 가드 + `cascade-locked` dim). seq `.catch`로 실패해도 잠금 해제(게임 락 방지). 할인 0(시나리오1 등 락 카드 없음)이면 정보창 없음 — §4p v4 락 기준과 자동 일치. dock-disc(레일 -N)는 정적 유지. 헤드리스 검증(cut3): 박스2·복제카드5·타이틀X·정렬 스페이서·라벨 `시간 할인`/`에너지 할인`·disc -3/-1/-1·cut2 비용 final 초록(비할인 plain)·줌 해제·busy 해제·ERR 0 통과.
 
 ## 4r. 세션486 (6/15) — HUD 중앙 제목 + 전체점수 (피터공)

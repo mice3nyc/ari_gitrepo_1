@@ -82,7 +82,7 @@
 <div class="recovery-overlay hidden" id="recovery-overlay"></div>
 <button class="debug-toggle" onclick="toggleDebug()">디버그</button>
 <div class="debug-panel" id="debug-panel"></div>
-<!-- r42 — 로컬 테스팅용 화면 네비. localhost/file://에서만 _initDevNav가 노출(배포·KT 환경에선 숨김) -->
+<!-- r42 — 테스팅용 화면 네비. _initDevNav가 노출(현재 로컬·라이브 모두). KT 전달 직전 숨기려면 _isLocalEnv 가드 복원 -->
 <div class="dev-nav" id="dev-nav" hidden>
   <button type="button" onclick="showTitleScreen()">타이틀</button>
   <button type="button" onclick="showTutorialScreen()">튜토리얼</button>

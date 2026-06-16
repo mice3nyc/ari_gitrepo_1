@@ -226,9 +226,11 @@ button, input, select, textarea { font-family: inherit; }
 .cost-simple .cost-sep { opacity:.4; font-weight:700; }
 .cost-simple .cost-num { display:inline-block; font-weight:800; }
 .cost-simple .cost-num.discounted { color:#15803d; } /* 할인 적용되면 초록(취소선 대신 색 변화) */
-/* 캐스케이드 도는 동안 클릭 잠금(시각: 살짝 흐리게) */
+/* 캐스케이드 도는 동안 클릭 잠금 */
 .choices-area.cascade-locked .choice-card { pointer-events:none; }
-.choices-area.cascade-locked .choice-card:not(.disabled) { opacity:.92; }
+/* §4q v9.4 (피터공 6/16) — 선택지 하나 고르면 비선택 카드는 회색 처리(이미 못 누르는 상태를 시각으로). 선택 카드만 또렷 */
+.choices-area.cascade-locked .choice-card:not(.fx-selected) { opacity:.4; filter:grayscale(0.85); transition:opacity 0.2s ease, filter 0.2s ease; }
+.choices-area.cascade-locked .choice-card.fx-selected { opacity:1; filter:none; }
 @keyframes pulseFx { 0%{transform:scale(1)} 45%{transform:scale(1.5)} 100%{transform:scale(1)} }
 
 /* ===== §4q v3 6/15 세션486 — 할인 정보창 (피터공): 옆 칸(cut3/cut5)에 선택 버튼 우측 같은 크기 ===== */
@@ -2030,7 +2032,7 @@ button,
 <div class="recovery-overlay hidden" id="recovery-overlay"></div>
 <button class="debug-toggle" onclick="toggleDebug()">디버그</button>
 <div class="debug-panel" id="debug-panel"></div>
-<!-- r42 — 로컬 테스팅용 화면 네비. localhost/file://에서만 _initDevNav가 노출(배포·KT 환경에선 숨김) -->
+<!-- r42 — 테스팅용 화면 네비. _initDevNav가 노출(현재 로컬·라이브 모두). KT 전달 직전 숨기려면 _isLocalEnv 가드 복원 -->
 <div class="dev-nav" id="dev-nav" hidden>
   <button type="button" onclick="showTitleScreen()">타이틀</button>
   <button type="button" onclick="showTutorialScreen()">튜토리얼</button>
@@ -15971,6 +15973,7 @@ function runChoiceDiscount(card,targetCut){
     if(!lines.length||!host){resolve();return;}
     _cascadeBusy=true;
     var area=card.parentNode;if(area)area.classList.add('cascade-locked');
+    card.classList.add('fx-selected'); // §4q v9.4 — 선택한 카드 표식 → 비선택 카드 회색 처리(CSS)
     panel.classList.add('dfx-host');
     host.innerHTML='';host.style.position='relative';
     var idx=0;
@@ -15978,6 +15981,7 @@ function runChoiceDiscount(card,targetCut){
       if(host){host.innerHTML='';host.style.position='';}
       if(panel)panel.classList.remove('dfx-host');
       _cascadeBusy=false;if(area)area.classList.remove('cascade-locked');
+      card.classList.remove('fx-selected');
       resolve();
     }
     function step(){
@@ -17680,14 +17684,15 @@ function _renderGrowthReport(hist, compType, inventory){
 // 12. Debug Panel
 // =====================================================
 
-// r42 — 로컬 테스팅 화면 네비: localhost/file://에서만 노출(배포·KT 환경에선 숨김)
+// r42 — 테스팅 화면 네비: 로컬·라이브 모두 노출(피터공 6/16 "라이브도 있어야 테스팅").
+// KT 전달 직전 숨기려면 _initDevNav에서 _isLocalEnv() 게이팅 복원.
 function _isLocalEnv(){
   var h=(location.hostname||'');
   return location.protocol==='file:'||h==='localhost'||h==='127.0.0.1'||h==='0.0.0.0'||h==='';
 }
 function _initDevNav(){
   var nav=document.getElementById('dev-nav');
-  if(nav&&_isLocalEnv())nav.hidden=false;
+  if(nav)nav.hidden=false; // 현재: 항상 노출(라이브 테스팅). 배포본 숨김 필요 시 _isLocalEnv() 가드 추가
 }
 // 리포트 화면은 시나리오 기록이 있어야 의미 → 비어 있으면 샘플(A등급 5종) 채우고 보여줌
 function devNavReport(){

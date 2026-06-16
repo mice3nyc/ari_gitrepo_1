@@ -34,9 +34,11 @@
 .cost-simple .cost-sep { opacity:.4; font-weight:700; }
 .cost-simple .cost-num { display:inline-block; font-weight:800; }
 .cost-simple .cost-num.discounted { color:#15803d; } /* 할인 적용되면 초록(취소선 대신 색 변화) */
-/* 캐스케이드 도는 동안 클릭 잠금(시각: 살짝 흐리게) */
+/* 캐스케이드 도는 동안 클릭 잠금 */
 .choices-area.cascade-locked .choice-card { pointer-events:none; }
-.choices-area.cascade-locked .choice-card:not(.disabled) { opacity:.92; }
+/* §4q v9.4 (피터공 6/16) — 선택지 하나 고르면 비선택 카드는 회색 처리(이미 못 누르는 상태를 시각으로). 선택 카드만 또렷 */
+.choices-area.cascade-locked .choice-card:not(.fx-selected) { opacity:.4; filter:grayscale(0.85); transition:opacity 0.2s ease, filter 0.2s ease; }
+.choices-area.cascade-locked .choice-card.fx-selected { opacity:1; filter:none; }
 @keyframes pulseFx { 0%{transform:scale(1)} 45%{transform:scale(1.5)} 100%{transform:scale(1)} }
 
 /* ===== §4q v3 6/15 세션486 — 할인 정보창 (피터공): 옆 칸(cut3/cut5)에 선택 버튼 우측 같은 크기 ===== */
