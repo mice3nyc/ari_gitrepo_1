@@ -213,3 +213,35 @@
 .rmap-cut-lg img { width:100%; height:100%; object-fit:cover; display:block; }
 .rmap-cap { font-size:11px; color:var(--ink-mute); line-height:1.45; margin-top:5px; word-break:keep-all; }
 @media (max-width:760px){ .rmap-flex { flex-wrap:wrap; } .rmap-route { width:100%; } .rmap-strip { grid-template-columns:repeat(3,1fr); } .rmap-title { flex:1 1 100%; } .rmap-title-spacer { display:none; } }
+
+/* §4 R3.10 (6/16 세션487) — 위임 항로 SVG → 표 전환. 비교 정보(직접/부분/전체·시간·에너지·점수)는 스캔되는 컬럼, 레슨·흐름·할인은 떼어낸 정독 블록 */
+.report-deltable { margin:0 0 20px; border:var(--border-w) solid var(--ink); background:var(--bg-card); box-shadow:var(--shadow); overflow:hidden; }
+.report-deltable .rt-head { display:flex; align-items:center; min-height:44px; padding:0 16px; background:var(--acc-yellow); border-bottom:var(--border-w) solid var(--ink); font-size:16px; font-weight:700; }
+.rt { width:100%; border-collapse:collapse; font-size:13px; }
+.rt thead th { font-size:12px; font-weight:700; color:var(--ink-soft); padding:9px 6px; border-bottom:2px solid var(--ink); text-align:center; white-space:nowrap; }
+.rt thead th:first-child { text-align:left; padding-left:14px; }
+.rt td { padding:9px 6px; text-align:center; vertical-align:middle; }
+.rt-main td:first-child { text-align:left; padding-left:14px; font-weight:700; white-space:nowrap; }
+.rt-main { border-top:1.5px solid var(--ink); }
+.rt-del { font-size:18px; line-height:1; }
+.rt-pill { display:inline-flex; align-items:center; justify-content:center; min-width:19px; height:19px; padding:0 5px; border-radius:10px; font-size:11px; font-weight:700; color:#fff; margin:1px; line-height:1; }
+.rt-pill-rv { background:var(--bg-card); color:var(--ink); border:2px solid var(--ink); }
+.rt-num { font-size:15px; font-weight:700; color:var(--ink); }
+.rt-cutbtn { font-size:11px; font-weight:700; border:2px solid var(--ink); background:var(--acc-yellow); padding:4px 8px; cursor:pointer; box-shadow:2px 2px 0 var(--ink); white-space:nowrap; }
+.rt-sub > td { padding:0 14px 14px; text-align:left; }
+.rt-flow { font-size:12px; color:var(--ink-mute); padding:6px 0 2px; }
+.rt-flow b { color:var(--ink); }
+.rt-lesson { font-size:13px; line-height:1.6; color:var(--ink); background:var(--bg-soft); border-left:3px solid var(--ink); padding:8px 12px; margin:6px 0; }
+.rt-disc { font-size:12px; color:var(--acc-mint-deep); font-weight:700; padding:2px 0; }
+.rt-expand { display:none; margin-top:8px; padding:10px; border:2px dashed var(--ink); background:var(--bg-soft); }
+.rt-expand.open { display:block; }
+/* §4 R3.10b — 시나리오당 1차·2차·검토 3행 + 종합 1행. 비트가 위에서 아래로 컬럼을 내려오며 채워지고, 시간·에너지·점수·선택 텍스트가 같은 줄에 정렬 */
+.rt-beat td { padding:6px 6px; }
+.rt-grouphead th { font-size:11px; font-weight:700; color:var(--ink-soft); padding:7px 6px; background:var(--bg-soft); border-top:2px solid var(--ink); border-bottom:1px solid var(--ink); text-align:center; white-space:nowrap; }
+.rt-grouphead th:first-child, .rt-grouphead th:last-child { text-align:left; padding-left:14px; }
+.rt td.rt-scnname { text-align:left; padding-left:14px; font-size:16px; font-weight:700; vertical-align:top; white-space:normal; max-width:150px; line-height:1.35; }
+.rt td.rt-choicetext { text-align:left; font-size:13px; color:var(--ink); line-height:1.45; }
+.rt td.rt-choicetext b { color:var(--ink-soft); margin-right:5px; font-weight:700; }
+.rt-reflect-row > td { padding:2px 14px 14px; text-align:left; }
+.report-deltable .rt-head { text-align:left; }
+.rt-strip { max-width:660px; gap:8px; margin-top:8px; }

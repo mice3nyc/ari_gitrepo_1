@@ -158,40 +158,103 @@ function _rmapToggle(i){
   var el=document.getElementById('rmapExp'+i);
   if(el)el.classList.toggle('open');
 }
+// §4 R3.10 (6/16 세션487) — 시나리오별 할인 인과 계산.
+// 할인 = 그 시나리오를 칠 때까지 "완료한" 시나리오에서 모은 카드 장수(§4p A 모델과 동일 출처).
+// 시간 할인 = 위임 카드(인간중심+성장) / 에너지 할인 = 능력 카드(도메인). cleared 카드만(_lockedCardCount 규칙).
+function _rtDiscounts(hist){
+  var inv=(gameState&&gameState.inventory)||{};
+  var dom=inv.domainCards||[],hc=inv.humanCentricCards||[],gr=inv.growthCards||[];
+  function cnt(arr,prior){var k=0;for(var i=0;i<arr.length;i++){if(arr[i]&&prior[arr[i].scenario])k++;}return k;}
+  var out=[],prior={};
+  for(var i=0;i<hist.length;i++){
+    out.push({time:cnt(hc,prior)+cnt(gr,prior),energy:cnt(dom,prior)});
+    if(hist[i])prior[hist[i].scenarioId]=true; // 이 시나리오 카드는 "다음" 행부터 할인에 반영
+  }
+  return out;
+}
+// §4 R3.10 — 세 비트(1차·2차·검토)가 직접/부분/전체 컬럼 중 어디에 찍혔는지 계산.
+// 1차=tier1 컬럼 / 2차=tier1 + MICRO_OFFSETS(−1 직접쪽·+1 위임쪽) / 검토=2차와 같은 컬럼(위임 스펙트럼 축 아님). 항로 _rmapBeatXs와 같은 매핑.
+function _rtBeatCols(r){
+  var idx={A:0,B:1,C:2};
+  var b1=idx[r.tier1];if(b1==null)b1=1;
+  var off=0;
+  if(typeof MICRO_OFFSETS!=='undefined'&&MICRO_OFFSETS[r.scenarioId]&&typeof MICRO_OFFSETS[r.scenarioId][r.tier2]==='number')off=MICRO_OFFSETS[r.scenarioId][r.tier2];
+  var b2=Math.max(0,Math.min(2,b1+off));
+  var rvCount=r.review?(parseInt(String(r.review).replace('R',''),10)||1):1;
+  return {b1:b1,b2:b2,rv:b2,rvCount:rvCount,t1:r.tier1||'B'};
+}
+// 한 위임 컬럼(ci=0직접/1부분/2전체) 셀에 들어갈 비트 마커: 1차·2차는 갈래 색 알약, 검토는 ink 테두리 알약(검N회)
+function _rtColCell(bc,ci,CMY){
+  var col=CMY[bc.t1]||'#555',s='';
+  if(bc.b1===ci)s+='<span class="rt-pill" style="background:'+col+';">1</span>';
+  if(bc.b2===ci)s+='<span class="rt-pill" style="background:'+col+';">2</span>';
+  if(bc.rv===ci)s+='<span class="rt-pill rt-pill-rv">검'+bc.rvCount+'</span>';
+  return s;
+}
+// §4 R3.10 — 항로 SVG → 표. 직접/부분/전체를 컬럼으로(성향 세로 스캔), 시간·에너지·점수 컬럼, 선택 흐름·레슨·할인은 분리된 정독 서브행.
 function _renderDelegationMap(hist){
   if(!hist||!hist.length)return '';
   var M=(typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.report&&TEXTS.report.map)||{};
   function _esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-  // §4f-5 — 행 간 연결선 폐지: 비트 x만 계산
-  var beats=[];
-  for(var i=0;i<hist.length;i++){beats.push(_rmapBeatXs(hist[i]));}
-  var h='<div class="report-delegation-map" style="margin:0 0 20px;border:var(--border-w) solid var(--ink);background:var(--bg-card);box-shadow:var(--shadow);overflow:hidden;">';
-  h+='<div style="display:flex;align-items:center;min-height:44px;padding:0 16px;background:var(--acc-yellow);border-bottom:var(--border-w) solid var(--ink);font-size:16px;font-weight:700;">'+_esc(M.title||'나의 위임 항로')+'</div>';
-  h+='<div style="padding:10px 14px 4px;">';
-  h+='<div class="rmap-flex"><div class="rmap-title-spacer"></div><div class="rmap-route">'+_rmapHeaderSvg(M,_esc)+'</div><div style="flex:1;"></div></div>';
+  var CMY={A:'#00a3d4',B:'#e6007e',C:'#eab000'};
+  var discs=_rtDiscounts(hist);
+  var h='<div class="report-deltable">';
+  h+='<div class="rt-head">'+_esc(M.title||'시나리오별 위임 선택')+'</div>';
+  // §4 R3.10b — 컬럼 헤더를 시나리오마다 반복(스크롤·PDF 페이지마다 레이블 자족)
+  var headHtml='<tr class="rt-grouphead">'
+    +'<th>'+_esc(M.col_scn||'시나리오')+'</th>'
+    +'<th style="color:'+CMY.A+';">'+_esc(M.col_direct||'내가 직접')+'</th>'
+    +'<th style="color:'+CMY.B+';">'+_esc(M.col_partial||'부분 위임')+'</th>'
+    +'<th style="color:'+CMY.C+';">'+_esc(M.col_full||'전체 위임')+'</th>'
+    +'<th>'+_esc(M.cost_time||'시간')+'</th>'
+    +'<th>'+_esc(M.cost_energy||'에너지')+'</th>'
+    +'<th>'+_esc(M.col_score||'점수')+'</th>'
+    +'<th>'+_esc(M.col_choice||'선택')+'</th></tr>';
+  h+='<table class="rt"><tbody>';
   for(var n=0;n<hist.length;n++){
     var r=hist[n];
     var sc=SCENARIOS[r.scenarioId];
-    var fin=(sc&&sc.finals)?sc.finals[r.leaf]:null;
-    h+='<div class="rmap-row">';
-    h+='<div class="rmap-flex">';
-    // §4g-6 — 시나리오 제목 = 번호+제목만, 박스 없이, 줄바꿈 없음
-    h+='<div class="rmap-title">'+(n+1)+'. '+_esc(sc?sc.title:r.scenarioId)+'</div>';
-    h+='<div class="rmap-route">'+_rmapRowSvg(r,beats[n],_rmapBeatLabels(r),_esc,M)+'</div>';
-    // §4g-9 — 대표 컷 1장 (1차 선택 장면 c2) + 5컷 보기
-    var c2src=getCutImageFor(r.scenarioId,r.leaf,2);
-    h+='<div class="rmap-thumbs no-print">';
-    if(c2src)h+='<div class="rmap-cut" onclick="_rmapToggle('+n+')"><img src="'+c2src+'" alt="" onerror="this.style.display=\'none\'"></div>';
-    h+='<div class="rmap-more" onclick="_rmapToggle('+n+')">'+_esc(M.btn_cuts||'5컷 보기')+'</div>';
-    h+='</div>';
-    h+='</div>';
-    // 펼침: 핵심 돌아보기 + 5컷 스트립(캡션). 인쇄는 강제 펼침
-    h+='<div class="rmap-expand" id="rmapExp'+n+'">';
-    var reflection=(fin&&fin.reportReflection)||'';
-    if(reflection){
-      h+='<div class="rmap-reflect"><b>'+_t('game_flow.reflection_label','핵심 돌아보기')+'</b> — '+_esc(reflection)+'</div>';
+    var bc=_rtBeatCols(r);
+    var labels=_rmapBeatLabels(r);
+    var costs=_rmapCosts(r);
+    var pts=[
+      sc?getTier1Points(sc,r.tier1).points:null,
+      sc?getTier2Points(sc,r.tier2).points:null,
+      sc?getReviewPoints(sc,r.review).points:null
+    ];
+    var beatCols=[bc.b1,bc.b2,bc.rv];
+    var beatStages=['tier1','tier2','review'];
+    var beatNames=['1차','2차','검토'];
+    var colColor=[CMY.A,CMY.B,CMY.C]; // §4 R3.10b — 점 색 = 위임 정도(컬럼) 고정: 직접 cyan·부분 pink·전체 yellow
+    h+=headHtml; // 시나리오마다 컬럼 레이블 반복
+    // 비트 3행: 1차→2차→검토가 위에서 아래로, 각 줄에 위임 컬럼·시간·에너지·점수·선택 텍스트 정렬
+    for(var b=0;b<3;b++){
+      h+='<tr class="rt-beat'+(b===0?' rt-scn-first':'')+'">';
+      if(b===0)h+='<td rowspan="4" class="rt-scnname">'+(n+1)+'. '+_esc(sc?sc.title:r.scenarioId)+'</td>';
+      for(var ci=0;ci<3;ci++){
+        h+='<td>'+(beatCols[b]===ci?'<span class="rt-del" style="color:'+colColor[ci]+';">●</span>':'')+'</td>';
+      }
+      var cst=costs&&costs[beatStages[b]];
+      h+='<td class="rt-num">'+(cst&&cst.time>0?cst.time:'')+'</td>';
+      h+='<td class="rt-num">'+(cst&&cst.energy>0?cst.energy:'')+'</td>';
+      h+='<td class="rt-num">'+(pts[b]!=null?pts[b]:'')+'</td>';
+      h+='<td class="rt-choicetext"><b>'+beatNames[b]+'</b> '+_esc(labels[b]||'')+'</td>';
+      h+='</tr>';
     }
-    h+='<div class="rmap-strip">';
+    // 시나리오 종합 행: 핵심 돌아보기(레슨) + 할인 인과 + 5컷
+    h+='<tr class="rt-reflect-row"><td colspan="7">';
+    var fin=(sc&&sc.finals)?sc.finals[r.leaf]:null;
+    var reflection=(fin&&fin.reportReflection)||'';
+    if(reflection)h+='<div class="rt-lesson">'+_esc(reflection)+'</div>';
+    var dd=discs[n]||{time:0,energy:0};
+    if(dd.time>0||dd.energy>0){
+      var parts=[];
+      if(dd.time>0)parts.push('시간 -'+dd.time);
+      if(dd.energy>0)parts.push('에너지 -'+dd.energy);
+      h+='<div class="rt-disc">그때까지 모은 카드로 '+parts.join(' · ')+' 가벼워졌어</div>';
+    }
+    // §4 R3.10b — 5컷 버튼 폐지: 작게 항시 노출
+    h+='<div class="rmap-strip rt-strip">';
     var beatLabels=['',M.beat1||'1차 선택',M.beat2||'2차 선택',M.beat_result||'결과',M.beat_review||'검토'];
     for(var c=1;c<=5;c++){
       var src=getCutImageFor(r.scenarioId,r.leaf,c);
@@ -201,12 +264,10 @@ function _renderDelegationMap(hist){
       h+='<div class="rmap-cap">'+(beatLabels[c]?'<b>'+_esc(beatLabels[c])+'</b>'+(cap?' — ':''):'')+cap+'</div>';
       h+='</div>';
     }
-    h+='</div></div>';
     h+='</div>';
+    h+='</td></tr>';
   }
-  h+='</div>';
-  // §4g-10 — 하단 범례 폐지
-  h+='</div>';
+  h+='</tbody></table></div>';
   return h;
 }
 
@@ -731,12 +792,22 @@ function _renderLearnerType(hist,_esc){
   var patName=(GR.pattern_names||{})[pattern]||'';
   var patText=(GR.patterns||{})[pattern]||'';
   if(!patName&&!patText)return '';
-  var h='<div style="margin:0 0 20px;padding:18px 20px;background:var(--bg-card);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);">';
-  h+='<div style="font-size:12px;color:var(--ink-soft);font-weight:700;letter-spacing:1.5px;margin-bottom:6px;">'+_t('final_report.learner_type_label','학습자 유형')+'</div>';
-  if(patName)h+='<div style="font-size:20px;font-weight:700;margin-bottom:8px;">'+_esc(patName)+'</div>';
+  // §4 R3.10b (6/16) — 좌(유형 이름·설명) / 우(성장·할인 인과) 2컬럼, 좌정렬, 글씨 키움
+  var aCnt=(typeof _abilityCardCount==='function')?_abilityCardCount():0;
+  var dCnt=(typeof _delegationCardCount==='function')?_delegationCardCount():0;
+  var h='<div style="margin:0 0 20px;padding:20px 24px;background:var(--bg-card);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);text-align:left;">';
+  h+='<div style="display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start;">';
+  h+='<div style="flex:1 1 320px;min-width:280px;text-align:left;">';
+  h+='<div style="font-size:13px;color:var(--ink-soft);font-weight:700;letter-spacing:1.5px;margin-bottom:8px;">'+_t('final_report.learner_type_label','AI리터러시 유형')+'</div>';
+  if(patName)h+='<div style="font-size:23px;font-weight:700;margin-bottom:10px;">'+_esc(patName)+'</div>';
   // §4h-4 — 문장 단위 줄바꿈: 한 단락으로 이어지면 안 읽힘 (escape 후 br 삽입이라 안전)
-  if(patText)h+='<div style="font-size:14px;line-height:1.9;color:var(--ink-mute);">'+_esc(patText).replace(/\.\s+/g,'.<br>')+'</div>';
+  if(patText)h+='<div style="font-size:16px;line-height:1.9;color:var(--ink-mute);">'+_esc(patText).replace(/\.\s+/g,'.<br>')+'</div>';
   h+='</div>';
+  // §4 R3.10 — 위임 성향 자리에서 할인 인과 전체 1회 설명. 경제("싸졌다") 아니라 성장("역량이 자라 수월해졌다") 프레임.
+  if(aCnt+dCnt>0){
+    h+='<div style="flex:1 1 280px;min-width:260px;text-align:left;padding-left:24px;border-left:1px dashed var(--ink);font-size:16px;line-height:1.85;color:var(--ink-mute);">한 학기 동안 <b>능력 카드 '+aCnt+'장</b>과 <b>위임 카드 '+dCnt+'장</b>이 자라면서, 뒤로 갈수록 같은 선택도 에너지와 시간이 덜 들었어. 비용이 싸진 게 아니라, 네 역량이 자라서 그 선택이 수월해진 거야.</div>';
+  }
+  h+='</div></div>';
   return h;
 }
 
