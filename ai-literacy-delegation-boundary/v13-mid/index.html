@@ -605,11 +605,12 @@ button, input, select, textarea { font-family: inherit; }
 .rt td.rt-scnname .rt-scn-grade { display:flex; align-items:baseline; gap:7px; margin-top:7px; }
 .rt-grade-badge { display:inline-flex; align-items:center; justify-content:center; min-width:24px; height:24px; padding:0 7px; border:2px solid var(--ink); background:var(--acc-yellow); border-radius:4px; font-size:14px; font-weight:700; color:var(--ink); line-height:1; }
 .rt-scn-score { font-size:13px; font-weight:600; color:var(--ink-mute); }
-/* §4j R3.11 — 성장 리포트 상단 요약 스트립: 총점·능력레벨·위임레벨 */
+/* §4j R3.11 / r43c — 성장 리포트 상단 요약 스트립: "라벨 : 값" 한 줄, 하늘색 박스 */
 .report-topstats { display:flex; gap:12px; margin-bottom:22px; }
-.report-topstats .rts-box { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:74px; padding:12px 8px; border:var(--border-w) solid var(--ink); background:var(--bg-card); box-shadow:var(--shadow); }
-.report-topstats .rts-num { font-size:28px; font-weight:700; color:var(--ink); line-height:1; }
-.report-topstats .rts-lbl { font-size:13px; font-weight:600; color:var(--ink-mute); margin-top:6px; }
+.report-topstats .rts-box { flex:1; display:flex; flex-direction:row; align-items:baseline; justify-content:center; gap:7px; min-height:60px; padding:12px 10px; border:var(--border-w) solid var(--ink); background:var(--acc-cyan); box-shadow:var(--shadow); }
+.report-topstats .rts-lbl { font-size:15px; font-weight:600; color:var(--ink); }
+.report-topstats .rts-colon { font-size:15px; font-weight:600; color:var(--ink); }
+.report-topstats .rts-num { font-size:24px; font-weight:700; color:var(--ink); line-height:1; }
 /* v0.5 — 시나리오 선택 + 학기 프로그레스 */
 .semester-frame { max-width:640px; margin:0 auto; padding:32px 20px; }
 .semester-frame h1 { font-size:22px; font-weight:700; margin-bottom:6px; text-align:center; }
@@ -15590,8 +15591,8 @@ function showStartScreen(){
   h+=buildGameTitleHead(); // §4i-7 — 기존 h1 대체
   h+='<div class="subtitle">'+(_ss.subtitle||'이건 AI한테 맡겨도 돼?')+'</div>';
   if(allDone){
-    // r41 — 완료 배너: 손글씨·노랑 → 픽셀 폰트(시나리오 선택 화면 톤) + 연두색 박스
-    h+='<div style="max-width:460px;margin:8px auto 24px;padding:16px 24px;background:var(--acc-mint);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);text-align:center;font-family:var(--font-pixel);font-size:20px;font-weight:400;color:var(--ink);letter-spacing:2px;line-height:1.4;">'+(_ss.all_done_banner||'AI 리터러시 시나리오를 모두 완료했습니다!')+'</div>';
+    // r41/r43b — 완료 배너: 픽셀 폰트·연두 박스. 줄바꿈 금지(nowrap·내용폭) + 글씨 키움 + 노랑 글씨 + 초록 그림자(타이틀 화면 톤)
+    h+='<div style="text-align:center;margin:8px 0 24px;"><span style="display:inline-block;padding:18px 42px;background:var(--acc-mint);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);font-family:var(--font-pixel);font-size:28px;font-weight:400;color:var(--acc-yellow);text-shadow:3px 3px 0 var(--acc-mint-deep);letter-spacing:2px;white-space:nowrap;">'+(_ss.all_done_banner||'AI 리터러시 시나리오를 모두 완료했습니다!')+'</span></div>';
   }
   h+='<div class="scenario-list">';
   order.forEach(function(sid,idx){
@@ -17441,10 +17442,11 @@ function showFinalReport(){
   var _statTotal=(typeof gameState.totalScore==='number')?gameState.totalScore:0;
   var _abLv=(typeof _abilityCardCount==='function')?_abilityCardCount():0;
   var _dlgLv=(typeof _delegationCardCount==='function')?_delegationCardCount():0;
+  // r43c (피터공) — "라벨 : 값" 한 줄 형태(박스 채움) + 하늘색 박스
   h+='<div class="report-topstats">';
-  h+='<div class="rts-box"><div class="rts-num">'+_statTotal+'</div><div class="rts-lbl">'+(_fr.stat_total||'총점')+'</div></div>';
-  h+='<div class="rts-box"><div class="rts-num">'+_abLv+'</div><div class="rts-lbl">'+(_fr.stat_ability_level||'능력레벨')+'</div></div>';
-  h+='<div class="rts-box"><div class="rts-num">'+_dlgLv+'</div><div class="rts-lbl">'+(_fr.stat_delegation_level||'위임레벨')+'</div></div>';
+  h+='<div class="rts-box"><span class="rts-lbl">'+(_fr.stat_total||'시나리오 총점')+'</span><span class="rts-colon">:</span><span class="rts-num">'+_statTotal+'</span></div>';
+  h+='<div class="rts-box"><span class="rts-lbl">'+(_fr.stat_ability_level||'능력레벨')+'</span><span class="rts-colon">:</span><span class="rts-num">'+_abLv+'</span></div>';
+  h+='<div class="rts-box"><span class="rts-lbl">'+(_fr.stat_delegation_level||'위임레벨')+'</span><span class="rts-colon">:</span><span class="rts-num">'+_dlgLv+'</span></div>';
   h+='</div>';
   // §4h-3 — 안내문 + 4박스(총점·레벨·선택/능력 원 미터) + grade_note 렌더 제거 (texts 키·_renderMiniCircleMeter는 보존)
   // §4h-4 — 그 자리에 학습자 유형 박스 (유형 이름 + 거울 문장)

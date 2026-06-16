@@ -440,8 +440,8 @@ function showStartScreen(){
   h+=buildGameTitleHead(); // §4i-7 — 기존 h1 대체
   h+='<div class="subtitle">'+(_ss.subtitle||'이건 AI한테 맡겨도 돼?')+'</div>';
   if(allDone){
-    // r41 — 완료 배너: 손글씨·노랑 → 픽셀 폰트(시나리오 선택 화면 톤) + 연두색 박스
-    h+='<div style="max-width:460px;margin:8px auto 24px;padding:16px 24px;background:var(--acc-mint);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);text-align:center;font-family:var(--font-pixel);font-size:20px;font-weight:400;color:var(--ink);letter-spacing:2px;line-height:1.4;">'+(_ss.all_done_banner||'AI 리터러시 시나리오를 모두 완료했습니다!')+'</div>';
+    // r41/r43b — 완료 배너: 픽셀 폰트·연두 박스. 줄바꿈 금지(nowrap·내용폭) + 글씨 키움 + 노랑 글씨 + 초록 그림자(타이틀 화면 톤)
+    h+='<div style="text-align:center;margin:8px 0 24px;"><span style="display:inline-block;padding:18px 42px;background:var(--acc-mint);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);font-family:var(--font-pixel);font-size:28px;font-weight:400;color:var(--acc-yellow);text-shadow:3px 3px 0 var(--acc-mint-deep);letter-spacing:2px;white-space:nowrap;">'+(_ss.all_done_banner||'AI 리터러시 시나리오를 모두 완료했습니다!')+'</span></div>';
   }
   h+='<div class="scenario-list">';
   order.forEach(function(sid,idx){

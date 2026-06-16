@@ -14,6 +14,8 @@
 - [x] **r42 추가 요청(같은 세션)**: 테스팅용 화면 네비 바([타이틀][튜토리얼][시나리오 선택][리포트], 좌하단 디버그 토글 위). 셸 `#dev-nav` + `.dev-nav` CSS + `_isLocalEnv`/`_initDevNav`/`devNavReport`(12-debug.js, 14-init서 호출). 리포트 버튼은 기록 없으면 `dbgShowReport('A')` 샘플 채움. 인쇄 숨김. 빌드 991,160B + CDP 검증(노출·4화면 전환 OK). SPEC-intro-crt r42
 - [x] **r42b**: dev-nav **라이브에서도 노출**(피터공 "라이브도 있어야 테스팅"). `_initDevNav` 항상 `hidden=false`. `_isLocalEnv` 헬퍼 보존 — KT 전달 직전 가드 복원으로 배포본만 숨김 가능
 - [x] **r43(§4q v9.4) 추가 요청(같은 세션)**: 선택지 하나 고르면 비선택 카드 **회색 처리**(이미 못 누르는 상태 시각화). `runChoiceDiscount`가 클릭 카드에 `.fx-selected`(done서 제거), CSS `.cascade-locked .choice-card:not(.fx-selected)` opacity .4 + grayscale .85. 빌드 991,828B + CDP 검증(선택 opacity 1·filter none / 비선택 0.4·grayscale·pointer-events none / 박스 등장). SPEC-ui-hud §4q v9.4
+- [x] **r43b 추가 요청**: 완료 배너 줄바꿈 금지(nowrap·내용폭) + 폰트 28px + 노랑 글씨 + 초록 text-shadow(타이틀 톤). 빌드 991,962B + CDP(rects 1줄·#ffdb31·shadow #219b6c). SPEC-intro-crt r43b
+- [x] **r43c 추가 요청**: 상단 스트립 "라벨 : 값" 한 줄(`.rts-colon`) + 하늘색 박스(`--acc-cyan`). "시나리오 총점 : 410" 형태. 빌드 992,258B + CDP(3박스 1줄·bg #63d8f1). SPEC-report §4j r43c
 - [ ] 피터공 라이브 확인 후 미세조정(레벨 색 구분·점수 단위 등)
 
 > 요청 노트: `current_notes/요청.26.0616.1604-리포트상단요약.md`

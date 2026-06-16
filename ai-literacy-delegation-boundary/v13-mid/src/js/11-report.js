@@ -628,10 +628,11 @@ function showFinalReport(){
   var _statTotal=(typeof gameState.totalScore==='number')?gameState.totalScore:0;
   var _abLv=(typeof _abilityCardCount==='function')?_abilityCardCount():0;
   var _dlgLv=(typeof _delegationCardCount==='function')?_delegationCardCount():0;
+  // r43c (피터공) — "라벨 : 값" 한 줄 형태(박스 채움) + 하늘색 박스
   h+='<div class="report-topstats">';
-  h+='<div class="rts-box"><div class="rts-num">'+_statTotal+'</div><div class="rts-lbl">'+(_fr.stat_total||'총점')+'</div></div>';
-  h+='<div class="rts-box"><div class="rts-num">'+_abLv+'</div><div class="rts-lbl">'+(_fr.stat_ability_level||'능력레벨')+'</div></div>';
-  h+='<div class="rts-box"><div class="rts-num">'+_dlgLv+'</div><div class="rts-lbl">'+(_fr.stat_delegation_level||'위임레벨')+'</div></div>';
+  h+='<div class="rts-box"><span class="rts-lbl">'+(_fr.stat_total||'시나리오 총점')+'</span><span class="rts-colon">:</span><span class="rts-num">'+_statTotal+'</span></div>';
+  h+='<div class="rts-box"><span class="rts-lbl">'+(_fr.stat_ability_level||'능력레벨')+'</span><span class="rts-colon">:</span><span class="rts-num">'+_abLv+'</span></div>';
+  h+='<div class="rts-box"><span class="rts-lbl">'+(_fr.stat_delegation_level||'위임레벨')+'</span><span class="rts-colon">:</span><span class="rts-num">'+_dlgLv+'</span></div>';
   h+='</div>';
   // §4h-3 — 안내문 + 4박스(총점·레벨·선택/능력 원 미터) + grade_note 렌더 제거 (texts 키·_renderMiniCircleMeter는 보존)
   // §4h-4 — 그 자리에 학습자 유형 박스 (유형 이름 + 거울 문장)
