@@ -230,7 +230,18 @@ function _renderDelegationMap(hist){
     // 비트 3행: 1차→2차→검토가 위에서 아래로, 각 줄에 위임 컬럼·시간·에너지·점수·선택 텍스트 정렬
     for(var b=0;b<3;b++){
       h+='<tr class="rt-beat'+(b===0?' rt-scn-first':'')+'">';
-      if(b===0)h+='<td rowspan="4" class="rt-scnname">'+(n+1)+'. '+_esc(sc?sc.title:r.scenarioId)+'</td>';
+      if(b===0){
+        // §4j R3.11 — 타이틀 아래 여백에 그 시나리오의 등급 배지 + 점수 (history 레코드)
+        var _scnGrade=(r.grade!=null&&r.grade!=='')?String(r.grade):'';
+        var _scnScore=(typeof r.finalScore==='number')?r.finalScore:'';
+        var _gradeHtml='';
+        if(_scnGrade)_gradeHtml+='<span class="rt-grade-badge">'+_esc(_scnGrade)+'</span>';
+        if(_scnScore!=='')_gradeHtml+='<span class="rt-scn-score">'+_scnScore+'점</span>';
+        h+='<td rowspan="4" class="rt-scnname">'
+          +'<div class="rt-scn-title">'+(n+1)+'. '+_esc(sc?sc.title:r.scenarioId)+'</div>'
+          +(_gradeHtml?'<div class="rt-scn-grade">'+_gradeHtml+'</div>':'')
+          +'</td>';
+      }
       for(var ci=0;ci<3;ci++){
         h+='<td>'+(beatCols[b]===ci?'<span class="rt-del" style="color:'+colColor[ci]+';">●</span>':'')+'</td>';
       }
@@ -613,6 +624,15 @@ function showFinalReport(){
   var h='<div class="report-overlay"><div class="report-inner report-v813">';
   var _fr=_t('final_report',{});
   h+='<div style="display:flex;align-items:center;min-height:56px;padding:0 22px;margin-bottom:24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);font-size:20px;font-weight:700;letter-spacing:1px;">'+(_fr.title_bar||'AI 리터러시 성장 리포트')+'</div>';
+  // §4j R3.11 — 상단 요약 스트립: 총점 / 능력레벨 / 위임레벨 (HUD FX_META 명칭·출처와 동일)
+  var _statTotal=(typeof gameState.totalScore==='number')?gameState.totalScore:0;
+  var _abLv=(typeof _abilityCardCount==='function')?_abilityCardCount():0;
+  var _dlgLv=(typeof _delegationCardCount==='function')?_delegationCardCount():0;
+  h+='<div class="report-topstats">';
+  h+='<div class="rts-box"><div class="rts-num">'+_statTotal+'</div><div class="rts-lbl">'+(_fr.stat_total||'총점')+'</div></div>';
+  h+='<div class="rts-box"><div class="rts-num">'+_abLv+'</div><div class="rts-lbl">'+(_fr.stat_ability_level||'능력레벨')+'</div></div>';
+  h+='<div class="rts-box"><div class="rts-num">'+_dlgLv+'</div><div class="rts-lbl">'+(_fr.stat_delegation_level||'위임레벨')+'</div></div>';
+  h+='</div>';
   // §4h-3 — 안내문 + 4박스(총점·레벨·선택/능력 원 미터) + grade_note 렌더 제거 (texts 키·_renderMiniCircleMeter는 보존)
   // §4h-4 — 그 자리에 학습자 유형 박스 (유형 이름 + 거울 문장)
   h+=_renderLearnerType(hist,_esc);
