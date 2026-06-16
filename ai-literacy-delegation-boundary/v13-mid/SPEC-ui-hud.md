@@ -374,6 +374,8 @@
 - **③ 레벨업 팝업·연출 중단**: XP 획득→Level Up 기능 폐기(레벨=카드 장수, §4p A). cut6 chain의 `[2] showLevelUpModal` 호출과 `flashLevelUpUI()/pulseExpLevel()` 연출을 주석 처리. exp 계산(`calculateExpGain`·`checkLevelUp`·`applyLevelUpMeterIncrease`·`awardRP`)은 **자원 max·RP 밸런스 보존을 위해 그대로 두되 사용자에게 보이는 연출만 끈다.** CDP: cut6에서 `levelup-modal` hidden 유지 확인.
 - **④ cut1 선택지 스크롤 조건화**: 신규 `_scrollCut1ChoicesIfBelowFold(area,count)` — 선택지 하단(`getBoundingClientRect().bottom`)이 화면 하단(`innerHeight-12`)보다 **아래일 때만** 그 초과분만큼 스크롤. 다 보이면 그대로 둠(화면 안 흔듦). `showTier1Choices`만 교체, cut2(`showTier2Choices`)는 기존 `_scrollChoicesIntoView` 유지.
 - **⑤ 회복력 일반 카드 통일 + Replay 유지**: 회복력 특별 중앙 모달(`showRecoveryCardModal`) 호출 폐지(함수 정의는 보존). 회복력을 도전력처럼 `_v8CardLabels`에 push해 **일반 카드 획득 팝업**(`playCardRewardSequential`)으로 통일(B 이하, engine 자동지급 조건과 동일). 리플레이 진입은 등급 화면 버튼(C/D `replay-btn-grade` 다시 도전하기 / B `replay-btn-cut6` 이 시나리오 다시 해보기)으로 유지 — Replay 창 자체는 그대로. CDP: cut6에서 `recovery-overlay` hidden·empty 유지 확인.
+- **⑥ 비용 숫자 처음부터 핑크**: 선택 버튼 시간·에너지 비용 숫자(`.cost-simple .cost-num`) 기본색을 `var(--acc-pink-deep)`(#d63f7a 자주색)로. 기존엔 기본 어두운 텍스트 → 할인 적용 시에만 초록(`.discounted`). 이제 **처음부터 핑크**, 할인 settle 후 초록은 유지(02-choice-costs.css). CDP: 적용 전 cost-num 색 `rgb(217,58,117)` 확인.
+- **⑦ 할인 카운터 끝 −1 중복 교정**: `_fxRunCount`에서 disc가 마지막에 −1로 멈춘 뒤 `finish()`가 그 −1을 다시 finalpop해 **−1이 두 번** 보이던 것(특히 N=1) 교정. 마지막 비트(dv=0)에서 disc를 **`0`으로 내리고** finalpop 한 번만 → 사라짐. "0으로 되고 끝." 휴식(클릭 전) 표시는 `-N` 그대로. CDP: N=1 시퀀스 `['0']`(rest −1→0 종료), N=3 `[-2,-1,0]` 중복 없음 확인.
 
 ## 5. 미해결 / 다음 단계
 

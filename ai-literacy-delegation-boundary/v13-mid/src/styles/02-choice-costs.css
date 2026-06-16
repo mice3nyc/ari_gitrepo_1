@@ -32,7 +32,7 @@
 .choice-cost.cost-simple { display:flex; flex-direction:row; flex-wrap:nowrap; align-items:baseline; justify-content:center; gap:10px; margin-top:8px; font-size:15px; font-weight:800; color:var(--ink); white-space:nowrap; }
 .cost-simple .cost-line { display:inline-flex; align-items:baseline; gap:4px; }
 .cost-simple .cost-sep { opacity:.4; font-weight:700; }
-.cost-simple .cost-num { display:inline-block; font-weight:800; }
+.cost-simple .cost-num { display:inline-block; font-weight:800; color:var(--acc-pink-deep); } /* §4t (6/16 피터공) — 비용 숫자는 처음부터 핑크(자주색) */
 .cost-simple .cost-num.discounted { color:#15803d; } /* 할인 적용되면 초록(취소선 대신 색 변화) */
 /* 캐스케이드 도는 동안 클릭 잠금 */
 .choices-area.cascade-locked .choice-card { pointer-events:none; }

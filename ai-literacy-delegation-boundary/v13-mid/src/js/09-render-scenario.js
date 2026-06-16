@@ -767,10 +767,12 @@ function _fxRunCount(box,line){
       if(costNum)costNum.textContent=String(raw-k);   // 비용 10→9→8→7
       var dv=N-k;
       if(dv>0){
-        if(disc){disc.textContent='-'+dv;pop(disc);}  // 할인 -3→-2→-1, 각 팝
+        if(disc){disc.textContent='-'+dv;pop(disc);}  // 할인 -3→-2→-1, 각 한 번씩 팝
         setTimeout(tick,STEP);
       }else{
-        setTimeout(finish,STEP);                       // 마지막 비트 — disc는 -1 유지하다 finalpop으로 사라짐
+        // §4t (6/16 피터공) — 끝에서 -1이 두 번 보이던 것 교정: 마지막 비트는 0으로 내리고 finalpop 한 번만.
+        if(disc)disc.textContent='0';
+        setTimeout(finish,STEP);                       // disc=0 보여주다 finalpop으로 사라짐
       }
     })();
   });

@@ -224,7 +224,7 @@ button, input, select, textarea { font-family: inherit; }
 .choice-cost.cost-simple { display:flex; flex-direction:row; flex-wrap:nowrap; align-items:baseline; justify-content:center; gap:10px; margin-top:8px; font-size:15px; font-weight:800; color:var(--ink); white-space:nowrap; }
 .cost-simple .cost-line { display:inline-flex; align-items:baseline; gap:4px; }
 .cost-simple .cost-sep { opacity:.4; font-weight:700; }
-.cost-simple .cost-num { display:inline-block; font-weight:800; }
+.cost-simple .cost-num { display:inline-block; font-weight:800; color:var(--acc-pink-deep); } /* §4t (6/16 피터공) — 비용 숫자는 처음부터 핑크(자주색) */
 .cost-simple .cost-num.discounted { color:#15803d; } /* 할인 적용되면 초록(취소선 대신 색 변화) */
 /* 캐스케이드 도는 동안 클릭 잠금 */
 .choices-area.cascade-locked .choice-card { pointer-events:none; }
@@ -15918,10 +15918,12 @@ function _fxRunCount(box,line){
       if(costNum)costNum.textContent=String(raw-k);   // 비용 10→9→8→7
       var dv=N-k;
       if(dv>0){
-        if(disc){disc.textContent='-'+dv;pop(disc);}  // 할인 -3→-2→-1, 각 팝
+        if(disc){disc.textContent='-'+dv;pop(disc);}  // 할인 -3→-2→-1, 각 한 번씩 팝
         setTimeout(tick,STEP);
       }else{
-        setTimeout(finish,STEP);                       // 마지막 비트 — disc는 -1 유지하다 finalpop으로 사라짐
+        // §4t (6/16 피터공) — 끝에서 -1이 두 번 보이던 것 교정: 마지막 비트는 0으로 내리고 finalpop 한 번만.
+        if(disc)disc.textContent='0';
+        setTimeout(finish,STEP);                       // disc=0 보여주다 finalpop으로 사라짐
       }
     })();
   });
