@@ -136,6 +136,11 @@
 .debug-toggle { position:fixed; bottom:10px; left:10px; background:#333; color:#fff; border:none; padding:5px 10px; font-size:11px; cursor:pointer; z-index:300; font-family:monospace; }
 .debug-panel { display:none; position:fixed; bottom:38px; left:10px; background:#1a1a1a; color:#ddd; padding:10px 12px; font-size:11px; line-height:1.4; font-family:monospace; z-index:300; max-width:420px; max-height:calc(100vh - 48px); overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
 .debug-panel.active { display:block; }
+/* r42 — 로컬 테스팅 화면 네비 (디버그 토글 위 줄, localhost/file:// 전용) */
+.dev-nav { position:fixed; bottom:42px; left:10px; display:flex; gap:4px; z-index:300; }
+.dev-nav[hidden] { display:none; }
+.dev-nav button { background:#2b6cb0; color:#fff; border:none; padding:5px 10px; font-size:11px; font-family:monospace; cursor:pointer; border-radius:2px; }
+.dev-nav button:hover { background:#1f4f80; }
 .debug-section { margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid #333; }
 .debug-label { color:#aaa; font-size:10px; text-transform:uppercase; margin-bottom:4px; letter-spacing:0.5px; }
 .debug-buttons { display:flex; flex-wrap:wrap; gap:4px; margin-top:5px; }

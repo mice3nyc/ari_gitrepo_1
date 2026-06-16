@@ -484,6 +484,11 @@ button, input, select, textarea { font-family: inherit; }
 .debug-toggle { position:fixed; bottom:10px; left:10px; background:#333; color:#fff; border:none; padding:5px 10px; font-size:11px; cursor:pointer; z-index:300; font-family:monospace; }
 .debug-panel { display:none; position:fixed; bottom:38px; left:10px; background:#1a1a1a; color:#ddd; padding:10px 12px; font-size:11px; line-height:1.4; font-family:monospace; z-index:300; max-width:420px; max-height:calc(100vh - 48px); overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,0.3); }
 .debug-panel.active { display:block; }
+/* r42 — 로컬 테스팅 화면 네비 (디버그 토글 위 줄, localhost/file:// 전용) */
+.dev-nav { position:fixed; bottom:42px; left:10px; display:flex; gap:4px; z-index:300; }
+.dev-nav[hidden] { display:none; }
+.dev-nav button { background:#2b6cb0; color:#fff; border:none; padding:5px 10px; font-size:11px; font-family:monospace; cursor:pointer; border-radius:2px; }
+.dev-nav button:hover { background:#1f4f80; }
 .debug-section { margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid #333; }
 .debug-label { color:#aaa; font-size:10px; text-transform:uppercase; margin-bottom:4px; letter-spacing:0.5px; }
 .debug-buttons { display:flex; flex-wrap:wrap; gap:4px; margin-top:5px; }
@@ -1870,6 +1875,7 @@ button,
   #inv-tab,
   #inv-fab,
   .debug-toggle,
+  .dev-nav,
   #version-label,
   #hud,
   .stats-bar,
@@ -2024,6 +2030,13 @@ button,
 <div class="recovery-overlay hidden" id="recovery-overlay"></div>
 <button class="debug-toggle" onclick="toggleDebug()">디버그</button>
 <div class="debug-panel" id="debug-panel"></div>
+<!-- r42 — 로컬 테스팅용 화면 네비. localhost/file://에서만 _initDevNav가 노출(배포·KT 환경에선 숨김) -->
+<div class="dev-nav" id="dev-nav" hidden>
+  <button type="button" onclick="showTitleScreen()">타이틀</button>
+  <button type="button" onclick="showTutorialScreen()">튜토리얼</button>
+  <button type="button" onclick="showStartScreen()">시나리오 선택</button>
+  <button type="button" onclick="devNavReport()">리포트</button>
+</div>
 <div class="version" id="version-label">v1.3-mid-r39</div>
 
 <!-- Phase 8.10b — 레벨업 이벤트 팝업 (DECISIONS §10.11) -->
@@ -17666,6 +17679,23 @@ function _renderGrowthReport(hist, compType, inventory){
 // =====================================================
 // 12. Debug Panel
 // =====================================================
+
+// r42 — 로컬 테스팅 화면 네비: localhost/file://에서만 노출(배포·KT 환경에선 숨김)
+function _isLocalEnv(){
+  var h=(location.hostname||'');
+  return location.protocol==='file:'||h==='localhost'||h==='127.0.0.1'||h==='0.0.0.0'||h==='';
+}
+function _initDevNav(){
+  var nav=document.getElementById('dev-nav');
+  if(nav&&_isLocalEnv())nav.hidden=false;
+}
+// 리포트 화면은 시나리오 기록이 있어야 의미 → 비어 있으면 샘플(A등급 5종) 채우고 보여줌
+function devNavReport(){
+  if(gameState&&gameState.scenarioHistory&&gameState.scenarioHistory.length){showFinalReport();}
+  else if(typeof dbgShowReport==='function'){dbgShowReport('A');}
+  else{showFinalReport();}
+}
+
 var dbgOn=false;
 function toggleDebug(){dbgOn=!dbgOn;document.getElementById('debug-panel').classList.toggle('active',dbgOn);if(dbgOn)renderDebug();}
 document.addEventListener('click',function(e){if(!dbgOn)return;var p=document.getElementById('debug-panel'),t=document.querySelector('.debug-toggle');var r=p.getBoundingClientRect(),tr=t.getBoundingClientRect();var inP=(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom);var inT=(e.clientX>=tr.left&&e.clientX<=tr.right&&e.clientY>=tr.top&&e.clientY<=tr.bottom);if(!inP&&!inT){dbgOn=false;p.classList.remove('active');}});
@@ -18348,6 +18378,7 @@ function _applyStaticTexts(){
   _set('exit-confirm-go',xc.btn_destructive);
 }
 _applyStaticTexts();
+if(typeof _initDevNav==='function')_initDevNav(); // r42 — 로컬 테스팅 화면 네비 노출(localhost/file://만)
 
 // §11 진입 분기 → §4i-10 (피터공): 부팅은 항상 타이틀부터 (레트로 PRESS START 관례)
 // 재방문 라우팅(튜토리얼 생략, 플래시 후 선택 화면)은 enterFromTitle이 처리.

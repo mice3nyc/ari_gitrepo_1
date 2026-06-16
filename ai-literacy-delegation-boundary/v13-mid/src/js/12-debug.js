@@ -1,6 +1,23 @@
 // =====================================================
 // 12. Debug Panel
 // =====================================================
+
+// r42 — 로컬 테스팅 화면 네비: localhost/file://에서만 노출(배포·KT 환경에선 숨김)
+function _isLocalEnv(){
+  var h=(location.hostname||'');
+  return location.protocol==='file:'||h==='localhost'||h==='127.0.0.1'||h==='0.0.0.0'||h==='';
+}
+function _initDevNav(){
+  var nav=document.getElementById('dev-nav');
+  if(nav&&_isLocalEnv())nav.hidden=false;
+}
+// 리포트 화면은 시나리오 기록이 있어야 의미 → 비어 있으면 샘플(A등급 5종) 채우고 보여줌
+function devNavReport(){
+  if(gameState&&gameState.scenarioHistory&&gameState.scenarioHistory.length){showFinalReport();}
+  else if(typeof dbgShowReport==='function'){dbgShowReport('A');}
+  else{showFinalReport();}
+}
+
 var dbgOn=false;
 function toggleDebug(){dbgOn=!dbgOn;document.getElementById('debug-panel').classList.toggle('active',dbgOn);if(dbgOn)renderDebug();}
 document.addEventListener('click',function(e){if(!dbgOn)return;var p=document.getElementById('debug-panel'),t=document.querySelector('.debug-toggle');var r=p.getBoundingClientRect(),tr=t.getBoundingClientRect();var inP=(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom);var inT=(e.clientX>=tr.left&&e.clientX<=tr.right&&e.clientY>=tr.top&&e.clientY<=tr.bottom);if(!inP&&!inT){dbgOn=false;p.classList.remove('active');}});

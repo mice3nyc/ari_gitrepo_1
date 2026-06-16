@@ -82,6 +82,13 @@
 <div class="recovery-overlay hidden" id="recovery-overlay"></div>
 <button class="debug-toggle" onclick="toggleDebug()">디버그</button>
 <div class="debug-panel" id="debug-panel"></div>
+<!-- r42 — 로컬 테스팅용 화면 네비. localhost/file://에서만 _initDevNav가 노출(배포·KT 환경에선 숨김) -->
+<div class="dev-nav" id="dev-nav" hidden>
+  <button type="button" onclick="showTitleScreen()">타이틀</button>
+  <button type="button" onclick="showTutorialScreen()">튜토리얼</button>
+  <button type="button" onclick="showStartScreen()">시나리오 선택</button>
+  <button type="button" onclick="devNavReport()">리포트</button>
+</div>
 <div class="version" id="version-label">v1.3-mid-r39</div>
 
 <!-- Phase 8.10b — 레벨업 이벤트 팝업 (DECISIONS §10.11) -->

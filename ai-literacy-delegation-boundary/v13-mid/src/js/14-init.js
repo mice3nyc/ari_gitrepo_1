@@ -89,6 +89,7 @@ function _applyStaticTexts(){
   _set('exit-confirm-go',xc.btn_destructive);
 }
 _applyStaticTexts();
+if(typeof _initDevNav==='function')_initDevNav(); // r42 — 로컬 테스팅 화면 네비 노출(localhost/file://만)
 
 // §11 진입 분기 → §4i-10 (피터공): 부팅은 항상 타이틀부터 (레트로 PRESS START 관례)
 // 재방문 라우팅(튜토리얼 생략, 플래시 후 선택 화면)은 enterFromTitle이 처리.

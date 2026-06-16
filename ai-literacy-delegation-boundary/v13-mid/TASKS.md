@@ -11,6 +11,7 @@
 - [x] 시나리오 행(`_renderDelegationMap` `.rt-scnname`): 타이틀 아래 등급 배지 + 점수(`.rt-grade-badge`·`.rt-scn-score`), `r.grade`·`r.finalScore`
 - [x] 빌드 989,296B + CDP 헤드리스 검증(`dbgShowReport('A')`: 스트립 총점410·능력0·위임0 / 5행 모두 A·82점, 예외 0)
 - [x] **r41 추가 요청(같은 세션)**: 시나리오 선택 완료 배너 → 픽셀 폰트(`--font-pixel`)·연두 박스(`--acc-mint`)·기울임 제거. 빌드 989,402B + CDP 검증(배너 fontFamily=Mulmaru·bg #b9eed7). SPEC-intro-crt r41
+- [x] **r42 추가 요청(같은 세션)**: 로컬 테스팅용 화면 네비 바([타이틀][튜토리얼][시나리오 선택][리포트], 좌하단 디버그 토글 위). 셸 `#dev-nav` + `.dev-nav` CSS + `_isLocalEnv`/`_initDevNav`/`devNavReport`(12-debug.js, 14-init서 호출). **localhost/file://에서만 노출** — 배포·KT 환경 숨김. 리포트 버튼은 기록 없으면 `dbgShowReport('A')` 샘플 채움. 인쇄 숨김. 빌드 991,160B + CDP 검증(file:// 노출·4화면 전환 OK). SPEC-intro-crt r42
 - [ ] 피터공 라이브 확인 후 미세조정(레벨 색 구분·점수 단위 등)
 
 > 요청 노트: `current_notes/요청.26.0616.1604-리포트상단요약.md`
