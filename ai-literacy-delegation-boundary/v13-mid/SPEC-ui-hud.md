@@ -365,6 +365,16 @@
 - **회복력 특별 UI 모달 타이밍**: 시나리오 끝 chain(`09-render-scenario.js`)에서 `[1.5]`(카드 보상 직후)에 있던 `showRecoveryCardModal`을 **`[4]`(철컥 `railFlyToInventory` 뒤)로 이동**. 카드 획득 팝업과 연속으로 뜨던 문제 → 카드 획득·철컥(시나리오 완료)이 모두 끝난 뒤에 회복 모달이 뜬다. chain 순서: `[0] pending 흡수 → [1] 카드 → [2] 레벨업 → [3] RP → [3.5] 철컥 → [4] 회복력 모달 → 다음 버튼`.
 - **회복/도전 카드 "역량" 표기 통일**: 시킬까(hc) 칸에 들어가는 성장 카드(회복력·도전력)를 인간중심 "X 역량"과 통일해 **"회복 역량"·"도전 역량"**으로 표기. `data/texts.yaml` growthCards에 `display` 필드 추가, `_cardDisplayName`(00-config)이 domainCards에 더해 growthCards.display도 읽도록 확장 → dock·획득팝업·리포트·§4q 카드 복제 일괄 적용. 내부 키·세이브·scenarios.yaml은 기존 라벨(회복력/도전력) 유지, 렌더 시점에만 교체.
 
+## 4t. 세션492 (6/16) — UI 마무리 5건 (피터공)
+
+> 세션491 라이브 빌드 위 핀포인트 수정. 모두 `src/js/09-render-scenario.js`. 빌드 993,855B. CDP 헤드리스 검증 통과.
+
+- **① 할인박스 카드 비행 회전 교정**: `_fxFillCards`의 비행 고스트 회전을 `rotate(540deg)` → **`rotate(720deg)`**. 540°=360+180이라 카드가 180° 뒤집혀 착지(텍스트 상하 반전)하던 것을 2바퀴(=순회전 0°)로 **똑바로 스냅**. (레일→인벤토리 `16-card-rail.js`·카드보상 `13-inventory.js`의 540deg는 끝에서 축소·페이드로 소멸 → 미수정, 슬롯에 남는 건 할인박스뿐.)
+- **② 할인박스 능력카드 흰 배경**: `_fxFillSlot`에서 슬롯 배경을 `chip.style.background||''` → **`||'#fff'`**. 능력(domain)카드는 흰 배경이 CSS 클래스(`.dock-card`)라 인라인 background가 비어 슬롯이 투명했음. 인라인 배경 없으면 흰색 폴백 → **흰 카드 + 좌측 6px 컬러코드 테두리**(borderLeft 복사). 인간중심(hc)카드는 인라인 색 유지. CDP: 에너지 박스 배경 `rgb(255,255,255)`·좌테두리 6px 컬러 확인.
+- **③ 레벨업 팝업·연출 중단**: XP 획득→Level Up 기능 폐기(레벨=카드 장수, §4p A). cut6 chain의 `[2] showLevelUpModal` 호출과 `flashLevelUpUI()/pulseExpLevel()` 연출을 주석 처리. exp 계산(`calculateExpGain`·`checkLevelUp`·`applyLevelUpMeterIncrease`·`awardRP`)은 **자원 max·RP 밸런스 보존을 위해 그대로 두되 사용자에게 보이는 연출만 끈다.** CDP: cut6에서 `levelup-modal` hidden 유지 확인.
+- **④ cut1 선택지 스크롤 조건화**: 신규 `_scrollCut1ChoicesIfBelowFold(area,count)` — 선택지 하단(`getBoundingClientRect().bottom`)이 화면 하단(`innerHeight-12`)보다 **아래일 때만** 그 초과분만큼 스크롤. 다 보이면 그대로 둠(화면 안 흔듦). `showTier1Choices`만 교체, cut2(`showTier2Choices`)는 기존 `_scrollChoicesIntoView` 유지.
+- **⑤ 회복력 일반 카드 통일 + Replay 유지**: 회복력 특별 중앙 모달(`showRecoveryCardModal`) 호출 폐지(함수 정의는 보존). 회복력을 도전력처럼 `_v8CardLabels`에 push해 **일반 카드 획득 팝업**(`playCardRewardSequential`)으로 통일(B 이하, engine 자동지급 조건과 동일). 리플레이 진입은 등급 화면 버튼(C/D `replay-btn-grade` 다시 도전하기 / B `replay-btn-cut6` 이 시나리오 다시 해보기)으로 유지 — Replay 창 자체는 그대로. CDP: cut6에서 `recovery-overlay` hidden·empty 유지 확인.
+
 ## 5. 미해결 / 다음 단계
 
 - [ ] 원 7개의 **숫자 로직 정식 설계** — 획득·증감 단위를 7단계 기준으로 재설계 (피터공: "일단은 3개가 기존 0"). 콘텐츠 트랙 밸런스와 엮임.

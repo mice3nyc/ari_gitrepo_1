@@ -1,6 +1,18 @@
 ## TASKS — v1.3-mid (중등)
 
-**최종 업데이트**: 2026-06-16 세션491 (성장 리포트 상단 요약 스트립 + 시나리오 행 등급·점수 — 빌드 989,296B)
+**최종 업데이트**: 2026-06-16 세션492 (UI 마무리 5건 — 빌드 993,855B)
+
+### ✓ 세션492 (6/16) — UI 마무리 5건 (라이브 빌드, 피터공 라이브 확인 대기)
+
+피터공 라이브 요청 5건. 전부 `src/js/09-render-scenario.js`. SPEC-ui-hud §4t 선문후코 반영.
+
+- [x] **① 할인박스 카드 비행 회전** `rotate(540deg)`→`720deg` — 180° 뒤집혀 착지하던 텍스트를 똑바로 스냅(`_fxFillCards`)
+- [x] **② 능력카드 흰 배경** `_fxFillSlot` 배경 폴백 `||'#fff'` — 투명하던 능력(domain)카드를 흰색+좌측 6px 컬러코드 테두리로
+- [x] **③ 레벨업 팝업·연출 중단** — XP→Level Up 폐기(레벨=카드 장수). `showLevelUpModal`·`flashLevelUpUI`/`pulseExpLevel` 주석. exp 계산은 자원·RP 밸런스 보존 위해 유지
+- [x] **④ cut1 선택지 스크롤 조건화** — 신규 `_scrollCut1ChoicesIfBelowFold`: 하단이 화면 밖일 때만 스크롤, 다 보이면 그대로. `showTier1Choices`만 교체(cut2 유지)
+- [x] **⑤ 회복력 일반 카드 통일** — `showRecoveryCardModal` 호출 폐지, 회복력도 도전력처럼 `_v8CardLabels`로 일반 카드 팝업. Replay 진입은 등급화면 버튼(C/D·B)으로 유지
+- [x] `node --check` OK. **빌드 993,855B**. CDP 헤드리스 검증: 에너지 박스 카드 배경 `rgb(255,255,255)`·좌테두리 6px 컬러 / cut6 `levelup-modal` hidden / `recovery-overlay` hidden·empty / 예외 0(_crtToTitle 1건은 타이틀 타이핑 중 cut6 강제점프 테스트 레이스, 깨끗한 로드 에러 0으로 회귀 아님 확인)
+- [ ] 피터공 라이브 육안 확인 — 카드 비행 회전·능력카드 흰배경·회복력 팝업·cut1 스크롤 / (옵션) 레일→인벤토리·카드보상 비행도 540deg 회전 통일할지
 
 ### ✓ 세션491 (6/16) — 성장 리포트 상단 요약 스트립 + 시나리오 행 등급·점수 (라이브 빌드, 피터공 라이브 확인 대기)
 

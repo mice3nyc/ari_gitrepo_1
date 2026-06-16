@@ -683,7 +683,9 @@ function _fxDiscountedLines(card){
 function _fxFillSlot(slot,chip){
   slot.classList.remove('fx-empty');
   slot.innerHTML=chip.innerHTML;
-  slot.style.background=chip.style.background||'';
+  // §4q (6/16 피터공) — 능력(domain) 카드는 흰 배경이 CSS 클래스(.dock-card)라 인라인 background가 비어 슬롯이 투명해짐.
+  // 인라인 배경 없으면 흰색 폴백 → 흰 카드 + 좌측 컬러코드 테두리(아래 borderLeft 복사)로 통일. 인간중심(hc) 카드는 인라인 색 유지.
+  slot.style.background=chip.style.background||'#fff';
   slot.style.borderLeft=chip.style.borderLeft||'';
   slot.classList.remove('reveal');void slot.offsetWidth;slot.classList.add('reveal');
 }
@@ -707,7 +709,7 @@ function _fxFillCards(container,res){
         var tx=tr.left+tr.width/2-(sr.left+sr.width/2);
         var ty=tr.top+tr.height/2-(sr.top+sr.height/2);
         var scl=tr.width/sr.width;
-        requestAnimationFrame(function(){ghost.style.transform='translate('+tx+'px,'+ty+'px) rotate(540deg) scale('+scl.toFixed(2)+')';ghost.style.opacity='0.25';});
+        requestAnimationFrame(function(){ghost.style.transform='translate('+tx+'px,'+ty+'px) rotate(720deg) scale('+scl.toFixed(2)+')';ghost.style.opacity='0.25';});
         setTimeout(function(){if(ghost.parentNode)ghost.parentNode.removeChild(ghost);_fxFillSlot(slot,chip);},520);
       },idx*180+120);
     })(chip,slots[i],i);
@@ -872,6 +874,18 @@ function _scrollChoicesIntoView(area,count){
     }
   },count*120+300);
 }
+// §5 (6/16 피터공) — cut1 전용 스크롤: 선택지 하단이 화면 밖일 때만, 하단이 화면 안에 보이도록 딱 그만큼만 스크롤.
+// 이미 하단까지 다 보이면 그대로 둔다(화면을 흔들지 않는다).
+function _scrollCut1ChoicesIfBelowFold(area,count){
+  setTimeout(function(){
+    if(!area)return;
+    var rect=area.getBoundingClientRect();
+    var margin=12;
+    var overflow=rect.bottom-(window.innerHeight-margin); // 하단이 화면 하단보다 얼마나 아래인가
+    if(overflow<=0)return; // 하단이 이미 화면 안 → 그대로
+    window.scrollTo({top:window.pageYOffset+overflow,behavior:'smooth'});
+  },count*120+300);
+}
 function showTier1Choices(){
   if(btnGuard('showTier1Choices'))return;
   var sc=getScenario();
@@ -891,7 +905,7 @@ function showTier1Choices(){
     area.appendChild(card);
     setTimeout(function(){card.classList.add('visible');},i*120+150);
   });
-  _scrollChoicesIntoView(area,sc.tier1.length);
+  _scrollCut1ChoicesIfBelowFold(area,sc.tier1.length); // §5 (6/16 피터공) — 하단 화면 밖일 때만 스크롤
   updateStats();
   if(_checkAllUnaffordable(costs))triggerGameOver();
 }
@@ -1139,13 +1153,9 @@ function goCut6(){
   saveGame();
   updateStats();
 
-  // 레벨업 애니메이션 (작업 7)
-  if(didLevelUp){
-    setTimeout(function(){
-      flashLevelUpUI();
-      pulseExpLevel();
-    },400);
-  }
+  // 레벨업 애니메이션 — §5 (6/16 피터공) 중단. XP 획득 → Level Up 기능 폐기(레벨=카드 장수).
+  // exp 계산은 RP/자원 max 밸런스 보존을 위해 그대로 두되, 사용자에게 보이는 레벨업 연출(flash/pulse/모달)만 끈다.
+  // if(didLevelUp){ setTimeout(function(){ flashLevelUpUI(); pulseExpLevel(); },400); }
 
   // v0.9 — 리플레이 판정 (덱스 12-ari-challenge-card-bug.md 권장안 적용)
   // 완료 처리 전 상태를 먼저 저장 — played가 완료 전부터 true였는지로 판단
@@ -1189,15 +1199,15 @@ function goCut6(){
   // 결과 패널 1.4초 보여주고 → [0] pending 흡수 → [1] 카드 → [2] 레벨업 → [3] RP → [3.5] 철컥(시나리오 완료) → [4] 회복력 특별 UI(B 이하) → 다음 버튼
   // 6/16 — 회복력 모달은 카드 획득·철컥이 다 끝난 맨 끝으로 (피터공: 카드 팝업과 연속으로 뜨던 문제)
   var _v8CardLabels=[];
-  var _hasRecoveryCard=false;
   // 6/11 파일럿 — 선택별 획득 시나리오: 검토 카드는 onReview에서 즉시 지급·레일 표시(§2b). 결말 일괄 지급 없음.
   var _pilotPC=(typeof pilotPerChoiceActive==='function')&&pilotPerChoiceActive(scid);
   if(!_pilotPC&&fin&&fin.cardEarned){
     if(fin.humanCentricAxis&&fin.humanCentricTag)_v8CardLabels.push('['+fin.humanCentricAxis+'] '+fin.humanCentricTag);
     if(fin.domainCards)for(var _di=0;_di<fin.domainCards.length;_di++)_v8CardLabels.push(fin.domainCards[_di]);
   }
-  // 회복력은 B 이하만 — 특별 UI로 표시
-  if(grade==='B'||grade==='C'||grade==='D')_hasRecoveryCard=true;
+  // §5 (6/16 피터공) — 회복력도 도전력처럼 일반 카드 획득 팝업으로 통일. 특별 중앙 모달(showRecoveryCardModal) 폐지.
+  // B 이하만 지급(engine 자동 지급 조건과 동일). 리플레이 진입은 등급 화면 버튼(C/D 다시 도전하기 / B 이 시나리오 다시 해보기)으로 유지.
+  if(grade==='B'||grade==='C'||grade==='D')_v8CardLabels.push('회복력');
   // 도전력은 리플레이 완료 시 — wasReplay 기반 (덱스 권장안)
   if(challengeAwardedNow){
     _v8CardLabels.push('도전력');
@@ -1206,14 +1216,12 @@ function goCut6(){
     var chain=Promise.resolve();
     // [0] §12 pending → 누적 흡수 (원 마커가 게이지로 흘러내림)
     chain=chain.then(function(){return absorbPending();});
-    // [1] v0.9 카드 reward — 인간중심 + 도메인 + 도전력 (회복력 제외)
+    // [1] v0.9 카드 reward — 인간중심 + 도메인 + 회복력 + 도전력 (§5 6/16: 회복력도 일반 카드로 통일)
     if(_v8CardLabels.length){
       chain=chain.then(function(){return playCardRewardSequential(_v8CardLabels,'');});
     }
-    // [2] 레벨업 — 레벨 표시 + 보너스 RP 안내 (에너지 자동 충전 없음)
-    if(didLevelUp){
-      chain=chain.then(function(){return showLevelUpModal(prevLevel,newLevel);});
-    }
+    // [2] 레벨업 모달 — §5 (6/16 피터공) 중단. XP→Level Up 기능 폐기로 팝업 띄우지 않음.
+    // if(didLevelUp){ chain=chain.then(function(){return showLevelUpModal(prevLevel,newLevel);}); }
     // [3] v0.9 세션322 — RP 직접 배분 (학기 끝 아닐 때만)
     if(!willBeAllDone){
       chain=chain.then(function(){return showRPDistributionModal();});
@@ -1222,11 +1230,8 @@ function goCut6(){
     if(typeof railFlyToInventory==='function'){
       chain=chain.then(function(){return railFlyToInventory();});
     }
-    // [4] 회복력 특별 UI — B 이하만, 화면 중앙, 리플레이 진입점.
-    // 6/16 피터공: 카드 획득 팝업·철컥(시나리오 완료)이 모두 끝난 뒤에 띄운다 (체인 맨 끝으로 이동).
-    if(_hasRecoveryCard){
-      chain=chain.then(function(){return showRecoveryCardModal(scid);});
-    }
+    // [4] §5 (6/16 피터공) — 회복력 특별 중앙 모달 폐지. 회복력은 [1]에서 일반 카드 팝업으로 통일됨.
+    //     리플레이 진입은 등급 화면(cut6 panel-image)의 다시 도전 버튼으로 유지. showRecoveryCardModal은 미사용(정의는 보존).
     chain.then(function(){
       var c6body=currentRow.querySelector('[data-cut="6"] .panel-body');
       if(c6body){
