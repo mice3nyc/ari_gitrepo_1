@@ -440,7 +440,8 @@ function showStartScreen(){
   h+=buildGameTitleHead(); // §4i-7 — 기존 h1 대체
   h+='<div class="subtitle">'+(_ss.subtitle||'이건 AI한테 맡겨도 돼?')+'</div>';
   if(allDone){
-    h+='<div style="max-width:420px;margin:8px auto 24px;padding:14px 24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);text-align:center;font-family:var(--font-hand);font-size:26px;font-weight:400;color:var(--ink);transform:rotate(-1.5deg);letter-spacing:1px;">'+(_ss.all_done_banner||'AI 리터러시 시나리오를 모두 완료했습니다!')+'</div>';
+    // r41 — 완료 배너: 손글씨·노랑 → 픽셀 폰트(시나리오 선택 화면 톤) + 연두색 박스
+    h+='<div style="max-width:460px;margin:8px auto 24px;padding:16px 24px;background:var(--acc-mint);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);text-align:center;font-family:var(--font-pixel);font-size:20px;font-weight:400;color:var(--ink);letter-spacing:2px;line-height:1.4;">'+(_ss.all_done_banner||'AI 리터러시 시나리오를 모두 완료했습니다!')+'</div>';
   }
   h+='<div class="scenario-list">';
   order.forEach(function(sid,idx){

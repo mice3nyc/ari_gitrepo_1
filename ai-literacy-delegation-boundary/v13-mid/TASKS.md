@@ -10,9 +10,10 @@
 - [x] 상단 스트립(`showFinalReport` 타이틀 바 아래): 총점=`totalScore` / 능력레벨=`_abilityCardCount` / 위임레벨=`_delegationCardCount` (HUD `FX_META` 명칭·출처 동일). `.report-topstats`/`.rts-box` CSS
 - [x] 시나리오 행(`_renderDelegationMap` `.rt-scnname`): 타이틀 아래 등급 배지 + 점수(`.rt-grade-badge`·`.rt-scn-score`), `r.grade`·`r.finalScore`
 - [x] 빌드 989,296B + CDP 헤드리스 검증(`dbgShowReport('A')`: 스트립 총점410·능력0·위임0 / 5행 모두 A·82점, 예외 0)
+- [x] **r41 추가 요청(같은 세션)**: 시나리오 선택 완료 배너 → 픽셀 폰트(`--font-pixel`)·연두 박스(`--acc-mint`)·기울임 제거. 빌드 989,402B + CDP 검증(배너 fontFamily=Mulmaru·bg #b9eed7). SPEC-intro-crt r41
 - [ ] 피터공 라이브 확인 후 미세조정(레벨 색 구분·점수 단위 등)
 
-> 요청 노트: `current_notes/요청.26.0616.1606-리포트상단요약.md`
+> 요청 노트: `current_notes/요청.26.0616.1604-리포트상단요약.md`
 
 ---
 
