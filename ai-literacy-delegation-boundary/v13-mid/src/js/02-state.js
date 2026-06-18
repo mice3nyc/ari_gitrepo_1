@@ -41,7 +41,10 @@ function createInitialState(){
     // v0.8 — 3트랙 카드 인벤토리
     inventory:{competencyCards:[],humanCentricCards:[],domainCards:[],growthCards:[]},
     // v0.8 — 리플레이 상태
-    replay:{}
+    replay:{},
+    // SPEC-play-log — 한 판 익명 id + 시작 시각 (makePlayRecord에서 첫 발급)
+    playId:null,
+    playStartedAt:null
   };
 }
 

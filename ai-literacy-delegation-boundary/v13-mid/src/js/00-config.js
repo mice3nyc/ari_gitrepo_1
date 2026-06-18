@@ -20,6 +20,7 @@ var CONFIG={
   storageKey:'ai-literacy-delegation-boundary-v13-mid',
   eventLogKey:'ai-literacy-delegation-boundary-v13-mid-events',
   sessionIdKey:'ai-literacy-v13-mid-session-id',
+  outboxKey:'ai-literacy-delegation-boundary-v13-mid-outbox', // SPEC-play-log §2 — 전송 대기 큐
   version:'v1.3-mid-r39',
   scenarios:['selfintro','groupwork','eorinwangja','career','studyplan'],
   pointThresholds:{S:95,A:85,B:75,C:60,D:0},

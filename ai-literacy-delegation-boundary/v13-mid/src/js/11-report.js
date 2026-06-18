@@ -616,6 +616,8 @@ function showFinalReport(){
   var verLabel=document.getElementById('version-label');if(verLabel)verLabel.style.display='none';
   trackEvent('semester_report_viewed',{totalScore:gameState.totalScore,history:gameState.scenarioHistory,level:gameState.exp.level,cards:_reportAllCards().map(function(c){return c.label;}),items:gameState.itemsCollected});
   var hist=gameState.scenarioHistory||[];
+  // SPEC-play-log §3.3 — 학기 완료 시 done=true 레코드로 outbox 최종 갱신 (end 블록 채움)
+  recordSemesterDone();
   // §4h-3 — totalScore/lv/dv/kv/gradeNote 계산 제거 (상단 블록 렌더 폐지에 따라)
   // 2b: getCompetencyType 호출 제거 — 함수·데이터 키는 보존(되돌리기 가능)
   var compType=null;

@@ -1152,6 +1152,8 @@ function goCut6(){
   }
   trackEvent('scenario_completed',{scenarioId:sc.id,leaf:leaf,score:gameState.score,grade:grade});
 
+  // SPEC-play-log §3.2 — 시나리오 종료마다 outbox 갱신 (pid 발급은 makePlayRecord 첫 호출 시). saveGame 전에 두어 pid 영속.
+  recordScenarioEnd();
   saveGame();
   updateStats();
 

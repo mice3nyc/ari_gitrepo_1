@@ -1,6 +1,28 @@
 ## TASKS — v1.3-mid (중등)
 
-**최종 업데이트**: 2026-06-16 세션492 (UI 마무리 5건 + 비용 핑크·할인카운터 교정 — 빌드 994,129B)
+**최종 업데이트**: 2026-06-18 세션498 (KT 배포 준비 완료: 플레이로그 + 변종 빌드 구현·검증)
+
+### ✓ 세션498 (6/18) — 플레이로그 + 변종 빌드 구현·검증 완료 (요청: [[요청.26.0617.1648-KT중초등내일배포]])
+
+세션497 설계분을 이 세션에서 구현. 백공 QA 콘텐츠 정정(커밋 b4345c9) 직후 이어서. ct/ce는 `discounts`(scenarioHistory에 이미 저장)의 time/energy 합으로 산출 — 어제 "additive 추적 필요"로 본 건 오판, 새 추적 코드 불필요로 단순화.
+
+(1) 플레이로그 — 구현·CDP 검증 완료. SPEC: [[SPEC-play-log]]
+- [x] CONFIG 신규 키 `outboxKey` (00-config.js)
+- [x] 신규 `src/js/08b-play-record.js` — `makePlayRecord(gs,opts)`: scenarioHistory 시나리오별 최신 엔트리 압축 → §1 스키마. 학습자유형 `_judgePattern` 재사용 → 코드 0~5(`_playTypeCode`). **ct/ce = discounts time/energy 합** / cd = raw−실비 / rep = scenarioRepeatCount−1
+- [x] `upsertOutbox`/`getOutbox`/`clearOutbox`/`dequeueFromOutbox` + `recordScenarioEnd`/`recordSemesterDone` 안전 래퍼
+- [x] 연결: playId·st는 makePlayRecord 첫 호출 시 발급(02-state 필드) / `scenarioEnd`(09-render:saveGame 전) `recordScenarioEnd` / `showFinalReport`(11-report:612) `recordSemesterDone`
+- [x] CDP 검증(§7) ALL PASS: 5완주 1레코드 915B(≤2KB)·done+end·ct/ce 존재·rep(단일0/리플레이1)·중간이탈 done=false sc=2
+- [x] 빌드 999,146B (js 18개)
+
+(2) build.py 변종 빌드 — 구현·CDP 스모크 완료. SPEC: [[SPEC-variant]] §3·§6 (focused: 변종변수+자기완결만, 전체 H1~H9 외부화는 post-KT)
+- [x] `--variant=mid|elem`: 5개 키 정확-문자열 교체 주입(`VARIANT_CONFIG_REPLACEMENTS`). 'mid' 오염 없음(resultMidZone 보존)
+- [x] 에셋 자기완결: `../images`→`images`·`../fonts`→`fonts` 재작성 + 부모루트 에셋(135+3) `builds/{variant}/` 복사(`_copy_assets`)
+- [x] `--release`: terser shell-out + 미설치 시 평문 폴백. **terser 현재 미설치 → 평문 산출** (minify는 과속방지턱)
+- [x] 산출 `builds/mid/`·`builds/elem/` 자기완결 폴더 (.gitignore 처리, 22MB 생성물)
+- [x] CDP 스모크 PASS: builds/mid http 부팅·images/fonts 200·시나리오 진입·JS에러 0·CONFIG mid키 / elem 키 분리 확인
+
+> **동현공 전달 단위**: `builds/mid/` 폴더 통째(index.html+images+fonts). 변종 URL 분리(중등 builds/mid, 초등 builds/elem 동일내용).
+> **미결(post-KT)**: 전체 v14-split 외부화(H1~H9), --release용 terser 설치(피터공 판단), content/_shared override 모델.
 
 ### ✓ 세션492 (6/16) — UI 마무리 5건 + 추가 2건 (라이브 빌드, 피터공 라이브 확인 대기)
 
