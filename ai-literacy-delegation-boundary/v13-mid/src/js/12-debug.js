@@ -10,7 +10,7 @@ function _isLocalEnv(){
 }
 function _initDevNav(){
   var nav=document.getElementById('dev-nav');
-  if(nav)nav.hidden=false; // 현재: 항상 노출(라이브 테스팅). 배포본 숨김 필요 시 _isLocalEnv() 가드 추가
+  if(nav&&CONFIG.debug)nav.hidden=false; // CONFIG.debug일 때만 노출. 변종(배포) 빌드는 debug:false라 숨김 유지
 }
 // 리포트 화면은 시나리오 기록이 있어야 의미 → 비어 있으면 샘플(A등급 5종) 채우고 보여줌
 function devNavReport(){

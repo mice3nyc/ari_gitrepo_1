@@ -333,7 +333,7 @@ function resetGame(){
   clearGame();
   resetSid();
   gameState=null;currentRow=null;
-  showStartScreen();
+  showTitleScreen(); // 처음부터 새로 시작 → 타이틀 화면부터 (피터공 6/18). showTitleScreen이 fresh state 재생성
 }
 
 // 학기 처음부터 — 확인 모달 (5/3 세션278)

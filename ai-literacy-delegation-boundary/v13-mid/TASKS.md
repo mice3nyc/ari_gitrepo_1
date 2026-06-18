@@ -21,8 +21,16 @@
 - [x] 산출 `builds/mid/`·`builds/elem/` 자기완결 폴더 (.gitignore 처리, 22MB 생성물)
 - [x] CDP 스모크 PASS: builds/mid http 부팅·images/fonts 200·시나리오 진입·JS에러 0·CONFIG mid키 / elem 키 분리 확인
 
-> **동현공 전달 단위**: `builds/mid/` 폴더 통째(index.html+images+fonts). 변종 URL 분리(중등 builds/mid, 초등 builds/elem 동일내용).
-> **미결(post-KT)**: 전체 v14-split 외부화(H1~H9), --release용 terser 설치(피터공 판단), content/_shared override 모델.
+(3) 동현공 참여 로깅 + 디버그 숨김 + 재시작→타이틀 — 구현·CDP 검증 완료 (피터공 6/18)
+- [x] **게임 시작 로깅**(동현공 Lambda `/log`, 레퍼런스 `Assets/incoming/AI리터러시/20260617-lambda-api-reference.md`): 신규 `08c-game-start-log.js` — `sendGameStartLog()` fire-and-forget(keepalive·실패무시). payload `{eventType:'game_start',gameId,clientId(UUID·localStorage 영속),ts}`. 트리거 = `enterFromTutorial`(튜토리얼→시나리오 선택 진입), 한 판 1회. 우리 플레이로그(08b)와 별개.
+- [x] gameId 변종 분리: 중등 `ai_literacy_md` / 초등 `ai_literacy_el` (CONFIG + 변종 주입). logEndpoint·clientIdKey도 CONFIG로.
+- [x] **디버그 숨김**: `CONFIG.debug`(소스 true, 변종 빌드 false 주입). `_initDevNav` 게이팅 + 14-init서 debug-panel·debug-toggle·version-label·dev-nav 숨김. CDP: 배포빌드서 전부 display:none 확인.
+- [x] **재시작→타이틀**: `resetGame`이 `showStartScreen`→`showTitleScreen`. fresh state 재생성(tutorialSeen=false). CDP 확인.
+- [x] CDP 스모크 PASS: game_start payload(md)·1회만·디버그 none·재시작 타이틀.
+
+> ⚠️ **동현공 선행 작업 필수** (이게 없으면 /log 403/400): Lambda 환경변수에 (1) 배포 도메인을 `ALLOWED_ORIGINS`에 (2) `ai_literacy_md`·`ai_literacy_el`를 `ALLOWED_GAME_IDS`에 등록. 클라 코드만으론 작동 안 함.
+> **동현공 전달 단위**: `builds/mid/` 폴더 통째(index.html+images+fonts). 변종 URL 분리(중등 builds/mid, 초등 builds/elem 동일내용). 배포 빌드는 디버그 OFF.
+> **미결(post-KT)**: 전체 v14-split 외부화(H1~H9), --release용 terser 설치(피터공 판단), content/_shared override 모델, /log 전송은 수집 아닌 시작 1회(우리 플레이로그 전송 인프라는 별도).
 
 ### ✓ 세션492 (6/16) — UI 마무리 5건 + 추가 2건 (라이브 빌드, 피터공 라이브 확인 대기)
 

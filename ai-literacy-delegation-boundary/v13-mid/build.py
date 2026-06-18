@@ -49,8 +49,10 @@ EXPECTED_SCENARIO_KEYS = ["selfintro", "groupwork", "eorinwangja", "career", "st
 
 # §3c — 변종별 CONFIG 값 주입. mid는 현재 소스 그대로(회귀 동일), elem은 키 분리.
 # 전체 문자열 교체(정확 매칭)로 'mid'(resultTextsByType 등) 오염 없이 안전.
+# 배포(변종) 빌드는 디버그 OFF — 학교 라이브에서 디버그 UI 숨김 (피터공 6/18)
+_DEBUG_OFF = {"debug:true": "debug:false"}
 VARIANT_CONFIG_REPLACEMENTS = {
-    "mid": {},  # 소스가 이미 mid — 무변경
+    "mid": dict(_DEBUG_OFF),  # 키는 소스(mid) 그대로, 디버그만 OFF
     "elem": {
         "storageKey:'ai-literacy-delegation-boundary-v13-mid'":
             "storageKey:'ai-literacy-delegation-boundary-v13-elem'",
@@ -62,6 +64,9 @@ VARIANT_CONFIG_REPLACEMENTS = {
             "outboxKey:'ai-literacy-delegation-boundary-v13-elem-outbox'",
         "version:'v1.3-mid-r39'":
             "version:'v1.3-elem-r39'",
+        "gameId:'ai_literacy_md'":   # 동현공 참여 로깅 게임 ID — 초등
+            "gameId:'ai_literacy_el'",
+        "debug:true": "debug:false",
     },
 }
 

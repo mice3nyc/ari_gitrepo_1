@@ -403,6 +403,7 @@ function bootFlashTo(fn){
 }
 function enterFromTutorial(){
   if(btnGuard('enterTutorial'))return;
+  if(typeof sendGameStartLog==='function')sendGameStartLog(); // 동현공 참여 로깅 — 튜토리얼→시나리오 선택 진입 시
   bootFlashTo(showStartScreen);
 }
 
