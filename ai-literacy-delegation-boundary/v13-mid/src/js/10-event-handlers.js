@@ -100,6 +100,11 @@ function replayScenario(scid){
     }
   }
 
+  // [1b] clearedScenarios에서 해당 시나리오 제거 — 재도전 완료 후 goNextScenario가
+  //      totalScore를 다시 가산하고, scenarioHistory를 재기록하고, _lockedCardCount 할인 가드가
+  //      정상 작동하도록 한다. (백공 QA #1·#6·#7 + 리포트/학습자유형 누락. 두 진입로·5종 시나리오 공통)
+  gameState.clearedScenarios=gameState.clearedScenarios.filter(function(s){return s!==scid;});
+
   // [2] 해당 시나리오에서 받은 카드 제거 (도전력 제외 — 리플레이 보상이므로 유지)
   function removeCardsForScenario(arr){
     if(!arr)return[];

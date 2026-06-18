@@ -516,6 +516,7 @@ var reportData = {
 - **해결**: `showStartScreen`의 완료 카드를 비활성 대신 **(a) 기존 등급/점수 뱃지 표시**(`replay[scid].bestGrade` + `bestScore`) **+ (b) "재도전" 버튼**(`replayScenario(scid)` 연결)으로 바꾼다.
 - **재도전 진입 확인**: 이전 기록이 롤백되므로 확인 모달을 거친다(기존 점수는 `bestScore`로 보존되어 비교 표시되니, 문구는 "기록을 지우는" 것이 아니라 "다시 도전" 톤).
 - **AC**: 완료 카드에 등급·점수 보임 → "재도전" 클릭 → 확인 → 해당 시나리오 Cut 1부터 재시작. 학기 전체 진행(다른 완료 시나리오)은 유지.
+- **버그 fix (6/18, 백공 QA)** — 재도전 시 `replayScenario`가 점수·역량·카드·자원·history는 롤백하면서 `clearedScenarios`에서 `scid`를 빼지 않아, 재완주 후 `goNextScenario` 가산 가드(`indexOf(scid)<0`)가 막혀 (#6) 총점 마이너스 · (#7) 2연속 재도전 본편 스킵·리포트 직행 · (#1) 1차 선택 역량 할인 즉시적용 · 리포트/학습자유형 회기 누락이 발생했다. **해결**: `[1]` 롤백 직후 `[1b] gameState.clearedScenarios=clearedScenarios.filter(s=>s!==scid)` 한 줄(전역 로직이라 두 진입로 — 등급 화면·선택 화면 재도전 버튼 — 과 5종 시나리오 공통). CDP 헤드리스 검증 5/5 PASS(selfintro A→A1→R3: total 97→0→97 / 2연속 재도전 본편 진행 / cardDiscount 0·_lockedCardCount 0 / history 1→0→1).
 
 ##### 14.3 전체 초기화 — 숨김 노출 (피터공 결정)
 
