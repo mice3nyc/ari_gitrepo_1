@@ -15,11 +15,13 @@
 - [x] 콘텐츠 저작 5종: 독후감(직접 docx), 동물발표·캐릭터·역사검증(백도 docx), 진로카드(라벨 기반). desc/lesson·만화캡션·리포트·중간결과.
 
 ### 빌드 기록
-- `2026-06-21 20:41` — `index.html` **1,014,768 bytes** / scenarios.yaml 514KB / 5종 ⟨TODO⟩ 0 / CDP 예외 0. (커밋 미실시 — 피터공 검토 후)
+- `2026-06-21 20:41` — `index.html` **1,014,768 bytes** / scenarios.yaml 514KB / 5종 ⟨TODO⟩ 0 / CDP 예외 0. → 피터공 검토 통과 후 커밋 **`0b4711b`** (main 푸시).
+- `2026-06-21 (라벨)` — footer/타이틀/CONFIG.version "mid"→"v1.3-elem(초등)" 통일. `index.html` **1,014,771 bytes**. mid 표시 라벨 0건 검증. (커밋 대기)
+- `2026-06-21 (이미지)` — 초등 컷 이미지 분리. `v13-elem/images/` 신설(125장 237 webp + _unused 15). id맵·경로 초등화. `index.html` **1,014,777 bytes**. CDP 125/125 로드·237x237·예외 0. (커밋 대기)
 
 ### 미완 (SPEC §7 — 착수 전 SPEC 갱신)
-- [ ] 초등 컷 이미지 (현재 중등 자기소개 폴백)
-- [ ] footer/타이틀 "mid" 라벨 변종화 (index.shell.html)
-- [ ] review-tier 카드 leaf별 확인
+- [x] footer/타이틀 라벨 변종화 (6/21) — index.shell.html 타이틀·footer + 00-config.js version 직접 elem화. 빌드 모델 메모 SPEC §7.
+- [x] 초등 컷 이미지 (6/21) — v13-elem/images/ 자체 분리. B안 매핑(cut1=타이틀). CDP 검증. → [[요청.26.0621.2143-초등이미지]]
+- [ ] review-tier 카드 leaf별 확인 (tier1·tier2 검증됨)
 - [ ] 배포 storage/gameId 분리 + 동현공 Lambda 등록
-- [ ] git 커밋·푸시 (피터공 검토 통과 후)
+- [ ] git 커밋·푸시 (라벨 변경분)

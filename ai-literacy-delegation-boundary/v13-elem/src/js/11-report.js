@@ -321,8 +321,8 @@ function showReport(){
 
 // hist 데이터(scenarioId, leaf)로 카툰 이미지 경로 산출. gameState 무관.
 function getCutImageFor(scenarioId, leaf, cutNum){
-  var n=({'selfintro':'01','groupwork':'02','eorinwangja':'03','career':'04','studyplan':'05'})[scenarioId]||'01';
-  var base='../images/s'+n;
+  var n=({'bookreport':'01','animaltalk':'02','jobcard':'03','classmascot':'04','historycheck':'05'})[scenarioId]||'01';
+  var base='images/s'+n;
   var t1=leaf?leaf.charAt(0):null;
   var t2=leaf?leaf.substr(0,2):null;
   var rv=leaf?leaf.substr(2):null;

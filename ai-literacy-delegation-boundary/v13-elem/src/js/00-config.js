@@ -21,7 +21,7 @@ var CONFIG={
   eventLogKey:'ai-literacy-delegation-boundary-v13-mid-events',
   sessionIdKey:'ai-literacy-v13-mid-session-id',
   outboxKey:'ai-literacy-delegation-boundary-v13-mid-outbox', // SPEC-play-log §2 — 전송 대기 큐
-  version:'v1.3-mid-r39',
+  version:'v1.3-elem-r39',
   // 디버그 UI(개발 네비 바·디버그 패널·버전 라벨) 노출 여부. 변종(배포) 빌드는 false 주입 → 학교 라이브 숨김
   debug:true,
   // 동현공 Lambda — 게임 시작 참여 로깅(/log, fire-and-forget). 우리 플레이로그(08b)와 별개 시스템

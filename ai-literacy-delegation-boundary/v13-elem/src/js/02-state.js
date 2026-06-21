@@ -49,10 +49,10 @@ function createInitialState(){
 }
 
 // v0.5: 시나리오별 컷 이미지 동적 매핑
-var _imgCacheBust='?v=20260509';
+var _imgCacheBust='?v=20260621b';
 function getCutImage(scenarioId,cutNum){
-  var n=({'selfintro':'01','groupwork':'02','eorinwangja':'03','career':'04','studyplan':'05'})[scenarioId]||'01';
-  var base='../images/s'+n;
+  var n=({'bookreport':'01','animaltalk':'02','jobcard':'03','classmascot':'04','historycheck':'05'})[scenarioId]||'01';
+  var base='images/s'+n;
   var t1=gameState&&gameState.selectedTier1;
   var t2=gameState&&gameState.selectedTier2;
   var rv=gameState&&gameState.selectedReview;

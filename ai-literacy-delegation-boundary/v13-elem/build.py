@@ -38,7 +38,7 @@ OUTPUT = ROOT / "index.html"
 DATA_DIR = ROOT / "data"
 
 # 변종 빌드 (SPEC-variant §3c·§6) — 자기완결 폴더 산출용
-IMAGES_DIR = ROOT.parent / "images"   # 부모 루트 공유 에셋 (135개)
+IMAGES_DIR = ROOT / "images"   # v13-elem 자체 초등 이미지 (125개, 중등과 분리) — 피터공 6/21
 FONTS_DIR = ROOT.parent / "fonts"     # Galmuri11·Mulmaru
 BUILDS_DIR = ROOT / "builds"
 

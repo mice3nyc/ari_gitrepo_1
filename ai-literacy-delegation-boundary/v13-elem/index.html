@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 리터러시: 위임의 경계 v1.2-mid (중등)</title>
+<title>AI 리터러시: 위임의 경계 v1.3-elem (초등)</title>
 <style>
 @import url('https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
@@ -2039,7 +2039,7 @@ button,
   <button type="button" onclick="showStartScreen()">시나리오 선택</button>
   <button type="button" onclick="devNavReport()">리포트</button>
 </div>
-<div class="version" id="version-label">v1.3-mid-r39</div>
+<div class="version" id="version-label">v1.3-elem-r39</div>
 
 <!-- Phase 8.10b — 레벨업 이벤트 팝업 (DECISIONS §10.11) -->
 <div id="levelup-modal" class="modal-overlay hidden">
@@ -2164,7 +2164,7 @@ var CONFIG={
   eventLogKey:'ai-literacy-delegation-boundary-v13-mid-events',
   sessionIdKey:'ai-literacy-v13-mid-session-id',
   outboxKey:'ai-literacy-delegation-boundary-v13-mid-outbox', // SPEC-play-log §2 — 전송 대기 큐
-  version:'v1.3-mid-r39',
+  version:'v1.3-elem-r39',
   // 디버그 UI(개발 네비 바·디버그 패널·버전 라벨) 노출 여부. 변종(배포) 빌드는 false 주입 → 학교 라이브 숨김
   debug:true,
   // 동현공 Lambda — 게임 시작 참여 로깅(/log, fire-and-forget). 우리 플레이로그(08b)와 별개 시스템
@@ -13948,10 +13948,10 @@ function createInitialState(){
 }
 
 // v0.5: 시나리오별 컷 이미지 동적 매핑
-var _imgCacheBust='?v=20260509';
+var _imgCacheBust='?v=20260621b';
 function getCutImage(scenarioId,cutNum){
-  var n=({'selfintro':'01','groupwork':'02','eorinwangja':'03','career':'04','studyplan':'05'})[scenarioId]||'01';
-  var base='../images/s'+n;
+  var n=({'bookreport':'01','animaltalk':'02','jobcard':'03','classmascot':'04','historycheck':'05'})[scenarioId]||'01';
+  var base='images/s'+n;
   var t1=gameState&&gameState.selectedTier1;
   var t2=gameState&&gameState.selectedTier2;
   var rv=gameState&&gameState.selectedReview;
@@ -16989,8 +16989,8 @@ function showReport(){
 
 // hist 데이터(scenarioId, leaf)로 카툰 이미지 경로 산출. gameState 무관.
 function getCutImageFor(scenarioId, leaf, cutNum){
-  var n=({'selfintro':'01','groupwork':'02','eorinwangja':'03','career':'04','studyplan':'05'})[scenarioId]||'01';
-  var base='../images/s'+n;
+  var n=({'bookreport':'01','animaltalk':'02','jobcard':'03','classmascot':'04','historycheck':'05'})[scenarioId]||'01';
+  var base='images/s'+n;
   var t1=leaf?leaf.charAt(0):null;
   var t2=leaf?leaf.substr(0,2):null;
   var rv=leaf?leaf.substr(2):null;
