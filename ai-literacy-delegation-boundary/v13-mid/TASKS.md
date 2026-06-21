@@ -1,6 +1,16 @@
 ## TASKS — v1.3-mid (중등)
 
-**최종 업데이트**: 2026-06-18 세션498 (KT 배포 준비 완료: 플레이로그 + 변종 빌드 구현·검증)
+**최종 업데이트**: 2026-06-21 (재도전 총점 음수 잔여 버그 fix — 백공 #6 재확인)
+
+### ✓ 2026-06-21 — 재도전 총점 음수 잔여 버그 fix (요청: [[요청.26.0621.1004-재도전점수버그]])
+
+백공 재확인: 6/18 filter fix는 **선택화면 재도전**만 정상화, **완료화면(cut6) 직후 [다시하기]**는 총점 음수(−62/−86) 잔존. 근본 원인 = 반영 타이밍 비대칭(점수만 `goNextScenario`에서 가산, history·역량·EXP는 cut6에서 확정). SPEC §14.2.
+- [x] **원인 규명** — totalScore 가산은 `goNextScenario`(10:169) 한 곳. cut6 완료화면은 미가산(0) 상태인데 `replayScenario`가 `scenarioHistory.finalScore`를 무조건 차감(10:74) → 음수.
+- [x] **fix** — `10-event-handlers.js:74` totalScore 차감에 `gameState.clearedScenarios.indexOf(scid)>=0` 가드(실제 가산된 경우만 차감). 카드/역량/EXP는 cut6 기준 일관이라 무변.
+- [x] **SPEC.md §14.2** 잔여 버그 fix(6/21) 항목 추가.
+- [x] **빌드** — 소스 `index.html`(디버그 ON) + `builds/mid`(1,002,133B) + `builds/elem`(1,002,138B) 3종, 수정 반영 확인.
+- [x] **CDP 양경로 재검증 PASS** — (A) 완료화면 직후: cut6 total 0 → replay 0(음수 아님) → 재완주+goNext 86. (B) 선택화면: goNext 86 → replay 0(차감·cleared 제거) → 재완주 86 복귀. 런타임 예외 0건.
+- [ ] 커밋·푸시 (해시는 푸시 후 보고)
 
 ### ✓ 세션498 (6/18) — 플레이로그 + 변종 빌드 구현·검증 완료 (요청: [[요청.26.0617.1648-KT중초등내일배포]])
 

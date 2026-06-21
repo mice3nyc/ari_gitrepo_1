@@ -70,8 +70,9 @@ function replayScenario(scid){
       // 역량 누적에서 해당 delta 빼기
       if(typeof r.dlgDelta==='number')gameState.competencies.delegationChoice.value-=r.dlgDelta;
       if(typeof r.knlDelta==='number')gameState.competencies.knowledge.value-=r.knlDelta;
-      // totalScore에서 빼기
-      if(typeof r.finalScore==='number')gameState.totalScore-=r.finalScore;
+      // totalScore에서 빼기 — 단 실제 가산된 경우(goNextScenario를 거쳐 clearedScenarios에 든 경우)만.
+      // cut6 완료화면 직후 [다시하기]는 아직 goNextScenario 전이라 totalScore에 미가산(0) → 빼면 음수가 됨(백공 #6 잔여, 6/21). SPEC §14.2.
+      if(typeof r.finalScore==='number'&&gameState.clearedScenarios.indexOf(scid)>=0)gameState.totalScore-=r.finalScore;
       // EXP 롤백 — 해당 시나리오에서 얻은 EXP 빼기 + 레벨 재계산
       var sc2r=SCENARIOS[scid];
       var leafScore=(sc2r&&sc2r.finals&&sc2r.finals[r.leaf])?sc2r.finals[r.leaf].score:0;
