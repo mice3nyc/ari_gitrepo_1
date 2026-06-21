@@ -16,8 +16,7 @@
 
 ### 빌드 기록
 - `2026-06-21 20:41` — `index.html` **1,014,768 bytes** / scenarios.yaml 514KB / 5종 ⟨TODO⟩ 0 / CDP 예외 0. → 피터공 검토 통과 후 커밋 **`0b4711b`** (main 푸시).
-- `2026-06-21 (라벨)` — footer/타이틀/CONFIG.version "mid"→"v1.3-elem(초등)" 통일. `index.html` **1,014,771 bytes**. mid 표시 라벨 0건 검증. (커밋 대기)
-- `2026-06-21 (이미지)` — 초등 컷 이미지 분리. `v13-elem/images/` 신설(125장 237 webp + _unused 15). id맵·경로 초등화. `index.html` **1,014,777 bytes**. CDP 125/125 로드·237x237·예외 0. (커밋 대기)
+- `2026-06-21 (라벨+이미지)` — 라벨 v1.3-elem 통일 + 초등 컷 이미지 분리(`v13-elem/images/` 125장 PIL 처리·타이틀 정사각 pad·237 webp q88 + _unused 15). id맵·경로 초등화. `index.html` **1,014,778 bytes**. CDP 125/125 로드·237². 커밋 **`623aefc`** (main 푸시). 캐시버스트 `v20260621b`.
 
 ### 미완 (SPEC §7 — 착수 전 SPEC 갱신)
 - [x] footer/타이틀 라벨 변종화 (6/21) — index.shell.html 타이틀·footer + 00-config.js version 직접 elem화. 빌드 모델 메모 SPEC §7.

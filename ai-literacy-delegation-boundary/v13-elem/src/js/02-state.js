@@ -49,7 +49,7 @@ function createInitialState(){
 }
 
 // v0.5: 시나리오별 컷 이미지 동적 매핑
-var _imgCacheBust='?v=20260621b';
+var _imgCacheBust='?v=20260621c';
 function getCutImage(scenarioId,cutNum){
   var n=({'bookreport':'01','animaltalk':'02','jobcard':'03','classmascot':'04','historycheck':'05'})[scenarioId]||'01';
   var base='images/s'+n;
