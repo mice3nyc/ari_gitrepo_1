@@ -99,22 +99,9 @@ function applyReview(rid){
         gameState.inventory.domainCards.push({label:fin.domainCards[di],scenario:gameState.currentScenarioId,leaf:leaf});
       }
     }
-    if(fin.growthCard){
-      if(!gameState.inventory.growthCards)gameState.inventory.growthCards=[];
-      gameState.inventory.growthCards.push({label:fin.growthCard,scenario:gameState.currentScenarioId,leaf:leaf});
-    }
+    // 성장카드(growthCard) 지급 폐지 (6/21, 피터공) — 회복력·도전력 제거. SPEC §14.2.
   }
-  // v0.8 세션310 — B 이하 결과 시 회복력 자동 지급 (yaml에 없어도)
-  var _grade=fin?fin.grade:'';
-  if(_grade==='B'||_grade==='C'||_grade==='D'){
-    var hasRecovery=false;
-    var gc=gameState.inventory.growthCards||[];
-    for(var gi=0;gi<gc.length;gi++){if(gc[gi].scenario===gameState.currentScenarioId&&gc[gi].label==='회복력'){hasRecovery=true;break;}}
-    if(!hasRecovery){
-      if(!gameState.inventory.growthCards)gameState.inventory.growthCards=[];
-      gameState.inventory.growthCards.push({label:'회복력',scenario:gameState.currentScenarioId,leaf:leaf,note:_t('recovery.note','이번 결과를 바탕으로 다시 시도할 수 있는 회복력 카드가 생겼어요.')});
-    }
-  }
+  // 회복력 자동 지급 폐지 (6/21) — 재도전 무조건 가능으로 불필요. growthCards는 빈 배열 유지.
   var resourcePenalty=calcResourcePenalty(gameState.resources);
   var ownedCards=(gameState.inventory&&gameState.inventory.competencyCards)||[];
   var cardMatchBonus=getCardMatchBonus(sc2,leaf,ownedCards);

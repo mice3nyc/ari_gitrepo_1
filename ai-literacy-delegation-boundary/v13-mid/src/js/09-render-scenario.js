@@ -1167,7 +1167,6 @@ function goCut6(){
   if(!gameState.replay)gameState.replay={};
   var replayState=gameState.replay[scid];
   var wasReplay=replayState&&replayState.played===true;
-  var challengeAwardedNow=false;
   if(!replayState){
     // 방어 코드 — startScenario에서 보통 이미 만들어져 있지만 없을 경우 대비
     replayState=gameState.replay[scid]={played:true,improved:false,bestScore:gameState.score,bestGrade:grade,resourceSnapshot:{time:gameState.resources.time.current,energy:gameState.resources.energy.current}};
@@ -1178,16 +1177,10 @@ function goCut6(){
     replayState.bestScore=gameState.score;
     replayState.bestGrade=grade;
   } else {
-    // 진짜 리플레이 완료
+    // 진짜 리플레이 완료 — bestScore/bestGrade만 갱신 (도전력 카드 폐지 6/21, 피터공). SPEC §14.2.
     if(gameState.score>replayState.bestScore){
       replayState.bestScore=gameState.score;
       replayState.bestGrade=grade;
-      if(!replayState.improved){
-        replayState.improved=true;
-        challengeAwardedNow=true;
-        if(!gameState.inventory.growthCards)gameState.inventory.growthCards=[];
-        gameState.inventory.growthCards.push({label:'도전력',scenario:scid,leaf:leaf});
-      }
     }
   }
 
@@ -1210,13 +1203,7 @@ function goCut6(){
     if(fin.humanCentricAxis&&fin.humanCentricTag)_v8CardLabels.push('['+fin.humanCentricAxis+'] '+fin.humanCentricTag);
     if(fin.domainCards)for(var _di=0;_di<fin.domainCards.length;_di++)_v8CardLabels.push(fin.domainCards[_di]);
   }
-  // §5 (6/16 피터공) — 회복력도 도전력처럼 일반 카드 획득 팝업으로 통일. 특별 중앙 모달(showRecoveryCardModal) 폐지.
-  // B 이하만 지급(engine 자동 지급 조건과 동일). 리플레이 진입은 등급 화면 버튼(C/D 다시 도전하기 / B 이 시나리오 다시 해보기)으로 유지.
-  if(grade==='B'||grade==='C'||grade==='D')_v8CardLabels.push('회복력');
-  // 도전력은 리플레이 완료 시 — wasReplay 기반 (덱스 권장안)
-  if(challengeAwardedNow){
-    _v8CardLabels.push('도전력');
-  }
+  // 회복력·도전력 성장카드 팝업 폐지 (6/21, 피터공) — 재도전 무조건 가능으로 불필요. _v8CardLabels에 성장카드 라벨 추가 안 함. SPEC §14.2.
   setTimeout(function(){
     var chain=Promise.resolve();
     // [0] §12 pending → 누적 흡수 (원 마커가 게이지로 흘러내림)
