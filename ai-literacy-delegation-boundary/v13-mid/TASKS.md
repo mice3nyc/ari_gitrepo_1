@@ -12,7 +12,7 @@
 - [x] **충전 미리보기 박스 제거** — `#rp-preview` HTML 삭제 + `05-modals.js` Preview 블록 제거 + `14-init.js` rpPrev 참조 제거 + `.rp-preview` CSS 삭제.
 - [x] **빌드** — index.html(999,654) + builds/mid(999,604) + builds/elem(999,609) 3종, 2026-06-21.
 - [x] **CDP 검증 PASS** — 모달 열어 title center·border 2px / 부제 신문구 / 회색 hint 없음 / rp-bal flex·한 줄(label 12px·num 34px) / preview 미존재 / 런타임 예외 0건 + 스크린샷.
-- [ ] 커밋·푸시 (피터공 확인 후)
+- [x] 커밋·푸시 — **64dcdc6** (f5cfa62..64dcdc6, main). 피터공 로컬 확인 후. GitHub Pages 라이브 반영.
 
 ### ✓ 2026-06-21 — 회복력·도전력 성장카드 폐지 (피터공)
 
