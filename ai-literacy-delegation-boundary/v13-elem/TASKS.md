@@ -15,6 +15,7 @@
 - [x] 콘텐츠 저작 5종: 독후감(직접 docx), 동물발표·캐릭터·역사검증(백도 docx), 진로카드(라벨 기반). desc/lesson·만화캡션·리포트·중간결과.
 
 ### 빌드 기록
+- `2026-06-22` — **replaySuggestion 135개 저작 + 주입** (피터공 6/21 요청: 빈 텍스트 채우기, 범위=replaySuggestion만). 가시 텍스트 전수 감사 결과 만화·리포트 본문은 이미 135/135 채워짐, 빈 채 코드가 읽는 건 replaySuggestion(C/D/B 다시도전 팁)뿐 확인. 백도(sonnet) 저작 → `merge_replaysug.py` 무결성 검증(다른 필드 변경 0) → `build.py`. `index.html` **1,029,200 bytes**. CDP 스모크 검증: 콘솔 에러 0·예외 0·5종 135 leaf·빈 replaySuggestion 0. 신규 스크립트: `data/merge_replaysug.py`·`data/export_full_csv.py`. 전체 데이터 CSV(135행×56컬럼) → `data/elem_full_data.csv` + `~/Downloads/AI리터러시_초등_전체데이터.csv`. **커밋·푸시 대기**(피터공 replaySuggestion 검토 후). → [[요청.26.0621.2323-초등텍스트채우기]]
 - `2026-06-21 20:41` — `index.html` **1,014,768 bytes** / scenarios.yaml 514KB / 5종 ⟨TODO⟩ 0 / CDP 예외 0. → 피터공 검토 통과 후 커밋 **`0b4711b`** (main 푸시).
 - `2026-06-21 (라벨+이미지)` — 라벨 v1.3-elem 통일 + 초등 컷 이미지 분리(`v13-elem/images/` 125장 PIL 처리·237 webp q88 + _unused 15). id맵·경로 초등화. CDP 125/125 로드·237². 커밋 **`623aefc`** (main 푸시).
 - `2026-06-21 (타이틀 stretch)` — 타이틀 c1 5장 모서리 pad → **237² stretch**(피터공: 좌우 빈 공간 제거, 텍스트 전체 보존). 캐시버스트 `v20260621c`. 커밋 **`5a2d687`** (main 푸시).
