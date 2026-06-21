@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 리터러시: 위임의 경계 v1.2-mid (중등)</title>
+<style>/* __CSS_INJECT__ */</style>
+</head>
+<body>
+<!-- 좌/우 패널 (sticky) — 좌:자원 / 우:역량+점수+진행 -->
+<div class="panel-row" id="panel-row">
+  <!-- 좌측: 자원 게이지 (시간/에너지) — 6/11 HUD 개편: 타이틀 제거, 아이콘+큰 레이블+두툼한 바+바 위 수치 -->
+  <div class="resource-bar" id="resource-bar">
+    <div class="panel-content">
+      <div class="resource-item" id="res-time"><div class="resource-change-indicator" id="rdelta-time"></div><span class="resource-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.513 7.119c.958-1.143 1.487-2.577 1.487-4.036v-3.083h-16v3.083c0 1.459.528 2.892 1.487 4.035l3.087 3.68c.566.677.57 1.625.009 2.306l-3.13 3.794c-.937 1.136-1.453 2.555-1.453 3.995v3.107h16v-3.107c0-1.44-.517-2.858-1.453-3.994l-3.13-3.794c-.562-.681-.558-1.629.009-2.306l3.087-3.68zm-.513-4.12c0 1.101-.363 2.05-1.02 2.834l-.978 1.167h-8.004l-.978-1.167c-.66-.785-1.02-1.736-1.02-2.834h12zm-.996 15.172c.652.791.996 1.725.996 2.829h-1.061c-1.939-2-4.939-2-4.939-2s-3 0-4.939 2h-1.061c0-1.104.344-2.039.996-2.829l3.129-3.793c.342-.415.571-.886.711-1.377h.164v1h2v-1h.163c.141.491.369.962.711 1.376l3.13 3.794zm-6.004-1.171h2v1h-2v-1zm0-2h2v1h-2v-1z"/></svg></span><span class="resource-name">시간</span><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-time" style="width:100%"></div><span class="resource-num" id="rnum-time">100</span></div></div>
+      <div class="panel-divider"></div>
+      <div class="resource-item" id="res-energy"><div class="resource-change-indicator" id="rdelta-energy"></div><span class="resource-icon rotated" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 19h21v-14h-21v14zm9.298-7.21v-3.79l8.535 6.248-5.878-1.728v3.48l-8.789-5.984 6.132 1.774zm14.702-2.54v4.5c0 .69-.56 1.25-1.25 1.25h-.75v-7h.75c.69 0 1.25.56 1.25 1.25z"/></svg></span><span class="resource-name">에너지</span><div class="resource-gauge"><div class="resource-gauge-fill" id="rgauge-energy" style="width:100%"></div><span class="resource-num" id="rnum-energy">100</span></div></div>
+    </div>
+  </div>
+  <!-- 중앙: 시나리오 실시간 점수 그래프 + 누적 SCORE + LV/XP — 6/11 v6 (SPEC §4e) -->
+  <div class="score-display" id="score-display">
+    <div class="hud-title" id="hud-scenario-title"></div>
+    <div class="score-graph-row">
+      <div class="score-graph" id="score-graph">
+        <!-- v6.2 — 알약형 트랙 안에 머리+숫자 (피터공 스케치 IMG_4762). icon-schoolhead.svg 분리 임베드: 머리/기어 두 패스, 기어만 SMIL 회전(중심 11,10) -->
+        <div class="score-graph-track">
+          <div class="score-graph-fill" id="score-graph-fill" style="width:0%"></div>
+          <div class="score-graph-rider" id="score-graph-rider" style="left:0%">
+            <span class="score-graph-num" id="score-graph-num">0</span>
+            <span class="score-head-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.996 23.999h-12.605s.734-3.931.633-5.686c-.041-.724-.161-1.474-.54-2.104-.645-1-2.636-3.72-2.475-7.43.224-5.209 4.693-8.779 10.126-8.779 5.098 0 8.507 3.001 9.858 7.483.328 1.079.311 1.541-.151 2.607l-.006.013 1.751 2.142c.26.381.413.791.413 1.239 0 .547-.233 1.045-.61 1.399-.368.345-.767.452-1.248.642 0 0-.576 2.592-.873 3.291-.7 1.643-1.97 1.659-2.97 1.849-.394.083-.49.133-.681.681-.208.591-.363 1.435-.622 2.653M11.154 1.999c-4.285.048-7.74 2.548-8.121 6.488-.192 1.991.463 3.986 1.516 5.705.611 1 1.305 1.592 1.464 3.875.091 1.313-.05 2.636-.241 3.932h8.604c.141-.645.35-1.485.687-2.057.449-.766 1.097-1.099 1.926-1.254.838-.148 1.238-.059 1.489-.785.212-.579.612-2.221.831-3.902 1.203-.335.612-.161 1.671-.559-.206-.234-1.918-2.314-2.045-2.6-.336-.759-.046-1.19.225-1.913.086-.251.06-.357-.009-.613-1.049-3.949-3.891-6.317-7.997-6.317"/><g><animateTransform attributeName="transform" type="rotate" from="0 11 10" to="360 11 10" dur="4s" repeatCount="indefinite"/><path fill-rule="evenodd" clip-rule="evenodd" d="M11.674 4.999c.242.684.312 1.122.841 1.341h.001c.53.221.893-.044 1.543-.353l.953.952c-.312.655-.573 1.016-.354 1.544v.001c.219.528.653.597 1.342.841v1.347c-.681.243-1.123.313-1.342.843-.22.529.043.891.354 1.544l-.953.952c-.657-.313-1.014-.574-1.541-.355h-.001c-.531.222-.601.661-.843 1.343h-1.348c-.242-.684-.312-1.122-.841-1.34l-.001-.001c-.529-.221-.892.043-1.544.353l-.952-.952c.305-.643.574-1.011.353-1.545-.22-.529-.661-.599-1.341-.842v-1.347c.681-.242 1.121-.312 1.341-.841.22-.531-.042-.891-.353-1.545l.952-.952c.657.312 1.015.573 1.544.353h.001c.529-.219.599-.661.841-1.341h1.348zM11.0 11.666c-.92 0-1.667-.746-1.667-1.667s.747-1.667 1.667-1.667 1.666.746 1.666 1.667-.746 1.667-1.666 1.667"/></g></svg></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 우상단: 누적 SCORE (전체 시나리오 합) + LV — 6/15 r42: 미터 우측 레일 이동에 따라 SCORE를 독립 우측 구역으로 -->
+  <div class="score-total-block">
+    <span class="display-label">전체점수</span>
+    <span class="display-num" id="score-num">0</span>
+  </div>
+  <!-- 6/15 §4o — 우측 두 칸을 HUD에 결합: 내가할까/시킬까 헤더+레벨+할인 (점선 구획, 플랫) -->
+  <div class="hud-dock">
+    <div class="hud-dock-col" id="hud-dock-ab">
+      <div class="hdc-head">내가 할까?</div>
+      <div class="hdc-level"><span class="dl-label">능력 레벨</span><span class="dl-sep"> : </span><span class="dl-num" id="dock-level-ab">0</span></div>
+    </div>
+    <div class="hud-dock-col" id="hud-dock-hc">
+      <div class="hdc-head">시킬까?</div>
+      <div class="hdc-level"><span class="dl-label">위임 레벨</span><span class="dl-sep"> : </span><span class="dl-num" id="dock-level-hc">0</span></div>
+    </div>
+  </div>
+  <!-- 우측: 역량 (원 7개 미터 — 6/11 HUD 개편: 타이틀·숫자·양방향 바 제거, 기본 3개 채움 = 기존 0) -->
+  <div class="stats-bar" id="stats-bar">
+    <div class="panel-content">
+      <div class="stat" id="stat-delegation">
+        <!-- v3 6/11 — pending 세모 마커 제거 (pending 로직은 유지, 흡수 시 원 미터 갱신) -->
+        <div class="stat-row"><span class="stat-name">선택</span><div class="circle-meter" id="meter-delegation" role="img" aria-label="선택 3/7"></div></div>
+      </div>
+      <div class="panel-divider"></div>
+      <div class="stat" id="stat-knowledge">
+        <div class="stat-row"><span class="stat-name" id="stat-name-knowledge">능력</span><div class="circle-meter" id="meter-knowledge" role="img" aria-label="능력 3/7"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- §17.2 — 시나리오 나가기 (전체 윈도우 좌측 상단 코너 고정, 검정. panel-row.visible ~ 셀렉터로 시나리오 진행 화면에서만 표시) -->
+<button class="scenario-exit" id="scenario-exit" onclick="exitScenario()" aria-label="시나리오 나가기">나가기</button>
+<div class="container" id="main-container"></div>
+<!-- 역량 카드 인벤토리 탭 (우측 가장자리 고정 / texts.yaml inject — 초기값은 fallback) -->
+<button class="inv-tab" id="inv-tab" onclick="toggleInventory()" aria-label="역량 카드 인벤토리 열기"><span class="inv-tab-name" id="inv-tab-name">역량 카드</span><span class="inv-tab-desc" id="inv-tab-desc">모은 카드 보기</span><span class="inv-tab-badge hidden" id="inv-tab-badge"></span></button>
+<div class="inv-panel-backdrop" id="inv-panel-backdrop" onclick="toggleInventory(false)"></div>
+<aside class="inv-panel" id="inv-panel" aria-hidden="true">
+  <div class="inv-panel-header">
+    <span class="inv-panel-title" id="inv-panel-title">역량 카드</span>
+    <button class="inv-panel-close" onclick="toggleInventory(false)" aria-label="닫기">×</button>
+  </div>
+  <div class="inv-panel-body" id="inv-list">
+    <div class="inv-empty">아직 획득한 카드가 없어요.<br>시나리오 끝에 카드를 받을 수 있습니다.</div>
+  </div>
+</aside>
+<div class="card-reward-overlay hidden" id="card-reward-overlay"></div>
+<div class="recovery-overlay hidden" id="recovery-overlay"></div>
+<button class="debug-toggle" onclick="toggleDebug()">디버그</button>
+<div class="debug-panel" id="debug-panel"></div>
+<!-- r42 — 테스팅용 화면 네비. _initDevNav가 노출(현재 로컬·라이브 모두). KT 전달 직전 숨기려면 _isLocalEnv 가드 복원 -->
+<div class="dev-nav" id="dev-nav" hidden>
+  <button type="button" onclick="showTitleScreen()">타이틀</button>
+  <button type="button" onclick="showTutorialScreen()">튜토리얼</button>
+  <button type="button" onclick="showStartScreen()">시나리오 선택</button>
+  <button type="button" onclick="devNavReport()">리포트</button>
+</div>
+<div class="version" id="version-label">v1.3-mid-r39</div>
+
+<!-- Phase 8.10b — 레벨업 이벤트 팝업 (DECISIONS §10.11) -->
+<div id="levelup-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="lvup-badge">LEVEL UP</div>
+    <div class="lvup-transition">
+      <span class="lvup-from" id="lvup-from">Lv.1</span>
+      <span class="lvup-arrow">→</span>
+      <span class="lvup-to" id="lvup-to">Lv.2</span>
+    </div>
+    <div class="lvup-effects">
+      <div class="lvup-effect">
+        <span class="lvup-effect-label">자원토큰 보너스</span>
+        <span class="lvup-effect-val" id="lvup-token-bonus">+20</span>
+      </div>
+    </div>
+    <button id="lvup-confirm" class="lvup-confirm" type="button">확인 →</button>
+  </div>
+</div>
+
+<!-- GAME OVER 모달 (5/3 정정 — 자원 부족 시 / texts.yaml inject) -->
+<div id="gameover-modal" class="gameover-overlay hidden">
+  <div class="gameover-card">
+    <div class="gameover-title" id="gameover-title">자원이 부족!</div>
+    <div class="gameover-body" id="gameover-body">자원이 부족해서 더 이상 진행할 수 없습니다.</div>
+    <div class="gameover-resources">
+      <div class="gameover-resource"><span class="gameover-resource-label" id="gameover-time-label">시간</span><span class="gameover-resource-num" id="gameover-time">0</span></div>
+      <div class="gameover-resource"><span class="gameover-resource-label" id="gameover-energy-label">에너지</span><span class="gameover-resource-num" id="gameover-energy">0</span></div>
+    </div>
+    <div class="gameover-actions">
+      <button class="gameover-report" id="gameover-btn-report" onclick="gameOverShowReport()">AI 리터러시 성장 리포트</button>
+      <button class="gameover-restart" id="gameover-btn-restart" onclick="gameOverRestart()">처음부터 다시 시작하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 학기 처음부터 확인 모달 (5/3 세션278) -->
+<div id="reset-confirm-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-title">학기를 처음부터 시작할까요?</div>
+    <div class="modal-subtitle">지금까지 진행한 학기가 모두 사라지고 새 학생으로 다시 시작합니다.</div>
+    <div class="confirm-actions">
+      <button class="confirm-cancel" onclick="closeResetConfirm()">계속하기</button>
+      <button class="confirm-destructive" onclick="confirmResetDo()">다시 시작</button>
+    </div>
+  </div>
+</div>
+
+<!-- §17.2 — 시나리오 나가기 확인 모달 -->
+<div id="exit-confirm-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-title" id="exit-confirm-title">시나리오에서 나갈까요?</div>
+    <div class="modal-subtitle" id="exit-confirm-subtitle">이번 시나리오에서 진행한 선택과 받은 카드는 사라지고, 시간·에너지는 시작 전으로 돌아갑니다.</div>
+    <div class="confirm-actions">
+      <button class="confirm-cancel" id="exit-confirm-stay" onclick="closeExitConfirm()">계속하기</button>
+      <button class="confirm-destructive" id="exit-confirm-go" onclick="confirmExitDo()">나가기</button>
+    </div>
+  </div>
+</div>
+
+<!-- Phase 8.10a — 자원토큰 분배 팝업 (DECISIONS §10.5) -->
+<div id="rp-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-title">자원토큰 분배</div>
+    <div class="modal-subtitle">추가 자원 토큰을 시간과 에너지에 필요한 만큼 나누어 담으세요.</div>
+    <div class="rp-bal">
+      <div class="rp-bal-label">남은 자원토큰</div>
+      <div class="rp-bal-num" id="rp-bal-num">0</div>
+    </div>
+    <div class="rp-buckets">
+      <div class="rp-bucket" data-axis="time">
+        <div class="rp-bucket-label">시간</div>
+        <div class="rp-bucket-meter">
+          <div class="rp-bucket-fill" id="rp-bucket-time-fill" style="width:0%"></div>
+          <div class="rp-bucket-overlay" id="rp-bucket-time-overlay" style="width:0%; left:0%"></div>
+        </div>
+        <div class="rp-bucket-num" id="rp-bucket-time-num">0/100</div>
+        <div class="rp-bucket-controls">
+          <button class="rp-btn rp-minus" data-axis="time" type="button">−</button>
+          <span class="rp-allocate" id="rp-allocate-time">+0</span>
+          <button class="rp-btn rp-plus" data-axis="time" type="button">+</button>
+        </div>
+      </div>
+      <div class="rp-bucket" data-axis="energy">
+        <div class="rp-bucket-label">에너지</div>
+        <div class="rp-bucket-meter">
+          <div class="rp-bucket-fill" id="rp-bucket-energy-fill" style="width:0%"></div>
+          <div class="rp-bucket-overlay" id="rp-bucket-energy-overlay" style="width:0%; left:0%"></div>
+        </div>
+        <div class="rp-bucket-num" id="rp-bucket-energy-num">0/100</div>
+        <div class="rp-bucket-controls">
+          <button class="rp-btn rp-minus" data-axis="energy" type="button">−</button>
+          <span class="rp-allocate" id="rp-allocate-energy">+0</span>
+          <button class="rp-btn rp-plus" data-axis="energy" type="button">+</button>
+        </div>
+      </div>
+    </div>
+    <button id="rp-confirm" class="rp-confirm" type="button" disabled>분배 완료 →</button>
+  </div>
+</div>
+
+<script>// __JS_INJECT__</script>
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>타이틀 CRT 시안 v2 — AI 리터러시</title>
+<style>
+@font-face{
+  font-family:"Galmuri11";
+  src:url("../../fonts/Galmuri11.woff2") format("woff2");
+  font-display:block;
+}
+:root{
+  /* 화면 톤 */
+  --green:#7fffb0; --green-dim:#3aa86a; --amber:#ffcf6b; --pop:#ff6b9d; --cyan:#6bd5ff;
+  --screen:#0c1410;
+  /* 모니터 톤 (레퍼런스 SVG/JPG 추출) */
+  --cream:#f3e6cb; --cream-2:#e3d1ae; --cream-edge:#cdb78f;
+  --choco:#3b2c21; --choco-2:#27190f; --choco-lip:#5a4231;
+  --led:#ff7a3c;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:radial-gradient(ellipse at center,#1b1b1b 0%,#070707 70%,#000 100%);
+  font-family:"Galmuri11",monospace;
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:26px 26px 74px;
+  -webkit-font-smoothing:none;
+}
+
+/* ===== 모니터 본체 (크림) ===== */
+.monitor{
+  width:min(92vw,840px);
+  background:linear-gradient(168deg,var(--cream) 0%,var(--cream-2) 78%,var(--cream-edge) 100%);
+  border-radius:30px 30px 22px 22px;
+  padding:26px 30px 22px;
+  position:relative;
+  box-shadow:
+    inset 0 3px 0 rgba(255,255,255,.55),
+    inset 0 -10px 22px rgba(120,90,55,.35),
+    inset 0 0 0 2px rgba(120,90,55,.18),
+    0 34px 80px rgba(0,0,0,.72);
+}
+/* 상단 패널 이음새(통풍 슬릿) */
+.monitor::before{
+  content:"";position:absolute;left:34px;right:34px;top:13px;height:5px;
+  border-radius:3px;
+  background:repeating-linear-gradient(90deg,
+    rgba(120,90,55,.0) 0 7px, rgba(120,90,55,.22) 7px 8px);
+  opacity:.7;
+}
+
+/* ===== 초콜릿 경사 베젤 (화면이 안으로 박힌 느낌) ===== */
+.bezel{
+  margin-top:10px;
+  background:linear-gradient(160deg,var(--choco-lip),var(--choco) 30%,var(--choco-2) 100%);
+  border-radius:20px;
+  padding:22px;
+  box-shadow:
+    inset 0 4px 10px rgba(0,0,0,.6),
+    inset 0 -3px 6px rgba(120,80,50,.25),
+    0 1px 0 rgba(255,255,255,.35);
+}
+
+/* ===== 화면 ===== */
+.screen{
+  position:relative;
+  aspect-ratio:4/3;
+  background:radial-gradient(ellipse at center,#10221a 0%,var(--screen) 60%,#060b08 100%);
+  border-radius:18px/22px;
+  overflow:hidden;
+  box-shadow:
+    inset 0 0 18px rgba(0,0,0,.95),
+    inset 0 0 70px rgba(0,0,0,.6);
+}
+/* 좌상단 유리 반사광 */
+.glare{position:absolute;z-index:42;left:-6%;top:-10%;width:62%;height:46%;
+  background:linear-gradient(135deg,rgba(220,255,240,.16),rgba(220,255,240,0) 60%);
+  transform:rotate(-8deg);pointer-events:none;border-radius:50%}
+/* 스캔라인 */
+.screen::before{
+  content:"";position:absolute;inset:0;z-index:40;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,
+    rgba(0,0,0,0) 0 2px, rgba(0,0,0,.22) 3px 3px);
+  mix-blend-mode:multiply;
+}
+/* 비네트 + 곡면 글로우 + 플리커 */
+.screen::after{
+  content:"";position:absolute;inset:0;z-index:41;pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(0,0,0,0) 52%,rgba(0,0,0,.6) 100%);
+  box-shadow:inset 0 0 44px rgba(127,255,176,.05);
+  animation:flicker 5s infinite steps(60);
+}
+@keyframes flicker{0%,97%{opacity:1}98%{opacity:.93}100%{opacity:1}}
+
+/* 화면 안 콘텐츠 — 상하 여백 넉넉히 */
+.layer{position:absolute;inset:0;padding:14% 9%;z-index:10;display:flex;flex-direction:column}
+
+/* 전원 켜짐 플래시 */
+.flash{position:absolute;inset:0;z-index:60;background:#eafff2;opacity:0;pointer-events:none}
+#title.on .flash{animation:powerOn .55s ease-out both}
+@keyframes powerOn{
+  0%{opacity:0;transform:scaleY(.004)}
+  8%{opacity:.95;transform:scaleY(.02)}
+  22%{opacity:.85;transform:scaleY(1)}
+  100%{opacity:0;transform:scaleY(1)}
+}
+
+/* ===== 부팅 ===== */
+#boot{justify-content:flex-start}
+.boot-top{display:flex;justify-content:flex-end}
+.boot-line{margin-top:4px;color:var(--green);font-size:clamp(12px,2.4vw,17px);
+  line-height:2.0;text-shadow:0 0 6px rgba(127,255,176,.55);min-height:2em;letter-spacing:.5px}
+.boot-line.sub{color:var(--green-dim);font-size:clamp(10px,1.9vw,13px)}
+.cur{display:inline-block;width:.62em;height:1.05em;background:var(--green);
+  vertical-align:-2px;box-shadow:0 0 8px var(--green);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ===== 타이틀 ===== */
+#title{justify-content:center;align-items:center;text-align:center;opacity:0;transition:opacity .08s}
+#title.on{opacity:1}
+.badge{font-size:clamp(9px,1.6vw,12px);color:var(--green);border:2px solid var(--green-dim);
+  padding:4px 12px;letter-spacing:1px;text-shadow:0 0 6px rgba(127,255,176,.5);margin-bottom:5%}
+.t1,.t2{font-size:clamp(22px,5.7vw,46px);line-height:1.25;letter-spacing:1px}
+.t1{color:var(--amber);text-shadow:3px 3px 0 #7a4a12,0 0 16px rgba(255,207,107,.4)}
+.t2{color:var(--pop);text-shadow:3px 3px 0 #7a1e44,0 0 16px rgba(255,107,157,.4);margin-bottom:5%}
+.subs{color:#cfeee0;font-size:clamp(10px,1.8vw,13px);line-height:1.7;margin-bottom:6%}
+.subs .p{color:var(--cyan)}
+.intro{width:100%;max-width:580px;border:2px solid var(--green-dim);
+  background:rgba(8,22,16,.72);padding:4.5% 6%;
+  box-shadow:0 0 0 2px rgba(0,0,0,.5),0 0 22px rgba(127,255,176,.12) inset}
+.intro p{color:#eafff2;font-size:clamp(11px,1.9vw,15px);line-height:1.85;
+  text-shadow:0 0 5px rgba(127,255,176,.25)}
+.hl-c{color:var(--cyan)}.hl-p{color:var(--pop)}.hl-a{color:var(--amber)}
+
+/* 타이틀 — 레트로 그려짐/써짐 연출 (JS 시퀀스 구동) */
+/* 인트로 박스: 위→아래로 그려지듯 */
+#title .intro{clip-path:inset(0 0 100% 0);transition:clip-path .45s ease-out}
+#title .intro.draw{clip-path:inset(0 0 0 0)}
+#title .start-btn{opacity:0;pointer-events:none;transition:opacity .3s}
+#title .start-btn.show{opacity:1;pointer-events:auto;animation:btnPulse 1.3s .3s ease-in-out infinite}
+@keyframes btnPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06);box-shadow:7px 7px 0 #7a4a12}}
+/* 스캔라인 스윕 — 화면을 그리는 빛줄기 */
+.sweep{position:absolute;left:0;right:0;top:0;height:16px;z-index:55;pointer-events:none;opacity:0;
+  background:linear-gradient(rgba(127,255,176,0),rgba(127,255,176,.6),rgba(127,255,176,0));
+  box-shadow:0 0 22px 6px rgba(127,255,176,.35)}
+#title.on .sweep{animation:sweep .75s .18s ease-out both}
+@keyframes sweep{0%{opacity:.95;top:-3%}88%{opacity:.95}100%{opacity:0;top:101%}}
+/* 타이틀 글자 글리치(써진 뒤 잠깐 떨림) */
+.glitch{animation:glitch .22s steps(2) 3}
+@keyframes glitch{0%,100%{transform:translate(0,0)}25%{transform:translate(-2px,1px)}
+  50%{transform:translate(2px,-1px)}75%{transform:translate(-1px,0)}}
+/* 캡처/정적 모드: 애니메이션 끄고 최종 상태 */
+#title.cap .flash,#title.cap .sweep{animation:none;opacity:0}
+#title.cap .intro{clip-path:none}
+#title.cap .start-btn{opacity:1;animation:none}
+
+/* 공통 버튼 */
+.start-btn{font-family:inherit;cursor:pointer;font-size:clamp(14px,2.5vw,19px);
+  color:#0c1410;background:var(--amber);border:none;padding:13px 26px;
+  box-shadow:5px 5px 0 #7a4a12;letter-spacing:1px;transition:transform .05s,box-shadow .05s}
+.start-btn:hover{background:#ffd884}
+.start-btn:active{transform:translate(3px,3px);box-shadow:2px 2px 0 #7a4a12}
+.intro .start-btn{margin-top:8%}
+
+/* ===== 위임 정의 ===== */
+#deleg{justify-content:center;align-items:center;text-align:center;opacity:0;transition:opacity .4s}
+#deleg.on{opacity:1}
+.delg-word{color:var(--amber);font-size:clamp(34px,8vw,66px);line-height:1;
+  text-shadow:4px 4px 0 #7a4a12,0 0 22px rgba(255,207,107,.45);margin-bottom:9%}
+.delg-lines{min-height:7.2em;display:flex;flex-direction:column;gap:.5em;
+  width:100%;max-width:600px}
+.delg-lines .ln{color:#eafff2;font-size:clamp(13px,2.6vw,20px);line-height:1.85;
+  min-height:1.85em;text-shadow:0 0 5px rgba(127,255,176,.25)}
+.delg-lines .ln .em{color:var(--amber)}
+.delg-lines.blink{animation:textblink .28s steps(1) 3}
+@keyframes textblink{50%{opacity:.15}}
+#deleg .start-btn{margin-top:8%;opacity:0;pointer-events:none;transition:opacity .35s}
+#deleg .start-btn.show{opacity:1;pointer-events:auto}
+
+/* ===== 게임 방법 (문안 작업 예정) ===== */
+#method{justify-content:flex-start;opacity:0;transition:opacity .4s;overflow:auto}
+#method.on{opacity:1}
+#method::-webkit-scrollbar{width:8px}#method::-webkit-scrollbar-thumb{background:var(--green-dim)}
+.m-head{color:var(--green);font-size:clamp(13px,2.3vw,17px);
+  border-bottom:2px solid var(--green-dim);padding-bottom:8px;margin-bottom:6%;
+  text-shadow:0 0 6px rgba(127,255,176,.5)}
+.m-todo{display:inline-block;font-size:11px;color:#0c1410;background:var(--pop);
+  padding:2px 8px;margin-left:8px;vertical-align:2px}
+.m-line{color:#dff7ea;font-size:clamp(11px,2.1vw,16px);line-height:1.7;
+  margin-bottom:15px;display:flex;gap:11px;align-items:flex-start;text-align:left}
+.m-line .mtext{min-height:1.7em}
+.m-line .no{flex:none;width:1.8em;height:1.8em;display:flex;align-items:center;justify-content:center;
+  font-size:clamp(11px,2.0vw,15px);color:#0c1410;box-shadow:2px 2px 0 rgba(0,0,0,.45);opacity:0}
+.m-line .no.numon{opacity:1}
+.m-line .no.blink2{animation:numblink .4s steps(1) 2}
+@keyframes numblink{0%,100%{opacity:1}50%{opacity:0}}
+.m-line:nth-child(2) .no{background:var(--green)}
+.m-line:nth-child(3) .no{background:var(--cyan)}
+.m-line:nth-child(4) .no{background:var(--amber)}
+.m-line:nth-child(5) .no{background:var(--pop)}
+.m-line:nth-child(6) .no{background:#7fd0ff}
+#method .m-kicker{opacity:0;transition:opacity .4s}
+#method .m-kicker.show{opacity:1}
+#method .start-btn{opacity:0;transition:opacity .3s}
+#method .start-btn.show{opacity:1}
+.m-kicker{color:var(--pop);font-size:clamp(12px,2.2vw,16px);text-align:center;
+  margin-top:7%;line-height:1.7;text-shadow:0 0 8px rgba(255,107,157,.4)}
+#method .start-btn{margin:8% auto 2%;display:block}
+
+/* ===== 하단 베이스: 통풍구 + LED ===== */
+.base{margin-top:16px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 6px;height:30px}
+.vents{flex:1;height:9px;margin-right:16px;border-radius:2px;
+  background:repeating-linear-gradient(90deg,
+    rgba(120,85,50,.0) 0 9px, rgba(120,85,50,.30) 9px 11px)}
+.brand{display:flex;align-items:center;gap:9px;font-size:11px;color:#8a7656;letter-spacing:1px;white-space:nowrap}
+.led{width:9px;height:9px;border-radius:50%;background:var(--led);
+  box-shadow:0 0 9px var(--led);animation:led 2.6s infinite}
+@keyframes led{0%,92%{opacity:1}96%{opacity:.4}100%{opacity:1}}
+
+/* ===== 시안 전용 컨트롤 ===== */
+.ctl{position:fixed;left:0;right:0;bottom:0;display:flex;gap:8px;flex-wrap:wrap;
+  justify-content:center;padding:10px;background:rgba(0,0,0,.62);z-index:99}
+.ctl button{font-family:"Galmuri11",monospace;font-size:12px;cursor:pointer;
+  background:#1b1815;color:var(--green);border:1px solid var(--green-dim);padding:7px 13px}
+.ctl button:hover{background:#262019}
+.ctl .note{color:#7b726a;font-size:11px;align-self:center;margin-right:8px}
+</style>
+</head>
+<body>
+<div class="monitor">
+  <div class="bezel">
+    <div class="screen" id="screen">
+      <div class="glare"></div>
+
+      <!-- 부팅 -->
+      <div class="layer" id="boot">
+        <div class="boot-line" id="bootLine"></div>
+        <div class="boot-line sub" id="bootSub"></div>
+      </div>
+
+      <!-- 타이틀 -->
+      <div class="layer" id="title">
+        <div class="flash"></div>
+        <div class="sweep"></div>
+        <div class="t1" id="tT1">내가 할까? 시킬까?</div>
+        <div class="t2" id="tT2">그것이 문제로다!</div>
+        <div class="subs" id="tSubs">AI 시대, 무엇을 맡기고 무엇을 <span class="p">직접</span> 할 것인가!</div>
+        <div class="intro" id="tIntro">
+          <p id="tIntroP">딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>
+          누구나 할 수 있다면, <span class="hl-c">누구인가</span>가 중요하다.<br>
+          무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지.<br>
+          당신은 구별할 수 있을까?</p>
+          <button class="start-btn" id="tBtn" onclick="showDeleg()">▶ 시작하기</button>
+        </div>
+      </div>
+
+      <!-- 위임 정의 -->
+      <div class="layer" id="deleg">
+        <div class="delg-word">위임</div>
+        <div class="delg-lines" id="delgLines">
+          <div class="ln"></div><div class="ln"></div><div class="ln"></div>
+        </div>
+        <button class="start-btn" id="delgBtn" onclick="showMethod()">계속 →</button>
+      </div>
+
+      <!-- 게임 방법 (문안 작업 예정) -->
+      <div class="layer" id="method">
+        <div class="m-head">게임 방법</div>
+        <div class="m-line"><span class="no">1</span><span class="mtext">상황이 주어진다. 이 일, 내가 할까? AI에게 시킬까?</span></div>
+        <div class="m-line"><span class="no">2</span><span class="mtext">선택은 각기 다른 <span class="hl-c">시간</span>과 <span class="hl-p">에너지</span>, 자원을 필요로 한다.</span></div>
+        <div class="m-line"><span class="no">3</span><span class="mtext">직접 하면 자원 비용이 비싸다. 대신 나의 <span class="hl-a">능력</span>이 쌓인다.</span></div>
+        <div class="m-line"><span class="no">4</span><span class="mtext"><span class="hl-a">능력</span>이 쌓이면 다음 위임의 비용이 싸진다!</span></div>
+        <div class="m-line"><span class="no">5</span><span class="mtext">제출 전, 마지막 검토 한 번! 어떻게 보느냐에 따라 <span class="hl-p">점수</span>가 달라진다.</span></div>
+        <div class="m-kicker">이 게임의 비밀: 잘 시키는 사람은, 직접 해 본 사람이다.</div>
+        <button class="start-btn" onclick="reboot()">게임 시작 ▶</button>
+      </div>
+
+    </div>
+  </div>
+  <div class="base">
+    <div class="vents"></div>
+    <div class="brand"><span class="led"></span> NOLGONG-CRT · AI-2026</div>
+  </div>
+</div>
+
+<div class="ctl">
+  <span class="note">시안 전용 컨트롤(게임엔 없음)</span>
+  <button onclick="reboot()">↻ 부팅부터</button>
+  <button onclick="skipToTitle()">타이틀</button>
+  <button onclick="showDeleg()">위임 정의</button>
+  <button onclick="showMethod()">게임 방법</button>
+</div>
+
+<script>
+const boot=document.getElementById('boot'), title=document.getElementById('title');
+const deleg=document.getElementById('deleg'), method=document.getElementById('method');
+const bootLine=document.getElementById('bootLine'), bootSub=document.getElementById('bootSub');
+const delgLines=document.getElementById('delgLines'), delgBtn=document.getElementById('delgBtn');
+const tT1=document.getElementById('tT1'), tT2=document.getElementById('tT2');
+const tSubs=document.getElementById('tSubs'), tIntro=document.getElementById('tIntro'), tIntroP=document.getElementById('tIntroP'), tBtn=document.getElementById('tBtn');
+const T_T1="내가 할까? 시킬까?", T_T2="그것이 문제로다!";
+const T_SUBS='AI 시대, 무엇을 맡기고 무엇을 <span class="p">직접</span> 할 것인가!';
+const T_HOST='딸깍하면 누구나 할 수 있는 AI 시대라고 한다.<br>누구나 할 수 있다면, <span class="hl-c">누구인가</span>가 중요하다.<br>무엇을 AI가 해야 하고 무엇은 내가 직접 해야 하는지.<br>당신은 구별할 수 있을까?';
+const BOOT="경기도 하이러닝 - AI 리터러시: 게임 시작";
+const BOOT_SUB="> 시스템 준비 완료. 잠시 후 시작합니다_";
+const DELG=[
+  '위임이란 내가 할 일을 다른 누군가에게 맡기는 것!',
+  '내가 할까? <span class="em">AI에게 시킬까?</span>',
+  '내 대신 AI에게 시키는 것이 바로 위임이다.'
+];
+let timers=[];
+const t=(fn,ms)=>{const id=setTimeout(fn,ms);timers.push(id);return id;};
+const clearT=()=>{timers.forEach(clearTimeout);timers=[];};
+function hideAll(){[boot,title,deleg,method].forEach(l=>{l.style.display='none';l.classList.remove('on');});}
+function show(l){l.style.display='flex';void l.offsetWidth;l.classList.add('on');}
+
+/* 부팅 */
+function reboot(){
+  clearT();hideAll();
+  boot.style.display='flex';
+  bootSub.innerHTML='';
+  bootLine.innerHTML='<span class="cur"></span>';   // 좌측 커서 깜빡(2회) 후 좌→우 타이핑
+  t(()=>typeInto(bootLine,BOOT,65,()=>t(()=>typeInto(bootSub,BOOT_SUB,38,()=>t(toTitle,1000)),450)),1300);
+}
+/* HTML-안전 타이핑(태그 없는 평문 전용) */
+function typeInto(el,str,sp,cb){
+  let i=0;(function step(){
+    if(i<=str.length){el.innerHTML=str.slice(0,i)+'<span class="cur"></span>';i++;t(step,sp);}
+    else{el.textContent=str;cb&&cb();}
+  })();
+}
+function toTitle(){hideAll();title.classList.remove('cap');show(title);runTitle();}
+function skipToTitle(){clearT();toTitle();}
+
+/* 타이틀 레트로 시퀀스: 스윕(그려짐) → 제목 써짐+글리치 → 부제·인트로 써짐 → 버튼 켜짐 */
+function gl(el){el.classList.add('glitch');t(()=>el.classList.remove('glitch'),700);}
+function runTitle(){
+  clearT();
+  tT1.textContent=''; tT2.textContent='';
+  tSubs.innerHTML=''; tIntroP.innerHTML='';
+  tIntro.classList.remove('draw'); tBtn.classList.remove('show');
+  tT1.classList.remove('glitch'); tT2.classList.remove('glitch');
+  t(()=>                                          // 스윕이 화면 그린 뒤 제목부터 써짐
+    typeInto(tT1,T_T1,60,()=>{ gl(tT1);
+      typeInto(tT2,T_T2,60,()=>{ gl(tT2);
+        t(()=>typeHTMLLine(tSubs,T_SUBS,18,()=>{
+          tIntro.classList.add('draw');           // 인트로 박스 위→아래로 그려짐
+          t(()=>typeHTMLLine(tIntroP,T_HOST,11,()=>t(()=>tBtn.classList.add('show'),160)),320);
+        }),250);
+      });
+    })
+  ,720);
+}
+
+/* 위임 정의 — 줄별 한 글자씩(빠르게) → 전체 깜빡 2~3회 → 버튼 */
+function showDeleg(){
+  clearT();hideAll();show(deleg);
+  const lns=delgLines.querySelectorAll('.ln');
+  lns.forEach(l=>l.innerHTML='');
+  delgBtn.classList.remove('show');
+  delgLines.classList.remove('blink');
+  typeLine(0,lns);
+}
+function typeLine(idx,lns){
+  if(idx>=DELG.length){
+    t(()=>{delgLines.classList.add('blink');
+      t(()=>{delgLines.classList.remove('blink');delgBtn.classList.add('show');},900);},350);
+    return;
+  }
+  typeHTMLLine(lns[idx],DELG[idx],33,()=>t(()=>typeLine(idx+1,lns),260));
+}
+/* <span> 태그를 건너뛰며 글자만 타이핑 */
+function typeHTMLLine(el,html,sp,cb){
+  // 토큰화: 텍스트 글자 또는 통째 태그
+  const toks=[];let m;const re=/(<[^>]+>)|([^<])/g;
+  while((m=re.exec(html))){toks.push(m[1]?{tag:m[1]}:{ch:m[2]});}
+  let i=0,out='';
+  (function step(){
+    if(i<toks.length){
+      const tk=toks[i++];out+=tk.tag||tk.ch;
+      el.innerHTML=out+'<span class="cur"></span>';
+      t(step, tk.tag?0:sp);
+    }else{el.innerHTML=out;cb&&cb();}
+  })();
+}
+/* 게임 방법 — 번호 배지 2회 깜빡 → 줄 텍스트 좌→우 타이핑, 5단계 순차 */
+const M_TEXT=[
+  '상황이 주어진다. 이 일, 내가 할까? AI에게 시킬까?',
+  '선택은 각기 다른 <span class="hl-c">시간</span>과 <span class="hl-p">에너지</span>, 자원을 필요로 한다.',
+  '직접 하면 자원 비용이 비싸다. 대신 나의 <span class="hl-a">능력</span>이 쌓인다.',
+  '<span class="hl-a">능력</span>이 쌓이면 다음 위임의 비용이 싸진다!',
+  '제출 전, 마지막 검토 한 번! 어떻게 보느냐에 따라 <span class="hl-p">점수</span>가 달라진다.'
+];
+function showMethod(){
+  clearT();hideAll();show(method);
+  const lines=[...method.querySelectorAll('.m-line')];
+  const kicker=method.querySelector('.m-kicker'), mbtn=method.querySelector('.start-btn');
+  lines.forEach(l=>{l.querySelector('.mtext').innerHTML='';
+    const n=l.querySelector('.no');n.classList.remove('numon','blink2');});
+  kicker.classList.remove('show');mbtn.classList.remove('show');
+  runMethodLine(0,lines,kicker,mbtn);
+}
+function runMethodLine(i,lines,kicker,mbtn){
+  if(i>=lines.length){
+    t(()=>{kicker.classList.add('show');t(()=>mbtn.classList.add('show'),350);},250);
+    return;
+  }
+  const no=lines[i].querySelector('.no'), txt=lines[i].querySelector('.mtext');
+  no.classList.add('blink2');                       // 배지 2회 깜빡
+  t(()=>{no.classList.remove('blink2');no.classList.add('numon');
+    typeHTMLLine(txt,M_TEXT[i],28,()=>t(()=>runMethodLine(i+1,lines,kicker,mbtn),200));
+  },860);
+}
+
+/* 시안 캡처용 상태 진입 */
+const S=new URLSearchParams(location.search).get('s');
+if(S==='title'){hideAll();title.style.display='flex';title.classList.add('cap','on');}
+else if(S==='deleg'){hideAll();show(deleg);
+  const lns=delgLines.querySelectorAll('.ln');DELG.forEach((h,i)=>lns[i].innerHTML=h);delgBtn.classList.add('show');}
+else if(S==='method'){hideAll();show(method);
+  method.querySelectorAll('.no').forEach(n=>n.classList.add('numon'));
+  method.querySelector('.m-kicker').classList.add('show');
+  method.querySelector('.start-btn').classList.add('show');}
+else if(S==='boot'){bootLine.innerHTML=BOOT.slice(0,14)+'<span class="cur"></span>';}
+else reboot();
+</script>
+</body>
+</html>

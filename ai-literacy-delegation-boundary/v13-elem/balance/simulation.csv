@@ -1,0 +1,20 @@
+﻿block,scenario_id,max_cost_path,max_time,max_energy,avg_time,avg_energy,min_time,min_energy
+scenario,selfintro,A1R3,67,57,32,25,7,5
+scenario,groupwork,A1R3,72,60,36,28,12,9
+scenario,eorinwangja,A1R3,60,54,29,23,6,3
+scenario,career,A1R3,75,65,35,27,9,6
+scenario,studyplan,A1R3,75,65,37,28,9,6
+
+block,metric,value,note,,,,,
+semester_total,time_max_start,100,L1 시작 시간 자원
+semester_total,energy_max_start,100,L1 시작 에너지 자원
+semester_total,total_max_time,349,5 시나리오 최대 비용 합 (할인 0)
+semester_total,total_max_energy,301,5 시나리오 최대 비용 합 (할인 0)
+semester_total,total_avg_time,169,5 시나리오 평균 비용 합
+semester_total,total_avg_energy,131,5 시나리오 평균 비용 합
+semester_total,total_min_time,43,5 시나리오 최소 비용 합
+semester_total,total_min_energy,29,5 시나리오 최소 비용 합
+verdict,verdict_time_max,OVER (-249),시작 자원 100 대비
+verdict,verdict_energy_max,OVER (-201),시작 자원 100 대비
+verdict,verdict_time_avg,OVER (-69),평균 선택 시
+verdict,verdict_energy_avg,OVER (-31),평균 선택 시
