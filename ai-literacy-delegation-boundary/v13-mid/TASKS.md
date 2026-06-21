@@ -1,6 +1,20 @@
 ## TASKS — v1.3-mid (중등)
 
-**최종 업데이트**: 2026-06-21 (자원토큰 분배 모달 디자인 정리)
+**최종 업데이트**: 2026-06-21 (초등 변종 데이터-분리 구현 — 공유 코드베이스)
+
+### ◐ 2026-06-21 — 초등/중등 변종 데이터-분리 (피터공: 공유 코드베이스 확정)
+
+피터공 결정: 코드 분리 X(v12-elem 통째복사 실패 재발 방지), 공유 코드베이스 + 데이터-분리. 중등 큰 로직 불변 절대조건. 직백아리 검증: 변종 빌드 배관·동현공 두-빌드 분리는 이미 작동, 콘텐츠 데이터 층만 미구현이었음. SPEC-variant §3a.
+- [x] **build.py 데이터-분리** — `deep_merge` + `_load_variant_yaml`(오버레이 없으면 NO-OP). scenarios/cuts/micro/aiflags=파일교체, texts=키병합(UI 공유). 간이안(data/ 베이스 + data/{variant}/ 오버레이), content/_shared 전체신설은 보류.
+- [x] **--dev 빌드** — 변종 디버그 켠 빌드를 builds/{variant}-dev/에 산출(배포 오염 방지). 초등 개발 라이브 테스트용.
+- [x] **중등 보호 검증 PASS** — data/elem 없는 휴면 상태에서 index.html·builds/mid·builds/elem SHA-256 변경 전과 바이트 동일.
+- [x] **오버레이 작동 검증** — 일회용 elem texts 오버레이로 반영+중등UI상속(병합)+debug유지 확인 후 제거.
+- [ ] 초등 CSV → data/elem/scenarios.yaml 변환 (회복력 교체·위임 정규화·카드모델 A)
+- [ ] data/elem cuts/micro/aiflags + texts 오버레이 + 초등 메타·desc·lesson·domainPool 초안
+- [ ] 초등 이미지 소스 결정
+→ [[요청.26.0621.1539-초등데이터]]
+
+### ✓ 2026-06-21 — 자원토큰 분배 모달 UI 정리 (피터공)
 
 ### ✓ 2026-06-21 — 자원토큰 분배 모달 UI 정리 (피터공)
 

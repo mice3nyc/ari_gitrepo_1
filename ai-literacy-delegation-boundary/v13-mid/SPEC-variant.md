@@ -1,8 +1,22 @@
 ---
 author: 아리공
 created: 2026-06-17
-status: focused 구현 완료 (2026-06-18 세션498) · 전체 v14-split 외부화는 post-KT
-implemented: §3a(--variant), §3c(변종 변수 5키 주입), §6(자기완결 builds/{variant}/) — v13-mid build.py에 추가. §3b(--release)는 terser 폴백 stub. H1~H9 외부화·content/_shared override·v14-split 신규 루트는 미착수(post-KT).
+status: 데이터-분리 구현 (2026-06-21 세션510) · H1~H9 외부화는 콘텐츠 도착분만 선별 진행
+implemented: §3c(변종 변수 키 주입), §6(자기완결 builds/{variant}/), §3a 데이터-분리(변종 데이터 오버레이) — v13-mid build.py에 추가. §3b(--release)는 terser 폴백 stub. H1~H9 전체 외부화·content/_shared 신규 루트는 미착수(초등은 카드 마스터·판정 공유라 전체 불필요).
+
+## 데이터-분리 구현 메모 (세션510, 6/21) — 간이안 채택
+
+피터공 결정(6/21): 공유 코드베이스 유지(분리 코드 X — v12-elem 통째복사 실패 재발 방지), 데이터-분리부터. 중등 큰 로직 불변이 절대조건.
+
+채택: **content/_shared 전체 신설 대신 간이안** — `data/`를 베이스(=현행 중등)로 두고, `data/{variant}/` 오버레이만 deep-merge. build.py 구현:
+- `deep_merge(base, override)`: dict 키 병합 / list·스칼라 교체 (§1).
+- `_load_variant_yaml(base, variant, name, merge)`: 오버레이 없으면 NO-OP. scenarios·cuts·micro·aiflags = **파일 교체**(변종 고유 콘텐츠), texts = **deep_merge**(UI 문구 공유 → 한 번 고치면 양쪽).
+- `build_data_injection(variant)`: 오버레이 적용. scenarios 오버레이 있으면 EXPECTED_SCENARIO_KEYS 고정검증 건너뜀(베이스/중등은 유지 = 회귀 안전장치).
+- `--dev`: 변종 빌드라도 debug:true 유지. 산출은 `builds/{variant}-dev/`(배포 빌드 오염 방지). 초등 개발 라이브 테스트용.
+
+**중등 보호 검증 PASS**: data/elem 없는 상태(휴면)에서 index.html·builds/mid·builds/elem 3종 모두 변경 전과 SHA-256 바이트 동일. 오버레이 작동 검증(일회용 elem texts): TEST 문구 반영 + 중등 UI 상속(병합) + debug 유지 확인 후 잔재 제거.
+
+다음: 초등 CSV → `data/elem/scenarios.yaml` 변환 + cuts/micro/aiflags + texts 오버레이.
 ---
 
 ## SPEC — 초등/중등 변종 분기 (단일 코드 × 변종 콘텐츠)
