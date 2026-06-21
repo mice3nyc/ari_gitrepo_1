@@ -153,20 +153,6 @@ function showRPDistributionModal(){
       eOver.style.left=((re.current/re.max)*100)+'%';
       eOver.style.width=((eApplied/re.max)*100)+'%';
 
-      // Preview
-      var preview=document.getElementById('rp-preview');
-      if(alloc.time||alloc.energy){
-        var _prevFmt=(_rpM.preview_format||'→ 시간 +{time} / 에너지 +{energy} 충전');
-        var p=_prevFmt.replace('{time}',tApplied).replace('{energy}',eApplied);
-        var totalWaste=tWaste+eWaste;
-        if(totalWaste>0)p+=' <span class="rp-overflow-warn">'+(_rpM.overflow_warn||'(메터 초과로 {waste} 손실)').replace('{waste}',totalWaste)+'</span>';
-        preview.innerHTML=p;
-        preview.classList.remove('empty');
-      }else{
-        preview.textContent=(_rpM.preview_empty||'토큰을 시간/에너지에 분배하세요');
-        preview.classList.add('empty');
-      }
-
       // Buttons enabled state — 미터 초과 불가
       var timeFull=(rt.current+alloc.time)>=rt.max;
       var energyFull=(re.current+alloc.energy)>=re.max;

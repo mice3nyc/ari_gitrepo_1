@@ -880,9 +880,11 @@ button, input, select, textarea { font-family: inherit; }
 .lvup-confirm:active { box-shadow:var(--shadow-press); transform:translate(2px,2px); }
 
 /* ===== Phase 8.10a — 자원토큰 분배 모달 ===== */
-.rp-bal { text-align:center; padding:14px 0; border-bottom:1px solid #eee; margin-bottom:16px; }
-.rp-bal-label { font-size:10px; color:#888; letter-spacing:1.5px; font-weight:600; }
-.rp-bal-num { font-size:36px; font-weight:700; color:#111; line-height:1.05; }
+#rp-modal .modal-title { text-align:center; border-bottom:2px solid var(--ink); padding-bottom:12px; margin-bottom:14px; }
+#rp-modal .modal-subtitle { text-align:center; }
+.rp-bal { display:flex; align-items:baseline; justify-content:center; gap:10px; padding:14px 0; border-bottom:1px solid #eee; margin-bottom:16px; }
+.rp-bal-label { font-size:12px; color:#888; letter-spacing:1px; font-weight:600; }
+.rp-bal-num { font-size:34px; font-weight:800; color:#111; line-height:1; }
 .rp-bal-num.zero { color:var(--acc-mint-deep); }
 .rp-buckets { display:flex; gap:14px; margin-bottom:14px; }
 .rp-bucket { flex:1; padding:12px; border:var(--border-w) solid var(--ink); background:var(--bg-soft); }
@@ -898,9 +900,6 @@ button, input, select, textarea { font-family: inherit; }
 .rp-btn.charging:not(:disabled) { background:var(--acc-yellow); color:var(--ink); transform:translate(2px,2px); box-shadow:var(--shadow-press); }
 .rp-btn:disabled { opacity:0.25; cursor:not-allowed; }
 .rp-allocate { font-size:15px; font-weight:700; color:#111; min-width:30px; text-align:center; }
-.rp-preview { font-size:13px; font-weight:600; color:#222; padding:12px; text-align:center; border:1px dashed #ccc; margin-bottom:14px; min-height:20px; line-height:1.5; }
-.rp-preview .rp-overflow-warn { color:#c44; font-weight:700; font-size:11px; }
-.rp-preview.empty { color:#999; }
 .rp-confirm { width:100%; padding:11px; background:var(--acc-yellow); color:var(--ink); border:var(--border-w) solid var(--ink); font-size:13px; font-weight:700; font-family:var(--font-main); cursor:pointer; letter-spacing:1px; transition:transform 0.05s, box-shadow 0.05s; box-shadow:var(--shadow); }
 .rp-confirm:active:not(:disabled) { box-shadow:var(--shadow-press); transform:translate(2px,2px); }
 .rp-confirm:disabled { background:var(--bg-page); color:var(--ink-soft); cursor:not-allowed; box-shadow:none; }
@@ -2105,7 +2104,7 @@ button,
 <div id="rp-modal" class="modal-overlay hidden">
   <div class="modal-card">
     <div class="modal-title">자원토큰 분배</div>
-    <div class="modal-subtitle">받은 토큰을 시간과 에너지에 나눠 담으세요.<br><span style="font-size:11px;color:#888;">시간과 에너지는 알아서 돌아오지 않습니다. 여기서 넣는 만큼만 충전됩니다.</span></div>
+    <div class="modal-subtitle">추가 자원 토큰을 시간과 에너지에 필요한 만큼 나누어 담으세요.</div>
     <div class="rp-bal">
       <div class="rp-bal-label">남은 자원토큰</div>
       <div class="rp-bal-num" id="rp-bal-num">0</div>
@@ -2138,7 +2137,6 @@ button,
         </div>
       </div>
     </div>
-    <div class="rp-preview empty" id="rp-preview">토큰을 시간/에너지에 분배하세요</div>
     <button id="rp-confirm" class="rp-confirm" type="button" disabled>분배 완료 →</button>
   </div>
 </div>
@@ -13946,8 +13944,8 @@ var TEXTS = {
     },
     "rp_distribution": {
       "title": "자원토큰 분배",
-      "subtitle": "받은 토큰을 시간과 에너지에 나눠 담으세요.",
-      "subtitle_hint": "시간과 에너지는 알아서 돌아오지 않습니다. 여기서 넣는 만큼만 충전됩니다.",
+      "subtitle": "추가 자원 토큰을 시간과 에너지에 필요한 만큼 나누어 담으세요.",
+      "subtitle_hint": "",
       "remaining_label": "남은 자원토큰",
       "preview_empty": "토큰을 시간/에너지에 분배하세요",
       "preview_format": "→ 시간 +{time} / 에너지 +{energy} 충전",
@@ -14881,20 +14879,6 @@ function showRPDistributionModal(){
       var eApplied=eClamp-re.current;
       eOver.style.left=((re.current/re.max)*100)+'%';
       eOver.style.width=((eApplied/re.max)*100)+'%';
-
-      // Preview
-      var preview=document.getElementById('rp-preview');
-      if(alloc.time||alloc.energy){
-        var _prevFmt=(_rpM.preview_format||'→ 시간 +{time} / 에너지 +{energy} 충전');
-        var p=_prevFmt.replace('{time}',tApplied).replace('{energy}',eApplied);
-        var totalWaste=tWaste+eWaste;
-        if(totalWaste>0)p+=' <span class="rp-overflow-warn">'+(_rpM.overflow_warn||'(메터 초과로 {waste} 손실)').replace('{waste}',totalWaste)+'</span>';
-        preview.innerHTML=p;
-        preview.classList.remove('empty');
-      }else{
-        preview.textContent=(_rpM.preview_empty||'토큰을 시간/에너지에 분배하세요');
-        preview.classList.add('empty');
-      }
 
       // Buttons enabled state — 미터 초과 불가
       var timeFull=(rt.current+alloc.time)>=rt.max;
@@ -18475,8 +18459,6 @@ function _applyStaticTexts(){
       if(hud.time)rpBkLabels[0].textContent=hud.time;
       if(hud.energy)rpBkLabels[1].textContent=hud.energy;
     }
-    var rpPrev=document.getElementById('rp-preview');
-    if(rpPrev && mr.preview_empty)rpPrev.textContent=mr.preview_empty;
     var rpConf=document.getElementById('rp-confirm');
     if(rpConf && mr.btn_confirm)rpConf.textContent=mr.btn_confirm;
   }

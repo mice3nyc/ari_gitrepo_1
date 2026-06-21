@@ -377,6 +377,17 @@
 - **⑥ 비용 숫자 처음부터 핑크**: 선택 버튼 시간·에너지 비용 숫자(`.cost-simple .cost-num`) 기본색을 `var(--acc-pink-deep)`(#d63f7a 자주색)로. 기존엔 기본 어두운 텍스트 → 할인 적용 시에만 초록(`.discounted`). 이제 **처음부터 핑크**, 할인 settle 후 초록은 유지(02-choice-costs.css). CDP: 적용 전 cost-num 색 `rgb(217,58,117)` 확인.
 - **⑦ 할인 카운터 끝 −1 중복 교정**: `_fxRunCount`에서 disc가 마지막에 −1로 멈춘 뒤 `finish()`가 그 −1을 다시 finalpop해 **−1이 두 번** 보이던 것(특히 N=1) 교정. 마지막 비트(dv=0)에서 disc를 **`0`으로 내리고** finalpop 한 번만 → 사라짐. "0으로 되고 끝." 휴식(클릭 전) 표시는 `-N` 그대로. CDP: N=1 시퀀스 `['0']`(rest −1→0 종료), N=3 `[-2,-1,0]` 중복 없음 확인.
 
+## 4u. 세션510 (6/21) — 자원토큰 분배 모달 디자인 정리 (피터공: "디자인 없는 느낌")
+
+> 분배 모달(§8.10a) UI 폴리시 5건. 기능·rpCost·메터 클램프 무변. 텍스트는 i18n 소스(`data/texts.yaml` + `data/ui_texts.csv`)가 진실, `14-init.js`가 모달 초기화 때 HTML을 덮어쓰므로 HTML 폴백과 i18n 동시 수정. CDP 검증·런타임 예외 0건.
+
+- **① 타이틀 중앙 + 구분선**: `#rp-modal .modal-title` `text-align:center` + `border-bottom:2px solid var(--ink)`(+padding·margin) — 타이틀과 아래 기능 영역 분리(`07-modals.css`). 공유 `.modal-title`는 무변, `#rp-modal` 스코프만 적용.
+- **② 부제 문구 교체**: "받은 토큰을 시간과 에너지에 나눠 담으세요" → **"추가 자원 토큰을 시간과 에너지에 필요한 만큼 나누어 담으세요"**. `texts.yaml`/`ui_texts.csv` `modals.rp_distribution.subtitle` + HTML 폴백.
+- **③ 회색 보조 문구 제거**: `subtitle_hint` 빈 문자열로(yaml+csv). `14-init.js`가 hint를 `<br><span style=...#888>`로 재조립하던 경로 무효화(빈 문자열 falsy → span 미생성).
+- **④ 남은 자원토큰 레이블+숫자 한 줄**: `.rp-bal` `display:flex; align-items:baseline; justify-content:center; gap:10px`. 레이블 12px·숫자 34px·weight 800(강조). 텍스트는 `mr.remaining_label` 유지.
+- **⑤ 충전 미리보기 박스 제거**: `#rp-preview` HTML 삭제 + `05-modals.js` Preview 블록(`preview.innerHTML`/`preview_format`) 제거 + `14-init.js` rpPrev 참조 제거 + `.rp-preview`·`.rp-overflow-warn` CSS 삭제. i18n `preview_empty`/`preview_format` 키는 무해 잔재로 보존(읽는 코드 없음). `[분배 완료]` 버튼이 버킷 바로 아래로.
+- **검증**: CDP로 모달 강제 표시(`dbgShowRPModal`) → title center·border 2px / 부제 신문구 / 회색 hint 없음 / `.rp-bal` flex·label 12px·num 34px / preview 미존재 / 예외 0건 + 스크린샷.
+
 ## 5. 미해결 / 다음 단계
 
 - [ ] 원 7개의 **숫자 로직 정식 설계** — 획득·증감 단위를 7단계 기준으로 재설계 (피터공: "일단은 3개가 기존 0"). 콘텐츠 트랙 밸런스와 엮임.

@@ -658,8 +658,8 @@ modals:
     btn_confirm: "확인 →"
   rp_distribution:
     title: "자원토큰 분배"
-    subtitle: "받은 토큰을 시간과 에너지에 나눠 담으세요."
-    subtitle_hint: "시간과 에너지는 알아서 돌아오지 않습니다. 여기서 넣는 만큼만 충전됩니다."
+    subtitle: "추가 자원 토큰을 시간과 에너지에 필요한 만큼 나누어 담으세요."
+    subtitle_hint: ""
     remaining_label: "남은 자원토큰"
     preview_empty: "토큰을 시간/에너지에 분배하세요"
     preview_format: "→ 시간 +{time} / 에너지 +{energy} 충전"

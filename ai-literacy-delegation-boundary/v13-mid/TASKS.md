@@ -1,6 +1,18 @@
 ## TASKS — v1.3-mid (중등)
 
-**최종 업데이트**: 2026-06-21 (회복력·도전력 성장카드 폐지 + 재도전 총점 음수 fix)
+**최종 업데이트**: 2026-06-21 (자원토큰 분배 모달 디자인 정리)
+
+### ✓ 2026-06-21 — 자원토큰 분배 모달 UI 정리 (피터공)
+
+"디자인 없는 느낌" → 헤더 분리 + 텍스트 정리 + 군더더기 제거. 5건.
+- [x] **타이틀 중앙 정렬 + 구분선** — `#rp-modal .modal-title` text-align:center + border-bottom 2px ink, 타이틀과 아래 기능 영역 분리 (`07-modals.css`).
+- [x] **부제 문구 교체** — "받은 토큰을 시간과 에너지에 나눠 담으세요" → "추가 자원 토큰을 시간과 에너지에 필요한 만큼 나누어 담으세요". i18n source(`data/texts.yaml` + `data/ui_texts.csv`) + HTML 폴백 동시 수정.
+- [x] **회색 보조 문구 제거** — `subtitle_hint` 빈 문자열로(yaml+csv). `14-init.js`가 hint를 `<br><span gray>`로 재조립하던 경로 무효화.
+- [x] **남은 자원토큰 레이블+숫자 한 줄** — `.rp-bal` flex(baseline·center), 레이블 12px / 숫자 34px·weight 800 강조.
+- [x] **충전 미리보기 박스 제거** — `#rp-preview` HTML 삭제 + `05-modals.js` Preview 블록 제거 + `14-init.js` rpPrev 참조 제거 + `.rp-preview` CSS 삭제.
+- [x] **빌드** — index.html(999,654) + builds/mid(999,604) + builds/elem(999,609) 3종, 2026-06-21.
+- [x] **CDP 검증 PASS** — 모달 열어 title center·border 2px / 부제 신문구 / 회색 hint 없음 / rp-bal flex·한 줄(label 12px·num 34px) / preview 미존재 / 런타임 예외 0건 + 스크린샷.
+- [ ] 커밋·푸시 (피터공 확인 후)
 
 ### ✓ 2026-06-21 — 회복력·도전력 성장카드 폐지 (피터공)
 
@@ -9,7 +21,7 @@
 - [x] **트랙 인프라는 빈 배열 비활성** — `growthCards` state·독·리포트·인벤토리·로그 표시 코드는 그대로(전부 `||[]` + count 조건이라 빈 배열에서 안전). `_delegationCardCount`의 growthCards 항은 0 기여 → 시간 할인은 인간중심 카드만. yaml `growthCard:회복력`·R3a(D=회복력)는 코드가 안 읽어 무효(데이터 잔재 무해).
 - [x] **빌드** — 소스 index.html + builds/mid + builds/elem 3종.
 - [x] **CDP 회귀 검증 PASS** — C등급 cut6 회복력 안 뜸(growthCards []) / cut6·종합리포트 예외 0·"성장 카드" 라인 미출력 / 재도전 S등급 개선 후에도 growthCards [] (도전력 미지급). 전 구간 빈 배열.
-- [ ] 커밋·푸시 (해시 푸시 후 기입)
+- [x] 커밋·푸시 — **f5cfa62** (301c461..f5cfa62, main). GitHub Pages 라이브 반영.
 
 ### ✓ 2026-06-21 — 재도전 총점 음수 잔여 버그 fix (요청: [[요청.26.0621.1004-재도전점수버그]])
 

@@ -61,8 +61,6 @@ function _applyStaticTexts(){
       if(hud.time)rpBkLabels[0].textContent=hud.time;
       if(hud.energy)rpBkLabels[1].textContent=hud.energy;
     }
-    var rpPrev=document.getElementById('rp-preview');
-    if(rpPrev && mr.preview_empty)rpPrev.textContent=mr.preview_empty;
     var rpConf=document.getElementById('rp-confirm');
     if(rpConf && mr.btn_confirm)rpConf.textContent=mr.btn_confirm;
   }
