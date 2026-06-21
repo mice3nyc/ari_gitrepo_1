@@ -67,6 +67,9 @@ VARIANT_CONFIG_REPLACEMENTS = {
             "version:'v1.3-elem-r39'",
         "gameId:'ai_literacy_md'":   # 동현공 참여 로깅 게임 ID — 초등
             "gameId:'ai_literacy_el'",
+        # H2 — CONFIG.scenarios 변종 교체. clientIdKey 줄로 앵커해 15-card PILOT 배열(동일 문자열)과 구분.
+        "clientIdKey:'ai-literacy-client-id', // 브라우저별 익명 식별자(참여 로깅용, localStorage 영속)\n  scenarios:['selfintro','groupwork','eorinwangja','career','studyplan'],":
+            "clientIdKey:'ai-literacy-client-id', // 브라우저별 익명 식별자(참여 로깅용, localStorage 영속)\n  scenarios:['bookreport','animaltalk','jobcard','classmascot','historycheck'],",
         "debug:true": "debug:false",
     },
 }

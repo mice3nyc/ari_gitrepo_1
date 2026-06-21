@@ -1,0 +1,76 @@
+﻿scenario_id,type,id,parent,label,desc,lesson,basePoint,varPoint,points,boostType,delegation,knowledge,delta_afterA_del,delta_afterA_know,delta_afterB_del,delta_afterB_know,delta_afterC_del,delta_afterC_know,stageCost_time,stageCost_energy,result_text,result_summary,result_lesson,result_deltaR2,result_deltaR3,result_basePoint,result_hiddenIssues,matchGroups,discountTags_humanCentric,discountTags_domain,discountTags_strongDomain
+bookreport,tier1,A,,책을 더 읽고 내가 기억나는 장면부터 찾는다,⟨TODO⟩,⟨TODO⟩,25,0,,,+,+,,,,,,,0,0,,,,,,,,,중심잡기,문해력,
+bookreport,tier1,B,,AI에게 안 읽은 부분의 줄거리를 짧게 물어본다,⟨TODO⟩,⟨TODO⟩,16,0,,,+,,,,,,,,0,0,,,,,,,,,중심잡기,탐색력,
+bookreport,tier1,C,,AI에게 독후감을 바로 써 달라고 한다,⟨TODO⟩,⟨TODO⟩,8,0,,,-,-,,,,,,,0,0,,,,,,,,,,,
+bookreport,tier2,A1,A,시간이 부족해도 기억나는 장면 하나와 느낌을 짧게 쓴다,,⟨TODO⟩,22,0,,,+,+,,,,,,,14,12,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,6,10,,,,융합하기,문해력,문해력
+bookreport,tier2,A2,A,내가 읽은 쪽에서 마음에 남은 장면 하나를 고른다,,⟨TODO⟩,34,0,,,+,+,,,,,,,16,14,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,14,,,,융합하기,표현력,표현력
+bookreport,tier2,A3,A,이해 안 된 장면만 AI에게 쉽게 설명해 달라고 묻고 다시 책을 본다,,⟨TODO⟩,28,0,,,+,+,,,,,,,12,10,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,14,,,,융합하기,탐색력,탐색력
+bookreport,tier2,B1,B,AI가 알려 준 내용에서 내가 읽은 부분과 안 읽은 부분을 나눈다,,⟨TODO⟩,22,0,,,+,,,,,,,,8,7,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,12,,,,융합하기,분석력,분석력
+bookreport,tier2,B2,B,AI가 말한 장면이 나오는 쪽을 책에서 펼쳐 확인한다,,⟨TODO⟩,35,0,,,+,,,,,,,,14,12,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,13,,,,융합하기,자료판단력,자료판단력
+bookreport,tier2,B3,B,AI에게 감상문을 쓰게 하지 않고 생각해 볼 질문만 받는다,,⟨TODO⟩,28,0,,,+,,,,,,,,10,8,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,12,,,,융합하기,탐색력,탐색력
+bookreport,tier2,C1,C,AI 독후감이 괜찮아 보여 거의 그대로 둔다,,⟨TODO⟩,0,0,,,-,-,,,,,,,3,2,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,7,10,,,,,,
+bookreport,tier2,C2,C,내가 평소 안 쓰는 말만 조금 바꾼다,,⟨TODO⟩,8,0,,,-,-,,,,,,,5,4,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,7,11,,,,성찰하기,표현력,표현력
+bookreport,tier2,C3,C,AI 글에 나온 장면을 책에서 펼쳐 보고 내 느낌을 다시 붙인다,,⟨TODO⟩,20,0,,,-,-,,,,,,,12,10,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,14,16,,,,중심잡기,자료판단력,자료판단력
+bookreport,review,R1,,검토하지 않고 낸다,⟨TODO⟩,⟨TODO⟩,,,10,,,,,,,,,,2,1,,,,,,,,,,,
+bookreport,review,R2,,겉을 한번 본다,⟨TODO⟩,⟨TODO⟩,,,18,,,,,,,,,,5,4,,,,,,,,,,,검토력
+bookreport,review,R3,,깊이 따져 본다,⟨TODO⟩,⟨TODO⟩,,,30,,,,,,,,,,10,8,,,,,,,,,,,검토력
+animaltalk,tier1,A,,좋아하는 동물을 하나 정하고 내가 아는 것부터 적는다,⟨TODO⟩,⟨TODO⟩,25,0,,,+,+,,,,,,,0,0,,,,,,,,,중심잡기,표현력,
+animaltalk,tier1,B,,AI에게 친구들이 신기해할 발표 포인트를 물어본다,⟨TODO⟩,⟨TODO⟩,18,0,,,+,,,,,,,,0,0,,,,,,,,,중심잡기,탐색력,
+animaltalk,tier1,C,,AI에게 동물 발표문을 바로 만들어 달라고 한다,⟨TODO⟩,⟨TODO⟩,8,0,,,-,-,,,,,,,0,0,,,,,,,,,,,
+animaltalk,tier2,A1,A,내가 왜 좋아하는지를 중심으로 발표문을 써 본다,,⟨TODO⟩,24,0,,,+,+,,,,,,,14,12,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,10,,,,융합하기,자기이해,자기이해
+animaltalk,tier2,A2,A,친구들이 듣고 신기해할 특징 3가지를 찾는다,,⟨TODO⟩,34,0,,,+,+,,,,,,,16,14,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,14,,,,융합하기,탐색력,탐색력
+animaltalk,tier2,A3,A,내가 쓴 내용에서 부족한 정보만 AI에게 물어본다,,⟨TODO⟩,30,0,,,+,+,,,,,,,12,10,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,12,,,,성찰하기,소통력,소통력
+animaltalk,tier2,B1,B,AI가 준 신기한 사실 중 제일 재미있는 것만 고른다,,⟨TODO⟩,16,0,,,+,,,,,,,,6,5,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,12,,,,,,
+animaltalk,tier2,B2,B,AI가 준 포인트 중 내가 설명할 수 있는 것을 고른다,,⟨TODO⟩,34,0,,,+,,,,,,,,10,8,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,13,,,,융합하기,표현력,표현력
+animaltalk,tier2,B3,B,친구들이 물어볼 질문을 AI에게 받아 보고 내 답을 준비한다,,⟨TODO⟩,32,0,,,+,,,,,,,,12,10,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,12,,,,융합하기,소통력,소통력
+animaltalk,tier2,C1,C,AI 발표문이 매끄러워 보여 그대로 읽는 연습을 한다,,⟨TODO⟩,0,0,,,-,-,,,,,,,3,2,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,6,8,,,,,,
+animaltalk,tier2,C2,C,발표문에서 내가 이해하기 어려운 말은 빼거나 쉬운 말로 바꾼다,,⟨TODO⟩,12,0,,,-,-,,,,,,,6,5,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,10,,,,성찰하기,표현력,표현력
+animaltalk,tier2,C3,C,AI 발표문을 읽고 내가 보지 않고 설명할 수 있는 내용만 남긴다,,⟨TODO⟩,22,0,,,-,-,,,,,,,12,10,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,12,16,,,,중심잡기,소통력,소통력
+animaltalk,review,R1,,검토하지 않고 낸다,⟨TODO⟩,⟨TODO⟩,,,10,,,,,,,,,,2,1,,,,,,,,,,,
+animaltalk,review,R2,,겉을 한번 본다,⟨TODO⟩,⟨TODO⟩,,,20,,,,,,,,,,5,4,,,,,,,,,,,표현력
+animaltalk,review,R3,,깊이 따져 본다,⟨TODO⟩,⟨TODO⟩,,,30,,,,,,,,,,10,8,,,,,,,,,,,소통력
+jobcard,tier1,A,,"수의사, 웹툰 작가, 운동선수 중 끌리는 직업과 이유를 먼저 적는다",⟨TODO⟩,⟨TODO⟩,25,0,,,+,+,,,,,,,0,0,,,,,,,,,중심잡기,자기이해,
+jobcard,tier1,B,,AI에게 내가 좋아하는 활동을 말하고 직업 추천을 요청한다,⟨TODO⟩,⟨TODO⟩,18,0,,,+,,,,,,,,0,0,,,,,,,,,중심잡기,탐색력,
+jobcard,tier1,C,,AI에게 직업 소개 카드 초안을 바로 만들어 달라고 한다,⟨TODO⟩,⟨TODO⟩,8,0,,,-,-,,,,,,,0,0,,,,,,,,,,,
+jobcard,tier2,A1,A,세 직업 중 제일 멋져 보이는 하나를 골라 좋은 점만 적는다,,⟨TODO⟩,22,0,,,+,+,,,,,,,8,7,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,12,,,,융합하기,자기이해,자기이해
+jobcard,tier2,A2,A,세 직업 중 내가 좋아하는 활동과 가장 잘 맞는 하나를 고른다,,⟨TODO⟩,32,0,,,+,+,,,,,,,12,10,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,10,14,,,,중심잡기,탐색력,탐색력
+jobcard,tier2,A3,A,"고른 직업이 수의사라면 돌봄, 웹툰 작가라면 창작, 운동선수라면 훈련처럼 실제 하는 일을 찾아본다",,⟨TODO⟩,36,0,,,+,+,,,,,,,16,14,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,14,,,,중심잡기,탐색력,탐색력
+jobcard,tier2,B1,B,"AI가 수의사, 웹툰 작가, 운동선수를 추천하자 가장 멋져 보이는 하나를 고른다",,⟨TODO⟩,12,0,,,+,,,,,,,,5,4,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,10,14,,,,,,
+jobcard,tier2,B2,B,AI가 세 직업을 추천한 이유가 내 관심과 맞는지 표시한다,,⟨TODO⟩,30,0,,,+,,,,,,,,10,8,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,10,14,,,,융합하기,자기이해,자기이해
+jobcard,tier2,B3,B,AI 추천 이유를 읽고 세 직업의 실제 하루와 힘든 점을 비교한다,,⟨TODO⟩,34,0,,,+,,,,,,,,14,12,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,14,,,,융합하기,탐색력,탐색력
+jobcard,tier2,C1,C,AI가 만든 직업 카드가 그럴듯해서 그대로 쓰고 꾸미기만 한다,,⟨TODO⟩,0,0,,,-,-,,,,,,,3,2,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,6,10,,,,,,
+jobcard,tier2,C2,C,AI 카드에서 직업 이름과 어려운 말만 쉬운 말로 바꾼다,,⟨TODO⟩,12,0,,,-,-,,,,,,,6,5,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,10,14,,,,성찰하기,표현력,표현력
+jobcard,tier2,C3,C,"AI 카드에 내가 수의사, 웹툰 작가, 운동선수 중 그 직업을 고른 이유를 넣어 다시 고친다",,⟨TODO⟩,24,0,,,-,-,,,,,,,12,10,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,12,20,,,,중심잡기,탐색력,탐색력
+jobcard,review,R1,,검토하지 않고 낸다,⟨TODO⟩,⟨TODO⟩,,,10,,,,,,,,,,2,1,,,,,,,,,,,
+jobcard,review,R2,,겉을 한번 본다,⟨TODO⟩,⟨TODO⟩,,,20,,,,,,,,,,5,4,,,,,,,,,,,자기이해
+jobcard,review,R3,,깊이 따져 본다,⟨TODO⟩,⟨TODO⟩,,,30,,,,,,,,,,10,8,,,,,,,,,,,탐색력
+classmascot,tier1,A,,우리 반 대표 캐릭터에 넣고 싶은 특징을 먼저 생각한다,⟨TODO⟩,⟨TODO⟩,25,0,,,+,+,,,,,,,0,0,,,,,,,,,중심잡기,표현력,
+classmascot,tier1,B,,내 스케치나 원하는 느낌을 AI에게 보여 주고 후보를 받아 본다,⟨TODO⟩,⟨TODO⟩,20,0,,,+,,,,,,,,0,0,,,,,,,,,중심잡기,탐색력,
+classmascot,tier1,C,,AI에게 '우리 반 대표 캐릭터 만들어 줘'라고 바로 시킨다,⟨TODO⟩,⟨TODO⟩,8,0,,,-,-,,,,,,,0,0,,,,,,,,,,,
+classmascot,tier2,A1,A,내가 좋아하는 동물과 물건을 이것저것 넣어 그린다,,⟨TODO⟩,22,0,,,+,+,,,,,,,14,12,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,6,8,,,,융합하기,표현력,표현력
+classmascot,tier2,A2,A,우리 반을 대표할 말이나 분위기 하나를 골라 그린다,,⟨TODO⟩,35,0,,,+,+,,,,,,,16,14,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,12,,,,성찰하기,소통력,소통력
+classmascot,tier2,A3,A,대충 그린 그림을 더 깔끔하게 보이게 할 방법만 AI에게 묻는다,,⟨TODO⟩,30,0,,,+,+,,,,,,,12,10,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,14,,,,융합하기,탐색력,탐색력
+classmascot,tier2,B1,B,AI가 보여 준 것 중 제일 멋진 그림을 고른다,,⟨TODO⟩,16,0,,,+,,,,,,,,6,5,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,10,,,,,,
+classmascot,tier2,B2,B,AI 그림에 우리 반에서만 아는 말이나 물건을 넣어 다시 만들어 달라고 한다,,⟨TODO⟩,34,0,,,+,,,,,,,,12,10,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,12,,,,융합하기,소통력,소통력
+classmascot,tier2,B3,B,"AI가 만든 그림에서 색, 표정, 들고 있는 물건을 내가 다시 고른다",,⟨TODO⟩,30,0,,,+,,,,,,,,10,8,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,12,,,,융합하기,표현력,표현력
+classmascot,tier2,C1,C,AI가 만든 그림이 멋져 보여서 그대로 제출하고 싶다,,⟨TODO⟩,0,0,,,-,-,,,,,,,3,2,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,6,8,,,,,,
+classmascot,tier2,C2,C,그림은 멋진데 내가 만든 캐릭터라고 말하기가 애매하다,,⟨TODO⟩,12,0,,,-,-,,,,,,,6,5,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,10,,,,성찰하기,검토력,검토력
+classmascot,tier2,C3,C,우리 반 이야기를 더 말해 주고 다시 만들어 본다,,⟨TODO⟩,22,0,,,-,-,,,,,,,12,10,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,10,14,,,,중심잡기,탐색력,탐색력
+classmascot,review,R1,,검토하지 않고 낸다,⟨TODO⟩,⟨TODO⟩,,,10,,,,,,,,,,2,1,,,,,,,,,,,
+classmascot,review,R2,,겉을 한번 본다,⟨TODO⟩,⟨TODO⟩,,,20,,,,,,,,,,5,4,,,,,,,,,,,검토력
+classmascot,review,R3,,깊이 따져 본다,⟨TODO⟩,⟨TODO⟩,,,30,,,,,,,,,,10,8,,,,,,,,,,,검토력
+historycheck,tier1,A,,조선 코끼리 유배'를 인터넷에 검색해 본다,⟨TODO⟩,⟨TODO⟩,24,0,,,+,+,,,,,,,0,0,,,,,,,,,중심잡기,탐색력,
+historycheck,tier1,B,,AI에게 '이 이야기가 사실인지 확인하려면 뭘 찾아봐야 해?'라고 묻는다,⟨TODO⟩,⟨TODO⟩,18,0,,,+,,,,,,,,0,0,,,,,,,,,중심잡기,탐색력,
+historycheck,tier1,C,,AI에게 이 이야기를 바로 역사 사건 카드로 만들어 달라고 한다,⟨TODO⟩,⟨TODO⟩,8,0,,,-,-,,,,,,,0,0,,,,,,,,,,,
+historycheck,tier2,A1,A,검색 결과 첫 번째 글만 읽고 카드 내용을 고른다,,⟨TODO⟩,20,0,,,+,+,,,,,,,8,7,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,14,,,,중심잡기,탐색력,탐색력
+historycheck,tier2,A2,A,"여러 자료에서 태종, 코끼리, 장도 같은 말이 반복되는지 본다",,⟨TODO⟩,35,0,,,+,+,,,,,,,16,14,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,14,,,,성찰하기,자료판단력,자료판단력
+historycheck,tier2,A3,A,"검색어를 '태종실록 코끼리', '조선 코끼리 장도'처럼 바꿔 더 찾아본다",,⟨TODO⟩,32,0,,,+,+,,,,,,,14,12,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,14,,,,중심잡기,탐색력,탐색력
+historycheck,tier2,B1,B,AI에게 '정말 있었던 일이야?'라고 한 번 더 묻는다,,⟨TODO⟩,8,0,,,+,,,,,,,,4,3,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,10,20,,,,,,
+historycheck,tier2,B2,B,AI 답을 읽고 인터넷에 사실 확인차 검색해 볼 말을 따로 적는다,,⟨TODO⟩,26,0,,,+,,,,,,,,8,6,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,14,,,,융합하기,탐색력,탐색력
+historycheck,tier2,B3,B,"AI가 알려 준 말로 뉴스, 백과사전, 실록 자료를 찾아본다",,⟨TODO⟩,34,0,,,+,,,,,,,,14,12,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,10,,,,융합하기,자료판단력,자료판단력
+historycheck,tier2,C1,C,코끼리가 유배 갔다는 이야기가 너무 신기해서 그대로 넣고 싶다,,⟨TODO⟩,0,0,,,-,-,,,,,,,3,2,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,16,,,,,,
+historycheck,tier2,C2,C,AI가 자세히 써 줬지만 사실 확인을 안 해서 그대로 쓰기는 망설여진다,,⟨TODO⟩,12,0,,,-,-,,,,,,,6,5,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,12,20,,,,성찰하기,분석력,분석력
+historycheck,tier2,C3,C,"태종, 코끼리, 장도, 조선왕조실록 같은 말로 인터넷에서 검색해 본다",,⟨TODO⟩,22,0,,,-,-,,,,,,,12,10,⟨TODO⟩,⟨TODO⟩,⟨TODO⟩,8,18,,,,중심잡기,자료판단력,자료판단력
+historycheck,review,R1,,검토하지 않고 낸다,⟨TODO⟩,⟨TODO⟩,,,10,,,,,,,,,,2,1,,,,,,,,,,,
+historycheck,review,R2,,겉을 한번 본다,⟨TODO⟩,⟨TODO⟩,,,22,,,,,,,,,,8,6,,,,,,,,,,,자료판단력
+historycheck,review,R3,,깊이 따져 본다,⟨TODO⟩,⟨TODO⟩,,,30,,,,,,,,,,12,9,,,,,,,,,,,학습력

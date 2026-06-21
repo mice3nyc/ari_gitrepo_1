@@ -9,6 +9,7 @@ mind2action-home/
 # 빌드 산물 / 의존성
 *.app/
 **/node_modules/
+**/__pycache__/
 # AI리터러시 변종 빌드 산출 폴더 (생성물 — 동현공 전달은 폴더 직접 전달, git 미포함)
 ai-literacy-delegation-boundary/v13-mid/builds/
 

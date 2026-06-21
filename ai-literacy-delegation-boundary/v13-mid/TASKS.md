@@ -9,9 +9,12 @@
 - [x] **--dev 빌드** — 변종 디버그 켠 빌드를 builds/{variant}-dev/에 산출(배포 오염 방지). 초등 개발 라이브 테스트용.
 - [x] **중등 보호 검증 PASS** — data/elem 없는 휴면 상태에서 index.html·builds/mid·builds/elem SHA-256 변경 전과 바이트 동일.
 - [x] **오버레이 작동 검증** — 일회용 elem texts 오버레이로 반영+중등UI상속(병합)+debug유지 확인 후 제거.
-- [ ] 초등 CSV → data/elem/scenarios.yaml 변환 (회복력 교체·위임 정규화·카드모델 A)
-- [ ] data/elem cuts/micro/aiflags + texts 오버레이 + 초등 메타·desc·lesson·domainPool 초안
-- [ ] 초등 이미지 소스 결정
+- [x] **초등 CSV → data/elem 변환 (Phase 1, 플레이 가능)** — `data/elem_build_csv.py` 분해기. 평면 135경로 → meta(5)+choices(75)+leaves(135) 3CSV → `csv_to_scenarios` → `data/elem/scenarios.yaml`. 회복력→적응성, 위임 정규화. 카드 모델 A→**leaf end-지급(엔진 무변경, 초등 비-pilot)**으로 변경. micro/aiflags 생성.
+- [x] **초등 빌드 검증** — `build.py --variant=elem --dev` → builds/elem-dev. CDP: 5 초등 시나리오 로드·예외 0·version v1.3-elem-r39·gameId ai_literacy_el·debug ON·startScenario 정상. 중등 바이트 동일 유지.
+- [ ] **Phase 2 — 빠진 콘텐츠 생성(아리공)**: ⟨TODO⟩ 3075개 — 경로별 만화캡션5·리포트성찰/피드백·중간결과·선택 desc/lesson·reviewSupplement
+- [ ] **Phase 3 — 전체 데이터 CSV로 export(피터공 점검용)**
+- [ ] 초등 이미지 소스(현재 mid s01 이미지 폴백) + HTML title·footer version 라벨 mid 하드코딩 정정
+- [ ] 카드 per-choice 타이밍(선택 직후) 초등 적용 여부 (현재 end-지급)
 → [[요청.26.0621.1539-초등데이터]]
 
 ### ✓ 2026-06-21 — 자원토큰 분배 모달 UI 정리 (피터공)
