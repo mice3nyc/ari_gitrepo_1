@@ -2441,7 +2441,7 @@ groupwork:
       cartoonCaption2: 모둠과 발표 방향을 먼저 맞췄다.
       cartoonCaption3: 발표에서 답할 질문을 먼저 정했다.
       cartoonCaption4: 모둠 질문 중심의 발표 준비
-      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      cartoonCaption5: 내가 설명할 수 있는 내용만 남겼다.
       reportReflection: '모둠의 질문을 먼저 세웠기에, 발표 흐름과 설명 가능성까지 붙들 수 있었다.'
       reportCardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 소통력 · 검토력'
       reportStrengthTags:
@@ -2550,7 +2550,7 @@ groupwork:
       cartoonCaption2: 모둠과 발표 방향을 먼저 맞췄다.
       cartoonCaption3: 모둠 안에서 역할과 흐름을 나눴다.
       cartoonCaption4: 역할 분담 + 흐름 정합 발표 준비
-      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      cartoonCaption5: 내가 설명할 수 있는 내용만 남겼다.
       reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
       reportCardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 학습력'
       reportStrengthTags:
@@ -2657,7 +2657,7 @@ groupwork:
       cartoonCaption2: 모둠과 발표 방향을 먼저 맞췄다.
       cartoonCaption3: 내가 맡은 내용을 먼저 이해했다.
       cartoonCaption4: 내 파트 이해 + 말로 설명 가능한 준비
-      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      cartoonCaption5: 내가 설명할 수 있는 내용만 남겼다.
       reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
       reportCardSummary: '[중심잡기] 주체성 · 표현력 · 협업력'
       reportStrengthTags:
@@ -2759,7 +2759,7 @@ groupwork:
       cartoonCaption2: AI로 발표 준비를 빠르게 시작했다.
       cartoonCaption3: AI에게 발표 개요를 부탁했다.
       cartoonCaption4: AI 개요 + 우리 동네 정합 검토 준비
-      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      cartoonCaption5: 내가 설명할 수 있는 내용만 남겼다.
       reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
       reportCardSummary: 회복력
       reportStrengthTags: []
@@ -2853,7 +2853,7 @@ groupwork:
       cartoonCaption2: AI로 발표 준비를 빠르게 시작했다.
       cartoonCaption3: AI가 만든 슬라이드 문구를 받았다.
       cartoonCaption4: AI 슬라이드 + 설명 가능 검수 준비
-      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      cartoonCaption5: 내가 설명할 수 있는 내용만 남겼다.
       reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
       reportCardSummary: '[융합하기] 맥락적 사고 · 표현력 · 검토력'
       reportStrengthTags:
@@ -2959,7 +2959,7 @@ groupwork:
       cartoonCaption2: AI로 발표 준비를 빠르게 시작했다.
       cartoonCaption3: 내 자료를 바탕으로 AI 대본을 받았다.
       cartoonCaption4: AI 대본은 빠르게 만들어졌다.
-      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      cartoonCaption5: 내가 설명할 수 있는 내용만 남겼다.
       reportReflection: 'AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.'
       reportCardSummary: '[융합하기] 통합적 사고 · 자료판단력 · 표현력 · 검토력'
       reportStrengthTags:
@@ -3062,7 +3062,7 @@ groupwork:
       cartoonCaption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
       cartoonCaption3: 회의 없이 각자 찾은 자료를 합쳤다.
       cartoonCaption4: 각자 자료 모음 → 흐름 정합 자리
-      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      cartoonCaption5: 내가 설명할 수 있는 내용만 남겼다.
       reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
       reportCardSummary: 회복력
       reportStrengthTags: []
@@ -3159,7 +3159,7 @@ groupwork:
       cartoonCaption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
       cartoonCaption3: 발표를 잘하는 한 사람에게 많이 맡겼다.
       cartoonCaption4: 한 사람 주도 → 각자 이해 점검 자리
-      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      cartoonCaption5: 내가 설명할 수 있는 내용만 남겼다.
       reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
       reportCardSummary: 회복력
       reportStrengthTags: []
@@ -3257,7 +3257,7 @@ groupwork:
       cartoonCaption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
       cartoonCaption3: 자료보다 발표 모양을 먼저 만들었다.
       cartoonCaption4: 모양 우선 → 빈 부분 보충 자리
-      cartoonCaption5: 내가 이해하지 못한 내용은 지웠다.
+      cartoonCaption5: 내가 설명할 수 있는 내용만 남겼다.
       reportReflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
       reportCardSummary: 회복력
       reportStrengthTags: []
@@ -3547,7 +3547,7 @@ groupwork:
     B2R2: 내가 설명할 수 없는 문장과 조사한 내용이 빠진 부분을 고친다
     B2R3: AI에게 너무 일반적인 문장이나 원래 자료와 달라진 표현을 표시하게 한 뒤 고친다
     B3R1: AI 대본을 그대로 읽기로 한다
-    B3R2: 내가 이해하지 못한 문장과 조사하지 않은 내용을 지운다
+    B3R2: AI 대본에서 내가 설명할 수 있는 내용만 남기고 나머지는 뺀다
     B3R3: AI에게 선생님이 물어볼 질문을 만들게 한 뒤 대답 못하는 부분을 고친다
     C1R1: 모은 자료를 그대로 슬라이드에 붙인다
     C1R2: 자료들이 하나의 발표 질문으로 이어지는지 확인한다
@@ -3625,7 +3625,7 @@ groupwork:
       caption2: 모둠과 발표 방향을 먼저 맞췄다.
       caption3: 발표에서 답할 질문을 먼저 정했다.
       caption4: 모둠 질문 중심의 발표 준비
-      caption5: 내가 이해하지 못한 내용은 지웠다.
+      caption5: 내가 설명할 수 있는 내용만 남겼다.
       reflection: 'AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.'
       cardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 소통력 · 검토력'
       strengthTags: '사회·관계적 사고;협업력, 소통력, 검토력'
@@ -3658,7 +3658,7 @@ groupwork:
       caption2: 모둠과 발표 방향을 먼저 맞췄다.
       caption3: 모둠 안에서 역할과 흐름을 나눴다.
       caption4: 역할 분담 + 흐름 정합 발표 준비
-      caption5: 내가 이해하지 못한 내용은 지웠다.
+      caption5: 내가 설명할 수 있는 내용만 남겼다.
       reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
       cardSummary: '[성찰하기] 사회·관계적 사고 · 협업력 · 학습력'
       strengthTags: '사회·관계적 사고;협업력, 학습력'
@@ -3691,7 +3691,7 @@ groupwork:
       caption2: 모둠과 발표 방향을 먼저 맞췄다.
       caption3: 내가 맡은 내용을 먼저 이해했다.
       caption4: 내 파트 이해 + 말로 설명 가능한 준비
-      caption5: 내가 이해하지 못한 내용은 지웠다.
+      caption5: 내가 설명할 수 있는 내용만 남겼다.
       reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
       cardSummary: '[중심잡기] 주체성 · 표현력 · 협업력'
       strengthTags: '주체성;표현력, 협업력'
@@ -3724,7 +3724,7 @@ groupwork:
       caption2: AI로 발표 준비를 빠르게 시작했다.
       caption3: AI에게 발표 개요를 부탁했다.
       caption4: AI 개요 + 우리 동네 정합 검토 준비
-      caption5: 내가 이해하지 못한 내용은 지웠다.
+      caption5: 내가 설명할 수 있는 내용만 남겼다.
       reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
       cardSummary: 회복력
       strengthTags: ''
@@ -3757,7 +3757,7 @@ groupwork:
       caption2: AI로 발표 준비를 빠르게 시작했다.
       caption3: AI가 만든 슬라이드 문구를 받았다.
       caption4: AI 슬라이드 + 설명 가능 검수 준비
-      caption5: 내가 이해하지 못한 내용은 지웠다.
+      caption5: 내가 설명할 수 있는 내용만 남겼다.
       reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
       cardSummary: '[융합하기] 맥락적 사고 · 표현력 · 검토력'
       strengthTags: '맥락적 사고;표현력, 검토력'
@@ -3790,7 +3790,7 @@ groupwork:
       caption2: AI로 발표 준비를 빠르게 시작했다.
       caption3: 내 자료를 바탕으로 AI 대본을 받았다.
       caption4: AI 대본은 빠르게 만들어졌다.
-      caption5: 내가 이해하지 못한 내용은 지웠다.
+      caption5: 내가 설명할 수 있는 내용만 남겼다.
       reflection: 'AI와 자료를 함께 쓰되, 모둠 흐름과 설명 가능성을 끝까지 확인했다.'
       cardSummary: '[융합하기] 통합적 사고 · 자료판단력 · 표현력 · 검토력'
       strengthTags: '통합적 사고;자료판단력, 표현력, 검토력'
@@ -3823,7 +3823,7 @@ groupwork:
       caption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
       caption3: 회의 없이 각자 찾은 자료를 합쳤다.
       caption4: 각자 자료 모음 → 흐름 정합 자리
-      caption5: 내가 이해하지 못한 내용은 지웠다.
+      caption5: 내가 설명할 수 있는 내용만 남겼다.
       reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
       cardSummary: 회복력
       strengthTags: ''
@@ -3856,7 +3856,7 @@ groupwork:
       caption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
       caption3: 발표를 잘하는 한 사람에게 많이 맡겼다.
       caption4: 한 사람 주도 → 각자 이해 점검 자리
-      caption5: 내가 이해하지 못한 내용은 지웠다.
+      caption5: 내가 설명할 수 있는 내용만 남겼다.
       reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
       cardSummary: 회복력
       strengthTags: ''
@@ -3889,7 +3889,7 @@ groupwork:
       caption2: 함께 맞추기보다 각자 준비나 모양부터 보았다.
       caption3: 자료보다 발표 모양을 먼저 만들었다.
       caption4: 모양 우선 → 빈 부분 보충 자리
-      caption5: 내가 이해하지 못한 내용은 지웠다.
+      caption5: 내가 설명할 수 있는 내용만 남겼다.
       reflection: 자료와 역할을 맞추는 과정이 더해질 때 발표가 내 것이 된다.
       cardSummary: 회복력
       strengthTags: ''
