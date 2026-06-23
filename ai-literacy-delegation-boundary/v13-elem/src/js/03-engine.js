@@ -214,7 +214,7 @@ function getLiveScore(){
 }
 
 function getGrade(score){
-  if(score>=CONFIG.pointThresholds.S)return 'S';
+  // 6/23 — S 폐지, A로 통합 ("S도 A"). 최고 등급 = A. S threshold·라벨·리워드(30)·무드 잔존 항목은 미사용 dead.
   if(score>=CONFIG.pointThresholds.A)return 'A';
   if(score>=CONFIG.pointThresholds.B)return 'B';
   if(score>=CONFIG.pointThresholds.C)return 'C';

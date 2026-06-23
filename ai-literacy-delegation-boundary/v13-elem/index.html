@@ -2191,7 +2191,7 @@ var CONFIG={
   // 명칭: 코드는 RP 유지(식별자 길이/i18n), UI 텍스트는 "자원토큰"
   // v1.4 세션468 — 두 자리 수 상향 (SPEC §18). 상향 후에도 회복 < 소모 유지.
   rpRewardByGrade:{S:30,A:20,B:15,C:10,D:5},
-  rpLevelUpBonusByLevel:{2:10,3:15,4:20,5:25},
+  rpLevelUpBonusByLevel:{2:0,3:0,4:0,5:0}, // 6/23 OFF — 보이는 레벨업 폐기(6/16) 후 숨은 보너스만 남아 리워드가 설명 없이 커지던 것 제거. 등급 리워드만 남김
   rpCost:{time:1,energy:1}, // 2축 전용 (DECISIONS §10.4 — 위/도 분배 폐기)
   // v0.8 5/4 세션289 — 비대칭 효과 (mNeg=1 되돌림)
   // 양수 ×2 (잘하면 두 배 보상), 음수 ×1 (잘못해도 한 배만 페널티). 메모리 5/3 세션278 정합.
@@ -13948,7 +13948,7 @@ function createInitialState(){
 }
 
 // v0.5: 시나리오별 컷 이미지 동적 매핑
-var _imgCacheBust='?v=20260621d';
+var _imgCacheBust='?v=20260623a';
 function getCutImage(scenarioId,cutNum){
   var n=({'bookreport':'01','animaltalk':'02','jobcard':'03','classmascot':'04','historycheck':'05'})[scenarioId]||'01';
   var base='images/s'+n;
@@ -14180,7 +14180,7 @@ function getLiveScore(){
 }
 
 function getGrade(score){
-  if(score>=CONFIG.pointThresholds.S)return 'S';
+  // 6/23 — S 폐지, A로 통합 ("S도 A"). 최고 등급 = A. S threshold·라벨·리워드(30)·무드 잔존 항목은 미사용 dead.
   if(score>=CONFIG.pointThresholds.A)return 'A';
   if(score>=CONFIG.pointThresholds.B)return 'B';
   if(score>=CONFIG.pointThresholds.C)return 'C';
@@ -18567,10 +18567,13 @@ function _docOffset(el){
 }
 function _popupAnchorBox(anchorCut){
   if(!anchorCut||typeof currentRow==='undefined'||!currentRow)return null;
-  var img=currentRow.querySelector('[data-cut="'+anchorCut+'"] .panel-image');
-  if(!img||img.offsetWidth<40||img.offsetHeight<40)return null;
-  var o=_docOffset(img);
-  return {left:o.x,top:o.y,width:img.offsetWidth,height:img.offsetHeight};
+  // 6/23 (피터공) — 앵커를 .panel-image(이미지만) → .panel 전체(이미지+선택지 영역)로.
+  // 팝업 하단을 이미지 하단이 아니라 선택지 버튼 포함 전체 박스 하단에 맞춤.
+  var panel=currentRow.querySelector('[data-cut="'+anchorCut+'"]');
+  var img=panel&&panel.querySelector('.panel-image');
+  if(!panel||!img||img.offsetWidth<40||img.offsetHeight<40)return null;
+  var o=_docOffset(panel);
+  return {left:o.x,top:o.y,width:panel.offsetWidth,height:panel.offsetHeight};
 }
 // 획득 팝업 v3 (§2e) — 컷 이미지 하단 중앙(§2c v2.1). 카드명 상단 큰 글씨 + 작은 설명 줄.
 // 자동 닫힘 없음 — 확보 버튼을 눌러야 닫히고, 미리보기 카드 고스트가
