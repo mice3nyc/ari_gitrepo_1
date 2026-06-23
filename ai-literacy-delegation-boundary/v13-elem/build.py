@@ -63,13 +63,10 @@ VARIANT_CONFIG_REPLACEMENTS = {
             "sessionIdKey:'ai-literacy-v13-elem-session-id'",
         "outboxKey:'ai-literacy-delegation-boundary-v13-mid-outbox'":
             "outboxKey:'ai-literacy-delegation-boundary-v13-elem-outbox'",
-        "version:'v1.3-mid-r39'":
-            "version:'v1.3-elem-r39'",
         "gameId:'ai_literacy_md'":   # 동현공 참여 로깅 게임 ID — 초등
             "gameId:'ai_literacy_el'",
-        # H2 — CONFIG.scenarios 변종 교체. clientIdKey 줄로 앵커해 15-card PILOT 배열(동일 문자열)과 구분.
-        "clientIdKey:'ai-literacy-client-id', // 브라우저별 익명 식별자(참여 로깅용, localStorage 영속)\n  scenarios:['selfintro','groupwork','eorinwangja','career','studyplan'],":
-            "clientIdKey:'ai-literacy-client-id', // 브라우저별 익명 식별자(참여 로깅용, localStorage 영속)\n  scenarios:['bookreport','animaltalk','jobcard','classmascot','historycheck'],",
+        # 6/23 — version·scenarios 치환 제거: v13-elem 소스가 이미 elem화됨
+        #   (version:'v1.3-elem-r39', scenarios:[bookreport...]). mid→elem 치환 키가 소스에 없어 빌드 실패하던 것 해소.
         "debug:true": "debug:false",
     },
 }
