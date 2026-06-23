@@ -167,10 +167,13 @@ function _docOffset(el){
 }
 function _popupAnchorBox(anchorCut){
   if(!anchorCut||typeof currentRow==='undefined'||!currentRow)return null;
-  var img=currentRow.querySelector('[data-cut="'+anchorCut+'"] .panel-image');
-  if(!img||img.offsetWidth<40||img.offsetHeight<40)return null;
-  var o=_docOffset(img);
-  return {left:o.x,top:o.y,width:img.offsetWidth,height:img.offsetHeight};
+  // 6/23 (피터공) — 앵커를 .panel-image(이미지만) → .panel 전체(이미지+선택지 영역)로.
+  // 팝업 하단을 이미지 하단이 아니라 선택지 버튼 포함 전체 박스 하단에 맞춤.
+  var panel=currentRow.querySelector('[data-cut="'+anchorCut+'"]');
+  var img=panel&&panel.querySelector('.panel-image');
+  if(!panel||!img||img.offsetWidth<40||img.offsetHeight<40)return null;
+  var o=_docOffset(panel);
+  return {left:o.x,top:o.y,width:panel.offsetWidth,height:panel.offsetHeight};
 }
 // 획득 팝업 v3 (§2e) — 컷 이미지 하단 중앙(§2c v2.1). 카드명 상단 큰 글씨 + 작은 설명 줄.
 // 자동 닫힘 없음 — 확보 버튼을 눌러야 닫히고, 미리보기 카드 고스트가
