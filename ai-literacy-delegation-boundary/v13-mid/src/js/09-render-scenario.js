@@ -264,7 +264,7 @@ function showTitleScreen(){
   _crtClear();
   container.innerHTML=_crtMarkup();
   trackEvent('title_viewed',{tutorialSeenBefore:!!gameState.tutorialSeen});
-  _crtRunBoot();
+  _crtShowEntry(); // 입장 화면(이름·수업코드)이 모든 화면 제일 앞 — 통과 후 부팅→타이틀
 }
 
 // §4i-7 — 공통 타이틀 헤더 (튜토리얼·시나리오 선택 상단)
@@ -290,7 +290,7 @@ var _crtTimers=[], _crtIntroLines=[], _crtTutLines=[];
 function _crtT(fn,ms){var id=setTimeout(fn,ms);_crtTimers.push(id);return id;}
 function _crtClear(){for(var i=0;i<_crtTimers.length;i++)clearTimeout(_crtTimers[i]);_crtTimers=[];}
 function _g(id){return document.getElementById(id);}
-function _crtHideAll(){var L=[_g('crtBoot'),_g('crtTitle'),_g('crtDeleg'),_g('crtMethod')];
+function _crtHideAll(){var L=[_g('crtEntry'),_g('crtBoot'),_g('crtTitle'),_g('crtDeleg'),_g('crtMethod')];
   for(var i=0;i<L.length;i++){if(L[i]){L[i].style.display='none';L[i].classList.remove('crt-on');}}}
 function _crtShow(el){if(!el)return;el.style.display='flex';void el.offsetWidth;el.classList.add('crt-on');}
 
@@ -303,6 +303,16 @@ function _crtMarkup(){
   var kick=_tu.kicker?'<div class="crt-kicker">'+_tu.kicker+'</div>':'';
   return '<div class="crt-overlay"><div class="crt-monitor"><div class="crt-bezel"><div class="crt-screen">'
     +'<div class="crt-glare"></div><div class="crt-flash" id="crtFlash"></div><div class="crt-sweep" id="crtSweep"></div>'
+    +'<div class="crt-layer crt-entrylayer" id="crtEntry">'
+      +'<div class="crt-entry-title"><span class="crt-et1">'+(_ts.main_title_1||'내가 할까? 시킬까?')+'</span><span class="crt-et2">'+(_ts.main_title_2||'그것이 문제로다!')+'</span></div>'
+      +'<div class="crt-entry-sub">'+(_ts.sub_title_2||'AI 리터러시, 위임의 경계!')+'</div>'
+      +'<div class="crt-entry-fields">'
+        +'<label class="crt-field"><span>'+(_ts.label_name||'이름')+'</span><input id="crtName" type="text" maxlength="20" autocomplete="off" spellcheck="false" oninput="_crtEntryCheck()" onkeydown="if(event.key===\'Enter\')enterFromEntry()"></label>'
+        +'<label class="crt-field"><span>'+(_ts.label_code||'수업코드')+'</span><input id="crtCode" type="text" maxlength="20" autocomplete="off" spellcheck="false" oninput="_crtEntryCheck()" onkeydown="if(event.key===\'Enter\')enterFromEntry()"></label>'
+        +'<div class="crt-entry-err" id="crtEntryErr"></div>'
+      +'</div>'
+      +'<button class="crt-btn" id="crtEntryBtn" disabled onclick="enterFromEntry()">▶ '+(_ts.btn_start||'시작하기')+'</button>'
+    +'</div>'
     +'<div class="crt-layer" id="crtBoot"><div class="crt-bootline" id="crtBootLine"></div><div class="crt-bootline crt-sub" id="crtBootSub"></div></div>'
     +'<div class="crt-layer crt-title" id="crtTitle"><div class="crt-t1" id="crtT1"></div><div class="crt-t2" id="crtT2"></div>'
       +'<div class="crt-subs" id="crtSubs"></div>'
@@ -409,6 +419,42 @@ function enterFromTutorial(){
 
 var _btnLock={};
 function btnGuard(key){if(_btnLock[key])return true;_btnLock[key]=true;setTimeout(function(){_btnLock[key]=false;},600);return false;}
+
+// ===== 입장 화면(이름·수업코드) — CRT 모니터 제일 앞 레이어. SPEC-intro-crt "입장 게이트" =====
+// 흐름: showTitleScreen → _crtShowEntry(입장) → enterFromEntry(검증·저장) → _crtRunBoot(부팅) → 타이틀
+function _crtShowEntry(){
+  _crtClear();
+  _crtHideAll(); _crtShow(_g('crtEntry'));
+  // 캐싱 안 함 — 입장 화면은 매번 빈 칸으로 시작 (피터공 6/29)
+  var n=_g('crtName'), c=_g('crtCode');
+  if(n)n.value=''; if(c)c.value='';
+  _crtEntryCheck();
+  if(n)setTimeout(function(){try{n.focus();}catch(e){}},60);
+}
+function _crtEntryCheck(){
+  var n=_g('crtName'), c=_g('crtCode'), b=_g('crtEntryBtn');
+  if(!b)return;
+  var ok=!!(n&&c&&n.value.trim()&&c.value.trim());
+  b.disabled=!ok;
+  if(ok){var e=_g('crtEntryErr');if(e)e.textContent='';}
+}
+function _crtEntryErr(msg){var e=_g('crtEntryErr');if(e)e.textContent=msg;}
+// 입장 화면 시작하기 — 이름·수업코드 검증 후 저장, 통과 시 부팅 시퀀스로
+function enterFromEntry(){
+  if(!gameState)return;
+  var nameEl=_g('crtName'), codeEl=_g('crtCode');
+  if(!nameEl||!codeEl)return;
+  var nm=(nameEl.value||'').trim().replace(/[<>&"]/g,'').slice(0,20);
+  var code=(codeEl.value||'').replace(/\s+/g,''); // 띄어쓰기 무시
+  if(!nm){_crtEntryErr(_t('title_screen.err_name','이름을 입력해 주세요'));nameEl.focus();return;}
+  if(code!==(CONFIG.classCode||'하이러닝')){_crtEntryErr(_t('title_screen.err_code','수업코드가 올바르지 않아요'));codeEl.focus();return;}
+  if(btnGuard('enterEntry'))return;
+  gameState.playerName=nm;
+  gameState.classCode=(CONFIG.classCode||'하이러닝');
+  gameState.tutorialSeen=false; // 입장(새 시작)마다 튜토리얼 노출 — 캐시로 스킵 방지
+  saveGame();
+  _crtRunBoot(); // 부팅 → 타이틀
+}
 
 function enterFromTitle(){
   if(btnGuard('enterTitle'))return;

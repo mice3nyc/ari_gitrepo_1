@@ -290,7 +290,10 @@ function showReport(){
   var msg=sc.learningMessage;
   var _sr=_t('scenario_report',{});
   var gradeNote=((typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.report&&TEXTS.report.grade_note)||'');
-  var h='<div class="report-overlay"><div class="report-inner"><h2>'+(_sr.title||'활동 리포트')+'</h2>';
+  var _rpName=(gameState.playerName||'').trim();
+  var _rpTitle=(_sr.title||'활동 리포트');
+  if(_rpName)_rpTitle=_rpName+_t('final_report.name_suffix','의 ')+_rpTitle;
+  var h='<div class="report-overlay"><div class="report-inner"><h2>'+_rpTitle+'</h2>';
   // 2d: 위임 선택력/지식 ± 박스 제거 → 점수·등급 2박스 + grade_note
   h+='<div class="report-grid">';
   h+='<div class="report-stat-box"><div class="report-stat-num">'+gameState.score+'</div><div class="report-stat-label">'+(_sr.stat_score||'최종 점수')+'</div></div>';
@@ -625,7 +628,10 @@ function showFinalReport(){
 
   var h='<div class="report-overlay"><div class="report-inner report-v813">';
   var _fr=_t('final_report',{});
-  h+='<div style="display:flex;align-items:center;min-height:56px;padding:0 22px;margin-bottom:24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);font-size:20px;font-weight:700;letter-spacing:1px;">'+(_fr.title_bar||'AI 리터러시 성장 리포트')+'</div>';
+  var _frName=(gameState.playerName||'').trim();
+  var _frTitle=(_fr.title_bar||'AI 리터러시 성장 리포트');
+  if(_frName)_frTitle=_esc(_frName)+_t('final_report.name_suffix','의 ')+_frTitle;
+  h+='<div style="display:flex;align-items:center;min-height:56px;padding:0 22px;margin-bottom:24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);font-size:20px;font-weight:700;letter-spacing:1px;">'+_frTitle+'</div>';
   // §4j R3.11 — 상단 요약 스트립: 총점 / 능력레벨 / 위임레벨 (HUD FX_META 명칭·출처와 동일)
   var _statTotal=(typeof gameState.totalScore==='number')?gameState.totalScore:0;
   var _abLv=(typeof _abilityCardCount==='function')?_abilityCardCount():0;
@@ -786,7 +792,12 @@ function extractReportData(){
 // 옵션 1: 브라우저 인쇄 다이얼로그 (print CSS 적용. 학생이 "PDF로 저장" 수동 선택)
 function printReport(){
   trackEvent('report_print',{totalScore:gameState.totalScore});
+  // PDF 저장 기본 파일명에 이름 — 인쇄 전 document.title 교체, 후 복원
+  var _prevTitle=document.title;
+  var _pn=(gameState.playerName||'').trim();
+  document.title=(_pn?_pn+'_':'')+'AI리터러시_성장리포트';
   window.print();
+  setTimeout(function(){document.title=_prevTitle;},800);
 }
 
 // §4h-4 — 패턴 판정 (옛 _renderGrowthReport 내장 로직 추출, 판정 기준 무변)

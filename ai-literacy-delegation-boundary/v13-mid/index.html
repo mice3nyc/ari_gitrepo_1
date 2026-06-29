@@ -821,6 +821,19 @@ button, input, select, textarea { font-family: inherit; }
 .crt-intro .crt-btn{margin-top:8%;opacity:0;pointer-events:none;transition:opacity .3s;}
 .crt-intro .crt-btn.show{opacity:1;pointer-events:auto;animation:crtBtnPulse 1.3s .3s ease-in-out infinite;}
 @keyframes crtBtnPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06);box-shadow:7px 7px 0 #7a4a12}}
+/* 입장 화면 — 이름·수업코드 (CRT 모니터 제일 앞 레이어, SPEC-intro-crt "입장 게이트") */
+.crt-entrylayer{justify-content:center;align-items:center;text-align:center;}
+.crt-entry-title{display:flex;flex-direction:column;gap:3px;margin-bottom:3%;}
+.crt-et1{color:var(--ca);font-size:clamp(18px,4.4vw,38px);line-height:1.2;letter-spacing:1px;text-shadow:3px 3px 0 #7a4a12,0 0 16px rgba(255,207,107,.4);}
+.crt-et2{color:var(--cp);font-size:clamp(18px,4.4vw,38px);line-height:1.2;letter-spacing:1px;text-shadow:3px 3px 0 #7a1e44,0 0 16px rgba(255,107,157,.4);}
+.crt-entry-sub{color:#cfeee0;font-size:clamp(10px,1.8vw,13px);letter-spacing:1.5px;margin-bottom:8%;}
+.crt-entry-fields{width:100%;max-width:430px;display:flex;flex-direction:column;gap:14px;margin-bottom:8%;}
+.crt-field{display:flex;align-items:center;gap:12px;font-family:var(--font-crt);color:var(--cg);font-size:clamp(12px,2vw,16px);text-shadow:0 0 5px rgba(127,255,176,.3);}
+.crt-field span{flex:0 0 4.5em;text-align:right;letter-spacing:1px;}
+.crt-field input{flex:1;min-width:0;background:rgba(0,0,0,.45);border:2px solid var(--cg-dim);color:#eafff2;font-family:var(--font-crt);font-size:clamp(13px,2.2vw,17px);padding:9px 11px;outline:none;text-shadow:0 0 5px rgba(127,255,176,.3);box-shadow:0 0 10px rgba(127,255,176,.08) inset;}
+.crt-field input:focus{border-color:var(--cg);box-shadow:0 0 13px rgba(127,255,176,.25) inset;}
+.crt-entry-err{min-height:1.4em;text-align:center;font-family:var(--font-crt);font-size:clamp(10px,1.7vw,13px);color:#ff9d9d;text-shadow:0 0 6px rgba(255,107,107,.45);}
+.crt-btn[disabled]{opacity:.3;pointer-events:none;cursor:not-allowed;filter:grayscale(.6);box-shadow:5px 5px 0 #7a4a12;}
 .crt-deleg{justify-content:center;align-items:center;text-align:center;}
 .crt-dword{color:var(--ca);font-size:clamp(34px,8vw,66px);line-height:1;text-shadow:4px 4px 0 #7a4a12,0 0 22px rgba(255,207,107,.45);margin-bottom:9%;}
 .crt-dlines{min-height:7.2em;display:flex;flex-direction:column;gap:.5em;width:100%;max-width:600px;}
@@ -2160,6 +2173,8 @@ function _t(path,fallback){
 // 3. Config
 // =====================================================
 var CONFIG={
+  // 입장 게이트 수업코드 (피터공 6/29) — 공백 제거 후 일치 비교. 변종(mid/elem) 공통값.
+  classCode:'하이러닝',
   storageKey:'ai-literacy-delegation-boundary-v13-mid',
   eventLogKey:'ai-literacy-delegation-boundary-v13-mid-events',
   sessionIdKey:'ai-literacy-v13-mid-session-id',
@@ -15512,7 +15527,7 @@ function showTitleScreen(){
   _crtClear();
   container.innerHTML=_crtMarkup();
   trackEvent('title_viewed',{tutorialSeenBefore:!!gameState.tutorialSeen});
-  _crtRunBoot();
+  _crtShowEntry(); // 입장 화면(이름·수업코드)이 모든 화면 제일 앞 — 통과 후 부팅→타이틀
 }
 
 // §4i-7 — 공통 타이틀 헤더 (튜토리얼·시나리오 선택 상단)
@@ -15538,7 +15553,7 @@ var _crtTimers=[], _crtIntroLines=[], _crtTutLines=[];
 function _crtT(fn,ms){var id=setTimeout(fn,ms);_crtTimers.push(id);return id;}
 function _crtClear(){for(var i=0;i<_crtTimers.length;i++)clearTimeout(_crtTimers[i]);_crtTimers=[];}
 function _g(id){return document.getElementById(id);}
-function _crtHideAll(){var L=[_g('crtBoot'),_g('crtTitle'),_g('crtDeleg'),_g('crtMethod')];
+function _crtHideAll(){var L=[_g('crtEntry'),_g('crtBoot'),_g('crtTitle'),_g('crtDeleg'),_g('crtMethod')];
   for(var i=0;i<L.length;i++){if(L[i]){L[i].style.display='none';L[i].classList.remove('crt-on');}}}
 function _crtShow(el){if(!el)return;el.style.display='flex';void el.offsetWidth;el.classList.add('crt-on');}
 
@@ -15551,6 +15566,16 @@ function _crtMarkup(){
   var kick=_tu.kicker?'<div class="crt-kicker">'+_tu.kicker+'</div>':'';
   return '<div class="crt-overlay"><div class="crt-monitor"><div class="crt-bezel"><div class="crt-screen">'
     +'<div class="crt-glare"></div><div class="crt-flash" id="crtFlash"></div><div class="crt-sweep" id="crtSweep"></div>'
+    +'<div class="crt-layer crt-entrylayer" id="crtEntry">'
+      +'<div class="crt-entry-title"><span class="crt-et1">'+(_ts.main_title_1||'내가 할까? 시킬까?')+'</span><span class="crt-et2">'+(_ts.main_title_2||'그것이 문제로다!')+'</span></div>'
+      +'<div class="crt-entry-sub">'+(_ts.sub_title_2||'AI 리터러시, 위임의 경계!')+'</div>'
+      +'<div class="crt-entry-fields">'
+        +'<label class="crt-field"><span>'+(_ts.label_name||'이름')+'</span><input id="crtName" type="text" maxlength="20" autocomplete="off" spellcheck="false" oninput="_crtEntryCheck()" onkeydown="if(event.key===\'Enter\')enterFromEntry()"></label>'
+        +'<label class="crt-field"><span>'+(_ts.label_code||'수업코드')+'</span><input id="crtCode" type="text" maxlength="20" autocomplete="off" spellcheck="false" oninput="_crtEntryCheck()" onkeydown="if(event.key===\'Enter\')enterFromEntry()"></label>'
+        +'<div class="crt-entry-err" id="crtEntryErr"></div>'
+      +'</div>'
+      +'<button class="crt-btn" id="crtEntryBtn" disabled onclick="enterFromEntry()">▶ '+(_ts.btn_start||'시작하기')+'</button>'
+    +'</div>'
     +'<div class="crt-layer" id="crtBoot"><div class="crt-bootline" id="crtBootLine"></div><div class="crt-bootline crt-sub" id="crtBootSub"></div></div>'
     +'<div class="crt-layer crt-title" id="crtTitle"><div class="crt-t1" id="crtT1"></div><div class="crt-t2" id="crtT2"></div>'
       +'<div class="crt-subs" id="crtSubs"></div>'
@@ -15657,6 +15682,42 @@ function enterFromTutorial(){
 
 var _btnLock={};
 function btnGuard(key){if(_btnLock[key])return true;_btnLock[key]=true;setTimeout(function(){_btnLock[key]=false;},600);return false;}
+
+// ===== 입장 화면(이름·수업코드) — CRT 모니터 제일 앞 레이어. SPEC-intro-crt "입장 게이트" =====
+// 흐름: showTitleScreen → _crtShowEntry(입장) → enterFromEntry(검증·저장) → _crtRunBoot(부팅) → 타이틀
+function _crtShowEntry(){
+  _crtClear();
+  _crtHideAll(); _crtShow(_g('crtEntry'));
+  // 캐싱 안 함 — 입장 화면은 매번 빈 칸으로 시작 (피터공 6/29)
+  var n=_g('crtName'), c=_g('crtCode');
+  if(n)n.value=''; if(c)c.value='';
+  _crtEntryCheck();
+  if(n)setTimeout(function(){try{n.focus();}catch(e){}},60);
+}
+function _crtEntryCheck(){
+  var n=_g('crtName'), c=_g('crtCode'), b=_g('crtEntryBtn');
+  if(!b)return;
+  var ok=!!(n&&c&&n.value.trim()&&c.value.trim());
+  b.disabled=!ok;
+  if(ok){var e=_g('crtEntryErr');if(e)e.textContent='';}
+}
+function _crtEntryErr(msg){var e=_g('crtEntryErr');if(e)e.textContent=msg;}
+// 입장 화면 시작하기 — 이름·수업코드 검증 후 저장, 통과 시 부팅 시퀀스로
+function enterFromEntry(){
+  if(!gameState)return;
+  var nameEl=_g('crtName'), codeEl=_g('crtCode');
+  if(!nameEl||!codeEl)return;
+  var nm=(nameEl.value||'').trim().replace(/[<>&"]/g,'').slice(0,20);
+  var code=(codeEl.value||'').replace(/\s+/g,''); // 띄어쓰기 무시
+  if(!nm){_crtEntryErr(_t('title_screen.err_name','이름을 입력해 주세요'));nameEl.focus();return;}
+  if(code!==(CONFIG.classCode||'하이러닝')){_crtEntryErr(_t('title_screen.err_code','수업코드가 올바르지 않아요'));codeEl.focus();return;}
+  if(btnGuard('enterEntry'))return;
+  gameState.playerName=nm;
+  gameState.classCode=(CONFIG.classCode||'하이러닝');
+  gameState.tutorialSeen=false; // 입장(새 시작)마다 튜토리얼 노출 — 캐시로 스킵 방지
+  saveGame();
+  _crtRunBoot(); // 부팅 → 타이틀
+}
 
 function enterFromTitle(){
   if(btnGuard('enterTitle'))return;
@@ -17204,7 +17265,10 @@ function showReport(){
   var msg=sc.learningMessage;
   var _sr=_t('scenario_report',{});
   var gradeNote=((typeof TEXTS!=='undefined'&&TEXTS&&TEXTS.report&&TEXTS.report.grade_note)||'');
-  var h='<div class="report-overlay"><div class="report-inner"><h2>'+(_sr.title||'활동 리포트')+'</h2>';
+  var _rpName=(gameState.playerName||'').trim();
+  var _rpTitle=(_sr.title||'활동 리포트');
+  if(_rpName)_rpTitle=_rpName+_t('final_report.name_suffix','의 ')+_rpTitle;
+  var h='<div class="report-overlay"><div class="report-inner"><h2>'+_rpTitle+'</h2>';
   // 2d: 위임 선택력/지식 ± 박스 제거 → 점수·등급 2박스 + grade_note
   h+='<div class="report-grid">';
   h+='<div class="report-stat-box"><div class="report-stat-num">'+gameState.score+'</div><div class="report-stat-label">'+(_sr.stat_score||'최종 점수')+'</div></div>';
@@ -17539,7 +17603,10 @@ function showFinalReport(){
 
   var h='<div class="report-overlay"><div class="report-inner report-v813">';
   var _fr=_t('final_report',{});
-  h+='<div style="display:flex;align-items:center;min-height:56px;padding:0 22px;margin-bottom:24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);font-size:20px;font-weight:700;letter-spacing:1px;">'+(_fr.title_bar||'AI 리터러시 성장 리포트')+'</div>';
+  var _frName=(gameState.playerName||'').trim();
+  var _frTitle=(_fr.title_bar||'AI 리터러시 성장 리포트');
+  if(_frName)_frTitle=_esc(_frName)+_t('final_report.name_suffix','의 ')+_frTitle;
+  h+='<div style="display:flex;align-items:center;min-height:56px;padding:0 22px;margin-bottom:24px;background:var(--acc-yellow);border:var(--border-w) solid var(--ink);box-shadow:var(--shadow);font-size:20px;font-weight:700;letter-spacing:1px;">'+_frTitle+'</div>';
   // §4j R3.11 — 상단 요약 스트립: 총점 / 능력레벨 / 위임레벨 (HUD FX_META 명칭·출처와 동일)
   var _statTotal=(typeof gameState.totalScore==='number')?gameState.totalScore:0;
   var _abLv=(typeof _abilityCardCount==='function')?_abilityCardCount():0;
@@ -17700,7 +17767,12 @@ function extractReportData(){
 // 옵션 1: 브라우저 인쇄 다이얼로그 (print CSS 적용. 학생이 "PDF로 저장" 수동 선택)
 function printReport(){
   trackEvent('report_print',{totalScore:gameState.totalScore});
+  // PDF 저장 기본 파일명에 이름 — 인쇄 전 document.title 교체, 후 복원
+  var _prevTitle=document.title;
+  var _pn=(gameState.playerName||'').trim();
+  document.title=(_pn?_pn+'_':'')+'AI리터러시_성장리포트';
   window.print();
+  setTimeout(function(){document.title=_prevTitle;},800);
 }
 
 // §4h-4 — 패턴 판정 (옛 _renderGrowthReport 내장 로직 추출, 판정 기준 무변)

@@ -17,6 +17,8 @@ function _t(path,fallback){
 // 3. Config
 // =====================================================
 var CONFIG={
+  // 입장 게이트 수업코드 (피터공 6/29) — 공백 제거 후 일치 비교. 변종(mid/elem) 공통값.
+  classCode:'하이러닝',
   storageKey:'ai-literacy-delegation-boundary-v13-mid',
   eventLogKey:'ai-literacy-delegation-boundary-v13-mid-events',
   sessionIdKey:'ai-literacy-v13-mid-session-id',
