@@ -1,6 +1,15 @@
 ## TASKS — v1.3-mid (중등)
 
-**최종 업데이트**: 2026-06-23 (RP 레벨업 보너스 OFF + S→A 통합, 커밋 dc0e433 dev-live)
+**최종 업데이트**: 2026-06-29 (입장 화면 이름·수업코드 + 리포트 이름 개인화, 커밋 75a7728, 동현공 전달)
+
+### ✓ 2026-06-29 — 입장 화면(이름·수업코드) + 리포트 이름 개인화 (피터공, 요청 [[요청.26.0629.1341-이름수업코드입장]])
+
+- [x] **입장 화면**: CRT 모니터 제일 앞 별도 레이어 `#crtEntry`(타이틀보다 앞). 게임 타이틀 + 이름/수업코드 + 시작하기. 둘 다 입력해야 활성, `CONFIG.classCode='하이러닝'`(공백 무시). 흐름: 입장→부팅→타이틀→튜토리얼. 09-render-scenario.js(`_crtShowEntry`/`enterFromEntry`/`_crtHideAll`에 crtEntry 추가)·06-scenario-select.css(`.crt-entrylayer`·`.crt-field`). 초·중등 동일.
+- [x] **리포트 이름 3곳**: 활동 리포트 헤더 / 종합 리포트 노란 타이틀 바('OOO의 …') / PDF 저장 파일명(`document.title` 교체). 11-report.js. (`extractReportData().name` 기존 예비 배관 활용.)
+- [x] **캐싱 안 함**: 입장칸 매번 빈 칸(프리필 제거), 입장 시 `tutorialSeen=false`(스킵 방지). `_crtHideAll` 누락으로 화면 안 지워지던 버그 수정.
+- [x] **빌드** — `index.html` + `builds/mid`(771,309 B, --release minify). 토큰 주입·terser 통과·피터공 라이브 확인(초·중등).
+- [x] **커밋·푸시** — 커밋 **75a7728**(main) push. SPEC-intro-crt(입장 게이트)·SPEC-report(§6) 반영.
+- [x] **동현공 전달본** — `~/Downloads/AI리터러시_동현공전달_260629/{mid,elem}`(자기완결 폴더 + HANDOFF 문서). 618 패키지 구성 동일.
 
 ### ✓ 2026-06-23 — RP 레벨업 보너스 OFF + S→A 통합 (피터공 결정, DECISIONS §10.16·§10.17)
 
