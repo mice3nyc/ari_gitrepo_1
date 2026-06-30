@@ -1,5 +1,5 @@
 /* ===== Choice Cards ===== */
-.choices-area { padding:8px; display:flex; flex-direction:column; gap:8px; height:100%; }
+.choices-area { padding:8px; display:flex; flex-direction:column; gap:8px; height:100%; } /* QA1: 실제 적용은 10-paperlogy의 .choices-area에서 (여긴 override됨) */
 .choices-q { font-size:14px; font-weight:700; padding:6px 0 8px; color:#111; }
 .chosen-summary { padding:8px 4px; background:transparent; animation:panelSlideIn 0.4s ease; }
 .chosen-label { font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:#888; margin-bottom:4px; }
@@ -9,10 +9,10 @@
 .choice-card.visible { opacity:1; transform:translateY(0); }
 .choice-card:hover { transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
 .choice-card:active { box-shadow:var(--shadow-press); transform:translate(2px,2px); }
-.choice-header { display:flex; align-items:center; gap:8px; padding:8px 12px 4px; }
+.choice-header { display:flex; align-items:center; gap:8px; padding:8px 12px 4px; } /* QA1: 실제 적용은 10-paperlogy의 .choice-header에서 */
 .choice-card-nocost .choice-header { padding:12px 14px; }
 .choice-num { background:var(--acc-yellow); color:var(--ink); width:24px; height:24px; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; border:2px solid var(--ink); }
-.choice-text { font-size:15px; font-weight:700; line-height:1.4; margin-bottom:2px; }
+.choice-text { font-size:15px; font-weight:700; line-height:1.4; margin-bottom:2px; } /* QA1: 실제 적용은 10-paperlogy의 .choice-text(14px)에서 */
 /* §4f v7 — 역량카드 할인 가능 표식 (버튼 아님, 선택 텍스트 끝) */
 .card-discount-mark { display:inline-block; font-size:10px; font-weight:700; color:#fff; background:#15803d; padding:2px 7px; margin-left:6px; vertical-align:2px; line-height:1.3; white-space:nowrap; }
 .choice-desc { font-size:11px; color:#888; line-height:1.4; margin-top:3px; }

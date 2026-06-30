@@ -32,7 +32,7 @@
 .cut-label { font-size:48px; font-weight:200; color:#ddd; }
 .cut-num { position:absolute; top:6px; left:8px; font-size:10px; font-weight:700; color:#999; background:rgba(255,255,255,0.85); padding:2px 6px; letter-spacing:1px; }
 .panel-place { font-size:10px; color:#999; position:absolute; bottom:4px; right:8px; background:rgba(255,255,255,0.8); padding:1px 6px; }
-.panel-body { flex:1; padding:10px 12px; overflow-y:auto; font-size:13px; line-height:1.5; }
+.panel-body { flex:1; padding:10px 12px; overflow-y:auto; font-size:13px; line-height:1.5; } /* QA1: 실제 적용은 10-paperlogy의 .panel-body(좌우 8px)에서 */
 .panel-body p { margin-bottom:6px; }
 /* §4f v7 — 컷1 상황 텍스트 확대 (본문 13px → 15px) */
 .panel-body .situation-text { font-size:15px; }

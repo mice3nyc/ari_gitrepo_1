@@ -29,7 +29,7 @@
 
 
 /* ===== §4p v3 6/15 — 시간·에너지 비용을 한 줄에 (피터공: "시간비용:6 | 에너지비용:10"). 취소선 폐지, 숫자만 바뀜 ===== */
-.choice-cost.cost-simple { display:flex; flex-direction:row; flex-wrap:nowrap; align-items:baseline; justify-content:center; gap:10px; margin-top:8px; font-size:15px; font-weight:800; color:var(--ink); white-space:nowrap; }
+.choice-cost.cost-simple { display:flex; flex-direction:row; flex-wrap:nowrap; align-items:baseline; justify-content:center; gap:6px; margin-top:8px; font-size:13px; font-weight:800; color:var(--ink); white-space:nowrap; } /* QA1 (6/30) — 15→13, gap 10→6, 태블릿 폭 비용 잘림 완화 */
 .cost-simple .cost-line { display:inline-flex; align-items:baseline; gap:4px; }
 .cost-simple .cost-sep { opacity:.4; font-weight:700; }
 .cost-simple .cost-num { display:inline-block; font-weight:800; color:var(--acc-pink-deep); } /* §4t (6/16 피터공) — 비용 숫자는 처음부터 핑크(자주색) */
