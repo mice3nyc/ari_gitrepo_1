@@ -60,6 +60,8 @@ function startScenario(scid){
 function replayScenario(scid){
   if(!SCENARIOS[scid])return;
   if(!gameState||!gameState.clearedScenarios){return;}
+  // QA8 — 이전 판 cut6 보상 체인(자원 분배 팝업) 예약이 남아 있으면 취소. 안 그러면 다시 도전 화면 위에서 발화해 자원 중복 지급.
+  if(typeof _cancelCut6Chain==='function')_cancelCut6Chain();
   if(typeof railClear==='function')railClear(); // §2b — 컷6에서 리플레이 진입 시 레일 정리 (비행 생략 경로)
 
   // [1] 해당 시나리오 역량/점수/EXP 롤백 (scenarioHistory에서 찾아서 역산)
@@ -124,6 +126,12 @@ function replayScenario(scid){
     gameState.resources.time.current=rp.resourceSnapshot.time;
     gameState.resources.energy.current=rp.resourceSnapshot.energy;
   }
+  // [3a] QA8 — 이번 판 완료로 적립된 자원토큰(RP) 회수. 자원을 시작 스냅샷으로 되돌리는 것과 일관.
+  //      아직 [자원 분배]로 쓰지 않은 토큰이 다시 도전으로 넘어가 중복 분배되던 것 차단(타이머 취소와 이중 방어).
+  if(gameState.rp&&gameState.rp.balance>0){
+    if(gameState.rp.history)gameState.rp.history.push({type:'forfeited_on_replay',scenarioId:scid,forfeited:gameState.rp.balance});
+    gameState.rp.balance=0;
+  }
   // 새 스냅샷 저장 (§3b 가드 — stale 세이브에서 replay[scid] 부재 시 TypeError 방지)
   if(!gameState.replay)gameState.replay={};
   if(!gameState.replay[scid])gameState.replay[scid]={played:true,improved:false,bestScore:0,bestGrade:''};
@@ -165,6 +173,8 @@ function updateDomainLabel(){
 function goNextScenario(){
   if(btnGuard('goNext'))return;
   if(!gameState)return;
+  // QA8 — 분배 팝업 전에 다음으로 넘어가면 예약된 cut6 체인이 다음 화면 위에서 발화하던 것 차단.
+  if(typeof _cancelCut6Chain==='function')_cancelCut6Chain();
   if(gameState.currentScenarioId&&gameState.clearedScenarios.indexOf(gameState.currentScenarioId)<0){
     gameState.clearedScenarios.push(gameState.currentScenarioId);
     gameState.totalScore=(gameState.totalScore||0)+gameState.score;

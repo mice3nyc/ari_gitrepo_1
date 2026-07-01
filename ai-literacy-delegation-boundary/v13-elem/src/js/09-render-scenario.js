@@ -287,6 +287,10 @@ function showTutorialScreen(){
 // ===== r40 — 인트로 CRT 모니터 연출 (시안 mockups/title-crt-sian.html 승인분 통합) =====
 // 부팅→타이틀→위임 정의→게임 방법, 한 번 렌더한 모니터 DOM의 4개 .crt-layer 토글. SPEC-intro-crt.md
 var _crtTimers=[], _crtIntroLines=[], _crtTutLines=[];
+// QA8 — cut6 보상 체인(자원 분배 팝업 포함) 예약 타이머. 리플레이/다음 진입 시 취소해
+// 스테일 분배 팝업이 발화하며 자원이 중복 지급되는 것을 막는다. (10-event-handlers replayScenario/goNextScenario에서 취소)
+var _cut6ChainTimer=null;
+function _cancelCut6Chain(){if(_cut6ChainTimer){clearTimeout(_cut6ChainTimer);_cut6ChainTimer=null;}}
 function _crtT(fn,ms){var id=setTimeout(fn,ms);_crtTimers.push(id);return id;}
 function _crtClear(){for(var i=0;i<_crtTimers.length;i++)clearTimeout(_crtTimers[i]);_crtTimers=[];}
 function _g(id){return document.getElementById(id);}
@@ -1244,7 +1248,9 @@ function goCut6(){
     if(fin.domainCards)for(var _di=0;_di<fin.domainCards.length;_di++)_v8CardLabels.push(fin.domainCards[_di]);
   }
   // 회복력·도전력 성장카드 팝업 폐지 (6/21, 피터공) — 재도전 무조건 가능으로 불필요. _v8CardLabels에 성장카드 라벨 추가 안 함. SPEC §14.2.
-  setTimeout(function(){
+  _cancelCut6Chain(); // QA8 — 재렌더/재진입 시 이전 예약 체인 정리
+  _cut6ChainTimer=setTimeout(function(){
+    _cut6ChainTimer=null;
     var chain=Promise.resolve();
     // [0] §12 pending → 누적 흡수 (원 마커가 게이지로 흘러내림)
     chain=chain.then(function(){return absorbPending();});
