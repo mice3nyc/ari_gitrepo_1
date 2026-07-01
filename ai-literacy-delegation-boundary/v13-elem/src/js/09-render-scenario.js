@@ -1103,15 +1103,10 @@ function goCut6(){
     if(replayInGrade){
       var gradeReplayBtn=document.getElementById('replay-btn-grade');
       if(gradeReplayBtn)gradeReplayBtn.onclick=function(){
-        gradeReplayBtn.disabled=true;
+        // QA6 — 인라인 문구+1.5초 자동전환 폐기. 안내를 모달로 또렷하게 (C/D 버튼은 상단 등급박스라 인라인 문구가 잘리던 문제 해소)
         var replaySug=fin?fin.replaySuggestion:'';
-        if(replaySug){
-          var sugDiv=document.createElement('div');
-          sugDiv.style.cssText='margin-top:10px;max-width:280px;padding:8px 12px;background:#fff;border:3px solid #000;border-radius:0;font-size:13px;line-height:1.5;color:#000;text-align:center;box-shadow:4px 4px 0 #000;';
-          sugDiv.textContent=replaySug;
-          gradeReplayBtn.parentNode.appendChild(sugDiv);
-        }
-        setTimeout(function(){replayScenario(scid);},replaySug?1500:0);
+        if(replaySug)showReplaySuggest(scid,replaySug);
+        else replayScenario(scid);
       };
     }
   }
@@ -1160,15 +1155,10 @@ function goCut6(){
   var replayBtn=document.getElementById('replay-btn-cut6');
   if(replayBtn){
     replayBtn.onclick=function(){
-      replayBtn.disabled=true;
+      // QA6 — 인라인 문구+1.5초 자동전환 폐기. 안내를 모달로 (B등급 경로도 공통)
       var replaySug=fin?fin.replaySuggestion:'';
-      if(replaySug){
-        var sugDiv=document.createElement('div');
-        sugDiv.style.cssText='margin-top:8px;padding:10px;background:#f4f1ea;border:3px solid #000;border-radius:0;font-size:13px;line-height:1.5;color:#000;';
-        sugDiv.textContent=replaySug;
-        replayBtn.parentNode.insertBefore(sugDiv,replayBtn.nextSibling);
-      }
-      setTimeout(function(){replayScenario(scid);},replaySug?1500:0);
+      if(replaySug)showReplaySuggest(scid,replaySug);
+      else replayScenario(scid);
     };
   }
   trackEvent('final_viewed',{scenarioId:sc.id,leaf:leaf,score:gameState.score,grade:grade,item:item});

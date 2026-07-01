@@ -150,6 +150,18 @@
   </div>
 </div>
 
+<!-- QA6 — 시나리오 다시 해보기 안내 모달 -->
+<div id="replay-suggest-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-title">이 시나리오, 다시 해볼까요?</div>
+    <div class="modal-subtitle" id="replay-suggest-text"></div>
+    <div class="confirm-actions">
+      <button class="confirm-cancel" onclick="closeReplaySuggest()">닫기</button>
+      <button class="confirm-destructive" id="replay-suggest-go">다시 시작하기</button>
+    </div>
+  </div>
+</div>
+
 <!-- Phase 8.10a — 자원토큰 분배 팝업 (DECISIONS §10.5) -->
 <div id="rp-modal" class="modal-overlay hidden">
   <div class="modal-card">

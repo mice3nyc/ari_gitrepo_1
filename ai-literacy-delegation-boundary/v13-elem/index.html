@@ -2113,6 +2113,18 @@ button,
   </div>
 </div>
 
+<!-- QA6 — 시나리오 다시 해보기 안내 모달 -->
+<div id="replay-suggest-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-title">이 시나리오, 다시 해볼까요?</div>
+    <div class="modal-subtitle" id="replay-suggest-text"></div>
+    <div class="confirm-actions">
+      <button class="confirm-cancel" onclick="closeReplaySuggest()">닫기</button>
+      <button class="confirm-destructive" id="replay-suggest-go">다시 시작하기</button>
+    </div>
+  </div>
+</div>
+
 <!-- Phase 8.10a — 자원토큰 분배 팝업 (DECISIONS §10.5) -->
 <div id="rp-modal" class="modal-overlay hidden">
   <div class="modal-card">
@@ -13787,57 +13799,57 @@ var MICRO_OFFSETS = {
   "bookreport": {
     "A1": 0,
     "A2": 0,
-    "A3": 0,
+    "A3": 1,
     "B1": 0,
-    "B2": 0,
-    "B3": 0,
-    "C1": 0,
+    "B2": -1,
+    "B3": -1,
+    "C1": 1,
     "C2": 0,
-    "C3": 0
+    "C3": -1
   },
   "animaltalk": {
     "A1": 0,
     "A2": 0,
-    "A3": 0,
+    "A3": 1,
     "B1": 0,
-    "B2": 0,
-    "B3": 0,
-    "C1": 0,
+    "B2": -1,
+    "B3": -1,
+    "C1": 1,
     "C2": 0,
-    "C3": 0
+    "C3": -1
   },
   "jobcard": {
     "A1": 0,
     "A2": 0,
-    "A3": 0,
-    "B1": 0,
+    "A3": -1,
+    "B1": 1,
     "B2": 0,
-    "B3": 0,
-    "C1": 0,
+    "B3": -1,
+    "C1": 1,
     "C2": 0,
-    "C3": 0
+    "C3": -1
   },
   "classmascot": {
     "A1": 0,
     "A2": 0,
-    "A3": 0,
-    "B1": 0,
+    "A3": 1,
+    "B1": 1,
     "B2": 0,
-    "B3": 0,
-    "C1": 0,
+    "B3": -1,
+    "C1": 1,
     "C2": 0,
-    "C3": 0
+    "C3": -1
   },
   "historycheck": {
     "A1": 0,
-    "A2": 0,
-    "A3": 0,
-    "B1": 0,
-    "B2": 0,
-    "B3": 0,
-    "C1": 0,
+    "A2": -1,
+    "A3": -1,
+    "B1": 1,
+    "B2": -1,
+    "B3": -1,
+    "C1": 1,
     "C2": 0,
-    "C3": 0
+    "C3": -1
   }
 };
 var AI_FLAGS = {
@@ -16120,15 +16132,10 @@ function goCut6(){
     if(replayInGrade){
       var gradeReplayBtn=document.getElementById('replay-btn-grade');
       if(gradeReplayBtn)gradeReplayBtn.onclick=function(){
-        gradeReplayBtn.disabled=true;
+        // QA6 — 인라인 문구+1.5초 자동전환 폐기. 안내를 모달로 또렷하게 (C/D 버튼은 상단 등급박스라 인라인 문구가 잘리던 문제 해소)
         var replaySug=fin?fin.replaySuggestion:'';
-        if(replaySug){
-          var sugDiv=document.createElement('div');
-          sugDiv.style.cssText='margin-top:10px;max-width:280px;padding:8px 12px;background:#fff;border:3px solid #000;border-radius:0;font-size:13px;line-height:1.5;color:#000;text-align:center;box-shadow:4px 4px 0 #000;';
-          sugDiv.textContent=replaySug;
-          gradeReplayBtn.parentNode.appendChild(sugDiv);
-        }
-        setTimeout(function(){replayScenario(scid);},replaySug?1500:0);
+        if(replaySug)showReplaySuggest(scid,replaySug);
+        else replayScenario(scid);
       };
     }
   }
@@ -16177,15 +16184,10 @@ function goCut6(){
   var replayBtn=document.getElementById('replay-btn-cut6');
   if(replayBtn){
     replayBtn.onclick=function(){
-      replayBtn.disabled=true;
+      // QA6 — 인라인 문구+1.5초 자동전환 폐기. 안내를 모달로 (B등급 경로도 공통)
       var replaySug=fin?fin.replaySuggestion:'';
-      if(replaySug){
-        var sugDiv=document.createElement('div');
-        sugDiv.style.cssText='margin-top:8px;padding:10px;background:#f4f1ea;border:3px solid #000;border-radius:0;font-size:13px;line-height:1.5;color:#000;';
-        sugDiv.textContent=replaySug;
-        replayBtn.parentNode.insertBefore(sugDiv,replayBtn.nextSibling);
-      }
-      setTimeout(function(){replayScenario(scid);},replaySug?1500:0);
+      if(replaySug)showReplaySuggest(scid,replaySug);
+      else replayScenario(scid);
     };
   }
   trackEvent('final_viewed',{scenarioId:sc.id,leaf:leaf,score:gameState.score,grade:grade,item:item});
@@ -16659,6 +16661,24 @@ function closeResetConfirm(){
 function confirmResetDo(){
   closeResetConfirm();
   setTimeout(function(){resetGame();},150);
+}
+
+// QA6 — "이 시나리오 다시 해보기" 안내 모달. 인라인 문구가 잠깐 떴다 사라지고(1.5초 자동전환) C/D는 잘리던 문제 대체.
+function showReplaySuggest(scid,sug){
+  var modal=document.getElementById('replay-suggest-modal');
+  if(!modal){replayScenario(scid);return;} // 모달 부재 시 폴백: 바로 재도전
+  var txt=document.getElementById('replay-suggest-text');
+  if(txt)txt.textContent=sug||'';
+  var go=document.getElementById('replay-suggest-go');
+  if(go)go.onclick=function(){closeReplaySuggest();setTimeout(function(){replayScenario(scid);},150);};
+  modal.classList.remove('hidden');
+  requestAnimationFrame(function(){modal.classList.add('visible');});
+}
+function closeReplaySuggest(){
+  var modal=document.getElementById('replay-suggest-modal');
+  if(!modal)return;
+  modal.classList.remove('visible');
+  setTimeout(function(){modal.classList.add('hidden');},250);
 }
 
 // §17.2 — 시나리오 나가기 (세션467, 6/11): 이번 판 롤백 후 시나리오 선택 화면으로
