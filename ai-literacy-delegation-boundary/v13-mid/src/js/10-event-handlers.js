@@ -355,6 +355,24 @@ function confirmResetDo(){
   setTimeout(function(){resetGame();},150);
 }
 
+// QA6 — "이 시나리오 다시 해보기" 안내 모달. 인라인 문구가 잠깐 떴다 사라지고(1.5초 자동전환) C/D는 잘리던 문제 대체.
+function showReplaySuggest(scid,sug){
+  var modal=document.getElementById('replay-suggest-modal');
+  if(!modal){replayScenario(scid);return;} // 모달 부재 시 폴백: 바로 재도전
+  var txt=document.getElementById('replay-suggest-text');
+  if(txt)txt.textContent=sug||'';
+  var go=document.getElementById('replay-suggest-go');
+  if(go)go.onclick=function(){closeReplaySuggest();setTimeout(function(){replayScenario(scid);},150);};
+  modal.classList.remove('hidden');
+  requestAnimationFrame(function(){modal.classList.add('visible');});
+}
+function closeReplaySuggest(){
+  var modal=document.getElementById('replay-suggest-modal');
+  if(!modal)return;
+  modal.classList.remove('visible');
+  setTimeout(function(){modal.classList.add('hidden');},250);
+}
+
 // §17.2 — 시나리오 나가기 (세션467, 6/11): 이번 판 롤백 후 시나리오 선택 화면으로
 function exitScenario(){
   if(btnGuard('exitScenario'))return;

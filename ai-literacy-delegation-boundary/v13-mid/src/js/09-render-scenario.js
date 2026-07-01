@@ -1103,15 +1103,10 @@ function goCut6(){
     if(replayInGrade){
       var gradeReplayBtn=document.getElementById('replay-btn-grade');
       if(gradeReplayBtn)gradeReplayBtn.onclick=function(){
-        gradeReplayBtn.disabled=true;
+        // QA6 — 인라인 문구+1.5초 자동전환 폐기. 안내를 모달로 또렷하게 (C/D 버튼은 상단 등급박스라 인라인 문구가 잘리던 문제 해소)
         var replaySug=fin?fin.replaySuggestion:'';
-        if(replaySug){
-          var sugDiv=document.createElement('div');
-          sugDiv.style.cssText='margin-top:10px;max-width:280px;padding:8px 12px;background:#fff;border:3px solid #000;border-radius:0;font-size:13px;line-height:1.5;color:#000;text-align:center;box-shadow:4px 4px 0 #000;';
-          sugDiv.textContent=replaySug;
-          gradeReplayBtn.parentNode.appendChild(sugDiv);
-        }
-        setTimeout(function(){replayScenario(scid);},replaySug?1500:0);
+        if(replaySug)showReplaySuggest(scid,replaySug);
+        else replayScenario(scid);
       };
     }
   }
@@ -1151,8 +1146,8 @@ function goCut6(){
     h+='<div class="result-feedback" style="margin-bottom:16px;padding:12px 14px;background:#f4f1ea;border:3px solid #000;border-radius:0;font-size:14px;line-height:1.6;color:#000;">'+cut6Fb+'</div>';
   }
 
-  // ③ B — low key 리플레이 버튼 (C/D는 등급 박스에, S/A는 없음)
-  if(grade==='B'){
+  // ③ B·A·S — low key 리플레이 버튼 (C/D는 등급 박스에). QA7 — A/S도 더 높은 등급 도전용으로 추가(기존엔 없어서 유저가 [나가기]로 우회 → 중복 버그 유발).
+  if(grade==='B'||grade==='A'||grade==='S'){
     h+='<div style="text-align:center;margin-top:8px;"><button class="replay-btn" id="replay-btn-cut6" style="background:#fff;border:3px solid #000;padding:6px 16px;font-size:12px;color:#000;cursor:pointer;border-radius:0;box-shadow:4px 4px 0 #000;">'+_t('game_flow.buttons.replay','이 시나리오 다시 해보기')+'</button></div>';
   }
 
@@ -1160,20 +1155,19 @@ function goCut6(){
   var replayBtn=document.getElementById('replay-btn-cut6');
   if(replayBtn){
     replayBtn.onclick=function(){
-      replayBtn.disabled=true;
+      // QA6 — 인라인 문구+1.5초 자동전환 폐기. 안내를 모달로 (B등급 경로도 공통)
       var replaySug=fin?fin.replaySuggestion:'';
-      if(replaySug){
-        var sugDiv=document.createElement('div');
-        sugDiv.style.cssText='margin-top:8px;padding:10px;background:#f4f1ea;border:3px solid #000;border-radius:0;font-size:13px;line-height:1.5;color:#000;';
-        sugDiv.textContent=replaySug;
-        replayBtn.parentNode.insertBefore(sugDiv,replayBtn.nextSibling);
-      }
-      setTimeout(function(){replayScenario(scid);},replaySug?1500:0);
+      if(replaySug)showReplaySuggest(scid,replaySug);
+      else replayScenario(scid);
     };
   }
   trackEvent('final_viewed',{scenarioId:sc.id,leaf:leaf,score:gameState.score,grade:grade,item:item});
 
   // 시나리오 완료 처리
+  // QA7 — 완료 push 중복 가드: 완료 후 [나가기]→재도전 등 replayScenario를 안 거치는 경로에서 같은 시나리오가 리포트에 여러 번 쌓이던 문제. 같은 scid 기존 엔트리 제거 후 최신 판만 push.
+  for(var _dupHi=gameState.scenarioHistory.length-1;_dupHi>=0;_dupHi--){
+    if(gameState.scenarioHistory[_dupHi].scenarioId===sc.id)gameState.scenarioHistory.splice(_dupHi,1);
+  }
   // 5/3 세션278+ — 종합 리포트용 Δ/누적 스냅샷 동봉 (흡수 직전 시점, 위 dlgDelta·knlDelta·dlgTotal·knlTotal과 동일)
   gameState.scenarioHistory.push({
     scenarioId:sc.id,
