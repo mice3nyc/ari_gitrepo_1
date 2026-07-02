@@ -482,7 +482,7 @@ function showStartScreen(){
   }
   var hintOn=getHintPref();
   var order=CONFIG.scenarios; // 학기 시간 순
-  var cleared=gameState.clearedScenarios||[];
+  var cleared=getEverClearedScenarios(gameState); // QA9 — 재도전 중 홀 방지, 영구 완료 기록 기준
   var nextId=null;
   for(var i=0;i<order.length;i++){if(cleared.indexOf(order[i])<0){nextId=order[i];break;}}
   var allDone=(nextId===null);
@@ -540,9 +540,8 @@ function showStartScreen(){
     h+='<button class="action-main" onclick="startScenario(\''+nextId+'\')">'+(_ss.btn_next_scenario||'다음 시나리오')+'</button>';
   }
   h+='</div>';
-  h+='<div class="select-footer-links">'; // §4i-10 — 튜토리얼·타이틀 재방문 링크
+  h+='<div class="select-footer-links">'; // §4i-10 — 튜토리얼 재방문 링크. 타이틀 화면 버튼은 요청.26.0702 삭제
   h+='<button class="tutorial-link" onclick="showTutorialScreen()">'+(_ss.btn_tutorial_again||'튜토리얼 다시 보기')+'</button>';
-  h+='<button class="tutorial-link" onclick="showTitleScreen()">'+(_ss.btn_title_again||'타이틀 화면')+'</button>';
   h+='</div>';
   h+='</div>';
   container.innerHTML=h;

@@ -18,10 +18,13 @@ function startScenario(scid){
   _couponSelections={};
   if(typeof railClear==='function')railClear(); // §2b — 이전 시나리오 레일 잔여물 정리
   if(!gameState||!gameState.clearedScenarios){gameState=createInitialState();}
-  if(gameState.clearedScenarios.indexOf(scid)>=0)return; // 1회 제한 (리플레이는 replayScenario 사용)
+  // QA9 — 영구 완료 기록(getEverClearedScenarios) 기준. 재도전 중 clearedScenarios에서
+  // 잠깐 빠진 상태라도 startScenario로 "첫 판"처럼 시작되지 않게(리플레이는 replayScenario 사용).
+  var _everCleared=getEverClearedScenarios(gameState);
+  if(_everCleared.indexOf(scid)>=0)return; // 1회 제한 (리플레이는 replayScenario 사용)
   // §14.5 — 순차 진행: 미완료 중 다음 시나리오만 진입 가능 (UI 우회 방어)
   var _order=CONFIG.scenarios,_next=null;
-  for(var _i=0;_i<_order.length;_i++){if(gameState.clearedScenarios.indexOf(_order[_i])<0){_next=_order[_i];break;}}
+  for(var _i=0;_i<_order.length;_i++){if(_everCleared.indexOf(_order[_i])<0){_next=_order[_i];break;}}
   if(_next&&scid!==_next)return;
   // v0.8 — 리플레이용 자원 스냅샷 저장
   if(!gameState.replay)gameState.replay={};
@@ -365,6 +368,33 @@ function confirmResetDo(){
   setTimeout(function(){resetGame();},150);
 }
 
+// 요청.26.0702 — 리포트 "처음부터 다시 해보기"(오공 제안·피터공 결정). resetGame과 초기화 내용은
+// 같지만 착지가 다름 — 타이틀이 아니라 시나리오 선택 화면(첫 시나리오만 열림)으로 바로 간다.
+function resetGameToScenarioSelect(){
+  trackEvent('session_reset',{source:'report_full_restart'});
+  if(typeof railClear==='function')railClear(); // §2b
+  clearGame();
+  resetSid();
+  gameState=null;currentRow=null;
+  showStartScreen();
+}
+function confirmFullRestart(){
+  var modal=document.getElementById('full-restart-confirm-modal');
+  if(!modal)return;
+  modal.classList.remove('hidden');
+  requestAnimationFrame(function(){modal.classList.add('visible');});
+}
+function closeFullRestartConfirm(){
+  var modal=document.getElementById('full-restart-confirm-modal');
+  if(!modal)return;
+  modal.classList.remove('visible');
+  setTimeout(function(){modal.classList.add('hidden');},250);
+}
+function confirmFullRestartDo(){
+  closeFullRestartConfirm();
+  setTimeout(function(){resetGameToScenarioSelect();},150);
+}
+
 // QA6 — "이 시나리오 다시 해보기" 안내 모달. 인라인 문구가 잠깐 떴다 사라지고(1.5초 자동전환) C/D는 잘리던 문제 대체.
 function showReplaySuggest(scid,sug){
   var modal=document.getElementById('replay-suggest-modal');
@@ -418,6 +448,12 @@ function confirmExitDo(){
     gameState.inventory.domainCards=_exitDropCards(gameState.inventory.domainCards);
     gameState.inventory.growthCards=_exitDropCards(gameState.inventory.growthCards);
     gameState.inventory.competencyCards=_exitDropCards(gameState.inventory.competencyCards);
+  }
+  // [2b] QA9 — 재도전 중 나가기: replayScenario가 진입 시 clearedScenarios에서 뺐던 걸
+  //      완료 없이 나가는 거면 되돌린다. 안 그러면 이 시나리오가 클리어됐다는 기록만
+  //      비어서 §14.5 순차 잠금이 "다음 하나만 열림"으로 오인, 뒤 시나리오까지 잠근다.
+  if(rp&&rp.played===true&&gameState.clearedScenarios.indexOf(scid)<0){
+    gameState.clearedScenarios.push(scid);
   }
   // [3] 시나리오 상태 초기화 — 점수·완료 확정 전이라 pending/선택만 비우면 됨
   gameState.currentScenarioId=null;

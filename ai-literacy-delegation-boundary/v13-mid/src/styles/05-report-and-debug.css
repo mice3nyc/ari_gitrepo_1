@@ -199,6 +199,24 @@
   transform: translate(2px, 2px);
   box-shadow: var(--shadow-press);
 }
+/* 요청.26.0702 — "처음부터 다시 해보기"는 파괴적 액션이라 §14.3 인벤토리 리셋 버튼과 같은
+   눈에 덜 띄는 톤(회색+얇은 테두리, 그림자 없음)으로 다른 report-btn과 구분한다. */
+.report-btn-restart {
+  font-family: 'Paperlogy', sans-serif;
+  background: #fff;
+  color: #999;
+  border: 1px solid #ccc;
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  border-radius: 0;
+}
+.report-btn-restart:hover {
+  color: #666;
+  border-color: #999;
+}
 
 /* §4d R3.5 — 위임 항로 v2: 마이크로 항로 + 대표 컷 + 펼침 (report-comic 대체) */
 .rmap-row { margin:10px 0 0; padding-top:8px; border-top:1.5px solid var(--ink); } /* §4g-5 시나리오 사이 가로 구분선 */

@@ -138,6 +138,18 @@
   </div>
 </div>
 
+<!-- 요청.26.0702 — 리포트 "처음부터 다시 해보기" 확인 모달 (오공 제안·피터공 결정) -->
+<div id="full-restart-confirm-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <div class="modal-title">지금까지 했던 모든 시나리오가 다 지워지고, 처음부터 모든 시나리오를 다시 하겠습니까?</div>
+    <div class="modal-subtitle">역량·점수·카드 기록이 모두 사라지고, 첫 시나리오만 열린 상태로 다시 시작합니다.</div>
+    <div class="confirm-actions">
+      <button class="confirm-cancel" onclick="closeFullRestartConfirm()">취소</button>
+      <button class="confirm-destructive" onclick="confirmFullRestartDo()">다 지우고 다시 시작</button>
+    </div>
+  </div>
+</div>
+
 <!-- §17.2 — 시나리오 나가기 확인 모달 -->
 <div id="exit-confirm-modal" class="modal-overlay hidden">
   <div class="modal-card">

@@ -585,7 +585,6 @@ start_screen:
   btn_continue: "이어서 진행"
   btn_next_scenario: "다음 시나리오"
   btn_tutorial_again: "튜토리얼 다시 보기"
-  btn_title_again: "타이틀 화면"
 
 # =====================================================
 # 7. 게임 흐름 UI
@@ -612,7 +611,8 @@ game_flow:
     report: "AI 리터러시 성장 리포트"
     replay: "이 시나리오 다시 해보기"
     replay_grade: "다시 도전하기"
-    back_to_start: "시작 화면 돌아가기"
+    back_to_start: "시나리오 선택 화면으로"
+    full_restart: "처음부터 다시 해보기"
     exit_scenario: "나가기"
   chosen_labels:
     tier1: "1차 선택"

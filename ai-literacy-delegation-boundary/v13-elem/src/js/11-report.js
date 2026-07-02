@@ -735,7 +735,8 @@ function showFinalReport(){
   h+='<div class="report-actions no-print" style="display:flex;gap:12px;justify-content:center;align-items:center;margin-top:24px;flex-wrap:wrap;">';
   h+='<button class="report-btn-pdf" onclick="printReport()">'+_t('game_flow.buttons.save_pdf','리포트 저장 (PDF)')+'</button>';
   h+='<div style="width:1px;height:32px;background:var(--ink);opacity:0.3;"></div>';
-  h+='<button class="report-btn-back" onclick="backToStartScreen()">'+_t('game_flow.buttons.back_to_start','시작 화면 돌아가기')+'</button>';
+  h+='<button class="report-btn-back" onclick="backToStartScreen()">'+_t('game_flow.buttons.back_to_start','시나리오 선택 화면으로')+'</button>';
+  h+='<button class="report-btn-restart" onclick="confirmFullRestart()">'+_t('game_flow.buttons.full_restart','처음부터 다시 해보기')+'</button>';
   h+='</div>';
   h+='</div></div>';
   container.innerHTML=h;

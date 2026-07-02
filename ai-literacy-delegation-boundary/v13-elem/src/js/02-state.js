@@ -48,6 +48,18 @@ function createInitialState(){
   };
 }
 
+// QA9 (7/2) — 재도전 진입 시 replayScenario가 clearedScenarios에서 해당 시나리오를
+// 먼저 빼는데(§14.2), 완료 전 나가면 그 구멍이 남아 "다음 하나만 열림" 순차 잠금(§14.5)과
+// 부딪혀 이미 끝낸 시나리오가 잠긴 것처럼 보인다. replay[sid].played는 재도전으로도 되돌아가지
+// 않는 영구 완료 기록이라, 순차 잠금 판정은 이걸 더한 "한 번이라도 끝낸" 목록을 기준으로 한다.
+function getEverClearedScenarios(gs){
+  var cleared=(gs&&gs.clearedScenarios)||[];
+  var replay=(gs&&gs.replay)||{};
+  return CONFIG.scenarios.filter(function(sid){
+    return cleared.indexOf(sid)>=0||(replay[sid]&&replay[sid].played===true);
+  });
+}
+
 // v0.5: 시나리오별 컷 이미지 동적 매핑
 var _imgCacheBust='?v=20260623a';
 function getCutImage(scenarioId,cutNum){
