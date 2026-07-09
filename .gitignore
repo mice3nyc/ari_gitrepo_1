@@ -18,6 +18,7 @@ context-hop-bar/logs/
 context-hop-bar/data/
 context-hop-bar/*.db
 context-hop-bar/*.jsonl
+tm-bar/data/
 
 # 마이그레이션 백업 스냅샷
 *.before-v*-migration
