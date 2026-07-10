@@ -62,6 +62,7 @@ _dev/tm-bar/
 | `whoami-term` | `<anchor>` | **터미널 앵커**(`$ITERM_SESSION_ID`/`$TERM_SESSION_ID`)로 창 ID 조회(훅→창 매핑, §9) |
 | `state` | `<ID> <working\|attention\|done>` | 색 상태만 교체(+state_at). `updated_at` 안 건드림. 미등록 창이면 조용히 무시 |
 | `term` | `<ID>` | 자기 env의 터미널 앵커를 창 파일 `term_session`에 저장(백필용. register가 자동 하므로 보통 불필요) |
+| `focus` | `<ID>` | **그 창을 앞으로**(cmd-tab처럼). `term_program`으로 앱 갈라 tty/UUID로 세션·탭 찾아 select+activate. Terminal·iTerm 지원(§10) |
 | `flush` | `[YYYY-MM-DD]` | 그날 전 창 로그를 마크다운으로 stdout(goodbye가 노트에 씀) |
 
 - ID 유효값 A/B/C/D. 잘못된 ID는 거부.
@@ -80,7 +81,8 @@ _dev/tm-bar/
 **드롭다운**:
 - 헤더 `TM · 활성 N창 | color=gray`
 - 활성 창 목록 — **ID순 고정(A→D)**. 열린 창은 항상 이 순서(2창이면 A·B, 1창이면 A). 한 줄 `{ID} · {project} — {status}`. 색: 최근 갱신=파랑 `#1100ff` > 대기(project 빈·status "대기")=회색 > 일반=검정. 헤더 길이 상한 `DROPDOWN_MAX`(48, 넘으면 말줄임). register 직후 기본 status="대기".
-  - 서브메뉴 `--`: 당일 로그 최근 `LOG_SHOW`(8)개(`HH:MM  msg`), 최신이 위. 없으면 `(로그 없음)`.
+  - **헤드 라인 클릭 = 그 창으로 focus**(TM=뷰어, §10). `bash=tm.sh param1=focus`를 헤드에 직접 부착.
+  - 서브메뉴 `--`: 당일 로그 최근 `LOG_SHOW`(8)개(`HH:MM  msg`), 최신이 위. 없으면 `(로그 없음)`. + `✏️ 상태 입력…`(손입력). SwiftBar는 헤드에 action이 있어도 이 서브메뉴를 함께 연다(26.0710 확인).
 - 하단: `TM_log_YYMMDD 열기`(obsidian URI href) · `데이터 폴더 열기` · `새로고침`
 
 **변수**(플러그인 상단): `LABEL`·`PIN_SECS`·`LOG_SHOW`·`DROPDOWN_MAX`. 조절은 여기서.
@@ -147,3 +149,18 @@ _dev/tm-bar/
 - 노치 대응 = 상시 텍스트(로테이션) 제거, 아이콘+풀다운 / 배포 = `install.sh` 실파일 복사(심링크 불가)
 - 로그 노트명 = `TM_log_YYMMDD`(라벨은 TermMo지만 파일명은 짧게 유지 — 플러그인 href·스킬에 이미 박힘)
 - 저장 위치 = `_클로드코드노트/`
+
+## 10. 창 포커스 — 클릭으로 이동 (26.0710)
+
+TM은 뷰어(편집 아님). 드롭다운에서 창 텍스트를 클릭하는 유일한 의도 = "그 창으로 가기". → **헤드 라인 자체가 이동 버튼.** 이전엔 서브메뉴 첫 항목(`▸ 이 창으로 가기`)으로 한 단계 더 들어가야 했다(제거).
+
+**동작**: 각 창 헤드 라인에 `bash=tm.sh param1=focus param2={ID} terminal=false` 부착. 클릭 즉시 그 창을 포그라운드로. 로그·상태입력은 그대로 hover 서브메뉴로 유지(SwiftBar가 헤드 action + 서브메뉴 공존 지원 — 26.0710 라이브 확인).
+
+**tm.sh focus 구현**: 창 파일 `term_program`으로 앱을 가른다.
+- `Apple_Terminal`: `tabs of windows` 순회, `tty of t` == 저장 tty면 `selected of t` + `frontmost of w` + activate.
+- iTerm(기본): `sessions of tabs of windows` 순회, tty 우선(없으면 세션 `id` == term_session UUID) 매칭해 select+activate.
+- tty·UUID 둘 다 없으면 "그 창에서 `tm.sh term {ID}` 먼저" 안내 후 종료.
+
+**자동화 권한**: 첫 클릭 시 macOS Automation 프롬프트(SwiftBar/osascript→Terminal·iTerm 제어). **한 번 허용하면 재프롬프트 없음**(26.0710 확인).
+
+**미배선 케이스**: tty 미캡처 창(term 없음)은 focus 불가 → 그 창에서 recall(자동 term) 또는 `tm.sh term {ID}`.

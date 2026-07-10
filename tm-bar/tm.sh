@@ -16,6 +16,19 @@ TODAY="$(date +%F)"
 valid_id() { case "$1" in A|B|C|D) return 0;; *) return 1;; esac; }
 wfile() { echo "$WIN_DIR/$1.json"; }
 
+# controlling tty 찾기 (focus용, §10). Bash 툴은 파이프라 $$ 자체는 "not a tty" →
+# 부모 프로세스 체인을 올라가 첫 ttysNNN 을 잡는다(클로드 프로세스가 붙은 터미널).
+find_tty() {
+  local pid=$$ t pp i
+  for i in 1 2 3 4 5 6 7 8 9 10; do
+    read -r t pp <<<"$(ps -o tty=,ppid= -p "$pid" 2>/dev/null)"
+    case "$t" in ttys*) echo "/dev/$t"; return 0;; esac
+    [ -z "$pp" ] || [ "$pp" = "1" ] && return 1
+    pid="$pp"
+  done
+  return 1
+}
+
 cmd="$1"; ID="$2"
 
 case "$cmd" in
@@ -23,16 +36,21 @@ case "$cmd" in
     valid_id "$ID" || { echo "ID는 A/B/C/D" >&2; exit 1; }
     f="$(wfile "$ID")"; now="$(date +%s)"; session="${3:-}"
     ts="${ITERM_SESSION_ID:-${TERM_SESSION_ID:-}}"   # 터미널 창 앵커 자동 캡처(§9)
+    prog="${TERM_PROGRAM:-}"                          # 앱 구분 iTerm.app/Apple_Terminal(§10)
+    tty="$(find_tty || true)"                         # controlling tty(focus 매칭 공통키, §10)
     d_in_file="$([ -f "$f" ] && "$JQ" -r '.date // ""' "$f" 2>/dev/null)"
     if [ ! -f "$f" ] || [ "$d_in_file" != "$TODAY" ]; then
-      "$JQ" -n --arg id "$ID" --arg date "$TODAY" --arg s "$session" --arg ts "$ts" --argjson now "$now" \
-        '{id:$id, date:$date, session:$s, term_session:$ts, project:"", status:"대기", state:"idle", updated_at:$now, state_at:$now, active:true, log:[]}' \
+      "$JQ" -n --arg id "$ID" --arg date "$TODAY" --arg s "$session" --arg ts "$ts" \
+        --arg prog "$prog" --arg tty "$tty" --argjson now "$now" \
+        '{id:$id, date:$date, session:$s, term_session:$ts, term_program:$prog, tty:$tty, project:"", status:"대기", state:"idle", updated_at:$now, state_at:$now, active:true, log:[]}' \
         > "$f"
     else
-      "$JQ" --arg s "$session" --arg ts "$ts" --argjson now "$now" \
+      "$JQ" --arg s "$session" --arg ts "$ts" --arg prog "$prog" --arg tty "$tty" --argjson now "$now" \
         '.active=true | .updated_at=$now
          | (if $s!="" then .session=$s else . end)
-         | (if $ts!="" then .term_session=$ts else . end)' \
+         | (if $ts!="" then .term_session=$ts else . end)
+         | (if $prog!="" then .term_program=$prog else . end)
+         | (if $tty!="" then .tty=$tty else . end)' \
         "$f" > "$f.tmp" && mv "$f.tmp" "$f"
     fi
     echo "창 $ID 등록"
@@ -43,9 +61,64 @@ case "$cmd" in
     valid_id "$ID" || { echo "ID는 A/B/C/D" >&2; exit 1; }
     ts="${ITERM_SESSION_ID:-${TERM_SESSION_ID:-}}"
     [ -z "$ts" ] && { echo "터미널 앵커 없음(TERM_SESSION_ID/ITERM_SESSION_ID)" >&2; exit 1; }
+    prog="${TERM_PROGRAM:-}"; tty="$(find_tty || true)"   # focus용 앱·tty도 함께 백필(§10)
     f="$(wfile "$ID")"; [ -f "$f" ] || "$0" register "$ID" >/dev/null
-    "$JQ" --arg ts "$ts" '.term_session=$ts' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
-    echo "창 $ID term_session=$ts"
+    "$JQ" --arg ts "$ts" --arg prog "$prog" --arg tty "$tty" \
+      '.term_session=$ts
+       | (if $prog!="" then .term_program=$prog else . end)
+       | (if $tty!="" then .tty=$tty else . end)' \
+      "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+    echo "창 $ID term_session=$ts${tty:+ tty=$tty}${prog:+ prog=$prog}"
+    ;;
+
+  focus)
+    # 메뉴바 클릭 → 해당 창을 앞으로(cmd-tab처럼, §10). 저장된 term_program으로 앱을 갈라
+    # tty(공통키) 또는 term_session UUID로 세션/탭을 찾아 select+activate.
+    valid_id "$ID" || { echo "ID는 A/B/C/D" >&2; exit 1; }
+    f="$(wfile "$ID")"; [ -f "$f" ] || { echo "창 $ID 미등록" >&2; exit 1; }
+    prog="$("$JQ" -r '.term_program // ""' "$f")"
+    tty="$("$JQ" -r '.tty // ""' "$f")"
+    ts="$("$JQ" -r '.term_session // ""' "$f")"
+    uuid="${ts##*:}"   # wXtXpX:UUID → UUID (프리픽스 없으면 그대로)
+    [ -z "$tty" ] && [ -z "$uuid" ] && { echo "창 $ID: tty/UUID 없음 — 그 창에서 tm.sh term $ID 먼저" >&2; exit 1; }
+    case "$prog" in
+      Apple_Terminal)
+        [ -z "$tty" ] && { echo "창 $ID(Terminal): tty 없음 — 그 창에서 tm.sh term $ID 먼저" >&2; exit 1; }
+        /usr/bin/osascript <<OSA
+tell application "Terminal"
+  repeat with w in windows
+    repeat with t in tabs of w
+      if (tty of t) is "$tty" then
+        set selected of t to true
+        set frontmost of w to true
+        activate
+        return
+      end if
+    end repeat
+  end repeat
+end tell
+OSA
+        ;;
+      *)  # iTerm.app(기본). tty 우선, 없으면 세션 UUID로 매칭.
+        /usr/bin/osascript <<OSA
+tell application "iTerm2"
+  repeat with w in windows
+    repeat with t in tabs of w
+      repeat with s in sessions of t
+        if (("$tty" is not "") and ((tty of s) is "$tty")) or (("$uuid" is not "") and ((id of s) is "$uuid")) then
+          tell s to select
+          tell t to select
+          tell w to select
+          activate
+          return
+        end if
+      end repeat
+    end repeat
+  end repeat
+end tell
+OSA
+        ;;
+    esac
     ;;
 
   whoami-term)
@@ -155,7 +228,7 @@ case "$cmd" in
     ;;
 
   *)
-    echo "tm.sh {register <ID> [session] | log <ID> <project> <status> | set <ID> <project> <status> | note <ID> <msg> | state <ID> <working|attention|done> | term <ID> | whoami <UUID> | whoami-term <anchor> | unregister <ID> | render | slot | flush [date]}" >&2
+    echo "tm.sh {register <ID> [session] | log <ID> <project> <status> | set <ID> <project> <status> | note <ID> <msg> | state <ID> <working|attention|done> | term <ID> | focus <ID> | whoami <UUID> | whoami-term <anchor> | unregister <ID> | render | slot | flush [date]}" >&2
     exit 1
     ;;
 esac

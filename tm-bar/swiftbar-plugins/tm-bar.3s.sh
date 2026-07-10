@@ -67,7 +67,8 @@ else
       elif [ $(( now - upd )) -lt "$PIN_SECS" ]; then color=" color=#1100ff"   # legacy(무상태) 폴백
       elif [ -z "$proj" ] || [ "$stat" = "대기" ]; then color=" color=gray"; fi
       if [ -n "$proj" ]; then head="${mark}${id} · ${proj} — ${stat}"; else head="${mark}${id} · ${stat}"; fi
-      echo "$(ellip "$head" "$DROPDOWN_MAX") | size=13${color}"
+      # 헤드 라인 자체가 이동 버튼(TM=뷰어라 창 텍스트 클릭=그 창으로 focus). 로그·편집은 hover 서브메뉴.
+      echo "$(ellip "$head" "$DROPDOWN_MAX") | size=13${color} bash=$TM param1=focus param2=${id} terminal=false"
       logs="$(echo "$DATA" | "$JQ" -r --arg id "$id" \
         '.[] | select(.id==$id) | .log | reverse | .['"0:$LOG_SHOW"'][] | .t + "  " + .msg')"
       if [ -n "$logs" ]; then

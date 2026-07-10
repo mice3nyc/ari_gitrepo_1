@@ -34,6 +34,13 @@
 - [x] 자가검증: attention→resume→working ✓ / working→resume→working(유지) ✓ / done→resume→done(초록 안 덮음) ✓ / 엉뚱 앵커→no-op ✓ (stdin JSON 파이프로 4케이스 실행)
 - [ ] **피터공 라이브 확인**: 권한 프롬프트로 빨강 뜬 뒤 YES → 다음 도구 실행되며 파랑으로 풀리는지. ⚠️ 새 PostToolUse 훅이 **기존 세션에 즉시 반영되는지**가 미검증점(안 되면 창 새로 열거나 세션 재시작 후 확인)
 
+## v0.6 — 창 포커스 클릭 이동 (26.0710) — SPEC §10
+
+- [x] `tm.sh focus <ID>` — Terminal(tty)·iTerm(tty/UUID) osascript로 select+activate (기구현, SPEC §3·§10 반영)
+- [x] 플러그인 헤드 라인에 focus 액션 부착 + 중복 서브메뉴 `▸ 이 창으로 가기` 제거 (SwiftBar 헤드 action + 로그 서브메뉴 공존)
+- [x] install.sh 재배포 + **피터공 라이브 확인 완료**: 창 텍스트 클릭 → 그 창으로 이동 ✓, 자동화 프롬프트 첫 1회만 뜸 ✓
+- [ ] (관찰) install.sh의 `rm 후 cp`가 SwiftBar를 잠깐 놓쳐 플러그인이 사라짐 → 이번엔 `killall SwiftBar` 재시작으로 복구. 재발하면 install.sh에 재시작/재-refresh 보강
+
 ## 이전 다음 단계
 
 - [ ] goodbye 실행 시 `TM_log_YYMMDD` 노트 실제 생성 확인(첫 마감 때)
