@@ -1,0 +1,194 @@
+{
+  "note": "★ 기본값(placeholder). 원자료에 플레이어별 배정표가 없어 라운드로빈으로 생성. 실제 배정은 피터공/게임 세팅으로 교체. 규칙: 모든 아이템에 담당자 1명+ 존재, 플레이어당 2~3개.",
+  "scheme": "round-robin",
+  "itemsPerPlayer": 2,
+  "teams": [
+    {
+      "teamSize": 15,
+      "note": "205호 기준(4팀×15명)",
+      "assignment": [
+        {
+          "player": 1,
+          "items": [
+            "OFFICE_BUILDING",
+            "GLOBAL_CONSUMER_GOODS"
+          ]
+        },
+        {
+          "player": 2,
+          "items": [
+            "LEISURE",
+            "RAW_MATERIALS"
+          ]
+        },
+        {
+          "player": 3,
+          "items": [
+            "HOUSING",
+            "PUBLIC_SAFETY"
+          ]
+        },
+        {
+          "player": 4,
+          "items": [
+            "MEDICAL",
+            "TRANSPORT"
+          ]
+        },
+        {
+          "player": 5,
+          "items": [
+            "POWER",
+            "ICT_TECH"
+          ]
+        },
+        {
+          "player": 6,
+          "items": [
+            "AEROSPACE",
+            "BIO_TECH"
+          ]
+        },
+        {
+          "player": 7,
+          "items": [
+            "NEW_REGEN_ENERGY",
+            "CLIENT_PARTNERSHIP"
+          ]
+        },
+        {
+          "player": 8,
+          "items": [
+            "INNOVATION",
+            "SOCIAL_CONTRIBUTION"
+          ]
+        },
+        {
+          "player": 9,
+          "items": [
+            "OFFICE_BUILDING",
+            "GLOBAL_CONSUMER_GOODS"
+          ]
+        },
+        {
+          "player": 10,
+          "items": [
+            "LEISURE",
+            "RAW_MATERIALS"
+          ]
+        },
+        {
+          "player": 11,
+          "items": [
+            "HOUSING",
+            "PUBLIC_SAFETY"
+          ]
+        },
+        {
+          "player": 12,
+          "items": [
+            "MEDICAL",
+            "TRANSPORT"
+          ]
+        },
+        {
+          "player": 13,
+          "items": [
+            "POWER",
+            "ICT_TECH"
+          ]
+        },
+        {
+          "player": 14,
+          "items": [
+            "AEROSPACE",
+            "BIO_TECH"
+          ]
+        },
+        {
+          "player": 15,
+          "items": [
+            "NEW_REGEN_ENERGY",
+            "CLIENT_PARTNERSHIP"
+          ]
+        }
+      ]
+    },
+    {
+      "teamSize": 10,
+      "note": "소규모 리허설용",
+      "assignment": [
+        {
+          "player": 1,
+          "items": [
+            "OFFICE_BUILDING",
+            "GLOBAL_CONSUMER_GOODS"
+          ]
+        },
+        {
+          "player": 2,
+          "items": [
+            "LEISURE",
+            "RAW_MATERIALS"
+          ]
+        },
+        {
+          "player": 3,
+          "items": [
+            "HOUSING",
+            "PUBLIC_SAFETY"
+          ]
+        },
+        {
+          "player": 4,
+          "items": [
+            "MEDICAL",
+            "TRANSPORT"
+          ]
+        },
+        {
+          "player": 5,
+          "items": [
+            "POWER",
+            "ICT_TECH"
+          ]
+        },
+        {
+          "player": 6,
+          "items": [
+            "AEROSPACE",
+            "BIO_TECH"
+          ]
+        },
+        {
+          "player": 7,
+          "items": [
+            "NEW_REGEN_ENERGY",
+            "CLIENT_PARTNERSHIP"
+          ]
+        },
+        {
+          "player": 8,
+          "items": [
+            "INNOVATION",
+            "SOCIAL_CONTRIBUTION"
+          ]
+        },
+        {
+          "player": 9,
+          "items": [
+            "OFFICE_BUILDING",
+            "GLOBAL_CONSUMER_GOODS"
+          ]
+        },
+        {
+          "player": 10,
+          "items": [
+            "LEISURE",
+            "RAW_MATERIALS"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "momak2026-back",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "MOMAK 마켓타임 — 단일 권위 웹소켓 서버 (Phase 1 PoC)",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "tsx src/server.ts"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.12",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

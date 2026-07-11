@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MOMAK 마켓타임 — PoC</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; background: #0a0e14; color: #e8edf4;
+    font-family: -apple-system, "Pretendard", "Apple SD Gothic Neo", system-ui, sans-serif;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem;
+  }
+  h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: .04em; margin: 0; }
+  .sub { color: #8a94a6; font-size: .85rem; margin-top: -1.2rem; }
+  .cards { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+  a.card {
+    display: block; width: 200px; padding: 1.3rem 1.2rem; text-decoration: none;
+    border: 1px solid #232b3a; border-radius: 12px; background: #10151f; color: #e8edf4;
+    transition: border-color .15s, transform .15s;
+  }
+  a.card:hover { border-color: #ffd23f; transform: translateY(-2px); }
+  a.card b { display: block; font-size: 1.05rem; margin-bottom: .3rem; }
+  a.card span { color: #8a94a6; font-size: .8rem; line-height: 1.4; }
+  .note { color: #5b6577; font-size: .75rem; max-width: 460px; text-align: center; line-height: 1.6; }
+</style>
+</head>
+<body>
+  <div style="text-align:center">
+    <h1>MOMAK · 마켓타임</h1>
+    <div class="sub">단일 권위 웹소켓 서버 — Phase 1 PoC</div>
+  </div>
+  <div class="cards">
+    <a class="card" href="/overview.html?room=DEMO"><b>중앙 디스플레이</b><span>16개 아이템 전 화면. 모두가 보는 대형 시세판.</span></a>
+    <a class="card" href="/channel.html?room=DEMO"><b>마켓 채널 (태블릿)</b><span>아이템 2개만 초대형. <code>?items=POWER,ICT_TECH</code>로 지정.</span></a>
+    <a class="card" href="/player.html?room=DEMO"><b>플레이어 앱 (폰)</b><span>로그인 → 담당 아이템 BUY / SELL.</span></a>
+    <a class="card" href="/gm.html?room=DEMO"><b>GM 콘솔</b><span>마켓 OPEN·PAUSE·RESUME·CLOSE·다음 턴.</span></a>
+  </div>
+  <div class="note"><b style="color:#ffd23f">기기별로 열기</b>: 같은 WiFi의 다른 기기(폰·태블릿)는 브라우저에서<br><code style="color:#8fd">http://172.30.1.48:8787/</code> 로 접속 → 위 화면 선택. (맥이 서버, 방=DEMO 자동 진행중)</div>
+</body>
+</html>

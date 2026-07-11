@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>MOMAK · Player</title>
+<style>
+  :root { color-scheme: dark; --bg:#2b2b33; --panel:#3a3a44; --yellow:#ffdd33; }
+  * { box-sizing: border-box; margin: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: #fff; font-family: "Helvetica Neue", Arial, "Apple SD Gothic Neo", system-ui, sans-serif;
+    touch-action: manipulation;           /* 사파리 더블탭 줌 방지 */
+    -webkit-user-select: none; user-select: none;
+  }
+  /* 가격 숨김 모드(기본): 플레이어는 방의 마켓 화면을 본다. ?price=1로 표시 */
+  body.no-price .item .band .pr { display: none; }
+  body.no-price .item .sub { display: none; }
+  .screen { display: none; min-height: 100%; flex-direction: column; }
+  .screen.active { display: flex; }
+
+  /* ── LOGIN ── */
+  #login { align-items: center; justify-content: center; gap: 22px; padding: 24px; }
+  .logo-mark { display: flex; gap: 6px; margin-bottom: 4px; } .logo-mark i { width: 12px; height: 12px; border-radius: 50%; }
+  #login .title { font-size: 46px; font-weight: 800; letter-spacing: .02em; }
+  #login .field { width: 100%; max-width: 320px; }
+  select, #login input {
+    width: 100%; font: inherit; font-size: 20px; font-weight: 700; padding: 14px 16px; border-radius: 8px;
+    border: none; background: #e6e6ea; color: #1a1a20; text-align: center;
+  }
+  #enter { width: 100%; max-width: 320px; font: inherit; font-size: 22px; font-weight: 800; padding: 16px; border: none; border-radius: 8px; background: var(--yellow); color: #201900; cursor: pointer; }
+  #enter:active { filter: brightness(.92); }
+  .foot { color: #ffffff30; font-size: 12px; margin-top: 10px; }
+
+  /* ── MAIN ── */
+  #main { }
+  .topbar { flex: 0 0 auto; background: #23232b; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
+  .topbar .who { font-size: 18px; font-weight: 800; letter-spacing: .02em; }
+  .topbar .cash { text-align: right; }
+  .topbar .cash .k { font-size: 10px; color: #9a9aa8; letter-spacing: .1em; }
+  .topbar .cash .v { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .state-tag { flex: 0 0 auto; text-align: center; font-size: 12px; font-weight: 800; letter-spacing: .1em; padding: 4px; }
+  .state-tag.OPEN { background:#1f8a4c; } .state-tag.PAUSED { background:#c99a1e; color:#201700; } .state-tag.CLOSED { background:#b23b3b; }
+  .items { flex: 1 1 auto; overflow-y: auto; }
+  .item { border-bottom: 3px solid #23232b; }
+  .item .band { padding: 12px 16px; display: flex; align-items: baseline; justify-content: space-between; background: var(--c); }
+  .item .band .nm { font-size: 22px; font-weight: 800; color: #fff; text-shadow: 0 1px 2px #0003; }
+  .item .band .bandright { display: flex; align-items: baseline; gap: 14px; }
+  .item .band .pr { font-size: 24px; font-weight: 800; color: #ffffffcc; font-variant-numeric: tabular-nums; text-shadow: 0 1px 2px #0003; }
+  .item .band .hold-big { font-size: 30px; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; text-shadow: 0 1px 2px #0004; letter-spacing: .01em; }
+  .item .band .hold-big small { font-size: 13px; font-weight: 700; opacity: .8; margin-right: 3px; }
+  .item .sub { display: flex; justify-content: space-between; padding: 6px 16px; font-size: 13px; color: #b8b8c4; background: #30303a; font-variant-numeric: tabular-nums; }
+  .item .sub .chg.up { color:#5fd08a; } .item .sub .chg.down { color:#ff8a8a; }
+  .item .btns { display: grid; grid-template-columns: 1fr 1fr; }
+  .item .btns button { font: inherit; font-size: 22px; font-weight: 800; padding: 20px 0; border: none; cursor: pointer; color: #1a1a20; touch-action: manipulation; }
+  .item .btns .buy { background: #d9d9de; } .item .btns .buy:active { background: var(--yellow); }
+  .item .btns .sell { background: #eaeaef; border-left: 3px solid #23232b; } .item .btns .sell:active { background: var(--yellow); }
+  .item .btns button .ico { font-size: 13px; display: block; }
+  /* 체결 토스트 */
+  #toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: #000d; padding: 12px 20px; border-radius: 10px; font-size: 15px; font-weight: 700; opacity: 0; transition: opacity .2s; pointer-events: none; max-width: 90vw; text-align: center; }
+  #toast.show { opacity: 1; }
+  #toast.err { background: #7a1f1f; }
+</style>
+</head>
+<body>
+  <!-- LOGIN -->
+  <div class="screen active" id="login">
+    <div class="logo-mark"><i style="background:#e8524a"></i><i style="background:#4aa3e8"></i><i style="background:#e8524a"></i><i style="background:#4aa3e8"></i></div>
+    <div class="title">MoMA</div>
+    <div class="field"><select id="team"><option value="1">TEAM 1</option><option value="2">TEAM 2</option><option value="3">TEAM 3</option><option value="4">TEAM 4</option></select></div>
+    <div class="field"><input id="pid" type="number" min="1" max="15" placeholder="ID 번호 (1~15)" inputmode="numeric"></div>
+    <button id="enter">입장</button>
+    <div class="foot">© 2013 NOLGONG · MOMAK 마켓타임</div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="screen" id="main">
+    <div class="topbar">
+      <div class="who" id="who">TEAM – / ID –</div>
+      <div class="cash"><div class="k">운영자금</div><div class="v" id="cash">–</div></div>
+    </div>
+    <div class="state-tag CLOSED" id="stateTag">–</div>
+    <div class="items" id="items"></div>
+  </div>
+  <div id="toast"></div>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  const room = (params.get('room') || 'DEMO').toUpperCase();
+  const showPrice = params.get('price') === '1';   // 기본은 폰에 가격 숨김 (마켓 화면을 본다)
+  document.body.classList.toggle('no-price', !showPrice);
+  const fmt = (n) => Number(n).toLocaleString('en-US');
+  let ws, team, pid, myItems = [], holdings = {}, lastSnap = null;
+
+  // 사파리 더블탭/핀치 줌 이중 방지 (touch-action 보강)
+  document.addEventListener('gesturestart', (e) => e.preventDefault());
+  document.addEventListener('dblclick', (e) => e.preventDefault());
+
+  document.getElementById('enter').addEventListener('click', () => {
+    team = Number(document.getElementById('team').value);
+    pid = Number(document.getElementById('pid').value);
+    if (!(pid >= 1 && pid <= 15)) { toast('ID를 1~15로 입력', true); return; }
+    document.getElementById('who').textContent = `TEAM ${team} / ID ${team}-${pid}`;
+    connect();
+    document.getElementById('login').classList.remove('active');
+    document.getElementById('main').classList.add('active');
+  });
+
+  function connect() {
+    const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+    ws = new WebSocket(`${proto}://${location.host}/?room=${room}&role=player&team=${team}&id=${pid}`);
+    ws.onmessage = (e) => {
+      const m = JSON.parse(e.data);
+      if (m.type === 'player') { myItems = m.items; buildItems(); }
+      else if (m.type === 'wallet') { holdings = m.holdings || {}; document.getElementById('cash').textContent = fmt(m.cash); updateHoldings(); }
+      else if (m.type === 'snapshot') { lastSnap = m; renderPrices(m); }
+      else if (m.type === 'orderResult') { onOrderResult(m); }
+    };
+    ws.onclose = () => setTimeout(connect, 1000);
+    ws.onerror = () => ws.close();
+  }
+
+  function itemInfo(code) { return lastSnap?.items.find(i => i.code === code); }
+  function buildItems() {
+    const box = document.getElementById('items'); box.innerHTML = '';
+    for (const code of myItems) {
+      const el = document.createElement('div'); el.className = 'item'; el.dataset.code = code;
+      el.innerHTML = `
+        <div class="band"><span class="nm">–</span><span class="bandright"><span class="pr">–</span><span class="hold-big"><small>보유</small>0</span></span></div>
+        <div class="sub"><span class="chg">–</span></div>
+        <div class="btns">
+          <button class="buy"><span class="ico">▼ 매수</span>BUY</button>
+          <button class="sell"><span class="ico">▲ 매도</span>SEL</button>
+        </div>`;
+      el.querySelector('.buy').addEventListener('click', () => order(code, 'BUY'));
+      el.querySelector('.sell').addEventListener('click', () => order(code, 'SELL'));
+      box.appendChild(el);
+    }
+    if (lastSnap) renderPrices(lastSnap);
+  }
+  function renderPrices(snap) {
+    document.getElementById('stateTag').textContent = snap.marketState;
+    document.getElementById('stateTag').className = 'state-tag ' + snap.marketState;
+    for (const el of document.querySelectorAll('.item')) {
+      const it = itemInfo(el.dataset.code); if (!it) continue;
+      el.style.setProperty('--c', it.color);
+      el.querySelector('.nm').textContent = it.ko;
+      el.querySelector('.pr').textContent = fmt(it.price);
+      const diff = it.price - it.prevPrice; const chg = el.querySelector('.chg');
+      if (diff > 0) { chg.textContent = '▲ ' + fmt(diff); chg.className = 'chg up'; }
+      else if (diff < 0) { chg.textContent = '▼ 저점'; chg.className = 'chg down'; }
+      else { chg.textContent = '–'; chg.className = 'chg'; }
+    }
+  }
+  function updateHoldings() {
+    for (const el of document.querySelectorAll('.item')) {
+      el.querySelector('.hold-big').innerHTML = '<small>보유</small>' + (holdings[el.dataset.code] || 0);
+    }
+  }
+  function order(code, side) {
+    if (!ws || ws.readyState !== 1) return;
+    const clientOrderId = `${team}-${pid}-${Date.now()}-${Math.floor(Math.random()*1e6)}`;
+    ws.send(JSON.stringify({ cmd: 'order', side, itemId: code, qty: 1, clientOrderId }));
+  }
+  const CODES = { INSUFFICIENT_CASH:'자금 부족', INSUFFICIENT_INVENTORY:'보유 없음', MARKET_NOT_OPEN:'마켓 닫힘', BAD_ITEM:'잘못된 종목' };
+  function onOrderResult(r) {
+    if (r.ok) toast(`${r.side === 'BUY' ? '매수' : '매도'} 체결 · ${fmt(r.price)} · ${r.side==='BUY'?'+':'-'}${r.qty}`, false);
+    else toast(CODES[r.code] || r.code, true);
+  }
+  let toastT;
+  function toast(msg, err) {
+    const t = document.getElementById('toast'); t.textContent = msg; t.className = 'show' + (err ? ' err' : '');
+    clearTimeout(toastT); toastT = setTimeout(() => t.className = t.className.replace('show',''), 1400);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,1063 @@
+{
+  "edition": "miraeasset",
+  "turns": 11,
+  "note": "1턴=튜토리얼, 2~11=진행(원자료 표기). min=바닥가격, delta=틱 진폭",
+  "items": [
+    {
+      "code": "OFFICE_BUILDING",
+      "ko": "오피스 빌딩",
+      "en": "OFFICE BUILDING",
+      "category": "basic",
+      "color": "#5B8FF9",
+      "initialPrice": 1050,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 1050,
+          "delta": 10
+        },
+        {
+          "turn": 2,
+          "min": 1103,
+          "delta": 11
+        },
+        {
+          "turn": 3,
+          "min": 1158,
+          "delta": 10
+        },
+        {
+          "turn": 4,
+          "min": 1216,
+          "delta": 12
+        },
+        {
+          "turn": 5,
+          "min": 1276,
+          "delta": 13
+        },
+        {
+          "turn": 6,
+          "min": 1340,
+          "delta": 14
+        },
+        {
+          "turn": 7,
+          "min": 1407,
+          "delta": 15
+        },
+        {
+          "turn": 8,
+          "min": 1477,
+          "delta": 14
+        },
+        {
+          "turn": 9,
+          "min": 1551,
+          "delta": 15
+        },
+        {
+          "turn": 10,
+          "min": 1629,
+          "delta": 19
+        },
+        {
+          "turn": 11,
+          "min": 1829,
+          "delta": 21
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    },
+    {
+      "code": "GLOBAL_CONSUMER_GOODS",
+      "ko": "글로벌 소비재",
+      "en": "GLOBAL CONSUMER GOODS",
+      "category": "basic",
+      "color": "#F6BD16",
+      "initialPrice": 1260,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 1260,
+          "delta": 10
+        },
+        {
+          "turn": 2,
+          "min": 1323,
+          "delta": 12
+        },
+        {
+          "turn": 3,
+          "min": 1389,
+          "delta": 12
+        },
+        {
+          "turn": 4,
+          "min": 1459,
+          "delta": 12
+        },
+        {
+          "turn": 5,
+          "min": 1532,
+          "delta": 13
+        },
+        {
+          "turn": 6,
+          "min": 1608,
+          "delta": 14
+        },
+        {
+          "turn": 7,
+          "min": 1689,
+          "delta": 15
+        },
+        {
+          "turn": 8,
+          "min": 1773,
+          "delta": 14
+        },
+        {
+          "turn": 9,
+          "min": 1862,
+          "delta": 14
+        },
+        {
+          "turn": 10,
+          "min": 1955,
+          "delta": 18
+        },
+        {
+          "turn": 11,
+          "min": 2100,
+          "delta": 19
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    },
+    {
+      "code": "LEISURE",
+      "ko": "레져",
+      "en": "LEISURE",
+      "category": "basic",
+      "color": "#5AD8A6",
+      "initialPrice": 1103,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 1103,
+          "delta": 10
+        },
+        {
+          "turn": 2,
+          "min": 1158,
+          "delta": 11
+        },
+        {
+          "turn": 3,
+          "min": 1216,
+          "delta": 11
+        },
+        {
+          "turn": 4,
+          "min": 1276,
+          "delta": 11
+        },
+        {
+          "turn": 5,
+          "min": 1340,
+          "delta": 13
+        },
+        {
+          "turn": 6,
+          "min": 1407,
+          "delta": 14
+        },
+        {
+          "turn": 7,
+          "min": 1477,
+          "delta": 15
+        },
+        {
+          "turn": 8,
+          "min": 1551,
+          "delta": 15
+        },
+        {
+          "turn": 9,
+          "min": 1629,
+          "delta": 16
+        },
+        {
+          "turn": 10,
+          "min": 1710,
+          "delta": 18
+        },
+        {
+          "turn": 11,
+          "min": 1910,
+          "delta": 19
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    },
+    {
+      "code": "RAW_MATERIALS",
+      "ko": "원자재",
+      "en": "RAW MATERIALS",
+      "category": "basic",
+      "color": "#945FB9",
+      "initialPrice": 1365,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 1365,
+          "delta": 10
+        },
+        {
+          "turn": 2,
+          "min": 1433,
+          "delta": 12
+        },
+        {
+          "turn": 3,
+          "min": 1505,
+          "delta": 13
+        },
+        {
+          "turn": 4,
+          "min": 1580,
+          "delta": 12
+        },
+        {
+          "turn": 5,
+          "min": 1659,
+          "delta": 13
+        },
+        {
+          "turn": 6,
+          "min": 1742,
+          "delta": 14
+        },
+        {
+          "turn": 7,
+          "min": 1829,
+          "delta": 14
+        },
+        {
+          "turn": 8,
+          "min": 1921,
+          "delta": 15
+        },
+        {
+          "turn": 9,
+          "min": 2017,
+          "delta": 15
+        },
+        {
+          "turn": 10,
+          "min": 2118,
+          "delta": 18
+        },
+        {
+          "turn": 11,
+          "min": 2221,
+          "delta": 19
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    },
+    {
+      "code": "HOUSING",
+      "ko": "주거시설",
+      "en": "HOUSING",
+      "category": "basic",
+      "color": "#FF9EB7",
+      "initialPrice": 1260,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 1260,
+          "delta": 11
+        },
+        {
+          "turn": 2,
+          "min": 1323,
+          "delta": 12
+        },
+        {
+          "turn": 3,
+          "min": 1389,
+          "delta": 13
+        },
+        {
+          "turn": 4,
+          "min": 1459,
+          "delta": 12
+        },
+        {
+          "turn": 5,
+          "min": 1532,
+          "delta": 13
+        },
+        {
+          "turn": 6,
+          "min": 1608,
+          "delta": 14
+        },
+        {
+          "turn": 7,
+          "min": 1689,
+          "delta": 15
+        },
+        {
+          "turn": 8,
+          "min": 1773,
+          "delta": 15
+        },
+        {
+          "turn": 9,
+          "min": 1862,
+          "delta": 14
+        },
+        {
+          "turn": 10,
+          "min": 1955,
+          "delta": 18
+        },
+        {
+          "turn": 11,
+          "min": 2105,
+          "delta": 19
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    },
+    {
+      "code": "PUBLIC_SAFETY",
+      "ko": "공공안전시설",
+      "en": "PUBLIC SAFETY",
+      "category": "basic",
+      "color": "#6DC8EC",
+      "initialPrice": 1680,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 1680,
+          "delta": 10
+        },
+        {
+          "turn": 2,
+          "min": 1764,
+          "delta": 12
+        },
+        {
+          "turn": 3,
+          "min": 1852,
+          "delta": 11
+        },
+        {
+          "turn": 4,
+          "min": 1945,
+          "delta": 12
+        },
+        {
+          "turn": 5,
+          "min": 2042,
+          "delta": 13
+        },
+        {
+          "turn": 6,
+          "min": 2144,
+          "delta": 14
+        },
+        {
+          "turn": 7,
+          "min": 2251,
+          "delta": 15
+        },
+        {
+          "turn": 8,
+          "min": 2364,
+          "delta": 16
+        },
+        {
+          "turn": 9,
+          "min": 2482,
+          "delta": 18
+        },
+        {
+          "turn": 10,
+          "min": 2606,
+          "delta": 19
+        },
+        {
+          "turn": 11,
+          "min": 2806,
+          "delta": 20
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    },
+    {
+      "code": "MEDICAL",
+      "ko": "의료시설",
+      "en": "MEDICAL",
+      "category": "basic",
+      "color": "#FF6B6B",
+      "initialPrice": 1890,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 1890,
+          "delta": 12
+        },
+        {
+          "turn": 2,
+          "min": 1985,
+          "delta": 12
+        },
+        {
+          "turn": 3,
+          "min": 2084,
+          "delta": 12
+        },
+        {
+          "turn": 4,
+          "min": 2188,
+          "delta": 12
+        },
+        {
+          "turn": 5,
+          "min": 2297,
+          "delta": 13
+        },
+        {
+          "turn": 6,
+          "min": 2412,
+          "delta": 14
+        },
+        {
+          "turn": 7,
+          "min": 2533,
+          "delta": 15
+        },
+        {
+          "turn": 8,
+          "min": 2659,
+          "delta": 16
+        },
+        {
+          "turn": 9,
+          "min": 2792,
+          "delta": 20
+        },
+        {
+          "turn": 10,
+          "min": 2932,
+          "delta": 17
+        },
+        {
+          "turn": 11,
+          "min": 3155,
+          "delta": 19
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    },
+    {
+      "code": "TRANSPORT",
+      "ko": "대중교통",
+      "en": "TRANSPORT",
+      "category": "basic",
+      "color": "#FF9845",
+      "initialPrice": 2100,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 2100,
+          "delta": 12
+        },
+        {
+          "turn": 2,
+          "min": 2205,
+          "delta": 11
+        },
+        {
+          "turn": 3,
+          "min": 2315,
+          "delta": 13
+        },
+        {
+          "turn": 4,
+          "min": 2431,
+          "delta": 14
+        },
+        {
+          "turn": 5,
+          "min": 2553,
+          "delta": 14
+        },
+        {
+          "turn": 6,
+          "min": 2680,
+          "delta": 15
+        },
+        {
+          "turn": 7,
+          "min": 2814,
+          "delta": 15
+        },
+        {
+          "turn": 8,
+          "min": 2955,
+          "delta": 16
+        },
+        {
+          "turn": 9,
+          "min": 3103,
+          "delta": 20
+        },
+        {
+          "turn": 10,
+          "min": 3258,
+          "delta": 17
+        },
+        {
+          "turn": 11,
+          "min": 3470,
+          "delta": 20
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    },
+    {
+      "code": "POWER",
+      "ko": "발전소",
+      "en": "POWER",
+      "category": "basic",
+      "color": "#F6C022",
+      "initialPrice": 2100,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 2100,
+          "delta": 11
+        },
+        {
+          "turn": 2,
+          "min": 2205,
+          "delta": 12
+        },
+        {
+          "turn": 3,
+          "min": 2315,
+          "delta": 12
+        },
+        {
+          "turn": 4,
+          "min": 2431,
+          "delta": 12
+        },
+        {
+          "turn": 5,
+          "min": 2553,
+          "delta": 13
+        },
+        {
+          "turn": 6,
+          "min": 2680,
+          "delta": 14
+        },
+        {
+          "turn": 7,
+          "min": 2814,
+          "delta": 15
+        },
+        {
+          "turn": 8,
+          "min": 2955,
+          "delta": 16
+        },
+        {
+          "turn": 9,
+          "min": 3103,
+          "delta": 20
+        },
+        {
+          "turn": 10,
+          "min": 3258,
+          "delta": 18
+        },
+        {
+          "turn": 11,
+          "min": 3478,
+          "delta": 20
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    },
+    {
+      "code": "ICT_TECH",
+      "ko": "ICT산업",
+      "en": "ICT TECH",
+      "category": "highvalue",
+      "color": "#269A99",
+      "initialPrice": 3310,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 3310,
+          "delta": 14
+        },
+        {
+          "turn": 2,
+          "min": 3526,
+          "delta": 14
+        },
+        {
+          "turn": 3,
+          "min": 3748,
+          "delta": 15
+        },
+        {
+          "turn": 4,
+          "min": 3976,
+          "delta": 15
+        },
+        {
+          "turn": 5,
+          "min": 4223,
+          "delta": 15
+        },
+        {
+          "turn": 6,
+          "min": 4466,
+          "delta": 15
+        },
+        {
+          "turn": 7,
+          "min": 4734,
+          "delta": 16
+        },
+        {
+          "turn": 8,
+          "min": 4985,
+          "delta": 16
+        },
+        {
+          "turn": 9,
+          "min": 5245,
+          "delta": 25
+        },
+        {
+          "turn": 10,
+          "min": 5478,
+          "delta": 26
+        },
+        {
+          "turn": 11,
+          "min": 5711,
+          "delta": 27
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    },
+    {
+      "code": "AEROSPACE",
+      "ko": "우주항공",
+      "en": "AEROSPACE",
+      "category": "highvalue",
+      "color": "#4062B8",
+      "initialPrice": 3990,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 3990,
+          "delta": 14
+        },
+        {
+          "turn": 2,
+          "min": 4190,
+          "delta": 15
+        },
+        {
+          "turn": 3,
+          "min": 4399,
+          "delta": 15
+        },
+        {
+          "turn": 4,
+          "min": 4619,
+          "delta": 14
+        },
+        {
+          "turn": 5,
+          "min": 4850,
+          "delta": 16
+        },
+        {
+          "turn": 6,
+          "min": 5092,
+          "delta": 15
+        },
+        {
+          "turn": 7,
+          "min": 5347,
+          "delta": 16
+        },
+        {
+          "turn": 8,
+          "min": 5641,
+          "delta": 16
+        },
+        {
+          "turn": 9,
+          "min": 5895,
+          "delta": 25
+        },
+        {
+          "turn": 10,
+          "min": 6190,
+          "delta": 26
+        },
+        {
+          "turn": 11,
+          "min": 6390,
+          "delta": 27
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    },
+    {
+      "code": "BIO_TECH",
+      "ko": "생명공학",
+      "en": "BIO TECH",
+      "category": "highvalue",
+      "color": "#9661BC",
+      "initialPrice": 4410,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 4410,
+          "delta": 15
+        },
+        {
+          "turn": 2,
+          "min": 4631,
+          "delta": 16
+        },
+        {
+          "turn": 3,
+          "min": 4862,
+          "delta": 16
+        },
+        {
+          "turn": 4,
+          "min": 5105,
+          "delta": 14
+        },
+        {
+          "turn": 5,
+          "min": 5360,
+          "delta": 16
+        },
+        {
+          "turn": 6,
+          "min": 5628,
+          "delta": 16
+        },
+        {
+          "turn": 7,
+          "min": 5910,
+          "delta": 16
+        },
+        {
+          "turn": 8,
+          "min": 6205,
+          "delta": 16
+        },
+        {
+          "turn": 9,
+          "min": 6516,
+          "delta": 25
+        },
+        {
+          "turn": 10,
+          "min": 6841,
+          "delta": 26
+        },
+        {
+          "turn": 11,
+          "min": 7041,
+          "delta": 28
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    },
+    {
+      "code": "NEW_REGEN_ENERGY",
+      "ko": "신재생 에너지",
+      "en": "NEW REGENERATION ENERGY",
+      "category": "highvalue",
+      "color": "#2EC7C9",
+      "initialPrice": 4515,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 4515,
+          "delta": 15
+        },
+        {
+          "turn": 2,
+          "min": 4741,
+          "delta": 16
+        },
+        {
+          "turn": 3,
+          "min": 4978,
+          "delta": 16
+        },
+        {
+          "turn": 4,
+          "min": 5227,
+          "delta": 15
+        },
+        {
+          "turn": 5,
+          "min": 5488,
+          "delta": 16
+        },
+        {
+          "turn": 6,
+          "min": 5762,
+          "delta": 17
+        },
+        {
+          "turn": 7,
+          "min": 6051,
+          "delta": 16
+        },
+        {
+          "turn": 8,
+          "min": 6353,
+          "delta": 17
+        },
+        {
+          "turn": 9,
+          "min": 6671,
+          "delta": 25
+        },
+        {
+          "turn": 10,
+          "min": 7004,
+          "delta": 26
+        },
+        {
+          "turn": 11,
+          "min": 7254,
+          "delta": 28
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    },
+    {
+      "code": "CLIENT_PARTNERSHIP",
+      "ko": "고객동맹",
+      "en": "CLIENT PARTNERSHIP",
+      "category": "core",
+      "color": "#E86452",
+      "initialPrice": 1130,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 1130,
+          "delta": 10
+        },
+        {
+          "turn": 2,
+          "min": 1336,
+          "delta": 10
+        },
+        {
+          "turn": 3,
+          "min": 1539,
+          "delta": 10
+        },
+        {
+          "turn": 4,
+          "min": 1440,
+          "delta": 12
+        },
+        {
+          "turn": 5,
+          "min": 1611,
+          "delta": 12
+        },
+        {
+          "turn": 6,
+          "min": 1751,
+          "delta": 13
+        },
+        {
+          "turn": 7,
+          "min": 1880,
+          "delta": 13
+        },
+        {
+          "turn": 8,
+          "min": 2030,
+          "delta": 14
+        },
+        {
+          "turn": 9,
+          "min": 2195,
+          "delta": 15
+        },
+        {
+          "turn": 10,
+          "min": 2356,
+          "delta": 17
+        },
+        {
+          "turn": 11,
+          "min": 2531,
+          "delta": 20
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    },
+    {
+      "code": "INNOVATION",
+      "ko": "혁신",
+      "en": "INNOVATION",
+      "category": "core",
+      "color": "#D14A61",
+      "initialPrice": 1250,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 1250,
+          "delta": 10
+        },
+        {
+          "turn": 2,
+          "min": 1400,
+          "delta": 11
+        },
+        {
+          "turn": 3,
+          "min": 1560,
+          "delta": 11
+        },
+        {
+          "turn": 4,
+          "min": 1740,
+          "delta": 12
+        },
+        {
+          "turn": 5,
+          "min": 1940,
+          "delta": 13
+        },
+        {
+          "turn": 6,
+          "min": 2144,
+          "delta": 13
+        },
+        {
+          "turn": 7,
+          "min": 2366,
+          "delta": 13
+        },
+        {
+          "turn": 8,
+          "min": 2566,
+          "delta": 14
+        },
+        {
+          "turn": 9,
+          "min": 2764,
+          "delta": 15
+        },
+        {
+          "turn": 10,
+          "min": 2942,
+          "delta": 18
+        },
+        {
+          "turn": 11,
+          "min": 3107,
+          "delta": 19
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    },
+    {
+      "code": "SOCIAL_CONTRIBUTION",
+      "ko": "사회기여",
+      "en": "SOCIAL CONTRIBUTION",
+      "category": "core",
+      "color": "#6BA33A",
+      "initialPrice": 1350,
+      "prices": [
+        {
+          "turn": 1,
+          "min": 1350,
+          "delta": 10
+        },
+        {
+          "turn": 2,
+          "min": 1553,
+          "delta": 10
+        },
+        {
+          "turn": 3,
+          "min": 1554,
+          "delta": 10
+        },
+        {
+          "turn": 4,
+          "min": 1658,
+          "delta": 12
+        },
+        {
+          "turn": 5,
+          "min": 1795,
+          "delta": 12
+        },
+        {
+          "turn": 6,
+          "min": 1911,
+          "delta": 13
+        },
+        {
+          "turn": 7,
+          "min": 2016,
+          "delta": 14
+        },
+        {
+          "turn": 8,
+          "min": 2129,
+          "delta": 15
+        },
+        {
+          "turn": 9,
+          "min": 2265,
+          "delta": 15
+        },
+        {
+          "turn": 10,
+          "min": 2421,
+          "delta": 19
+        },
+        {
+          "turn": 11,
+          "min": 2596,
+          "delta": 21
+        }
+      ],
+      "colorNote": "기본 팔레트(2013 톤 참고). 디자인 확정 시 교체."
+    }
+  ]
+}
