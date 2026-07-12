@@ -54,8 +54,10 @@ author: 아리공
 ### Phase 6 — 라이브 운영 도구 (7/12 피터공 확정 목록)
 > **빌드 2026-07-12 · (1) 기본값·해상도 (피터공)**: 변동시간 기본 **1.5초**(전역), 총주기 아이템별 **20~40초 분산**(`20+(i*13 mod21)`). 틱 엔진 1000ms→**500ms**(0.5초 해상도, 1.5초 지원), 타이머는 2틱마다 1초 차감. 변동시간 0.5초 단위 클램프, UI `parseFloat`·step 0.5. deriveStep `ceil`→**`round`**(좁은 밴드 언더슛 최소화). 검증: tsc / WS 하니스(1.5초 실틱 12s→8회·0.5초 6s→12회·1.3→1.5 반올림·기본 주기 전16 20~40대·내부정합) / 실브라우저(변동시간1.5·주기 21~40.5 분산·폭 자동·콘솔0). SPEC §4·§4.1 동기.
 - [x] **(1) 중앙화면 아이템 세팅 데이터 변경 UI** (SPEC §4.1) — `overview.html?edit=1` 우측 오버레이. **입력 4개(아이템별): 저/고/변동시간/총주기**, **변동폭은 자동 파생**(읽기전용, `폭=ceil((고−저)/round(총주기/변동시간))`). 전역 변동시간 일괄. WS `setPlan{low,high,stepSec,durationSec}`/`setPriceStepSec`(gm·overview 역할). 변동시간·총주기 지속(모션 정의), 밴드는 이번 턴 한정. 클램프(high>low·stepSec 1~15·durationSec≥stepSec·파생폭 1~밴드폭·현재가 밴드 내).
-- [ ] **(2) GM 핸드폰용 마켓 컨트롤 화면** — 셔플 / 채널 섞기 / 이벤트(spike·crash). SPEC §4 이벤트층 정식화 후.
+- [x] **(2) GM 핸드폰용 마켓 컨트롤 화면** (SPEC §4.2·§10.1) — `gm.html` 확장(모바일). ①중앙 위치 셔플(displayOrder) ②채널 화면 섞기(채널 레지스트리→순환) ③아이템 이벤트 폭등/폭락(폭 지정·빈칸=랜덤, 지속초, 종료 시 밴드 복귀). 중앙화면 이벤트 배지(▲폭등 초록/▼폭락 빨강). channel.html=role=channel 등록.
 - [ ] (이어서) Quote grace·나머지 오류코드·광클릭 자동 하니스 / 중앙 팀 지표·GM 자금지급 / AWS 배포(합동).
+
+> **빌드 2026-07-12 · (2) GM 폰 컨트롤 (셔플·채널섞기·이벤트)**: `room.ts` displayOrder+shuffleItems / 채널 레지스트리(registerChannel·setChannelItems·unregisterChannel·shuffleChannels 랜덤시프트) / PriceEvent(spike/crash·triggerEvent·eventStep·tick서 모션+타이머·종료 밴드복귀·새턴 초기화) + 스냅샷 event 필드. `server.ts` role=channel 등록·channelItems 라우팅·gm 명령(shuffleItems/shuffleChannels/itemEvent). `gm.html` 셔플2버튼+이벤트(아이템셀렉트·폭·지속·폭등/폭락). `overview.html` 순서시그니처 재배치+이벤트 배지/강조. `channel.html` role=channel·channelItems 통보·setChannelItems 수신. 검증: tsc / WS 하니스(셔플 순서변경·집합보존 / spike 고점초과→종료 밴드복귀 / crash 저점하회→양수유지→복귀 / 채널 등록·섞기 양쪽 수신·교체) / 실브라우저(gm 클릭→중앙 재배치 / spike·crash 배지+가격 / 채널2탭 표시 스왑 / 콘솔0). SPEC §4.2·§10.1 동기.
 
 ### Phase 5 — 통합·튜닝
 - [ ] 미래에셋 데이터로 실플레이 리허설 (소규모 → 확대)

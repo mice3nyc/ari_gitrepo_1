@@ -72,6 +72,13 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
   const send = (obj: unknown) => { if (ws.readyState === ws.OPEN) ws.send(JSON.stringify(obj)); };
   const unsub = room.subscribe(send); // 연결 즉시 스냅샷 + 이후 매 틱 (시세 구독)
 
+  // 채널(태블릿)이면 레지스트리 등록 (SPEC §10.1 채널 섞기)
+  let channelId = 0;
+  if (role === 'channel') {
+    const initItems = (url.searchParams.get('items') ?? '').split(',').map((s) => s.trim()).filter(Boolean);
+    channelId = room.registerChannel(send, initItems);
+  }
+
   // 플레이어면 정체성·담당 아이템·지갑을 초기 전송
   const team = Number(url.searchParams.get('team') ?? 0);
   const pid = Number(url.searchParams.get('id') ?? 0);
@@ -85,8 +92,14 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
     let msg: {
       cmd?: string; side?: 'BUY' | 'SELL'; itemId?: string; qty?: number; clientOrderId?: string;
       low?: number; high?: number; stepSec?: number; durationSec?: number; value?: number;
+      kind?: 'spike' | 'crash'; magnitude?: number; items?: string[];
     };
     try { msg = JSON.parse(String(data)); } catch { return; }
+    // 채널: 표시 아이템 갱신 통보 (SPEC §10.1)
+    if (role === 'channel' && msg.cmd === 'channelItems' && Array.isArray(msg.items)) {
+      room.setChannelItems(channelId, msg.items);
+      return;
+    }
     // 라이브 세팅 편집 (SPEC §4.1) — gm·overview 역할 허용 (LAN 신뢰 환경)
     if (role === 'gm' || role === 'overview') {
       if (msg.cmd === 'setPlan' && msg.itemId) {
@@ -108,6 +121,12 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
         case 'resume': room.resume(); break;
         case 'close': room.close(); break;
         case 'nextTurn': room.nextTurn(); break;
+        case 'shuffleItems': room.shuffleItems(); break;           // SPEC §10.1 중앙 셔플
+        case 'shuffleChannels': room.shuffleChannels(); break;     // SPEC §10.1 채널 섞기
+        case 'itemEvent':                                          // SPEC §4.2 충격 이벤트
+          if (msg.itemId && (msg.kind === 'spike' || msg.kind === 'crash'))
+            room.triggerEvent(msg.itemId, msg.kind, msg.magnitude ?? 0, msg.durationSec ?? 5);
+          break;
       }
       return;
     }
@@ -119,7 +138,7 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
     }
   });
 
-  ws.on('close', () => unsub());
+  ws.on('close', () => { unsub(); if (channelId) room.unregisterChannel(channelId); });
   console.log(`[ws] +${role} room="${code}" (구독 ${room.playerCount})`);
 });
 

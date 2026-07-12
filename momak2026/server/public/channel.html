@@ -97,9 +97,14 @@
   document.getElementById('gear').addEventListener('click', openPicker);
   document.getElementById('done').addEventListener('click', () => {
     document.getElementById('picker').classList.remove('show');
+    syncUrlAndRender();
+    sendChannelItems(); // 서버 레지스트리에 통보 (SPEC §10.1)
+  });
+  function syncUrlAndRender() {
     const u = new URL(location.href); u.searchParams.set('items', selected.join(',')); history.replaceState(null,'',u);
     stage.dataset.key = ''; renderStage();
-  });
+  }
+  function sendChannelItems() { if (ws && ws.readyState === 1) ws.send(JSON.stringify({ cmd: 'channelItems', items: selected })); }
 
   // ── 스테이지 (목업: NAME 왼쪽 / PRICE 박스 오른쪽) ──
   function selectedItems() { return selected.map(c => allItems.find(i=>i.code===c)).filter(Boolean).slice(0,2); }
@@ -137,8 +142,16 @@
   let ws;
   function connect() {
     const proto = location.protocol === 'https:' ? 'wss' : 'ws';
-    ws = new WebSocket(`${proto}://${location.host}/?room=${room}&role=display`);
-    ws.onmessage = (e) => { const m = JSON.parse(e.data); if (m.type === 'snapshot') onSnapshot(m); };
+    ws = new WebSocket(`${proto}://${location.host}/?room=${room}&role=channel&items=${selected.join(',')}`);
+    ws.onopen = () => sendChannelItems(); // 현재 선택을 서버에 등록
+    ws.onmessage = (e) => {
+      const m = JSON.parse(e.data);
+      if (m.type === 'snapshot') onSnapshot(m);
+      else if (m.type === 'setChannelItems') { // GM 채널 섞기 → 표시 아이템 교체 (SPEC §10.1)
+        selected = (m.items || []).slice(0, 2);
+        syncUrlAndRender();
+      }
+    };
     ws.onclose = () => { const ov=document.getElementById('overlay'); ov.textContent='연결 끊김'; ov.classList.add('show'); setTimeout(connect, 1000); };
     ws.onerror = () => ws.close();
   }

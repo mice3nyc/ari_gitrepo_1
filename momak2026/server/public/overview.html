@@ -65,6 +65,18 @@
   }
   .cell.drop .pricebox { animation: dropflash .6s ease-out; }
   @keyframes dropflash { 0% { filter: brightness(2.2); } 100% { filter: brightness(1); } }
+  /* 이벤트 강조 (SPEC §4.2) */
+  .cell.ev-spike { box-shadow: inset 0 0 0 3px #35d07f; }
+  .cell.ev-crash { box-shadow: inset 0 0 0 3px #ff5a5a; }
+  .cell .evbadge {
+    position: absolute; top: clamp(6px,.8vw,14px); left: clamp(8px,1vw,18px);
+    font-size: clamp(11px,1.2vw,20px); font-weight: 900; letter-spacing: .04em;
+    padding: 2px 9px; border-radius: 6px; display: none; z-index: 2;
+  }
+  .cell.ev-spike .evbadge { display: block; background: #35d07f; color: #06210f; }
+  .cell.ev-crash .evbadge { display: block; background: #ff5a5a; color: #2a0606; }
+  .cell.ev-crash .pricebox { animation: crashpulse .5s ease-in-out infinite alternate; }
+  @keyframes crashpulse { from { filter: brightness(1); } to { filter: brightness(.72); } }
   /* 디버그: 현재 세팅값 (작게, 우상단) */
   .cell .dbg {
     position: absolute; top: clamp(6px, .8vw, 14px); right: clamp(8px, 1vw, 18px);
@@ -154,8 +166,11 @@
   const fmt = (n) => n.toLocaleString('en-US');
   const mmss = (s) => `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
 
+  let gridOrderSig = '';
   function ensureCells(items) {
-    if (cells.size === items.length) return;
+    const sig = items.map(i => i.code).join(',');
+    if (cells.size === items.length && sig === gridOrderSig) return; // 개수·순서 동일 → 유지
+    gridOrderSig = sig;                                             // 셔플로 순서 바뀌면 재배치 (SPEC §10.1)
     grid.innerHTML = ''; cells.clear();
     // 아이템 수에 맞춰 열 개수 조정 (16→4열, 그 외엔 정사각에 가깝게)
     const cols = Math.ceil(Math.sqrt(items.length));
@@ -166,6 +181,7 @@
       cell.style.setProperty('--c', it.color);
       cell.innerHTML = `<div><div class="name">${it.ko}</div><div class="en">${it.en}</div></div>
         <div class="dbg"></div>
+        <div class="evbadge"></div>
         <div class="pricebox"><span class="price">–</span><span class="chg"></span></div>`;
       grid.appendChild(cell);
       cells.set(it.code, cell);
@@ -183,9 +199,15 @@
       cell.querySelector('.price').textContent = fmt(it.price);
       cell.querySelector('.dbg').innerHTML =
         `저 <b>${fmt(it.low)}</b> · 고 <b>${fmt(it.high)}</b><br>폭 <b>${it.step}</b>/스텝 · 주기 <b>${it.cycleSec}s</b>`;
+      // 이벤트 배지·강조 (SPEC §4.2)
+      cell.classList.toggle('ev-spike', it.event === 'spike');
+      cell.classList.toggle('ev-crash', it.event === 'crash');
+      cell.querySelector('.evbadge').textContent = it.event === 'spike' ? '▲ 폭등' : it.event === 'crash' ? '▼ 폭락' : '';
       const diff = it.price - it.prevPrice;
       const chg = cell.querySelector('.chg');
-      if (diff > 0) { chg.textContent = '▲ ' + fmt(diff); chg.style.color = '#ffffffcc'; }
+      if (it.event === 'spike') { chg.textContent = '▲ ' + fmt(Math.abs(diff)); chg.style.color = '#fff'; }
+      else if (it.event === 'crash') { chg.textContent = '▼ ' + fmt(Math.abs(diff)); chg.style.color = '#fff'; }
+      else if (diff > 0) { chg.textContent = '▲ ' + fmt(diff); chg.style.color = '#ffffffcc'; }
       else if (diff < 0) { chg.textContent = '▼ 저점'; chg.style.color = '#fff'; flashDrop(cell); }
       else { chg.textContent = ''; }
     }

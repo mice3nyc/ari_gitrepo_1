@@ -32,6 +32,14 @@ export interface ItemState {
   stepSec: number;     // 변동시간: 몇 초마다 한 스텝 (아이템별, SPEC §4.1)
   sinceStep: number;   // 마지막 스텝 이후 경과 초 (per-item 틱 카운터)
   durationSec: number; // 총변동주기: 한 사이클 총 시간. 변동폭(step)은 이것+stepSec+밴드에서 파생 (SPEC §4.1)
+  event: PriceEvent | null; // 진행 중 충격 이벤트 (SPEC §4.2)
+}
+
+// 충격 이벤트 (spike/crash) — 톱니를 지속시간 동안 대체 (SPEC §4.2)
+export interface PriceEvent {
+  kind: 'spike' | 'crash';
+  magnitude: number; // 스텝당 변동폭. 0이면 스텝마다 랜덤
+  secLeft: number;   // 남은 지속시간(초)
 }
 
 // 클라이언트에 보내는 스냅샷 (연결 직후 + 매 틱)
@@ -51,6 +59,7 @@ export interface Snapshot {
     price: number; prevPrice: number; priceVersion: number;
     // 디버그/관찰용 현재 세팅값
     low: number; high: number; step: number; stepSec: number; cycleSec: number;
+    event: 'spike' | 'crash' | null; // 진행 중 이벤트 (중앙화면 배지, SPEC §4.2)
   }>;
 }
 
@@ -76,6 +85,9 @@ export class Room {
   // 가격변동시간: 몇 초마다 가격이 한 스텝 움직이나 (관찰 가능한 주기용 튜닝, SPEC §4·§4.1). 0.5초 단위.
   private priceStepSec = 1.5; // 기본 1.5초 (2026-07-12 피터공)
   private subSecAcc = 0;      // 초 타이머용 누적 (틱 500ms → 2틱마다 1초 차감)
+  private displayOrder: string[]; // 중앙(overview) 아이템 표시 순서 (SPEC §10.1 셔플)
+  private channels = new Map<number, { send: (m: unknown) => void; items: string[] }>(); // 채널 레지스트리
+  private nextChannelId = 1;
 
   constructor(code: string, cfg: GameConfig, rng: () => number = Math.random) {
     this.code = code;
@@ -87,7 +99,9 @@ export class Room {
       price: it.initialPrice, prevPrice: it.initialPrice, priceVersion: 0,
       // 변동시간=전역 기본(1.5초), 총주기=아이템별 20~40초 분산(이웃끼리 다르게, SPEC §4.1)
       stepSec: this.priceStepSec, sinceStep: 0, durationSec: 20 + ((i * 13) % 21),
+      event: null,
     }));
+    this.displayOrder = this.items.map((s) => s.code);
     this.replanTurn();
   }
 
@@ -108,6 +122,7 @@ export class Room {
       const st = this.items.find((s) => s.code === it.code)!;
       // 총주기 미시드면 엑셀 궤적에서 시드(첫 총주기 = 엑셀 스텝수 × 변동시간). 이후엔 사용자값 유지.
       if (st.durationSec <= 0) st.durationSec = plan.ticksPerCycle * st.stepSec;
+      st.event = null; // 새 턴 = 이벤트 초기화 (SPEC §4.2)
       this.deriveStep(plan, st); // 폭을 총주기·변동시간·새 밴드로 재파생
       // 턴 시작 = 사이클 내 랜덤 위상 (아이템마다 다른 지점에서 출발 → 저점/고점 시점 제각각)
       const k = Math.floor(this.rng() * plan.ticksPerCycle);
@@ -142,12 +157,15 @@ export class Room {
       serverTime: Date.now(),
       playerCount: this.listeners.size,
       priceStepSec: this.priceStepSec,
-      items: this.items.map((s) => {
-        const p = this.plans.get(s.code)!;
+      // 중앙 표시 순서(displayOrder)대로 방출 (SPEC §10.1 셔플)
+      items: this.displayOrder.map((code) => {
+        const s = this.items.find((it) => it.code === code)!;
+        const p = this.plans.get(code)!;
         return {
           code: s.code, ko: s.ko, en: s.en, category: s.category, color: s.color,
           price: s.price, prevPrice: s.prevPrice, priceVersion: s.priceVersion,
           low: p.low, high: p.high, step: p.step, stepSec: s.stepSec, cycleSec: p.ticksPerCycle * s.stepSec,
+          event: s.event ? s.event.kind : null,
         };
       }),
     };
@@ -189,6 +207,58 @@ export class Room {
     this.secondsLeft = DEFAULTS.marketDurationSec;
     this.replanTurn();       // 새 턴 시작가·규칙 적용
     this.broadcast();        // turn.changed (SPEC §5) — OPEN 전까지 주문 불가
+  }
+
+  // ── GM 폰 컨트롤 (SPEC §10.1) ──
+
+  // 중앙(overview) 아이템 표시 순서 셔플. 가격·세팅 그대로, 자리만 바뀜.
+  shuffleItems(): void {
+    for (let i = this.displayOrder.length - 1; i > 0; i--) {
+      const j = Math.floor(this.rng() * (i + 1));
+      [this.displayOrder[i], this.displayOrder[j]] = [this.displayOrder[j], this.displayOrder[i]];
+    }
+    this.broadcast();
+  }
+
+  // 아이템 충격 이벤트 발동 (SPEC §4.2). magnitude 0/미지정 → 스텝마다 랜덤.
+  triggerEvent(itemId: string, kind: 'spike' | 'crash', magnitude: number, durationSec: number): void {
+    const st = this.items.find((s) => s.code === itemId);
+    if (!st) return;
+    const mag = Number.isFinite(magnitude) && magnitude > 0 ? Math.round(magnitude) : 0;
+    const dur = Math.max(1, Math.round(durationSec) || 5);
+    st.event = { kind, magnitude: mag, secLeft: dur };
+    this.broadcast();
+  }
+
+  // 이벤트 한 스텝의 새 가격. spike=상승(고점 초과 허용), crash=하락(바닥 1).
+  private eventStep(st: ItemState, plan: TurnPlan): number {
+    const ev = st.event!;
+    const mag = ev.magnitude > 0 ? ev.magnitude : Math.max(1, Math.round(plan.step * (2 + this.rng() * 3)));
+    return ev.kind === 'spike' ? st.price + mag : Math.max(1, st.price - mag);
+  }
+
+  // ── 채널 레지스트리 (SPEC §10.1 채널 섞기) ──
+  registerChannel(send: (m: unknown) => void, items: string[] = []): number {
+    const id = this.nextChannelId++;
+    this.channels.set(id, { send, items: items.slice(0, 2) });
+    return id;
+  }
+  setChannelItems(id: number, items: string[]): void {
+    const ch = this.channels.get(id);
+    if (ch) ch.items = items.slice(0, 2);
+  }
+  unregisterChannel(id: number): void { this.channels.delete(id); }
+
+  // 열린 채널들의 표시 아이템을 서로 순환(랜덤 시프트 — 전원 변경 보장). 채널 0~1개면 무동작.
+  shuffleChannels(): void {
+    const chans = [...this.channels.values()].filter((c) => c.items.length > 0);
+    if (chans.length < 2) return;
+    const shift = 1 + Math.floor(this.rng() * (chans.length - 1)); // 1~n-1 → 전원 바뀜
+    const arrays = chans.map((c) => c.items);
+    for (let i = 0; i < chans.length; i++) {
+      chans[i].items = arrays[(i + shift) % chans.length];
+      chans[i].send({ type: 'setChannelItems', items: chans[i].items });
+    }
   }
 
   // ── 라이브 세팅 편집 (SPEC §4.1 중앙화면 오버레이) ──
@@ -255,8 +325,18 @@ export class Room {
         st.sinceStep = 0;
         const plan = this.plans.get(st.code)!;
         st.prevPrice = st.price;
-        st.price = nextPrice(st.price, plan);
+        if (st.event) st.price = this.eventStep(st, plan); // 이벤트 중 = 방향 충격 (SPEC §4.2)
+        else st.price = nextPrice(st.price, plan);         // 평시 = 톱니
         st.priceVersion += 1;
+      }
+      // 이벤트 타이머 감소 (실초). 끝나면 밴드로 복귀 후 톱니 재개
+      if (st.event) {
+        st.event.secLeft -= dt;
+        if (st.event.secLeft <= 0) {
+          const plan = this.plans.get(st.code)!;
+          st.price = st.event.kind === 'crash' ? plan.low : plan.high - 1;
+          st.event = null;
+        }
       }
     }
     this.subSecAcc += dt;
