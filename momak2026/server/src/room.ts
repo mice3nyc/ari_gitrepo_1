@@ -29,6 +29,9 @@ export interface ItemState {
   price: number;
   prevPrice: number;   // 직전 틱 가격 (방향·변동액 표시용)
   priceVersion: number;
+  stepSec: number;     // 변동시간: 몇 초마다 한 스텝 (아이템별, SPEC §4.1)
+  sinceStep: number;   // 마지막 스텝 이후 경과 초 (per-item 틱 카운터)
+  durationSec: number; // 총변동주기: 한 사이클 총 시간. 변동폭(step)은 이것+stepSec+밴드에서 파생 (SPEC §4.1)
 }
 
 // 클라이언트에 보내는 스냅샷 (연결 직후 + 매 틱)
@@ -42,11 +45,12 @@ export interface Snapshot {
   sequenceNo: number;
   serverTime: number;
   playerCount: number;
+  priceStepSec: number;   // 전역 가격변동주기 (SPEC §4.1 편집 UI 표시용)
   items: Array<{
     code: string; ko: string; en: string; category: string; color: string;
     price: number; prevPrice: number; priceVersion: number;
     // 디버그/관찰용 현재 세팅값
-    low: number; high: number; step: number; cycleSec: number;
+    low: number; high: number; step: number; stepSec: number; cycleSec: number;
   }>;
 }
 
@@ -69,27 +73,42 @@ export class Room {
   private ledger: Array<Record<string, unknown>> = []; // append-only (SPEC §6)
   private autoDemo = false; // true면 타이머 만료 시 자동으로 다음 턴+재개 (손맛 확인용 무한 루프)
   private tickCount = 0;
-  // 가격변동시간: 몇 초마다 가격이 한 스텝 움직이나 (관찰 가능한 주기용 튜닝, SPEC §4·§15). 타이머는 매 초 정확.
-  private priceStepSec = 2;
+  // 가격변동시간: 몇 초마다 가격이 한 스텝 움직이나 (관찰 가능한 주기용 튜닝, SPEC §4·§4.1). 0.5초 단위.
+  private priceStepSec = 1.5; // 기본 1.5초 (2026-07-12 피터공)
+  private subSecAcc = 0;      // 초 타이머용 누적 (틱 500ms → 2틱마다 1초 차감)
 
   constructor(code: string, cfg: GameConfig, rng: () => number = Math.random) {
     this.code = code;
     this.cfg = cfg;
     this.rng = rng;
     this.secondsLeft = DEFAULTS.marketDurationSec;
-    this.items = cfg.items.map((it) => ({
+    this.items = cfg.items.map((it, i) => ({
       code: it.code, ko: it.ko, en: it.en, category: it.category, color: it.color,
       price: it.initialPrice, prevPrice: it.initialPrice, priceVersion: 0,
+      // 변동시간=전역 기본(1.5초), 총주기=아이템별 20~40초 분산(이웃끼리 다르게, SPEC §4.1)
+      stepSec: this.priceStepSec, sinceStep: 0, durationSec: 20 + ((i * 13) % 21),
     }));
     this.replanTurn();
+  }
+
+  // 변동폭(step)을 밴드·변동시간·총주기에서 파생 (SPEC §4.1). 입력은 저/고/변동시간/총주기 넷뿐.
+  private deriveStep(plan: TurnPlan, st: ItemState): void {
+    const band = plan.high - plan.low;
+    const steps = Math.max(1, Math.round(st.durationSec / st.stepSec)); // 목표 스텝수 = 총주기/변동시간
+    // 폭 = 밴드÷스텝수를 반올림(ceil 아님 — 좁은 밴드에서 총주기 언더슛 최소화). 1~밴드폭.
+    plan.step = Math.max(1, Math.min(band, Math.round(band / steps)));
+    plan.ticksPerCycle = Math.ceil(band / plan.step);
   }
 
   // 현재 턴의 궤적 파라미터 재계산 + 가격을 그 턴 바닥에서 출발
   private replanTurn(): void {
     for (const it of this.cfg.items) {
-      const plan = planTurn(it, this.turn, this.cfg.turns);
+      const plan = planTurn(it, this.turn, this.cfg.turns); // 엑셀 min/delta 기반 밴드·초기 step
       this.plans.set(it.code, plan);
       const st = this.items.find((s) => s.code === it.code)!;
+      // 총주기 미시드면 엑셀 궤적에서 시드(첫 총주기 = 엑셀 스텝수 × 변동시간). 이후엔 사용자값 유지.
+      if (st.durationSec <= 0) st.durationSec = plan.ticksPerCycle * st.stepSec;
+      this.deriveStep(plan, st); // 폭을 총주기·변동시간·새 밴드로 재파생
       // 턴 시작 = 사이클 내 랜덤 위상 (아이템마다 다른 지점에서 출발 → 저점/고점 시점 제각각)
       const k = Math.floor(this.rng() * plan.ticksPerCycle);
       st.price = Math.min(plan.low + plan.step * k, Math.max(plan.low, plan.high - 1));
@@ -122,12 +141,13 @@ export class Room {
       sequenceNo: ++this.sequenceNo,
       serverTime: Date.now(),
       playerCount: this.listeners.size,
+      priceStepSec: this.priceStepSec,
       items: this.items.map((s) => {
         const p = this.plans.get(s.code)!;
         return {
           code: s.code, ko: s.ko, en: s.en, category: s.category, color: s.color,
           price: s.price, prevPrice: s.prevPrice, priceVersion: s.priceVersion,
-          low: p.low, high: p.high, step: p.step, cycleSec: p.ticksPerCycle * this.priceStepSec,
+          low: p.low, high: p.high, step: p.step, stepSec: s.stepSec, cycleSec: p.ticksPerCycle * s.stepSec,
         };
       }),
     };
@@ -171,6 +191,51 @@ export class Room {
     this.broadcast();        // turn.changed (SPEC §5) — OPEN 전까지 주문 불가
   }
 
+  // ── 라이브 세팅 편집 (SPEC §4.1 중앙화면 오버레이) ──
+  // 입력 4개: 밴드(저/고)·변동시간(stepSec)·총주기(durationSec). 변경된 필드만 온다.
+  // 변동폭(step)은 입력이 아니라 셋에서 파생(deriveStep) — 재조정 규칙 불필요.
+  setItemPlan(
+    code: string,
+    patch: { low?: number; high?: number; stepSec?: number; durationSec?: number },
+  ): void {
+    const plan = this.plans.get(code);
+    const st = this.items.find((s) => s.code === code);
+    if (!plan || !st) return;
+
+    // 밴드 (독립)
+    const low = Math.max(1, patch.low !== undefined ? Math.round(patch.low) : plan.low);
+    const high = Math.max(low + 1, patch.high !== undefined ? Math.round(patch.high) : plan.high);
+    plan.low = low; plan.high = high;
+
+    // 변동시간 (독립) — 0.5초 단위 (SPEC §4.1)
+    if (patch.stepSec !== undefined && Number.isFinite(patch.stepSec)) {
+      st.stepSec = Math.max(0.5, Math.min(15, Math.round(patch.stepSec * 2) / 2));
+    }
+    // 총주기 (독립) — 최소 한 스텝 시간
+    if (patch.durationSec !== undefined && Number.isFinite(patch.durationSec)) {
+      st.durationSec = Math.max(st.stepSec, Math.round(patch.durationSec));
+    }
+
+    this.deriveStep(plan, st); // 폭·스텝수 파생
+    // 현재가를 새 밴드 [low, high)로 당겨넣음
+    st.price = Math.min(Math.max(st.price, low), high - 1);
+    st.prevPrice = st.price;
+    st.sinceStep = 0;
+    st.priceVersion += 1;
+    this.broadcast();
+  }
+
+  // 전역 변동시간 일괄 (모든 아이템 stepSec를 한 번에) + 신규/리셋 기본값. 이후 턴에도 지속.
+  setPriceStepSec(value: number): void {
+    if (!Number.isFinite(value)) return;
+    this.priceStepSec = Math.max(0.5, Math.min(15, Math.round(value * 2) / 2)); // 0.5초 단위
+    for (const st of this.items) {
+      st.stepSec = this.priceStepSec; st.sinceStep = 0;
+      this.deriveStep(this.plans.get(st.code)!, st); // 변동시간 바뀌면 폭 재파생
+    }
+    this.broadcast();
+  }
+
   private startTicking(): void {
     if (this.tickTimer) return;
     this.tickTimer = setInterval(() => this.tick(), DEFAULTS.tickIntervalMs);
@@ -180,17 +245,23 @@ export class Room {
     if (this.tickTimer) { clearInterval(this.tickTimer); this.tickTimer = null; }
   }
 
-  // 매 틱(1초): 타이머는 매 초 감소, 가격은 priceStepSec마다 한 스텝 전진 + 브로드캐스트
+  // 매 틱(500ms): 각 아이템은 자기 stepSec(초)마다 한 스텝 전진, 타이머는 2틱마다 1초 감소 (SPEC §4.1)
   private tick(): void {
     this.tickCount += 1;
-    if (this.tickCount % this.priceStepSec === 0) {
-      for (const st of this.items) {
+    const dt = DEFAULTS.tickIntervalMs / 1000; // 0.5초
+    for (const st of this.items) {
+      st.sinceStep += dt;
+      if (st.sinceStep + 1e-9 >= st.stepSec) {
+        st.sinceStep = 0;
         const plan = this.plans.get(st.code)!;
         st.prevPrice = st.price;
         st.price = nextPrice(st.price, plan);
         st.priceVersion += 1;
       }
     }
+    this.subSecAcc += dt;
+    if (this.subSecAcc + 1e-9 < 1) { this.broadcast(); return; } // 아직 1초 안 참 → 가격만 갱신 브로드캐스트
+    this.subSecAcc -= 1;
     this.secondsLeft = Math.max(0, this.secondsLeft - 1);
     if (this.secondsLeft === 0) {
       if (this.autoDemo) { this.demoAdvance(); return; } // 데모: 멈추지 않고 다음 턴으로

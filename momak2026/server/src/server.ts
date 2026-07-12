@@ -82,8 +82,24 @@ wss.on('connection', (ws: WebSocket, req: IncomingMessage) => {
   }
 
   ws.on('message', (data) => {
-    let msg: { cmd?: string; side?: 'BUY' | 'SELL'; itemId?: string; qty?: number; clientOrderId?: string };
+    let msg: {
+      cmd?: string; side?: 'BUY' | 'SELL'; itemId?: string; qty?: number; clientOrderId?: string;
+      low?: number; high?: number; stepSec?: number; durationSec?: number; value?: number;
+    };
     try { msg = JSON.parse(String(data)); } catch { return; }
+    // 라이브 세팅 편집 (SPEC §4.1) — gm·overview 역할 허용 (LAN 신뢰 환경)
+    if (role === 'gm' || role === 'overview') {
+      if (msg.cmd === 'setPlan' && msg.itemId) {
+        room.setItemPlan(msg.itemId, {
+          low: msg.low, high: msg.high, stepSec: msg.stepSec, durationSec: msg.durationSec,
+        });
+        return;
+      }
+      if (msg.cmd === 'setPriceStepSec' && typeof msg.value === 'number') {
+        room.setPriceStepSec(msg.value);
+        return;
+      }
+    }
     // GM 제어
     if (role === 'gm') {
       switch (msg.cmd) {

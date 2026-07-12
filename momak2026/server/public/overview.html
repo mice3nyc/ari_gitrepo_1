@@ -74,6 +74,47 @@
   }
   .cell .dbg b { color: #ffffff66; font-weight: 800; }
   .disc { position: fixed; inset: 0; background: #000a; display: none; align-items: center; justify-content: center; font-size: 28px; font-weight: 800; color: #ff6b6b; }
+
+  /* ── 라이브 세팅 편집 오버레이 (SPEC §4.1, ?edit=1) ── */
+  .editbtn {
+    position: fixed; top: 10px; right: 14px; z-index: 30;
+    background: #10151f; color: #cdd6e4; border: 1px solid #3a445a;
+    border-radius: 8px; padding: 6px 12px; font: inherit; font-size: 13px; font-weight: 700;
+    cursor: pointer; opacity: .8;
+  }
+  .editbtn:hover { opacity: 1; }
+  .editpanel {
+    position: fixed; top: 0; right: 0; height: 100%; width: 440px; z-index: 40;
+    background: #0d1119; border-left: 1px solid #2a3446; box-shadow: -8px 0 30px #0008;
+    transform: translateX(100%); transition: transform .22s ease; overflow-y: auto;
+    display: flex; flex-direction: column; color: #e8edf4;
+  }
+  .editpanel.open { transform: translateX(0); }
+  .ep-head {
+    position: sticky; top: 0; background: #0d1119; border-bottom: 1px solid #232b3a;
+    padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .ep-head h2 { font-size: 14px; margin: 0; letter-spacing: .04em; font-weight: 800; }
+  .ep-head .x { background: none; border: none; color: #7a8598; font-size: 20px; cursor: pointer; line-height: 1; }
+  .ep-global {
+    padding: 12px 16px; border-bottom: 1px solid #232b3a; display: flex; align-items: center; gap: 10px;
+    font-size: 12px; color: #9aa4b6;
+  }
+  .ep-global input { width: 64px; }
+  .ep-list { padding: 6px 10px 24px; }
+  .ep-row { border-bottom: 1px solid #171d29; padding: 9px 6px; }
+  .ep-row .nm { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .ep-row .sw { width: 12px; height: 12px; border-radius: 3px; flex: 0 0 auto; }
+  .ep-fields { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .ep-fields label { font-size: 10px; color: #6b7688; text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 3px; }
+  .editpanel input {
+    width: 100%; background: #060a11; border: 1px solid #2a3446; border-radius: 6px;
+    color: #e8edf4; font: inherit; font-size: 13px; padding: 5px 7px;
+    font-variant-numeric: tabular-nums; text-align: right;
+  }
+  .editpanel input:focus { outline: none; border-color: #4d8cff; }
+  .editpanel input:disabled { opacity: .55; border-style: dashed; color: #8b95a8; cursor: default; }
+  .ep-hint { padding: 0 16px 16px; font-size: 11px; color: #5b6577; line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -88,6 +129,21 @@
   </header>
   <main id="grid"></main>
   <div class="disc" id="disc">연결 끊김</div>
+
+  <!-- 라이브 세팅 편집 (SPEC §4.1, ?edit=1일 때만) -->
+  <button class="editbtn" id="editbtn" hidden>⚙ 편집</button>
+  <aside class="editpanel" id="editpanel" hidden>
+    <div class="ep-head">
+      <h2>세팅 편집 · 이번 턴</h2>
+      <button class="x" id="epclose" title="닫기">×</button>
+    </div>
+    <div class="ep-global">
+      변동시간 일괄
+      <input type="number" id="epstep" min="0.5" max="15" step="0.5"> 초 (전 아이템 한 번에)
+    </div>
+    <div class="ep-list" id="eplist"></div>
+    <div class="ep-hint">입력은 넷 — 저점·고점·변동시간(몇 초마다 한 스텝)·총주기(한 사이클 저→고→저 총 시간).<br><b>변동폭은 자동</b>: 폭 = (고−저) ÷ (총주기÷변동시간). 넷을 바꾸면 폭이 다시 계산돼 표시된다.<br>밴드(저/고)는 이번 턴 한정(다음 턴 초기화), 변동시간·총주기는 계속 유지.</div>
+  </aside>
 
 <script>
   const params = new URLSearchParams(location.search);
@@ -133,8 +189,78 @@
       else if (diff < 0) { chg.textContent = '▼ 저점'; chg.style.color = '#fff'; flashDrop(cell); }
       else { chg.textContent = ''; }
     }
+    syncEdit(snap);
   }
   function flashDrop(cell) { cell.classList.remove('drop'); void cell.offsetWidth; cell.classList.add('drop'); }
+
+  // ── 라이브 세팅 편집 (SPEC §4.1) ──
+  const editMode = params.get('edit') === '1';
+  const editRows = new Map(); // code → { low, high, step } input 엘리먼트
+  const sendCmd = (o) => { if (ws && ws.readyState === 1) ws.send(JSON.stringify(o)); };
+
+  function setupEdit() {
+    if (!editMode) return;
+    const btn = document.getElementById('editbtn');
+    const panel = document.getElementById('editpanel');
+    btn.hidden = false;
+    btn.addEventListener('click', () => { panel.hidden = false; requestAnimationFrame(() => panel.classList.add('open')); });
+    document.getElementById('epclose').addEventListener('click', () => panel.classList.remove('open'));
+    const epstep = document.getElementById('epstep');
+    epstep.addEventListener('change', () => {
+      const v = parseInt(epstep.value, 10);
+      if (Number.isFinite(v)) sendCmd({ cmd: 'setPriceStepSec', value: v });
+    });
+  }
+
+  function buildEditRows(items) {
+    if (!editMode || editRows.size === items.length) return;
+    const list = document.getElementById('eplist');
+    list.innerHTML = ''; editRows.clear();
+    for (const it of items) {
+      const row = document.createElement('div');
+      row.className = 'ep-row';
+      row.innerHTML = `<div class="nm"><span class="sw" style="background:${it.color}"></span>${it.ko}</div>
+        <div class="ep-fields">
+          <div><label>저점</label><input type="number" data-k="low" min="1" step="1"></div>
+          <div><label>고점</label><input type="number" data-k="high" min="2" step="1"></div>
+          <div><label>변동시간 s</label><input type="number" data-k="stepSec" min="0.5" max="15" step="0.5"></div>
+          <div><label>총주기 s</label><input type="number" data-k="durationSec" min="1" step="1"></div>
+          <div><label>변동폭 자동</label><input type="number" data-k="step" class="ro" disabled></div>
+        </div>`;
+      const inputs = {};
+      for (const inp of row.querySelectorAll('input')) {
+        inputs[inp.dataset.k] = inp;
+        if (inp.disabled) continue; // 변동폭은 읽기전용 파생값
+        // 변경된 필드 하나만 전송 (SPEC §4.1 — 입력은 저/고/변동시간/총주기, 폭은 서버 파생)
+        inp.addEventListener('change', () => sendField(it.code, inp.dataset.k, inp.value));
+        inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') inp.blur(); });
+      }
+      editRows.set(it.code, inputs);
+      list.appendChild(row);
+    }
+  }
+
+  function sendField(code, key, raw) {
+    const v = parseFloat(raw); // 변동시간 1.5 등 소수 허용
+    if (!Number.isFinite(v)) return;
+    sendCmd({ cmd: 'setPlan', itemId: code, [key]: v });
+  }
+
+  // 스냅샷의 값으로 편집 필드 갱신 — 단, 지금 편집 중인(포커스된) 필드는 건드리지 않는다
+  function syncEdit(snap) {
+    if (!editMode) return;
+    buildEditRows(snap.items);
+    const epstep = document.getElementById('epstep');
+    if (document.activeElement !== epstep && typeof snap.priceStepSec === 'number') {
+      epstep.value = snap.priceStepSec;
+    }
+    for (const it of snap.items) {
+      const f = editRows.get(it.code); if (!f) continue;
+      const set = (el, val) => { if (document.activeElement !== el) el.value = val; };
+      set(f.low, it.low); set(f.high, it.high); set(f.step, it.step);
+      set(f.stepSec, it.stepSec); set(f.durationSec, it.cycleSec);
+    }
+  }
 
   let ws;
   function connect() {
@@ -144,6 +270,7 @@
     ws.onclose = () => { document.getElementById('disc').style.display='flex'; setTimeout(connect, 1000); };
     ws.onerror = () => ws.close();
   }
+  setupEdit();
   connect();
 </script>
 </body>

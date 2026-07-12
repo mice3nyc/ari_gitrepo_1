@@ -51,6 +51,12 @@ author: 아리공
 - [x] GM Console: 마켓 제어(OPEN/PAUSE/RESUME/CLOSE/NEXT TURN) (`public/gm.html`) — 자금 지급·대시보드는 후속
 - [ ] LabelLayer dev 이름표 이식 (Vite 신규 관례) — 현재는 정적 html라 보류
 
+### Phase 6 — 라이브 운영 도구 (7/12 피터공 확정 목록)
+> **빌드 2026-07-12 · (1) 기본값·해상도 (피터공)**: 변동시간 기본 **1.5초**(전역), 총주기 아이템별 **20~40초 분산**(`20+(i*13 mod21)`). 틱 엔진 1000ms→**500ms**(0.5초 해상도, 1.5초 지원), 타이머는 2틱마다 1초 차감. 변동시간 0.5초 단위 클램프, UI `parseFloat`·step 0.5. deriveStep `ceil`→**`round`**(좁은 밴드 언더슛 최소화). 검증: tsc / WS 하니스(1.5초 실틱 12s→8회·0.5초 6s→12회·1.3→1.5 반올림·기본 주기 전16 20~40대·내부정합) / 실브라우저(변동시간1.5·주기 21~40.5 분산·폭 자동·콘솔0). SPEC §4·§4.1 동기.
+- [x] **(1) 중앙화면 아이템 세팅 데이터 변경 UI** (SPEC §4.1) — `overview.html?edit=1` 우측 오버레이. **입력 4개(아이템별): 저/고/변동시간/총주기**, **변동폭은 자동 파생**(읽기전용, `폭=ceil((고−저)/round(총주기/변동시간))`). 전역 변동시간 일괄. WS `setPlan{low,high,stepSec,durationSec}`/`setPriceStepSec`(gm·overview 역할). 변동시간·총주기 지속(모션 정의), 밴드는 이번 턴 한정. 클램프(high>low·stepSec 1~15·durationSec≥stepSec·파생폭 1~밴드폭·현재가 밴드 내).
+- [ ] **(2) GM 핸드폰용 마켓 컨트롤 화면** — 셔플 / 채널 섞기 / 이벤트(spike·crash). SPEC §4 이벤트층 정식화 후.
+- [ ] (이어서) Quote grace·나머지 오류코드·광클릭 자동 하니스 / 중앙 팀 지표·GM 자금지급 / AWS 배포(합동).
+
 ### Phase 5 — 통합·튜닝
 - [ ] 미래에셋 데이터로 실플레이 리허설 (소규모 → 확대)
 - [ ] 가격 진동 손맛 튜닝 (진폭·드리프트·틱주기) → SPEC §4 갱신
@@ -71,3 +77,16 @@ author: 아리공
   - **네트워크**: LAN 접속 안내(`http://<맥IP>:8787`), DEMO 방 자동데모.
   - 검증: 실브라우저로 4화면 전부 렌더·매수 체결(50000→변동·보유 증가·토스트) 확인. `tsc` 통과.
   - 미착수: 가격 이벤트층, Quote grace·광클릭 하니스, 팀 지표·GM 자금지급, AWS 배포(합동).
+- **2026-07-12 · (1) 라이브 세팅 편집 UI (SPEC §4.1)** — 커밋 예정. 변경:
+  - `room.ts`: `setItemPlan(code,{low,high,step})`·`setPriceStepSec(v)` + Snapshot에 `priceStepSec` 필드. 클램프(low≥1·high≥low+1·step≤밴드폭·현재가를 [low,high) 내로 당김).
+  - `server.ts`: WS `setPlan`/`setPriceStepSec` 라우팅(gm·overview 역할, LAN 신뢰).
+  - `overview.html`: `?edit=1` 우측 슬라이드 오버레이(⚙ 편집 버튼) — 16 아이템 저/고/폭 + 전역 주기, 포커스 중 필드는 스냅샷 덮어쓰기 제외.
+  - 검증: `tsc --noEmit` 통과 / WS 하니스 PASS(setPlan 반영·priceStepSec 반영·현재가 밴드 클램프·high<low 방어) / 실브라우저 `?edit=1` 패널 16행 렌더·UI 입력→그리드 dbg 왕복·콘솔 에러 0.
+- **2026-07-12 · (1) 확장: 변동시간 아이템별 + 총주기 편집 (SPEC §4.1, 피터공 요청)** — 커밋 예정. 변경:
+  - `room.ts`: `priceStepSec` 전역 → **ItemState.stepSec(아이템별)** + `sinceStep`(per-item 틱 카운터). tick 엔진이 아이템마다 자기 stepSec마다 전진. `setItemPlan`에 stepSec·durationSec 재조정(총주기 편집→폭 역산 `ticks=round(dur/stepSec)`, `step=ceil(밴드/ticks)`, 변동시간 유지). `setPriceStepSec`=전 아이템 일괄. Snapshot에 아이템별 stepSec, cycleSec=ticks×stepSec.
+  - `server.ts`: `setPlan`에 stepSec·durationSec 라우팅. `overview.html`: 행마다 저/고/폭/변동시간/총주기 5필드, **변경 필드 1개만 전송**(폭·총주기 동시 전송 방지), 전역 라벨 "변동시간 일괄", 패널 440px.
+  - 검증: tsc 통과 / WS 하니스 PASS / 실브라우저.
+- **2026-07-12 · (1) 재정리: 변동폭을 입력에서 제거·파생값으로 (SPEC §4.1, 피터공 정리)** — 커밋 예정. "저/고/총주기/변동시간 넷이면 폭은 종속" → 입력 4개로 단순화, 재조정 규칙 폐기. 변경:
+  - `room.ts`: ItemState에 `durationSec`(지속). `deriveStep(plan,st)`=`폭=ceil(밴드/round(총주기/변동시간))`. `replanTurn`이 턴 시작 시 총주기 미시드면 엑셀 궤적에서 시드 후 폭 파생(변동시간·총주기 지속, 새 밴드에 폭 자동). `setItemPlan` 입력에서 step 제거(저/고/stepSec/durationSec만), 항상 deriveStep. `setPriceStepSec` 일괄도 폭 재파생.
+  - `server.ts`: setPlan에서 step 라우팅 제거. `overview.html`: 변동폭 입력→읽기전용(disabled·점선), 4입력만 change 전송, 힌트·순서 갱신.
+  - 검증: tsc 통과 / WS 하니스 PASS(폭 파생 20·재파생 40·20, 변동시간만 바꿔도 총주기 유지·폭 자동, 밴드만 바꿔도 폭 자동, 실틱 타이밍, 일괄 재파생, 전16아이템 내부정합 ceil(밴드/폭)×변동시간=cycleSec) / 실브라우저 변동폭 disabled·저1000고1600변동시간2총주기60→폭 자동20·그리드 왕복·콘솔 에러 0.

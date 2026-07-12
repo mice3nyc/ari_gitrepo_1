@@ -8,7 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // 서버 기본값 (SPEC §6 — v1은 이 값으로 못박고 간다)
 export const DEFAULTS = {
-  tickIntervalMs: 1000,
+  tickIntervalMs: 500,    // 500ms granularity → 변동시간 0.5초 단위 지원 (1.5초 등, SPEC §4.1)
   marketDurationSec: 600, // 턴당 최소 10분 (2026-07-11 피터공 확정, 기존 원작 기준)
   startingCash: 50000,
 } as const;
