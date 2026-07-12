@@ -362,4 +362,11 @@ price(0) = low
 - `public/player.html` — §9.1 플레이어 앱. 플레이어UI2(LOGIN: MoMA·팀/ID)→UI1(MAIN: TEAM/ID·운영자금·담당 아이템 색밴드+실시간가+BUY/SELL+보유·체결 토스트). role=player·`?team&id`.
 - `public/gm.html` — §10 GM 콘솔 최소판(마켓 제어). `public/index.html` = 랜딩(LAN 접속 안내).
 - **네트워크**: `http.listen`이 전 인터페이스 바인딩 → 같은 WiFi 기기가 `http://<맥LAN>:8787/`로 접속(플레이어=폰, 채널=태블릿). 
-- **미구현(범위대로 후속)**: 가격 이벤트층(폭락/급등·저점/고점 이벤트, §4 하단), Quote priceVersion·validUntil grace(§7, 지금은 현재가 즉시체결)·나머지 오류코드·광클릭 자동 하니스(§7), TRADE·정산(범위밖), import(§11 = Phase 2), 팀 지표·감사로그·GM 자금지급/플레이어 제어(§9.3·§10), AWS 배포(§12 = 합동).
+- **미구현(범위대로 후속)**: Quote priceVersion·validUntil grace(§7, 지금은 현재가 즉시체결)·나머지 오류코드·광클릭 자동 하니스(§7), TRADE·정산(범위밖), import(§11 = Phase 2), 팀 지표·감사로그·GM 자금지급/플레이어 제어(§9.3·§10), AWS 배포(§12 = 합동).
+
+**갱신 2026-07-12 (Phase 6 라이브 운영 도구, 커밋 63d11dc·46a4288):**
+- `room.ts` — 가격변동시간 기본 **1.5초**·틱 **500ms**(0.5초 해상도), 아이템별 `stepSec`·`durationSec`(총주기 기본 20~40 분산), 폭은 파생(§4.1). `displayOrder`·`shuffleItems`, 채널 레지스트리·`shuffleChannels`, `PriceEvent`(spike/crash·`triggerEvent`·`eventStep`, §4.2). 스냅샷에 priceStepSec·아이템별 stepSec·event.
+- `server.ts` — `setPlan`/`setPriceStepSec`(gm·overview), `shuffleItems`/`shuffleChannels`/`itemEvent`(gm), role=channel 등록·`channelItems`.
+- `overview.html` — **§4.1 `?edit=1` 라이브 세팅 편집 오버레이**(저/고/변동시간/총주기, 폭 자동) + 셔플 재배치 + **§4.2 이벤트 배지**(▲폭등 초록/▼폭락 빨강).
+- `gm.html` — **§10.1 폰 컨트롤**: 마켓제어 + 중앙 셔플 + 채널 섞기 + 아이템 이벤트.
+- `channel.html` — role=channel 등록·`channelItems` 통보·`setChannelItems` 수신(채널 섞기 반영).
