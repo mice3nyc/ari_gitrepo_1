@@ -88,6 +88,8 @@ function _applyStaticTexts(){
 }
 _applyStaticTexts();
 if(typeof _initDevNav==='function')_initDevNav(); // CONFIG.debug일 때만 dev-nav 노출
+// 버전 라벨은 CONFIG.version 단일 출처 — 셸에 손으로 박으면 레코드 v와 갈린다(r39/r40 사고)
+(function(){var el=document.getElementById('version-label');if(el)el.textContent=CONFIG.version;})();
 // 배포(변종) 빌드 — 디버그 표면 전부 숨김 (피터공 6/18: 학교 라이브엔 디버그 노출 금지)
 if(!CONFIG.debug){
   ['debug-panel','version-label','dev-nav'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});

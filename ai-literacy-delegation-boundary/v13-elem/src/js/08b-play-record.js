@@ -32,8 +32,11 @@ function makePlayRecord(gs,opts){
   for(var i=0;i<hist.length;i++){
     var hid=hist[i].scenarioId;
     if(byId[hid]===undefined)order.push(hid);
-    byId[hid]=hist[i];
+    byId[hid]=hist[i];                        // 마지막 시도 = 최종 결과
   }
+  // r40 — 시도별 기록은 scenarioHistory가 아니라 _scAttemptLog에서 읽는다.
+  // replayScenario가 history 엔트리를 splice로 지우기 때문에 history엔 마지막 시도만 남는다.
+  var attempts=gs._scAttemptLog||{};
   var sc=order.map(function(id){
     var h=byId[id];
     var disc=h.discounts||[];
@@ -48,9 +51,23 @@ function makePlayRecord(gs,opts){
       dl:h.dlgDelta,dk:h.knlDelta,ct:ct,ce:ce,
       rep:Math.max(0,((gs.scenarioRepeatCount&&gs.scenarioRepeatCount[id])||0)-1)}; // 총 완료수-1 = 리플레이 횟수
     if(cd.length)rec.cd=cd;
+    // r40 — 라이브 수업 계측. dur=최종 시도 소요 초, du=시도별(재도전 있을 때만), gs=시도별 등급(2회+일 때만)
+    if(typeof h.dur==='number')rec.dur=h.dur;
+    var att=attempts[id]||[];
+    if(att.length>1){
+      rec.gs=att.map(function(a){return a.g;});
+      rec.du=att.map(function(a){return a.dur;});
+    }
     return rec;
   });
   var rec={v:CONFIG.version,pid:gs.playId,st:gs.playStartedAt||Date.now(),en:Date.now(),done:!!opts.done,sc:sc};
+  // r40 — 중간 이탈 지점. 어느 시나리오의 어느 단계에서 멈췄나(완주 레코드엔 넣지 않는다).
+  // sc에는 "끝낸 것"만 들어가므로, 시나리오 도중에 그만두면 그 시나리오는 아예 안 보인다 — 그 공백을 메운다.
+  if(!opts.done&&gs.currentScenarioId&&gs.completed===false){
+    var step=!gs.selectedTier1?'tier1':(!gs.selectedTier2?'tier2':(!gs.selectedReview?'review':'result'));
+    rec.cur={id:gs.currentScenarioId,step:step};
+    if(gs._scStartedAt)rec.cur.dur=Math.round((Date.now()-gs._scStartedAt)/1000);
+  }
   if(opts.done){
     var inv=gs.inventory||{};
     rec.end={

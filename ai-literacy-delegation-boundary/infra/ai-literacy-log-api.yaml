@@ -1,0 +1,534 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  AI 리터러시(위임의 경계) 플레이 로그 수집 API. API Gateway HTTP API +
+  Lambda(검증 전용) + S3(private, 쓰기 전용 경로). 브라우저가 AWS 자격증명을
+  갖지 않도록 Lambda를 앞에 둔 구조 -- SPEC-log-transmit.md 참조.
+  Deploy ONCE, playvault 계정/ap-northeast-2, 기존 OIDC 재사용.
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: ai-literacy-log
+    Description: Short name used for naming and tagging resources.
+  AllowedOrigins:
+    Type: CommaDelimitedList
+    Default: >-
+      https://goe-ai-el.nolgong.com,https://goe-ai-md.nolgong.com,https://mice3nyc.github.io
+    Description: >
+      SPEC-log-transmit.md §2 확정 3개 오리진 (운영 초/중등 + GitHub Pages 개발용).
+      새 오리진 추가 시 이 파라미터만 갱신하면 됨(코드 변경 없음).
+  BudgetAlertEmail:
+    Type: String
+    Default: mice3nyc@gmail.com
+    Description: 월 예산 초과 시 알림 받을 이메일 (SPEC §5 비용 가드레일).
+
+Resources:
+
+  # ---------------------------------------------------------------------------
+  # 레코드 저장 버킷. 완전 비공개 + 암호화 강제. 쓰기 전용(Lambda도 PutObject만).
+  # ---------------------------------------------------------------------------
+  PlayLogBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${ProjectName}-${AWS::AccountId}'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+
+  DenyUnencryptedUploads:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref PlayLogBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyUnencryptedObjectUploads
+            Effect: Deny
+            Principal: '*'
+            Action: s3:PutObject
+            Resource: !Sub '${PlayLogBucket.Arn}/*'
+            Condition:
+              StringNotEquals:
+                s3:x-amz-server-side-encryption: AES256
+
+  # ---------------------------------------------------------------------------
+  # Lambda 실행 역할 -- raw/* prefix에 PutObject만. Get/List/Delete 없음.
+  # ---------------------------------------------------------------------------
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${ProjectName}-lambda-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: s3-write-only-raw-prefix
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                Resource: !Sub '${PlayLogBucket.Arn}/raw/*'
+
+  # ---------------------------------------------------------------------------
+  # 검증 전용 Lambda. 크기 캡(5KB) + 최소 스키마 체크(pid/v/sc 존재)만.
+  # SPEC-play-log.md §1 레코드 스키마를 그대로 받아 raw/{v}/{yyyy}/{mm}/{dd}/{pid}.json
+  # 키로 덮어쓰기(upsert) 저장 -- 로컬 outbox의 upsert 동작과 동일하게.
+  # ---------------------------------------------------------------------------
+  IngestFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-ingest'
+      Runtime: nodejs20.x
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 10
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref PlayLogBucket
+      Code:
+        ZipFile: |
+          const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+          const s3 = new S3Client({});
+          const MAX_BYTES = 5 * 1024;
+          function resp(code, obj) {
+            return { statusCode: code, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(obj) };
+          }
+          exports.handler = async (event) => {
+            const raw = event.body || '';
+            if (Buffer.byteLength(raw, 'utf8') > MAX_BYTES) return resp(400, { error: 'payload too large' });
+            let rec;
+            try { rec = JSON.parse(raw); } catch (e) { return resp(400, { error: 'bad json' }); }
+            if (typeof rec.pid !== 'string' || !rec.pid.startsWith('p_')) return resp(400, { error: 'invalid pid' });
+            if (typeof rec.v !== 'string' || !Array.isArray(rec.sc)) return resp(400, { error: 'invalid record shape' });
+            const now = new Date();
+            const yyyy = now.getUTCFullYear();
+            const mm = String(now.getUTCMonth() + 1).padStart(2, '0');
+            const dd = String(now.getUTCDate()).padStart(2, '0');
+            const key = `raw/${rec.v}/${yyyy}/${mm}/${dd}/${rec.pid}.json`;
+            await s3.send(new PutObjectCommand({
+              Bucket: process.env.BUCKET_NAME,
+              Key: key,
+              Body: raw,
+              ContentType: 'application/json',
+              ServerSideEncryption: 'AES256'
+            }));
+            console.log('saved', key);  // SPEC §11-1: CloudWatch Logs 유입 확인용
+            return resp(200, { ok: true });
+          };
+
+  # ---------------------------------------------------------------------------
+  # HTTP API -- CORS는 API 레벨에서 처리(OPTIONS Lambda 불필요), 3개 오리진만 허용.
+  # ---------------------------------------------------------------------------
+  HttpApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub '${ProjectName}-api'
+      ProtocolType: HTTP
+      CorsConfiguration:
+        AllowOrigins: !Ref AllowedOrigins
+        AllowMethods:
+          - POST
+          - GET
+        AllowHeaders:
+          - Content-Type
+
+  DefaultStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref HttpApi
+      StageName: '$default'
+      AutoDeploy: true
+      DefaultRouteSettings:
+        ThrottlingRateLimit: 5
+        ThrottlingBurstLimit: 10
+
+  IngestIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt IngestFunction.Arn
+      PayloadFormatVersion: '2.0'
+
+  IngestRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: 'POST /log'
+      Target: !Sub 'integrations/${IngestIntegration}'
+
+  IngestPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref IngestFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*/log'
+
+  # ---------------------------------------------------------------------------
+  # 조회용 Lambda 실행 역할 -- 버킷 raw/* prefix에 ListBucket만(읽기·쓰기 없음).
+  # ingest 역할(쓰기 전용)과 분리해 최소권한 유지 -- SPEC-log-transmit.md §11-2.
+  # ---------------------------------------------------------------------------
+  StatsExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${ProjectName}-stats-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: s3-list-only-raw-prefix
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource: !GetAtt PlayLogBucket.Arn
+                Condition:
+                  StringLike:
+                    s3:prefix:
+                      - 'raw/*'
+
+  # ---------------------------------------------------------------------------
+  # 유입 조회 Lambda -- raw/ 아래 객체를 세어 {total, byVersion, latest} 반환.
+  # 개인정보 0(판 수·시각뿐). 페이지네이션으로 1000개 초과도 카운트.
+  # SPEC-log-transmit.md §11-2.
+  # ---------------------------------------------------------------------------
+  StatsFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-stats'
+      Runtime: nodejs20.x
+      Handler: index.handler
+      Role: !GetAtt StatsExecutionRole.Arn
+      Timeout: 15
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref PlayLogBucket
+      Code:
+        ZipFile: |
+          const { S3Client, ListObjectsV2Command } = require('@aws-sdk/client-s3');
+          const s3 = new S3Client({});
+          function resp(code, obj) {
+            return { statusCode: code, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(obj) };
+          }
+          exports.handler = async () => {
+            let total = 0;
+            const byVersion = {};
+            let latest = null;
+            let token;
+            do {
+              const out = await s3.send(new ListObjectsV2Command({
+                Bucket: process.env.BUCKET_NAME, Prefix: 'raw/', ContinuationToken: token
+              }));
+              for (const o of (out.Contents || [])) {
+                if (o.Key.endsWith('/')) continue;
+                total++;
+                const v = o.Key.split('/')[1] || 'unknown';
+                byVersion[v] = (byVersion[v] || 0) + 1;
+                if (!latest || o.LastModified > latest) latest = o.LastModified;
+              }
+              token = out.IsTruncated ? out.NextContinuationToken : undefined;
+            } while (token);
+            return resp(200, { total, byVersion, latest: latest ? latest.toISOString() : null });
+          };
+
+  StatsIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt StatsFunction.Arn
+      PayloadFormatVersion: '2.0'
+
+  StatsRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: 'GET /stats'
+      Target: !Sub 'integrations/${StatsIntegration}'
+
+  StatsPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref StatsFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*/stats'
+
+  # ---------------------------------------------------------------------------
+  # 결과 리포트 Lambda (2026-08-04 추가) -- raw/ 아래 레코드를 실제로 읽어 내용 분석.
+  # /stats가 "몇 판 들어왔나"라면 /report는 "무엇이 일어났나"다. 브라우저로 열면 HTML 한 장.
+  # 개인정보 없음(레코드 자체에 없다). SPEC-log-transmit.md §12.
+  # ---------------------------------------------------------------------------
+  ReportExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${ProjectName}-report-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: s3-read-only-raw-prefix
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource: !GetAtt PlayLogBucket.Arn
+                Condition:
+                  StringLike:
+                    s3:prefix:
+                      - 'raw/*'
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                Resource: !Sub '${PlayLogBucket.Arn}/raw/*'
+
+  ReportFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-report'
+      Runtime: nodejs20.x
+      Handler: index.handler
+      Role: !GetAtt ReportExecutionRole.Arn
+      Timeout: 60
+      MemorySize: 512
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref PlayLogBucket
+          MAX_RECORDS: '5000'
+      Code:
+        ZipFile: |
+          const { S3Client, ListObjectsV2Command, GetObjectCommand } = require('@aws-sdk/client-s3');
+          const s3 = new S3Client({});
+          const B = process.env.BUCKET_NAME;
+          const MAX = parseInt(process.env.MAX_RECORDS || '5000', 10);
+          const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+          const pct = (n, d) => (d ? Math.round((n / d) * 100) : 0);
+          const med = (a) => { if (!a.length) return null; const s = a.slice().sort((x, y) => x - y); const m = s.length >> 1; return s.length % 2 ? s[m] : Math.round((s[m - 1] + s[m]) / 2); };
+          const GORD = { S: 5, A: 4, B: 3, C: 2, D: 1 };
+          const TYPES = ['가려서 맡기는', '넓게 맡기는', '내가 먼저 해보는', '끝까지 확인하는', '빠르게 끝내는', '다시 도전하는'];
+
+          async function listKeys(prefix) {
+            const keys = []; let token; let truncated = false;
+            do {
+              const out = await s3.send(new ListObjectsV2Command({ Bucket: B, Prefix: prefix, ContinuationToken: token }));
+              for (const o of (out.Contents || [])) {
+                if (o.Key.endsWith('/')) continue;
+                if (keys.length >= MAX) { truncated = true; break; }
+                keys.push(o.Key);
+              }
+              token = (out.IsTruncated && !truncated) ? out.NextContinuationToken : undefined;
+            } while (token);
+            return { keys, truncated };
+          }
+
+          async function readAll(keys) {
+            const recs = []; const bad = [];
+            for (let i = 0; i < keys.length; i += 20) {
+              const batch = keys.slice(i, i + 20);
+              const got = await Promise.all(batch.map(async (k) => {
+                try {
+                  const o = await s3.send(new GetObjectCommand({ Bucket: B, Key: k }));
+                  return JSON.parse(await o.Body.transformToString());
+                } catch (e) { bad.push(k); return null; }
+              }));
+              for (const r of got) if (r) recs.push(r);
+            }
+            return { recs, bad };
+          }
+
+          function analyse(recs) {
+            const byVersion = {}, sc = {}, drop = {}, types = {};
+            let done = 0;
+            const totals = [];
+            for (const r of recs) {
+              byVersion[r.v || 'unknown'] = (byVersion[r.v || 'unknown'] || 0) + 1;
+              if (r.done) { done++; if (r.end && typeof r.end.total === 'number') totals.push(r.end.total); }
+              if (r.done && r.end && typeof r.end.type === 'number') types[r.end.type] = (types[r.end.type] || 0) + 1;
+              if (!r.done && r.cur) {
+                const k = r.cur.id + ' / ' + r.cur.step;
+                drop[k] = (drop[k] || 0) + 1;
+              }
+              for (const s of (r.sc || [])) {
+                const e = sc[s.id] || (sc[s.id] = { n: 0, grades: {}, scores: [], durs: [], replays: 0, improved: 0, worse: 0, same: 0, t1: {}, t2: {}, rv: {} });
+                e.n++;
+                e.grades[s.g] = (e.grades[s.g] || 0) + 1;
+                if (typeof s.s === 'number') e.scores.push(s.s);
+                if (typeof s.dur === 'number') e.durs.push(s.dur);
+                if (s.t1) e.t1[s.t1] = (e.t1[s.t1] || 0) + 1;
+                if (s.t2) e.t2[s.t2] = (e.t2[s.t2] || 0) + 1;
+                if (s.rv) e.rv[s.rv] = (e.rv[s.rv] || 0) + 1;
+                if (s.gs && s.gs.length > 1) {
+                  e.replays++;
+                  const a = GORD[s.gs[0]] || 0, b = GORD[s.gs[s.gs.length - 1]] || 0;
+                  if (b > a) e.improved++; else if (b < a) e.worse++; else e.same++;
+                }
+              }
+            }
+            return { byVersion, sc, drop, types, done, totals };
+          }
+
+          function dist(o) {
+            const t = Object.values(o).reduce((a, b) => a + b, 0);
+            return Object.keys(o).sort().map((k) => esc(k) + ' ' + o[k] + '<span class="p">(' + pct(o[k], t) + '%)</span>').join(' · ') || '-';
+          }
+
+          function html(a, meta) {
+            const rows = Object.keys(a.sc).map((id) => {
+              const e = a.sc[id];
+              const avg = e.scores.length ? Math.round(e.scores.reduce((x, y) => x + y, 0) / e.scores.length) : '-';
+              return '<tr><td class="id">' + esc(id) + '</td><td class="num">' + e.n + '</td><td class="num">' + avg + '</td>'
+                + '<td class="num">' + (med(e.durs) == null ? '-' : med(e.durs) + '초') + '</td>'
+                + '<td>' + dist(e.grades) + '</td>'
+                + '<td class="num">' + e.replays + (e.replays ? ' <span class="p">(↑' + e.improved + ' =' + e.same + ' ↓' + e.worse + ')</span>' : '') + '</td></tr>';
+            }).join('');
+            const choiceRows = Object.keys(a.sc).map((id) => {
+              const e = a.sc[id];
+              return '<tr><td class="id">' + esc(id) + '</td><td>' + dist(e.t1) + '</td><td>' + dist(e.t2) + '</td><td>' + dist(e.rv) + '</td></tr>';
+            }).join('');
+            const dropRows = Object.keys(a.drop).sort((x, y) => a.drop[y] - a.drop[x])
+              .map((k) => '<tr><td class="id">' + esc(k) + '</td><td class="num">' + a.drop[k] + '</td></tr>').join('')
+              || '<tr><td colspan="2" class="none">중간 이탈 기록 없음</td></tr>';
+            const typeRows = Object.keys(a.types).sort().map((t) =>
+              '<tr><td class="id">' + esc(TYPES[t] || ('유형 ' + t)) + '</td><td class="num">' + a.types[t] + '<span class="p">(' + pct(a.types[t], a.done) + '%)</span></td></tr>').join('')
+              || '<tr><td colspan="2" class="none">완주 기록 없음</td></tr>';
+            const avgTotal = a.totals.length ? Math.round(a.totals.reduce((x, y) => x + y, 0) / a.totals.length) : '-';
+            return '<!doctype html><meta charset="utf-8"><title>AI 리터러시 플레이 리포트</title>'
+              + '<style>body{font:14px/1.6 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;margin:0;padding:28px;background:#fff;color:#111;max-width:1100px}'
+              + 'h1{font-size:20px;margin:0 0 4px}h2{font-size:15px;margin:32px 0 8px;padding-bottom:6px;border-bottom:1px solid #111}'
+              + '.meta{color:#666;font-size:12px;margin-bottom:20px}.cards{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}'
+              + '.card{border:1px solid #ddd;padding:10px 14px;min-width:110px}.card b{display:block;font-size:22px;font-weight:600}'
+              + '.card span{font-size:11px;color:#666}table{border-collapse:collapse;width:100%;font-size:13px}'
+              + 'th,td{border-bottom:1px solid #eee;padding:7px 8px;text-align:left;vertical-align:top}'
+              + 'th{font-weight:600;border-bottom:1px solid #111;white-space:nowrap}.num{text-align:right;white-space:nowrap}'
+              + '.id{font-weight:600;white-space:nowrap}.p{color:#888;font-size:11px;margin-left:2px}.none{color:#999}'
+              + '.warn{background:#fff8e1;border:1px solid #e8d9a0;padding:8px 12px;margin:14px 0;font-size:12px}</style>'
+              + '<h1>AI 리터러시 — 플레이 리포트</h1>'
+              + '<div class="meta">' + esc(meta.when) + ' 기준 · 대상 ' + (meta.v ? '버전 ' + esc(meta.v) : '전체 버전')
+              + ' · 읽은 레코드 ' + meta.read + '건' + (meta.bad ? ' · 못 읽은 파일 ' + meta.bad + '건' : '') + '</div>'
+              + (meta.truncated ? '<div class="warn">⚠️ 레코드가 상한(' + MAX + '건)을 넘어 앞의 ' + MAX + '건만 집계했다. 전체를 보려면 상한을 올려야 한다.</div>' : '')
+              + '<div class="cards"><div class="card"><b>' + meta.read + '</b><span>전체 판</span></div>'
+              + '<div class="card"><b>' + a.done + '</b><span>완주</span></div>'
+              + '<div class="card"><b>' + pct(a.done, meta.read) + '%</b><span>완주율</span></div>'
+              + '<div class="card"><b>' + avgTotal + '</b><span>완주 평균 총점</span></div></div>'
+              + '<h2>버전별</h2><div>' + dist(a.byVersion) + '</div>'
+              + '<h2>시나리오별</h2><table><tr><th>시나리오</th><th class="num">플레이</th><th class="num">평균점수</th><th class="num">소요(중앙값)</th><th>등급 분포</th><th class="num">재도전(↑개선 =유지 ↓하락)</th></tr>' + rows + '</table>'
+              + '<h2>선택 분포</h2><table><tr><th>시나리오</th><th>1차</th><th>2차</th><th>검토</th></tr>' + choiceRows + '</table>'
+              + '<h2>어디서 멈췄나 (미완주)</h2><table><tr><th>시나리오 / 단계</th><th class="num">건수</th></tr>' + dropRows + '</table>'
+              + '<h2>학습자 유형 (완주자)</h2><table><tr><th>유형</th><th class="num">인원</th></tr>' + typeRows + '</table>';
+          }
+
+          exports.handler = async (event) => {
+            const q = (event && event.queryStringParameters) || {};
+            const v = q.v || '';
+            const fmt = q.format || 'html';
+            const prefix = v ? ('raw/' + v + '/') : 'raw/';
+            const { keys, truncated } = await listKeys(prefix);
+            const { recs, bad } = await readAll(keys);
+            const a = analyse(recs);
+            const meta = { when: new Date().toISOString(), v, read: recs.length, bad: bad.length, truncated };
+            if (fmt === 'json') {
+              return { statusCode: 200, headers: { 'Content-Type': 'application/json; charset=utf-8' }, body: JSON.stringify({ meta, ...a }) };
+            }
+            return { statusCode: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' }, body: html(a, meta) };
+          };
+
+  ReportIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt ReportFunction.Arn
+      PayloadFormatVersion: '2.0'
+
+  ReportRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: 'GET /report'
+      Target: !Sub 'integrations/${ReportIntegration}'
+
+  ReportPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ReportFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*/report'
+
+  # ---------------------------------------------------------------------------
+  # 비용 안전망 -- 이 스택(태그 Project=ai-literacy-log)이 월 $5 넘으면 메일.
+  # 이상 트래픽(스로틀을 뚫는 규모의 봇 스팸 등) 조기 발견용.
+  # 주의: 태그 기반 필터는 Billing 콘솔에서 "Project" 태그를 cost allocation tag로
+  # 1회 수동 활성화해야 동작(최대 24시간 반영 지연). 활성화 전엔 필터 없이 생성됨
+  # -> 계정 전체 비용 기준으로 잡히니 배포 직후 콘솔에서 태그 활성화 확인할 것.
+  # ---------------------------------------------------------------------------
+  CostBudget:
+    Type: AWS::Budgets::Budget
+    Properties:
+      Budget:
+        BudgetName: !Sub '${ProjectName}-monthly'
+        BudgetType: COST
+        TimeUnit: MONTHLY
+        BudgetLimit:
+          Amount: 5
+          Unit: USD
+        CostFilters:
+          TagKeyValue:
+            - !Sub 'user:Project$${ProjectName}'
+      NotificationsWithSubscribers:
+        - Notification:
+            NotificationType: ACTUAL
+            ComparisonOperator: GREATER_THAN
+            Threshold: 80
+            ThresholdType: PERCENTAGE
+          Subscribers:
+            - SubscriptionType: EMAIL
+              Address: !Ref BudgetAlertEmail
+
+Outputs:
+  ApiEndpoint:
+    Description: 'SPEC-log-transmit.md §7 08d-log-transmit.js에 고정할 값'
+    Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/log'
+  StatsEndpoint:
+    Description: 'SPEC-log-transmit.md §11-2 유입 조회 -- 브라우저로 열면 {total,byVersion,latest}'
+    Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/stats'
+  ReportEndpoint:
+    Description: 'SPEC-log-transmit.md §12 결과 리포트 -- 브라우저로 열면 HTML 한 장 (?v=버전 필터, ?format=json)'
+    Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/report'
+  BucketName:
+    Description: 플레이 로그가 쌓이는 버킷
+    Value: !Ref PlayLogBucket

@@ -1,13 +1,77 @@
 ## TASKS — v1.3-mid (중등)
 
-**최종 업데이트**: 2026-06-30 (QA1 태블릿 폭 비용 잘림 — 선택지 폰트·마진 축소, 초중등 공통)
+**최종 업데이트**: 2026-08-08 (r40 전달 준비 — 버전 출처 단일화 + 재패키징)
+
+### ★ 2026-08-08 — 전달 직전 점검: 같은 사실에 출처가 둘이었다
+
+r40 빌드를 동현공에게 보내기 전 전수 확인에서 **버전 문자열이 세 곳에 흩어져 있었고 그중 둘이 r39로 남아 있었다.**
+
+- **원인**: `00-config.js`의 `version`만 r40으로 올렸는데, 화면 라벨은 `src/index.shell.html`에 **손으로 박은 리터럴**이었고 `14-init.js`는 `display`만 토글할 뿐 내용을 안 건드렸다. 판올림 때 한쪽만 오른다.
+- **수정**: 셸은 빈 `<div id="version-label">`만 두고 **`14-init.js`가 `CONFIG.version`으로 채운다**(양 트리). SPEC-variant에 단일 출처 규칙으로 명문화.
+- **영향 범위 정정**: 배포(변종) 빌드는 `CONFIG.debug`가 false라 이 라벨이 `display:none`이다 — **학교 화면엔 원래 안 보였고, 서버 레코드의 `v`는 처음부터 r40으로 맞게 갔다**(`/stats` 실측 `v1.3-mid-r40`·`v1.3-elem-r40`). 즉 데이터 손상은 없었다.
+- **⚠️ 실제로 눈에 보이던 것은 문서였다** — `HANDOFF-deploy.md` 5절 "빌드 버전: 중등 `v1.3-mid-r39`, 초등 `v1.3-elem-r39`". 이 파일은 zip 루트에 들어가 동현공이 그대로 읽는다. 양 트리 r40으로 정정.
+- **재빌드 안전성 증명**: 변경 전 산출물과 줄 단위 비교 → **바뀐 줄은 2개뿐**(셸 라벨 줄 + 인라인 스크립트 줄), 스크립트 줄의 차이는 삽입된 IIFE `function(){var e=document.getElementById("version-label");e&&(e.textContent=CONFIG.version)}(),` **하나뿐이고 삭제 0**. 공통 접두 417,955자·접미 12,959자(mid) 바이트 동일.
+- **런타임 확인**: 헤드리스 크롬 `--dump-dom`으로 양쪽 실측 — mid `<div id="version-label" style="display: none;">v1.3-mid-r40</div>`, elem 동일 형태로 `v1.3-elem-r40`. 라벨이 CONFIG에서 채워지고 배포 빌드에선 숨는 것까지 한 번에 확인.
+- **빌드 기록**: mid `builds/mid/index.html` 778,034B → **778,180B** / elem `builds/elem/index.html` 798,017B → **798,162B**(둘 다 `--release`). 루트 개발 빌드(`v13-{mid,elem}/index.html`)도 셸 변경 반영해 재생성.
+- **`.gitignore` 보정**: `v13-mid/builds/`만 제외돼 있고 `v13-elem/builds/`는 빠져 있었다(생성물이 커밋될 뻔). 양쪽 다 제외로 통일.
+- **남겨둔 것**: `HANDOFF-ai-integration.md` 67행 표의 `version` 값이 아직 r39다. 이 문서는 zip에 안 들어가고 통합 참조용이라 이번 전달엔 영향 없음 — 다음 판올림 때 같이 정리.
+
+### ★★ 2026-08-04 오후 — r40: 라이브 전에 다 넣는다 (피터공 "라이브 테스팅인데 언제 단계적으로 진행해")
+
+**판단**: 학교 라이브는 되감을 수 없다. **안 찍은 것은 나중에 만들 수 없으므로** 수집 스키마를 단계적으로 가지 않고 이번 빌드에 다 넣었다. (분석 화면은 데이터가 S3에 남으니 나중에도 되지만, 그것도 같이 했다.)
+
+- **버전 `r39` → `r40`** (양 트리 + v13-mid/build.py elem 앵커). 스키마가 바뀌었는데 같은 버전이면 `dur` 있는 판과 없는 판을 구분 못 한다. S3 prefix도 `raw/v1.3-*-r40/`로 갈려 "전송 붙인 뒤 데이터"가 저절로 분리된다.
+- **수집 3종 추가** (SPEC-play-log §1-2): `sc[].dur`·`du`(시나리오별 소요 초) / `sc[].gs`(시도별 등급 순서) / `cur`(미완료 판의 이탈 지점 id·step·dur). 개인정보는 하나도 안 늘렸다.
+- ⚠️ **`gs`를 `scenarioHistory`에서 읽으면 안 된다** — `replayScenario`가 롤백하며 `hist.splice(i,1)`로 지운다. 하니스가 이걸로 2건 FAIL을 냈고, 지워지지 않는 **`gameState._scAttemptLog`**(09 push 직후 append)로 옮겨 해결. 게임이 갖고 있던 `replay[scid].firstAttempt`는 첫 판만 보존해 3회 이상을 못 담는다.
+- **이탈 포착 경로**: outbox 갱신은 시나리오 종료 때만 일어나 도중 이탈을 못 잡는다 → **`pagehide`·`visibilitychange(hidden)`**에서 upsert+flush(08d `_ltRecordLeave`). 태블릿 앱 전환·화면 잠금이 수업 중 실제 이탈 형태다. 시나리오 미진입자는 기록하지 않는다.
+- **교육청 제출용 `수집항목-설명.md` 작성**(양 트리 사본, 전달 패키지 동봉) — 수집/미수집 항목, 왜 모으는지, 보관·삭제.
+- **결과 리포트 `GET /report` (SPEC §12)** — `infra/ai-literacy-log-api.yaml`에 Report 5리소스 추가. 브라우저로 열면 HTML 한 장: 완주율·시나리오별 평균점수/소요 중앙값/등급 분포·**재도전 ↑개선 =유지 ↓하락**·선택 분포·**어디서 멈췄나**·학습자 유형. 상한 5,000건은 경고 배너로 명시(조용히 안 자른다). **배포는 피터공 콘솔 몫**(아리공에 AWS 자격증명 없음).
+- **검증**: CDP 하니스 **26/26 PASS**(T5 dur·T6 재도전 gs/du·T7 이탈 cur + 서버 도달까지) / 리포트 람다 **12/12 PASS**(`node --check` + S3 스텁으로 실제 레코드 모양 집계·HTML·XSS) / elem 배포빌드 실플레이 1판 예외 0, 레코드에 `dur` 확인.
+- **빌드**: mid `builds/mid/index.html` **778,034B** · elem `builds/elem/index.html` **798,017B**(둘 다 `--release`). 양쪽에 `flushOutbox` 8회·`_scAttemptLog`·`_ltRecordLeave`·`version:"v1.3-*-r40"` 실측.
+- **전달 패키지**: `~/Downloads/AI리터러시_동현공전달_260804_r40{,.zip}` (290 files · 5,431,031B · sha256 `2b85ab79472a`), 구성 `mid/`+`elem/`+`HANDOFF-deploy.md`+`수집항목-설명.md`. **미발송.** 오전 11:34 zip은 피터공 판단용으로 남겨뒀다.
+
+### ★ 2026-08-04 — 08d-log-transmit 구현: 플레이 로그가 실제로 서버까지 간다 (요청 [[요청.26.0804.1103-AI리터러시로그전송구현]])
+
+서버는 7/8에 서 있었는데 **게임이 거기로 보내는 코드가 없었다.** 그 자리(SPEC-play-log §4의 `flushOutbox()` stub)를 채웠다.
+
+- **신규 `src/js/08d-log-transmit.js`** — v13-mid·v13-elem 두 트리 동일(md5 `1ff49d16…`). 큐 앞에서부터 직렬 POST, 200이면 `dequeueFromOutbox`, 일시 실패(네트워크·CORS·403·429·5xx)면 큐 유지하고 그 자리에서 중단, 영구 거부(400·413·422)와 5KB 초과는 큐에서 제거(머리 막힘 방지). `_lt_busy` 재진입 가드, `keepalive:true`.
+- **CONFIG `logApiEndpoint`** 추가(변종 공통). ⚠️ **`clientIdKey`~`scenarios` 두 줄 사이에는 줄을 못 넣는다** — build.py `VARIANT_CONFIG_REPLACEMENTS`의 elem 앵커라 끼우면 elem 빌드가 죽는다. 그래서 `logEndpoint` 아래에 뒀다.
+- **호출 3곳**: `09-render-scenario.js` `enterFromTutorial()`(지난 판 밀어내기) + `goCut6()`의 `recordScenarioEnd()` 직후 / `11-report.js` `recordSemesterDone()` 직후.
+- **⚠️ v13은 mid·elem 평행 트리다** — `src/js` 중 5개 파일이 서로 다르다. 전송 모듈은 **양쪽에 넣었다.** 단일 마스터화는 v14 과제이고 v14는 배포판이 아니다(라이브 실측 `v1.3-elem-r39`·`v1.3-mid-r39`).
+- **검증 하니스 `scripts/verify-log-transmit-cdp.mjs` (신규, 양 트리 사본) — 17/17 PASS.** 실행법·항목·함정은 SPEC §10-2. T4는 버튼이 부르는 그 함수들로 실제 1판을 돈다. 서버 `/stats`가 `total`·`byVersion`으로 반영을 확인해준다.
+- **CORS 실측(SPEC §10-3)**: preflight로 허용 3개(자기 오리진 반사)·차단 2개(헤더 없음). 보안 켠 크롬으로 **배포(minify) 빌드**를 차단 오리진에서 열고 flush → outbox 잔존 1 = **막혀도 데이터 안 잃는다.**
+- **빌드 기록**: `v13-mid/build.py --variant=mid --release` → `builds/mid/index.html` **776,746B**(images 132 + fonts 3) / `v13-elem/build.py --variant=elem --release` → `builds/elem/index.html` **796,729B**(images 126 + fonts 3). js parts 19 → **20**. 양쪽 산출물 실측: `1js1lu6g60` 1회 · `flushOutbox` 7회(정의 1 + 호출 3×2) · `debug:!1` · version/outboxKey 변종 분리.
+- **전달 패키지 재생성 (2026-08-04 13:36)** — `~/Downloads/AI리터러시_동현공전달_260804_로그전송포함{,.zip}` (289 files · 5,436,865B · sha256 `968ebe2fa81d`), 구성 `mid/`+`elem/`+`HANDOFF-deploy.md`(4b절 추가본). **11:34 zip은 남겨뒀다 — 피터공이 어느 쪽을 보낼지 정한 뒤 지운다.** **미발송.**
+- **덮어쓰기 없음 검증**: 11:34 zip 빌드 vs 현재 소스 빌드(둘 다 비압축)를 `;` 단위로 diff → **차이 101줄 전부 추가(`>`)뿐, 삭제·변경 0.** CSS는 양쪽 md5 동일(`9fd145ebd114`, 115,920B)이라 **6/30 QA1 수정분이 그대로 살아 있다.** `src/styles`에 미커밋 변경이 없다는 것도 확인(QA1은 이미 커밋된 상태).
+- ⚠️ **같은 날 11:34 `~/Downloads/AI리터러시_동현공전달_260804.zip`(미발송)은 이 모듈 이전 빌드다.** 그 zip은 QA1 수정분 전달용으로 **`--release` 없이** 만들어졌고(1,013,531B), 라이브는 minify본(771,309B 실측)이다. 이 항목의 빌드가 `builds/`를 덮었으므로 **zip을 다시 만들어야 내용이 맞는다** — 재패키징 전 `--release` 여부를 통일할 것.
+
+### ○ 2026-07-03 — SPEC-log-transmit 작성: 플레이 로그 서버 전송 (요청 [[요청.26.0703.1044-AI리터러시로그전송설계]])
+- **결정**: Supabase 등 외부 서비스 배제, playvault 개인 AWS 계정(자체 인프라)만 사용. 브라우저→S3 직접 쓰기(Cognito) 대신 **API Gateway(HTTP API) + Lambda(검증 전용) + S3(private)** 채택 — 속도 제한·payload 검증·AWS 자격증명 비노출 확보.
+- **CORS 오리진 3개 확정**: `goe-ai-el.nolgong.com`(운영 초등)·`goe-ai-md.nolgong.com`(운영 중등)·`mice3nyc.github.io`(개발/테스트, GitHub Pages).
+- **키 전략**: `raw/{version}/{yyyy}/{mm}/{dd}/{pid}.json`, 로컬 outbox와 동일하게 pid 기준 덮어쓰기(upsert).
+- **핸드오프 순서 확정**: 피터공이 zip으로 코드를 동현공에게 넘기는 구조라, 코드 확정 전에 dev 스택부터 배포해 엔드포인트 URL을 먼저 고정 — 동현공 쪽 조율 왕복 없음(CORS·엔드포인트 전부 아리공이 사전 확정).
+- 산출물: `SPEC-log-transmit.md`(v13-elem·v13-mid·v14 동일 사본), `infra/ai-literacy-log-api.yaml`(CloudFormation).
+- [x] **dev 스택 배포(playvault) → curl 검증 완료 (2026-07-08)**. 스택 `ai-literacy-log-api`(UPDATE_COMPLETE). API URL `https://1js1lu6g60.execute-api.ap-northeast-2.amazonaws.com` (`/log` POST · `/stats` GET). 버킷 `ai-literacy-log-885123105962`. 검증 7종 전부 통과: 유효 PUT 200·stats 반영(total 2)·bad pid/shape/5KB 400·CORS 운영오리진 허용/비허용 차단. **첫 배포는 stats 없는 구버전이 먼저 CREATE된 뒤(전송 타이밍) 업데이트로 stats 5리소스 Add(대체 없음, S3 보존)**.
+- [x] **유입 모니터링 추가 (2026-07-08, SPEC §11)**: `GET /stats`(별도 Stats Lambda·ListBucket만) + ingest `console.log('saved',key)`. 조회 URL = StatsEndpoint.
+- [x] **확정 URL을 `08d-log-transmit.js`에 고정, 코드 작성 (2026-08-04)** — 아래 8/4 항목 참조.
+- [x] **로컬 빌드 실플레이 end-to-end 확인 (2026-08-04)** — 하니스 17/17 PASS. outbox → S3 → 로컬 큐 제거.
+- [x] **SPEC-log-transmit 사본 동기화 (2026-08-04)** — v13-mid·v13-elem·v14 세 파일 md5 동일(`e53d6597…`).
+- [ ] 검증용 테스트 레코드 S3에서 정리(stats total 오염 방지) — **피터공 S3 콘솔 작업**(아리공 로컬에 AWS 자격증명 없음, 스택 역할도 PutObject/ListBucket뿐이라 삭제 경로 없음). 지울 대상: ①`raw/v1.3-mid-r39/2026/07/08/` 아래 `p_curl_a1.json`·`p_curl_b2.json`(7/8 curl 검증분) ②`raw/v0-e2e-test/` **prefix 통째**(8/4 하니스 합성 레코드, 운영 버전과 분리해 두려고 별도 버전으로 넣었다) ③`raw/v1.3-mid-r39/2026/08/04/` 아래 8/4자(하니스 T4 실플레이분).
+- [ ] 코드 커밋 → 빌드 → zip → 동현공 전달·배포
+  - [x] **배포 빌드 + zip 생성 (2026-08-04)** — 6/30 QA1 수정분이 전달본에 없던 것을 확인하고 재빌드(직전 전달본은 6/29). 중등 `v13-mid/build.py --variant=mid` → `builds/mid/index.html` **1,013,531B · sha256 e981839345bf** (images 132 + fonts 3) / 초등 `v13-elem/build.py --variant=elem` → `builds/elem/index.html` **1,031,746B · sha256 a0174dbf7d89** (images 126 + fonts 3). 패키지 `~/Downloads/AI리터러시_동현공전달_260804{,.zip}` (289 files · 5,506,727B · sha256 9a317836aaa5), 구성 `mid/`+`elem/`+`HANDOFF-deploy.md`. **검증**: QA1 6값 양쪽 산출물 grep 확인(paperlogy `.panel-body` 14px 8px · `.choices-area` 12px 6px · `.choice-header` 14px 10px 8px · `.choice-text` 14px / `.cost-simple` 13px) · `debug:false` · gameId 분리(`ai_literacy_md`/`ai_literacy_el`) · version 분리(r39) · dev-nav는 `CONFIG.debug` 게이트라 배포본 숨김 · `/log` 대상 `w0a7nvx7qd`(HANDOFF §3과 일치) · zip 무결성·한글명 라운드트립 OK. **미발송**(피터공 전달 대기).
+  - **이 빌드는 QA1 재포장이 아니다.** 6/29 전달본 이후 커밋 6건(QA1 태블릿 / QA2 초등 리포트 문구 135개 신집필 / QA6 재도전 안내 모달 / QA7 리포트 중복·재도전 버튼 / QA8 재도전 자원토큰 무한 복사 / QA9 재도전-나가기 순차잠금)이 함께 실렸고, ~~08d 플레이로그 전송 코드도 들어갔다~~ ⚠️ **정정(창B 13:40 실측)**: 이 문장은 `builds/`를 본 것이고, `builds/`는 창B가 12:21에 다시 만든 것이다. **11:34 zip 안의 `mid/index.html`·`elem/index.html`은 `flushOutbox` 0회·`1js1lu6g60` 0회 — 08d가 없다.** 원문 유지: **08d 플레이로그 전송 코드도 들어갔다**(양쪽 산출물에 `function flushOutbox` + `logApiEndpoint` = `https://1js1lu6g60…/log`).
+  - ⚠️ **창D 오판 기록(2026-08-04, 남겨둠)** — 창D가 08d를 "미커밋·미검증 WIP"으로 보고 커밋 상태(`35d8e5f`)로 되돌려 재빌드하려 했으나 **틀렸다.** 같은 날 **창B가 08d를 구현·검증(17/17 PASS) 완료**하고 mid·elem 두 트리에 이식한 것이었다(요청 [[요청.26.0804.1103-AI리터러시로그전송구현]]). 소스 mtime 11:05는 창B의 작업 시각. 되돌렸으면 완료된 기능을 벗겨낼 뻔했다. **교훈: 작업 트리의 미커밋 변경을 "중단된 WIP"으로 단정하기 전에 세션 체크리스트를 다시 읽는다** — 창D의 `/recall`은 11:00 시점 스냅샷이라 그 뒤 창B가 갱신한 줄을 못 보고 있었다.
+  - 🔁 **이 zip은 재생성 대상**(창B 판단) — 11:34 산출분은 08d 모듈 이전 빌드이고 `--release` 축도 안 맞는다. 전달 전 재빌드할 것.
+  - ⚠️ **초등 CUT_IMAGES 폴백 404 (선재 결함, 이번 빌드가 원인 아님)** — `CUT_IMAGES`가 `images/s01_ch1~3.webp`를 가리키는데 v13-elem 이미지 세트(126개)엔 `_ch` 파일이 없다(중등 세트에만 7개). 6/29 전달본·현 라이브 초등도 동일. 실플레이는 `getCutImage(scenarioId,cutNum)` 경로(`s0N_c*.webp`, 존재함)를 타고 폴백은 `currentScenarioId`가 없을 때만 쓰이며 `img.onerror`가 번호 플레이스홀더로 대체 → 깨진 이미지 아이콘은 안 뜬다. 별건으로 정리할 것.
 
 ### ◐ 2026-06-30 — QA1 태블릿 폭: 시간/에너지 비용 잘림 (피터공·오공 테스트, 요청 [[요청.26.0630.1115-AI리터러시태블릿반응형]])
 - **증상**: 태블릿(화면 폭 좁음)에서 시나리오 선택지 화면의 "시간 비용 / 에너지 비용" 줄(`.cost-simple` nowrap)이 잘려 보임. **초중등 공통**.
 - **처방(전역)**: `02-choice-costs.css` `.cost-simple` 15→13px / `04-choice-cards.css` `.choice-text` 15→13px · `.choices-area` padding 8→6px(버튼↔cut 프레임 마진) · `.choice-header` 좌우 12→9px.
 - **반영**: v13-mid 수정 → v13-elem CSS 복제(02·04 동일 확인). 양쪽 `build.py` 빌드 — **v13-mid 1,006,047B · v13-elem 1,035,558B** (2026-06-30). 산출물 index.html 4값 반영 grep 확인.
-- **v14**: 미반영(대기) — 반영 매트릭스 QA1행에 인계 기록.
-- [ ] 피터공/오공 태블릿 실기 확인 — 잘림 해소 여부 + 더 줄일지 결정
+- **정정(원인 규명)**: 03/04 수정은 `10-paperlogy` 테마가 맨 마지막 로드로 override해 **무효였음**(레이어 충돌 — 화면 변화 0). 진짜 적용 레이어(`10-paperlogy`)에서 `.panel-body` 좌우 16→8 · `.choices-area` 12→6 · `.choice-header` 16→10 · `.choice-text` 16→14로 재수정. 효력 없던 03/04 변경 원복(베이스 청결).
+- **배포**: 커밋 43b5d42 main push → **GitHub Pages 개발 라이브 반영 확인**(라이브 grep 통과). 중등 `…/v13-mid/index.html` · 초등 `…/v13-elem/index.html`.
+- **v14 인계 대기**: paperlogy 4개(panel-body·choices-area·choice-header·choice-text) + `02` cost 2개(font·gap).
+- [ ] 피터공/오공 라이브에서 핑크 마진 축소 확인 → 비용 잘림 잔여 시 QA1 추가 조정(라벨 축약/두 줄/폰트 더)
 
 ### ✓ 2026-06-29 — 입장 화면(이름·수업코드) + 리포트 이름 개인화 (피터공, 요청 [[요청.26.0629.1341-이름수업코드입장]])
 

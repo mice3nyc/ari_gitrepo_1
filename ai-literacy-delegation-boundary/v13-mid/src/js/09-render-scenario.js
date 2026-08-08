@@ -418,6 +418,7 @@ function bootFlashTo(fn){
 function enterFromTutorial(){
   if(btnGuard('enterTutorial'))return;
   if(typeof sendGameStartLog==='function')sendGameStartLog(); // 동현공 참여 로깅 — 튜토리얼→시나리오 선택 진입 시
+  if(typeof flushOutbox==='function')flushOutbox();           // SPEC-log-transmit §7-6① — 지난 판이 남아 있으면 여기서 밀어낸다
   bootFlashTo(showStartScreen);
 }
 
@@ -1185,7 +1186,19 @@ function goCut6(){
     knlDelta:knlDelta,
     dlgTotal:dlgTotal,
     knlTotal:knlTotal,
-    discounts:(gameState._scDiscounts||[]).slice() // §3a R2 — 영수증 재료 (할인 사용 내역)
+    discounts:(gameState._scDiscounts||[]).slice(), // §3a R2 — 영수증 재료 (할인 사용 내역)
+    // SPEC-play-log §1(r40) — 라이브 수업 계측용. at=종료 시각, dur=이 시도에 걸린 초.
+    // 시작점이 없으면(구 세이브 이어하기) dur을 0이 아니라 null로 둔다 — "0초"와 "모름"은 다르다.
+    at:Date.now(),
+    dur:(gameState._scStartedAt?Math.round((Date.now()-gameState._scStartedAt)/1000):null)
+  });
+  // SPEC-play-log §1-2(r40) — 시도별 등급 누적. scenarioHistory는 replayScenario가 splice로 지우므로
+  // (10-event-handlers [1] 롤백) 거기서는 "다시 해서 나아졌는가"를 영영 못 읽는다. 지워지지 않는 로그를 따로 둔다.
+  if(!gameState._scAttemptLog)gameState._scAttemptLog={};
+  if(!gameState._scAttemptLog[sc.id])gameState._scAttemptLog[sc.id]=[];
+  gameState._scAttemptLog[sc.id].push({
+    g:grade,
+    dur:(gameState._scStartedAt?Math.round((Date.now()-gameState._scStartedAt)/1000):null)
   });
   gameState.completed=true;
 
@@ -1198,6 +1211,7 @@ function goCut6(){
 
   // SPEC-play-log §3.2 — 시나리오 종료마다 outbox 갱신 (pid 발급은 makePlayRecord 첫 호출 시). saveGame 전에 두어 pid 영속.
   recordScenarioEnd();
+  if(typeof flushOutbox==='function')flushOutbox(); // SPEC-log-transmit §7-6② — 갱신 직후 전송 시도(실패해도 큐 유지)
   saveGame();
   updateStats();
 

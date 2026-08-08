@@ -34,6 +34,7 @@ function startScenario(scid){
       resourceSnapshot:{time:gameState.resources.time.current,energy:gameState.resources.energy.current}
     };
   }
+  gameState._scStartedAt=Date.now(); // SPEC-play-log §1 dur — 시나리오 소요 시간 기준점(첫 판·재도전 양쪽)
   gameState.currentScenarioId=scid;
   gameState.currentTier=1;
   gameState.selectedTier1=null;
@@ -142,6 +143,7 @@ function replayScenario(scid){
 
   // [4] 시나리오 상태 초기화 (1회 제한 우회)
   _couponSelections={}; // §3b R2 곁가지 — 이전 판 쿠폰 선택이 재도전에 자동 적용되던 것 교정
+  gameState._scStartedAt=Date.now(); // SPEC-play-log §1 dur — 시나리오 소요 시간 기준점(첫 판·재도전 양쪽)
   gameState.currentScenarioId=scid;
   gameState.currentTier=1;
   gameState.selectedTier1=null;

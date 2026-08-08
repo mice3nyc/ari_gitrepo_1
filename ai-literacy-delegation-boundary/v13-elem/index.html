@@ -2070,7 +2070,7 @@ button,
   <button type="button" onclick="showStartScreen()">시나리오 선택</button>
   <button type="button" onclick="devNavReport()">리포트</button>
 </div>
-<div class="version" id="version-label">v1.3-elem-r39</div>
+<div class="version" id="version-label"></div><!-- 내용은 14-init.js가 CONFIG.version으로 채운다 -->
 
 <!-- Phase 8.10b — 레벨업 이벤트 팝업 (DECISIONS §10.11) -->
 <div id="levelup-modal" class="modal-overlay hidden">
@@ -2221,11 +2221,15 @@ var CONFIG={
   eventLogKey:'ai-literacy-delegation-boundary-v13-mid-events',
   sessionIdKey:'ai-literacy-v13-mid-session-id',
   outboxKey:'ai-literacy-delegation-boundary-v13-mid-outbox', // SPEC-play-log §2 — 전송 대기 큐
-  version:'v1.3-elem-r39',
+  version:'v1.3-elem-r40',
   // 디버그 UI(개발 네비 바·디버그 패널·버전 라벨) 노출 여부. 변종(배포) 빌드는 false 주입 → 학교 라이브 숨김
   debug:true,
   // 동현공 Lambda — 게임 시작 참여 로깅(/log, fire-and-forget). 우리 플레이로그(08b)와 별개 시스템
   logEndpoint:'https://w0a7nvx7qd.execute-api.ap-northeast-2.amazonaws.com/log',
+  // 놀공 자체 수집 API — 플레이 로그 전송(08d, SPEC-log-transmit §7-8). 위 08c logEndpoint와 다른 스택이다.
+  // 변종(mid/elem) 공통값 — 버전 구분은 레코드의 v 필드가 한다. ⚠️ 아래 clientIdKey~scenarios 두 줄은
+  // build.py VARIANT_CONFIG_REPLACEMENTS의 앵커라 사이에 줄을 끼우면 elem 빌드가 죽는다.
+  logApiEndpoint:'https://1js1lu6g60.execute-api.ap-northeast-2.amazonaws.com/log',
   gameId:'ai_literacy_md', // /log gameId. 변종 elem→ai_literacy_el. 동현공이 ALLOWED_GAME_IDS에 등록 필요
   clientIdKey:'ai-literacy-client-id', // 브라우저별 익명 식별자(참여 로깅용, localStorage 영속)
   scenarios:['bookreport','animaltalk','jobcard','classmascot','historycheck'],
@@ -14987,8 +14991,11 @@ function makePlayRecord(gs,opts){
   for(var i=0;i<hist.length;i++){
     var hid=hist[i].scenarioId;
     if(byId[hid]===undefined)order.push(hid);
-    byId[hid]=hist[i];
+    byId[hid]=hist[i];                        // 마지막 시도 = 최종 결과
   }
+  // r40 — 시도별 기록은 scenarioHistory가 아니라 _scAttemptLog에서 읽는다.
+  // replayScenario가 history 엔트리를 splice로 지우기 때문에 history엔 마지막 시도만 남는다.
+  var attempts=gs._scAttemptLog||{};
   var sc=order.map(function(id){
     var h=byId[id];
     var disc=h.discounts||[];
@@ -15003,9 +15010,23 @@ function makePlayRecord(gs,opts){
       dl:h.dlgDelta,dk:h.knlDelta,ct:ct,ce:ce,
       rep:Math.max(0,((gs.scenarioRepeatCount&&gs.scenarioRepeatCount[id])||0)-1)}; // 총 완료수-1 = 리플레이 횟수
     if(cd.length)rec.cd=cd;
+    // r40 — 라이브 수업 계측. dur=최종 시도 소요 초, du=시도별(재도전 있을 때만), gs=시도별 등급(2회+일 때만)
+    if(typeof h.dur==='number')rec.dur=h.dur;
+    var att=attempts[id]||[];
+    if(att.length>1){
+      rec.gs=att.map(function(a){return a.g;});
+      rec.du=att.map(function(a){return a.dur;});
+    }
     return rec;
   });
   var rec={v:CONFIG.version,pid:gs.playId,st:gs.playStartedAt||Date.now(),en:Date.now(),done:!!opts.done,sc:sc};
+  // r40 — 중간 이탈 지점. 어느 시나리오의 어느 단계에서 멈췄나(완주 레코드엔 넣지 않는다).
+  // sc에는 "끝낸 것"만 들어가므로, 시나리오 도중에 그만두면 그 시나리오는 아예 안 보인다 — 그 공백을 메운다.
+  if(!opts.done&&gs.currentScenarioId&&gs.completed===false){
+    var step=!gs.selectedTier1?'tier1':(!gs.selectedTier2?'tier2':(!gs.selectedReview?'review':'result'));
+    rec.cur={id:gs.currentScenarioId,step:step};
+    if(gs._scStartedAt)rec.cur.dur=Math.round((Date.now()-gs._scStartedAt)/1000);
+  }
   if(opts.done){
     var inv=gs.inventory||{};
     rec.end={
@@ -15068,6 +15089,92 @@ function sendGameStartLog(){
       keepalive:true // 화면 전환 중에도 전송 보장
     }).catch(function(){});
   }catch(e){}
+}
+// =====================================================
+// 8d. Play Record 전송 (SPEC-log-transmit §7)
+// 08b가 로컬 outbox에 쌓은 레코드를 우리 AWS 수집 API로 보낸다.
+// 성공(200) → dequeueFromOutbox(pid). 실패 → 큐 유지, 다음 기회에 재시도(데이터 손실 없음).
+// 08c(동현공 Lambda /log, game_start 참여 집계)와는 별개 시스템 — 엔드포인트도 다르다.
+// 게임 흐름을 절대 막지 않는다: 전부 비동기 + try/catch, 실패는 조용히 넘어간다.
+// =====================================================
+
+var _LT_MAX_BYTES = 5120;   // 서버 payload 캡(SPEC §4)과 동일 — 초과분은 보내기 전에 거른다
+var _lt_busy = false;       // 동시 flush 방지 (시나리오 종료가 연달아 불릴 때)
+
+// 4xx는 재시도해도 안 고쳐지는 거부(스키마·크기) → 큐에서 뺀다. 큐 머리에 남아 뒤를 막지 않게.
+// 403·429·5xx·네트워크 오류(CORS 실패 포함)는 유지 — 설정/일시 장애라 나중에 성공할 수 있다.
+function _ltIsPermanentReject(status) {
+  return status === 400 || status === 413 || status === 422;
+}
+
+function _ltSendOne(rec, onDone) {
+  var body;
+  try { body = JSON.stringify(rec); } catch (e) { onDone(false, true); return; }
+  if (body.length > _LT_MAX_BYTES) { onDone(false, true); return; }  // 서버가 거부할 것 — 보내지 않고 버린다
+  try {
+    fetch(CONFIG.logApiEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: body,
+      credentials: 'omit',
+      keepalive: true  // 마지막 시나리오 직후 창을 닫아도 전송 보장
+    }).then(function (res) {
+      onDone(!!(res && res.ok), !!(res && _ltIsPermanentReject(res.status)));
+    }).catch(function () {
+      onDone(false, false);  // 네트워크·CORS 실패 → 큐 유지
+    });
+  } catch (e) { onDone(false, false); }
+}
+
+// 큐를 앞에서부터 하나씩. 일시 실패를 만나면 그 자리에서 멈춘다(순서 보존, 폭주 방지).
+function _ltDrain(list, i) {
+  if (i >= list.length) { _lt_busy = false; return; }
+  var rec = list[i];
+  _ltSendOne(rec, function (ok, permanent) {
+    if (ok || permanent) {
+      try { dequeueFromOutbox(rec.pid); } catch (e) {}
+      _ltDrain(list, i + 1);
+    } else {
+      _lt_busy = false;  // 일시 실패 — 남은 것은 다음 기회에
+    }
+  });
+}
+
+// 호출 시점(SPEC §7-4): 게임 시작 1회 + 시나리오 종료마다 + 학기 완주 시.
+// 매번 실패해도 outbox가 유지되므로 교실 와이파이가 끊겨도 손실 없음.
+function flushOutbox() {
+  try {
+    if (!CONFIG.logApiEndpoint) return;
+    if (_lt_busy) return;
+    if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+    var box = getOutbox();
+    if (!box.length) return;
+    _lt_busy = true;
+    _ltDrain(box.slice(), 0);
+  } catch (e) { _lt_busy = false; }
+}
+
+// ─────────────────────────────────────────────────────────────
+// 이탈 시점 기록 (SPEC-play-log §1 `cur`, r40)
+// outbox 갱신은 "시나리오를 끝냈을 때"만 일어난다. 그래서 시나리오 도중에 그만두면
+// 그 시나리오는 레코드에 아예 안 나타난다 — 어디서 놓쳤는지가 통째로 안 보인다.
+// 탭을 떠나는 순간에 한 번 더 찍어, 미완료 판의 마지막 위치(`cur`)를 남긴다.
+// 시나리오에 들어간 적 없는 사람(타이틀만 보고 나감)은 기록하지 않는다 — 빈 레코드 방지.
+function _ltRecordLeave() {
+  try {
+    if (typeof gameState === 'undefined' || !gameState) return;
+    var entered = !!gameState.currentScenarioId || ((gameState.scenarioHistory || []).length > 0);
+    if (!entered) return;
+    upsertOutbox(makePlayRecord(gameState, { done: false }));
+  } catch (e) {}
+  try { flushOutbox(); } catch (e) {}
+}
+if (typeof window !== 'undefined' && window.addEventListener) {
+  // pagehide = 창 닫기·뒤로가기. visibilitychange hidden = 태블릿 앱 전환·화면 잠금(수업 중 실제 이탈 형태).
+  window.addEventListener('pagehide', _ltRecordLeave);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') _ltRecordLeave();
+  });
 }
 // =====================================================
 // 9. Render Functions (v0.3 — 6컷 흐름)
@@ -15489,6 +15596,7 @@ function bootFlashTo(fn){
 function enterFromTutorial(){
   if(btnGuard('enterTutorial'))return;
   if(typeof sendGameStartLog==='function')sendGameStartLog(); // 동현공 참여 로깅 — 튜토리얼→시나리오 선택 진입 시
+  if(typeof flushOutbox==='function')flushOutbox();           // SPEC-log-transmit §7-6① — 지난 판이 남아 있으면 여기서 밀어낸다
   bootFlashTo(showStartScreen);
 }
 
@@ -16256,7 +16364,19 @@ function goCut6(){
     knlDelta:knlDelta,
     dlgTotal:dlgTotal,
     knlTotal:knlTotal,
-    discounts:(gameState._scDiscounts||[]).slice() // §3a R2 — 영수증 재료 (할인 사용 내역)
+    discounts:(gameState._scDiscounts||[]).slice(), // §3a R2 — 영수증 재료 (할인 사용 내역)
+    // SPEC-play-log §1(r40) — 라이브 수업 계측용. at=종료 시각, dur=이 시도에 걸린 초.
+    // 시작점이 없으면(구 세이브 이어하기) dur을 0이 아니라 null로 둔다 — "0초"와 "모름"은 다르다.
+    at:Date.now(),
+    dur:(gameState._scStartedAt?Math.round((Date.now()-gameState._scStartedAt)/1000):null)
+  });
+  // SPEC-play-log §1-2(r40) — 시도별 등급 누적. scenarioHistory는 replayScenario가 splice로 지우므로
+  // (10-event-handlers [1] 롤백) 거기서는 "다시 해서 나아졌는가"를 영영 못 읽는다. 지워지지 않는 로그를 따로 둔다.
+  if(!gameState._scAttemptLog)gameState._scAttemptLog={};
+  if(!gameState._scAttemptLog[sc.id])gameState._scAttemptLog[sc.id]=[];
+  gameState._scAttemptLog[sc.id].push({
+    g:grade,
+    dur:(gameState._scStartedAt?Math.round((Date.now()-gameState._scStartedAt)/1000):null)
   });
   gameState.completed=true;
 
@@ -16269,6 +16389,7 @@ function goCut6(){
 
   // SPEC-play-log §3.2 — 시나리오 종료마다 outbox 갱신 (pid 발급은 makePlayRecord 첫 호출 시). saveGame 전에 두어 pid 영속.
   recordScenarioEnd();
+  if(typeof flushOutbox==='function')flushOutbox(); // SPEC-log-transmit §7-6② — 갱신 직후 전송 시도(실패해도 큐 유지)
   saveGame();
   updateStats();
 
@@ -16393,6 +16514,7 @@ function startScenario(scid){
       resourceSnapshot:{time:gameState.resources.time.current,energy:gameState.resources.energy.current}
     };
   }
+  gameState._scStartedAt=Date.now(); // SPEC-play-log §1 dur — 시나리오 소요 시간 기준점(첫 판·재도전 양쪽)
   gameState.currentScenarioId=scid;
   gameState.currentTier=1;
   gameState.selectedTier1=null;
@@ -16501,6 +16623,7 @@ function replayScenario(scid){
 
   // [4] 시나리오 상태 초기화 (1회 제한 우회)
   _couponSelections={}; // §3b R2 곁가지 — 이전 판 쿠폰 선택이 재도전에 자동 적용되던 것 교정
+  gameState._scStartedAt=Date.now(); // SPEC-play-log §1 dur — 시나리오 소요 시간 기준점(첫 판·재도전 양쪽)
   gameState.currentScenarioId=scid;
   gameState.currentTier=1;
   gameState.selectedTier1=null;
@@ -17467,6 +17590,7 @@ function showFinalReport(){
   var hist=gameState.scenarioHistory||[];
   // SPEC-play-log §3.3 — 학기 완료 시 done=true 레코드로 outbox 최종 갱신 (end 블록 채움)
   recordSemesterDone();
+  if(typeof flushOutbox==='function')flushOutbox(); // SPEC-log-transmit §7-6③ — 완주 레코드 전송(keepalive라 창을 닫아도 나간다)
   // §4h-3 — totalScore/lv/dv/kv/gradeNote 계산 제거 (상단 블록 렌더 폐지에 따라)
   // 2b: getCompetencyType 호출 제거 — 함수·데이터 키는 보존(되돌리기 가능)
   var compType=null;
@@ -18430,6 +18554,8 @@ function _applyStaticTexts(){
 }
 _applyStaticTexts();
 if(typeof _initDevNav==='function')_initDevNav(); // CONFIG.debug일 때만 dev-nav 노출
+// 버전 라벨은 CONFIG.version 단일 출처 — 셸에 손으로 박으면 레코드 v와 갈린다(r39/r40 사고)
+(function(){var el=document.getElementById('version-label');if(el)el.textContent=CONFIG.version;})();
 // 배포(변종) 빌드 — 디버그 표면 전부 숨김 (피터공 6/18: 학교 라이브엔 디버그 노출 금지)
 if(!CONFIG.debug){
   ['debug-panel','version-label','dev-nav'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});

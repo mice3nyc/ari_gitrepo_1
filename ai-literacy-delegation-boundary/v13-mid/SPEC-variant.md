@@ -14,6 +14,8 @@ implemented: §3c(변종 변수 키 주입), §6(자기완결 builds/{variant}/)
 - `build_data_injection(variant)`: 오버레이 적용. scenarios 오버레이 있으면 EXPECTED_SCENARIO_KEYS 고정검증 건너뜀(베이스/중등은 유지 = 회귀 안전장치).
 - `--dev`: 변종 빌드라도 debug:true 유지. 산출은 `builds/{variant}-dev/`(배포 빌드 오염 방지). 초등 개발 라이브 테스트용.
 
+**버전 라벨은 `CONFIG.version` 단일 출처 (2026-08-08 신설)** — 화면 좌하단 `#version-label`의 내용은 `14-init.js`가 `CONFIG.version`으로 채운다. 셸(`src/index.shell.html`)에는 빈 `<div>`만 두고 문자열을 손으로 박지 않는다. 배경: r40으로 올릴 때 `00-config.js`만 바뀌고 셸 리터럴이 `r39`로 남아, **화면이 말하는 판과 서버 레코드의 `v`가 갈렸다**. 배포(변종) 빌드는 `CONFIG.debug`가 false라 이 라벨이 `display:none`으로 숨겨지므로 학교 화면엔 안 보이지만, 같은 사실에 출처가 둘이면 다음 판올림에서 또 갈린다.
+
 **중등 보호 검증 PASS**: data/elem 없는 상태(휴면)에서 index.html·builds/mid·builds/elem 3종 모두 변경 전과 SHA-256 바이트 동일. 오버레이 작동 검증(일회용 elem texts): TEST 문구 반영 + 중등 UI 상속(병합) + debug 유지 확인 후 잔재 제거.
 
 다음: 초등 CSV → `data/elem/scenarios.yaml` 변환 + cuts/micro/aiflags + texts 오버레이.
