@@ -1,0 +1,65 @@
+bookreport:
+  A: false
+  B: true
+  C: true
+  A1: false
+  A2: false
+  A3: false
+  B1: true
+  B2: true
+  B3: true
+  C1: true
+  C2: true
+  C3: true
+animaltalk:
+  A: false
+  B: true
+  C: true
+  A1: false
+  A2: false
+  A3: false
+  B1: true
+  B2: true
+  B3: true
+  C1: true
+  C2: true
+  C3: true
+jobcard:
+  A: false
+  B: true
+  C: true
+  A1: false
+  A2: false
+  A3: false
+  B1: true
+  B2: true
+  B3: true
+  C1: true
+  C2: true
+  C3: true
+classmascot:
+  A: false
+  B: true
+  C: true
+  A1: false
+  A2: false
+  A3: false
+  B1: true
+  B2: true
+  B3: true
+  C1: true
+  C2: true
+  C3: true
+historycheck:
+  A: false
+  B: true
+  C: true
+  A1: false
+  A2: false
+  A3: false
+  B1: true
+  B2: true
+  B3: true
+  C1: true
+  C2: true
+  C3: true
