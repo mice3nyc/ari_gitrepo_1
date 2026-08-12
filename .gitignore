@@ -13,6 +13,8 @@ mind2action-home/
 # AI리터러시 변종 빌드 산출 폴더 (생성물 — 동현공 전달은 폴더 직접 전달, git 미포함)
 ai-literacy-delegation-boundary/v13-mid/builds/
 ai-literacy-delegation-boundary/v13-elem/builds/
+# v14도 같은 규칙. 이 줄이 없어서 v14/builds/ 408개(webp 396)가 두 달간 「미커밋 511건」으로 보였다 (26.0812)
+ai-literacy-delegation-boundary/v14/builds/
 
 # 런타임 로그·상태
 context-hop-bar/logs/
@@ -23,3 +25,8 @@ tm-bar/data/
 
 # 마이그레이션 백업 스냅샷
 *.before-v*-migration
+# 편집 직전 스냅샷 (yaml 손보기 전 사본 — 위와 같은 범주인데 접미가 자유롭다)
+*.yaml.before-*
+
+# 스크래치 (작업 중 임시 산출 — 참조하는 문서가 없는 것)
+todoy-bar/scratch_*
