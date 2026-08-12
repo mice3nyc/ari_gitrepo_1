@@ -2,7 +2,7 @@
 # <xbar.title>TM (TerminalMonitor)</xbar.title>
 # <xbar.version>v0.3</xbar.version>
 # <xbar.author>아리공</xbar.author>
-# <xbar.desc>여러 클로드코드 창(A/B/C/D)의 현재 작업 — 노치 화면 대비 아이콘+풀다운만</xbar.desc>
+# <xbar.desc>여러 클로드코드 창(A~F)의 현재 작업 — 노치 화면 대비 아이콘+풀다운만</xbar.desc>
 #
 # 메뉴바에는 최소 폭(TM + 활성 창 수)만. 상세(현재 작업·당일 로그)는 클릭 드롭다운.
 # 노치 있는 화면은 상태영역이 좁아 상시 텍스트가 todoy를 밀어내므로, 텍스트 로테이션은 뺐다.

@@ -4,7 +4,7 @@
 # 취소(Cancel)하면 아무것도 쓰지 않는다.
 #
 # 사용:
-#   tm-edit.sh win <ID>     창 A/B/C/D의 project·status를 손으로 편집
+#   tm-edit.sh win <ID>     창 A~F의 project·status를 손으로 편집
 #   tm-edit.sh ext <key>    외부 AI 레인(dex/gpt/claude/google) 텍스트 편집
 
 TM="/Users/p.air15/Neo-Obsi-Sync/_dev/tm-bar/tm.sh"

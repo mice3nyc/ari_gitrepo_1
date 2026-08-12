@@ -1,6 +1,6 @@
 # SPEC — TM (TerminalMonitor)
 
-여러 클로드코드 창(A/B/C/D)의 "지금 무엇을 하는가"를 메뉴바에서 모니터링하는 SwiftBar 확장.
+여러 클로드코드 창(A~F)의 "지금 무엇을 하는가"를 메뉴바에서 모니터링하는 SwiftBar 확장.
 todoy-bar(계획축, "오늘 할 일")의 짝 = 실행축("지금 어느 창이 뭘"). 폐기된 now-bar의 멀티창 부활.
 
 ## 1. 아키텍처
@@ -8,7 +8,7 @@ todoy-bar(계획축, "오늘 할 일")의 짝 = 실행축("지금 어느 창이 
 ```
 _dev/tm-bar/
   tm.sh                       ← 상태 변경 헬퍼 (절대경로 호출, jq)
-  data/windows/{A,B,C,D}.json ← 창별 상태 (현재 작업 + 당일 로그)
+  data/windows/{A..F}.json    ← 창별 상태 (현재 작업 + 당일 로그)
   swiftbar-plugins/tm-bar.3s.sh ← 렌더 플러그인 (3초 새로고침 = 로테이션 주기)
   docs/{SPEC,PLAN,TASKS}.md
 ```
@@ -57,7 +57,7 @@ _dev/tm-bar/
 | `note` | `<ID> <msg>` | 헤더 안 바꾸고 로그만 append(부가 기록) |
 | `unregister` | `<ID>` | 창 끔. `active=false` |
 | `render` | | 플러그인용 — 활성 창 배열 JSON(오늘 date만) |
-| `slot` | | 다음 빈 창 ID 제안(A→D 중 비활성 첫 칸) |
+| `slot` | | 다음 빈 창 ID 제안(A→F 중 비활성 첫 칸). **다 찼으면 아무것도 출력하지 않고 exit 1** |
 | `whoami` | `<UUID>` | 부모 세션 UUID로 등록 창 ID 조회(clear→recall 복원) |
 | `whoami-term` | `<anchor>` | **터미널 앵커**(`$ITERM_SESSION_ID`/`$TERM_SESSION_ID`)로 창 ID 조회(훅→창 매핑, §9) |
 | `state` | `<ID> <working\|attention\|done>` | 색 상태만 교체(+state_at). `updated_at` 안 건드림. 미등록 창이면 조용히 무시 |
@@ -65,7 +65,8 @@ _dev/tm-bar/
 | `focus` | `<ID>` | **그 창을 앞으로**(cmd-tab처럼). `term_program`으로 앱 갈라 tty/UUID로 세션·탭 찾아 select+activate. Terminal·iTerm 지원(§10) |
 | `flush` | `[YYYY-MM-DD]` | 그날 전 창 로그를 마크다운으로 stdout(goodbye가 노트에 씀) |
 
-- ID 유효값 A/B/C/D. 잘못된 ID는 거부.
+- **ID 유효값 A~F**(6창). 잘못된 ID는 거부. 슬롯 이름을 아는 곳은 `valid_id`와 `slot` 둘뿐이고, `render`·`whoami`·`flush`·`unregister`와 플러그인은 `data/windows/*.json` glob이라 개수·이름을 가정하지 않는다. 더 늘릴 일이 생기면 그 두 곳만 고치면 된다. (A~D → A~F 확장 26.0731)
+- **`slot`은 제안일 뿐 예약이 아니다.** 동시 조회 시 둘 다 같은 답을 받는 race가 있다(P60). 그래서 **다 찼을 때 첫 칸으로 되감지 않는다** — 옛 구현은 "다 찼으면 A"를 뱉어 이미 쓰는 중인 창을 덮어쓸 수 있었다(26.0731 A~D 만실 상태에서 실제 재현). 지금은 빈 출력 + exit 1이며, 스킬은 이를 "다 찼다"로 읽어 피터공에게 직접 묻는다.
 - `log`/`set`은 `register` 안 된 ID여도 자동 생성(방어). 단 정상 흐름은 register 먼저.
 - `register`는 호출된 셸 env에서 `term_session`을 자동 캡처(§9). 스킬은 기존대로 `register <ID> <UUID>`만 부르면 됨.
 
@@ -115,7 +116,7 @@ _dev/tm-bar/
 
 ## 9. 색 상태 — 빨강/초록 (26.0709, Q2 구현)
 
-**목적**: 창 4개를 Cmd-Tab으로 순회할 때 "어느 창이 나를 기다리나"를 메뉴바 색으로 즉시 파악.
+**목적**: 여러 창을 Cmd-Tab으로 순회할 때 "어느 창이 나를 기다리나"를 메뉴바 색으로 즉시 파악.
 
 **4-상태 → 색** (피터공 모델 26.0709). 파랑·검정은 **글씨 색만**(마커 없음), 초록·빨강은 마커(🟢🔴):
 | state | 의미 | 색 | 마커 | 트리거 훅 |

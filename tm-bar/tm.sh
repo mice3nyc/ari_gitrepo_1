@@ -3,9 +3,11 @@
 # 사용: tm.sh {register <ID> [session] | log <ID> <project> <status> | set <ID> <project> <status>
 #            | note <ID> <msg> | state <ID> <working|attention|done> | term <ID>
 #            | whoami <UUID> | whoami-term <anchor> | unregister <ID> | render | slot | flush [YYYY-MM-DD]}
-#   - 데이터: data/windows/{A,B,C,D}.json  (창별 현재 작업 + 당일 로그)
+#   - 데이터: data/windows/{A..F}.json  (창별 현재 작업 + 당일 로그)
 #   - 절대경로로 호출해야 settings allowlist 매칭 (cd 붙이지 말 것)
-#   - ID = A/B/C/D
+#   - ID = A~F (6창). 슬롯 이름을 아는 곳은 valid_id와 slot 둘뿐 —
+#     render/whoami/flush/unregister와 플러그인은 windows/*.json glob이라 개수를 가정하지 않는다.
+#     더 늘릴 일이 생기면 아래 VALID_IDS 한 줄만 고치면 된다. (A~D → A~F 확장 26.0731)
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
 WIN_DIR="$DIR/data/windows"
@@ -13,7 +15,9 @@ mkdir -p "$WIN_DIR"
 JQ=/usr/bin/jq
 TODAY="$(date +%F)"
 
-valid_id() { case "$1" in A|B|C|D) return 0;; *) return 1;; esac; }
+VALID_IDS="A B C D E F"   # 슬롯 정본. 늘리려면 여기만 고친다(valid_id·slot이 함께 읽는다).
+valid_id() { case " $VALID_IDS " in *" $1 "*) [ -n "$1" ] && return 0;; esac; return 1; }
+ids_label() { echo "$VALID_IDS" | tr ' ' '/'; }
 wfile() { echo "$WIN_DIR/$1.json"; }
 
 # controlling tty 찾기 (focus용, §10). Bash 툴은 파이프라 $$ 자체는 "not a tty" →
@@ -33,7 +37,7 @@ cmd="$1"; ID="$2"
 
 case "$cmd" in
   register)
-    valid_id "$ID" || { echo "ID는 A/B/C/D" >&2; exit 1; }
+    valid_id "$ID" || { echo "ID는 $(ids_label)" >&2; exit 1; }
     f="$(wfile "$ID")"; now="$(date +%s)"; session="${3:-}"
     ts="${ITERM_SESSION_ID:-${TERM_SESSION_ID:-}}"   # 터미널 창 앵커 자동 캡처(§9)
     prog="${TERM_PROGRAM:-}"                          # 앱 구분 iTerm.app/Apple_Terminal(§10)
@@ -58,7 +62,7 @@ case "$cmd" in
 
   term)
     # 자기 env의 터미널 앵커를 창 파일에 백필(register가 자동 하므로 보통 불필요)
-    valid_id "$ID" || { echo "ID는 A/B/C/D" >&2; exit 1; }
+    valid_id "$ID" || { echo "ID는 $(ids_label)" >&2; exit 1; }
     ts="${ITERM_SESSION_ID:-${TERM_SESSION_ID:-}}"
     [ -z "$ts" ] && { echo "터미널 앵커 없음(TERM_SESSION_ID/ITERM_SESSION_ID)" >&2; exit 1; }
     prog="${TERM_PROGRAM:-}"; tty="$(find_tty || true)"   # focus용 앱·tty도 함께 백필(§10)
@@ -74,7 +78,7 @@ case "$cmd" in
   focus)
     # 메뉴바 클릭 → 해당 창을 앞으로(cmd-tab처럼, §10). 저장된 term_program으로 앱을 갈라
     # tty(공통키) 또는 term_session UUID로 세션/탭을 찾아 select+activate.
-    valid_id "$ID" || { echo "ID는 A/B/C/D" >&2; exit 1; }
+    valid_id "$ID" || { echo "ID는 $(ids_label)" >&2; exit 1; }
     f="$(wfile "$ID")"; [ -f "$f" ] || { echo "창 $ID 미등록" >&2; exit 1; }
     prog="$("$JQ" -r '.term_program // ""' "$f")"
     tty="$("$JQ" -r '.tty // ""' "$f")"
@@ -134,7 +138,7 @@ OSA
 
   state)
     # 색 상태만 교체(working|attention|done). updated_at 안 건드림. 미등록 창이면 조용히 무시.
-    valid_id "$ID" || { echo "ID는 A/B/C/D" >&2; exit 1; }
+    valid_id "$ID" || { echo "ID는 $(ids_label)" >&2; exit 1; }
     st="$3"
     case "$st" in working|attention|done|idle) ;; *) echo "state는 working|attention|done|idle" >&2; exit 1;; esac
     f="$(wfile "$ID")"; now="$(date +%s)"
@@ -144,7 +148,7 @@ OSA
     ;;
 
   log|set)
-    valid_id "$ID" || { echo "ID는 A/B/C/D" >&2; exit 1; }
+    valid_id "$ID" || { echo "ID는 $(ids_label)" >&2; exit 1; }
     project="$3"; status="$4"
     [ -z "$status" ] && { echo "사용: tm.sh $cmd <ID> <project> <status>" >&2; exit 1; }
     f="$(wfile "$ID")"; now="$(date +%s)"; hm="$(date +%H:%M)"
@@ -162,7 +166,7 @@ OSA
     ;;
 
   note)
-    valid_id "$ID" || { echo "ID는 A/B/C/D" >&2; exit 1; }
+    valid_id "$ID" || { echo "ID는 $(ids_label)" >&2; exit 1; }
     msg="$3"; [ -z "$msg" ] && { echo "사용: tm.sh note <ID> <msg>" >&2; exit 1; }
     f="$(wfile "$ID")"; hm="$(date +%H:%M)"
     [ -f "$f" ] || "$0" register "$ID" >/dev/null
@@ -171,7 +175,7 @@ OSA
     ;;
 
   unregister)
-    valid_id "$ID" || { echo "ID는 A/B/C/D" >&2; exit 1; }
+    valid_id "$ID" || { echo "ID는 $(ids_label)" >&2; exit 1; }
     f="$(wfile "$ID")"
     [ -f "$f" ] && "$JQ" '.active=false' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
     echo "창 $ID 해제"
@@ -193,10 +197,14 @@ OSA
       a="$("$JQ" -r 'select(.date=="'"$TODAY"'" and .active==true) | .id' "$f" 2>/dev/null)"
       [ -n "$a" ] && used="$used $a"
     done
-    for c in A B C D; do
+    for c in $VALID_IDS; do
       case " $used " in *" $c "*) ;; *) echo "$c"; exit 0;; esac
     done
-    echo "A"  # 다 찼으면 A 제안
+    # 다 찼으면 아무것도 뱉지 않는다. 옛 구현은 "A"로 되감았는데, A가 이미 쓰는 중이면
+    # 그 제안을 믿은 새 창이 남의 창을 덮어썼다(26.0731 A~D 만실 상태에서 실제 재현).
+    # slot은 제안일 뿐 예약이 아니므로(P60 race), 빈 답으로 "직접 물어라"를 알린다.
+    echo "모든 슬롯($(ids_label)) 사용 중 — 창 번호를 피터공에게 직접 확인" >&2
+    exit 1
     ;;
 
   whoami)
