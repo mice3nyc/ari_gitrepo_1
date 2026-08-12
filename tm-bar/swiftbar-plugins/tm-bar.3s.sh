@@ -48,6 +48,22 @@ fi
 
 echo "---"
 echo "TM · 활성 ${count}창 | size=12 color=gray"
+
+# ── 사본 드리프트 감지 (SPEC § 사본 드리프트 감지) ──
+# 복사 배포라 정본과 배포본이 실물로 둘이다. 어긋나도 아무도 모르는 것이 문제라 렌더가 대조한다.
+# 어느 쪽이 새것인지는 단정하지 않는다 — 두 경로(install.sh 안 돌림 / 배포본 직접 수정)가
+# 정반대 처방을 요구하므로, 잘못 단정하면 작업을 지운다. mtime만 보여주고 판단은 사람에게.
+CANON="/Users/p.air15/Neo-Obsi-Sync/_dev/tm-bar/swiftbar-plugins/tm-bar.3s.sh"
+if [ -f "$CANON" ] && ! cmp -s "$0" "$CANON"; then
+  echo "---"
+  echo "⚠ 플러그인 사본이 정본과 다릅니다 | size=12 color=#e5484d"
+  echo "--배포본(도는 것)  $(date -r "$0" '+%m/%d %H:%M')  $0 | size=11 font=Menlo"
+  echo "--정본(리포)       $(date -r "$CANON" '+%m/%d %H:%M')  $CANON | size=11 font=Menlo"
+  echo "-----"
+  echo "--정본이 새것이면 → install.sh로 배포 | size=11 color=gray"
+  echo "--배포본이 새것이면 → 그 수정을 정본으로 옮긴 뒤 배포(안 옮기면 install.sh가 덮는다) | size=11 color=gray"
+  echo "--차이 보기 (터미널) | bash=/usr/bin/diff param1=$CANON param2=$0 terminal=true size=11"
+fi
 echo "---"
 
 # ── 창별 목록 (최근 갱신 상단) ──
