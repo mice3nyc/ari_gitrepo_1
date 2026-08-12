@@ -4,7 +4,7 @@
   --line: #dcdcdc;
   --bg: #f4f4f2;
   --panel: #ffffff;
-  --impulse: #e0218a;   /* 충동 분홍 */
+  --impulse: #e23a2a;   /* 충동 빨강 */
   --thought: #1aa64b;   /* 생각 초록 */
   --action:  #1e74ff;   /* 실천 파랑 */
   --overuse: #1c1c1c;   /* 과몰입 검정 */
@@ -38,14 +38,12 @@ h1,h2,h3 { font-weight: 800; margin: 0; }
 .select-groups { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:20px; }
 .select-group { border:1px dashed var(--line); border-radius:var(--radius); padding:12px; background:#fff; }
 .select-group-no { font-size:12px; color:var(--muted); margin-bottom:8px; }
-.select-options { display:flex; flex-direction:column; gap:8px; }
-.pick-card { text-align:left; font:inherit; font-size:14px; padding:11px 13px; border:1px solid var(--line); background:#fff; border-radius:var(--radius); cursor:pointer; }
-.pick-card:hover { border-color: var(--impulse); }
-.pick-card.picked { border:2px solid var(--impulse); background:#fdeef6; }
+.pick-spread { display:flex; gap:10px; flex-wrap:wrap; }
+.pick-spread .gcard { flex:1 1 0; min-width:120px; }
 .select-footer { display:flex; align-items:center; justify-content:space-between; margin-top:22px; border-top:1px solid var(--line); padding-top:16px; }
 
 /* ── 카드 게임 보드 ───────────────────────────────── */
-.board-wrap { max-width: 1180px; margin: 0 auto; padding: 16px 18px 48px; }
+.board-wrap { max-width: 1240px; margin: 0 auto; padding: 16px 18px 48px; }
 
 .topbar { display:flex; align-items:center; gap:18px; flex-wrap:wrap; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:10px 16px; margin-bottom:14px; font-size:13px; position:sticky; top:0; z-index:5; }
 .day { font-weight:800; letter-spacing:.06em; }
@@ -57,29 +55,51 @@ h1,h2,h3 { font-weight: 800; margin: 0; }
 .track-practice .tdot.on { background:var(--action); border-color:var(--action); }
 .track-overuse .tdot.on { background:var(--impulse); border-color:var(--impulse); }
 
-/* 목표 트랙 (슬롯 행) */
-.zones { display:flex; flex-direction:column; gap:10px; margin-bottom:14px; }
-.slotrow { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:10px 12px; }
-.slotrow-head { display:flex; align-items:baseline; gap:10px; margin-bottom:8px; }
-.slotrow-overuse .slotrow-head b { color: var(--overuse); }
-.slotrow-action .slotrow-head b { color: var(--action); }
+/* 상단: 메인 보드(좌) + 카드 시장(우) */
+.play-grid { display:grid; grid-template-columns: 1.15fr 1fr; gap:14px; margin-bottom:14px; }
+@media (max-width: 920px){ .play-grid{ grid-template-columns:1fr; } .select-groups{grid-template-columns:1fr;} }
+
+/* 메인 보드 — 3행 트랙 */
+.board-main { display:flex; flex-direction:column; gap:10px; }
+.track-row { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:10px 12px; }
+.track-head { display:flex; align-items:baseline; gap:10px; margin-bottom:8px; }
+.track-overuse .track-head b { color: var(--overuse); }
+.track-action .track-head b { color: var(--action); }
+.track-thought .track-head b { color: var(--thought); }
 .slots { display:grid; grid-template-columns: repeat(6, 1fr); gap:8px; }
-.slot { aspect-ratio: 3/2.1; border:1px dashed var(--line); border-radius:6px; display:flex; align-items:center; justify-content:center; padding:3px; }
-.slot.filled { border-style:solid; }
+.slot { aspect-ratio: 3/2.3; border:1px dashed var(--line); border-radius:6px; display:flex; align-items:center; justify-content:center; padding:3px; }
+.slot.filled { border-style:solid; animation: pop .22s ease; }
 .slot-ghost { color: var(--line); }
+.thought-track { display:flex; gap:8px; flex-wrap:wrap; min-height:60px; align-items:center; }
 
-/* 본문 그리드: 좌 딜영역 / 우 상점 */
-.play-grid { display:grid; grid-template-columns: 1.05fr 1fr; gap:14px; }
-@media (max-width: 860px){ .play-grid{ grid-template-columns:1fr; } .slots{ grid-template-columns:repeat(6,1fr);} .select-groups{grid-template-columns:1fr;} }
-.zone-h { font-size:14px; font-weight:800; margin:0 0 8px; }
-.deal-area, .shop-area { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:14px; }
+/* 카드 시장 — 펼침 영역 */
+.market { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:12px 14px; display:flex; flex-direction:column; gap:10px; }
+.impulse-pin { border:1px dashed var(--impulse); border-radius:6px; padding:8px 11px; min-height:42px; display:flex; align-items:center; gap:10px; background:#fdf0ef; }
+.pin-label { font-size:10px; font-weight:800; color:var(--impulse); white-space:nowrap; }
+.pin-text { font-size:13px; font-weight:600; }
+.strip-h { font-size:12px; font-weight:800; margin:0 0 6px; }
+.strip-h.action { color:var(--action); } .strip-h.thought { color:var(--thought); }
+.strip { display:flex; gap:10px; overflow-x:auto; overflow-y:hidden; padding:2px 2px 8px; min-height:96px; scroll-behavior:smooth; }
+.strip::-webkit-scrollbar { height:7px; } .strip::-webkit-scrollbar-thumb { background:var(--line); border-radius:4px; }
+.strip > .gcard { flex:0 0 auto; }
+.strip-divider { border-top:2px dashed var(--line); margin:2px 0; }
 
-.deal-row { display:flex; gap:14px; align-items:flex-start; min-height:120px; }
+/* 하단: 딜 영역 (전체 폭) */
+.deal-area { background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:14px; }
+.deal-row { display:flex; gap:14px; align-items:center; min-height:130px; }
 .piles { display:flex; gap:8px; }
-.dealt { display:flex; flex-wrap:wrap; gap:8px; flex:1; }
+.deal-arrow { font-size:12px; font-weight:800; letter-spacing:.06em; color:var(--muted); white-space:nowrap; }
+.dealt { display:flex; gap:10px; flex:1; overflow-x:auto; padding-bottom:6px; align-items:center; min-height:120px; }
 .deal-controls { display:flex; gap:10px; margin-top:14px; align-items:center; }
 
-.shop-spread { display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
+/* 딜 fly-in: 덱(좌)에서 날아와 펼쳐짐 */
+.deal-in { opacity:0; animation: dealIn .42s cubic-bezier(.2,.7,.3,1) forwards; }
+@keyframes dealIn {
+  0%   { opacity:0; transform: translate(-90px,16px) scale(.82) rotate(-6deg); }
+  70%  { opacity:1; }
+  100% { opacity:1; transform: translate(0,0) scale(1) rotate(0); }
+}
+@keyframes pop { 0%{ transform:scale(.8);} 60%{ transform:scale(1.06);} 100%{ transform:scale(1);} }
 
 /* ── 카드 오브젝트 ───────────────────────────────── */
 .gcard { position:relative; background:#fff; border:1.5px solid var(--ink); border-radius:8px; overflow:hidden; display:flex; flex-direction:column; box-shadow: 1px 2px 0 rgba(0,0,0,.06); }
@@ -101,7 +121,7 @@ h1,h2,h3 { font-weight: 800; margin: 0; }
 
 .gcard.is-clickable { cursor:pointer; transition:.12s; }
 .gcard.is-clickable:hover:not(.is-disabled) { transform: translateY(-3px); box-shadow: 1px 5px 0 rgba(0,0,0,.1); }
-.gcard.is-selected { outline: 3px solid var(--thought); outline-offset: 1px; }
+.gcard.is-selected { outline: 3px solid var(--thought); outline-offset: 1px; transform: translateY(-6px); box-shadow: 1px 8px 0 rgba(0,0,0,.12); }
 .gcard.is-disabled { opacity:.45; cursor:default; }
 
 /* 더미 */
