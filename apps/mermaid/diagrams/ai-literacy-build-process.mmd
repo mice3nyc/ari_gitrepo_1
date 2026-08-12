@@ -1,0 +1,49 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#ffffff', 'primaryBorderColor': '#000000', 'primaryTextColor': '#000000', 'lineColor': '#000000', 'secondaryColor': '#f5f5f5', 'tertiaryColor': '#ffffff', 'fontFamily': 'sans-serif'}}}%%
+
+graph TD
+
+    META["<b>build.py 빌드 프로세스</b><br/>인자에 따라 4갈래 · 변종은 CONFIG 키 분리주입<br/><i>one script, four modes</i>"]
+    style META fill:#000000,stroke:#000000,color:#ffffff,stroke-width:3px
+
+    BUILD["<b>python3 build.py [인자]</b><br/>src/ + data/*.yaml 합침<br/><i>entry</i>"]
+    style BUILD fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== 4 MODES =====
+    ROOT["<b>인자 없음 → 루트 index.html</b><br/>개발·로컬 플레이테스트 · debug ON · ../images 참조<br/><i>build_root()</i>"]
+    style ROOT fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    VMID["<b>--variant=mid → builds/mid/</b><br/>키 그대로 · debug OFF<br/><i>배포 빌드</i>"]
+    style VMID fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    VELEM["<b>--variant=elem → builds/elem/</b><br/>CONFIG 키 -elem 분리 · gameId el · 초등 5종 · debug OFF<br/><i>배포 빌드</i>"]
+    style VELEM fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    DEV["<b>--dev → builds/(v)-dev/</b><br/>변종이지만 debug ON 유지<br/><i>개발 라이브 테스트</i>"]
+    style DEV fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+
+    REL["<b>--release → +terser minify</b><br/>없으면 평문 유지(경고)<br/><i>optional</i>"]
+    style REL fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+
+    %% ===== VARIANT INJECTION =====
+    INJ["<b>변종 CONFIG 주입 (정확 문자열 교체)</b><br/>storageKey · eventLogKey · sessionIdKey · outboxKey<br/>version · gameId(md→el) · debug · 시나리오 배열<br/><i>VARIANT_CONFIG_REPLACEMENTS</i>"]
+    style INJ fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    SELF["<b>자기완결 처리</b><br/>../images→images · ../fonts→fonts 재작성 + 에셋 폴더 복사<br/><i>_copy_assets — 폴더 통째 배포 단위</i>"]
+    style SELF fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    VERIFY["<b>빌드 시 정합 검증</b><br/>시나리오 키 순서 · micro_offsets/ai_flags id 전수 일치<br/><i>틀리면 빌드 중단(sys.exit)</i>"]
+    style VERIFY fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== FLOW =====
+    META --- BUILD
+    BUILD --> VERIFY
+    VERIFY --> ROOT
+    VERIFY --> VMID
+    VERIFY --> VELEM
+    VMID --> INJ
+    VELEM --> INJ
+    INJ --> SELF
+    VMID -.-> DEV
+    VELEM -.-> DEV
+    VMID -.-> REL
+    VELEM -.-> REL

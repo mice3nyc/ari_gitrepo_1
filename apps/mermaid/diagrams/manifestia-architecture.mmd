@@ -1,0 +1,91 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#ffffff', 'primaryBorderColor': '#000000', 'primaryTextColor': '#000000', 'lineColor': '#000000', 'secondaryColor': '#f5f5f5', 'tertiaryColor': '#ffffff', 'fontFamily': 'sans-serif'}}}%%
+
+graph TD
+
+    %% ===== META-STATEMENT (top) =====
+    META["<b>Manifestia 아키텍처</b><br/>실선 = 빌드 완료 · 점선 = 2단계 예정<br/><i>Solid = built · Dashed = stage 2 planned</i>"]
+    style META fill:#000000,stroke:#000000,color:#ffffff,stroke-width:3px
+
+    %% ===== LAYER LABELS =====
+    L_CLIENT["클라이언트 화면 Client / React+Vite"]
+    style L_CLIENT fill:#000000,stroke:#000000,color:#ffffff
+    L_STORE["추상화 레이어 Abstraction"]
+    style L_STORE fill:#000000,stroke:#000000,color:#ffffff
+    L_DATA["데이터 소스 Data"]
+    style L_DATA fill:#000000,stroke:#000000,color:#ffffff
+    L_SERVER["2단계 서버 Stage 2 / 독립서버"]
+    style L_SERVER fill:#000000,stroke:#000000,color:#ffffff
+
+    %% ===== CLIENT: ROUTER =====
+    APP["<b>App.jsx</b><br/>BrowserRouter + RequireCharacter 가드<br/><i>route guard</i>"]
+    style APP fill:#ffffff,stroke:#000000,stroke-width:3px
+    NAV["<b>NavBar</b><br/>하단 4탭 네비<br/><i>bottom tab nav</i>"]
+    style NAV fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== CLIENT: SCREENS (built solid) =====
+    S_CHAR["<b>① 캐릭터 선택</b><br/>4유형 자유 선택 → initPlayer<br/><i>CharacterSelect — built</i>"]
+    style S_CHAR fill:#ffffff,stroke:#000000,stroke-width:3px
+    S_MATCH["<b>② 포스터 매칭</b><br/>번호 입력 → 별점 판정 → 단어 획득·득점<br/><i>PosterMatch — built</i>"]
+    style S_MATCH fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== CLIENT: SCREENS (planned dashed) =====
+    S_MANI["<b>③ 매니페스토 쓰기</b><br/>인벤토리 칩 조립 → 제출(소모+득점)<br/><i>ComingSoon placeholder</i>"]
+    style S_MANI fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+    S_VOTE["<b>④ 투표</b><br/>월드컵 2지선다 · 클릭당 +1<br/><i>ComingSoon placeholder</i>"]
+    style S_VOTE fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+
+    %% ===== ABSTRACTION LAYER (the seam) =====
+    STORE["<b>store/index.js</b><br/>포스터 조회 + PlayerState 단일 진입점<br/>2단계엔 내부만 API로 교체 (화면 불변)<br/><i>swap seam for server</i>"]
+    style STORE fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== DATA SOURCES =====
+    LS["<b>localStorage</b><br/>prefix mnf_proto_<br/><i>player state</i>"]
+    style LS fill:#ffffff,stroke:#000000,stroke-width:3px
+    POSTERS["<b>posters.json</b><br/>120 포스터 · 480 단어 전부 고유<br/><i>validated</i>"]
+    style POSTERS fill:#ffffff,stroke:#000000,stroke-width:3px
+    I18N["<b>i18n/ko.json</b><br/>전 UI 텍스트 키 분리<br/><i>de/en 시트 교체 대비</i>"]
+    style I18N fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== STAGE 2 SERVER (dashed) =====
+    API["<b>서버 API</b><br/>독립서버 · server-authoritative<br/><i>replaces localStorage</i>"]
+    style API fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+    SESSION["<b>세션 관리</b><br/>세션코드 · 시간모드 · 캐릭터배정 · QR 프리필<br/><i>School / Drop-in / Evening</i>"]
+    style SESSION fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+    ADMIN["<b>관리자 콘솔</b><br/>세션 생성·시작/종료 제어·모니터<br/><i>operator console</i>"]
+    style ADMIN fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+    RT["<b>실시간 투표 + 디스플레이</b><br/>타인 매니페스토 풀 · LED wall 모듈<br/><i>websocket</i>"]
+    style RT fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+
+    %% ===== LABEL ANCHORS =====
+    L_CLIENT -.- APP
+    L_STORE -.- STORE
+    L_DATA -.- POSTERS
+    L_SERVER -.- API
+
+    %% ===== FLOW: META =====
+    META --- APP
+
+    %% ===== FLOW: ROUTER -> SCREENS =====
+    APP --> S_CHAR
+    APP --> S_MATCH
+    APP -.-> S_MANI
+    APP -.-> S_VOTE
+    APP --- NAV
+
+    %% ===== FLOW: SCREENS -> STORE =====
+    S_CHAR --> STORE
+    S_MATCH --> STORE
+    S_MANI -.-> STORE
+    S_VOTE -.-> STORE
+
+    %% ===== FLOW: STORE -> DATA =====
+    STORE --> LS
+    STORE --> POSTERS
+    S_CHAR -.->|UI 텍스트| I18N
+    S_MATCH -.->|UI 텍스트| I18N
+
+    %% ===== FLOW: STAGE 2 SEAM =====
+    STORE -.->|"2단계: 교체"| API
+    API -.-> SESSION
+    API -.-> ADMIN
+    API -.-> RT

@@ -1,0 +1,58 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#ffffff', 'primaryBorderColor': '#000000', 'primaryTextColor': '#000000', 'lineColor': '#000000', 'secondaryColor': '#f5f5f5', 'tertiaryColor': '#ffffff', 'fontFamily': 'sans-serif'}}}%%
+
+graph TD
+
+    %% ===== META-STATEMENT (top) =====
+    META["<b>대상화는 몰입의 결함이 아니라 전제</b><br/>Objectification is not a flaw in immersion<br/><i>but its very precondition</i>"]
+    style META fill:#000000,stroke:#000000,color:#ffffff,stroke-width:3px
+
+    %% ===== 통념 (반려) =====
+    MYTH["<b>통념</b> 몰입 = 동일시<br/>내가 그 인물이 된다<br/><i>거리 0 = 미적 경험 붕괴</i>"]
+    style MYTH fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+
+    %% ===== 핵심 사슬 =====
+    A1["<b>제삼자 = 대상화</b><br/>앞에 세움 Vor-stellung<br/><i>인물이 나와 분리되어 선다</i>"]
+    style A1 fill:#ffffff,stroke:#000000,stroke-width:3px
+    A2["<b>심리적 거리</b><br/><i>Psychical Distance</i>"]
+    style A2 fill:#ffffff,stroke:#000000,stroke-width:3px
+    A3["<b>안전한 위탁</b><br/>그의 믿음·감정을 빌린다"]
+    style A3 fill:#ffffff,stroke:#000000,stroke-width:3px
+    A4["<b>몰입 · 공감</b><br/><i>감정은 결과로 따라온다</i>"]
+    style A4 fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== 이론 받침 =====
+    T1["불로프 1912<br/>거리의 이율배반<br/><i>최소 거리, 그러나 0은 아니게</i>"]
+    style T1 fill:#f5f5f5,stroke:#000000,stroke-width:1px
+    T2["캐럴 · 머레이 스미스<br/>동일시 비판 · 관찰자 구조<br/><i>되는 게 아니라 곁에서 본다</i>"]
+    style T2 fill:#f5f5f5,stroke:#000000,stroke-width:1px
+    T3["아리스토텔레스<br/>연민 = 남의 부당한 몰락을 봄"]
+    style T3 fill:#f5f5f5,stroke:#000000,stroke-width:1px
+    T4["드세티 신경과학<br/>자기-타자 구분 = 공감의 전제<br/><i>경계 무너지면 정서적 전염</i>"]
+    style T4 fill:#f5f5f5,stroke:#000000,stroke-width:1px
+
+    %% ===== 반대 진영 =====
+    OPP["갈레세 · 게라<br/>체화된 시뮬레이션 동일시 진영<br/><i>몸으로 인물을 따라 한다</i>"]
+    style OPP fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+
+    %% ===== 분기: 영화 vs 게임 =====
+    FILM["<b>영화</b> 거리 &gt; 0<br/>빌린다 · 관람"]
+    style FILM fill:#ffffff,stroke:#000000,stroke-width:3px
+    GAME["<b>게임</b> 거리 = 0<br/>내가 직접 한다 · 플레이"]
+    style GAME fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== 연결 =====
+    META --- A1
+    MYTH -.->|"이 자리를 반박"| A1
+    A1 -->|"세움이 곧 거리"| A2
+    A2 -->|"거리가 위탁을 연다"| A3
+    A3 --> A4
+
+    T1 -.- A2
+    T2 -.- A3
+    T3 -.- A4
+    T4 -.- A1
+
+    OPP -.->|"그러나 자기-타자 경계는 유지된다<br/>→ 주장 보강"| A1
+
+    A2 ==>|"거리가 있으면"| FILM
+    A2 ==>|"거리가 0이면"| GAME

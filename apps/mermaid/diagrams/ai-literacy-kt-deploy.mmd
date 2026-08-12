@@ -1,0 +1,48 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#ffffff', 'primaryBorderColor': '#000000', 'primaryTextColor': '#000000', 'lineColor': '#000000', 'secondaryColor': '#f5f5f5', 'tertiaryColor': '#ffffff', 'fontFamily': 'sans-serif'}}}%%
+
+graph TD
+
+    META["<b>KT 전달 + 참여 로깅 흐름</b><br/>정적 폴더 전달 · URL이 곧 변종 · 로깅은 Lambda 화이트리스트가 게이트<br/>실선 = 작동 경로 · 점선 = 미구현/외부 대기"]
+    style META fill:#000000,stroke:#000000,color:#ffffff,stroke-width:3px
+
+    %% ===== ARTIFACT =====
+    ART["<b>builds/mid/ + builds/elem/</b><br/>각 폴더 자기완결 (index.html + images + fonts)<br/><i>완성된 정적 묶음 — 동현공은 빌드 안 돌림</i>"]
+    style ART fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== DEPLOY =====
+    AWS["<b>동현공 — AWS 업로드</b><br/>S3/CloudFront에 폴더 통째 · 캐시 무효화<br/><i>static host</i>"]
+    style AWS fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    URL["<b>변종별 URL 2개</b><br/>중등 URL → builds/mid · 초등 URL → builds/elem<br/><i>URL이 곧 변종 (런타임 판별 없음)</i>"]
+    style URL fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    KT["<b>KT → 학생 브라우저</b><br/>전 상태 클라이언트 localStorage · 서버 DB 없음<br/><i>키 분리로 중등/초등 안 엉킴</i>"]
+    style KT fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== LOGGING =====
+    TRIG["<b>game_start 로그 (한 판 1회)</b><br/>튜토리얼 끝 → 시나리오 선택 진입 시<br/><i>fire-and-forget, 게임 흐름 안 막음</i>"]
+    style TRIG fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    BODY["<b>본문 (≤1KB)</b><br/>eventType game_start · gameId md/el · clientId UUID · ts<br/><i>개인정보 없음</i>"]
+    style BODY fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    LAMBDA["<b>POST /log → Lambda</b><br/>w0a7nvx7qd...ap-northeast-2<br/><i>참여 로깅만 — gameplay와 무관</i>"]
+    style LAMBDA fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    WL["<b>★ Lambda 화이트리스트 등록 (BLOCKING)</b><br/>ALLOWED_GAME_IDS += md, el · ALLOWED_ORIGINS += 배포 도메인<br/><i>안 하면 403/400 — 동현공 외부 대기</i>"]
+    style WL fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+
+    %% ===== SEPARATE SYSTEM =====
+    PLAY["<b>08b play-record (별개 시스템)</b><br/>판별 풍부한 per-play 분석 → localStorage outbox<br/><i>서버 전송 미구현 — /log와 혼동 금지</i>"]
+    style PLAY fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+
+    %% ===== FLOW =====
+    META --- ART
+    ART --> AWS
+    AWS --> URL
+    URL --> KT
+    KT --> TRIG
+    TRIG --> BODY
+    BODY --> LAMBDA
+    WL -.->|"등록돼야 200"| LAMBDA
+    KT -.-> PLAY

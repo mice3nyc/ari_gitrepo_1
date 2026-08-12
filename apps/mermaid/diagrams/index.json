@@ -1,5 +1,40 @@
 [
   {
+    "id": "ai-literacy-build-architecture",
+    "name": "AI리터러시 빌드 구성 — 분산 소스→단일 HTML, 중등/초등 두 진실원",
+    "file": "ai-literacy-build-architecture.mmd",
+    "favorite": true,
+    "updatedAt": 1782103256
+  },
+  {
+    "id": "ai-literacy-build-process",
+    "name": "AI리터러시 build.py 프로세스 — 4갈래 모드 + 변종 CONFIG 주입",
+    "file": "ai-literacy-build-process.mmd",
+    "favorite": true,
+    "updatedAt": 1782103256
+  },
+  {
+    "id": "ai-literacy-kt-deploy",
+    "name": "AI리터러시 KT 전달 + 참여 로깅 — 정적 폴더→AWS→Lambda",
+    "file": "ai-literacy-kt-deploy.mmd",
+    "favorite": true,
+    "updatedAt": 1782103256
+  },
+  {
+    "id": "manifestia-architecture",
+    "name": "Manifestia 아키텍처 — 1단계 빌드 현황 + 2단계 서버 이음매",
+    "file": "manifestia-architecture.mmd",
+    "favorite": true,
+    "updatedAt": 1782086318
+  },
+  {
+    "id": "objectification-immersion",
+    "name": "영화는 내가 아니라서 작동한다 — 대상화가 몰입의 전제",
+    "file": "objectification-immersion.mmd",
+    "favorite": true,
+    "updatedAt": 1780804239
+  },
+  {
     "id": "weekly-review-26-W20-njp",
     "name": "26-W20 주간 회고 (NJP 스타일) — 사유의 확산·수렴·연결",
     "file": "weekly-review-26-W20-njp.mmd",

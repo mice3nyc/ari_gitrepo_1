@@ -1,0 +1,55 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#ffffff', 'primaryBorderColor': '#000000', 'primaryTextColor': '#000000', 'lineColor': '#000000', 'secondaryColor': '#f5f5f5', 'tertiaryColor': '#ffffff', 'fontFamily': 'sans-serif'}}}%%
+
+graph TD
+
+    META["<b>AI리터러시 빌드 구성</b><br/>분산 소스 → 단일 HTML · 중등/초등 두 진실원<br/>실선 = 현재 진실원 · 점선 = 6/21 전환 흔적"]
+    style META fill:#000000,stroke:#000000,color:#ffffff,stroke-width:3px
+
+    %% ===== LAYER LABELS =====
+    L_SRC["진실원 Source of truth"]
+    style L_SRC fill:#000000,stroke:#000000,color:#ffffff
+    L_BUILD["빌드 도구 Build"]
+    style L_BUILD fill:#000000,stroke:#000000,color:#ffffff
+    L_OUT["산출물 Output"]
+    style L_OUT fill:#000000,stroke:#000000,color:#ffffff
+
+    %% ===== 중등 v13-mid (진실원) =====
+    MID_SRC["<b>v13-mid · 중등 (1차 KT)</b><br/>src/index.shell.html · src/js/*.js · src/styles/*.css<br/><i>shell + modules + styles</i>"]
+    style MID_SRC fill:#ffffff,stroke:#000000,stroke-width:3px
+    MID_DATA["<b>data/*.yaml</b><br/>scenarios · cuts · texts · micro_offsets · ai_flags<br/><i>중등 5종: selfintro·groupwork·eorinwangja·career·studyplan</i>"]
+    style MID_DATA fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== 초등 v13-elem (6/21 분리) =====
+    ELEM["<b>v13-elem · 초등 (6/21 별도 폴더 분리)</b><br/>중등 src 복사 + 자체 data(초등 5종) + 자체 images 125장<br/><i>bookreport·animaltalk·jobcard·classmascot·historycheck</i>"]
+    style ELEM fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== 공유 에셋 =====
+    ASSETS["<b>부모 루트 공유 에셋</b><br/>images/ 135장(중등 컷) · fonts/ Galmuri11·Mulmaru<br/><i>elem은 자체 images로 분리</i>"]
+    style ASSETS fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== build.py =====
+    BUILD["<b>build.py</b><br/>소스 합침 + 데이터 주입 + 정합 검증<br/><i>concat + inject + verify</i>"]
+    style BUILD fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== 산출물 =====
+    INDEX["<b>index.html (단일 파일)</b><br/>CSS+JS+데이터 전부 인라인 · 손수정 금지<br/><i>generated, never hand-edit</i>"]
+    style INDEX fill:#ffffff,stroke:#000000,stroke-width:3px
+
+    %% ===== 옛 방식 (전환 흔적) =====
+    OLD["<b>v13-mid/builds/elem (옛 오버레이 방식)</b><br/>6/18 KT 전달 당시 초등=중등 동일분<br/><i>6/21 v13-elem 분리로 대체 — 확인 필요</i>"]
+    style OLD fill:#ffffff,stroke:#000000,stroke-width:2px,stroke-dasharray: 8 4
+
+    %% ===== LABEL ANCHORS =====
+    L_SRC -.- MID_SRC
+    L_BUILD -.- BUILD
+    L_OUT -.- INDEX
+
+    META --- MID_SRC
+
+    %% ===== FLOW =====
+    MID_SRC --> BUILD
+    MID_DATA --> BUILD
+    ASSETS --> BUILD
+    ELEM --> BUILD
+    BUILD --> INDEX
+    ELEM -.->|"6/21 이전 방식"| OLD
