@@ -1,0 +1,41 @@
+<!-- @dsCard group="Manifestia 와이어프레임" -->
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>04 단어주머니</title>
+<style>
+@font-face{font-family:'Paperlogy';src:url('assets/fonts/Paperlogy-4Regular.ttf');font-weight:400}
+@font-face{font-family:'Paperlogy';src:url('assets/fonts/Paperlogy-7Bold.ttf');font-weight:700}
+@font-face{font-family:'Paperlogy';src:url('assets/fonts/Paperlogy-9Black.ttf');font-weight:900}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Paperlogy',-apple-system,sans-serif}
+body{background:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:28px}
+.phone{width:390px;height:844px;background:#fff;border:10px solid #111;border-radius:42px;overflow:hidden;display:flex;flex-direction:column}
+.status{height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;flex:0 0 auto;font-weight:700}
+.screen{flex:1 1 auto;padding:22px;display:flex;flex-direction:column;overflow:hidden}
+.title{font-size:24px;font-weight:900;letter-spacing:-.5px}
+.muted{color:#999}
+.wrap{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px;align-content:flex-start;flex:1;overflow:hidden}
+.chip{border:2px solid #111;background:#fff;border-radius:20px;padding:9px 15px;font-size:14px;font-weight:700}
+.chip.used{background:#fff;color:#bbb;border-style:dashed;border-color:#ccc;text-decoration:line-through}
+.nav{flex:0 0 auto;height:66px;border-top:3px solid #111;display:flex;background:#fff}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#bbb;gap:4px;border-right:1px dashed #ddd}
+.tab:last-child{border-right:none}.tab.on{color:#fff;font-weight:900;background:#111}
+.ico{width:20px;height:20px;border:2px solid currentColor;border-radius:4px}
+</style></head>
+<body><div class="phone">
+<div class="status"><span>12:30</span><span>전사 · 35점</span></div>
+<div class="screen">
+  <div class="title">내 단어 가방</div>
+  <div class="muted" style="font-size:13px;margin-top:6px">12개 · 쓴 단어는 사라져요 (소모성)</div>
+  <div class="wrap">
+    <span class="chip">슬픔</span><span class="chip">고통</span><span class="chip">하악하악</span>
+    <span class="chip">펑!</span><span class="chip">망설임</span><span class="chip">분노</span>
+    <span class="chip">상처</span><span class="chip">조용함</span><span class="chip">이해</span>
+    <span class="chip">의도</span><span class="chip">마음</span><span class="chip">기쁨</span>
+    <span class="chip used">포기</span>
+  </div>
+</div>
+<div class="nav">
+  <div class="tab"><div class="ico"></div>매칭</div>
+  <div class="tab on"><div class="ico"></div>주머니</div>
+  <div class="tab"><div class="ico"></div>쓰기</div>
+  <div class="tab"><div class="ico"></div>투표</div>
+</div>
+</div></body></html>

@@ -1,0 +1,39 @@
+<!-- @dsCard group="Manifestia 와이어프레임" -->
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>06 투표</title>
+<style>
+@font-face{font-family:'Paperlogy';src:url('assets/fonts/Paperlogy-4Regular.ttf');font-weight:400}
+@font-face{font-family:'Paperlogy';src:url('assets/fonts/Paperlogy-7Bold.ttf');font-weight:700}
+@font-face{font-family:'Paperlogy';src:url('assets/fonts/Paperlogy-9Black.ttf');font-weight:900}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Paperlogy',-apple-system,sans-serif}
+body{background:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:28px}
+.phone{width:390px;height:844px;background:#fff;border:10px solid #111;border-radius:42px;overflow:hidden;display:flex;flex-direction:column}
+.status{height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;flex:0 0 auto;font-weight:700}
+.screen{flex:1 1 auto;padding:22px;display:flex;flex-direction:column;overflow:hidden}
+.title{font-size:23px;font-weight:900;letter-spacing:-.5px}
+.muted{color:#999}
+.opt{border:3px solid #111;background:#fff;border-radius:12px;padding:22px 18px;font-size:17px;font-weight:700;line-height:1.5;flex:1;display:flex;align-items:center}
+.vs{text-align:center;font-weight:900;font-size:14px;color:#bbb;margin:12px 0}
+.col{display:flex;flex-direction:column;flex:1;margin-top:16px}
+.nav{flex:0 0 auto;height:66px;border-top:3px solid #111;display:flex;background:#fff}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#bbb;gap:4px;border-right:1px dashed #ddd}
+.tab:last-child{border-right:none}.tab.on{color:#fff;font-weight:900;background:#111}
+.ico{width:20px;height:20px;border:2px solid currentColor;border-radius:4px}
+</style></head>
+<body><div class="phone">
+<div class="status"><span>12:30</span><span>전사 · 55점</span></div>
+<div class="screen">
+  <div class="title">둘 중 하나를 선택</div>
+  <div class="muted" style="font-size:13px;margin-top:6px">투표할 때마다 +1점</div>
+  <div class="col">
+    <div class="opt">"예술성이란 어린아이에 불과한 알맹이를 잃는 것이다"</div>
+    <div class="vs">VS</div>
+    <div class="opt">"슬픔과 고통을 거쳐야 예술이 된다"</div>
+  </div>
+</div>
+<div class="nav">
+  <div class="tab"><div class="ico"></div>매칭</div>
+  <div class="tab"><div class="ico"></div>주머니</div>
+  <div class="tab"><div class="ico"></div>쓰기</div>
+  <div class="tab on"><div class="ico"></div>투표</div>
+</div>
+</div></body></html>

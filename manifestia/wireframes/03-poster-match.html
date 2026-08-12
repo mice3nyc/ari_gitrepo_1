@@ -1,0 +1,42 @@
+<!-- @dsCard group="Manifestia 와이어프레임" -->
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>03 포스터 매칭</title>
+<style>
+@font-face{font-family:'Paperlogy';src:url('assets/fonts/Paperlogy-4Regular.ttf');font-weight:400}
+@font-face{font-family:'Paperlogy';src:url('assets/fonts/Paperlogy-7Bold.ttf');font-weight:700}
+@font-face{font-family:'Paperlogy';src:url('assets/fonts/Paperlogy-9Black.ttf');font-weight:900}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Paperlogy',-apple-system,sans-serif}
+body{background:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:28px}
+.phone{width:390px;height:844px;background:#fff;border:10px solid #111;border-radius:42px;overflow:hidden;display:flex;flex-direction:column}
+.status{height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;flex:0 0 auto;font-weight:700}
+.screen{flex:1 1 auto;padding:22px;display:flex;flex-direction:column;overflow:hidden}
+.title{font-size:22px;font-weight:900;letter-spacing:-.5px}
+.in{border:3px solid #111;background:#fff;border-radius:10px;padding:14px;font-size:22px;font-weight:900;letter-spacing:6px;text-align:center;margin-top:12px}
+.chip{border:2px solid #111;background:#fff;border-radius:20px;padding:7px 13px;font-size:13px;font-weight:700}
+.wrap{display:flex;flex-wrap:wrap;gap:8px}
+.nav{flex:0 0 auto;height:66px;border-top:3px solid #111;display:flex;background:#fff}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:#bbb;gap:4px;border-right:1px dashed #ddd}
+.tab:last-child{border-right:none}.tab.on{color:#fff;font-weight:900;background:#111}
+.ico{width:20px;height:20px;border:2px solid currentColor;border-radius:4px}
+.result{background:#f4d000;border:3px solid #111;border-radius:12px;padding:16px;margin-top:16px;flex:1;display:flex;flex-direction:column;gap:10px}
+.laurel{width:62px;height:62px;border:3px solid #111;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;align-self:center}
+</style></head>
+<body><div class="phone">
+<div class="status"><span>12:30</span><span>전사 · 35점</span></div>
+<div class="screen">
+  <div class="title">포스터 번호 입력</div>
+  <div class="in">1 0 2 4</div>
+  <div class="result">
+    <div class="laurel">★★★★</div>
+    <div style="text-align:center;font-weight:900;font-size:14px">100% 일치! 4단어 전부 획득</div>
+    <div style="background:#fff;border:3px solid #111;border-radius:8px;padding:12px;font-size:14px;line-height:1.5">"슬픔과 고통을 거쳐야<br>예술이 된다" — 피카소</div>
+    <div class="wrap" style="justify-content:center"><span class="chip">슬픔</span><span class="chip">고통</span><span class="chip">하악하악</span><span class="chip">펑!</span></div>
+    <div style="text-align:center;font-weight:900;font-size:13px">+5점 · 단어주머니에 담김</div>
+  </div>
+</div>
+<div class="nav">
+  <div class="tab on"><div class="ico"></div>매칭</div>
+  <div class="tab"><div class="ico"></div>주머니</div>
+  <div class="tab"><div class="ico"></div>쓰기</div>
+  <div class="tab"><div class="ico"></div>투표</div>
+</div>
+</div></body></html>

@@ -1,0 +1,34 @@
+<!-- @dsCard group="Manifestia 와이어프레임" -->
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>02 캐릭터 선택</title>
+<style>
+@font-face{font-family:'Paperlogy';src:url('assets/fonts/Paperlogy-4Regular.ttf');font-weight:400}
+@font-face{font-family:'Paperlogy';src:url('assets/fonts/Paperlogy-7Bold.ttf');font-weight:700}
+@font-face{font-family:'Paperlogy';src:url('assets/fonts/Paperlogy-9Black.ttf');font-weight:900}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Paperlogy',-apple-system,sans-serif}
+body{background:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:28px}
+.phone{width:390px;height:844px;background:#fff;border:10px solid #111;border-radius:42px;overflow:hidden;display:flex;flex-direction:column}
+.status{height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;flex:0 0 auto;font-weight:700}
+.screen{flex:1 1 auto;padding:24px 22px;display:flex;flex-direction:column;overflow:hidden}
+.title{font-size:25px;font-weight:900;letter-spacing:-.6px}
+.muted{color:#999}
+.btn{border:3px solid #111;background:#111;color:#fff;font-weight:900;padding:15px;border-radius:10px;text-align:center;font-size:15px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;flex:1}
+.cell{border:2px solid #ddd;border-radius:12px;overflow:hidden;position:relative;background:#fff;display:flex}
+.cell img{width:100%;height:100%;object-fit:cover;display:block}
+.cell.on{border:4px solid #111}
+.cell.on::after{content:'선택됨';position:absolute;left:8px;bottom:8px;background:#111;color:#fff;font-size:11px;font-weight:900;padding:4px 9px;border-radius:12px}
+</style></head>
+<body><div class="phone">
+<div class="status"><span>12:30</span><span>▦ ▮</span></div>
+<div class="screen">
+  <div class="title">캐릭터를 선택하세요</div>
+  <div class="muted" style="font-size:13px;margin-top:6px">캐릭터가 곧 포스터 매칭 규칙이 됩니다</div>
+  <div class="grid">
+    <div class="cell"><img src="assets/char/card_healer.png" alt="치유자"></div>
+    <div class="cell on"><img src="assets/char/card_tanker.png" alt="전사"></div>
+    <div class="cell"><img src="assets/char/card_illusionist.png" alt="환영가"></div>
+    <div class="cell"><img src="assets/char/card_prof.png" alt="교수"></div>
+  </div>
+  <div class="btn" style="margin-top:16px">이 캐릭터로 시작하기</div>
+</div>
+</div></body></html>

@@ -1,0 +1,6760 @@
+{
+ "schema": "manifestia-prototype-1",
+ "baseline": "korean",
+ "count": 120,
+ "temp_coded": 14,
+ "posters": [
+  {
+   "poster_no": "58543",
+   "artist_ko": "알렉산드르 솔제니친",
+   "affinity": [
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "따라서",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "정부",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "위대한",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "멍멍",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "위대한 작가는 제2의 정부다. 따라서 어떤 정권도 위대한 작가를 좋아하지 않는다."
+  },
+  {
+   "poster_no": "98977",
+   "artist_ko": "장 폴 사르트르",
+   "affinity": [
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "스스로",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "거부",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "제도화",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "야옹",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "작가는 스스로 제도화되기를 거부해야 한다."
+  },
+  {
+   "poster_no": "36853",
+   "artist_ko": "빅토르 위고",
+   "affinity": [
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "예술",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "아름다움",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "진보",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "우당탕",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "예술을 위한 예술이 아름다울지도 모른다. 그러나 진보를 위한 예술은 더 아름답다."
+  },
+  {
+   "poster_no": "59506",
+   "artist_ko": "요한 볼프강 폰 괴테",
+   "affinity": [
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "대중",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "시중",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "가련한",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "가물가물",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "대중의 시중을 드는 자는 가련한 동물이다."
+  },
+  {
+   "poster_no": "34833",
+   "artist_ko": "요한 볼프강 폰 괴테",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "꽃",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "자연",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "엮다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "힐끔힐끔",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "꽃을 주는 것은 자연이고 그 꽃을 엮어 화환을 만드는 것은 예술이다."
+  },
+  {
+   "poster_no": "52003",
+   "artist_ko": "요한 볼프강 폰 괴테",
+   "affinity": [
+    "PROFESSOR",
+    "HEALER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "괴로움",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "남기다",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "고난",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "까꿍",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "괴로움이 남기고 간 것을 맛보라. 고난도 지나면 감미롭다."
+  },
+  {
+   "poster_no": "63546",
+   "artist_ko": "요한 볼프강 폰 괴테",
+   "affinity": [
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "혼자",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "천국",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "살다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "메롱",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나 혼자 천국에 사는 것보다 더 큰 형벌은 없다."
+  },
+  {
+   "poster_no": "11367",
+   "artist_ko": "요한 볼프강 폰 괴테",
+   "affinity": [
+    "PROFESSOR",
+    "HEALER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "인간",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "나",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "싸우다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "허둥지둥",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나는 인간이었다. 그것은 싸우며 자란 것을 의미한다."
+  },
+  {
+   "poster_no": "49172",
+   "artist_ko": "요한 볼프강 폰 괴테",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "세상",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "해방",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "관계",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "바짝",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "세상에서 해방되려면 예술보다 좋은 것이 없다. 세상과 확실하게 관계 맺을 때도 예술을 통하는 것이 좋다."
+  },
+  {
+   "poster_no": "60423",
+   "artist_ko": "요한 볼프강 폰 괴테",
+   "affinity": [
+    "ILLUSIONIST",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "할 수 있다",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "시작",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "개이득",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "후후",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "당신이 할 수 있거나 할 수 있다고 꿈꾸는 그 모든 일을 시작하라. 새로운 일을 시작하는 용기 속에 당신의 천재성과 능력, 그리고 기적이 모두 숨어 있다."
+  },
+  {
+   "poster_no": "35893",
+   "artist_ko": "백남준",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "1등",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "맛",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "아니다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "보송보송",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "예술은 1등을 매기는 것이 아니다. 다른 것을 맛보는 것일 뿐이다."
+  },
+  {
+   "poster_no": "68927",
+   "artist_ko": "오귀스트 로댕",
+   "affinity": [
+    "PROFESSOR",
+    "HEALER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "감동",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "사랑",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "요동",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "삐약삐약",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "감동하고 사랑하며 요동치고 살아라."
+  },
+  {
+   "poster_no": "49074",
+   "artist_ko": "랄프 왈도 에머슨",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "예술가",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "처음",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "아마추어",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "주륵주륵",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "위대한 예술가도 처음에는 아마추어였다."
+  },
+  {
+   "poster_no": "99221",
+   "artist_ko": "파블로 피카소",
+   "affinity": [
+    "ILLUSIONIST",
+    "HEALER",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "슬픔",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "고통",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "되다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "꺄르르",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "슬픔과 고통을 거쳐야 예술이 된다."
+  },
+  {
+   "poster_no": "18539",
+   "artist_ko": "파블로 피카소",
+   "affinity": [
+    "ILLUSIONIST",
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "좋은",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "베끼다",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "훔치다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "반짝반짝",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "좋은 예술가는 베끼고 위대한 예술가는 훔친다."
+  },
+  {
+   "poster_no": "14270",
+   "artist_ko": "오귀스트 르누아르",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "가뜩",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "불쾌",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "투성이",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "하하하",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "가뜩이나 불쾌한 것투성이인 세상에서 굳이 그림마저 아름답지 않은 것까지 그려야 할까?"
+  },
+  {
+   "poster_no": "80172",
+   "artist_ko": "김환기",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "학설",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "하늘",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "산",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "호호호",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "예술은 학설이 아니다. 하늘과 산, 그리고 돌처럼 그냥 존재하는 것이다."
+  },
+  {
+   "poster_no": "30541",
+   "artist_ko": "앙리 마티스",
+   "affinity": [
+    "ILLUSIONIST",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "젊은",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "실수",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "방황",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "깔깔깔",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "젊은 화가여, 실수를 두려워하지 말아라. 방황한들 어떠리, 한 번 방황할 때마다 성장하는 것을!"
+  },
+  {
+   "poster_no": "55157",
+   "artist_ko": "미켈란젤로",
+   "affinity": [
+    "ILLUSIONIST",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "남",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "진전",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "결코",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "딸꾹",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "남의 뒤를 따라가서는 결코 진전할 수 없다."
+  },
+  {
+   "poster_no": "68483",
+   "artist_ko": "살바도르 달리",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "그림",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "숱한",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "비합리",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "송알송알",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "그림이란 숱한 비합리적 상상력에 의해 만들어지는 천연색 사진이다."
+  },
+  {
+   "poster_no": "12355",
+   "artist_ko": "살바도르 달리",
+   "affinity": [
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "마약",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "흡입",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "쇼미더머니",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "인스타그램",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나를 흡입해요. 내가 마약입니다."
+  },
+  {
+   "poster_no": "37542",
+   "artist_ko": "빈센트 반 고흐",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "언젠가",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "물감",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "가치",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "조롱조롱",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "언젠가는 내 그림이 물감값보다 가치 있다는 걸 알아줄 때가 올 것이다."
+  },
+  {
+   "poster_no": "56910",
+   "artist_ko": "장 프랑수아 밀레",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "다르다",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "먼저",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "입덕",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "총총",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "다른 사람을 감동시키려면 먼저 내가 감동해야 한다."
+  },
+  {
+   "poster_no": "91216",
+   "artist_ko": "앤디 워홀",
+   "affinity": [
+    "ILLUSIONIST",
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "필요",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "없다",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "생산",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "펄쩍",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "예술가는 사람들이 가질 필요가 없는 것을 생산하는 사람이다."
+  },
+  {
+   "poster_no": "72395",
+   "artist_ko": "앤디 워홀",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "토지",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "소유",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "모두",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "후비적후비적",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나는 토지를 소유하고 그것을 망치지 않는 것이 모두가 소유하고 싶어하는 가장 아름다운 예술이라고 생각한다."
+  },
+  {
+   "poster_no": "51074",
+   "artist_ko": "앤디 워홀",
+   "affinity": [
+    "PROFESSOR",
+    "HEALER",
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "공",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "자체",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "늘",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "동글동글",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "살아있다는 것 자체가 늘 하고 싶지 않은 일에 공들이는 것이라 생각한다."
+  },
+  {
+   "poster_no": "84591",
+   "artist_ko": "프랑수아 트뤼포",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "영화",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "단계",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "이상",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "치카치카",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "영화를 사랑하는 첫 단계는 한 영화를 2번 보는 것이다. 두 번째는 영화에 대한 글을 쓰는 것이고 세 번째는 영화를 만드는 것이다. 그 이상은 없다."
+  },
+  {
+   "poster_no": "24755",
+   "artist_ko": "제임스 카메론",
+   "affinity": [
+    "PROFESSOR",
+    "HEALER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "재능",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "꿈",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "망설이다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "쌀쌀",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "타고난 재능이 있어도 꿈을 이루지 못하는 사람이 있습니다. 지나치게 망설이거나 신중해서 한계를 넘지 못했기 때문입니다. 꿈을 이룰 때는 과감해야 합니다."
+  },
+  {
+   "poster_no": "52799",
+   "artist_ko": "로이 리히텐슈타인",
+   "affinity": [
+    "TANKER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "오늘",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "주위",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "있다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "콕콕",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "오늘날 예술은 우리 주위에 있다."
+  },
+  {
+   "poster_no": "17756",
+   "artist_ko": "레오나르도 다 빈치",
+   "affinity": [
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "종류",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "보다",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "존귀탱",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "우물쭈물",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "세상에는 세 종류의 사람이 있다. 보려는 사람, 보여주면 보는 사람, 보여줘도 안 보는 사람."
+  },
+  {
+   "poster_no": "91396",
+   "artist_ko": "레오나르도 다 빈치",
+   "affinity": [
+    "TANKER",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "성공",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "뒤",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "일",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "야호",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "성공한 사람들은 뒤에 물러앉아 일이 일어나기만 기다리지 않는다는 것을 오래전부터 알고 있었다. 그들은 밖으로 나가 일을 만들어낸다."
+  },
+  {
+   "poster_no": "69305",
+   "artist_ko": "레오나르도 다 빈치",
+   "affinity": [
+    "TANKER",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "직접",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "시도",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "감명",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "산들산들",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "직접 시도해보는 것은 큰 감명을 준다. 아는 것을 넘어서 적용해 봐야 하고 의지를 넘어서 직접 행동해야만 한다."
+  },
+  {
+   "poster_no": "83864",
+   "artist_ko": "레오나르도 다 빈치",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "영혼",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "작업",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "콜라보레이션",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "파닥파닥",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "영혼과 손이 함께 작업하지 않으면 예술이 탄생할 수 없다."
+  },
+  {
+   "poster_no": "85037",
+   "artist_ko": "마크 로스코",
+   "affinity": [
+    "HEALER",
+    "PROFESSOR",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "외롭다",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "젊다",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "비평",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "촐랑",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "제가 젊었을 때, 예술은 외로웠습니다. 갤러리, 수집가, 비평가 모두 돈이 없었습니다. 그러나 그때가 황금시대였습니다."
+  },
+  {
+   "poster_no": "16385",
+   "artist_ko": "마크 로스코",
+   "affinity": [
+    "HEALER",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "이끌리다",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "뿌리",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "침묵",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "맴맴",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "예술이란 삶에 이끌린 많은 사람은 우리가 뿌리를 내리고 자랄 수 있는 침묵이라는 주머니를 간절히 찾고 있습니다. 우리는 모두 침묵이라는 주머니를 찾을 수 있기를 희망해야 합니다."
+  },
+  {
+   "poster_no": "34642",
+   "artist_ko": "마크 로스코",
+   "affinity": [
+    "HEALER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "교감",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "확장",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "몰입",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "후다닥",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "그림은 사람과 교감함으로써 존재하는 것이며 감상자에 의해 확장되고 성장합니다. 깊이 몰입해서 자신을 바라보아야 슬픔을 해소할 수 있고 그것이 진정한 예술의 기능입니다."
+  },
+  {
+   "poster_no": "14655",
+   "artist_ko": "마르셀 뒤샹",
+   "affinity": [
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "회화",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "망하다",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "누가",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "훌쩍훌쩍",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "회화는 망했어! 누가 저 프로펠러보다 더 멋진 걸 만들 수 있겠어?"
+  },
+  {
+   "poster_no": "42049",
+   "artist_ko": "마르셀 뒤샹",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "넘사벽",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "시그널",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "믿지 않는다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "할리우드",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나는 예술을 믿지 않는다. 나는 예술가를 믿는다."
+  },
+  {
+   "poster_no": "58472",
+   "artist_ko": "르네 마그리트",
+   "affinity": [
+    "PROFESSOR",
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "인생",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "그래서",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "무언가",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "음메",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "인생은 내게 무언가 하게 만든다. 그래서 나는 그림을 그린다."
+  },
+  {
+   "poster_no": "18710",
+   "artist_ko": "클로드 모네",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "가장",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "실화냐?",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "바로",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "쓱싹쓱싹",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "베껴야 한다면 가장 위대한 것을 베껴야 한다. 그것은 바로 자연이다."
+  },
+  {
+   "poster_no": "99122",
+   "artist_ko": "클로드 모네",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "우주",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "광경",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "관찰",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "뽀득뽀득",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나는 우주가 내 앞에 펼쳐 보이는 광경을 관찰하고 붓이 그것을 증언하도록 했을 뿐이다."
+  },
+  {
+   "poster_no": "13294",
+   "artist_ko": "클로드 모네",
+   "affinity": [
+    "HEALER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "나이",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "새롭게",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "태어나다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "허허실실",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "사랑은 나이를 갖지 않는다. 그것은 언제나 새롭게 태어나기 때문이다."
+  },
+  {
+   "poster_no": "43534",
+   "artist_ko": "바실리 칸딘스키",
+   "affinity": [
+    "TANKER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "반드시",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "자유",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "왜냐하면",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "사박사박",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "예술에서 반드시 해야 하는 것은 없다. 왜냐하면 예술은 자유니까."
+  },
+  {
+   "poster_no": "47746",
+   "artist_ko": "바실리 칸딘스키",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "내버리다",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "화폭",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "나이프",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "깡총깡총",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나는 마음 가는대로 내버려 두었다. 화폭 위에 팔레트, 나이프로 선과 반점을 칠하면서도 집이나 나무를 그릴 생각은 별로 없었다. 그저 이것들을 내가 할 수 있는 힘차게 노래 부르도록 했을 뿐이다."
+  },
+  {
+   "poster_no": "28605",
+   "artist_ko": "바실리 칸딘스키",
+   "affinity": [
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "계급",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "상징",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "녹색",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "저렴이",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "색의 계급 체계에서 녹색은 자족하고 부동층이며 한정된 사회주의 중간 계층을 상징한다."
+  },
+  {
+   "poster_no": "54401",
+   "artist_ko": "마우리츠 에셔",
+   "affinity": [
+    "PROFESSOR",
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "게임",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "아주",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "중요하다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "휙",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "내 일은 게임, 그것도 아주 중요한 게임이다."
+  },
+  {
+   "poster_no": "81939",
+   "artist_ko": "앙리 카르티에 브레송",
+   "affinity": [
+    "PROFESSOR",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "평생",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "순간",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "발버둥",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "헐",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "평생 결정적 순간을 찍으려 발버둥 쳤으나 삶의 모든 순간이 결정적 순간이었다."
+  },
+  {
+   "poster_no": "12431",
+   "artist_ko": "윤태호",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "마감",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "퇴근",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "집",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "방긋방긋",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "만화가에게 마감이라는 것은 없다. 퇴근이 없다 보니 집에서도 정말 편한 마음으로 놀 수 없다."
+  },
+  {
+   "poster_no": "45720",
+   "artist_ko": "장 콕토",
+   "affinity": [
+    "HEALER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "추한 것",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "종종",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "시간",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "휘뚜루마뚜루",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "예술이 만드는 추한 것들은 종종 시간이 흐르면서 아름다워진다."
+  },
+  {
+   "poster_no": "31187",
+   "artist_ko": "추사 김정희",
+   "affinity": [
+    "ILLUSIONIST",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "가슴",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "책",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "글씨",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "아장아장",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "가슴 속에 1만 권의 책이 있어야 그것이 흘러넘쳐 그림과 글씨가 된다."
+  },
+  {
+   "poster_no": "44431",
+   "artist_ko": "이중섭",
+   "affinity": [
+    "TANKER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "비바람",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "기록",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "얼짱",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "엉금엉금",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "예술은 진실의 힘이 비바람을 이긴 기록이다."
+  },
+  {
+   "poster_no": "77854",
+   "artist_ko": "제임스 딘",
+   "affinity": [
+    "HEALER",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "배우",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "이루다",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "죽다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "얼레리꼴레리",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "좋은 배우가 되는 것은 쉬운 일이 아니다. 인간이 되는 것은 더 어렵다. 나는 죽기 전에 두 가지 다 이루고 싶다."
+  },
+  {
+   "poster_no": "14385",
+   "artist_ko": "박수근",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "눈빛",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "세계",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "쉽사리",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "후딱",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "예술은 고양이 눈빛처럼 쉽사리 변하는 것이 아니라 뿌리 깊게 한 세계를 깊이 파고드는 것이다."
+  },
+  {
+   "poster_no": "71667",
+   "artist_ko": "박완서",
+   "affinity": [
+    "TANKER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "문학",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "본래",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "그늘",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "제발",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "문학이란 게 본래 그런 것이 아니겠어요. 본질적으로 억압받는다든가 서러운 계층, 그늘에 가려진 층에 대한 애정을 쏟는 게 당연한 것 아니겠어요."
+  },
+  {
+   "poster_no": "32814",
+   "artist_ko": "박완서",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "취미",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "힘들어요",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "글",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "꼬끼오",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "차오를 때까지 기다려야 해요. 취미로 하기에는 글 쓰는 건 힘들어요."
+  },
+  {
+   "poster_no": "87057",
+   "artist_ko": "박완서",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "자꾸",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "성격",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "남겨두고 싶은",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "첨벙첨벙",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "자꾸 자기 작품을 고치는 작가도 있지만 그것도 성격인 것 같아요. 그대로 남겨두고 싶은 마음이 있더라구요."
+  },
+  {
+   "poster_no": "78756",
+   "artist_ko": "가브리엘 샤넬",
+   "affinity": [
+    "ILLUSIONIST",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "패션",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "드레스",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "얼굴천재",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "부디",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "패션은 드레스에만 존재하는 것이 아니다. 패션은 하늘과 길거리에도 있으며 우리의 생각과 삶, 그리고 지금 일어나고 있는 모든 일과 밀접한 관계가 있다."
+  },
+  {
+   "poster_no": "39470",
+   "artist_ko": "공자",
+   "affinity": [
+    "HEALER",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "공자",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "세젤예",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "세젤귀",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "기꺼이",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "모든 것은 제각기 아름다움을 지니고 있으나 모든 이가 그것을 볼 수는 없다."
+  },
+  {
+   "poster_no": "56529",
+   "artist_ko": "티에리 에르메스",
+   "affinity": [
+    "TANKER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "바꾸다",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "전통",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "균형",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "어찌하여",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나는 혁신과 전통 가치의 균형을 맞추려 노력한다. 아무것도 바꾸지 않기 위해 모든 걸 바꾼다."
+  },
+  {
+   "poster_no": "72769",
+   "artist_ko": "마르크 샤갈",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "침실",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "공기",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "푸른",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "훌러덩",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "침실 창문만 열었는데 푸른 공기, 사랑, 꽃들이 그녀와 함께 들어왔습니다."
+  },
+  {
+   "poster_no": "78559",
+   "artist_ko": "요한 제바스티안 바흐",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "모닝 커피",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "염소",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "고기",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "콩닥콩닥",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "모닝 커피가 없으면 나는 그저 말린 염소 고기에 불과하다."
+  },
+  {
+   "poster_no": "40969",
+   "artist_ko": "로맹 롤랑",
+   "affinity": [
+    "TANKER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "태양",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "창조",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "그것",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "두근두근",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "태양이 없을 때 그것을 창조하는 것이 예술가의 역할이다."
+  },
+  {
+   "poster_no": "92881",
+   "artist_ko": "루트비히 판 베토벤",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "여신",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "의견",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "그녀를",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "하늘하늘",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "예술! 누가 그녀를 알 수 있을까? 누구와 더불어 이 위대한 여신에 대해 의견을 나눌 수 있을까?"
+  },
+  {
+   "poster_no": "73627",
+   "artist_ko": "외젠 들라크루아",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "목표",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "완벽하게",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "스밍",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "드르렁",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "모든 것을 완벽하게 하는 것을 목표로 한다면 예술가는 아무것도 이루지 못한다."
+  },
+  {
+   "poster_no": "22206",
+   "artist_ko": "에곤 실레",
+   "affinity": [
+    "TANKER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "범죄",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "죽이다",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "덕후",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "으르렁",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "예술가를 제한하는 것은 범죄다. 그것은 태어나는 생명을 죽이는 것이다."
+  },
+  {
+   "poster_no": "24930",
+   "artist_ko": "볼프강 아마데우스 모차르트",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "끝",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "천재",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "언어",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "가릉가릉",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "언어가 끝나는 곳에서 음악은 시작된다."
+  },
+  {
+   "poster_no": "85807",
+   "artist_ko": "크리스티앙 디오르",
+   "affinity": [
+    "ILLUSIONIST",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "비밀",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "그 어떤",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "뽀시래기",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "꿀렁꿀렁",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "모든 아름다움의 비밀은 열정이다. 열정 없이는 그 어떤 아름다움도 있을 수 없다."
+  },
+  {
+   "poster_no": "99207",
+   "artist_ko": "닉 나이트",
+   "affinity": [
+    "HEALER",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "아마도",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "것이다",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "핵인싸",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "룰루랄라",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "삶은 아마도 우리가 만들어낸 실수들로 더 나아지고 있는 것이다."
+  },
+  {
+   "poster_no": "36572",
+   "artist_ko": "프리덴슈라이히 훈데르트바서",
+   "affinity": [
+    "TANKER",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "한낮",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "출발",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "취존",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "만세",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "혼자 꿈을 꾸면 한낱 꿈일 뿐이지만 우리가 모두 함께 꿈을 꾼다면 그것은 새로운 현실의 출발이다."
+  },
+  {
+   "poster_no": "67844",
+   "artist_ko": "박경리",
+   "affinity": [
+    "TANKER",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "왜 떠들어",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "기레기",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "후덜덜",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "두리번두리번",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "작가가 작품을 쓰고 나면 그만이지. 기자들 불러서 왜 떠들어. 기자한테 얘기할 게 남아 있다는 건 작품에 제대로 못 썼다는 거 아닌가?"
+  },
+  {
+   "poster_no": "72112",
+   "artist_ko": "박경리",
+   "affinity": [
+    "HEALER",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "인류",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "운명",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "인정",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "부리부리",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "작가는 인간으로부터 출발해야 해. 인간의 본질, 인류의 운명을 고민하는 게 작가가 가는 길이야."
+  },
+  {
+   "poster_no": "44383",
+   "artist_ko": "조성진",
+   "affinity": [
+    "ILLUSIONIST",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "휴가",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "무대",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "댕댕이",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "오목조목",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "무대에 서는 일은 내게 휴가나 다름없다. 연주회 전에 연습하는 과정이 너무 힘들기 때문이다."
+  },
+  {
+   "poster_no": "32939",
+   "artist_ko": "강수진",
+   "affinity": [
+    "PROFESSOR",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "여기",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "이 정도면 됐다",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "띵작",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "오밀조밀",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "여기가 끝이라고 이 정도면 됐다고 생각할 때 그 사람의 예술 인생은 거기서 끝나는 것이다."
+  },
+  {
+   "poster_no": "53895",
+   "artist_ko": "조수미",
+   "affinity": [
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "근자감",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "엄근진",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "띵언",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "따박따박",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "성공의 비밀은 자신감이고 자신감의 비밀은 엄청난 준비다."
+  },
+  {
+   "poster_no": "92591",
+   "artist_ko": "표트르 일리치 차이콥스키",
+   "affinity": [
+    "PROFESSOR",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "평균",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "미치다",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "TMI",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "빽빽하게",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "가장 훌륭한 천재조차도 최고, 아니 평균조차 미치지 못한다. 일에 미쳐있지 않다면."
+  },
+  {
+   "poster_no": "32455",
+   "artist_ko": "무라카미 하루키",
+   "affinity": [
+    "ILLUSIONIST",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "달리기",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "35년",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "갑분싸",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "사뿐사뿐",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "작가가 되고 나서 거의 매일 달리기를 하고 있어요. 오래 앉아 있어야 하기 때문에 운동을 하지 않으면 몸이 빨리 망가질 거라고 생각했어요. 그렇게 뛰기 시작한 게 35년 전입니다. 저는 소설가가 된 뒤로 더 건강해졌습니다."
+  },
+  {
+   "poster_no": "62584",
+   "artist_ko": "무라카미 하루키",
+   "affinity": [
+    "HEALER",
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "깨진 달걀",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "사이에서",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "폭풍눈물",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "폴짝폴짝",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "높고 단단한 벽과 그것에 부딪쳐 깨진 달걀 사이에서 나는 언제나 계란 쪽에 서겠다."
+  },
+  {
+   "poster_no": "82913",
+   "artist_ko": "밥 딜런",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "시",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "천상계",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "욜로",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "깜빡깜빡",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "시는 벌거벗은 인간이다."
+  },
+  {
+   "poster_no": "23944",
+   "artist_ko": "밥 딜런",
+   "affinity": [
+    "TANKER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "묶이다",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "닝겐",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "나 혼자 산다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "뛰뛰빵빵",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "완벽히 자유로운 건 없다. 새조차도 하늘에 묶여 있지 않은가."
+  },
+  {
+   "poster_no": "70389",
+   "artist_ko": "밥 딜런",
+   "affinity": [
+    "TANKER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "음악",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "당신의 것",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "아는 형님",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "붕붕붕",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "이 나라는 당신의 것이기도 하고 나의 것이기도 하다. 하지만 이 세상은 음악을 듣지 않는 사람들에 의해 돌아간다."
+  },
+  {
+   "poster_no": "30652",
+   "artist_ko": "밥 딜런",
+   "affinity": [
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "뭘",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "빚지다",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "내가",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "졸졸졸",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "당신들이 내 음악을 좋아해 준다고 해서 내가 당신에게 뭘 빚진 건 아니다."
+  },
+  {
+   "poster_no": "19737",
+   "artist_ko": "오노레 드 발자크",
+   "affinity": [
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "결혼",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "지식",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "뒤떨어진다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "에취",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "모든 지혜 중에서 결혼에 관한 지식이 가장 뒤떨어진다."
+  },
+  {
+   "poster_no": "10156",
+   "artist_ko": "오노레 드 발자크",
+   "affinity": [
+    "TANKER",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "불행",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "스승",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "타락",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "칙칙폭폭",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "불행이야말로 우리의 가장 훌륭한 스승이다. 불행은 돈과 사람의 가치를 가르쳐준다. 역경에 처해서도 타락하지 않았다면 그 자체만으로도 매우 위대하다."
+  },
+  {
+   "poster_no": "46566",
+   "artist_ko": "오노레 드 발자크",
+   "affinity": [
+    "PROFESSOR",
+    "HEALER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "얼굴",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "거짓말",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "사람",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "달그락달그락",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "사람의 얼굴은 하나의 풍경이다. 한 권의 책이다. 얼굴은 결코 거짓말을 하지 않는다."
+  },
+  {
+   "poster_no": "14087",
+   "artist_ko": "마르셀 프루스트",
+   "affinity": [
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "시들고",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "꽃피게",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "열망",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "부스럭거리다",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "열망은 모든 것을 꽃피게 하지만 소유는 모든 것을 시들고 스러지게 한다."
+  },
+  {
+   "poster_no": "68846",
+   "artist_ko": "마르셀 프루스트",
+   "affinity": [
+    "ILLUSIONIST",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "발견",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "눈",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "진정한",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "걸리적거리다",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "진정한 발견은 새로운 것을 찾는 것이 아니라 새로운 눈으로 보는 것이다."
+  },
+  {
+   "poster_no": "96186",
+   "artist_ko": "생텍쥐페리",
+   "affinity": [
+    "HEALER",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "바다",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "동경심",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "끝없는",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "철컹철컹",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "당신이 배를 만들고 싶다면 시람들에게 저 넓고 끝없는 바다에 대한 동경심을 키워줘라."
+  },
+  {
+   "poster_no": "13571",
+   "artist_ko": "루치아노 베네통",
+   "affinity": [
+    "ILLUSIONIST",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "재력",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "킹왕짱",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "오디션",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "엔딩요정",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "인생의 첫발을 내디딜 때는 자신의 재력이나 장점에 의지하지 말라. 중요한 것은 남들과 다른 일을 하는 것이다."
+  },
+  {
+   "poster_no": "20239",
+   "artist_ko": "장 오퀴스트 도미니크 앵그르",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "기억",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "젊은이",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "꽃길",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "존맛탱",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "젊은이여, 선을 그어라. 많은 선을 그어라, 기억에서 또는 자연에서. 그것이 좋은 예술가가 되는 길이다."
+  },
+  {
+   "poster_no": "41814",
+   "artist_ko": "티나 바니",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "연필",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "카메라",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "너는",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "말잇못",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "연필과 종이를 가지고 앉아서 생각해보라. 너의 삶은 무엇인지, 너는 누구인지. 그것에 대해 생각이 떠오르기 전에는 카메라를 손에 들지 마라."
+  },
+  {
+   "poster_no": "20295",
+   "artist_ko": "오노 요코",
+   "affinity": [
+    "HEALER",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "활용",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "소금",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "음식",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "할많하않",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "부정적인 감정을 없애려 하지 말고 음식에 들어 있는 소금처럼 활용하라."
+  },
+  {
+   "poster_no": "24699",
+   "artist_ko": "요제프 보이스",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "감자",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "단순한",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "행위",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "복세편살",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "감자 껍질을 벗기는 단순한 작업도 의식을 가진 행위라면 예술이 될 수 있다."
+  },
+  {
+   "poster_no": "69061",
+   "artist_ko": "잭슨 폴록",
+   "affinity": [
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "갤러리",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "이제 그만!",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "상관없다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "현웃",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "갤러리는 이제 그만! 내가 직접 그림을 팔겠다. 아니면 소유하거나. 어느 쪽이든 상관없다."
+  },
+  {
+   "poster_no": "92302",
+   "artist_ko": "장 미쉘 바스키아",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "상",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "스파이더맨",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "형편없는",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "있어빌리티",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나는 어렸을 때 진짜 형편없는 예술가였다. 한 번도 미술대회에 나가서 상을 타본 적이 없었다. 나는 대회에서 스파이더맨을 완벽하게 그렸던 아이에게 진 기억이 있다."
+  },
+  {
+   "poster_no": "49476",
+   "artist_ko": "척 클로스",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "가즈아!",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "단지",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "영감",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "국민템",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "영감은 아마추어를 위한 것이다. 우리는 단지 일어나서 일을 하러 간다."
+  },
+  {
+   "poster_no": "61097",
+   "artist_ko": "트레이시 에민",
+   "affinity": [
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "죽은 사람",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "실존",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "살아서",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "페이스북",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나에게 에곤 실레는 한 번도 죽은 사람인 적이 없었다. 누군가가 살아서 움직이지 않는다고 해서 그 사람이 실존하지 않는 것은 아니다."
+  },
+  {
+   "poster_no": "56774",
+   "artist_ko": "호안 미로",
+   "affinity": [
+    "TANKER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "그릇",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "터무니없이",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "흥미",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "트위터",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나에게는 소작농들이 수프를 담아 먹는 그릇이 부자들이 쓰는 터무니없이 비싼 그릇보다 더 흥미롭다."
+  },
+  {
+   "poster_no": "81635",
+   "artist_ko": "칼 안드레",
+   "affinity": [
+    "PROFESSOR",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "거장",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "길모퉁이",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "좋은 일",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "최애",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "모든 위대한 길들이 거장들에 의해 가로막히면 당신에게는 좋은 일이다. 당신만의 작은 길모퉁이를 찾아야만 하기 때문이다."
+  },
+  {
+   "poster_no": "38346",
+   "artist_ko": "알베르토 자코메티",
+   "affinity": [
+    "TANKER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "화재",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "건물",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "한 마리",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "아이돌",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "건물에 화재가 나면, 나는 렘브란트의 그림보다 고양이 한 마리를 구하겠다."
+  },
+  {
+   "poster_no": "35263",
+   "artist_ko": "고든 마타-클라크",
+   "affinity": [
+    "TANKER"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "조각",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "나야 나",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "차이점",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "부득이",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "내가 건축과 조각에서 가장 좋아하는 차이점 중 하나는 배관의 유무이다."
+  },
+  {
+   "poster_no": "27543",
+   "artist_ko": "데이비드 호크니",
+   "affinity": [
+    "HEALER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "아이폰",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "아침",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "받는다",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "갤럭시",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나는 매일 아이폰으로 꽃을 그려서 친구들에게 보낸다. 그들은 매일 아침 신선한 꽃을 받는다."
+  },
+  {
+   "poster_no": "65668",
+   "artist_ko": "로버트 메이플소프",
+   "affinity": [
+    "HEALER",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "사진",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "결과물",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "읽씹",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "카카오톡",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나에게 중요한 건 결과물로 얻어지는 사진들보다 내가 찍은 사람들과 맺는 관계이다."
+  },
+  {
+   "poster_no": "71293",
+   "artist_ko": "봉준호",
+   "affinity": [
+    "TANKER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "사회성",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "변태",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "생각",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "유튜브",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "사회성이 좋으면 결핍이 없어 생각할 시간이 줄어든다. 혼자서 변태적으로 관찰하는 것을 좋아한다."
+  },
+  {
+   "poster_no": "80385",
+   "artist_ko": "도로시아 태닝",
+   "affinity": [
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "여성",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "주어진 것",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "그러나",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "SNS",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "당신은 여성이고 예술가일지 모른다. 그러나 전자는 주어진 것이고 후자는 이룬 것이다."
+  },
+  {
+   "poster_no": "85014",
+   "artist_ko": "박찬욱",
+   "affinity": [
+    "TANKER",
+    "ILLUSIONIST"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "투자",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "장담",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "관습",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "스타",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "후에 투자받기 어려워지면 어떻게 될지 장담할 수는 없지만 지금으로서는 그래요. 관습적인 것은 금지."
+  },
+  {
+   "poster_no": "18515",
+   "artist_ko": "정약용",
+   "affinity": [
+    "HEALER",
+    "PROFESSOR"
+   ],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": true
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "쉬지 말고",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "믿어라",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "흐려지고",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "먹방",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "쉬지 말고 기록하라. 기억은 흐려지고 생각은 사라진다. 머리를 믿지 말고 손을 믿어라."
+  },
+  {
+   "poster_no": "90001",
+   "artist_ko": "헨드릭 릴랑가",
+   "affinity": [],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "옷",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "패셔니스타",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "퍼포먼스",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "피부",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "사람들이 매일 다른 색의 옷을 입듯이 사람의 마음은 어제 다르고 오늘 다르다. 어떤 색의 옷을 입는다는 것은 결국 자신의 마음을 드러내는 퍼포먼스다. 매일 변하는 것이 사람의 마음이듯 다양한 피부색은 하루하루 새롭게 살자는 의미를 담고 있다."
+  },
+  {
+   "poster_no": "90002",
+   "artist_ko": "에드워드 사이디 팅가팅가",
+   "affinity": [],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "삶",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "구름",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "중딩",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "팔로워",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "삶은 구름과도 같은 것"
+  },
+  {
+   "poster_no": "90003",
+   "artist_ko": "월레 소잉카",
+   "affinity": [],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "궁극적으로",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "자신",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "초딩",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "팔로잉",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나는 나 자신이어야 합니다. 궁극적으로 나 자신이어야 합니다."
+  },
+  {
+   "poster_no": "90004",
+   "artist_ko": "루쉰",
+   "affinity": [],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "매장",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "얼른",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "고딩",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "열심히",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "가급적 빨리 매장하라. 나에 대해서는 얼른 잊고 당신들이나 열심히 살아가라."
+  },
+  {
+   "poster_no": "90005",
+   "artist_ko": "위화",
+   "affinity": [],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "미덕",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "동정심",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "연민",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "스웨그",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "사람의 미덕이라고 하면 동정심이나 연민이지 않을까 싶다. 동정과 연민은 아주 중요한 가치다."
+  },
+  {
+   "poster_no": "90006",
+   "artist_ko": "나혜석",
+   "affinity": [],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "가정",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "감정",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "까닭",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "탕진잼",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "지금 생각건대 내게서 가정의 행복을 가져간 자는 내 예술이 아닌가 싶습니다. 그러나 이 예술이 없고는 감정을 행복하게 해 줄 아무것도 없었던 까닭입니다."
+  },
+  {
+   "poster_no": "90007",
+   "artist_ko": "어니스트 헤밍웨이",
+   "affinity": [],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "멋진",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "충분히",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "그렇기에",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "항마력",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "세상은 멋진 곳이다. 그렇기에 충분히 싸울 가치가 있다."
+  },
+  {
+   "poster_no": "90008",
+   "artist_ko": "콘스탄틴 브랑쿠시",
+   "affinity": [],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "제일",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "지금",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "쏙",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "아이고!",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "지금 이 순간 당신의 모습이 제일 좋다."
+  },
+  {
+   "poster_no": "90009",
+   "artist_ko": "앨리스 닐",
+   "affinity": [],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "경험",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "겪어냄",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "뒤뚱뒤뚱",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "어머나!",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "모든 경험은 당신이 그것을 겪어냄으로써 위대해진다."
+  },
+  {
+   "poster_no": "90010",
+   "artist_ko": "메리 켈리",
+   "affinity": [],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "항상",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "더",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "웬일이니?",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "우회",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "우회해서 가는 길이 곧게 뻗은 길보다 항상 더 흥미롭다."
+  },
+  {
+   "poster_no": "90011",
+   "artist_ko": "오드리 헵번",
+   "affinity": [],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "자주",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "아파트",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "흙수저",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "어리바리",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나는 자주 혼자 있어야 한다. 토요일부터 월요일까지, 내 아파트에 혼자 머물 때, 나는 행복하다. 이것이 내가 회복하는 방법이다."
+  },
+  {
+   "poster_no": "90012",
+   "artist_ko": "스티븐 스필버그",
+   "affinity": [],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": true
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "배고프지",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "사냥",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "금수저",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "지구",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "인간은 배고프지 않을 때도 사냥하는 지구상 유일한 동물이다."
+  },
+  {
+   "poster_no": "90013",
+   "artist_ko": "스티븐 스필버그",
+   "affinity": [],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": true,
+     "peace": true,
+     "comfort": true
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": false,
+     "resistance": false,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": false,
+     "effort": false,
+     "motivation": false
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": true,
+     "identity": true,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "희망",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "그러기에",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "매끈매끈",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "호로록",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "나는 희망을 밤이나 낮이나 품어둔다. 그러기에 그 희망은 현실로 이어진다."
+  },
+  {
+   "poster_no": "90014",
+   "artist_ko": "아리스토텔레스",
+   "affinity": [],
+   "value_marks": {
+    "HEALER": {
+     "happiness": true,
+     "hope": false,
+     "peace": false,
+     "comfort": false
+    },
+    "TANKER": {
+     "absurdity": true,
+     "anger": true,
+     "resistance": true,
+     "reform": false
+    },
+    "ILLUSIONIST": {
+     "creativity": true,
+     "beauty": true,
+     "effort": true,
+     "motivation": true
+    },
+    "PROFESSOR": {
+     "advice": true,
+     "meaning_of_life": false,
+     "identity": false,
+     "human": false
+    }
+   },
+   "words": [
+    {
+     "slot": 1,
+     "word_ko": "광기",
+     "type": "lexical"
+    },
+    {
+     "slot": 2,
+     "word_ko": "약간",
+     "type": "lexical"
+    },
+    {
+     "slot": 3,
+     "word_ko": "보들보들",
+     "type": "lexical"
+    },
+    {
+     "slot": 4,
+     "word_ko": "갓",
+     "type": "onomatopoeia"
+    }
+   ],
+   "text_ko": "약간의 광기도 없는 위대한 천재란 있을 수 없다."
+  }
+ ]
+}
