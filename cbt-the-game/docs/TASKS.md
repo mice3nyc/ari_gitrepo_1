@@ -7,10 +7,12 @@ created: 2026-06-22
 author: 아리공
 ---
 
-## CBT 덱빌딩 게임 — 진행 작업 (TASKS, live)
+## CBT 덱빌딩 게임 — 진행 작업 (TASKS) — ★동결 (26.0812)
 
-> 엔트리 = [[PLAN]]. 기준 = [[CANON]] · [[SPEC-mechanics]] · [[SPEC-data]].
-> 현재 단계: **선문후코 — SPEC 작성, 코드 착수 전.**
+> [!warning] **현행 TASKS는 `_devhaus/cbt-the-game-front/docs/TASKS.md`다.**
+> 아래 미체크 항목은 **미완료가 아니라 동결**이다. 6/26 `_devhaus` 입주로 승계됐고, 여기 남은 「내일 먼저」·「미확정 메카닉 확정 후 반영」류는 그쪽 PLAN/DECISIONS에서 이어받아 처리됐다. 안 체크된 것을 「할 일」로 읽지 않는다.
+>
+> 엔트리 = [[PLAN]](동결 사유 기재). 기준 = [[CANON]] · [[SPEC-mechanics]] · [[SPEC-data]].
 
 ### Phase 0 — 선문후코 (SPEC)
 

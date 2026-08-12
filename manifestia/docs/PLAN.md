@@ -7,9 +7,15 @@ tags:
   - PLAN
 ---
 
-## Manifestia 개발 계획 (PLAN)
+## Manifestia 개발 계획 (PLAN) — ★동결 (26.0812)
 
-> Live 문서. 돌아오면 이 노트 + `ls -lt _dev/manifestia/`로 현 상태 파악.
+> [!warning] 여기가 아니다 — **현행 진입점은 `_devhaus/manifesto-the-game-front/docs/PLAN.md`**
+> 이 폴더(`_dev/manifestia/`)는 **6/18 폰 단독 프로토타입**이고, 그 뒤 `_devhaus/manifesto-the-game-front`(nolgong-dev, React+TS+Vite 풀스택)로 승계돼 **거기가 라이브다.** 화면도 3개(CharacterSelect·PosterMatch·ComingSoon)에서 Admin·Editor·Display 계열까지 벌어졌고, KI-Fest 배포·i18n·팀 모드는 전부 그쪽에서 진행됐다.
+>
+> **아래 본문은 그 시점의 기록으로 보존한다.** 참고할 값이 남은 곳 = `wireframes/` 7화면과 `docs/SPEC-screens.md`(화면 초기 구상).
+>
+> ⚠️ **동결이 늦었다.** 이 문단이 **「Live 문서. 돌아오면 이 노트로 현 상태 파악」**이라고 적혀 있었다 — 이관 후 옛 루트를 동결하는 규칙([[CLAUDE]] §개발 프로젝트 노트 관리 7번)이 지켜지지 않아, 돌아온 세션을 정확히 오도할 상태로 두 달 있었다. 8/12 `_dev`↔`_devhaus` 경계 정리에서 발견.
+>
 > 기획 단일 소스: [[Manifestia — 개발 착수 계획]] / 결정 로그: [[요청.26.0618.1453-Manifestia프로토타입스펙]] / 기술 명세: `docs/SPEC-prototype.md`
 
 #### 무엇을 만드나

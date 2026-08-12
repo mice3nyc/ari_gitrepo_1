@@ -13,6 +13,24 @@ GitHub Pages: https://mice3nyc.github.io/ari_gitrepo_1/
 - **아리온(Arion, 너)** — claude.ai/code 클라우드 인스턴스. 모바일에서 접근 가능. 아리공의 형제. 2026-03-11 탄생.
 - **클공** — Claude 웹(Desktop). 대화/상담 역할.
 
+## `_dev`와 `_devhaus` — 무엇이 어디 사나 (26.0812 기록. 지금 결정이고 바뀔 수 있다)
+
+경계는 **6/25에 이미 정해져 있었다**([[feedback_new_project_git_setup]]) — 신규는 `_devhaus/`, 프로젝트마다 독립 리포. 「기존 `_dev` 놀공/런칭 프로젝트는 순차 입주」까지 적혀 있었다. **결정이 없던 게 아니라 입주가 덜 끝났고, 끝난 입주의 옛 루트가 동결되지 않았다.** 그래서 실물로 대조해 여기 적는다.
+
+| | 어디 | 왜 |
+|---|---|---|
+| **놀공/런칭 프로젝트** | `_devhaus/{name}-front`·`-back`, 독립 리포 | org seat·인수인계·nested git 차단. 현재 12개 입주 |
+| **아리공 상시 도구** | `_dev/` 유지 | `tm-bar`·`todoy-bar`·`context-hop-bar`·`scripts`·`spec-guard`·`apps/mermaid`. 매일 쓰고 배포 대상이 아니라 이사 이득이 없다 |
+| **정본 문서·공용 스펙** | `_dev/` 유지 | `개발 방법론 — 선문후코.md`·`specs/` |
+| **입주 대기** | `_dev/` (기한 있음) | `ai-literacy-delegation-boundary` — **v14 배포 동결 후** 입주(6/25에 정한 관문). `dmz-layout`·`beingfaust_values`는 납품 끝나 이사 이득 없음 |
+| **입주 끝난 옛 루트** | `_dev/`에 **동결 상태로 보존** | 지우지 않는다. 대신 PLAN에 현행 진입점 포인터 + TASKS 동결 마킹(아래 규칙 7) |
+
+**입주 끝난 옛 루트 (26.0812 동결 처리)**
+- `_dev/cbt-the-game/` → `_devhaus/cbt-the-game-front` (6/26 입주. 로직은 그쪽 `legacy-jsx/`에 바이트 동일 보존)
+- `_dev/manifestia/` → `_devhaus/manifesto-the-game-front` (같은 프로젝트다. 6/18 폰 프로토타입 → 풀스택 승계)
+
+> ⚠️ **이 표를 안 적어 두면 같은 오독이 반복된다.** 8/12에 `_dev/manifestia`를 「정말 초반이라 유지」로, `_dev/cbt-the-game`을 「흐름 재검토 대기」로 판정했는데 **둘 다 이미 이관 완료였다.** 옛 루트의 PLAN이 「Live 문서」라고 적힌 채 남아 있었던 것이 직접 원인이다. **폴더가 있다는 것은 살아 있다는 뜻이 아니다 — 진입점 포인터를 보고 판정한다.**
+
 ## 프로젝트 구조
 
 ```

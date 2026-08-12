@@ -7,9 +7,12 @@ tags:
   - TASKS
 ---
 
-## Manifestia TASKS
+## Manifestia TASKS — ★동결 (26.0812)
 
-> 진행 작업 체크리스트. 명세: `docs/SPEC-prototype.md` / 계획: `docs/PLAN.md`
+> [!warning] **현행 TASKS는 `_devhaus/manifesto-the-game-front/docs/TASKS.md`다.**
+> 아래 미체크 항목은 **미완료가 아니라 동결**이다 — 6/18 프로토타입 단계의 체크리스트이고, 그 뒤 `_devhaus`로 승계됐다. 여기 안 체크된 것을 「할 일」로 읽지 않는다.
+>
+> 명세: `docs/SPEC-prototype.md` / 계획: `docs/PLAN.md`(동결 사유 기재)
 
 #### 1단계 — 폰 단독 프로토타입
 
