@@ -26,12 +26,8 @@ done_count="$(echo "$DATA" | "$JQ" '[.[] | select(.done==true)] | length')"
 active_line="$(echo "$DATA" | "$JQ" -r '.[] | select(.active==true) | [.text, (.live_seconds|tostring)] | @tsv' | head -1)"
 
 # ── 메뉴바 ── (now-bar와 구분: 체크리스트 정체성 = 진행률 앞세움, ✓ 아이콘)
-if [ -n "$active_line" ]; then
-  a_text="$(echo "$active_line" | cut -f1)"
-  echo "✓ ${done_count}/${total} · ${a_text} | size=14"
-else
-  echo "✓ ${done_count}/${total} 오늘 할 일 | size=14"
-fi
+# 노치 화면 대비 최소 폭 (피터공 26.0705): 오늘{완료}/{전체}
+echo "오늘${done_count}/${total} | size=14"
 
 echo "---"
 echo "오늘 할 일  ${done_count}/${total} 완료 | size=12 color=gray"
@@ -68,5 +64,6 @@ fi
 
 echo "---"
 echo "＋ 할 일 추가 | bash=$TODOY param1=add-dialog terminal=false refresh=true"
+echo "✎ 편집창 열기 (여러 개 몰아서) | bash=$TODOY param1=edit terminal=false"
 echo "데이터 폴더 열기 | bash=$OPEN param1=$DATA_DIR terminal=false"
 echo "새로고침 | refresh=true"

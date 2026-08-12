@@ -8,7 +8,11 @@
 DIR="$(cd "$(dirname "$0")" && pwd)"
 DATA_DIR="$DIR/data"
 mkdir -p "$DATA_DIR"
-TODAY="$(date +%F)"
+# 2026-07-27 원복 — 7/17 뉴욕 출장 임시 패치(TZ=America/New_York) 해제. 7/25 귀국.
+# 해외 체류 시에는 TZ만 앞에 붙인다: TODAY="$(TZ=<현지TZ> date -v-4H +%F)". 귀국 즉시 이 줄로 원복.
+# 2026-08-12 — 날짜 경계를 자정에서 오전 4시로. 00:00~03:59는 아직 '어제'(피터공이 자정 넘겨 일하는 날이 잦다).
+# 경계는 '그 시각에 도는 무엇'이 아니라 '지금이 몇 시냐를 계산하는 식'이라, 4시에 컴이 꺼져 있었어도 정상 동작한다. SPEC 참조.
+TODAY="$(date -v-4H +%F)"
 FILE="$DATA_DIR/$TODAY.json"
 JQ=/usr/bin/jq
 
@@ -17,15 +21,20 @@ ensure_file() { [ -f "$FILE" ] || echo '[]' > "$FILE"; }
 cmd="$1"
 case "$cmd" in
   setup)
-    if [ ! -f "$FILE" ]; then
-      echo '[]' > "$FILE"
-      # 직전 날짜 파일의 미완료 항목 이월 (상태 초기화)
-      prev="$(ls "$DATA_DIR"/*.json 2>/dev/null | grep -v "/$TODAY.json" | sort | tail -1)"
-      if [ -n "$prev" ] && [ -f "$prev" ]; then
-        "$JQ" '[.[] | select(.done==false)
-                | {id, text, done:false, active:false, switches:0, seconds:0, active_since:null, carried:true}]' \
-          "$prev" > "$FILE.tmp" && mv "$FILE.tmp" "$FILE"
-      fi
+    # 멱등 이월 — 오늘 파일이 이미 있어도 돈다.
+    # 조건이 "파일 없으면"이던 시절엔, 자정 렌더나 굿모닝 전 add로 파일이 먼저 생기면 이월이 통째로 죽었다.
+    # 실제로 물어야 할 것은 "이월을 아직 안 했는가"라서, 오늘에 없는 text만 덧붙이는 방식으로 바꿨다. (2026-08-12)
+    ensure_file
+    prev="$(ls "$DATA_DIR"/*.json 2>/dev/null | grep -v "/$TODAY.json" | sort | tail -1)"
+    if [ -n "$prev" ] && [ -f "$prev" ]; then
+      "$JQ" -s '
+        .[0] as $today | .[1] as $prev
+        | ($today | map(.text)) as $have
+        | $today + [ $prev[]
+            | select(.done==false)
+            | select(.text as $t | $have | index($t) | not)
+            | {id, text, done:false, active:false, switches:0, seconds:0, active_since:null, carried:true} ]' \
+        "$FILE" "$prev" > "$FILE.tmp" && mv "$FILE.tmp" "$FILE"
     fi
     cat "$FILE"
     ;;
@@ -84,15 +93,30 @@ case "$cmd" in
     ;;
 
   render)
-    ensure_file
+    # ⚠️ ensure_file 부르지 않는다 — 읽기는 쓰기를 하지 않는다.
+    # 플러그인이 5초마다 부르므로, 여기서 파일을 만들면 자정 렌더가 빈 오늘 파일을 낳고
+    # 그게 setup의 이월 조건을 뒤집는다(2026-08-12 이월 12건 유실). SPEC 참조.
+    [ -f "$FILE" ] || { echo '[]'; exit 0; }
     now="$(date +%s)"
     "$JQ" --argjson now "$now" \
       'map(.live_seconds = (.seconds + (if .active then ($now - (.active_since // $now)) else 0 end)))' \
       "$FILE"
     ;;
 
+  sync)
+    # 옵시디언 미러 노트 <-> json 양방향 병합
+    shift
+    /usr/bin/python3 "$DIR/sync.py" "$@"
+    ;;
+
+  edit)
+    # 배치 편집창 (로컬 웹). detached로 띄워 SwiftBar 갱신을 막지 않음.
+    ensure_file
+    /usr/bin/python3 "$DIR/edit_server.py" >/dev/null 2>&1 &
+    ;;
+
   *)
-    echo "todoy.sh {setup | add <텍스트> | add-dialog | activate <id> | done <id> | carryover | render}" >&2
+    echo "todoy.sh {setup | add <텍스트> | add-dialog | activate <id> | done <id> | carryover | render | sync | edit}" >&2
     exit 1
     ;;
 esac
