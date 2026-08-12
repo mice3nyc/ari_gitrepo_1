@@ -1,4 +1,7 @@
-# devlog
+# devlog (은퇴 — 2026-06-14)
+
+> 2026-04-12 ~ 2026-05-31 횡단 빌드 로그. 6/14 기능적 은퇴(아카이브 보존).
+> 빌드 기록은 각 프로젝트 TASKS 안에 기록하는 것으로 일원화됨. 이 파일은 그 한 달 반의 m2a·dmz-layout·ai-literacy·스크립트 작업 히스토리를 읽기 위한 보존본.
 
 ### 2026-05-31 — m2a egogram 고객사별 설문 캠페인 시스템 Phase 1 + UI 조정 (세션401)
 - **배경**: 단일 설문 → 고객사별 설문 캠페인 플랫폼. 기존 `LandingPage.jsx` 하드코딩 `VALID_CODES`(코드→그룹) 자리를 Supabase 테이블 + 관리자 + URL로 끌어올림. SPEC: `_dev/mind2action/CAMPAIGNS.md`
