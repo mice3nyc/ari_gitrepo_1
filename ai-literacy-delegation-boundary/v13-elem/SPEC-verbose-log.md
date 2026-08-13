@@ -1,0 +1,160 @@
+# SPEC-verbose-log — 전체 행동 기록 (풀 이벤트 스트림)
+
+> 작성 2026-08-13. 선문후코 — 코드 작성 전 명세.
+> 바탕: 동현공 「사용 기록 로깅 설계 — DMZ 아카이브」(`Assets/incoming/AI리터러시/20260723-usage-logging-design.md`, 2026-08-11 갱신). **목적·버퍼 전략·롤오버·kill switch를 계승**하되 이 프로젝트(바닐라 JS 단일 HTML · `build.py` 빌드 · 교육청 배포)에 맞춰 다시 설계했다.
+> 검토: [[요청.26.0813.1406-AI리터러시로그동현공방식]]
+> 대상 빌드: v13-elem · v13-mid · v14 공통(SPEC 동일 사본 유지). 코드 반영은 **r42**부터.
+
+## §0 목표 (피터공 2026-08-13)
+
+**동현공이 원하는 것도 작동하고, 우리가 만든 것도 작동한다.**
+
+두 파이프가 서로를 모르는 채로 병렬로 돈다. 한쪽이 꺼지거나 실패해도 다른 쪽은 영향받지 않는다.
+
+| | 무엇 | 모듈 | 엔드포인트 | 저장 |
+|---|---|---|---|---|
+| **A. 우리 것 (기존, 유지)** | 판 하나 = 압축 레코드 하나. 분석 화면 `/report`·`/stats`가 이걸 읽는다 | `08b` + `08d` | `POST /log` | `raw/{v}/…/{pid}.json` |
+| **B. 동현공 방식 (신규)** | 행동 하나 = 이벤트 하나. 전체 궤적 | `08-event-log`(기존) + **`08e-verbose-log`(신규)** | `POST /log-ev` | `raw-ev/{v}/…/{pid}__{part}.ndjson` |
+
+- **A는 한 줄도 바꾸지 않는다.** `SPEC-play-log.md`의 레코드 스키마·`SPEC-log-transmit.md`의 전송 흐름 그대로. `v` 필드가 분석 해석 기준이라 여기를 흔들면 지금까지 쌓인 것과 갈린다.
+- B가 실패해도 A는 돈다. 반대도 같다. 둘 다 실패해도 게임은 돈다(전 경로 비동기 + `try/catch`).
+- 이 병렬 구조는 새로운 게 아니다 — `08c`(동현공 참여 집계 Lambda)와 `08d`(우리 전송)가 이미 엔드포인트·모듈 모두 별개로 돌고 있다(SPEC-log-transmit §0-1). 세 번째 트랙이 붙는 것이다.
+
+## §1 동현공 설계에서 그대로 가져오는 것
+
+1. **풀 이벤트 스트림** — 「나중에 어떤 질문이 생길지 모르니 세밀히 쌓아두고 분석은 사후에」.
+2. **세션당 파일 하나 · 버퍼 전체 재업로드** — S3엔 append가 없으므로 같은 키를 덮어쓴다. flush 한 번 실패해도 다음 flush가 전체를 다시 올려 자동 복구(멱등).
+3. **48KB 롤오버** — `keepalive` 바디 상한이 64KB라 그 밑에서 파일을 마감하고 `part`+1. 좋은 설계라 그대로 쓴다.
+4. **버퍼·카운터를 한 키에 원자적으로 영속** — `part`·`seq`를 메모리에만 두면 새로고침 시 이미 마감한 파일을 덮어써 유실된다.
+5. **kill switch, 기본 off** — 상시 수집이 아니다.
+6. **제거 방법을 미리 적어 둔다**(§9).
+
+## §2 동현공 설계에서 바꾸는 것 (셋, 각각 이유가 있다)
+
+### §2-1 전송지 — 익명 PUT 버킷이 아니라 우리 검증 Lambda
+
+동현공이 S3 익명 PUT을 발명한 건 그쪽에 검증 계층이 없어서다. 공유 Lambda `/log`는 **4필드·1024B 고정**이라 스트림을 못 싣는다(그 문서 4절이 직접 그렇게 적었다).
+
+**우리는 이미 있다.** `SPEC-log-transmit.md`의 API Gateway + 검증 Lambda + private 버킷 스택을 그대로 쓴다. 미성년·교육청 배포에 익명 PUT 버킷을 새로 여는 것은 우리 맥락에선 후퇴다(§4 보안 가드레일을 통째로 잃는다). 게다가 **피터공이 용량·비용을 직접 보려면 데이터가 우리 버킷에 있어야 한다**(§0 목표).
+
+### §2-2 식별자 — 세션 UUID를 발명하지 않는다
+
+동현공은 DMZ에 판 구분 id가 없어 `sessionId`를 발명하고 기기 영속 UUID(`dmz_client_id`)를 재사용했다. **우리는 정반대다** — 판 식별자 `pid`(`gameState.playId`)가 이미 있고, 그건 판마다 새로 나는 무작위 값이라 기기와 연결되지 않는다.
+
+- 봉투의 판 식별 = **`pid` 그대로 재사용**. 신규 코드 없음. A 파이프와 **같은 키로 저절로 조인된다**(동현공이 «clientId + ts 근접»으로 감수해야 했던 제약이 우리에겐 없다).
+- **기기 영속 UUID는 봉투에 넣지 않는다.** `CONFIG.clientIdKey`는 `08c` 전용으로 남긴다.
+
+### §2-3 개인정보 — `ua` 원문을 받지 않는다
+
+동현공 스키마의 `session_start.data.ua`(User-Agent 원문)와 기기 UUID는 우리 `수집항목-설명.md` §2가 「수집 안 함」으로 못 박은 항목이다(브라우저 지문·기기 식별자). 그 문서 §5는 「아래 목록이 전부」라고 적혀 있다.
+
+**둘을 빼면 교육청 문서를 고치지 않고 간다.** 그리고 잃는 게 거의 없다 — 동현공 설계의 최대 분석 가치인 `blank_submit.input`(오답·오타 패턴)은 **AI리터러시에 자유 입력란이 없어서** 애초에 해당 없다.
+
+기기 대신 필요한 것이 있으면 **비식별 파생값**만 쓴다(예: `vp:"1280x800"` 뷰포트 크기 구간). v1엔 넣지 않는다.
+
+> ⚠️ **별건 — 이미 어긋난 자리 하나.** `08c`가 보내는 `clientId`는 localStorage에 영속하는 기기 UUID이고, 받는 동현공 Lambda는 레퍼런스 §3.1대로 **IP와 User-Agent를 CloudWatch에 기록**한다. 우리 교육청 문서는 그것을 다루지 않는다. 이 SPEC의 범위 밖이지만 **같이 정리할 사안**으로 남긴다(§10).
+
+## §3 이벤트 카탈로그 — 새로 발명하지 않는다
+
+**계측은 이미 배선돼 있다.** `08-event-log.js`의 `trackEvent`가 **28개 호출 지점**에서 발화한다. 동현공이 계측 22종을 새로 배선해야 했던 것과 달리, 우리가 할 일은 «전송을 붙이는 것»뿐이다.
+
+채택 이벤트(현행 그대로, 신규 계측 0):
+
+| 묶음 | eventType |
+|---|---|
+| 세션 | `session_started` · `session_continued` · `session_reset` |
+| 진입 | `title_viewed` · `tutorial_viewed` · `scenario_selected` · `scenario_viewed` |
+| 선택(핵심 루프) | `tier1_selected` · `tier2_selected` · `review_selected` |
+| 결과 | `result_viewed` · `final_viewed` · `scenario_completed` · `exp_gained` · `level_up` |
+| 재도전·이탈 | `replay_started` · `scenario_exited` · `game_over_triggered` |
+| 자원·보조 | `resource_consumed` · `resource_recovered` · `rp_awarded` · `rp_distributed` · `hint_toggled` |
+| 리포트 | `final_report_viewed` · `semester_report_viewed` · `report_print` |
+
+### §3-1 `snap`을 싣지 않는다 (크기의 본체)
+
+⚠️ 지금 `trackEvent`는 **매 이벤트에 `stateSnap()` 14필드**를 붙이고, `tier2_selected`·`review_selected`는 `before`+`after` **스냅샷을 둘 다** 싣는다 — 이벤트 하나가 1KB에 육박한다. 그대로 보내면 판당 30~50KB다.
+
+**전송 봉투는 `snap`을 버린다.** 근거는 우리 스스로 이미 같은 판단을 내렸다는 것이다 — SPEC-play-log §5 「outbox는 `snap`을 쓰지 않는다」. 누적 스냅샷은 `v` + 선택 시퀀스로 재계산되거나 분석 무가치다.
+
+- `snap` 제거 후 이벤트당 **~150B**, 판당 **~10KB**.
+- 콘솔·DebugPanel용 로컬 `trackEvent`는 **지금 모양 그대로 둔다**(디버깅에 쓰인다). 전송 봉투만 걸러서 만든다.
+
+### §3-2 봉투
+
+```
+{v, pid, seq, at, t, d}
+```
+
+| 필드 | 의미 |
+|---|---|
+| `v` | `CONFIG.version` — 해석 기준. A 파이프와 같은 값 |
+| `pid` | 판 식별자(`gameState.playId`) 재사용. **기기 UUID 아님** |
+| `seq` | 판 내 순번(1,2,3…). `part` 넘어도 리셋 안 함 — 순서·누락 판정 |
+| `at` | epoch ms 정수(A 파이프와 통일. ISO 문자열 아님 — 크기) |
+| `t` | eventType |
+| `d` | 이벤트별 payload(현행 `trackEvent` payload에서 `before`/`after` 스냅 제거) |
+
+## §4 저장·전송
+
+- 신규 CONFIG 키: `evOutboxKey: 'ai-literacy-delegation-boundary-{변종}-evbuf'`
+- 구조: `{ pid, datePath, part, seq, lines }` — 한 키에 원자적으로 영속(§1-4). `datePath`는 판 시작 시 1회 고정(자정 넘어 키가 바뀌면 멱등이 깨진다).
+- 전송: `POST {CONFIG.logEvEndpoint}`, `Content-Type: application/x-ndjson`, `keepalive:true`, `credentials:'omit'`.
+- S3 키: `raw-ev/{v}/{yyyy}/{mm}/{dd}/{pid}__{part}.ndjson`
+  - **prefix를 `raw/`와 갈라 둔다** — 안 가르면 `/report`·`/stats`가 verbose 파일까지 세어 집계가 오염되고 `MAX_RECORDS` 5,000 상한을 verbose가 먹는다.
+- flush 트리거(동현공 §8과 동일): 이벤트 10개 · 60초 주기 · 마일스톤(`scenario_completed`·`final_report_viewed`·`session_reset`) · `pagehide`/`visibilitychange(hidden)`.
+- 실패 처리: A 파이프(`08d` §7)와 같은 규칙 — 일시 실패는 버퍼 유지 후 다음 기회, 영구 거부(400·413·422)는 폐기.
+
+## §5 kill switch
+
+- `CONFIG.verboseLog`(불리언) + `CONFIG.logEvEndpoint`. **둘 다 있어야 켜진다**(fail-safe — 엔드포인트 누락 시 통째 off).
+- 주입은 빌드 타임. 우리는 Next가 아니라 `build.py`이므로 `NEXT_PUBLIC_*`이 아니라 **`build.py` 인자로 `CONFIG`에 박는다**(SPEC-build-system 참조).
+- **기본 off.** 학교 배포본은 플래그 없이 나가고, 피터공 테스트 빌드(GitHub Pages)에서만 켠다.
+- off면 `08e`는 전 함수 즉시 반환 — 리스너조차 걸지 않는다.
+
+## §6 먼저 막을 것 — localStorage 무제한 누적 (verbose보다 먼저)
+
+⚠️ 현행 `trackEvent`는 **트리밍이 없다**(`08-event-log.js:29-31`, `l.push(e)` 후 통째 저장). 그리고 `saveGame()`엔 **`try/catch`가 없다**(`07-storage.js:4`).
+
+localStorage 상한(5MB)이 차면 이벤트 로그 쓰기는 `trackEvent`의 `catch`가 삼키지만, **`saveGame`은 그대로 던진다 — 세이브가 터진다.** 교실 태블릿을 반마다 돌려쓰면 비용보다 이게 먼저 온다.
+
+**verbose를 붙이기 전에 닫는다**(별건으로 선행):
+- `trackEvent` 로컬 로그에 상한(최근 N건 링버퍼, N은 구현 시 확정).
+- `saveGame`에 `try/catch` + 실패 시 이벤트 로그를 먼저 비우고 1회 재시도.
+
+## §7 용량·비용 (피터공 판단 재료, 2026-08-13 산정)
+
+한 판 완주 기준. 학기 1만 판 가정.
+
+| | 판당 | 판당 PUT | 학기 총량 | 학기 비용 |
+|---|---|---|---|---|
+| A. 우리 레코드 | 600~750B | ~6 | 7MB | ~$0.3 |
+| B. verbose(`snap` 포함 시) | 30~50KB | 10~20 | 300~500MB | ~$1.0 |
+| B. verbose(`snap` 제거 = 채택안) | ~10KB | 10~20 | 100MB | ~$1.0 |
+
+- S3 PUT $0.005/1,000 · 저장 $0.025/GB·월 · HTTP API $1/100만 · Lambda 무료 티어 안.
+- **비용은 제약이 아니다**(학기당 1~2달러). 제약은 셋이고 둘은 이미 답이 있다 — `keepalive` 64KB는 48KB 롤오버가, `/report` 5,000건 상한은 prefix 분리가 막는다. **남는 하나가 §6의 localStorage다.**
+- ⚠️ 위 수치는 **산정치**다. 실측은 §8-1에서 한 판 돌려 확정하고 이 표를 갱신한다.
+
+## §8 검증
+
+### §8-1 실측(구현 전에 먼저)
+기존 하니스(`scripts/verify-log-transmit-cdp.mjs` T4)가 실제 1판을 돌린다. 그 자리에서 `getEvents()`의 **건수와 바이트**를 찍어 §7 표를 실측으로 교체한다. 추정으로 설계를 고정하지 않는다.
+
+### §8-2 구현 후
+- off = 완전 no-op(리스너 0, 네트워크 0, localStorage 쓰기 0).
+- on = 한 판 → `raw-ev/`에 파일, `seq` 연속·누락 0, 봉투에 `ua`·기기 UUID **없음**.
+- **A·B 독립 확인(§0 목표의 본체)**: ①B 엔드포인트를 죽여도 A의 `/report`가 정상 ②A 엔드포인트를 죽여도 B 파일이 정상 ③둘 다 죽여도 게임 완주 가능, 런타임 예외 0.
+- 48KB 롤오버: 강제로 버퍼를 부풀려 `part` 1로 넘어가는지, `part=0` 파일이 안 덮이는지.
+- 새로고침 후 `part`·`seq`·`pid` 이어짐.
+
+## §9 제거 방법 (관찰 종료 후)
+
+`08e-verbose-log.js` 삭제 + `build.py`의 `verboseLog`·`logEvEndpoint` 주입 2줄 삭제 + `08-event-log.js`의 전송 훅 1줄 삭제. `trackEvent` 본체·DebugPanel·A 파이프는 **남긴다**. 그 전까지는 플래그 off로 비활성(코드가 남아도 무해).
+
+## §10 범위 밖 / 남은 사안
+
+- **v14에 `08d-log-transmit.js`가 없다.** A 파이프 전송 모듈이 v13-elem·v13-mid에만 있고 v14엔 없다(`logApiEndpoint`도 없음). verbose와 별개로 이식이 필요하다.
+- **`08c`의 IP·UA 기록**(§2-3 ⚠️) — 교육청 문서에 한 줄 추가 / `08c` 제거 / 동현공에게 이 게임만 미기록 요청. 셋 중 하나.
+- SPEC 두 장(play-log·log-transmit)이 `r39`/`r40` 표기인데 라이브는 **r41** — 현행화 필요.
+- `v13-elem`의 `eventLogKey`·`outboxKey` 문자열이 `v13-mid`로 되어 있다(오리진이 달라 실사용 충돌은 없으나 로컬 검증에서 섞인다).
+- verbose 데이터의 **분석 화면은 만들지 않는다.** 지금은 파일을 내려받아 사후 분석. `/report`는 A 파이프 전용으로 둔다.
