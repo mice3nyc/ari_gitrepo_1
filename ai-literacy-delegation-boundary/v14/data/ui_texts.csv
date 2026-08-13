@@ -180,7 +180,7 @@ growthReport,growthReport.teacherNotes.selfStart,이 학생은 직접 시작하�
 growthReport,growthReport.teacherNotes.reviewStrong,이 학생은 검토 단계에서 성과가 크게 달라졌다. AI 결과를 그대로 쓰는 것과 자기 기준으로 고치는 것의 차이를 토론하게 하면 좋다.
 growthReport,growthReport.teacherNotes.reviewWeak,이 학생은 빠르게 결과를 만들지만 마지막 확인 습관이 아직 약하다. AI 결과를 제출 전에 한 문장으로 요약하게 하는 연습을 연결하면 좋다.
 growthReport,growthReport.teacherNotes.recoveryNeeded,"이 학생은 결과를 빠르게 얻는 경향이 있다. 한 과제에서 AI 없이 먼저 해보고, AI로 보강하는 순서를 체험하게 하면 좋다."
-title_screen,title_screen.badge,경기도 하이러닝 - AI 리터러시
+title_screen,title_screen.badge,AI 리터러시
 title_screen,title_screen.main_title_1,내가 할까? 시킬까?
 title_screen,title_screen.main_title_2,그것이 문제로다!
 title_screen,title_screen.sub_title_1,"AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가!"

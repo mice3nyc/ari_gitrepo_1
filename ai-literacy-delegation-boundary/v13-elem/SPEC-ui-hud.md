@@ -148,7 +148,7 @@
 1. **화면 분리**: 기존 타이틀+튜토리얼 한 화면 → ① `showTitleScreen`(레트로 타이틀) → ② `showTutorialScreen`(신설, 게임 안내 4문장) → ③ `showStartScreen`(시나리오 선택, 무변). 흐름은 항상 3단계(스킵 없음 — 재방문 스킵은 추후 판단).
 2. **물마루(Mulmaru) 도입**: `ai-literacy-delegation-boundary/fonts/Mulmaru.woff2`(99KB, OFL 1.1, LICENSE 동봉) — `@font-face` `../fonts/` 상대 경로(images와 같은 패턴). `--font-pixel:"Mulmaru"`. 타이틀 화면 전용(본문 Paperlogy 무변).
 3. **타이틀 카피** (texts.yaml title_screen 개편):
-   - badge: "경기도 하이러닝" (구 heading의 발주처 표기를 상단 칩으로 보존 — 피터공 확인 포인트)
+   - badge: "AI 리터러시" (26.0813 피터공 결정 — 발주처 표기 제거. 플랫폼 명칭이 바뀌어도 손댈 일이 없게)
    - main_title 2줄: "내가 할까? 시킬까?" / "그것이 문제로다!"
    - sub_title 2줄: "AI 시대, 무엇을 맡기고 무엇을 직접 할 것인가!" / "AI 리터러시, 위임의 경계!"
    - host_text: 기존 3문장 유지 (딸깍하면…)

@@ -12,7 +12,7 @@
 
 ```
 showTitleScreen
-  → [부팅] 좌측 커서 깜빡 → "경기도 하이러닝 - AI 리터러시: 게임 시작" 좌→우 타이핑 → 준비 줄
+  → [부팅] 좌측 커서 깜빡 → "AI 리터러시: 게임 시작" 좌→우 타이핑 → 준비 줄
   → [타이틀] 스윕(화면 그림) → 제목 2줄 글자별 타이핑+글리치 → 부제·인트로 박스 그려짐/써짐 → 시작 버튼 펄스
   → enterFromTitle (시작하기)
       · tutorialSeen=true → bootFlashTo(showStartScreen)  [재방문은 튜토리얼 생략, 기존 로직 유지]
@@ -75,11 +75,11 @@ KT 하이러닝 배포용. 게임 시작 전 **학생 식별** — 이름·수�
 - **레이어 구성**(`.crt-entrylayer`): 게임 타이틀(`.crt-et1`/`.crt-et2`)+부제 / 입력 2칸 `#crtName`(maxlength 20)·`#crtCode`(`.crt-field` CRT 녹색 톤 `--cg`/`--cg-dim`·`--font-crt`) / 에러 `#crtEntryErr` / 시작 버튼 `#crtEntryBtn`. 마크업 `_crtMarkup()`(09-render-scenario.js).
 - **게이트 규칙**:
   - 버튼은 두 칸 모두 비어있지 않을 때만 활성(`_crtEntryCheck()` — `disabled` 토글). 빈 칸이면 회색·클릭 불가.
-  - 클릭(`enterFromEntry`) 시: 이름 trim 후 비면 에러. 수업코드는 **공백 전부 제거 후** `CONFIG.classCode`(='하이러닝')와 일치해야 통과. 불일치 시 인라인 에러(`#crtEntryErr`), 화면 유지.
+  - 클릭(`enterFromEntry`) 시: 이름 trim 후 비면 에러. 수업코드는 **공백 전부 제거 후**(`_normClassCode`) `CONFIG.classCodes` 중 **하나와** 일치해야 통과(`_isValidClassCode`). 불일치 시 인라인 에러(`#crtEntryErr`), 화면 유지.
   - Enter 키로도 제출.
 - **저장**: 통과 시 `gameState.playerName`(이름, `<>&"` 제거·20자 컷)·`gameState.classCode` 세팅 후 `saveGame()`. 재방문(`tutorialSeen===true`)·새로고침 복원(`continueGame`) 시 이미 저장돼 재입력 불필요 — 재방문 입장 화면에서 두 칸을 저장값으로 프리필(`_crtEntryPrefill`).
-- **수업코드 정의**: `CONFIG.classCode='하이러닝'`(00-config.js). 변종(mid/elem) 공통 값. 부팅 뱃지 "경기도 하이러닝 - AI 리터러시"와 정합.
-- **검증분**: (자가) 빈칸 게이트·오답 코드 차단·정답 통과·playerName 저장·재방문 프리필 / (피터공) 입력 UX·CRT 톤·라이브 흐름.
+- **수업코드 정의**: `CONFIG.classCodes=['경기교육','하이러닝']`(00-config.js). 변종(mid/elem) 공통 값. **복수 허용**(26.0813 피터공) — '하이러닝'은 더 쓰지 않는 명칭이지만 기존 안내물을 들고 오는 학생이 있어 받아만 준다(화면 비노출). 비교는 양쪽 다 `_normClassCode`로 공백 제거 후. 저장은 CONFIG 고정값이 아니라 **통과한 입력값**을 `gameState.classCode`에 넣어 어느 코드로 들어왔는지 구분한다(로그 전송 스키마에는 미포함).
+- **검증분**: (자가) `scripts/verify-entry-gate-cdp.mjs` — 허용 코드 2종 통과·띄어쓰기/앞뒤/전각 공백 보정 4종·**오답 5종 차단**(게이트가 헐거워졌는지. 통과만 재면 «다 열림»도 통과다)·빈칸 버튼 비활성·배지 문구·화면 텍스트 미노출·예외 0 = 17케이스 / (피터공) 입력 UX·CRT 톤·라이브 흐름.
 
 ## 비범위 (이번 빌드 제외)
 

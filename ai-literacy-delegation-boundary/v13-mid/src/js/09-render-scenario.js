@@ -338,7 +338,7 @@ function _crtGlitch(el){el.classList.add('crt-glitch');_crtT(function(){el.class
 // 부팅: 좌측 커서 깜빡 → 좌→우 타이핑 → 준비 줄 → 타이틀
 function _crtRunBoot(){
   var _ts=_t('title_screen',{});
-  var line=(_ts.badge||'경기도 하이러닝 - AI 리터러시')+': 게임 시작';
+  var line=(_ts.badge||'AI 리터러시')+': 게임 시작';
   var sub='> 시스템 준비 완료. 잠시 후 시작합니다_';
   var bl=_g('crtBootLine'), bs=_g('crtBootSub');
   _crtHideAll(); _crtShow(_g('crtBoot'));
@@ -444,18 +444,26 @@ function _crtEntryCheck(){
   if(ok){var e=_g('crtEntryErr');if(e)e.textContent='';}
 }
 function _crtEntryErr(msg){var e=_g('crtEntryErr');if(e)e.textContent=msg;}
+// 수업코드 정규화 — 공백 전부 제거(전각 공백 U+3000도 JS \s에 포함).
+function _normClassCode(s){return String(s==null?'':s).replace(/\s+/g,'');}
+// 허용 코드 중 하나와 일치하는가 (SPEC-intro-crt «수업코드 정의»). 기준값도 같은 규칙으로 정규화.
+function _isValidClassCode(code){
+  var list=(CONFIG.classCodes&&CONFIG.classCodes.length)?CONFIG.classCodes:[CONFIG.classCode||'경기교육'];
+  for(var i=0;i<list.length;i++){if(_normClassCode(list[i])===code)return true;}
+  return false;
+}
 // 입장 화면 시작하기 — 이름·수업코드 검증 후 저장, 통과 시 부팅 시퀀스로
 function enterFromEntry(){
   if(!gameState)return;
   var nameEl=_g('crtName'), codeEl=_g('crtCode');
   if(!nameEl||!codeEl)return;
   var nm=(nameEl.value||'').trim().replace(/[<>&"]/g,'').slice(0,20);
-  var code=(codeEl.value||'').replace(/\s+/g,''); // 띄어쓰기 무시
+  var code=_normClassCode(codeEl.value); // 띄어쓰기 무시
   if(!nm){_crtEntryErr(_t('title_screen.err_name','이름을 입력해 주세요'));nameEl.focus();return;}
-  if(code!==(CONFIG.classCode||'하이러닝')){_crtEntryErr(_t('title_screen.err_code','수업코드가 올바르지 않아요'));codeEl.focus();return;}
+  if(!_isValidClassCode(code)){_crtEntryErr(_t('title_screen.err_code','수업코드가 올바르지 않아요'));codeEl.focus();return;}
   if(btnGuard('enterEntry'))return;
   gameState.playerName=nm;
-  gameState.classCode=(CONFIG.classCode||'하이러닝');
+  gameState.classCode=code; // 통과한 입력값(정규화) 저장 — 어느 코드로 들어왔는지 구분
   gameState.tutorialSeen=false; // 입장(새 시작)마다 튜토리얼 노출 — 캐시로 스킵 방지
   saveGame();
   _crtRunBoot(); // 부팅 → 타이틀

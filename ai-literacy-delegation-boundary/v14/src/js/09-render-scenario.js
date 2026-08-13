@@ -324,7 +324,7 @@ function _crtGlitch(el){el.classList.add('crt-glitch');_crtT(function(){el.class
 // 부팅: 좌측 커서 깜빡 → 좌→우 타이핑 → 준비 줄 → 타이틀
 function _crtRunBoot(){
   var _ts=_t('title_screen',{});
-  var line=(_ts.badge||'경기도 하이러닝 - AI 리터러시')+': 게임 시작';
+  var line=(_ts.badge||'AI 리터러시')+': 게임 시작';
   var sub='> 시스템 준비 완료. 잠시 후 시작합니다_';
   var bl=_g('crtBootLine'), bs=_g('crtBootSub');
   _crtHideAll(); _crtShow(_g('crtBoot'));

@@ -798,3 +798,10 @@ cut1·cut3 상단이 sticky HUD 밑으로 가려진 채 시작하던 문제 수�
 - [x] 미완료 중 다음 카드만 진입, 그 뒤는 잠김(점선·흐림·잠김 칩) / 완료 재도전은 순서 무관 유지
 - [x] startScenario 가드(미완료 && !next → return) — UI 우회 방어
 - [x] texts mark_locked + csv 재생성, 빌드 + 헤드리스(잠김3·PLAY1·재도전1·가드) + 스크린샷
+
+#### 8/13 세션862 — 배지 문구만 반영. ⚠️ 입장 게이트는 v14에 아직 없다
+
+> v13에 들어간 26.0813 변경(진입 수업코드 복수 허용)을 v14로 옮길 때 같이 가져와야 할 것. 요청 노트 [[요청.26.0813.0954-AI리터러시진입코드]]
+
+- [x] 부팅 배지 `title_screen.badge` → **"AI 리터러시"** (발주처 표기 제거, 피터공 8/13). `data/texts.yaml` + `data/elem/texts.yaml` + `data/ui_texts.csv` + 09-render-scenario.js 폴백. 빌드 3종 재생성
+- [ ] ⚠️ **입장 게이트(이름·수업코드) 미이식** — v14는 6/24 분기이고 게이트는 6/29에 v13에 들어갔다. `#crtEntry`·`enterFromEntry`·`CONFIG.classCode*`가 v14엔 **존재하지 않는다.** v14로 전환하면 학생 식별이 통째로 빠지므로, 이식 시 v13-mid의 `SPEC-intro-crt.md` «입장 게이트» 절 + `scripts/verify-entry-gate-cdp.mjs`(17케이스)를 함께 가져올 것
