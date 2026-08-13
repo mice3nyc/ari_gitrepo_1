@@ -63,6 +63,8 @@ VARIANT_CONFIG_REPLACEMENTS = {
             "sessionIdKey:'ai-literacy-v13-elem-session-id'",
         "outboxKey:'ai-literacy-delegation-boundary-v13-mid-outbox'":
             "outboxKey:'ai-literacy-delegation-boundary-v13-elem-outbox'",
+        "evOutboxKey:'ai-literacy-delegation-boundary-v13-mid-evbuf'":  # SPEC-verbose-log §4
+            "evOutboxKey:'ai-literacy-delegation-boundary-v13-elem-evbuf'",
         "gameId:'ai_literacy_md'":   # 동현공 참여 로깅 게임 ID — 초등
             "gameId:'ai_literacy_el'",
         # 6/23 — version·scenarios 치환 제거: v13-elem 소스가 이미 elem화됨

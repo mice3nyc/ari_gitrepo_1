@@ -25,6 +25,8 @@ function stateSnap(){
 function trackEvent(t,p){
   var e={type:t,sid:getSid(),at:new Date().toISOString(),scenarioId:gameState?gameState.currentScenarioId:null,snap:stateSnap(),payload:p||{}};
   console.log('[AI Literacy v0.8]',e);
+  // SPEC-verbose-log §3 — 전송 봉투는 08e가 따로 만든다(snap 제외). off면 즉시 no-op. 실패해도 여기 흐름은 안 막는다.
+  try{verboseLogEvent(t,p);}catch(x){}
   try{
     var l=JSON.parse(localStorage.getItem(CONFIG.eventLogKey)||'[]');
     l.push(e);

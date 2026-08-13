@@ -36,6 +36,11 @@ var CONFIG={
   gameId:'ai_literacy_md', // /log gameId. 변종 elem→ai_literacy_el. 동현공이 ALLOWED_GAME_IDS에 등록 필요
   clientIdKey:'ai-literacy-client-id', // 브라우저별 익명 식별자(참여 로깅용, localStorage 영속)
   scenarios:['bookreport','animaltalk','jobcard','classmascot','historycheck'],
+  // SPEC-verbose-log — 동현공식 전체 행동 기록(08e). 08b/08d(우리 레코드+/report)와 별개로 병렬로 돈다.
+  // 기본 OFF: verboseLog와 logEvEndpoint가 둘 다 있어야 켜진다(fail-safe). 관찰 빌드에서만 주입.
+  verboseLog:false,
+  logEvEndpoint:'',
+  evOutboxKey:'ai-literacy-delegation-boundary-v13-mid-evbuf',
   pointThresholds:{S:95,A:85,B:75,C:60,D:0},
   minResourceCost:1,
   cardBoost:20,

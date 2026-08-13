@@ -63,6 +63,8 @@ VARIANT_CONFIG_REPLACEMENTS = {
             "sessionIdKey:'ai-literacy-v13-elem-session-id'",
         "outboxKey:'ai-literacy-delegation-boundary-v13-mid-outbox'":
             "outboxKey:'ai-literacy-delegation-boundary-v13-elem-outbox'",
+        "evOutboxKey:'ai-literacy-delegation-boundary-v13-mid-evbuf'":  # SPEC-verbose-log §4
+            "evOutboxKey:'ai-literacy-delegation-boundary-v13-elem-evbuf'",
         "version:'v1.3-mid-r41'":
             "version:'v1.3-elem-r41'",
         "gameId:'ai_literacy_md'":   # 동현공 참여 로깅 게임 ID — 초등
