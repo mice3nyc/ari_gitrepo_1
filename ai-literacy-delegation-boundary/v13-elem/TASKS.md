@@ -55,3 +55,26 @@
 - [x] HANDOFF-deploy.md 사실 정정 2건 — ① «초등은 현재 내용이 중등과 동일»이 **틀렸다**(초등 고유 시나리오 5종: bookreport·animaltalk·jobcard·classmascot·historycheck). 8/8까지 그대로 나갔다 ② 이미지 «135개» → 실측 중등 132 · 초등 126. 그리고 0절에 r41 수업코드 안내 한 줄 추가(학생이 못 들어가면 문의가 배포 담당자에게 간다)
 - [x] 빌드 `builds/mid` **778,366 bytes** `v1.3-mid-r41` · `v13-elem/builds/elem` **798,348 bytes** `v1.3-elem-r41`. 게이트 하니스 재실행 17/17 · 17/17 PASS
 - [x] 전달 패키지 `~/Downloads/AI리터러시_동현공전달_260813_r41/`(+ `.zip` 282엔트리 5,413,582 bytes). zip은 **비ASCII 경로 282개 전부 UTF-8 플래그 확인**(8/8 윈도우 한글 깨짐 재발 방지), 압축 해제본으로 버전·수업코드·배지 실물 재확인
+
+### r42 — verbose 전체 행동 기록 (08e) · 2026-08-13
+
+동현공식 풀 이벤트 스트림을 세 번째 트랙으로. **기본 OFF** — A(08b/08d + `/report`)는 불변.
+SPEC: `SPEC-verbose-log.md` · 커밋 `f0e2b0a` 계열(선행 SPEC `1e6aaf6`)
+
+- [x] `src/js/08e-verbose-log.js` 신설 (버퍼 원자 영속 · 48KB 롤오버 · flush 10건/60초/pagehide)
+- [x] `08-event-log.js` trackEvent 전송 훅 1줄 (계측 신규 0)
+- [x] `00-config.js` `verboseLog`·`logEvEndpoint`·`evOutboxKey` / `build.py` elem 치환
+- [x] 검증 19/19 — `scripts/verify-verbose-log-cdp.mjs` (+ `verbose-log-sink.mjs`)
+- [x] 실측 — 1판 58이벤트 / 10,885B / PUT 7회 (snap 포함 대비 2.7배 감축)
+- [ ] **`POST /log-ev` route 콘솔에서 열기 (피터공)** ← 유일한 남은 관문
+- [ ] 실서버 CORS(preflight 3오리진) + 실제 1판 e2e
+- [ ] 그다음 zip → 동현공 배포
+
+**빌드 기록 (2026-08-13, verbose OFF 상태로 빌드됨)**
+- `v13-mid/builds/mid/index.html` 782,007 B · md5 `2defc8ebfff16bad002e42b489cfa6a6`
+- `v13-elem/builds/elem/index.html` 801,990 B · md5 `56b42045eef93f79c74cc73cb20ac005`
+
+⚠️ **별건으로 남은 것 — `trackEvent` 무제한 누적** (verbose와 무관, r41에도 있음).
+판당 29.1KB 선형 누적 → 약 172판에서 localStorage 5MB. 쿼터가 차면 `saveGame()`이
+선택 핸들러 안에서 던져 **화면은 정상인데 진행이 안 잡힌다**(다시 해도 동일).
+처방은 링버퍼 상한 + `saveGame` try/catch. 상세 `SPEC-verbose-log.md` §6.
