@@ -881,7 +881,7 @@ SPEC: `SPEC-verbose-log.md` · 커밋 `f0e2b0a` 계열(선행 SPEC `1e6aaf6`)
 - [x] **하니스 두 곳이 붉어졌고 둘 다 고쳤다** — ①verbose 하니스 T1이 «빌드 기본값 OFF»를 전제해 ON으로 바꾸자 실패 → T1에서 명시적으로 끄게 ②키 스킴 정규식에 `r41`이 하드코딩 → `CONFIG.version`에서 읽게. ③**sink 자체 버그**: OPTIONS preflight에 응답을 두 번 써서 프로세스가 죽었다(`X-Log-Key`가 커스텀 헤더라 preflight는 늘 온다)
 - [x] **검증** — verbose 18/18 · 진입 게이트 mid 17/17 · elem 17/17
 - [x] **수집항목-설명.md 개정** ⚠️ — 이 문서는 «아래 목록이 전부»라고 학교·교육청에 명시한다. verbose를 켜면 판당 ~10KB 행동 기록이 새로 나가므로 그대로 두면 **문서가 사실과 어긋난다.** 3-2절 신설(담기는 6필드·안 담기는 것·끄는 방법) + HANDOFF 0절 안내
-- [ ] **zip → 동현공 배포** — 패키지는 만들어 뒀다(아래). 피터공 검토 후 발송
+- [x] **zip → 동현공 전달 완료 (2026-08-16, 피터공)** — 다음은 동현공 AWS 배포 + Lambda 환경변수 2개 갱신
 
 **빌드 기록 (2026-08-16, r42 · verbose ON)**
 - `v13-mid/builds/mid/index.html` **782,383 B** · md5 `ec120cc22fe685b0d0a6a4cfa7cdcfd5` · `v1.3-mid-r42`
