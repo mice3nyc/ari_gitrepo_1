@@ -14,13 +14,26 @@
 #   session_num.sh peek                          # 현재 최신 번호 조회 (발급 안 함)
 #
 # 출력: 발급된 번호 하나 (숫자만). 실패 시 stderr + exit 1
+#
+# ── 빈 엔트리 재사용 (2026-08-16 신설) ────────────────────
+#   new에 창 이름이 주어지면, 그 창의 «오늘» 엔트리 중 본문이 씨앗 한 줄뿐인 것을
+#   찾아 새 번호를 발급하지 않고 그것을 돌려준다.
+#   왜: /recall이 엔트리를 만들고 /memento가 채우는데, 화면을 비우려고 /clear만 하면
+#       그 엔트리는 빈 채로 남고 다음 /recall이 새 번호를 판다. 창 하나가 하루 네 번
+#       비우면 빈 엔트리가 셋 생긴다(8/15 창C 882·886·889·890이 그 모양).
+#       피터공 판단(8/16): 창을 연 횟수는 정보가 아니다. 빈 자리는 유지할 이유가 없다.
+#   안전선: ①창 이름을 모르면(빈 값·`?` 포함) 재사용하지 않는다 — 남의 자리를 집을 수 있다
+#          ②본문이 씨앗 한 줄일 때만. 한 줄이라도 더 적혔으면 그 창이 일한 것이라 안 건드린다
+#          ③재사용 시 헤딩을 고치지 않는다 — 제목은 /memento가 마지막에 쓴다
 
 set -euo pipefail
 
 VAULT="/Users/p.air15/Neo-Obsi-Sync"
-LOG="$VAULT/_클로드코드노트/클로드코드 세션 로그.md"
-COUNTER="$VAULT/_클로드코드노트/.session_counter"
-LOCK="$VAULT/_클로드코드노트/.session_num.lock"
+# SESSION_LOG_DIR은 픽스처 테스트용 우회로다 (평소엔 비워 둔다)
+BASE="${SESSION_LOG_DIR:-$VAULT/_클로드코드노트}"
+LOG="$BASE/클로드코드 세션 로그.md"
+COUNTER="$BASE/.session_counter"
+LOCK="$BASE/.session_num.lock"
 
 [ -f "$LOG" ] || { echo "세션 로그가 없다: $LOG" >&2; exit 1; }
 
@@ -48,6 +61,41 @@ for _ in $(seq 1 50); do
 done
 [ "$acquired" = 1 ] || { echo "락 획득 실패 — $LOCK 을 확인하라" >&2; exit 1; }
 trap 'rmdir "$LOCK" 2>/dev/null || true' EXIT
+
+# ── new: 이 창의 오늘 빈 엔트리가 있으면 재사용하고 끝낸다 ──
+if [ "${1}" = "new" ]; then
+  WIN_CHK="${2:-}"
+  case "$WIN_CHK" in
+    ""|*"?"*) ;;   # 창 이름을 모르면 재사용하지 않는다
+    *)
+      reuse=$(WIN="$WIN_CHK" LOGP="$LOG" python3 - <<'PY'
+import os, re, datetime
+log=os.environ['LOGP']; win=os.environ['WIN']
+today=datetime.date.today().isoformat()
+s=open(log,encoding='utf-8').read()
+heads=[(m.start(), m.end(), m.group(0), int(m.group(1)))
+       for m in re.finditer(r'(?m)^#{2,3} 세션 ?(\d+).*$', s)]
+for i,(st,en,txt,num) in enumerate(heads):
+    if today not in txt or f"({win})" not in txt:
+        continue
+    nxt = heads[i+1][0] if i+1 < len(heads) else len(s)
+    lines=[l for l in s[en:nxt].strip().splitlines()
+           if l.strip() and l.strip() != '---']
+    # 씨앗 줄은 헤딩 제목과 글자가 같다 — 이 스크립트가 `| {제목}` + `- {제목}`으로 꽂기 때문.
+    # 「한 줄뿐」로 판정하면 «- 완료: 배포» 한 줄 적고 닫은 창까지 집는다(픽스처에서 실측).
+    title = txt.split('|', 1)[1].strip() if '|' in txt else None
+    if title and len(lines)==1 and lines[0].strip() == f"- {title}":
+        print(num)
+    break          # 첫 매치(=가장 최신)만 본다. 그 아래는 지난 세션이다
+PY
+)
+      if [ -n "$reuse" ]; then
+        echo "재사용: 세션 $reuse — $WIN_CHK 의 오늘 빈 엔트리를 다시 쓴다 (새 번호 발급 안 함)" >&2
+        printf '%s\n' "$reuse"
+        exit 0
+      fi ;;
+  esac
+fi
 
 # ── 발급: 카운터와 로그 머리 중 큰 쪽 +1 (손으로 고쳐도 자가 치유) ──
 prev_counter=0
