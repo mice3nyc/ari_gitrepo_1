@@ -148,6 +148,9 @@ Resources:
           - GET
         AllowHeaders:
           - Content-Type
+          # X-Log-Key: verbose 파이프(POST /log-ev)가 S3 키를 헤더로 보낸다.
+          # 없으면 브라우저 preflight에서 막힌다 -- SPEC-verbose-log.md §8-1 (2026-08-16)
+          - X-Log-Key
 
   DefaultStage:
     Type: AWS::ApiGatewayV2::Stage
@@ -181,6 +184,114 @@ Resources:
       Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
       SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*/log'
+
+  # ===========================================================================
+  # verbose 파이프(B) -- POST /log-ev  (SPEC-verbose-log.md §8-1, 2026-08-16 신설)
+  #
+  # 파이프 A(IngestFunction)와 함수·역할을 가른다. A는 지금 KT 라이브를 받고
+  # 있어서 verbose 쪽 버그가 그것을 멈추면 안 된다. 역할도 갈라 A는 raw-ev/에
+  # 못 쓰고 B는 raw/에 못 쓴다(최소권한 -- SPEC-log-transmit.md §11-2와 같은 결).
+  # ===========================================================================
+  IngestEvExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${ProjectName}-lambda-ev-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        # ⚠️ raw/* 는 raw-ev/... 를 포함하지 않는다(prefix가 슬래시까지다).
+        #    기존 역할을 그대로 썼으면 PutObject가 403으로 죽었다.
+        - PolicyName: s3-write-only-raw-ev-prefix
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                Resource: !Sub '${PlayLogBucket.Arn}/raw-ev/*'
+
+  IngestEvFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-ingest-ev'
+      Runtime: nodejs20.x
+      Handler: index.handler
+      Role: !GetAtt IngestEvExecutionRole.Arn
+      Timeout: 10
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref PlayLogBucket
+      Code:
+        ZipFile: |
+          const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+          const s3 = new S3Client({});
+          // 클라이언트 롤오버가 48KB, keepalive 상한이 64KB -- 서버 캡은 64KB.
+          const MAX_BYTES = 64 * 1024;
+          // 키는 클라이언트가 주는 값이다. 검증 없이 쓰면 임의 경로 쓰기가 된다.
+          const KEY_RE = /^raw-ev\/[A-Za-z0-9._-]{1,32}\/\d{4}\/\d{2}\/\d{2}\/p_[A-Za-z0-9_-]{1,64}__\d{1,6}\.ndjson$/;
+          function resp(code, obj) {
+            return { statusCode: code, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(obj) };
+          }
+          exports.handler = async (event) => {
+            const h = event.headers || {};
+            // API Gateway HTTP API는 헤더 이름을 소문자로 준다.
+            const key = h['x-log-key'] || h['X-Log-Key'];
+            if (typeof key !== 'string' || !KEY_RE.test(key)) return resp(400, { error: 'invalid key' });
+            let raw = event.body || '';
+            if (event.isBase64Encoded) raw = Buffer.from(raw, 'base64').toString('utf8');
+            const bytes = Buffer.byteLength(raw, 'utf8');
+            if (bytes === 0) return resp(400, { error: 'empty body' });
+            if (bytes > MAX_BYTES) return resp(400, { error: 'payload too large' });
+            // NDJSON 최소 검증: 모든 줄이 파싱되고 봉투 필드가 있는가.
+            const lines = raw.split('\n').filter((l) => l.trim() !== '');
+            if (lines.length === 0) return resp(400, { error: 'no lines' });
+            for (const line of lines) {
+              let rec;
+              try { rec = JSON.parse(line); } catch (e) { return resp(400, { error: 'bad ndjson' }); }
+              if (typeof rec.pid !== 'string' || !rec.pid.startsWith('p_')) return resp(400, { error: 'invalid pid' });
+              if (typeof rec.t !== 'string' || typeof rec.seq !== 'number') return resp(400, { error: 'invalid record shape' });
+            }
+            // 같은 키에 덮어쓰기 -- flush가 그 part 전체를 다시 올린다(멱등, SPEC §1-2).
+            await s3.send(new PutObjectCommand({
+              Bucket: process.env.BUCKET_NAME,
+              Key: key,
+              Body: raw,
+              ContentType: 'application/x-ndjson',
+              ServerSideEncryption: 'AES256'
+            }));
+            console.log('saved-ev', key, lines.length, bytes);  // CloudWatch 유입 확인용
+            return resp(200, { ok: true, lines: lines.length });
+          };
+
+  IngestEvIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt IngestEvFunction.Arn
+      PayloadFormatVersion: '2.0'
+
+  IngestEvRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: 'POST /log-ev'
+      Target: !Sub 'integrations/${IngestEvIntegration}'
+
+  IngestEvPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref IngestEvFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*/log-ev'
 
   # ---------------------------------------------------------------------------
   # 조회용 Lambda 실행 역할 -- 버킷 raw/* prefix에 ListBucket만(읽기·쓰기 없음).
@@ -523,6 +634,9 @@ Outputs:
   ApiEndpoint:
     Description: 'SPEC-log-transmit.md §7 08d-log-transmit.js에 고정할 값'
     Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/log'
+  LogEvEndpoint:
+    Description: 'SPEC-verbose-log.md §8-1 verbose 파이프 -- build.py의 logEvEndpoint에 고정할 값'
+    Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/log-ev'
   StatsEndpoint:
     Description: 'SPEC-log-transmit.md §11-2 유입 조회 -- 브라우저로 열면 {total,byVersion,latest}'
     Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/stats'

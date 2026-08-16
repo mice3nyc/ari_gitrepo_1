@@ -208,7 +208,37 @@
 | **T5** | 런타임 예외 0 |
 | **회전 스티치** | 판 파일 첫 줄 `__rotate.d.from`이 부트스트랩 파일을 정확히 가리킴. 11 + 13 = 24줄로 이어붙음 |
 
-**남은 것 = 실서버 검증**. 지금은 로컬 sink 기준이라 CORS·실제 route는 아직 안 봤다. 콘솔에서 `/log-ev`를 연 뒤 §10-3 방식(preflight curl)으로 오리진 3개 확인 + 실제 1판 end-to-end.
+**남은 것 = 실서버 검증**. 지금은 로컬 sink 기준이라 CORS·실제 route는 아직 안 봤다.
+
+### §8-1 서버 쪽 (2026-08-16 신설 — 「콘솔에서 열면 된다」가 틀렸다)
+
+> ⚠️ **위 문단은 「콘솔에서 `/log-ev`를 연 뒤」라고 적었고 작업 큐도 그것을 «유일한 관문»으로 적었다. 실물 대조 결과 틀렸다.** `infra/ai-literacy-log-api.yaml`에 route가 없고 verbose 수신 Lambda도 없다. 콘솔에 켤 스위치가 있는 게 아니라 **받는 쪽이 안 지어져 있었다.** 라이브 실측 = `POST /log-ev → 404`(양쪽 API), `POST /log → 400`(살아 있음).
+>
+> 그리고 route만 열었으면 **두 번 더 막혔다.** 이 둘은 route를 열어 봐야 드러나지도 않는다(첫 번째로 죽는 자리 하나만 진짜다):
+> - **IAM** — `s3:PutObject`가 `${PlayLogBucket.Arn}/raw/*`로만 열려 있다. `raw-ev/…`는 이 패턴에 **안 걸린다**(`raw/`는 슬래시까지가 prefix). 403
+> - **CORS** — `AllowHeaders`가 `Content-Type` 하나뿐인데 클라이언트는 `X-Log-Key`를 보낸다. 브라우저 preflight에서 차단
+
+수신 계약은 클라이언트(`08e-verbose-log.js`)가 이미 정해 놓았다. 서버는 그것을 그대로 받는다.
+
+| | 값 |
+|---|---|
+| 메서드·경로 | `POST /log-ev` |
+| Content-Type | `application/x-ndjson` |
+| 키 | 헤더 `X-Log-Key` = `raw-ev/{v}/{yyyy}/{mm}/{dd}/{pid}__{part}.ndjson` |
+| 바디 | NDJSON. 같은 키에 **덮어쓰기**(flush가 그 part 전체를 다시 올린다 — 멱등) |
+| 크기 | 롤오버 48KB, `keepalive` 상한 64KB → 서버 캡 **64KB** |
+
+**설계 결정 — 파이프 A와 다른 Lambda·다른 역할로 가른다.** 기존 `IngestFunction`에 경로 분기를 넣지 않는다. A 파이프는 지금 KT 라이브를 받고 있어서, verbose 쪽 버그가 그것을 멈추면 안 된다. 함수를 가르면 실패 영역이 갈리고, 역할도 갈라서 **A 역할은 `raw-ev/`에 못 쓰고 B 역할은 `raw/`에 못 쓴다**(최소권한 유지, `SPEC-log-transmit.md` §11-2와 같은 결).
+
+**키는 클라이언트가 주는 값이라 서버에서 정규식으로 조인다.** 검증 없이 S3 키로 쓰면 임의 경로 쓰기가 된다. 통과 조건:
+
+```
+^raw-ev/[A-Za-z0-9._-]{1,32}/\d{4}/\d{2}/\d{2}/p_[A-Za-z0-9_-]{1,64}__\d{1,6}\.ndjson$
+```
+
+`raw-ev/` 접두어를 강제하는 것이 `/report`·`/stats` 오염 방지(§1-4 prefix 분리)와 같은 자리다.
+
+**남은 것 = 스택 업데이트 후 §10-3 방식(preflight curl)으로 오리진 3개 확인 + 실제 1판 end-to-end.**
 
 ## §9 제거 방법 (관찰 종료 후)
 
