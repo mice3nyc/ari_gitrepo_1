@@ -5,6 +5,10 @@ beingfaust_values/references/
 # 독립 저장소 (자체 remote — 부모 repo에 넣지 않음)
 mind2action/
 mind2action-home/
+# 동현공 2025 코드베이스 clone (nolgong-dev org 리포, 위메이크 성수 2026 참조용).
+# 자체 .git이 있어 여기 커밋하면 gitlink 껍데기만 들어가고, 놀공 org 코드가 개인 리포로 오배치된다.
+we-make-seongsu-back-2025/
+we-make-seongsu-front-2025/
 
 # 빌드 산물 / 의존성
 *.app/
