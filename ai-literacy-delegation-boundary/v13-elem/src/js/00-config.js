@@ -24,7 +24,7 @@ var CONFIG={
   eventLogKey:'ai-literacy-delegation-boundary-v13-mid-events',
   sessionIdKey:'ai-literacy-v13-mid-session-id',
   outboxKey:'ai-literacy-delegation-boundary-v13-mid-outbox', // SPEC-play-log §2 — 전송 대기 큐
-  version:'v1.3-elem-r41',
+  version:'v1.3-elem-r42',
   // 디버그 UI(개발 네비 바·디버그 패널·버전 라벨) 노출 여부. 변종(배포) 빌드는 false 주입 → 학교 라이브 숨김
   debug:true,
   // 동현공 Lambda — 게임 시작 참여 로깅(/log, fire-and-forget). 우리 플레이로그(08b)와 별개 시스템
@@ -37,9 +37,10 @@ var CONFIG={
   clientIdKey:'ai-literacy-client-id', // 브라우저별 익명 식별자(참여 로깅용, localStorage 영속)
   scenarios:['bookreport','animaltalk','jobcard','classmascot','historycheck'],
   // SPEC-verbose-log — 동현공식 전체 행동 기록(08e). 08b/08d(우리 레코드+/report)와 별개로 병렬로 돈다.
-  // 기본 OFF: verboseLog와 logEvEndpoint가 둘 다 있어야 켜진다(fail-safe). 관찰 빌드에서만 주입.
-  verboseLog:false,
-  logEvEndpoint:'',
+  // 켜짐(r42, 2026-08-16) — 수신 route가 실서버에 생기고 e2e까지 확인된 뒤 올렸다.
+  // 끄려면 verboseLog를 false로 두면 된다. A 파이프(08b/08d)는 이 값과 무관하게 돈다.
+  verboseLog:true,
+  logEvEndpoint:'https://1js1lu6g60.execute-api.ap-northeast-2.amazonaws.com/log-ev',
   evOutboxKey:'ai-literacy-delegation-boundary-v13-mid-evbuf',
   pointThresholds:{S:95,A:85,B:75,C:60,D:0},
   minResourceCost:1,

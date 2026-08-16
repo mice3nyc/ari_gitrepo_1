@@ -22,6 +22,12 @@ function stateSnap(){
   };
 }
 
+// SPEC-verbose-log §6-2 — 로컬 이벤트 로그 상한(링버퍼).
+// 트리밍이 없어서 판당 58건·29.1KB가 영원히 쌓였다(clearEvents는 DebugPanel에서만 불린다).
+// 약 172판에서 localStorage 5MB가 차고, 그때 증상은 «화면은 멀쩡한데 진행만 안 잡힌다»였다.
+// 200이면 최근 3~4판이 남고 크기는 ~100KB에 묶인다.
+var _EVENT_LOG_MAX = 200;
+
 function trackEvent(t,p){
   var e={type:t,sid:getSid(),at:new Date().toISOString(),scenarioId:gameState?gameState.currentScenarioId:null,snap:stateSnap(),payload:p||{}};
   console.log('[AI Literacy v0.8]',e);
@@ -30,6 +36,7 @@ function trackEvent(t,p){
   try{
     var l=JSON.parse(localStorage.getItem(CONFIG.eventLogKey)||'[]');
     l.push(e);
+    if(l.length>_EVENT_LOG_MAX)l=l.slice(l.length-_EVENT_LOG_MAX);
     localStorage.setItem(CONFIG.eventLogKey,JSON.stringify(l));
   }catch(x){}
 }

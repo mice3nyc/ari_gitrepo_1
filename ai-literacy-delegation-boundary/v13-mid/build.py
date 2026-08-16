@@ -65,8 +65,8 @@ VARIANT_CONFIG_REPLACEMENTS = {
             "outboxKey:'ai-literacy-delegation-boundary-v13-elem-outbox'",
         "evOutboxKey:'ai-literacy-delegation-boundary-v13-mid-evbuf'":  # SPEC-verbose-log §4
             "evOutboxKey:'ai-literacy-delegation-boundary-v13-elem-evbuf'",
-        "version:'v1.3-mid-r41'":
-            "version:'v1.3-elem-r41'",
+        "version:'v1.3-mid-r42'":
+            "version:'v1.3-elem-r42'",
         "gameId:'ai_literacy_md'":   # 동현공 참여 로깅 게임 ID — 초등
             "gameId:'ai_literacy_el'",
         # H2 — CONFIG.scenarios 변종 교체. clientIdKey 줄로 앵커해 15-card PILOT 배열(동일 문자열)과 구분.

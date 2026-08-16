@@ -27,6 +27,10 @@ async function play(n){
 // ───── T1: OFF = 완전 no-op
 await goto(BASE);await ev(`localStorage.clear();sessionStorage.clear();1`);await goto(BASE)
 await ev(`CONFIG.logApiEndpoint='';CONFIG.logEndpoint='';1`)
+// r42(2026-08-16)부터 빌드 기본값이 ON이라(SPEC §6-4) OFF 경로는 여기서 명시적으로 끈다.
+// 전엔 빌드 기본값에 기대고 있어서, 기본값을 켜는 순간 T1이 「OFF가 아니다」로 붉어졌다.
+// 부팅 때 ON으로 이미 생긴 버퍼도 지워서 백지에서 잰다.
+await ev(`CONFIG.verboseLog=false;localStorage.removeItem(CONFIG.evOutboxKey);1`)
 await reset()
 await play(1)
 ok('T1 OFF — evbuf 키 자체가 안 생김', (await ev(`localStorage.getItem(CONFIG.evOutboxKey)===null`)), `verboseLog=${await ev(`CONFIG.verboseLog`)}`)
@@ -52,7 +56,10 @@ ok('T2 PII 없음 — UA·기기UUID 미포함', !/Mozilla|AppleWebKit|Chrome\//
 const D=await dump()
 const evReq=D.filter(r=>r.url==='/log-ev')
 ok('T2 전송됨 — NDJSON', evReq.length>0 && evReq[0].ct==='application/x-ndjson', `${evReq.length}회 · ct=${evReq[0]?.ct}`)
-ok('T2 키 스킴 raw-ev/{v}/{y}/{m}/{d}/{pid}__{part}.ndjson', /^raw-ev\/v1\.3-mid-r41\/\d{4}\/\d{2}\/\d{2}\/p_[a-z0-9]+__0\.ndjson$/.test(evReq[evReq.length-1].key||''), evReq[evReq.length-1].key)
+// 버전을 하드코딩하지 않는다 — r41이 박혀 있어서 r42로 올리자 이 줄만 붉어졌다(2026-08-16).
+const VER=await ev(`CONFIG.version`)
+const KEY_RE=new RegExp('^raw-ev/'+VER.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'/\\d{4}/\\d{2}/\\d{2}/p_[a-z0-9]+__0\\.ndjson$')
+ok('T2 키 스킴 raw-ev/{v}/{y}/{m}/{d}/{pid}__{part}.ndjson', KEY_RE.test(evReq[evReq.length-1].key||''), `${evReq[evReq.length-1].key} (v=${VER})`)
 ok('T2 pid 회전 — 부트스트랩(p_b)과 판(p_) 파일이 갈린다', new Set(evReq.map(r=>r.key.split('/').pop().split('__')[0])).size>=2, [...new Set(evReq.map(r=>r.key.split('/').pop().split('__')[0]))].join(', '))
 ok('T2 A파이프 pid와 동일 — 조인된다', st.pid===(await ev(`gameState.playId`)), `${st.pid} vs ${await ev(`gameState.playId`)}`)
 

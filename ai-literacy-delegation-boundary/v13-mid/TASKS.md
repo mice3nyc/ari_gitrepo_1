@@ -873,9 +873,20 @@ SPEC: `SPEC-verbose-log.md` · 커밋 `f0e2b0a` 계열(선행 SPEC `1e6aaf6`)
 - [x] `00-config.js` `verboseLog`·`logEvEndpoint`·`evOutboxKey` / `build.py` elem 치환
 - [x] 검증 19/19 — `scripts/verify-verbose-log-cdp.mjs` (+ `verbose-log-sink.mjs`)
 - [x] 실측 — 1판 58이벤트 / 10,885B / PUT 7회 (snap 포함 대비 2.7배 감축)
-- [ ] **`POST /log-ev` route 콘솔에서 열기 (피터공)** ← 유일한 남은 관문
-- [ ] 실서버 CORS(preflight 3오리진) + 실제 1판 e2e
-- [ ] 그다음 zip → 동현공 배포
+- [x] ~~`POST /log-ev` route 콘솔에서 열기~~ → ⚠️**진단이 틀렸다(8/16)**: 콘솔에 켤 스위치가 없었고 **받는 쪽이 안 지어져 있었다**(템플릿에 route 없음·verbose 수신 Lambda 없음). route만 열었어도 **IAM(`raw/*`만 열려 `raw-ev/`는 403)**·**CORS(`X-Log-Key` 미허용)**에 두 번 더 막혔다 — 둘 다 열어 봐야 안 드러난다
+- [x] **서버 신설 + 배포(8/16 12:52)** — `IngestEvFunction`+전용 역할(`raw-ev/*`만)·route·integration·permission·CORS 헤더·Output. 변경세트 6건 = `HttpApi` Modify(대체 False) + 신규 5 Add. 핸들러 단위 18/18
+- [x] **실서버 CORS(3오리진) + e2e** — `/log-ev` 404→**200** · 경로탈출/prefix위조 400 · 파이프 A `POST /log` 무회귀 · 오리진 3개 `x-log-key` 허용·그 외 차단. **클라이언트가 실제로 만든 39줄 56,871B를 실서버가 200으로 수락**(48KB 롤오버 직후 덩어리 — 서버 캡을 64KB로 잡은 근거)
+- [x] **관찰 켬** — `verboseLog:true` + 실엔드포인트, 버전 `r41`→**`r42`**(mid·elem). `/stats`가 `byVersion`으로 세니 번호를 안 올리면 옛 빌드와 섞인다
+- [x] **`trackEvent` 무제한 누적 봉합** — `_EVENT_LOG_MAX=200` 링버퍼 + `saveGame` try/catch(실패 시 이벤트 로그 비우고 1회 재시도). SPEC §6-3
+- [x] **하니스 두 곳이 붉어졌고 둘 다 고쳤다** — ①verbose 하니스 T1이 «빌드 기본값 OFF»를 전제해 ON으로 바꾸자 실패 → T1에서 명시적으로 끄게 ②키 스킴 정규식에 `r41`이 하드코딩 → `CONFIG.version`에서 읽게. ③**sink 자체 버그**: OPTIONS preflight에 응답을 두 번 써서 프로세스가 죽었다(`X-Log-Key`가 커스텀 헤더라 preflight는 늘 온다)
+- [x] **검증** — verbose 18/18 · 진입 게이트 mid 17/17 · elem 17/17
+- [x] **수집항목-설명.md 개정** ⚠️ — 이 문서는 «아래 목록이 전부»라고 학교·교육청에 명시한다. verbose를 켜면 판당 ~10KB 행동 기록이 새로 나가므로 그대로 두면 **문서가 사실과 어긋난다.** 3-2절 신설(담기는 6필드·안 담기는 것·끄는 방법) + HANDOFF 0절 안내
+- [ ] **zip → 동현공 배포** — 패키지는 만들어 뒀다(아래). 피터공 검토 후 발송
+
+**빌드 기록 (2026-08-16, r42 · verbose ON)**
+- `v13-mid/builds/mid/index.html` **782,383 B** · md5 `ec120cc22fe685b0d0a6a4cfa7cdcfd5` · `v1.3-mid-r42`
+- `v13-elem/builds/elem/index.html` **802,366 B** · md5 `04f4f77860e119c296d0148b0d1a42a3` · `v1.3-elem-r42`
+- 패키지 `~/Downloads/AI리터러시_동현공전달_260816_r42/` + `.zip` **289엔트리 5,419,703 B**. 비ASCII 경로 289개 **전부 UTF-8 플래그 확인**(macOS `zip`은 플래그를 안 단다 — 파이썬 `zipfile`로 다시 묶었다. 8/8 윈도우 한글 깨짐 재발 방지). 압축 해제본으로 버전·verboseLog·엔드포인트 실물 재확인
 
 **빌드 기록 (2026-08-13, verbose OFF 상태로 빌드됨)**
 - `v13-mid/builds/mid/index.html` 782,007 B · md5 `2defc8ebfff16bad002e42b489cfa6a6`

@@ -2222,7 +2222,7 @@ var CONFIG={
   eventLogKey:'ai-literacy-delegation-boundary-v13-mid-events',
   sessionIdKey:'ai-literacy-v13-mid-session-id',
   outboxKey:'ai-literacy-delegation-boundary-v13-mid-outbox', // SPEC-play-log §2 — 전송 대기 큐
-  version:'v1.3-mid-r41',
+  version:'v1.3-mid-r42',
   // 디버그 UI(개발 네비 바·디버그 패널·버전 라벨) 노출 여부. 변종(배포) 빌드는 false 주입 → 학교 라이브 숨김
   debug:true,
   // 동현공 Lambda — 게임 시작 참여 로깅(/log, fire-and-forget). 우리 플레이로그(08b)와 별개 시스템
@@ -2235,9 +2235,11 @@ var CONFIG={
   clientIdKey:'ai-literacy-client-id', // 브라우저별 익명 식별자(참여 로깅용, localStorage 영속)
   scenarios:['selfintro','groupwork','eorinwangja','career','studyplan'],
   // SPEC-verbose-log — 동현공식 전체 행동 기록(08e). 08b/08d(우리 레코드+/report)와 별개로 병렬로 돈다.
-  // 기본 OFF: verboseLog와 logEvEndpoint가 둘 다 있어야 켜진다(fail-safe). 관찰 빌드에서만 주입.
-  verboseLog:false,
-  logEvEndpoint:'',
+  // 켜짐(r42, 2026-08-16) — 수신 route가 실서버에 생기고 e2e까지 확인된 뒤 올렸다.
+  // 끄려면 verboseLog를 false로 두면 된다(둘 다 있어야 켜지는 fail-safe라 엔드포인트는 남겨도 무해).
+  // A 파이프(08b/08d + /report)와는 무관하게 병렬로 돈다 — 여길 꺼도 A는 그대로 간다.
+  verboseLog:true,
+  logEvEndpoint:'https://1js1lu6g60.execute-api.ap-northeast-2.amazonaws.com/log-ev',
   evOutboxKey:'ai-literacy-delegation-boundary-v13-mid-evbuf',
   pointThresholds:{S:95,A:85,B:75,C:60,D:0},
   minResourceCost:1,
@@ -15164,7 +15166,19 @@ function getFinalGrade(leaf){
 // =====================================================
 // 7. Storage (v0.2 보존, key만 v03)
 // =====================================================
-function saveGame(){localStorage.setItem(CONFIG.storageKey,JSON.stringify({state:gameState,at:new Date().toISOString()}));}
+// SPEC-verbose-log §6-2 — 세이브는 어떤 경우에도 이벤트 로그보다 우선한다.
+// try/catch가 없어서 쿼터가 차면 선택 핸들러 3곳(03-engine 45·68·109)에서 던졌고,
+// 그때 화면은 정상으로 넘어가는데 scenarioHistory만 0으로 남았다(다시 해도 동일).
+// 실패하면 이벤트 로그를 먼저 비우고 한 번 재시도한다.
+function saveGame(){
+  var payload=JSON.stringify({state:gameState,at:new Date().toISOString()});
+  try{localStorage.setItem(CONFIG.storageKey,payload);}
+  catch(e){
+    try{localStorage.removeItem(CONFIG.eventLogKey);}catch(x){}
+    try{localStorage.setItem(CONFIG.storageKey,payload);}
+    catch(e2){try{console.error('[AI Literacy] saveGame 실패 — 저장 공간 부족',e2);}catch(x){}}
+  }
+}
 function loadGame(){try{var d=JSON.parse(localStorage.getItem(CONFIG.storageKey));return d?d.state:null;}catch(e){return null;}}
 function clearGame(){localStorage.removeItem(CONFIG.storageKey);}
 function hasSave(){return!!localStorage.getItem(CONFIG.storageKey);}
@@ -15195,6 +15209,12 @@ function stateSnap(){
   };
 }
 
+// SPEC-verbose-log §6-2 — 로컬 이벤트 로그 상한(링버퍼).
+// 트리밍이 없어서 판당 58건·29.1KB가 영원히 쌓였다(clearEvents는 DebugPanel에서만 불린다).
+// 약 172판에서 localStorage 5MB가 차고, 그때 증상은 «화면은 멀쩡한데 진행만 안 잡힌다»였다.
+// 200이면 최근 3~4판이 남고 크기는 ~100KB에 묶인다.
+var _EVENT_LOG_MAX = 200;
+
 function trackEvent(t,p){
   var e={type:t,sid:getSid(),at:new Date().toISOString(),scenarioId:gameState?gameState.currentScenarioId:null,snap:stateSnap(),payload:p||{}};
   console.log('[AI Literacy v0.8]',e);
@@ -15203,6 +15223,7 @@ function trackEvent(t,p){
   try{
     var l=JSON.parse(localStorage.getItem(CONFIG.eventLogKey)||'[]');
     l.push(e);
+    if(l.length>_EVENT_LOG_MAX)l=l.slice(l.length-_EVENT_LOG_MAX);
     localStorage.setItem(CONFIG.eventLogKey,JSON.stringify(l));
   }catch(x){}
 }
