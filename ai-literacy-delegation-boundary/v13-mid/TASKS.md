@@ -1,8 +1,8 @@
 ## TASKS — v1.3-mid (중등)
 
-**최종 업데이트**: 2026-08-25 (조회 층 개정 선문 — 완주 재판정 · 이벤트 파이프 관측)
+**최종 업데이트**: 2026-08-25 (조회 층 개정 **배포 완료** — 완주 재판정 · 이벤트 파이프 관측)
 
-### ★ 2026-08-25 — 조회 층 개정 (선문 완료, 코드 미착수)
+### ★ 2026-08-25 — 조회 층 개정 (배포 완료 · VER-050 채점 완료)
 
 > 명세 = `infra/SPEC-log-query.md` · 배경 = [[요청.26.0825.0930-열린프로젝트휴룹33건]] · 세션976 창A
 > ⚠️ **이 작업은 `infra/ai-literacy-log-api.yaml` 하나만 고친다. 클라이언트(v13-mid·v13-elem·v14)는 한 줄도 안 건드린다.** 학교에 나간 r42는 그대로다.
@@ -21,9 +21,19 @@
 - [x] **EV-010** — `GET /stats-ev` 신설(ListBucket만, 싸다) + 조회 역할에 `raw-ev/*`
 - [x] **EV-020** — `/report?ev=1`에서 `semester_report_viewed` 집계(기본 off, `MAX_EV_RECORDS` 2,000)
 - [x] **VER-010~040** — `node --check` **다섯**(stats-ev 포함) · 스텁 33단언 전건 통과(★2번 = 덮인 완주) · 검산 줄 · 기존 집계 회귀. 테스트는 YAML에서 도로 뽑은 코드를 돌린다
-- [ ] **VER-060** — 미리보기 HTML 피터공에게 전달 완료(8/25 저녁) → **구획 확정 대기**. 확정되면 CFN 한 왕복
-- [ ] CFN 한 왕복 — 템플릿 업로드는 아리공, ⚠️실행 전 `describe-change-set`으로 Replacement 확인, 로그인·실행은 피터공
-- [ ] **VER-050** — 배포 후 라이브에서 `flagged`가 18로 그대로 나오는지(기존 집계를 안 건드렸다는 증거)
+- [x] **VER-060** — 미리보기 HTML 전달·구획 확정(8/25 21:20경, 가감 없음) → 그대로 배포
+- [x] **CFN 한 왕복 완료** — 변경세트 `log-query-260825` 생성 → 검토 → 실행. 콘솔이 리소스 7건을 정상 렌더해(「0 변경」 오표시 아님) CloudShell 대조는 불필요했다
+- [x] **VER-050 채점 완료** — 예측 6개 중 5개 적중, 1개는 하한 방향으로 초과. 되돌리지 않는다. 상세 = `infra/SPEC-log-query.md` §5
+
+#### 배포 기록 — 2026-08-25 21:29 KST
+
+- **스택** `ai-literacy-log-api` (885123105962 playvault · ap-northeast-2) → **UPDATE_COMPLETE 21:29:02**
+- **템플릿** `infra/ai-literacy-log-api.yaml` 47,181B · 커밋 `f91c2b9`
+- **변경세트** `log-query-260825` — 리소스 **7건**: Modify 3(`ReportFunction`·`ReportExecutionRole`·`StatsExecutionRole`, **Replacement 전부 False**) / Add 4(`StatsEvFunction`·`StatsEvRoute`·`StatsEvIntegration`·`StatsEvPermission`). **삭제 0.** `IngestFunction`·`StatsFunction`·S3 버킷은 목록에 없다 = 무변
+- **런타임** `nodejs20.x` 그대로(신설 `StatsEvFunction` 포함). 22 상향은 9/2 인생게임·9/4 슈테델 뒤로
+- **라이브 실측** `GET /report?ev=1` = 유효 141 · 실제 완주 **109** · 리포트 도달 **116** · 기록상 완주 8 · 계측 손실(하한) **101** · **완주율 77%**(기록상 6%) · 완주 평균 총점 418
+- **`GET /stats-ev` 첫 응답** = total 221 · 1,764,839B · pids 107 / bootstrap 114 · latest 2026-08-25T03:37:35Z
+- **되돌리기** = 스택을 이전 템플릿으로. S3 데이터·수집 경로·게임 빌드 무변
 
 **이 뒤에 오는 것 (별건, 이 SPEC 밖)**
 - [ ] r43 클라이언트 수정 — `_ltRecordLeave`가 완주한 판을 덮지 않게. **새는 양을 숫자로 안 뒤에 판단.** 9/2·9/4 전에 학교 빌드를 다시 낼지는 또 별개
