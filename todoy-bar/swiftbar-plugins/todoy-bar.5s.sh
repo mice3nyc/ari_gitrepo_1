@@ -34,32 +34,47 @@ echo "오늘 할 일  ${done_count}/${total} 완료 | size=12 color=gray"
 echo "---"
 
 # ── 항목들 ──
+# 완료 항목은 «지우지 않고 접는다»(2026-08-25). 목록이 길어지는 것은 보기의 문제라
+# 표시에서만 접고, 데이터는 그대로 둔다 — 완료 항목이 진행률의 분자라 파일에서 빼면
+# 카운터가 0/N이 되어 "오늘 뭘 했다"가 같이 사라진다. SPEC 참조.
+undone_count="$(echo "$DATA" | "$JQ" '[.[] | select(.done==false)] | length')"
+
 if [ "$total" -eq 0 ]; then
   echo "(할 일 없음 — 아래에서 추가) | size=12 color=gray"
 else
-  echo "$DATA" | "$JQ" -r '.[] | [.id, .text, (.done|tostring), (.active|tostring), (.switches|tostring), (.live_seconds|tostring)] | @tsv' \
-  | while IFS=$'\t' read -r id text done active switches lsec; do
+  if [ "$undone_count" -eq 0 ]; then
+    echo "오늘 할 일 전부 완료 | size=12 color=gray"
+  fi
+  # 미완료만 본 목록에 그린다
+  echo "$DATA" | "$JQ" -r '.[] | select(.done==false) | [.id, .text, (.active|tostring), (.switches|tostring), (.live_seconds|tostring)] | @tsv' \
+  | while IFS=$'\t' read -r id text active switches lsec; do
       meta=""
       if [ "${switches:-0}" -gt 0 ]; then meta="  ×${switches} $(fmt "$lsec")"; fi
-      # 메인 라인 클릭 = ACTIVE(지금 작업으로). 완료는 서브메뉴. ☐/☑는 상태 표시.
-      # ACTIVE = 파랑+볼드(md), 완료 = 초록(끝난 것이니 굿).
-      prefix="☐ "; line_color=""; line_extra=""; text_disp="$text"
-      if [ "$done" = "true" ]; then
-        prefix="☑ "; line_color=" color=#009443"
-      elif [ "$active" = "true" ]; then
+      # 메인 라인 클릭 = ACTIVE(지금 작업으로). 완료는 서브메뉴. ☐는 상태 표시.
+      # ACTIVE = 파랑+볼드(md).
+      line_color=""; line_extra=""; text_disp="$text"
+      if [ "$active" = "true" ]; then
         line_color=" color=#1100ff"; line_extra=" md=true"; text_disp="**${text}**"
       fi
-      echo "${prefix}${text_disp}${meta} | size=13${line_color}${line_extra} bash=$TODOY param1=activate param2=$id terminal=false refresh=true"
-      # 서브메뉴 = 완료 토글 (+ ACTIVE 해제)
-      if [ "$done" = "true" ]; then
-        echo "-- ↩ 완료 취소 | bash=$TODOY param1=done param2=$id terminal=false refresh=true"
-      else
-        echo "-- ☑ 완료로 표시 | bash=$TODOY param1=done param2=$id terminal=false refresh=true"
-      fi
+      echo "☐ ${text_disp}${meta} | size=13${line_color}${line_extra} bash=$TODOY param1=activate param2=$id terminal=false refresh=true"
+      echo "-- ☑ 완료로 표시 | bash=$TODOY param1=done param2=$id terminal=false refresh=true"
       if [ "$active" = "true" ]; then
         echo "-- ⏸ 지금 작업 해제 | bash=$TODOY param1=activate param2=$id terminal=false refresh=true"
       fi
     done
+
+  # 완료분 = 접힌 한 줄 + 서브메뉴 (클릭 = 완료 취소)
+  if [ "$done_count" -gt 0 ]; then
+    echo "---"
+    echo "☑ 완료 ${done_count}건 | size=13 color=#009443"
+    echo "-- 클릭하면 완료 취소 | size=11 color=gray"
+    echo "$DATA" | "$JQ" -r '.[] | select(.done==true) | [.id, .text, (.switches|tostring), (.live_seconds|tostring)] | @tsv' \
+    | while IFS=$'\t' read -r id text switches lsec; do
+        meta=""
+        if [ "${switches:-0}" -gt 0 ]; then meta="  ×${switches} $(fmt "$lsec")"; fi
+        echo "-- ☑ ${text}${meta} | size=13 color=#009443 bash=$TODOY param1=done param2=$id terminal=false refresh=true"
+      done
+  fi
 fi
 
 echo "---"
