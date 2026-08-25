@@ -213,12 +213,20 @@ def backup_one(src, session, window, manifest, full=False, dry=False):
     if not recs:
         return "failed", f"{uuid[:8]} 레코드 0건"
 
-    stamp = datetime.fromtimestamp(src.stat().st_mtime)
-    date_s = stamp.strftime("%Y-%m-%d")
-    if session:
-        base = f"세션{session}-창{window}-{stamp.strftime('%y%m%d')}"
+    # 이름은 «처음 뜬 때»로 못 박고 다시 계산하지 않는다.
+    # mtime으로 매번 계산하면 자정을 넘겨 두 번 뜰 때 같은 세션이 두 파일로
+    # 갈라지고 앞엣것이 고아로 남는다(2026-08-26 피터공 질문에서 드러남).
+    if prev and prev.get("base"):
+        base = prev["base"]
+        date_s = prev.get("date") or datetime.fromtimestamp(
+            src.stat().st_mtime).strftime("%Y-%m-%d")
     else:
-        base = f"미상-{stamp.strftime('%y%m%d-%H%M')}-{uuid[:8]}"
+        stamp = datetime.fromtimestamp(src.stat().st_mtime)
+        date_s = stamp.strftime("%Y-%m-%d")
+        if session:
+            base = f"세션{session}-창{window}-{stamp.strftime('%y%m%d')}"
+        else:
+            base = f"미상-{stamp.strftime('%y%m%d-%H%M')}-{uuid[:8]}"
 
     n_msg = sum(1 for r in recs if r.get("type") in ("user", "assistant"))
     body = render(recs, full=full)
@@ -237,7 +245,7 @@ def backup_one(src, session, window, manifest, full=False, dry=False):
         shutil.copyfileobj(fi, fo)
 
     manifest[uuid] = {
-        "session": session, "window": window, "date": date_s,
+        "session": session, "window": window, "date": date_s, "base": base,
         "src_size": size, "records": len(recs), "messages": n_msg,
         "files": [txt_p.name, gz_p.name],
         "backed_up_at": datetime.now().isoformat(timespec="seconds"),
