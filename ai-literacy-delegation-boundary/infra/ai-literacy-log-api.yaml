@@ -323,6 +323,7 @@ Resources:
                   StringLike:
                     s3:prefix:
                       - 'raw/*'
+                      - 'raw-ev/*'
 
   # ---------------------------------------------------------------------------
   # 유입 조회 Lambda -- raw/ 아래 객체를 세어 {total, byVersion, latest} 반환.
@@ -392,6 +393,86 @@ Resources:
       SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*/stats'
 
   # ---------------------------------------------------------------------------
+  # 이벤트 파이프 관측 Lambda (2026-08-25 추가, SPEC-log-query.md EV-010).
+  # r42부터 게임이 POST /log-ev로 풀 이벤트 스트림을 보내는데 도착 여부를 밖에서
+  # 볼 창구가 없었다 -- /stats는 Prefix 'raw/'가 하드코딩이다. 조회 역할을 함께 쓴다.
+  # ---------------------------------------------------------------------------
+  StatsEvFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-stats-ev'
+      Runtime: nodejs20.x
+      Handler: index.handler
+      Role: !GetAtt StatsExecutionRole.Arn
+      Timeout: 30
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref PlayLogBucket
+      Code:
+        ZipFile: |
+          const { S3Client, ListObjectsV2Command } = require('@aws-sdk/client-s3');
+          const s3 = new S3Client({});
+          function resp(code, obj) {
+            return { statusCode: code, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(obj) };
+          }
+          // EV-010 -- raw-ev/ 아래를 «세기만» 한다. GetObject 안 한다(싸다).
+          // 키 문법: raw-ev/{v}/{yyyy}/{mm}/{dd}/p_{...}__{part}.ndjson -- part 롤오버가 있어 파일 수 != 판 수.
+          exports.handler = async () => {
+            let total = 0, bytes = 0, latest = null;
+            const byVersion = {};
+            const pids = {}, boot = {};
+            let token;
+            do {
+              const out = await s3.send(new ListObjectsV2Command({
+                Bucket: process.env.BUCKET_NAME, Prefix: 'raw-ev/', ContinuationToken: token
+              }));
+              for (const o of (out.Contents || [])) {
+                if (o.Key.endsWith('/')) continue;
+                total++;
+                bytes += (o.Size || 0);
+                const p = o.Key.split('/');
+                const v = p[1] || 'unknown';
+                byVersion[v] = (byVersion[v] || 0) + 1;
+                const pid = (p[p.length - 1] || '').split('__')[0];
+                // p_b… = 부트스트랩 pid. playId 발급 전 구간이라 판과 1:1이 아니다(08e §3-2 회전).
+                if (pid) { if (pid.indexOf('p_b') === 0) boot[pid] = 1; else pids[pid] = 1; }
+                if (!latest || o.LastModified > latest) latest = o.LastModified;
+              }
+              token = out.IsTruncated ? out.NextContinuationToken : undefined;
+            } while (token);
+            return resp(200, {
+              total, bytes,
+              pids: Object.keys(pids).length,
+              pidsBootstrap: Object.keys(boot).length,
+              byVersion,
+              latest: latest ? latest.toISOString() : null
+            });
+          };
+
+  StatsEvIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt StatsEvFunction.Arn
+      PayloadFormatVersion: '2.0'
+
+  StatsEvRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: 'GET /stats-ev'
+      Target: !Sub 'integrations/${StatsEvIntegration}'
+
+  StatsEvPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref StatsEvFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${HttpApi}/*/*/stats-ev'
+
+  # ---------------------------------------------------------------------------
   # 결과 리포트 Lambda (2026-08-04 추가) -- raw/ 아래 레코드를 실제로 읽어 내용 분석.
   # /stats가 "몇 판 들어왔나"라면 /report는 "무엇이 일어났나"다. 브라우저로 열면 HTML 한 장.
   # 개인정보 없음(레코드 자체에 없다). SPEC-log-transmit.md §12.
@@ -414,6 +495,8 @@ Resources:
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
+              # raw-ev/*는 ?ev=1(EV-020)에서만 읽는다. raw/*와 raw-ev/*는 prefix가
+              # 슬래시까지라 서로를 포함하지 않는다(§209 주석). 쓰기는 주지 않는다.
               - Effect: Allow
                 Action:
                   - s3:ListBucket
@@ -422,10 +505,13 @@ Resources:
                   StringLike:
                     s3:prefix:
                       - 'raw/*'
+                      - 'raw-ev/*'
               - Effect: Allow
                 Action:
                   - s3:GetObject
-                Resource: !Sub '${PlayLogBucket.Arn}/raw/*'
+                Resource:
+                  - !Sub '${PlayLogBucket.Arn}/raw/*'
+                  - !Sub '${PlayLogBucket.Arn}/raw-ev/*'
 
   ReportFunction:
     Type: AWS::Lambda::Function
@@ -440,25 +526,53 @@ Resources:
         Variables:
           BUCKET_NAME: !Ref PlayLogBucket
           MAX_RECORDS: '5000'
+          MAX_EV_RECORDS: '2000'
       Code:
         ZipFile: |
           const { S3Client, ListObjectsV2Command, GetObjectCommand } = require('@aws-sdk/client-s3');
           const s3 = new S3Client({});
           const B = process.env.BUCKET_NAME;
           const MAX = parseInt(process.env.MAX_RECORDS || '5000', 10);
+          const MAX_EV = parseInt(process.env.MAX_EV_RECORDS || '2000', 10);
           const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
           const pct = (n, d) => (d ? Math.round((n / d) * 100) : 0);
-          const med = (a) => { if (!a.length) return null; const s = a.slice().sort((x, y) => x - y); const m = s.length >> 1; return s.length % 2 ? s[m] : Math.round((s[m - 1] + s[m]) / 2); };
+          const srt = (a) => a.slice().sort((x, y) => x - y);
+          const med = (a) => { if (!a.length) return null; const s = srt(a); const m = s.length >> 1; return s.length % 2 ? s[m] : Math.round((s[m - 1] + s[m]) / 2); };
+          const p90 = (a) => { if (!a.length) return null; const s = srt(a); return s[Math.min(s.length - 1, Math.ceil(s.length * 0.9) - 1)]; };
+          const avg = (a) => (a.length ? Math.round(a.reduce((x, y) => x + y, 0) / a.length) : null);
           const GORD = { S: 5, A: 4, B: 3, C: 2, D: 1 };
           const TYPES = ['가려서 맡기는', '넓게 맡기는', '내가 먼저 해보는', '끝까지 확인하는', '빠르게 끝내는', '다시 도전하는'];
 
-          async function listKeys(prefix) {
+          // DONE-020 -- 버전별 시나리오 세트(잠금 해제 순서). 판정은 rec.v의 접두사로.
+          // ⚠️ 이 표의 출처는 클라이언트 00-config.js의 scenarios 배열이다(v13-mid:38 · v13-elem:38 · v14:31).
+          //    거기가 바뀌면 여기도 바꾼다. 안 바꾸면 그 버전이 폴백으로 새서 완주가 틀리게 잡힌다.
+          const SETS = [
+            { p: 'v1.3-mid', g: '중등', s: ['selfintro', 'groupwork', 'eorinwangja', 'career', 'studyplan'] },
+            { p: 'v1.4-mid', g: '중등', s: ['selfintro', 'groupwork', 'eorinwangja', 'career', 'studyplan'] },
+            { p: 'v1.3-elem', g: '초등', s: ['bookreport', 'animaltalk', 'jobcard', 'classmascot', 'historycheck'] }
+          ];
+          const FB = 5;
+          const setOf = (v) => SETS.filter((x) => String(v || '').indexOf(x.p) === 0)[0] || null;
+          // DONE-040 -- 우리 시험분. ?all=1이면 포함한다.
+          const isTest = (v) => { const s = String(v || ''); return s === 'v0-e2e-test' || /-selftest$/.test(s); };
+
+          // DONE-010 -- 완주를 두 기준으로 동시에 낸다. flagged=플래그가 살아남았나, full=데이터가 다 있나.
+          function judge(r) {
+            const S = setOf(r.v);
+            const ids = {};
+            for (const s of (r.sc || [])) ids[s.id] = 1;
+            const n = S ? S.s.length : FB;
+            const c = S ? S.s.filter((id) => ids[id]).length : Object.keys(ids).length;
+            return { g: S ? S.g : '기타', set: S ? S.s : null, c: c, n: n, full: c >= n, flagged: r.done === true };
+          }
+
+          async function listKeys(prefix, cap) {
             const keys = []; let token; let truncated = false;
             do {
               const out = await s3.send(new ListObjectsV2Command({ Bucket: B, Prefix: prefix, ContinuationToken: token }));
               for (const o of (out.Contents || [])) {
                 if (o.Key.endsWith('/')) continue;
-                if (keys.length >= MAX) { truncated = true; break; }
+                if (keys.length >= cap) { truncated = true; break; }
                 keys.push(o.Key);
               }
               token = (out.IsTruncated && !truncated) ? out.NextContinuationToken : undefined;
@@ -469,8 +583,7 @@ Resources:
           async function readAll(keys) {
             const recs = []; const bad = [];
             for (let i = 0; i < keys.length; i += 20) {
-              const batch = keys.slice(i, i + 20);
-              const got = await Promise.all(batch.map(async (k) => {
+              const got = await Promise.all(keys.slice(i, i + 20).map(async (k) => {
                 try {
                   const o = await s3.send(new GetObjectCommand({ Bucket: B, Key: k }));
                   return JSON.parse(await o.Body.transformToString());
@@ -481,24 +594,59 @@ Resources:
             return { recs, bad };
           }
 
-          function analyse(recs) {
-            const byVersion = {}, sc = {}, drop = {}, types = {};
-            let done = 0;
+          // EV-020 -- raw-ev/를 읽어 semester_report_viewed가 있는 pid만 뽑는다. 이벤트 본문은 안 싣는다.
+          async function evPids() {
+            const { keys, truncated } = await listKeys('raw-ev/', MAX_EV);
+            const pids = {}; let hit = 0;
+            for (let i = 0; i < keys.length; i += 20) {
+              await Promise.all(keys.slice(i, i + 20).map(async (k) => {
+                try {
+                  const o = await s3.send(new GetObjectCommand({ Bucket: B, Key: k }));
+                  const txt = await o.Body.transformToString();
+                  if (txt.indexOf('semester_report_viewed') < 0) return;   // 싼 1차 거르기
+                  for (const line of txt.split('\n')) {
+                    if (!line.trim()) continue;
+                    let r; try { r = JSON.parse(line); } catch (e) { continue; }
+                    if (r.t === 'semester_report_viewed' && typeof r.pid === 'string') { pids[r.pid] = 1; hit++; }
+                  }
+                } catch (e) { }
+              }));
+            }
+            return { pids, files: keys.length, truncated, hit };
+          }
+
+          const BK = [[30, '<30초'], [60, '30–60초'], [120, '1–2분'], [180, '2–3분'], [300, '3–5분'], [600, '5–10분'], [1e9, '10분+']];
+          const BKL = BK.map((b) => b[1]);
+          function bkt(v) { for (const b of BK) if (v < b[0]) return b[1]; return BKL[BKL.length - 1]; }
+
+          function analyse(recs, evp) {
+            const byVersion = {}, sc = {}, dropA = {}, dropB = {}, types = {}, groups = {};
+            let flagged = 0, full = 0, entry = 0, la = 0, lb = 0, ev = 0, endN = 0;
             const totals = [];
             for (const r of recs) {
               byVersion[r.v || 'unknown'] = (byVersion[r.v || 'unknown'] || 0) + 1;
-              if (r.done) { done++; if (r.end && typeof r.end.total === 'number') totals.push(r.end.total); }
-              if (r.done && r.end && typeof r.end.type === 'number') types[r.end.type] = (types[r.end.type] || 0) + 1;
-              if (!r.done && r.cur) {
-                const k = r.cur.id + ' / ' + r.cur.step;
-                drop[k] = (drop[k] || 0) + 1;
+              const j = judge(r);
+              const G = groups[j.g] || (groups[j.g] = { n: 0, size: j.n, set: j.set, cnt: [], full: 0, flagged: 0, ev: 0 });
+              if (j.n > G.size) G.size = j.n;
+              G.n++; G.cnt[j.c] = (G.cnt[j.c] || 0) + 1;
+              if (evp && evp.pids[r.pid]) { ev++; G.ev++; }
+              if (j.flagged) { flagged++; G.flagged++; }
+              if (r.end) {
+                endN++;
+                if (typeof r.end.total === 'number') totals.push(r.end.total);
+                if (typeof r.end.type === 'number') types[r.end.type] = (types[r.end.type] || 0) + 1;
               }
+              // VIZ-030 -- 배타 분할. 넷의 합이 유효 총계와 같아야 한다(VER-030 검산).
+              if (j.full) { full++; G.full++; }
+              else if (r.cur) { lb++; const k = r.cur.id + ' / ' + r.cur.step; dropB[k] = (dropB[k] || 0) + 1; }
+              else if ((r.sc || []).length) { la++; const t = r.sc[r.sc.length - 1].id; dropA[t] = (dropA[t] || 0) + 1; }
+              else entry++;
               for (const s of (r.sc || [])) {
-                const e = sc[s.id] || (sc[s.id] = { n: 0, grades: {}, scores: [], durs: [], replays: 0, improved: 0, worse: 0, same: 0, t1: {}, t2: {}, rv: {} });
+                const e = sc[s.id] || (sc[s.id] = { n: 0, grades: {}, scores: [], durs: [], hist: {}, replays: 0, improved: 0, worse: 0, same: 0, deltas: [], t1: {}, t2: {}, rv: {} });
                 e.n++;
                 e.grades[s.g] = (e.grades[s.g] || 0) + 1;
                 if (typeof s.s === 'number') e.scores.push(s.s);
-                if (typeof s.dur === 'number') e.durs.push(s.dur);
+                if (typeof s.dur === 'number') { e.durs.push(s.dur); const b = bkt(s.dur); e.hist[b] = (e.hist[b] || 0) + 1; }
                 if (s.t1) e.t1[s.t1] = (e.t1[s.t1] || 0) + 1;
                 if (s.t2) e.t2[s.t2] = (e.t2[s.t2] || 0) + 1;
                 if (s.rv) e.rv[s.rv] = (e.rv[s.rv] || 0) + 1;
@@ -506,71 +654,142 @@ Resources:
                   e.replays++;
                   const a = GORD[s.gs[0]] || 0, b = GORD[s.gs[s.gs.length - 1]] || 0;
                   if (b > a) e.improved++; else if (b < a) e.worse++; else e.same++;
+                  e.deltas.push(b - a);
                 }
               }
             }
-            return { byVersion, sc, drop, types, done, totals };
+            return { byVersion, sc, dropA, dropB, types, groups, flagged, full, entry, la, lb, ev, endN, totals };
           }
 
           function dist(o) {
-            const t = Object.values(o).reduce((a, b) => a + b, 0);
+            const t = Object.keys(o).reduce((a, k) => a + o[k], 0);
             return Object.keys(o).sort().map((k) => esc(k) + ' ' + o[k] + '<span class="p">(' + pct(o[k], t) + '%)</span>').join(' · ') || '-';
+          }
+          function bar(n, d) { return '<div class="bw"><i style="width:' + (d ? (n / d) * 100 : 0) + '%"></i></div>'; }
+
+          // VIZ-020 -- 진짜 깔때기. 「여기까지 끝낸 판 수」를 누적으로 낸다.
+          function funnel(G, name) {
+            const at = []; for (let k = 0; k <= G.size; k++) { let s = 0; for (let j = k; j <= G.size; j++) s += (G.cnt[j] || 0); at.push(s); }
+            const only = G.cnt[0] || 0;
+            const rows = at.map((v, k) => {
+              const lab = k === 0 ? '진입' : (k === G.size ? k + '개(완주)' : k + '개+');
+              const keep = k === 0 ? '' : '<span class="p">직전 대비 ' + pct(v, at[k - 1]) + '%</span>';
+              const nm = G.set ? (k > 0 ? esc(G.set[k - 1]) : '') : '';
+              return '<tr><td class="id">' + lab + '</td><td class="num">' + v + '</td><td class="num">' + pct(v, at[0]) + '%</td><td class="bc">' + bar(v, at[0]) + '</td><td>' + keep + ' <span class="p2">' + nm + '</span></td></tr>';
+            }).join('');
+            return '<h3>' + esc(name) + ' <span class="p">' + G.n + '판 · 세트 ' + G.size + '개</span></h3>'
+              + '<table><tr><th>단계</th><th class="num">판</th><th class="num">전체比</th><th>　</th><th>유지율 / 해당 시나리오</th></tr>' + rows + '</table>'
+              + '<div class="p">진입만(하나도 못 끝냄) ' + only + '건 · 실제 완주 ' + G.full + ' · 기록상 완주 ' + G.flagged + '</div>';
           }
 
           function html(a, meta) {
-            const rows = Object.keys(a.sc).map((id) => {
+            const scIds = Object.keys(a.sc);
+            const rows = scIds.map((id) => {
               const e = a.sc[id];
-              const avg = e.scores.length ? Math.round(e.scores.reduce((x, y) => x + y, 0) / e.scores.length) : '-';
-              return '<tr><td class="id">' + esc(id) + '</td><td class="num">' + e.n + '</td><td class="num">' + avg + '</td>'
+              return '<tr><td class="id">' + esc(id) + '</td><td class="num">' + e.n + '</td><td class="num">' + (avg(e.scores) == null ? '-' : avg(e.scores)) + '</td>'
                 + '<td class="num">' + (med(e.durs) == null ? '-' : med(e.durs) + '초') + '</td>'
+                + '<td class="num">' + (p90(e.durs) == null ? '-' : p90(e.durs) + '초') + '</td>'
                 + '<td>' + dist(e.grades) + '</td>'
                 + '<td class="num">' + e.replays + (e.replays ? ' <span class="p">(↑' + e.improved + ' =' + e.same + ' ↓' + e.worse + ')</span>' : '') + '</td></tr>';
             }).join('');
-            const choiceRows = Object.keys(a.sc).map((id) => {
+            // VIZ-040 -- 재도전 궤적. 다시 하면 나아지는가에 직접 답한다.
+            const reRows = scIds.filter((id) => a.sc[id].replays).map((id) => {
+              const e = a.sc[id]; const d = e.deltas.length ? (e.deltas.reduce((x, y) => x + y, 0) / e.deltas.length) : 0;
+              return '<tr><td class="id">' + esc(id) + '</td><td class="num">' + e.replays + '</td><td class="num">' + pct(e.improved, e.replays) + '%</td>'
+                + '<td class="num">' + e.improved + ' / ' + e.same + ' / ' + e.worse + '</td>'
+                + '<td class="num">' + (d >= 0 ? '+' : '') + d.toFixed(2) + '</td></tr>';
+            }).join('') || '<tr><td colspan="5" class="none">재도전 기록 없음(gs[]는 2회+일 때만 남는다)</td></tr>';
+            // VIZ-050 -- 소요 분포. 수업 설계에 쓰는 숫자는 중앙값이 아니라 꼬리다.
+            const hRows = scIds.filter((id) => a.sc[id].durs.length).map((id) => {
               const e = a.sc[id];
-              return '<tr><td class="id">' + esc(id) + '</td><td>' + dist(e.t1) + '</td><td>' + dist(e.t2) + '</td><td>' + dist(e.rv) + '</td></tr>';
-            }).join('');
-            const dropRows = Object.keys(a.drop).sort((x, y) => a.drop[y] - a.drop[x])
-              .map((k) => '<tr><td class="id">' + esc(k) + '</td><td class="num">' + a.drop[k] + '</td></tr>').join('')
-              || '<tr><td colspan="2" class="none">중간 이탈 기록 없음</td></tr>';
+              return '<tr><td class="id">' + esc(id) + '</td>' + BKL.map((b) => '<td class="num">' + (e.hist[b] || '·') + '</td>').join('') + '</tr>';
+            }).join('') || '<tr><td colspan="' + (BKL.length + 1) + '" class="none">소요 기록 없음</td></tr>';
+            const dA = Object.keys(a.dropA).sort((x, y) => a.dropA[y] - a.dropA[x])
+              .map((k) => '<tr><td class="id">' + esc(k) + '</td><td class="num">' + a.dropA[k] + '</td></tr>').join('') || '<tr><td colspan="2" class="none">없음</td></tr>';
+            const dB = Object.keys(a.dropB).sort((x, y) => a.dropB[y] - a.dropB[x])
+              .map((k) => '<tr><td class="id">' + esc(k) + '</td><td class="num">' + a.dropB[k] + '</td></tr>').join('') || '<tr><td colspan="2" class="none">없음</td></tr>';
             const typeRows = Object.keys(a.types).sort().map((t) =>
-              '<tr><td class="id">' + esc(TYPES[t] || ('유형 ' + t)) + '</td><td class="num">' + a.types[t] + '<span class="p">(' + pct(a.types[t], a.done) + '%)</span></td></tr>').join('')
+              '<tr><td class="id">' + esc(TYPES[t] || ('유형 ' + t)) + '</td><td class="num">' + a.types[t] + '<span class="p">(' + pct(a.types[t], a.endN) + '%)</span></td></tr>').join('')
               || '<tr><td colspan="2" class="none">완주 기록 없음</td></tr>';
-            const avgTotal = a.totals.length ? Math.round(a.totals.reduce((x, y) => x + y, 0) / a.totals.length) : '-';
+            const sum = a.full + a.la + a.lb + a.entry;
+            const gk = Object.keys(a.groups).sort();
+            const loss = a.full - a.flagged;
             return '<!doctype html><meta charset="utf-8"><title>AI 리터러시 플레이 리포트</title>'
               + '<style>body{font:14px/1.6 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;margin:0;padding:28px;background:#fff;color:#111;max-width:1100px}'
               + 'h1{font-size:20px;margin:0 0 4px}h2{font-size:15px;margin:32px 0 8px;padding-bottom:6px;border-bottom:1px solid #111}'
+              + 'h3{font-size:13px;margin:18px 0 6px;font-weight:600}'
               + '.meta{color:#666;font-size:12px;margin-bottom:20px}.cards{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}'
               + '.card{border:1px solid #ddd;padding:10px 14px;min-width:110px}.card b{display:block;font-size:22px;font-weight:600}'
-              + '.card span{font-size:11px;color:#666}table{border-collapse:collapse;width:100%;font-size:13px}'
+              + '.card span{font-size:11px;color:#666}.card.hi{border-color:#111}.card.loss b{color:#b45309}'
+              + 'table{border-collapse:collapse;width:100%;font-size:13px}'
               + 'th,td{border-bottom:1px solid #eee;padding:7px 8px;text-align:left;vertical-align:top}'
               + 'th{font-weight:600;border-bottom:1px solid #111;white-space:nowrap}.num{text-align:right;white-space:nowrap}'
-              + '.id{font-weight:600;white-space:nowrap}.p{color:#888;font-size:11px;margin-left:2px}.none{color:#999}'
-              + '.warn{background:#fff8e1;border:1px solid #e8d9a0;padding:8px 12px;margin:14px 0;font-size:12px}</style>'
+              + '.id{font-weight:600;white-space:nowrap}.p{color:#888;font-size:11px;margin-left:2px}.p2{color:#aaa;font-size:11px}.none{color:#999}'
+              + '.bc{width:38%}.bw{background:#f0f0f0;height:12px;width:100%}.bw i{display:block;height:12px;background:#111}'
+              + '.warn{background:#fff8e1;border:1px solid #e8d9a0;padding:8px 12px;margin:14px 0;font-size:12px}'
+              + '.note{background:#f6f8fa;border-left:3px solid #111;padding:10px 14px;margin:14px 0;font-size:12px;line-height:1.7}</style>'
               + '<h1>AI 리터러시 — 플레이 리포트</h1>'
               + '<div class="meta">' + esc(meta.when) + ' 기준 · 대상 ' + (meta.v ? '버전 ' + esc(meta.v) : '전체 버전')
-              + ' · 읽은 레코드 ' + meta.read + '건' + (meta.bad ? ' · 못 읽은 파일 ' + meta.bad + '건' : '') + '</div>'
+              + ' · 읽은 레코드 ' + meta.read + '건' + (meta.excl ? ' · 시험분 제외 ' + meta.excl + '건' : '') + (meta.bad ? ' · 못 읽은 파일 ' + meta.bad + '건' : '')
+              + (meta.all ? ' · <b>?all=1 (시험분 포함)</b>' : '') + '</div>'
               + (meta.truncated ? '<div class="warn">⚠️ 레코드가 상한(' + MAX + '건)을 넘어 앞의 ' + MAX + '건만 집계했다. 전체를 보려면 상한을 올려야 한다.</div>' : '')
-              + '<div class="cards"><div class="card"><b>' + meta.read + '</b><span>전체 판</span></div>'
-              + '<div class="card"><b>' + a.done + '</b><span>완주</span></div>'
-              + '<div class="card"><b>' + pct(a.done, meta.read) + '%</b><span>완주율</span></div>'
-              + '<div class="card"><b>' + avgTotal + '</b><span>완주 평균 총점</span></div></div>'
+              + (meta.evTrunc ? '<div class="warn">⚠️ 이벤트 파일이 상한(' + MAX_EV + '건)을 넘어 앞의 ' + MAX_EV + '건만 읽었다. 「리포트 도달」은 실제보다 낮다.</div>' : '')
+              + '<div class="cards"><div class="card"><b>' + meta.read + '</b><span>유효 판</span></div>'
+              + '<div class="card hi"><b>' + a.full + '</b><span>실제 완주 (sc 전세트)</span></div>'
+              + (meta.ev ? '<div class="card"><b>' + a.ev + '</b><span>리포트 도달 (ev)</span></div>' : '')
+              + '<div class="card"><b>' + a.flagged + '</b><span>기록상 완주 (done)</span></div>'
+              + '<div class="card loss"><b>' + (loss > 0 ? loss : 0) + '</b><span>계측 손실(하한)</span></div>'
+              + '<div class="card hi"><b>' + pct(a.full, meta.read) + '%</b><span>완주율 (실제)</span></div>'
+              + '<div class="card"><b>' + pct(a.flagged, meta.read) + '%</b><span>완주율 (기록상)</span></div>'
+              + '<div class="card"><b>' + (avg(a.totals) == null ? '-' : avg(a.totals)) + '</b><span>완주 평균 총점</span></div></div>'
+              + '<div class="note"><b>왜 두 숫자인가.</b> 최종 리포트를 열면 <code>done:true</code>가 찍히는데, 그 뒤 탭을 닫으면 이탈 기록이 조건 없이 <code>done:false</code>를 다시 올리고 서버 키가 판(pid) 단위라 <b>완주 기록이 미완주로 덮인다</b>. 그래서 「기록상 완주」는 그만둔 비율이 아니라 <b>기록이 살아남은 비율</b>이다. 「실제 완주」는 덮여도 살아남는 <code>sc[]</code>로 다시 판정한 값이다.<br>'
+              + '<b>「하한」인 이유</b> — <code>sc[]</code>는 «끝낸» 시나리오만 담으므로 마지막 시나리오 도중에 떠난 사람은 여기서도 안 잡힌다. 실제 손실은 이보다 크다.'
+              + (meta.ev ? '<br><b>세 숫자</b> — 실제 완주 &gt; 리포트 도달 = 「목록으로」를 안 눌러 리포트가 안 열린 사람(UI 흐름). 리포트 도달 &gt; 기록상 완주 = <b>덮어쓰기로 잃은 양</b>.' : '<br><span class="p">리포트 도달(ev)은 기본 꺼져 있다 — <code>?ev=1</code>로 켠다(이벤트 파일을 읽어 느리다).</span>')
+              + '</div>'
+              + '<h2>진짜 깔때기</h2>'
+              + '<div class="p">세트가 다르므로 중등·초등을 합치지 않는다. 「여기까지 끝낸 판 수」의 누적이다.</div>'
+              + gk.map((k) => funnel(a.groups[k], k)).join('')
+              + '<h2>멈춘 자리 — 두 층</h2>'
+              + '<div class="note"><code>cur</code>는 시나리오 «안»에서 떠났을 때만 찍힌다(설계다, 버그가 아니다). 그래서 시나리오와 시나리오 «사이»에서 떠난 대다수가 그 집계에 원리상 안 잡혔다. 층을 갈라 둘 다 낸다.</div>'
+              + '<h3>층 A — 시나리오 사이에서 멈춤 <span class="p">' + a.la + '건 · 마지막으로 끝낸 시나리오 기준</span></h3>'
+              + '<table><tr><th>마지막으로 끝낸 시나리오</th><th class="num">건수</th></tr>' + dA + '</table>'
+              + '<h3>층 B — 시나리오 안에서 멈춤 <span class="p">' + a.lb + '건 · cur 기준</span></h3>'
+              + '<table><tr><th>시나리오 / 단계</th><th class="num">건수</th></tr>' + dB + '</table>'
+              + '<div class="note"><b>검산(VER-030)</b> — 완주 ' + a.full + ' + 층A ' + a.la + ' + 층B ' + a.lb + ' + 진입만 ' + a.entry + ' = <b>' + sum + '</b> / 유효 판 ' + meta.read
+              + (sum === meta.read ? ' ✓ 일치' : ' <b style="color:#b45309">✗ ' + (meta.read - sum) + '건 차이</b>') + '</div>'
+              + '<h2>재도전 궤적</h2>'
+              + '<div class="p">다시 하면 나아지는가. 등급 이동은 D=1 … S=5로 셈한다. 2회+ 시도한 판만 잡힌다.</div>'
+              + '<table><tr><th>시나리오</th><th class="num">재도전</th><th class="num">개선율</th><th class="num">↑개선 / =유지 / ↓하락</th><th class="num">평균 등급 이동</th></tr>' + reRows + '</table>'
+              + '<h2>소요 시간 분포</h2>'
+              + '<div class="p">수업 시간 설계에 쓰는 숫자는 중앙값이 아니라 꼬리다. 위 표의 p90과 같이 본다.</div>'
+              + '<table><tr><th>시나리오</th>' + BKL.map((b) => '<th class="num">' + b + '</th>').join('') + '</tr>' + hRows + '</table>'
               + '<h2>버전별</h2><div>' + dist(a.byVersion) + '</div>'
-              + '<h2>시나리오별</h2><table><tr><th>시나리오</th><th class="num">플레이</th><th class="num">평균점수</th><th class="num">소요(중앙값)</th><th>등급 분포</th><th class="num">재도전(↑개선 =유지 ↓하락)</th></tr>' + rows + '</table>'
-              + '<h2>선택 분포</h2><table><tr><th>시나리오</th><th>1차</th><th>2차</th><th>검토</th></tr>' + choiceRows + '</table>'
-              + '<h2>어디서 멈췄나 (미완주)</h2><table><tr><th>시나리오 / 단계</th><th class="num">건수</th></tr>' + dropRows + '</table>'
-              + '<h2>학습자 유형 (완주자)</h2><table><tr><th>유형</th><th class="num">인원</th></tr>' + typeRows + '</table>';
+              + '<h2>시나리오별</h2><table><tr><th>시나리오</th><th class="num">플레이</th><th class="num">평균점수</th><th class="num">소요(중앙값)</th><th class="num">소요(p90)</th><th>등급 분포</th><th class="num">재도전(↑개선 =유지 ↓하락)</th></tr>' + rows + '</table>'
+              + '<h2>선택 분포</h2><table><tr><th>시나리오</th><th>1차</th><th>2차</th><th>검토</th></tr>'
+              + scIds.map((id) => { const e = a.sc[id]; return '<tr><td class="id">' + esc(id) + '</td><td>' + dist(e.t1) + '</td><td>' + dist(e.t2) + '</td><td>' + dist(e.rv) + '</td></tr>'; }).join('')
+              + '</table>'
+              + '<h2>학습자 유형 <span class="p">완주 기록이 남은 ' + a.endN + '건만 — 덮인 판에선 end가 통째로 사라져 영영 없다</span></h2>'
+              + '<table><tr><th>유형</th><th class="num">인원</th></tr>' + typeRows + '</table>';
           }
 
           exports.handler = async (event) => {
             const q = (event && event.queryStringParameters) || {};
             const v = q.v || '';
             const fmt = q.format || 'html';
+            const all = q.all === '1';
+            const wantEv = q.ev === '1';
             const prefix = v ? ('raw/' + v + '/') : 'raw/';
-            const { keys, truncated } = await listKeys(prefix);
-            const { recs, bad } = await readAll(keys);
-            const a = analyse(recs);
-            const meta = { when: new Date().toISOString(), v, read: recs.length, bad: bad.length, truncated };
+            const { keys, truncated } = await listKeys(prefix, MAX);
+            const got = await readAll(keys);
+            const before = got.recs.length;
+            const recs = all ? got.recs : got.recs.filter((r) => !isTest(r.v));
+            const evp = wantEv ? await evPids() : null;
+            const a = analyse(recs, evp);
+            const meta = {
+              when: new Date().toISOString(), v, read: recs.length, excl: before - recs.length,
+              bad: got.bad.length, truncated, all, ev: wantEv,
+              evTrunc: !!(evp && evp.truncated), evFiles: evp ? evp.files : 0
+            };
             if (fmt === 'json') {
               return { statusCode: 200, headers: { 'Content-Type': 'application/json; charset=utf-8' }, body: JSON.stringify({ meta, ...a }) };
             }
@@ -640,8 +859,11 @@ Outputs:
   StatsEndpoint:
     Description: 'SPEC-log-transmit.md §11-2 유입 조회 -- 브라우저로 열면 {total,byVersion,latest}'
     Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/stats'
+  StatsEvEndpoint:
+    Description: 'SPEC-log-query.md EV-010 이벤트 파이프 관측 -- {total,pids,byVersion,latest}'
+    Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/stats-ev'
   ReportEndpoint:
-    Description: 'SPEC-log-transmit.md §12 결과 리포트 -- 브라우저로 열면 HTML 한 장 (?v=버전 필터, ?format=json)'
+    Description: 'SPEC-log-query.md §2 결과 리포트 -- 브라우저로 열면 HTML 한 장 (?v=버전, ?format=json, ?ev=1 리포트도달, ?all=1 시험분포함)'
     Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com/report'
   BucketName:
     Description: 플레이 로그가 쌓이는 버킷
