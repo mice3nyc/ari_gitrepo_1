@@ -197,6 +197,23 @@ def detect_window():
         return "미상"
 
 
+def _disambiguate(base, uuid, manifest):
+    """세션 번호는 «재사용»된다 — 같은 이름이 남의 세션을 덮지 않게 한다.
+
+    `session_num.sh`는 그 창의 오늘 엔트리가 «비어 있으면» 번호를 다시 준다
+    (2026-08-16 신설, 8/15 창C에 빈 엔트리 넷이 생긴 것이 이유다).
+    그래서 memento 없이 /clear → /recall 하면 UUID는 다른데 세션 번호가 같다.
+    이름이 같아지면 앞 세션의 전사가 통째로 덮인다.
+
+    평소엔 이름을 건드리지 않고, «실제로 부딪힐 때만» uuid 앞 8자를 붙인다.
+    """
+    claimed = {v.get("base") for k, v in manifest.items() if k != uuid}
+    on_disk = {p.stem for p in OUT_DIR.glob("*.txt")}
+    if base not in claimed and base not in on_disk:
+        return base
+    return f"{base}-{uuid[:8]}"
+
+
 def backup_one(src, session, window, manifest, full=False, dry=False):
     """반환: (상태, 메시지). 상태 = new | updated | skipped | failed"""
     uuid = src.stem
@@ -227,6 +244,7 @@ def backup_one(src, session, window, manifest, full=False, dry=False):
             base = f"세션{session}-창{window}-{stamp.strftime('%y%m%d')}"
         else:
             base = f"미상-{stamp.strftime('%y%m%d-%H%M')}-{uuid[:8]}"
+        base = _disambiguate(base, uuid, manifest)
 
     n_msg = sum(1 for r in recs if r.get("type") in ("user", "assistant"))
     body = render(recs, full=full)
