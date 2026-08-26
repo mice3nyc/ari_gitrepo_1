@@ -214,6 +214,41 @@ def _disambiguate(base, uuid, manifest):
     return f"{base}-{uuid[:8]}"
 
 
+def _promote(base, date_s, uuid, session, window, manifest, dry):
+    """★BK-030 — 못 박기의 «한쪽 예외». 반환: (이름, 경고 또는 None)
+
+    세션 번호를 모르는 스윕이 먼저 이름을 박으면 나중에 번호가 와도 영영
+    `미상`으로 남는다(세션 996이 그렇게 났다: 매니페스트엔 session·window가
+    멀쩡히 있는데 파일만 미상). **번호를 파일명에 넣는 것이 이 판의 핵심
+    이득인데 그 이득만 빠진 채 돌아 증상이 조용하다.**
+
+    방향은 «미상 → 세션N» 한쪽뿐이다. 번호가 박힌 이름을 다시 계산하면
+    못 박기 자체가 무의미해진다.
+    """
+    if not session or not base.startswith("미상-"):
+        return base, None
+    try:
+        ymd = datetime.strptime(date_s, "%Y-%m-%d").strftime("%y%m%d")
+    except ValueError:
+        return base, None
+    promoted = _disambiguate(f"세션{session}-창{window}-{ymd}", uuid, manifest)
+    moved = []
+    for ext in (".txt", ".jsonl.gz"):
+        old_p, new_p = OUT_DIR / (base + ext), OUT_DIR / (promoted + ext)
+        if not old_p.exists():
+            continue
+        # 덮어쓰지 않는다 — 이름이 못생긴 편이 남의 전사를 지우는 것보다 낫다.
+        if new_p.exists():
+            return base, f"이름 승격 포기 — {promoted} 가 이미 있다"
+        moved.append((old_p, new_p))
+    # ⚠️ dry-run은 «디스크를 안 건드린다»가 유일한 약속이다. 여기서 rename하면
+    #    파일만 옮겨지고 매니페스트는 안 바뀌어 그 자리에서 고아가 된다.
+    if not dry:
+        for old_p, new_p in moved:
+            old_p.rename(new_p)
+    return promoted, None
+
+
 def backup_one(src, session, window, manifest, full=False, dry=False):
     """반환: (상태, 메시지). 상태 = new | updated | skipped | failed"""
     uuid = src.stem
@@ -224,7 +259,22 @@ def backup_one(src, session, window, manifest, full=False, dry=False):
 
     prev = manifest.get(uuid)
     if prev and prev.get("src_size") == size:
-        return "skipped", f"세션 {prev.get('session')} 그대로"
+        # ⚠️ **내용이 그대로여도 «이름»은 늦게 올 수 있다** (2026-08-26, 피터공
+        #    *"다른 창들도 다음 memento에서 이름 찾는지 확인할 필요가 있을까?"*).
+        #    이 조기 반환이 승격 앞에 있으면, 스윕이 익명으로 뜬 뒤 그 창이
+        #    한 글자도 안 쓴 채 memento를 돌릴 때 번호를 알고도 미상으로 남는다.
+        #    뜨는 것은 건너뛰되 이름만 고친다.
+        base0 = prev.get("base") or ""
+        newb, warn0 = _promote(base0, prev.get("date") or "", uuid,
+                               session, window, manifest, dry)
+        if newb != base0:
+            if not dry:
+                prev["base"] = newb
+                prev["session"], prev["window"] = session, window
+                prev["files"] = [newb + ".txt", newb + ".jsonl.gz"]
+            return "renamed", f"{base0} → {newb} (내용 그대로, 이름만)"
+        return "skipped", (f"세션 {prev.get('session')} 그대로"
+                           + (f"  ⚠️ {warn0}" if warn0 else ""))
 
     recs, bad = read_jsonl(src)
     if not recs:
@@ -238,37 +288,7 @@ def backup_one(src, session, window, manifest, full=False, dry=False):
         base = prev["base"]
         date_s = prev.get("date") or datetime.fromtimestamp(
             src.stat().st_mtime).strftime("%Y-%m-%d")
-        # ★BK-030 — 못 박기의 «한쪽 예외». 세션 번호를 모르는 스윕이 먼저 이름을
-        # 박으면 나중에 번호가 와도 영영 `미상`으로 남는다(세션 996이 그렇게 났다:
-        # 매니페스트엔 session·window가 있는데 파일만 미상). 번호를 파일명에 넣는
-        # 것이 이 판의 핵심 이득인데 그 이득만 빠진 채 돌아 증상이 조용하다.
-        # 방향은 «미상 → 세션N» 한쪽뿐이다. 번호가 박힌 이름을 다시 계산하면
-        # 못 박기 자체가 무의미해진다.
-        if session and base.startswith("미상-"):
-            try:
-                ymd = datetime.strptime(date_s, "%Y-%m-%d").strftime("%y%m%d")
-            except ValueError:
-                ymd = datetime.fromtimestamp(src.stat().st_mtime).strftime("%y%m%d")
-            promoted = _disambiguate(f"세션{session}-창{window}-{ymd}", uuid, manifest)
-            moved, clash = [], False
-            for ext in (".txt", ".jsonl.gz"):
-                old_p, new_p = OUT_DIR / (base + ext), OUT_DIR / (promoted + ext)
-                if not old_p.exists():
-                    continue
-                # 덮어쓰지 않는다 — 이름이 못생긴 편이 남의 전사를 지우는 것보다 낫다.
-                if new_p.exists():
-                    clash = True
-                    break
-                moved.append((old_p, new_p))
-            if clash:
-                warn = f"이름 승격 포기 — {promoted} 가 이미 있다"
-            else:
-                # ⚠️ dry-run은 «디스크를 안 건드린다»가 유일한 약속이다. 여기서 rename하면
-                #    파일만 옮겨지고 매니페스트는 안 바뀌어 그 자리에서 고아가 된다.
-                if not dry:
-                    for old_p, new_p in moved:
-                        old_p.rename(new_p)
-                base = promoted
+        base, warn = _promote(base, date_s, uuid, session, window, manifest, dry)
     else:
         stamp = datetime.fromtimestamp(src.stat().st_mtime)
         date_s = stamp.strftime("%Y-%m-%d")
@@ -381,7 +401,9 @@ def main():
         counts[status] = counts.get(status, 0) + 1
 
     for kind, status, msg in results:
-        mark = {"new": "＋", "updated": "↻", "skipped": "·", "failed": "⚠️"}[status]
+        # ⚠️ 상태를 늘리면 여기가 KeyError로 죽는다 — `.get`이 아니라 첨자였다.
+        mark = {"new": "＋", "updated": "↻", "renamed": "✎",
+                "skipped": "·", "failed": "⚠️"}.get(status, "?")
         if status != "skipped":
             print(f"{mark} [{kind}] {msg}")
 

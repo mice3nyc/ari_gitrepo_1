@@ -96,6 +96,37 @@ check("⑤ dry-run이 파일을 안 옮긴다", before == after, f"{len(before)}
 check("⑤ dry-run이 승격될 이름을 보여준다", "세션888-창D-" in msg, msg)
 check("⑤ dry-run이 매니페스트를 안 고친다", m3[srcC.stem]["base"] == baseC, m3[srcC.stem]["base"])
 
+# ⑥ ★내용이 그대로여도 이름은 승격된다 (skip 분기의 구멍)
+#    스윕이 익명으로 뜬 뒤, 그 창이 한 글자도 더 안 쓴 채 memento를 돌리는 경우.
+#    조기 반환이 승격 앞에 있으면 번호를 알고도 미상으로 남는다.
+m5 = {}
+srcE = mk("eeeeeeee-1111-2222-3333-444444444444")
+sb.backup_one(srcE, None, "미상", m5)
+baseE = m5[srcE.stem]["base"]
+size_before = srcE.stat().st_size
+st, msg = sb.backup_one(srcE, "777", "E", m5)   # 파일을 «안 키우고» 번호만 준다
+baseE2 = m5[srcE.stem]["base"]
+check("⑥ 크기가 같아도 이름이 승격된다", baseE2.startswith("세션777-창E-"), f"{baseE} → {baseE2}")
+check("⑥ 상태가 renamed다", st == "renamed", f"{st} · {msg}")
+check("⑥ 디스크 파일도 따라 옮겨졌다",
+      (sb.OUT_DIR / (baseE2 + ".txt")).exists() and not (sb.OUT_DIR / (baseE + ".txt")).exists())
+check("⑥ 매니페스트 files도 갱신됐다", m5[srcE.stem]["files"] == [baseE2 + ".txt", baseE2 + ".jsonl.gz"], str(m5[srcE.stem]["files"]))
+check("⑥ 원본을 다시 안 읽었다(크기 불변)", srcE.stat().st_size == size_before)
+
+# ⑦ 이미 번호가 박힌 것은 skip 분기에서도 안 건드린다
+st, msg = sb.backup_one(srcE, "778", "F", m5)
+check("⑦ 번호 박힌 이름은 skip 분기에서도 그대로", m5[srcE.stem]["base"] == baseE2 and st == "skipped", f"{st} · {m5[srcE.stem]['base']}")
+
+# ⑧ skip 분기의 dry-run도 디스크를 안 건드린다
+m6 = {}
+srcF = mk("ffffffff-1111-2222-3333-444444444444")
+sb.backup_one(srcF, None, "미상", m6)
+baseF = m6[srcF.stem]["base"]
+before6 = sorted(p.name for p in sb.OUT_DIR.glob("*"))
+st, msg = sb.backup_one(srcF, "779", "F", m6, dry=True)
+check("⑧ skip 분기 dry-run이 파일을 안 옮긴다", before6 == sorted(p.name for p in sb.OUT_DIR.glob("*")))
+check("⑧ skip 분기 dry-run이 매니페스트를 안 고친다", m6[srcF.stem]["base"] == baseF, m6[srcF.stem]["base"])
+
 shutil.rmtree(tmp)
 print(f"\n  {ok} PASS / {fail} FAIL")
 sys.exit(1 if fail else 0)
