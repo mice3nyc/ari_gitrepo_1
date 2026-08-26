@@ -233,10 +233,42 @@ def backup_one(src, session, window, manifest, full=False, dry=False):
     # 이름은 «처음 뜬 때»로 못 박고 다시 계산하지 않는다.
     # mtime으로 매번 계산하면 자정을 넘겨 두 번 뜰 때 같은 세션이 두 파일로
     # 갈라지고 앞엣것이 고아로 남는다(2026-08-26 피터공 질문에서 드러남).
+    warn = None
     if prev and prev.get("base"):
         base = prev["base"]
         date_s = prev.get("date") or datetime.fromtimestamp(
             src.stat().st_mtime).strftime("%Y-%m-%d")
+        # ★BK-030 — 못 박기의 «한쪽 예외». 세션 번호를 모르는 스윕이 먼저 이름을
+        # 박으면 나중에 번호가 와도 영영 `미상`으로 남는다(세션 996이 그렇게 났다:
+        # 매니페스트엔 session·window가 있는데 파일만 미상). 번호를 파일명에 넣는
+        # 것이 이 판의 핵심 이득인데 그 이득만 빠진 채 돌아 증상이 조용하다.
+        # 방향은 «미상 → 세션N» 한쪽뿐이다. 번호가 박힌 이름을 다시 계산하면
+        # 못 박기 자체가 무의미해진다.
+        if session and base.startswith("미상-"):
+            try:
+                ymd = datetime.strptime(date_s, "%Y-%m-%d").strftime("%y%m%d")
+            except ValueError:
+                ymd = datetime.fromtimestamp(src.stat().st_mtime).strftime("%y%m%d")
+            promoted = _disambiguate(f"세션{session}-창{window}-{ymd}", uuid, manifest)
+            moved, clash = [], False
+            for ext in (".txt", ".jsonl.gz"):
+                old_p, new_p = OUT_DIR / (base + ext), OUT_DIR / (promoted + ext)
+                if not old_p.exists():
+                    continue
+                # 덮어쓰지 않는다 — 이름이 못생긴 편이 남의 전사를 지우는 것보다 낫다.
+                if new_p.exists():
+                    clash = True
+                    break
+                moved.append((old_p, new_p))
+            if clash:
+                warn = f"이름 승격 포기 — {promoted} 가 이미 있다"
+            else:
+                # ⚠️ dry-run은 «디스크를 안 건드린다»가 유일한 약속이다. 여기서 rename하면
+                #    파일만 옮겨지고 매니페스트는 안 바뀌어 그 자리에서 고아가 된다.
+                if not dry:
+                    for old_p, new_p in moved:
+                        old_p.rename(new_p)
+                base = promoted
     else:
         stamp = datetime.fromtimestamp(src.stat().st_mtime)
         date_s = stamp.strftime("%Y-%m-%d")
@@ -256,7 +288,9 @@ def backup_one(src, session, window, manifest, full=False, dry=False):
     gz_p = OUT_DIR / (base + ".jsonl.gz")
 
     if dry:
-        return ("updated" if prev else "new"), f"{base} ← {size:,}B (dry-run)"
+        return ("updated" if prev else "new"), (
+            f"{base} ← {size:,}B (dry-run)" + (f"  ⚠️ {warn}" if warn else "")
+        )
 
     txt_p.write_text(txt, encoding="utf-8")
     with open(src, "rb") as fi, gzip.open(gz_p, "wb", compresslevel=9) as fo:
@@ -271,6 +305,7 @@ def backup_one(src, session, window, manifest, full=False, dry=False):
     ratio = gz_p.stat().st_size / size * 100 if size else 0
     return ("updated" if prev else "new"), (
         f"{base} · txt {txt_p.stat().st_size:,}B · gz {gz_p.stat().st_size:,}B ({ratio:.0f}%)"
+        + (f"  ⚠️ {warn}" if warn else "")
     )
 
 
