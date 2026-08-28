@@ -1,12 +1,14 @@
 #!/bin/bash
 # todoy-bar 상태 변경 헬퍼
-# 사용: todoy.sh {setup | add <텍스트> | add-dialog | activate <id> | done <id> | carryover | render}
+# 사용: todoy.sh {setup | add <텍스트> | add-dialog | activate <id> | done <id> | drop <id> | undrop <id> | carryover | render}
 #   - 데이터: data/YYYY-MM-DD.json (오늘 날짜)
 #   - 시간은 epoch초로 누적. active 구간이 끝날 때 정산.
 #   - 절대경로로 호출해야 settings allowlist 매칭 (cd 붙이지 말 것)
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
-DATA_DIR="$DIR/data"
+# TODOY_DATA_DIR가 있으면 그쪽을 쓴다 — 검증 하니스가 실데이터에 «닿을 수 없게» 하기 위한 것.
+# 조심하는 것이 아니라 길을 끊는다(검사는 자기가 밖으로 밀어낸 것을 안 본다).
+DATA_DIR="${TODOY_DATA_DIR:-$DIR/data}"
 mkdir -p "$DATA_DIR"
 # 2026-07-27 원복 — 7/17 뉴욕 출장 임시 패치(TZ=America/New_York) 해제. 7/25 귀국.
 # 해외 체류 시에는 TZ만 앞에 붙인다: TODAY="$(TZ=<현지TZ> date -v-4H +%F)". 귀국 즉시 이 줄로 원복.
@@ -27,13 +29,16 @@ case "$cmd" in
     ensure_file
     prev="$(ls "$DATA_DIR"/*.json 2>/dev/null | grep -v "/$TODAY.json" | sort | tail -1)"
     if [ -n "$prev" ] && [ -f "$prev" ]; then
-      "$JQ" -s '
+      prev_date="$(basename "$prev" .json)"
+      "$JQ" -s --arg pd "$prev_date" '
         .[0] as $today | .[1] as $prev
         | ($today | map(.text)) as $have
         | $today + [ $prev[]
             | select(.done==false)
+            | select(.dropped != true)
             | select(.text as $t | $have | index($t) | not)
-            | {id, text, done:false, active:false, switches:0, seconds:0, active_since:null, carried:true} ]' \
+            | {id, text, done:false, active:false, switches:0, seconds:0, active_since:null,
+               carried:true, carried_from:(.carried_from // $pd), dropped:false, dropped_at:null} ]' \
         "$FILE" "$prev" > "$FILE.tmp" && mv "$FILE.tmp" "$FILE"
     fi
     cat "$FILE"
@@ -88,8 +93,40 @@ case "$cmd" in
       else . end)' "$FILE" > "$FILE.tmp" && mv "$FILE.tmp" "$FILE"
     ;;
 
+  drop)
+    # 「오늘 안 함」으로 뺀다. 지우지 않고 표시만 — 데이터에는 남아 그날의 기록이 된다.
+    # 완료 항목은 거부한다: 완료는 진행률의 «분자»이고 drop은 「안 한다」라서 둘은 배타적이다.
+    ensure_file
+    id="$2"
+    [ -z "$id" ] && { echo "id 필요" >&2; exit 1; }
+    if ! "$JQ" -e --arg id "$id" 'any(.[]; .id == $id)' "$FILE" >/dev/null; then
+      echo "그런 id가 오늘 목록에 없다: $id" >&2; exit 1
+    fi
+    if "$JQ" -e --arg id "$id" 'any(.[]; .id == $id and .done == true)' "$FILE" >/dev/null; then
+      echo "완료 항목은 뺄 수 없다. 먼저 완료를 취소한다(done $id)." >&2; exit 1
+    fi
+    now="$(date +%s)"
+    "$JQ" --arg id "$id" --argjson now "$now" '
+      map(if .id == $id then
+        (if .active == true then .seconds += ($now - (.active_since // $now)) else . end)
+        | .dropped = true | .dropped_at = $now | .active = false | .active_since = null
+      else . end)' "$FILE" > "$FILE.tmp" && mv "$FILE.tmp" "$FILE"
+    ;;
+
+  undrop)
+    ensure_file
+    id="$2"
+    [ -z "$id" ] && { echo "id 필요" >&2; exit 1; }
+    if ! "$JQ" -e --arg id "$id" 'any(.[]; .id == $id)' "$FILE" >/dev/null; then
+      echo "그런 id가 오늘 목록에 없다: $id" >&2; exit 1
+    fi
+    "$JQ" --arg id "$id" '
+      map(if .id == $id then (.dropped = false | .dropped_at = null) else . end)' \
+      "$FILE" > "$FILE.tmp" && mv "$FILE.tmp" "$FILE"
+    ;;
+
   carryover)
-    [ -f "$FILE" ] && "$JQ" -r '.[] | select(.done==false) | "- " + .text' "$FILE"
+    [ -f "$FILE" ] && "$JQ" -r '.[] | select(.done==false) | select(.dropped != true) | "- " + .text' "$FILE"
     ;;
 
   render)
@@ -116,7 +153,7 @@ case "$cmd" in
     ;;
 
   *)
-    echo "todoy.sh {setup | add <텍스트> | add-dialog | activate <id> | done <id> | carryover | render | sync | edit}" >&2
+    echo "todoy.sh {setup | add <텍스트> | add-dialog | activate <id> | done <id> | drop <id> | undrop <id> | carryover | render | sync | edit}" >&2
     exit 1
     ;;
 esac

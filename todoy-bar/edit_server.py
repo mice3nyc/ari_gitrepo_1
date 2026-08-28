@@ -192,7 +192,9 @@ class Handler(BaseHTTPRequestHandler):
             threading.Thread(target=self.server.shutdown, daemon=True).start()
             return
         if self.path in ("/", "/index.html"):
-            body = page_html(load()).encode("utf-8")
+            # dropped(오늘 안 하기로 뺀 것)는 편집창에 그리지 않는다.
+            # 저장 시 build_saved가 원본에서 그대로 보존한다(edit.py). SPEC §빼기 참조.
+            body = page_html([it for it in load() if not it.get("dropped")]).encode("utf-8")
             self._send(200, body, "text/html; charset=utf-8")
             return
         self._send(404, b"nope")

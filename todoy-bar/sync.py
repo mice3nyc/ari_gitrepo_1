@@ -92,7 +92,15 @@ def render_lines(result):
 
 
 def main():
-    jitems = load(JSON_FILE, [])
+    jitems_all = load(JSON_FILE, [])
+    # dropped(오늘 안 하기로 뺀 것)는 이 병합에 «참여시키지 않는다».
+    # 존재 판정이 "base 대비 한쪽에서 사라지면 삭제"라, 노트에 안 쓰기만 하면
+    # 다음 sync가 「노트에서 사라짐」으로 읽어 json에서 지운다. 그래서 아예 분리해
+    # 병합 밖에 두고 결과 끝에 원본 그대로 되붙인다. base 스냅샷에도 넣지 않는다.
+    # SPEC §빼기 「조용히 증발하는 자리 둘」 참조.
+    dropped_items = [j for j in jitems_all if j.get("dropped")]
+    dropped_ids = {j["id"] for j in dropped_items}
+    jitems = [j for j in jitems_all if not j.get("dropped")]
     base_list = load(BASE_FILE, None)
     first_run = base_list is None
     base = {b["id"]: b for b in (base_list or [])}
@@ -113,6 +121,9 @@ def main():
     # 1) 노트 항목 순서대로
     for n in note_items:
         nid = n["id"]
+        if nid and nid in dropped_ids:
+            # 뺀 항목이 노트에 남아 있으면 노트에서만 지운다(json은 위에서 보존).
+            continue
         if nid and nid in jmap:
             j = jmap[nid]
             b = base.get(nid, {"text": j["text"], "done": j["done"]})
@@ -174,8 +185,11 @@ def main():
             result.append(dict(j))
 
     # ---- 변경 여부 판정 ----
-    json_changed = result != jitems
-    new_note_lines = render_lines(result)
+    # 노트에는 병합 결과만, json에는 «병합 결과 + 뺀 항목»을 쓴다.
+    merged = result
+    result = merged + dropped_items
+    json_changed = result != jitems_all
+    new_note_lines = render_lines(merged)
     if sec_start is None:
         # 섹션 없으면 파일 끝에 생성
         old_block = []
@@ -209,7 +223,7 @@ def main():
             f.write(out)
         os.replace(tmp, NOTE)
     # base 스냅샷 갱신
-    snap = [{"id": r["id"], "text": r["text"], "done": r.get("done", False)} for r in result]
+    snap = [{"id": r["id"], "text": r["text"], "done": r.get("done", False)} for r in merged]
     with open(BASE_FILE, "w", encoding="utf-8") as f:
         json.dump(snap, f, ensure_ascii=False)
 

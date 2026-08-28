@@ -72,6 +72,13 @@ def build_saved(original, rows, new_texts):
         if not text:
             continue
         out.append({"id": new_id(), "text": text, **DEFAULT_ITEM})
+    # dropped(오늘 안 하기로 뺀 것)는 편집창이 그리지 않으므로 rows에 오지 않는다.
+    # 이 함수는 rows로 배열을 «재구성»하니, 보존하지 않으면 저장하는 순간 사라진다.
+    # SPEC §빼기 「조용히 증발하는 자리 둘」 참조.
+    sent = {iid for iid, _, _ in rows}
+    for it in original:
+        if it.get("dropped") and it["id"] not in sent:
+            out.append(dict(it))
     return out
 
 

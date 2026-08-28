@@ -21,9 +21,25 @@ fmt() { # 초 -> 사람이 읽는 시간
   else echo "${s}s"; fi
 }
 
-total="$(echo "$DATA" | "$JQ" 'length')"
-done_count="$(echo "$DATA" | "$JQ" '[.[] | select(.done==true)] | length')"
-active_line="$(echo "$DATA" | "$JQ" -r '.[] | select(.active==true) | [.text, (.live_seconds|tostring)] | @tsv' | head -1)"
+# dropped(오늘 안 하기로 뺀 것)는 진행률의 대상이 아니다 — 분모에서도 뺀다.
+# 데이터에는 남아 있고 아래 접힌 줄로만 보인다. SPEC §빼기 참조.
+LIVE="$(echo "$DATA" | "$JQ" '[.[] | select(.dropped != true)]')"
+DROPPED="$(echo "$DATA" | "$JQ" '[.[] | select(.dropped == true)]')"
+# carried_from(YYYY-MM-DD) -> 오늘까지 며칠. 값이 없거나 파싱 실패면 0.
+# 오늘의 기준은 todoy.sh와 같은 4시 경계다(자정 직후에 나이가 하루 튀지 않게).
+age_days() {
+  local from="$1"
+  [ -z "$from" ] && { echo 0; return; }
+  local f t
+  f="$(date -j -f "%Y-%m-%d" "$from" "+%s" 2>/dev/null)" || { echo 0; return; }
+  t="$(date -j -f "%Y-%m-%d" "$(date -v-4H +%F)" "+%s" 2>/dev/null)" || { echo 0; return; }
+  echo $(( (t - f) / 86400 ))
+}
+
+total="$(echo "$LIVE" | "$JQ" 'length')"
+done_count="$(echo "$LIVE" | "$JQ" '[.[] | select(.done==true)] | length')"
+dropped_count="$(echo "$DROPPED" | "$JQ" 'length')"
+active_line="$(echo "$LIVE" | "$JQ" -r '.[] | select(.active==true) | [.text, (.live_seconds|tostring)] | @tsv' | head -1)"
 
 # ── 메뉴바 ── (now-bar와 구분: 체크리스트 정체성 = 진행률 앞세움, ✓ 아이콘)
 # 노치 화면 대비 최소 폭 (피터공 26.0705): 오늘{완료}/{전체}
@@ -37,19 +53,22 @@ echo "---"
 # 완료 항목은 «지우지 않고 접는다»(2026-08-25). 목록이 길어지는 것은 보기의 문제라
 # 표시에서만 접고, 데이터는 그대로 둔다 — 완료 항목이 진행률의 분자라 파일에서 빼면
 # 카운터가 0/N이 되어 "오늘 뭘 했다"가 같이 사라진다. SPEC 참조.
-undone_count="$(echo "$DATA" | "$JQ" '[.[] | select(.done==false)] | length')"
+undone_count="$(echo "$LIVE" | "$JQ" '[.[] | select(.done==false)] | length')"
 
-if [ "$total" -eq 0 ]; then
+if [ "$total" -eq 0 ] && [ "$dropped_count" -eq 0 ]; then
   echo "(할 일 없음 — 아래에서 추가) | size=12 color=gray"
 else
   if [ "$undone_count" -eq 0 ]; then
     echo "오늘 할 일 전부 완료 | size=12 color=gray"
   fi
   # 미완료만 본 목록에 그린다
-  echo "$DATA" | "$JQ" -r '.[] | select(.done==false) | [.id, .text, (.active|tostring), (.switches|tostring), (.live_seconds|tostring)] | @tsv' \
-  | while IFS=$'\t' read -r id text active switches lsec; do
+  echo "$LIVE" | "$JQ" -r '.[] | select(.done==false) | [.id, .text, (.active|tostring), (.switches|tostring), (.live_seconds|tostring), (.carried_from // "")] | @tsv' \
+  | while IFS=$'\t' read -r id text active switches lsec cfrom; do
       meta=""
       if [ "${switches:-0}" -gt 0 ]; then meta="  ×${switches} $(fmt "$lsec")"; fi
+      # 3일 이상 밀린 항목만 나이를 붙인다. 전부 붙이면 시끄럽고, 3일은 DN 이월 스캔과 같은 선.
+      age="$(age_days "$cfrom")"
+      if [ "$age" -ge 3 ]; then meta="${meta}  +${age}일"; fi
       # 메인 라인 클릭 = ACTIVE(지금 작업으로). 완료는 서브메뉴. ☐는 상태 표시.
       # ACTIVE = 파랑+볼드(md).
       line_color=""; line_extra=""; text_disp="$text"
@@ -58,6 +77,7 @@ else
       fi
       echo "☐ ${text_disp}${meta} | size=13${line_color}${line_extra} bash=$TODOY param1=activate param2=$id terminal=false refresh=true"
       echo "-- ☑ 완료로 표시 | bash=$TODOY param1=done param2=$id terminal=false refresh=true"
+      echo "-- ✕ 오늘 안 함 | bash=$TODOY param1=drop param2=$id terminal=false refresh=true"
       if [ "$active" = "true" ]; then
         echo "-- ⏸ 지금 작업 해제 | bash=$TODOY param1=activate param2=$id terminal=false refresh=true"
       fi
@@ -68,11 +88,22 @@ else
     echo "---"
     echo "☑ 완료 ${done_count}건 | size=13 color=#009443"
     echo "-- 클릭하면 완료 취소 | size=11 color=gray"
-    echo "$DATA" | "$JQ" -r '.[] | select(.done==true) | [.id, .text, (.switches|tostring), (.live_seconds|tostring)] | @tsv' \
+    echo "$LIVE" | "$JQ" -r '.[] | select(.done==true) | [.id, .text, (.switches|tostring), (.live_seconds|tostring)] | @tsv' \
     | while IFS=$'\t' read -r id text switches lsec; do
         meta=""
         if [ "${switches:-0}" -gt 0 ]; then meta="  ×${switches} $(fmt "$lsec")"; fi
         echo "-- ☑ ${text}${meta} | size=13 color=#009443 bash=$TODOY param1=done param2=$id terminal=false refresh=true"
+      done
+  fi
+
+  # 뺀 항목 = 접힌 한 줄 + 서브메뉴 (클릭 = 되돌리기). 완료 초록·ACTIVE 파랑과 갈리게 회색.
+  if [ "$dropped_count" -gt 0 ]; then
+    echo "---"
+    echo "✕ 뺀 항목 ${dropped_count}건 | size=13 color=#888888"
+    echo "-- 클릭하면 오늘 목록으로 되돌립니다 | size=11 color=gray"
+    echo "$DROPPED" | "$JQ" -r '.[] | [.id, .text] | @tsv' \
+    | while IFS=$'\t' read -r id text; do
+        echo "-- ✕ ${text} | size=13 color=#888888 bash=$TODOY param1=undrop param2=$id terminal=false refresh=true"
       done
   fi
 fi
