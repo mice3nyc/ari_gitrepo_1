@@ -20,7 +20,19 @@ VAULT=/Users/p.air15/Neo-Obsi-Sync
 MODE="${1:-list}"
 
 # 이름으로 무는 것 — 볼트 밖에서 떠도 개발용이면 잡는다
-PAT='vite|npm (run|exec)|node .*(_dev|_devhaus)|node --experimental-strip-types|node -c|mock-display|http\.server'
+#
+# ⚠️★2026-08-31 추가: **헤드리스 크롬이 이 패턴에 하나도 안 걸리고 있었다.**
+#    `/Applications/Google Chrome.app/…` 은 vite 도 npm 도 node 도 아니다.
+#    그래서 검사 하네스가 남긴 크롬 둘이 **2일 10시간**을 살았고 프로필 폴더가
+#    **147개 9.3GB** 쌓였다. 청소부는 있는데 이 쓰레기만 «안 보였다».
+#    → 검사용 프로필(`*-cdp-*`)을 쓰는 헤드리스 크롬만 문다. 사람이 쓰는 크롬은 안 건드린다.
+#    ⚠️ **본체만 문다**(`MacOS/Google Chrome`). 헬퍼(`Frameworks/…/Helpers/`)까지 걸면
+#       브라우저 하나가 42줄로 나와 목록이 못 읽게 된다. 본체를 죽이면 헬퍼는 따라 죽는다.
+#
+# ⚠️ 이건 «수동» 청소부다. 하루를 닫을 때 부르는 것이라 다른 창이 지금 돌리는 회차도 같이 죽는다.
+#    돌아가는 중에 안 끊기려면 그쪽은 `tools/cdp.mjs` 의 자동 정리가 맡는다 —
+#    그건 「주인 pid 가 죽었나」로 판정해서 «남의 살아있는 회차»를 안 건드린다.
+PAT='vite|npm (run|exec)|node .*(_dev|_devhaus)|node --experimental-strip-types|node -c|mock-display|http\.server|Google Chrome\.app/Contents/MacOS/Google Chrome .*--user-data-dir=[^ ]*-cdp-'
 
 found=$(ps -axo pid,etime,command \
   | grep -iE "$PAT" \
