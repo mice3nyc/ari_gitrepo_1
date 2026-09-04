@@ -21,6 +21,8 @@ ai-literacy-delegation-boundary/v13-elem/builds/
 ai-literacy-delegation-boundary/v14/builds/
 
 # 런타임 로그·상태
+# vault_write.py 덮어쓰기 로그 + 스킬 완료 마커(memento_done_*). 기계가 만드는 상태라 커밋 대상이 아니다.
+scripts/logs/
 context-hop-bar/logs/
 context-hop-bar/data/
 context-hop-bar/*.db
@@ -31,6 +33,8 @@ tm-bar/data/
 *.before-v*-migration
 # 편집 직전 스냅샷 (yaml 손보기 전 사본 — 위와 같은 범주인데 접미가 자유롭다)
 *.yaml.before-*
+# 편집 직전 사본 (tm.sh.bak_claim, session_num.sh.bak_lockunify 같은 것)
+*.bak_*
 
 # 스크래치 (작업 중 임시 산출 — 참조하는 문서가 없는 것)
 todoy-bar/scratch_*

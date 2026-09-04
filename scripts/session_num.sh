@@ -50,17 +50,28 @@ case "${1:-}" in
 esac
 
 # ── 락 획득 (mkdir은 원자적) ─────────────────────────────
+# ⚠️ 이 락은 vault_write.py와 «공유»한다 (2026-08-23). 세션 로그 한 파일에 락이
+#    둘이면 상호 배제가 성립하지 않아, recall의 채번과 memento의 본문 채우기가
+#    그대로 겹친다. 프로토콜도 맞춘다: 락 안에 PID를 적고, 회수 전에 그 PID가
+#    살아 있는지 본다(맥북이 쓰기 도중 잠들면 «1분 지났으니 죽었다»가 틀린 판정).
+#    사양: _dev/scripts/SPEC-vault_write.md §5
 acquired=0
 for _ in $(seq 1 50); do
-  if mkdir "$LOCK" 2>/dev/null; then acquired=1; break; fi
-  # 60초 넘은 락은 죽은 창이 남긴 것으로 보고 걷어낸다
-  if [ -d "$LOCK" ] && [ -z "$(find "$LOCK" -maxdepth 0 -mmin -1 2>/dev/null)" ]; then
-    rmdir "$LOCK" 2>/dev/null || true
+  if mkdir "$LOCK" 2>/dev/null; then echo $$ > "$LOCK/pid"; acquired=1; break; fi
+  if [ -d "$LOCK" ]; then
+    lpid=$(cat "$LOCK/pid" 2>/dev/null || true)
+    if [ -n "$lpid" ]; then
+      # PID가 있으면 «살아 있는가»만 본다
+      kill -0 "$lpid" 2>/dev/null || rm -rf "$LOCK"
+    elif [ -z "$(find "$LOCK" -maxdepth 0 -mmin -1 2>/dev/null)" ]; then
+      # PID 없는 옛 형식 — 60초 넘었으면 죽은 것으로 본다
+      rm -rf "$LOCK" 2>/dev/null || true
+    fi
   fi
   sleep 0.2
 done
 [ "$acquired" = 1 ] || { echo "락 획득 실패 — $LOCK 을 확인하라" >&2; exit 1; }
-trap 'rmdir "$LOCK" 2>/dev/null || true' EXIT
+trap 'rm -rf "$LOCK" 2>/dev/null || true' EXIT
 
 # ── new: 이 창의 오늘 빈 엔트리가 있으면 재사용하고 끝낸다 ──
 if [ "${1}" = "new" ]; then

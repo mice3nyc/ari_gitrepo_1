@@ -1,5 +1,15 @@
 # TASKS — TM (TerminalMonitor)
 
+## v0.5 — 컨텍스트 사용량 표시 (26.0823 선문, SPEC §11)
+
+- [x] 선문: SPEC §11 (재료 실측 · 함정 넷 · 검증 W1~W8)
+- [ ] C1-a: `tm-hook.sh` working 분기에서 `.transcript_path` → `{ID}.json`의 `transcript` 저장
+- [ ] C1-b: `tm.sh`에 `ctx {ID}` 명령 (꼬리 300KB에서 마지막 usage 합산). ⚠️ `"usage":{[^}]*}` grep 금지 — 중첩 중괄호로 깨진다
+- [ ] C1-c: 플러그인 창 헤드에 절대값 표시 + mtime 무변화 시 재사용
+- [ ] C1-d: W1~W8 자가검증 (**W1부터 — 수정 전 붉음 확인**)
+- [ ] C1-e: `install.sh` 재배포
+- [ ] **피터공 라이브 확인**: 메뉴바에 실제 숫자
+
 ## 현재 단계: v0 코어 (헬퍼 + 플러그인)
 
 - [x] `tm.sh` — register/log/set/note/unregister/render/slot/flush (전 명령 JSON 정합 테스트 통과)

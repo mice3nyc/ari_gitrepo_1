@@ -195,6 +195,37 @@ OSA
       "${files[@]}"
     ;;
 
+  claim)
+    # slot 조회 + register 를 «한 락 안에서» 한다 (2026-08-23).
+    # slot 단독은 제안일 뿐 예약이 아니라, 두 창이 동시에 부르면 같은 글자를 받는다.
+    # 사양: _dev/scripts/SPEC-vault_write.md §8
+    LK="$WIN_DIR/.claim.lock"
+    got=0
+    for _ in $(seq 1 40); do
+      if mkdir "$LK" 2>/dev/null; then echo $$ > "$LK/pid"; got=1; break; fi
+      lpid=$(cat "$LK/pid" 2>/dev/null || true)
+      if [ -n "$lpid" ]; then kill -0 "$lpid" 2>/dev/null || rm -rf "$LK"; fi
+      sleep 0.2
+    done
+    [ "$got" = 1 ] || { echo "claim 락 획득 실패 — $LK" >&2; exit 2; }
+    trap 'rm -rf "$LK" 2>/dev/null || true' EXIT
+
+    shopt -s nullglob
+    used=""
+    for f in "$WIN_DIR"/*.json; do
+      a="$("$JQ" -r 'select(.date=="'"$TODAY"'" and .active==true) | .id' "$f" 2>/dev/null)"
+      [ -n "$a" ] && used="$used $a"
+    done
+    pick=""
+    for c in $VALID_IDS; do
+      case " $used " in *" $c "*) ;; *) pick="$c"; break;; esac
+    done
+    [ -n "$pick" ] || { echo "모든 슬롯($(ids_label)) 사용 중 — 창 번호를 피터공에게 직접 확인" >&2; exit 1; }
+    "$0" register "$pick" "${2:-}" >/dev/null || exit 1
+    echo "$pick"
+    exit 0
+    ;;
+
   slot)
     shopt -s nullglob
     used=""
