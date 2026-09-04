@@ -9,6 +9,11 @@
 #     render/whoami/flush/unregister와 플러그인은 windows/*.json glob이라 개수를 가정하지 않는다.
 #     더 늘릴 일이 생기면 아래 VALID_IDS 한 줄만 고치면 된다. (A~D → A~F 확장 26.0731)
 
+# ⏱️ 출장 TZ 고정 (2026-09-03 ~ 09-08, 프랑크푸르트) — 귀국 시 이 세 줄을 삭제한다.
+#   .claude/settings.json의 env.TZ는 «클로드코드가 부르는 셸»에만 걸린다. 시스템 TZ는 Asia/Seoul이고
+#   SwiftBar는 GUI 앱이라 그 env를 안 받으므로, 날짜를 읽는 스크립트가 직접 박는다. (2026-09-04 창A)
+export TZ=Europe/Berlin
+
 DIR="$(cd "$(dirname "$0")" && pwd)"
 WIN_DIR="$DIR/data/windows"
 mkdir -p "$WIN_DIR"

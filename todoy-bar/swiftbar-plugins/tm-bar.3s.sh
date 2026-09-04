@@ -8,6 +8,11 @@
 # 노치 있는 화면은 상태영역이 좁아 상시 텍스트가 todoy를 밀어내므로, 텍스트 로테이션은 뺐다.
 # 방금 갱신된 창은 드롭다운에서 파랑(+맨 위)으로 표시해 "어디가 움직였나"는 살린다.
 
+# ⏱️ 출장 TZ 고정 (2026-09-03 ~ 09-08, 프랑크푸르트) — 귀국 시 이 세 줄을 삭제한다.
+#   .claude/settings.json의 env.TZ는 «클로드코드가 부르는 셸»에만 걸린다. 시스템 TZ는 Asia/Seoul이고
+#   SwiftBar는 GUI 앱이라 그 env를 안 받으므로, 날짜를 읽는 스크립트가 직접 박는다. (2026-09-04 창A)
+export TZ=Europe/Berlin
+
 TM="/Users/p.air15/Neo-Obsi-Sync/_dev/tm-bar/tm.sh"
 EDIT="/Users/p.air15/Neo-Obsi-Sync/_dev/tm-bar/tm-edit.sh"
 JQ=/usr/bin/jq
