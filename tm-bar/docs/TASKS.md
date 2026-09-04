@@ -76,3 +76,4 @@
 - `762e6f7` (26.0710) — 창 포커스(focus): tm.sh focus + 플러그인 헤드 클릭 배선 + SPEC §10. push 완료
 - `b63d09f` (26.0710) — herdr 검토 노트 커밋(별건)
 - (26.0812) — v0.7 사본 드리프트 감지. 정본 5,401 → 6,449 bytes, `install.sh` 배포 후 정본=배포본 일치. 같은 날 `_dev` 두 달 미커밋 정리(13커밋)에서 발견된 항목
+- `7a02aed` (26.0904) — **출장 TZ 고정.** `tm.sh`·`tm-bar.3s.sh`(정본·배포본)에 `export TZ=Europe/Berlin`. ⚠️ `.claude/settings.json`의 `env.TZ`는 클로드코드 셸에만 걸리고 **SwiftBar는 GUI 앱이라 안 받는다** — 그래서 `render`의 `.date==TODAY` 필터가 현지 17:00(=KST 다음 날 00:00)부터 0창을 냈다(9/3 저녁 실제 발생, 아무도 못 알아챔). **플러그인은 헬퍼와 별개로 자기 날짜를 또 계산**(`TM_log` 링크 `date +%y%m%d`)하므로 `tm.sh`만 고치면 반만 막힌다. **사람 손 확인 = 함**: 적대 TZ(`America/New_York`, 그 시점 하루 전)로 render 4창·`TM_log_260904` 정상 / 같은 조건에서 고치기 전 로직은 0창(변이 시험) / SwiftBar를 `env -u TZ open -a`로 재기동해 프로세스에 TZ 없는 상태에서 메뉴바 `TM 4` 눈확인 / 정본·배포본 `cmp` 일치. **귀국 시 세 줄 삭제** — `grep -rln "출장 TZ 고정" _dev/`. push 완료
