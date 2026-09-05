@@ -258,7 +258,12 @@ def backup_one(src, session, window, manifest, full=False, dry=False):
         return "failed", f"{uuid[:8]} 읽기 실패: {e}"
 
     prev = manifest.get(uuid)
-    if prev and prev.get("src_size") == size:
+    # ⚠️ `files`를 같이 본다 (2026-09-05). `--seed`로 올린 항목은 매니페스트에만
+    #    있고 «뜬 파일이 없다». 크기만 비교하면 그것이 여기서 조기 반환되어
+    #    영영 안 떠지고, 게다가 아래 이름 승격이 `files` 키를 채워 넣어
+    #    «백업이 있는 것처럼» 보이게 만든다. 8/6~8/25 227개 506MB가 그 상태로
+    #    30일 롤링 소멸을 기다리고 있었다.
+    if prev and prev.get("files") and prev.get("src_size") == size:
         # ⚠️ **내용이 그대로여도 «이름»은 늦게 올 수 있다** (2026-08-26, 피터공
         #    *"다른 창들도 다음 memento에서 이름 찾는지 확인할 필요가 있을까?"*).
         #    이 조기 반환이 승격 앞에 있으면, 스윕이 익명으로 뜬 뒤 그 창이
@@ -388,8 +393,19 @@ def main():
             for src in sorted(PROJECT_DIR.glob("*.jsonl"), key=lambda p: p.stat().st_mtime):
                 if cur is not None and src == cur:
                     continue
-                if src.stem in manifest:
-                    continue
+                # ⚠️ 「매니페스트에 있으면 건너뛴다」였다 (2026-09-05 수정).
+                #    한 번 오른 파일은 그 뒤로 아무리 자라도 다시 안 떴다 —
+                #    창이 memento 뒤에 더 나눈 대화가 영영 안 들어간다.
+                #    끝난 세션 88건 12.4MB가 그렇게 잘려 있었고, 한 건은
+                #    7.81MB 중 98%가 없었다. 매니페스트엔 `files`가 멀쩡해서
+                #    조회로는 안 갈린다. **크기가 그대로일 때만** 건너뛴다.
+                prev_e = manifest.get(src.stem)
+                if prev_e and prev_e.get("files"):
+                    try:
+                        if prev_e.get("src_size") == src.stat().st_size:
+                            continue
+                    except OSError:
+                        continue
                 results.append(("스윕", *backup_one(src, None, "미상", manifest,
                                                    a.full, a.dry)))
 
