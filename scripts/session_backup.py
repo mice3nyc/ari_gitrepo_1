@@ -341,6 +341,10 @@ def main():
     ap.add_argument("--full", action="store_true", help="툴 결과를 자르지 않는다")
     ap.add_argument("--dry-run", action="store_true", dest="dry")
     ap.add_argument("--no-sweep", action="store_true", help="현재 세션만")
+    ap.add_argument("--sweep-only", action="store_true", dest="sweep_only",
+                    help="현재 세션은 빼고 «밀린 것»만 뜬다 — SessionStart 훅용. "
+                         "세션 시작 시점엔 번호를 아직 모르고 현재 JSONL도 "
+                         "비어 있어서, 그걸 뜨면 `미상-` 이름만 못 박힌다")
     ap.add_argument("--seed", action="store_true",
                     help="도입 시점: 기존 jsonl을 «뜨지 않고» 매니페스트에만 올려 "
                          "스윕 대상에서 뺀다. 지난 30일은 수동 캡쳐가 이미 있다")
@@ -358,10 +362,18 @@ def main():
     cur_uuid = os.environ.get("CLAUDE_CODE_SESSION_ID", "").strip()
     cur = PROJECT_DIR / f"{cur_uuid}.jsonl" if cur_uuid else None
     if cur is None or not cur.exists():
-        cands = sorted(PROJECT_DIR.glob("*.jsonl"), key=lambda p: p.stat().st_mtime)
-        cur = cands[-1] if cands else None
-        print("⚠️ CLAUDE_CODE_SESSION_ID로 파일을 못 찾아 최신 mtime으로 폴백했다"
-              f" → {cur.name if cur else '없음'}", file=sys.stderr)
+        if a.sweep_only:
+            # ⛔ 폴백하지 않는다 (2026-09-05, 훅 실측에서 드러남). sweep-only는
+            #    뜰 것이 없으니 폴백이 남기는 것은 «스윕 제외» 하나뿐인데,
+            #    SessionStart 시점엔 새 세션 JSONL이 아직 없어 폴백이 매번
+            #    «최신 mtime 파일 = 방금 닫힌 창»을 집는다. 가장 메워야 할
+            #    파일이 정확히 스윕에서 빠지는 구조가 된다.
+            cur = None
+        else:
+            cands = sorted(PROJECT_DIR.glob("*.jsonl"), key=lambda p: p.stat().st_mtime)
+            cur = cands[-1] if cands else None
+            print("⚠️ CLAUDE_CODE_SESSION_ID로 파일을 못 찾아 최신 mtime으로 폴백했다"
+                  f" → {cur.name if cur else '없음'}", file=sys.stderr)
 
     with Lock(LOCK):
         manifest = load_manifest()
@@ -385,7 +397,8 @@ def main():
                   + (" (dry-run)" if a.dry else ""))
             return 0
 
-        if cur is not None:
+        # ⚠️ `cur`을 None으로 만들지 않는다 — 아래 스윕이 «자기 파일 제외»에 쓴다.
+        if cur is not None and not a.sweep_only:
             results.append(("현재", *backup_one(cur, a.session, window, manifest,
                                                 a.full, a.dry)))
 
